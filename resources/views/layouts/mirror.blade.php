@@ -15,6 +15,11 @@
         <script src="/components/jquery/jquery.min.js"></script>        
         <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 
+
+        <!-- David Stutz bootstrap-multiselect -->
+        <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+        <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
+
         <!-- Include the plugin's CSS and JS: -->
         <script type="text/javascript" src="/multiselect/dist/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
@@ -65,7 +70,7 @@
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Resultados </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#"> Resume </a>
-                            <a class="dropdown-item" href="{{ url('/adsales/results/monthly') }}"> Monthly </a>
+                            <a class="dropdown-item" href="{{ route('monthlyResultsGet') }}"> Monthly </a>
                             <a class="dropdown-item" href="#"> Quarter </a>
                             <a class="dropdown-item" href="#"> Share (Channel/Executive) </a>
                             <a class="dropdown-item" href="#"> YoY </a>                               
@@ -85,6 +90,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#"> Brand </a>
                             <a class="dropdown-item" href="#"> Market </a>                                
+                            <a class="dropdown-item" href="#"> Churn </a>                                
                             <a class="dropdown-item" href="#"> Overview </a>
                         </div>
                     </li>

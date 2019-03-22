@@ -14,7 +14,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> Sales Region </label>
-						<select name="salesRegion" id="salesRegion" class="form-control" style="width: 100%;">
+						<select name="salesRegion" id="salesRegion" style="width: 100%;">
 							<option value=""> Select </option>
 							@for($s = 0;$s < sizeof($salesRegion);$s++)
 								<option value="{{$salesRegion[$s]}}"> {{$salesRegion[$s]}} </option>
@@ -25,7 +25,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> Year </label>
-						<select name="year" id="year" class="form-control" style="width: 100%;">
+						<select name="year" id="year" style="width: 100%;">
 							<option value=""> Select </option>
 							@for($y = 0;$y < sizeof($years);$y++)
 								<option value="{{$years[$y]}}"> {{$years[$y]}} </option>
@@ -36,7 +36,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> Brand </label>
-						<select name="brand[]" id="brand" class="form-control" multiple="true" style="width: 100%;">
+						<select name="brand[]" id="brand" multiple="true" style="width: 100%;">
 							<?php
 								for ($f=0; $f < sizeof($brand); $f++) { 
 									echo "<option value='".$brand[$f]."'>".$brand[$f]."</option>";
@@ -48,7 +48,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 1st Pos </label>
-						<select name="firstPos" id="firstPos" class="form-control" style="width: 100%;">
+						<select name="firstPos" id="firstPos" style="width: 100%;">
 							
 						</select>
 					</div>
@@ -56,7 +56,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 2nd Pos </label>
-						<select name="secondPos" id="secondPos" class="form-control" style="width: 100%;">
+						<select name="secondPos" id="secondPos" style="width: 100%;">
 							
 						</select>
 					</div>
@@ -64,7 +64,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> Currency </label>
-						<select name="currency" id="currency" class="form-control" style="width: 100%;">
+						<select name="currency" id="currency" style="width: 100%;">
 							
 						</select>
 					</div>
@@ -72,7 +72,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> Value </label>
-						<select name="value" id="value" class="form-control" style="width: 100%;">							
+						<select name="value" id="value" style="width: 100%;">							
 							<option value="gross"> Gross </option>
 							<option value="net"> Net </option>
 						</select>
@@ -89,6 +89,10 @@
 	</form>
 
 	<script>
+    	$(document).ready(function(){
+    		$('select').multiselect();
+    	});
+
     	$(document).ready(function(){      
       		$('#year').click(function(){
         		var year = $(this).val();                		
