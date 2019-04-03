@@ -89,9 +89,10 @@
 	</form>
 
 	<script>
-    	$(document).ready(function(){
-    		$('select').multiselect();
-    	});
+    	
+		$(function(){
+			$("select").multiselect();
+		});
 
     	$(document).ready(function(){      
       		$('#year').click(function(){

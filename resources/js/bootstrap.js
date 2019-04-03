@@ -7,10 +7,14 @@ window._ = require('lodash');
  * code may be modified to fit the specific needs of your application.
  */
 
+
+import $ from 'jquery';
+import 'jquery-ui-multiselect-widget/src/jquery.multiselect.min.js';
+
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
-
+    window.dt = require('datatables.net');
     require('bootstrap');
 } catch (e) {}
 

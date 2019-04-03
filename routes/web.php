@@ -12,6 +12,10 @@
 */
 
 Auth::routes();
+
+Route::get('test','RootController@getTest')->name('getTest');
+Route::post('test','RootController@postTest')->name('postTest');
+
 Route::get('/','adSalesController@home');
 Route::group(['prefix' => 'adsales'],function(){
 	Route::get('/','adSalesController@home')->name('adSalesHome');
