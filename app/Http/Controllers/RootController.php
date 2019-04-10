@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
 use App\dataBase;
+use App\documentsHead;
+use App\importSpreadsheet;
 use App\Imports\testImport;
 
 
@@ -20,6 +22,8 @@ class RootController extends Controller
 	}
 
 	public function postTest(){
+
+		$import = new importSpreadsheet();
 		
 		$file_mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
@@ -37,11 +41,11 @@ class RootController extends Controller
 		    $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
 		     
 		    $sheetData = $spreadsheet->getActiveSheet()->toArray();
-		    var_dump($sheetData);
 
+		    $mtx = $import->import($sheetData);
+
+		    var_dump($mtx);
 		}
-
-
 	}
 
     public function home(){
