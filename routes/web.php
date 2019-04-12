@@ -13,16 +13,68 @@
 
 Auth::routes();
 
-Route::get('test','RootController@getTest')->name('getTest');
-Route::post('test','RootController@postTest')->name('postTest');
+Route::get('test','RootController@getTest')
+						->name('getTest');
+Route::post('test','RootController@postTest')
+						->name('postTest');
 
 Route::get('/','adSalesController@home');
+
+Route::group(['prefix' => 'dataManagement'],function(){
+	Route::get('/','dataManagementController@home')
+						->name('dataManagementHomeGet');
+	Route::get('region','dataManagementController@regionGet')
+						->name('dataManagementRegionGet');
+	Route::get('user','dataManagementController@userGet')
+						->name('dataManagementUserGet');
+	Route::get('pRate','dataManagementController@pRateGet')
+						->name('dataManagementPRateGet');
+	Route::get('salesRepresentative','dataManagementController@salesRepresentativeGet')
+						->name('dataManagementSalesRepresentativeGet');
+	Route::get('agency','dataManagementController@agencyGet')
+						->name('dataManagementAgencyGet');
+	Route::get('client','dataManagementController@clientGet')
+						->name('dataManagementClientGet');
+	Route::get('origin','dataManagementController@originGet')
+						->name('dataManagementOriginGet');
+	Route::get('brand','dataManagementController@brandGet')
+						->name('dataManagementBrandGet');
+
+	Route::group(['prefix' => 'add'],function(){
+		
+		Route::post('region','dataManagementController@addRegion')
+						->name('dataManagementAddRegion');
+		Route::post('region','dataManagementController@addUser')
+						->name('dataManagementAddUser');
+		Route::post('pRate','dataManagementController@addPRate')
+						->name('dataManagementAddPRate');
+		Route::post('salesRepresentativeGroup','dataManagementController@addSalesRepresentativeGroup')
+						->name('dataManagementAddSalesRepresentativeGroup');
+		Route::post('salesRepresentative','dataManagementController@addSalesRepresentative')
+						->name('dataManagementAddSalesRepresentative');
+		Route::post('salesRepresentativeUnit','dataManagementController@addSalesRepresentativeUnit')
+						->name('dataManagementAddSalesRepresentativeUnit');
+		Route::post('brand','dataManagementController@addBrand')
+						->name('dataManagementAddBrand');
+		Route::post('brandUnit','dataManagementController@addBrandUnit')
+						->name('dataManagementAddBrandUnit');
+		Route::post('origin','dataManagementController@addOrigin')
+						->name('dataManagementAddOrigin');
+	});
+
+	
+});
+
 Route::group(['prefix' => 'adsales'],function(){
-	Route::get('/','adSalesController@home')->name('adSalesHome');
+	Route::get('/','adSalesController@home')
+						->name('adSalesHome');
 
 	Route::group(['prefix' => 'results'],function(){
-		Route::get('monthly','resultsController@monthlyGet')->name('monthlyResultsGet');
-		Route::post('monthly','resultsController@monthlyPost')->name('monthlyResultsPost');
+
+		Route::get('monthly','resultsController@monthlyGet')
+						->name('monthlyResultsGet');
+		Route::post('monthly','resultsController@monthlyPost')
+						->name('monthlyResultsPost');
 	});
 });
 
