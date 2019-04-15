@@ -20,11 +20,6 @@ Route::post('test','RootController@postTest')
 
 Route::get('/','adSalesController@home');
 
-Route::group(["prefix" => 'importTables'],function(){
-	Route::get('/','importController@home')
-						->name('importHomeGet');
-
-});
 
 
 Route::group(['prefix' => 'dataManagement'],function(){
@@ -50,6 +45,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementTruncateGet');
 	Route::get('trueTruncate','dataManagementController@trueTruncateGet')
 						->name('dataManagementTrueTruncateGet');
+	Route::get('importTable','dataManagementController@importTableGet')
+						->name('dataManagementImportTableGet');
 
 	Route::group(['prefix' => 'add'],function(){
 		
