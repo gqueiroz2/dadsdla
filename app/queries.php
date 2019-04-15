@@ -5,6 +5,7 @@ namespace App;
 
 use App\documentsHead;
 use Illuminate\Database\Eloquent\Model;
+use App\dataBase;
 
 class queries extends Model
 {
@@ -92,7 +93,7 @@ class queries extends Model
 	public function getRegion(){
 		$select = "SELECT ID,name FROM region";
 
-		$temp["nome"] = array("Brazil","Colombia","Argentina","Miami","Mexico"); //matrix temporaria de exemplod e como seria a saida
+		$temp["nome"] = array("Brazil","Colombia","Argentina","Miami","Mexico"); //matrix temporaria de exemplo de como seria a saida
 		$temp["id"] = array(1,2,3,4,5); //matrix temporaria de exemplod e como seria a saida
 	
 		return $temp;
@@ -206,28 +207,24 @@ class queries extends Model
 	}
 
 
-	public function getAgency($matrix){
+	public function getAgency($conn){
 
-		$select = "SELECT ID,name FROM agency";
+		$sql = "SELECT ID, name FROM agency";
+
+		$result = $conn->query($sql);
 
 		$agencyList = array();
 
-		for ($i=0; $i <sizeof($matrix) ; $i++) { 
-			$validator = 1;
-			for ($j=0; $j <sizeof($agencyList) ; $j++) { 
-				if ($matrix[$i]["Agency"] == $agencyList[$j]) {
-					$validator = 0;
-					break;
-				}
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$agencyList[$row["ID"]] = $row["name"];
 			}
-
-			if ($validator == 1) {
-				array_push($agencyList, $matrix[$i]["Agency"]);
-			}
-
+		}else{
+			return 0;
 		}
 
 		return $agencyList;
+
 	}
 
 	public function getCampaingCurrency($matrix){
@@ -270,7 +267,7 @@ class queries extends Model
 	public function insert($matrix,$dbHead,$matrixHead,$table){
 		$insert = "INSERT INTO $table ( $dbHead[0]";
 
-		for ($i=1; $i <sizeof($dbHead) ; $i++) { 
+		for ($i=1; $i <sizeof($dbHead); $i++) { 
 			$insert .= ", $dbHead[$i]";
 		}
 		$temp = $matrix[$matrixHead[0]];
