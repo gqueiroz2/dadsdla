@@ -22,6 +22,18 @@ class dataManagement extends Management{
 		return $bool;
 	}
 
+	public function addCurrency($dm,$con){
+        
+        $region = Request::get('region');
+        $currency = Request::get('currency');
+
+        $regionID = $dm->getID($con,'region',$region);
+
+        var_dump($region);
+        var_dump($currency);
+
+	}
+
 	public function addUsers(){
 
 		return false;
@@ -41,12 +53,6 @@ class dataManagement extends Management{
 
 		return false;
 	}
-
-	public function addCurrency(){
-
-		return false;
-	}
-
 
 	public function addPRate(){
 

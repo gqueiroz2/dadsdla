@@ -52,6 +52,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementAddUser');
 		Route::post('pRate','dataManagementController@addPRate')
 						->name('dataManagementAddPRate');
+		Route::post('currency','dataManagementController@addCurrency')
+						->name('dataManagementAddCurrency');
 		Route::post('salesRepresentativeGroup','dataManagementController@addSalesRepresentativeGroup')
 						->name('dataManagementAddSalesRepresentativeGroup');
 		Route::post('salesRepresentative','dataManagementController@addSalesRepresentative')
