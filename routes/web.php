@@ -20,6 +20,13 @@ Route::post('test','RootController@postTest')
 
 Route::get('/','adSalesController@home');
 
+Route::group(["prefix" => 'importTables'],function(){
+	Route::get('/','importController@home')
+						->name('importHomeGet');
+
+});
+
+
 Route::group(['prefix' => 'dataManagement'],function(){
 	Route::get('/','dataManagementController@home')
 						->name('dataManagementHomeGet');

@@ -123,7 +123,11 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
-                    </li>                        
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('importHomeGet') }}"> Import Tables</a>
+                    </li>                         
                 </ul>    
                 <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
                     <li class="nav-item dropdown dropleft">
