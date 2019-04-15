@@ -39,6 +39,10 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementOriginGet');
 	Route::get('brand','dataManagementController@brandGet')
 						->name('dataManagementBrandGet');
+	Route::get('truncate','dataManagementController@truncateGet')
+						->name('dataManagementTruncateGet');
+	Route::get('trueTruncate','dataManagementController@trueTruncateGet')
+						->name('dataManagementTrueTruncateGet');
 
 	Route::group(['prefix' => 'add'],function(){
 		

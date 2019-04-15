@@ -55,6 +55,36 @@ class queries extends Model
 								'Net Revenue (Current Plan Rate)',
 								'Net Net Revenue (Current Plan Rate)');
 
+	protected $tableNames = array('agency',
+								'agency_group',
+								'brand',
+								'brand_unit',
+								'client',
+								'client_group',
+								'client_unit',
+								'cmaps',
+								'currency',
+								'digital',
+								'forecast',
+								'forecast_unit',
+								'header',
+								'mini_header',
+								'origin',
+								'pacing_report',
+								'pacing_report_unit',
+								'plan_by_brand',
+								'plan_by_sales',
+								'plan_source',
+								'p_rate',
+								'region',
+								'rolling_forecast',
+								'sales_rep',
+								'sales_rep_group',
+								'sales_rep_unit',
+								'sap_digital_executive',
+								'user',
+								'user_types',
+								'ytd');
 
 
 
@@ -66,6 +96,41 @@ class queries extends Model
 		$temp["id"] = array(1,2,3,4,5); //matrix temporaria de exemplod e como seria a saida
 	
 		return $temp;
+	}
+
+	public function truncateAll($con){
+
+		$start = "SET FOREIGN_KEY_CHECKS = 0;";
+
+		$tableNames = $this->tableNames;
+
+		for ($i=0; $i <sizeof($this->tableNames) ; $i++) { 
+			$middle[$i] = "TRUNCATE $tableNames[$i];";
+		}
+
+		$end = "SET FOREIGN_KEY_CHECKS = 1;";
+
+		if($con->query($start) === true){
+			var_dump("foi carai");
+		}else{
+			var_dump($con->error);
+		}
+
+		for ($i=0; $i <sizeof($middle) ; $i++) { 
+			if($con->query($middle[$i]) === true){
+				var_dump("foi carai");
+			}else{
+				var_dump($con->error);
+			}
+		}
+
+		if($con->query($end) === true){
+			var_dump("foi carai");
+		}else{
+			var_dump($con->error);
+		}
+
+
 	}
 
 

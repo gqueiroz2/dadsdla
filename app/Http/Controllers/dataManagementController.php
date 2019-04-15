@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Request;
 use App\dataManagement;
 use App\dataBase;
 use App\dataManagementRender;
+use App\queries;
 
 class dataManagementController extends Controller
 {
@@ -86,6 +87,30 @@ class dataManagementController extends Controller
 
     	return view('dataManagement.brandGet',compact('brand','brandUnit','origin','state'));
     }
+
+    public function truncateGet(){
+
+        $queries = new queries();
+        $db = new dataBase();
+        $con = $db->openCOnnection("DLA");
+
+        //$queries->truncateAll($con);
+
+        return view('dataManagement.truncateCheck');
+    }
+
+    public function trueTruncateGet(){
+
+        $queries = new queries();
+        $db = new dataBase();
+        $con = $db->openCOnnection("DLA");
+
+        $queries->truncateAll($con);
+
+        return view('dataManagement.home');
+    }
+
+
 
     public function addRegion(){
     	$dm = new dataManagement();
