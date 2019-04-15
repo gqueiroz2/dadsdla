@@ -52,4 +52,8 @@ class Management extends Model{
 		return $array;
 
 	}
+
+	public function getID($con,$parameter){
+		
+	}
 }

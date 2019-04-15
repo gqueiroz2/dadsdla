@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\dataManagement;
 use App\dataBase;
 use App\dataManagementRender;
@@ -39,8 +39,10 @@ class dataManagementController extends Controller
 
     public function salesRepresentativeGet(){
     	$dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
 
-    	$region = $dm->getRegions();
+        $region = $dm->getRegions($con);
     	$salesRepresentativeGroup = $dm->getSalesRepresentativeGroup();
     	$salesRepresentative = $dm->getSalesRepresentative();    	
     	$salesRepresentativeUnit = $dm->getSalesRepresentativeUnit();    	
@@ -50,8 +52,10 @@ class dataManagementController extends Controller
 
     public function pRateGet(){
     	$dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
 
-    	$region = $dm->getRegions();
+        $region = $dm->getRegions($con);
     	$currency = $dm->getCurrency();
     	$pRate = $dm->getPRate();
 
@@ -99,6 +103,17 @@ class dataManagementController extends Controller
     }
 
     public function addUser(){
+
+    }
+
+    public function addCurrency(){
+        $dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $bool = $dm->addRegion($con);
+
+        $bool = $dm->addCurrency($dm,$con);
 
     }
 
