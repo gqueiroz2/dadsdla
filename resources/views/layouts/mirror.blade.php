@@ -11,24 +11,24 @@
         <title> D|ADS DLA - @yield('title') </title>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-<!--
+
         <link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>        
 
         <script src="/components/jquery/jquery.min.js"></script>        
         <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
--->
+
 
         <!-- David Stutz bootstrap-multiselect 
         <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
--->
-        <!-- Include the plugin's CSS and JS: 
+        -->
+        <!-- Include the plugin's CSS and JS:-->
         <script type="text/javascript" src="/multiselect/dist/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
--->
+        {{--
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{ asset('js/jquery.multiselect.js') }}" defer></script>
-
+--}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <style type="text/css">
@@ -50,7 +50,12 @@
                 max-height: 120px; /* Set the fixed height of the footer here */
                 line-height: 60px; /* Vertically center the text there */
                 background-color: #f5f5f5;
-            }        
+            }      
+            a {
+                text-decoration:none;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                display: block;
+            }  
 
         </style>
 
@@ -102,6 +107,8 @@
                         </div>
                     </li>
 
+                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Ranking <span class="sr-only">(current)</span></a>
                     </li>
@@ -112,7 +119,11 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('getTest') }}"> Teste <span class="sr-only">(current)</span></a>
-                    </li>                        
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
+                    </li>
                 </ul>    
                 <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
                     <li class="nav-item dropdown dropleft">
@@ -127,7 +138,7 @@
         </nav>
         <div id="app"></div>
             @yield('content')
-        
+        {{--
         <footer class="footer">
             <div class="container-fluid">                                 
                 <div class="row">
@@ -136,7 +147,7 @@
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer>--}}
     </body>
 
 </html>
