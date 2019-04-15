@@ -35,6 +35,8 @@
 
 							<form method="POST" action="{{ route('dataManagementAddUser') }}">
 							@csrf
+
+							
 								<div class="row justify-content-center">
 									<div class="col">
 										<label for="region"> Name: </label>

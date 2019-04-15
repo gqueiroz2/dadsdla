@@ -44,7 +44,7 @@ Route::group(['prefix' => 'dataManagement'],function(){
 		
 		Route::post('region','dataManagementController@addRegion')
 						->name('dataManagementAddRegion');
-		Route::post('region','dataManagementController@addUser')
+		Route::post('user','dataManagementController@addUser')
 						->name('dataManagementAddUser');
 		Route::post('pRate','dataManagementController@addPRate')
 						->name('dataManagementAddPRate');
@@ -60,9 +60,7 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementAddBrandUnit');
 		Route::post('origin','dataManagementController@addOrigin')
 						->name('dataManagementAddOrigin');
-	});
-
-	
+	});	
 });
 
 Route::group(['prefix' => 'adsales'],function(){

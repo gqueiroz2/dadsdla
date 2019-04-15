@@ -20,7 +20,12 @@
 							</div>
 							
 							@if($region)
+								<div class="row">
+									
+									{{ $render->editRegion($region) }}
 
+
+								</div>
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Regions </strong> to manage yet.
@@ -30,6 +35,22 @@
 							<div class="row justify-content-center">
 								<div class="col">
 									<h5> Add a Region </h5>
+								</div>
+							</div>
+
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
+
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
 								</div>
 							</div>
 																  

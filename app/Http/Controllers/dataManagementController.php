@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\dataManagement;
-
+use App\dataBase;
+use App\dataManagementRender;
 
 class dataManagementController extends Controller
 {
@@ -16,10 +17,13 @@ class dataManagementController extends Controller
     public function regionGet(){
     	
     	$dm = new dataManagement();
+    	$db = new dataBase();
+		$con = $db->openConnection('DLA');
+    	$region = $dm->getRegions($con);
 
-    	$region = $dm->getRegions();
+    	$render = new dataManagementRender();
 
-    	return view('dataManagement.regionGet',compact('region'));
+    	return view('dataManagement.regionGet',compact('region','render'));
     }
 
     public function userGet(){
@@ -80,6 +84,17 @@ class dataManagementController extends Controller
     }
 
     public function addRegion(){
+    	$dm = new dataManagement();
+
+    	$db = new dataBase();
+		$con = $db->openConnection('DLA');
+    	$bool = $dm->addRegion($con);
+
+    	if($bool){
+    		return back()->with('response',$bool['msg']);
+    	}else{
+    		return back()->with('error',$bool['msg']);
+    	}
 
     }
 
