@@ -183,27 +183,27 @@ class cmaps extends Model
 
     	if ($brand) {
     		//make the bound between Brand and Channel
-    		$table .= "LEFT JOIN 'brand' AS brand ON ytd.channel_brand_id = brand.ID";
+    		$table .= "LEFT JOIN 'brand' ON ytd.channel_brand_id = brand.ID";
 
     		//make the bound between Brand and Brand Unit
-    		$table .= "LEFT JOIN 'brand_unit' AS brand_unit ON brand.ID = brand_unit.brand_id";
+    		$table .= "LEFT JOIN 'brand_unit' ON brand.ID = brand_unit.brand_id";
     	}
 
     	if ($client) {
-    		$table .= "LEFT JOIN 'client' AS client ON cmaps.client_id = client.ID";
+    		$table .= "LEFT JOIN 'client' ON cmaps.client_id = client.ID";
     	}
 
     	if ($agency) {
-    		$table .= "LEFT JOIN 'agency' AS agency ON cmaps.agency_id = agency.ID";
+    		$table .= "LEFT JOIN 'agency' ON cmaps.agency_id = agency.ID";
     	}    	
 
     	if ($sales_rep) {
     		//make the bound between Sales_rep and cmaps 
-    		$table .= "LEFT JOIN 'sales_rep' AS sales_rep ON cmaps.sales_representant_id = sales_rep.ID";
+    		$table .= "LEFT JOIN 'sales_rep' ON cmaps.sales_representant_id = sales_rep.ID";
     	}
 
     	if ($sales_rep_group) {
-    		$table .= "LEFT JOIN 'sales_rep_group' AS sales_rep_group ON cmaps.sales_group_id = sales_rep_group.ID";
+    		$table .= "LEFT JOIN 'sales_rep_group' ON cmaps.sales_group_id = sales_rep_group.ID";
     	}
 
     	return $table;

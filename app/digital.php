@@ -139,7 +139,7 @@ class digital extends Model
 
 		if ($agency) {
 			$agency_ids = implode(",", $agency)
-			$where .= "agency.ID IN ('.$agency_ids.')";
+			$where .= "agency.ID IN ('$agency_ids')";
 			if ($year OR $client) {
     			$where .= " AND ";
     		}
@@ -147,7 +147,7 @@ class digital extends Model
 
 		if ($client) {
 			$client_ids = implode(",", $client)
-			$where .= "client.ID IN ('.$client_ids.')";
+			$where .= "client.ID IN ('$client_ids')";
 			if ($year OR $agency OR $month) {
     			$where .= " AND ";
     		}
@@ -169,7 +169,7 @@ class digital extends Model
 
 		if ($sales_rep) {
 			$sales_rep_ids = implode(",", $sales_rep);
-			$where .= "sales_rep.ID in ('.$sales_rep_ids.')";
+			$where .= "sales_rep.ID in ('$sales_rep_ids')";
 		}
 
 		return $where;
@@ -182,7 +182,8 @@ class digital extends Model
 	*/
 	public function order_by(
 		$agency,
-		$client
+		$client,
+		$order
 	)
 	{
 		$order_by = "ORDER_BY";

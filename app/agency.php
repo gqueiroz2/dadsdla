@@ -75,19 +75,19 @@ class agency extends Model
     {
     	if ($agency) {
     		$table = "'agency' agency ";
-    		$table .= "LEFT JOIN 'agency_group' AS agency_group ON agency.agency_group_id = agency_group.ID ";
+    		$table .= "LEFT JOIN 'agency_group' ON agency.agency_group_id = agency_group.ID ";
     	}
 
     	if ($agency_unit) {
     		$table = "'agency_unit' agency_unit ";
-    		$table .= "LEFT JOIN 'agency' AS agency ON agency.ID = agency_unit.agency_id ";
-    		$table .= "LEFT JOIN 'origin' AS origin ON origin.ID = agency_unit.origin_id ";
+    		$table .= "LEFT JOIN 'agency' ON agency.ID = agency_unit.agency_id ";
+    		$table .= "LEFT JOIN 'origin'  ON origin.ID = agency_unit.origin_id ";
     	}
 
     	if ($agency_group) {
     		$table = "'agency_group' agency_group ";
-    		$table .= "LEFT JOIN 'agency' AS agency ON agency.agency_group_id = agency_group.ID ";
-    		$table .= "LEFT JOIN 'region' AS region ON region.ID = agency.region_id ";
+    		$table .= "LEFT JOIN 'agency'  ON agency.agency_group_id = agency_group.ID ";
+    		$table .= "LEFT JOIN 'region'  ON region.ID = agency.region_id ";
     	}
 
     	return $table;
@@ -112,25 +112,25 @@ class agency extends Model
     	if ($agency) {
     		if ($agency_group) {
     			$agency_group_ids = implode(",", $agency_group);
-    			$where .= "agency.agency_group_id IN ('.$agency_group_ids.') ";
+    			$where .= "agency.agency_group_id IN ('$agency_group_ids') ";
     		}
-    		$where .= "client.ID IN ('.$agency.')";
+    		$where .= "client.ID IN ('$agency')";
     	}
 
     	if ($agency_group) {
     		if ($region) {
     			$region_ids = implode(",", $region);
-    			$where .= "region.ID in ('.$region_ids.') ";
+    			$where .= "region.ID in ('$region_ids') ";
     		}
-    		$where .= "client_group.ID IN ('.$client_group.')";
+    		$where .= "client_group.ID IN ('$client_group')";
     	}
 
     	if ($agency_unit) {
     		if ($agency) {
     			$agency_ids = implode(",", $agency);
-    			$where .= "agency.ID in ('.$agency_ids.') ";
+    			$where .= "agency.ID in ('$agency_ids') ";
     		}
-    		$where .= "agency_unit.ID IN ('.$agency_unit.')";
+    		$where .= "agency_unit.ID IN ('$agency_unit')";
     	}
 
     	return $where;
@@ -175,8 +175,6 @@ class agency extends Model
     	else{
     		$order_by .= " DESC";
     	}
-
-    	return $order_by;
 
     	return $order_by;
     }

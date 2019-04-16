@@ -139,7 +139,8 @@ class forecast extends Model
 	*/
     public function order_by(
     	$region,
-    	$sales_rep
+    	$sales_rep,
+        $order
     )
     {
     	$order_by = "ORDER BY ";
