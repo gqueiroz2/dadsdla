@@ -19,9 +19,9 @@ class region extends Model
     */
     public function getRegion ($con, $ID){
     	$where = "";
-    	if ($ID) {
+    	if (isset($ID)) {
     		$ids = implode(",", $ID);
-    		$where .= "region.ID IN ('$ids')";
+    		$where .= "WHERE region.ID IN ('$ids')";
     	}
 
     	$sql = "
