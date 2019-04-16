@@ -16,13 +16,9 @@ class digital extends Model
 	*Date:11/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
-    {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
+    {    	
+    	$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
 
     	$res = $con->query($sql);
 
@@ -51,19 +47,19 @@ class digital extends Model
 		$colluns = "";
 
 		if ($campaign_sales_office_id) {
-			$colluns .= "region.name AS 'region_name', ";
+			$colluns .= "region.name AS 'regionName', ";
 		}
 
 		if ($sales_rep_is) {
-			$colluns .= "sales_rep.name AS 'sales_rep_name', ";
+			$colluns .= "sales_rep.name AS 'salesRepName', ";
 		}
 
 		if ($agency_id) {
-			$colluns .= "agency.name AS 'agency_name', ";
+			$colluns .= "agency.name AS 'agencyName', ";
 		}
 
 		if ($client_id) {
-			$colluns .= "client.name AS 'client_name', ";
+			$colluns .= "client.name AS 'clientName', ";
 		}
 
 		if ($mouth) {
@@ -75,18 +71,18 @@ class digital extends Model
 		}
 
 		if ($gross_revenue) {
-			$colluns .= "digital.gross_revenue AS 'gross_revenue',";
+			$colluns .= "digital.gross_revenue AS 'grossRevenue',";
 		}
 
 		if ($net_revenue) {
-			$colluns .= "digital.net_revenue AS 'net_revenue', ";
+			$colluns .= "digital.net_revenue AS 'netRevenue', ";
 		}
 
 		if ($agency_comission) {
-			$colluns .= "digital.agency_comission AS 'agency_comission', ";
+			$colluns .= "digital.agency_comission AS 'agencyComission', ";
 		}
 
-		$colluns .= "digital.ID AS ID";
+		$colluns .= "digital.ID AS id";
 	}
 
     /*
@@ -101,26 +97,26 @@ class digital extends Model
 		$agency,
 		$currency
 	){
-		$table = "'DLA'.'digital' AS digital";
+		$table = "'digital' AS digital";
 
 		if ($region) {
-			$table .="LEFT JOIN 'DLA'.'region' AS region ON region.ID = digital.campaign_sales_office_id";
+			$table .="LEFT JOIN 'region' ON region.ID = digital.campaign_sales_office_id";
 		}
 
 		if($sales_rep){
-			$table .= "LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON sales_rep.ID = digital.sales_rep_id";
+			$table .= "LEFT JOIN 'sales_rep' ON sales_rep.ID = digital.sales_rep_id";
 		}
 
 		if ($client) {
-			$table .= "LEFT JOIN 'DLA'.'client' AS client ON client.ID = digital.client_id";
+			$table .= "LEFT JOIN 'client' ON client.ID = digital.client_id";
 		}
 
 		if ($agency) {
-			$table .= "LEFT JOIN 'DLA'.'agency' AS agency ON agency.ID = digital.agency_id";
+			$table .= "LEFT JOIN 'agency' ON agency.ID = digital.agency_id";
 		}
 
 		if ($currency) {
-			$table .= "LEFT JOIN 'DLA'.'currency' AS currency ON currency.ID = digital.currency_id";
+			$table .= "LEFT JOIN 'currency' ON currency.ID = digital.currency_id";
 		}
 
 		return $table;
@@ -201,8 +197,14 @@ class digital extends Model
 		if ($client) {
 			$order_by .= "client.name";
 		}
-		$order_by .= " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-		return $order_by;
+        return $order_by;
 	}
 }
