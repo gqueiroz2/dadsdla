@@ -4,71 +4,56 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-/*
-*Author: Bruno Gomes
-*Date:08/04/2019
-*Razon:Sales rep modeler
-*/
-class salesRep extends Model
-{
-
+class salesRep extends Model{
 	/*
-	*Author: Bruno Gomes
-	*Date:08/04/2019
-	*Razon:getSalesRepGroup modeler
+		Abreviations
+
+		srg = sales_rep_group
+		sr = sales_rep
+		sru = sales_rep_unit
+		o = origin
 	*/
-	public function getSalesRepGroup(
-		$con,
-		$region
-	)
-	{
+
+
+	public function getSalesRepGroup($con,$region){
+
 		$where = "";
 
 		if($region){
-			$where .= "WHERE region.ID in ('.$region.')";
+			$where .= "WHERE r.ID in ('.$region.')";
 		}
 
 		$sql = "
 			SELECT 
-				sales_rep.ID AS 'ID',
-				sales_rep.name AS 'sales_rep'
+				sr.ID AS 'id',
+				sr.name AS 'salesRep'
 				
-			FROM 'DLA'.'sales_rep_group' AS sales_rep_group
-				LEFT JOIN 'DLA'.'region' AS region ON region.ID = sales_rep_group.region_id
-				LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON sales_rep.ID = sales_rep_group.sales_rep_id
-			$where
-
-		";
+			FROM sales_rep_group srg
+				LEFT JOIN region r ON r.ID = srg.region_id
+				LEFT JOIN sales_rep sr ON sr.ID = srg.sales_rep_id
+			$where";
 
 		$res = $con->query($sql);
 
     	return $res;
 	}
 
-	/*
-	*Author: Bruno Gomes
-	*Date:08/04/2019
-	*Razon:getSalesRep modeler
-	*/
-    public function getSalesRep(
-    	$con,
-    	$sales_rep_group_id
-    )
-	{
+    public function getSalesRep($con,$sales_rep_group_id){
+		
 		$where = "";
 
 		if($sales_rep_group_id){
 			$sales_rep_ids = implode(",", $sales_rep_group_id)
-			$where .= "WHERE sales_rep_group.ID in ('.$sales_rep_ids.')";
+			$where .= "WHERE srg.ID in ('.$sales_rep_ids.')";
 		}
 
 		$sql = "
 			SELECT 
-				sales_rep.ID AS 'ID',
-				sales_rep.name AS 'sales_rep'
+				sr.ID AS 'id',
+				sr.name AS 'salesRep'
 				
-			FROM 'DLA'.'sales_rep' AS sales_rep
-				LEFT JOIN 'DLA'.'sales_rep_group' AS sales_rep_group ON sales_rep_group.sales_rep_id = sales_rep.ID
+			FROM sales_rep sr
+				LEFT JOIN sales_rep_group srg ON srg.sales_rep_id = sr.ID
 			$where
 				
 
@@ -79,26 +64,20 @@ class salesRep extends Model
     	return $res;
 	}
 
-	 /*
-	*Author: Bruno Gomes
-	*Date:08/04/2019
-	*Razon:getSalesRepUnit modeler
-	*/
-	public function getSalesRepUnit(
-		$con,
-		$sales_rep_id
-	)
-	{
+
+
+	public function getSalesRepUnit($con,$sales_rep_id){
+
 		$sql = "
 			SELECT 
-				sales_rep.ID AS 'ID',
-				sales_rep.name AS 'sales_rep'
+				sr.ID AS 'id',
+				sr.name AS 'salesRep'
 				
-			FROM 'DLA'.'sales_rep_unit' AS sales_rep_unit
-				LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON sales_rep.ID = sales_rep_unit.ID
-				LEFT JOIN 'DLA'.'origin' AS origin ON origin.ID = sales_rep_unit.origin_id
+			FROM sales_rep_unit sru
+				LEFT JOIN sales_rep sr ON sr.ID = sru.ID
+				LEFT JOIN origin o ON o.ID = sru.origin_id
 			WHERE
-				 sales_rep.ID in ('.$sales_rep_id.')
+				 sr.ID in ('.$sales_rep_id.')
 
 		";
 
