@@ -74,7 +74,7 @@ class importSpreadsheet extends Model
 			$mtx[$i]["Net Net Revenue (Current Plan Rate)"] = $RSS->fixExcelNumber2($mtx[$i]["Net Net Revenue (Current Plan Rate)"]);
 
 		}
-
+		var_dump("AKI");
 		//$mtx = $RSS->filterMonthYear($mtx);
 
 		$mtx = $this->putIdYtd($mtx);

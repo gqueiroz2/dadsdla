@@ -21,6 +21,8 @@ Route::post('test','RootController@postTest')
 Route::get('/','adSalesController@home');
 
 Route::group(['prefix' => 'dataManagement'],function(){
+
+
 	Route::get('/','dataManagementController@home')
 						->name('dataManagementHomeGet');
 	Route::get('region','dataManagementController@regionGet')
@@ -67,6 +69,12 @@ Route::group(['prefix' => 'dataManagement'],function(){
 		Route::post('origin','dataManagementController@addOrigin')
 						->name('dataManagementAddOrigin');
 	});	
+
+	Route::group(['prefix' => 'ajax'],function(){
+		Route::post('salesRepGroupByRegion','dataManagementAjaxController@salesRepGroupByRegion')
+						->name('AjaxSalesRepGroupByRegion');
+	});	
+
 });
 
 Route::group(['prefix' => 'adsales'],function(){

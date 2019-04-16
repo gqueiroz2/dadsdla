@@ -44,7 +44,7 @@ class RootController extends Controller
 
 		    $mtx = $import->import($sheetData);
 
-		    var_dump($mtx);
+		    //var_dump($mtx);
 		}
 	}
 
