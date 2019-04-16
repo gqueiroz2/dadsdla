@@ -85,8 +85,8 @@
 									</button>	
 								</div>								
 							</div>
-							<div class="row mt-2 justify-content-center">
-								<div class="col col-sm-6">
+							<div class="row mt-2 justify-content-start">
+								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
 										<a style="color: white;" href="{{ route('dataManagementTruncateGet') }}">
 											Truncate

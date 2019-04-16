@@ -19,13 +19,8 @@
 								</div>
 							</div>
 							
-							@if($region)
-								<div class="row">
-									
-									{{ $render->editRegion($region) }}
-
-
-								</div>
+							@if($region)								
+								{{ $render->editRegion($region) }}
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Regions </strong> to manage yet.

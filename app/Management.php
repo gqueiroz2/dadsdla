@@ -10,6 +10,8 @@ class Management extends Model{
 
 		$insert = "INSERT INTO $table ($columns) VALUES ($values)";		
 
+		var_dump($insert);
+
 		if($con->query($insert) === true){
 			$rtr["bool"] = true;
 			$rtr["msg"] = "A New record on the table $table was successfully created!";
@@ -17,6 +19,8 @@ class Management extends Model{
 			$rtr["bool"] = false;
 			$rtr["msg"] = "Error: ".$insert."<br>".$con->error;
 		}
+
+		var_dump($rtr);
 
 		return $rtr;
 
@@ -53,7 +57,19 @@ class Management extends Model{
 
 	}
 
-	public function getID($con,$parameter){
-		
+	public function getID($con,$parameter,$seek){
+		$sql = "SELECT id FROM $parameter WHERE name = '$seek'";
+
+		$result = $con->query($sql);
+
+		if($result && $result->num_rows > 0){
+			$row = $result->fetch_assoc();
+			$id = $row['id'];
+		}else{
+			$id = false;
+		}
+
+		return $id;
+
 	}
 }

@@ -22,7 +22,7 @@
 							<div class="row justify-content-center">
 								<div class="col">
 									@if($salesRepresentativeGroup)
-
+										{{ $render->editSalesRepGroup($salesRepresentativeGroup) }}
 									@else
 										<div class="alert alert-warning">
   											There is no <strong> Sales Representative Group </strong> to manage yet.
@@ -38,20 +38,41 @@
 								</div>
 							</div>
 
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
+
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
+								</div>
+							</div>
+
 							<form method="POST" action="{{ route('dataManagementAddSalesRepresentativeGroup') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
 										<label for="region"> Region: </label>
-										@if($region)
-											@for($r = 0; $r < sizeof($region);$r++)
-												<option value="{{ $region[$r] }}"> {{ $region[$r] }} </option>
-											@endfor	
-										@else
-											<div class="alert alert-warning">
-	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a currency.
-											</div>
-										@endif
+										<select class="form-control" name="region">
+											@if($region)
+												<option value=""> Select a Region </option>
+												@for($r = 0; $r < sizeof($region);$r++)
+													<option value="{{ $region[$r]["id"] }}"> 
+														{{ $region[$r]["name"] }} 
+													</option>
+												@endfor	
+											@else
+												<div class="alert alert-warning">
+		  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a currency.
+												</div>
+											@endif
+										</select>
 									</div>
 
 									<div class="col">
@@ -100,11 +121,27 @@
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
-										<label for="region"> Sales Representative Group: </label>
+										<label> Region: </label>
+										@if($region)
+											<select class="form-control" style="width: 100%;" name="region" id="salesRep_Region">
+												<option value=""> Select a Region </option>
+												@for($r = 0; $r < sizeof($region);$r++)
+													<option value="{{ $region[$r]["id"] }}"> {{ $region[$r]["name"] }}</option>
+												@endfor	
+											</select>
+										@else
+											<div class="alert alert-warning">
+	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a Sales Group Representative and Sales Group.
+											</div>
+										@endif
+									</div>
+
+									<div class="col">
+										<label> Sales Representative Group: </label>
 										@if($salesRepresentativeGroup)
-											@for($s = 0; $s < sizeof($salesRepresentativeGroup);$s++)
-												<option value="{{ $salesRepresentativeGroup[$s] }}"> {{ $salesRepresentativeGroups[$s] }} </option>
-											@endfor	
+											<select class="form-control" style="width: 100%;" name="saleRepGr" id="salesRep_SalesRepGroup">
+												<option value=""> Select a Region </option>
+											</select>
 										@else
 											<div class="alert alert-warning">
 	  											There is no <strong> Sales Representative Group </strong> created yet, please first create a Sales Representative Group to relate with a Sales Representative.
@@ -161,7 +198,6 @@
 										<label for="region"> Sales Representative: </label>
 										@if($salesRepresentative)
 											@for($s = 0; $s < sizeof($salesRepresentative);$s++)
-												<option value="{{ $salesRepresentative[$s] }}"> {{ $salesRepresentatives[$s] }} </option>
 											@endfor	
 										@else
 											<div class="alert alert-warning">
@@ -191,17 +227,40 @@
 			</div>
 		</div>
 	</div>
-	<!--
+	
+	<div id="vlau"></div>
+
 	<script type="text/javascript">
 		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
-
-				location.href =''
-
-			});
-		});
+		$(document).ready(function(){      
+      		$('#salesRep_Region').click(function(){
+        		var region = $(this).val();                		
+        		console.log(region);
+        		if(region != ""){        			
+        			/*
+						SETUP THE AJAX FOR ALL CALLS
+        			*/
+        			$.ajaxSetup({
+            			headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            			type:"POST"
+          			});
+        			/*
+        				GET THE TARGET/FCST'S BY YEAR
+					*/
+          			$.ajax({
+            			url:"/dataManagement/ajax/salesRepGroupByRegion",
+            			method:"POST",
+            			data:{region},
+	              		success: function(output){
+	                		$('#vlau').html(output);                		
+	              		},
+	              		error: function(xhr, ajaxOptions,thrownError){
+	                		alert(xhr.status+""+thrownError);
+	          			}
+	          		});
+	          	}
+	        });
+	    });
 
 	</script>
-	-->
 @endsection

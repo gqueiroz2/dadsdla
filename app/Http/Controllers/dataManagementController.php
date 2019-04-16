@@ -44,11 +44,13 @@ class dataManagementController extends Controller
         $con = $db->openConnection('DLA');
 
         $region = $dm->getRegions($con);
-    	$salesRepresentativeGroup = $dm->getSalesRepresentativeGroup();
-    	$salesRepresentative = $dm->getSalesRepresentative();    	
-    	$salesRepresentativeUnit = $dm->getSalesRepresentativeUnit();    	
+    	$salesRepresentativeGroup = $dm->getSalesRepresentativeGroup($con);
+    	$salesRepresentative = $dm->getSalesRepresentative($con);    	
+    	$salesRepresentativeUnit = $dm->getSalesRepresentativeUnit($con);    	
 
-    	return view('dataManagement.salesRepresentativeGet',compact('region','salesRepresentativeGroup','salesRepresentative','salesRepresentativeUnit'));
+        $render = new dataManagementRender();
+
+    	return view('dataManagement.salesRepresentativeGet',compact('region','salesRepresentativeGroup','salesRepresentative','salesRepresentativeUnit','render'));
     }
 
     public function pRateGet(){
@@ -57,11 +59,12 @@ class dataManagementController extends Controller
         $con = $db->openConnection('DLA');
 
         $region = $dm->getRegions($con);
-    	$currency = $dm->getCurrency();
-    	$pRate = $dm->getPRate();
-
+    	$currency = $dm->getCurrency($con);
+    	$pRate = $dm->getPRate($con);
     	$cYear = date('Y');
-    	return view('dataManagement.pRateGet',compact('region','currency','cYear'));
+        $render = new dataManagementRender();
+
+    	return view('dataManagement.pRateGet',compact('region','currency','pRate','cYear','render'));
     }
 
     public function originGet(){
@@ -136,18 +139,43 @@ class dataManagementController extends Controller
 
         $db = new dataBase();
         $con = $db->openConnection('DLA');
-        $bool = $dm->addRegion($con);
 
         $bool = $dm->addCurrency($dm,$con);
+
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
 
     }
 
     public function addPRate(){
-    	
+    	$dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $bool = $dm->addPRate($dm,$con);
+
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
     }
 
     public function addSalesRepresentativeGroup(){
-    	
+    	$dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $bool = $dm->addSalesRepresentativeGroup($dm,$con);
+
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
     }
 
     public function addSalesRepresentative(){

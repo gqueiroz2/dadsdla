@@ -20,7 +20,7 @@
 							</div>
 							@if($region)
 								@if($currency)
-
+									{{ $render->editCurrency($currency) }}
 								@else
 									<div class="alert alert-warning">
   										There is no <strong> Currency </strong> to manage yet.
@@ -40,15 +40,34 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddRegion') }}">
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
+
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
+								</div>
+							</div>
+
+							<form method="POST" action="{{ route('dataManagementAddCurrency') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
 										<label for="region"> Region: </label>
 										<select class="form-control" name="region">
-											@if($region)												
+											@if($region)
+												<option value=""> Select a Region </option>
 												@for($r = 0; $r < sizeof($region);$r++)
-													<option value="{{ $region[$r] }}"> {{ $region[$r] }} </option>
+													<option value="{{ $region[$r]["name"] }}"> 
+														{{ $region[$r]["name"] }} 
+													</option>
 												@endfor												
 											@else
 												<option value=""> There is no regions created yet. </option>
@@ -58,8 +77,8 @@
 
 									<div class="col">
 										<label for="region"> Name: </label>										
-										@if($currency)												
-											<input type="text" name="currency">
+										@if($region)												
+											<input type="text" class="form-control" name="currency">
 										@else
 											<div class="alert alert-warning"> There is no regions created yet. </div>
 										@endif										
@@ -84,7 +103,7 @@
 							@if($region)
 								@if($currency)
 									@if($pRate)
-
+        								{{ $render->editPRate($pRate) }}        								
 									@else
 										<div class="alert alert-warning">
   											There is no <strong> P-Rate </strong> to manage yet.
@@ -108,36 +127,41 @@
 									<h5> Add a P-Rate </h5>
 								</div>
 							</div>
+
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
+
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
+								</div>
+							</div>
+
 							<form method="POST" action="{{ route('dataManagementAddPRate') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
 										<label> Year: </label>
 										<input class="form-control" type="number" name="year" value="{{$cYear}}" min="2001" max="2050">
-									</div>
-
-									<div class="col">
-										<label> Region: </label>
-										<select class="form-control" name="region">
-											@if($region)												
-												@for($r = 0; $r < sizeof($region);$r++)
-													<option value="{{ $region[$r] }}"> {{ $region[$r] }} </option>
-												@endfor												
-											@else
-												<option value=""> There is no regions created yet. </option>
-											@endif
-										</select>
-									</div>
-								</div>
-
-								<div class="row justify-content-center">
+									</div>									
+								
 									<div class="col">
 										<label> Currency: </label>
-										<select class="form-control" name="region">
-											@if($currency)												
+										<select class="form-control" name="currency">
+											<option value=""> Select the Currency </option>
+											@if($currency)
 												@for($c = 0; $c < sizeof($currency);$c++)
-													<option value="{{ $currency[$c] }}"> {{ $currency[$c] }} </option>
-												@endfor												
+													<option value="{{ $currency[$c]["id"] }}">
+														{{ $currency[$c]["name"] }}
+													</option>
+												@endfor	
 											@else
 												<option value=""> There is no currency created yet. </option>
 											@endif

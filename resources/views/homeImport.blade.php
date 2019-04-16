@@ -27,13 +27,14 @@
 					<div class="card-body">
 						<div class="container-fluid">
 							<div class="row mt-2 justify-content-center">
-								<div class="col col-sm-6">
-									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
-										<a style="color: white;" href="{{ route('dataManagementTrueTruncateGet') }}">
-											Truncate
-										</a>
-									</button>	
-								</div>
+								<form action="{{ route('postTest') }}" method="POST" enctype="multipart/form-data">
+									@csrf
+									<div class="form-group">
+							        	<label for="exampleInputFile">File Upload</label>
+							        	<input type="file" name="file" class="form-control" id="exampleInputFile">
+							    	</div>
+							    	<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
 							</div>
 						</div>
 					</div>
