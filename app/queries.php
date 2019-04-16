@@ -94,7 +94,7 @@ class queries extends Model
 		$select = "SELECT ID,name FROM region";
 
 		$temp["nome"] = array("Brazil","Colombia","Argentina","Miami","Mexico"); //matrix temporaria de exemplo de como seria a saida
-		$temp["id"] = array(1,2,3,4,5); //matrix temporaria de exemplod e como seria a saida
+		$temp["id"] = array(1,2,3,4,5); //matrix temporaria de exemplo de como seria a saida
 	
 		return $temp;
 	}
@@ -206,10 +206,53 @@ class queries extends Model
 		return $clientList;
 	}
 
+	//recebe a conexão com o banco
+	public function getClientUnit($conn){
 
+		$sql = "SELECT ID, name FROM client_unit";
+
+		$result = $conn->query($sql);
+
+		$clientList = array();
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$clientList[$row["ID"]] = $row["name"];
+			}
+		}else{
+			return 0;
+		}
+
+		return $clientList;
+
+	}
+
+
+	//recebe a conexão com o banco
 	public function getAgency($conn){
 
 		$sql = "SELECT ID, name FROM agency";
+
+		$result = $conn->query($sql);
+
+		$agencyList = array();
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$agencyList[$row["ID"]] = $row["name"];
+			}
+		}else{
+			return 0;
+		}
+
+		return $agencyList;
+
+	}
+
+	//recebe a conexão com o banco
+	public function getAgencyUnit($conn){
+
+		$sql = "SELECT ID, name FROM agency_unit";
 
 		$result = $conn->query($sql);
 

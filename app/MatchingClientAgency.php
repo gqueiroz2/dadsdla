@@ -10,20 +10,39 @@ use App\queries;
 class MatchingClientAgency extends Model
 {
 	
-	public function MatchAgency(){
-
+	public function Match($name){
+		
 		$db = new Database();
 		$conn = $db->openConnection('DLA');
 
-		$data = new importSpreadsheet();
-		$sheetData = $data->SpreadsheetHandler($data->base());
-
 		$queries = new queries();
-		$agency = $queries->getAgency($conn);
 
-		for ($i=0; $i < ; $i++) { 
-			# code...
+		switch ($name) {
+			case 'Agency':
+				
+				break;
+			
+			case 'Client':
+				
+				break;
+			
+			default:
+				
+				break;
 		}
+	}
+
+	public function verifyMatch($conn, $name, $table){
+
+		$importedData = new importSpreadsheet();
+		$sheetData = $data->SpreadsheetHandler($importedData->base());
+
+
+		for ($i=0; $i < sizeof($sheetData); $i++) {
+			$aux = $sheetData[$i][$name];
+			$sql = "SELECT id, name FROM $table WHERE name='".$aux."'";
+		}
+		
 	}
 
 }
