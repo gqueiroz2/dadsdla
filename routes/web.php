@@ -77,6 +77,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 	Route::group(['prefix' => 'ajax'],function(){
 		Route::post('salesRepGroupByRegion','dataManagementAjaxController@salesRepGroupByRegion')
 						->name('AjaxSalesRepGroupByRegion');
+		Route::post('salesRepBySalesRepGroup','dataManagementAjaxController@salesRepBySalesRepGroup')
+						->name('AjaxSalesRepBySalesRepGroup');
 	});	
 
 });

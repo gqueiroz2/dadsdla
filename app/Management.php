@@ -10,8 +10,6 @@ class Management extends Model{
 
 		$insert = "INSERT INTO $table ($columns) VALUES ($values)";		
 
-		var_dump($insert);
-
 		if($con->query($insert) === true){
 			$rtr["bool"] = true;
 			$rtr["msg"] = "A New record on the table $table was successfully created!";
@@ -19,8 +17,6 @@ class Management extends Model{
 			$rtr["bool"] = false;
 			$rtr["msg"] = "Error: ".$insert."<br>".$con->error;
 		}
-
-		var_dump($rtr);
 
 		return $rtr;
 

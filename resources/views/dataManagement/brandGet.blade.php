@@ -4,7 +4,7 @@
 
 @section('content')
 
-	<div class="container-fluid">
+	<div class="container-fluid" style="margin-bottom: 5%;">
 		<div class="row justify-content-center">
 			<div class="col-sm-6">
 				<div class="card">
@@ -20,7 +20,7 @@
 							</div>
 							
 							@if($brand)
-
+								{{ $render->editBrand($brand) }}
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Brands </strong> to manage yet.
@@ -30,6 +30,22 @@
 							<div class="row justify-content-center">
 								<div class="col">
 									<h5> Add a Brand </h5>
+								</div>
+							</div>
+
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
+
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
 								</div>
 							</div>
 
@@ -58,7 +74,7 @@
 							</div>
 							
 							@if($brandUnit)
-
+								{{ $render->editBrandUnit($brandUnit) }}
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Brand Unit </strong> to manage yet.
@@ -70,14 +86,36 @@
 									<h5> Add a Brand Unit </h5>
 								</div>
 							</div>
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
 
-							<form method="POST" action="{{ route('dataManagementAddBrand') }}">
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
+								</div>
+							</div>
+							<form method="POST" action="{{ route('dataManagementAddBrandUnit') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
 										@if($brand)										
-											<label for="region"> Brand </label>
-											<input type="text" name="brand" class="form-control">										
+											<label> Brand </label>
+											<select class="form-control" name="brand">
+												
+												<option value=""> Select</option>
+												@for($b=0;$b<sizeof($brand);$b++)
+													<option value="{{$brand[$b]['id']}}">
+														{{ $brand[$b]['name'] }}
+													</option>
+												@endfor
+											</select>							
 										@else
 											<div class="alert alert-warning">
 	  											There is no <strong> Brand </strong> created yet, please create an Brand to relate with Brand Unit.
@@ -88,7 +126,14 @@
 									@if($origin)
 										<div class="col">
 											<label for="region"> Origin </label>
-											<input type="text" name="brand" class="form-control">
+											<select class="form-control" name="origin">
+												<option value=""> Select</option>
+												@for($o=0;$o<sizeof($origin);$o++)
+													<option value="{{$origin[$o]['id']}}">
+														{{ $origin[$o]['name'] }}
+													</option>
+												@endfor
+											</select>
 										</div>	
 									@else
 										<div class="col">
@@ -100,7 +145,7 @@
 
 									<div class="col">
 										<label for="region"> Brand Unit </label>
-										<input type="text" name="brand" class="form-control" {{$state}}>
+										<input type="text" name="brandUnit" class="form-control" {{$state}}>
 									</div>								
 								</div>
 

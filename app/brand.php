@@ -4,110 +4,61 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-/*
-*Author: Bruno Gomes
-*Date:10/04/2019
-*Razon:Brand modeler
-*/
-class brand extends Model
-{
+class brand extends Model{
 
-	/*
-	*Author: Bruno Gomes
-	*Date:15/04/2019
-	*Razon:Query modeler
-	*/
-    public function query($con, $colluns, $tabels, $where, $order_by = 1)
-    {    	
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";    	
-
+    public function select($con, $columns, $table, $join, $where, $order_by){    	
+    	
+        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by";    	
     	$res = $con->query($sql);
-
     	return $res;
     }
 
-    /*
-	*Author: Bruno Gomes
-	*Date:15/04/2019
-	*Razon:Colluns modeler
-	*/
-    public function colluns (
-    	$brand,
-    	$brand_unit
-    )
-    {
-    	$colluns = "";
+    public function columns ( $brand, $brand_unit ){
+    	
+        $columns = "";
 
-    	if ($brand) {
-    		$colluns .= "brand.name AS 'brand_name',";
+    	if($brand) {
+    		$columns .= "brand.name AS 'brand_name'";
     	}
 
     	if ($brand_unit) {
-    		$colluns .= "brand_unit.name AS 'brand_unit.name',";
+    		$columns .= "brand_unit.name AS 'brand_unit.name'";
     	}
 
-    	return $colluns;
+    	return $columns;
     }
 
-    /*
-	*Author: Bruno Gomes
-	*Date:15/04/2019
-	*Razon:Table modeler
-	*/
-    public function table (
-    	$brand,
-    	$brand_unit
-    )
-    {
+    public function table($brand,$brand_unit){
     	if ($brand) {
-    		$table = "'brand' brand ";
-    		$table .= "LEFT JOIN brand_unit AS brand_unit ON brand_unit.brand_id = brand.ID";
+    		$table = "brand brand ";
+    		$table .= "LEFT JOIN brand_unit ON brand_unit.brand_id = brand.ID";
     	}
 
     	if ($brand_unit) {
-    		$table = "'brand_unit' brand_unit";
-    		$table .= "LEFT JOIN brand AS brand ON brand.ID = brand_unit.brand_id";
+    		$table = "brand_unit brand_unit";
+    		$table .= "LEFT JOIN brand ON brand.ID = brand_unit.brand_id";
     	}
 
     	return $table;
     }
 
-    /*
-	*Author: Bruno Gomes
-	*Date:15/04/2019
-	*Razon:Where modeler
-	*/
-    public function where (
-    	$brand,
-    	$brand_unit
-    )
-    {
+    public function where($brand, $brand_unit ){
     	$where = "";
 
     	if ($brand) {
     		$brand_ids = implode(",", $brand);
-    		$where = "brand.ID IN ('.$brand_ids.')";
+    		$where = "brand.ID IN ('$brand_ids')";
     	}
 
     	if ($brand_unit) {
     		$brand_unit_ids = implode(",", $brand_unit);
-    		$where .= "brand_unit.ID IN ('.$brand_unit_ids.'')";
+    		$where .= "brand_unit.ID IN ('$brand_unit_ids')";
     	}
 
     	return $where;
     }
 
-    /*
-	*Author: Bruno Gomes
-	*Date:15/04/2019
-	*Razon:Order_by modeler
-	*/
-    public function order_by (
-    	$brand,
-    	$brand_unit,
-    	$order
-    )
-    {
+    public function order_by($brand, $brand_unit, $order){
     	$order_by = "ORDER BY ";
 
     	if ($brand) {
@@ -131,50 +82,30 @@ class brand extends Model
 
     	return $order_by;
     }
-
-	/*
-	*Author: Bruno Gomes
-	*Date:10/04/2019
-	*Razon:Brand modeler
-	*/
-    public function getBrand(
-    	$con
-    )
-    {
-    	$sql = "
-    		SELECT
-    			brand.ID AS 'ID',
-    			brand.name AS 'brand_name'
-    		FROM 'brand' AS brand
-    		ORDER BY brand.ID ASC
-    	";
+	
+    public function getBrand($con){
+    	$sql = "SELECT
+    			    brand.ID AS 'ID',
+    			    brand.name AS 'brand_name'
+    		    FROM 'brand' AS brand";
 
     	$res = $con->query($sql);
 
     	return $res;
     }
+	
+	public function getBrandUnit($con,$brand_id){            
+        $where = ""; // WHERE brand_unit.brand_id in ('.$brand_id.')
 
-	/*
-	*Author: Bruno Gomes
-	*Date:10/04/2019
-	*Razon:Brand modeler
-	*/
-	public function getBrandUnit(
-		$con,
-		$brand_id
-	)
-	{
-		$sql = "
-			SELECT
-				brand_unit.ID AS id,
-				brand_unit.name AS 'brandUnitName',
-				origin.name AS 'originName'
+		$sql = "SELECT
+				    brand_unit.ID AS id,
+				    brand_unit.name AS 'brandUnitName',
+				    origin.name AS 'originName'
 				
-			FROM brand_unit AS brand_unit
-				LEFT JOIN 'brand' AS brand ON brand.ID = brand_unit.brand_id
-				LEFT JOIN 'origin' AS origin ON origin.ID = brand_unit.origin_id
-			WHERE brand_unit.brand_id in ('.$brand_id.')
-		";
+			    FROM brand_unit AS brand_unit
+				    LEFT JOIN 'brand' AS brand ON brand.ID = brand_unit.brand_id
+				    LEFT JOIN 'origin' AS origin ON origin.ID = brand_unit.origin_id
+                $where";
 
 		$res = $con->query($sql);
 
