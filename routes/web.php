@@ -56,6 +56,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementAddRegion');
 		Route::post('user','dataManagementController@addUser')
 						->name('dataManagementAddUser');
+		Route::post('userType','dataManagementController@addUserType')
+						->name('dataManagementAddUserType');
 		Route::post('pRate','dataManagementController@addPRate')
 						->name('dataManagementAddPRate');
 		Route::post('currency','dataManagementController@addCurrency')
@@ -79,6 +81,11 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('AjaxSalesRepGroupByRegion');
 		Route::post('salesRepBySalesRepGroup','dataManagementAjaxController@salesRepBySalesRepGroup')
 						->name('AjaxSalesRepBySalesRepGroup');
+		Route::post('subLevelGroupByRegion','dataManagementAjaxController@subLevelGroupByRegion')
+						->name('AjaxSubLevelGroupByRegion');
+
+
+						
 	});	
 
 });

@@ -175,7 +175,7 @@ class dataManagement extends Management{
 		$table = "brand";
 		$columns = "id,name";
 
-		$result = $br->select($con,$columns,$table,false,false,1);
+		$result = $br->select($con,$columns,$table,false,false);
 
 		if($result && $result->num_rows > 0){
 			$count = 0;
@@ -207,7 +207,7 @@ class dataManagement extends Management{
 				 LEFT JOIN origin o ON o.ID = brdu.origin_id
 				";
 
-		$result = $br->select($con,$columns,$table,$join,false,1);
+		$result = $br->select($con,$columns,$table,$join,false);
 
 		if($result && $result->num_rows > 0){
 			$count = 0;
@@ -290,11 +290,6 @@ class dataManagement extends Management{
 		
 	}
 
-	public function addUsers(){
-
-		return false;
-	}
-
 	public function addSalesRepresentativeGroup($dm,$con){
 
 		$region = Request::get('region');
@@ -341,9 +336,7 @@ class dataManagement extends Management{
 
 		return $bool;
 
-	}
-
-	
+	}	
 
 	public function addBrand($con){
 
@@ -363,10 +356,6 @@ class dataManagement extends Management{
 		$brandID = Request::get('brand');
 		$originID = Request::get('origin');
 		$brandUnit = Request::get('brandUnit');
-
-		var_dump($brandID);
-		var_dump($originID);
-		var_dump($brandUnit);
 
 		$table = 'brand_unit';
 		$columns = 'brand_id,origin_id,name';
