@@ -20,7 +20,14 @@
 							</div>
 							@if($region)
 								@if($currency)
-									{{ $render->editCurrency($currency) }}
+									<form method="GET" action="{{ route('dataManagementEditPRateGet')}}">
+										{{ $render->editCurrency($currency) }}
+										<div class="row justify-content-end mt-1">
+											<div class="col col-sm-3 ">
+												<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
+											</div>
+										</div>
+									</form>
 								@else
 									<div class="alert alert-warning">
   										There is no <strong> Currency </strong> to manage yet.

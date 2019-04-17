@@ -93,6 +93,26 @@ class dataManagement extends Management{
 		
 	}
 
+	public function editRegion($con){
+		$size = intval(Request::get("size"));
+		$table = "region";
+		$columns[0] = "name";
+		for ($i=0; $i <$size ; $i++) { 
+			$old[$i] = Request::get("Old-$i");
+			$new[$i][0] = Request::get("New-$i");
+			$where[$i] = "WHERE name = '$old[$i]'";
+		}
+
+		for ($i=0; $i <$size ; $i++) { 
+			$bool = $this->updateValues($con,$table,$columns,$new[$i],$where[$i]);
+			if ($bool["bool"] == false) {
+				break;
+			}
+		}
+
+		return $bool;
+	}
+
 	public function getRegions($con){
 
 		$something = "id , name";

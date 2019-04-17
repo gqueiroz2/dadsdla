@@ -193,4 +193,38 @@ class dataManagementController extends Controller
     public function addOrigin(){
     	
     }
+
+    public function editRegionGet(){
+
+        $dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $region = $dm->getRegions($con);
+
+        $size = sizeof($region);
+
+        $render = new dataManagementRender();
+
+        return view('dataManagement.edit.editRegion',compact('region','render','size'));
+    }
+
+    public function editPRateGet(){
+        var_dump("to aqui mesmo");
+    }
+
+    public function editRegionPost(){
+        $dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $region = $dm->getRegions($con);
+
+        $bool = $dm->editRegion($con);
+        
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
+    }
 }

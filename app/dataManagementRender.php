@@ -18,17 +18,38 @@ class dataManagementRender extends Render{
     		
     		echo "<div class='row mt-1'>";
 
-    		echo "<div class='col'>";
-    			echo "<input type='text' readonly='true' class='form-control' value='".$region[$r]["name"]."' style='width:100%;'>";
-    		echo "</div>";
-
-    		echo "<div class='col'>";
-    			echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-    		echo "</div>";
+        		echo "<div class='col'>";
+        			echo "<input type='text' readonly='true' class='form-control' value='".$region[$r]["name"]."' style='width:100%;'>";
+        		echo "</div>";
 
     		echo "</div>";
 
     	}
+
+    }
+
+    public function editRegion2($region){
+        echo "<div class='row mt-1'>";
+
+            echo "<div class='col'> Old Name </div>";          
+            echo "<div class='col'> New Name </div>";                
+
+        echo "</div>";
+        for ($r=0; $r < sizeof($region); $r++) { 
+            
+            echo "<div class='row mt-1'>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' name='Old-$r' readonly='true' class='form-control' value='".$region[$r]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' name='New-$r' class='form-control' value='".$region[$r]["name"]."' style='width:100%;'>";
+                echo "</div>";
+            
+            echo "</div>";
+
+        }
 
     }
 
@@ -37,23 +58,18 @@ class dataManagementRender extends Render{
 
             echo "<div class='col'> Region </div>";
             echo "<div class='col'> Currency </div>";  
-            echo "<div class='col'> &nbsp; </div>";         
 
         echo "</div>";
         for ($c=0; $c < sizeof($currency); $c++) { 
             
             echo "<div class='row mt-1'>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["region"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["name"]."' style='width:100%;'>";
-            echo "</div>";
-
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["region"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["name"]."' style='width:100%;'>";
+                echo "</div>";
 
             echo "</div>";
 
