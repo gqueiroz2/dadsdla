@@ -7,6 +7,7 @@ use App\dataManagement;
 use App\dataBase;
 use App\dataManagementRender;
 use App\queries;
+use App\matchingClientAgency;
 
 class dataManagementController extends Controller
 {
@@ -66,6 +67,14 @@ class dataManagementController extends Controller
 
     	return view('dataManagement.pRateGet',compact('region','currency','pRate','cYear','render'));
     }
+
+
+    public function agencyGet(){
+
+        return view('dataManagement.agencyGet');
+
+    }
+
 
     public function originGet(){
     	$dm = new dataManagement();
@@ -192,5 +201,16 @@ class dataManagementController extends Controller
 
     public function addOrigin(){
     	
+    }
+
+    public function addAgency(){
+
+        $dm = new dataManagement();
+        $agency = new matchingClientAgency();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $agency->match($con);
     }
 }

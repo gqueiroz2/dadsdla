@@ -64,6 +64,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementAddSalesRepresentativeGroup');
 		Route::post('salesRepresentative','dataManagementController@addSalesRepresentative')
 						->name('dataManagementAddSalesRepresentative');
+		Route::post('agency', 'dataManagementController@addAgency')
+						->name('dataManagementAddAgency');						
 		Route::post('salesRepresentativeUnit','dataManagementController@addSalesRepresentativeUnit')
 						->name('dataManagementAddSalesRepresentativeUnit');
 		Route::post('brand','dataManagementController@addBrand')

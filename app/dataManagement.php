@@ -235,4 +235,8 @@ class dataManagement extends Management{
 		
 	}
 
+	public function addAgency(){
+		
+	}
+
 }
