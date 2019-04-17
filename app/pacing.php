@@ -16,14 +16,10 @@ class pacing extends Model
 	*Date:11/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
     {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
-
+        $sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
+    	
     	$res = $con->query($sql);
 
     	return $res;
@@ -46,15 +42,15 @@ class pacing extends Model
     	$colluns = "";
 
     	if ($region) {
-    		$colluns .= "region.name AS 'region_name', ";
+    		$colluns .= "region.name AS 'regionName', ";
     	}
 
     	if ($user) {
-    		$colluns .= "user.name AS 'user_name', ";
+    		$colluns .= "user.name AS 'userName', ";
     	}
 
     	if ($currency) {
-    		$colluns .= "currency.name AS 'currency_name', ";
+    		$colluns .= "currency.name AS 'currencyName', ";
     	}
 
     	if ($date) {
@@ -62,14 +58,14 @@ class pacing extends Model
     	}
 
     	if ($type_of_value) {
-    		$colluns .= "pacing.type_of_value AS 'type_value', ";
+    		$colluns .= "pacing.type_of_value AS 'typeValue', ";
     	}
 
     	if ($pacing_month) {
-    		$colluns .= "pacing.pacing_month AS 'pacing_month', ";
+    		$colluns .= "pacing.pacing_month AS 'pacingMonth', ";
     	}
 
-    	$colluns .= "pacing.ID AS ID";
+    	$colluns .= "pacing.ID AS id";
 
     	return $colluns;
     }
@@ -85,18 +81,18 @@ class pacing extends Model
     	$user
     )
     {
-    	$table = "'DLA'.'pacing_report' AS pacing";
+    	$table = "''pacing_report' AS pacing";
 
     	if ($region) {
-    		$table .= "LEFT JOIN 'DLA'.'region' AS region ON region.ID = pacing.region_id";
+    		$table .= "LEFT JOIN ''region'  ON region.ID = pacing.region_id";
     	}
 
     	if ($currency) {
-    		$table .= "LEFT JOIN 'DLA'.'currency' AS currency ON currency.ID = pacing.currency_id";
+    		$table .= "LEFT JOIN ''currency'  ON currency.ID = pacing.currency_id";
     	}
 
     	if ($user) {
-    		$table .= "LEFT JOIN 'DLA'.'user' AS user ON user.ID = pacing.user_id";
+    		$table .= "LEFT JOIN ''user'  ON user.ID = pacing.user_id";
     	}
 
     	return $table;
@@ -115,7 +111,7 @@ class pacing extends Model
 
     	if ($region) {
     		$region_ids = implode(",", $region);
-    		$where .= "region.ID IN ('.$region_ids.')";
+    		$where .= "region.ID IN ('$region_ids')";
     		if ($user) {
     			$where .= " AND ";
     		}
@@ -123,7 +119,7 @@ class pacing extends Model
 
     	if ($user) {
     		$user_ids = implode(",", $user);
-    		$where .= "user.ID IN ('.$user_ids.')";
+    		$where .= "user.ID IN ('$user_ids')";
     	}
 
     	return $where;
@@ -152,9 +148,15 @@ class pacing extends Model
     		$order_by .= "user.name";    		
     	}
 
-    	$order_by .= " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-    	return $order_by;
+        return $order_by;
     }
 
     /*
@@ -173,7 +175,7 @@ class pacing extends Model
 
     	if ($pacing_report_id) {
     		$pacing_report_ids = implode(",", $pacing_report_id);
-    		$where .= "pacing_report_unit.pacing_report_id IN ('.$pacing_report_ids.')";
+    		$where .= "pacing_report_unit.pacing_report_id IN ('$pacing_report_ids')";
     		if ($brand OR $client) {
     			$where .= " AND ";
     		}
@@ -181,7 +183,7 @@ class pacing extends Model
 
     	if ($brand) {
     		$brand_ids = implode(",", $brand);
-    		$where .= "pacing_report_unit.brand_id IN ('.$brand_ids.')";
+    		$where .= "pacing_report_unit.brand_id IN ('$brand_ids')";
     		if ($pacing_report_id OR $client) {
     			$where .= " AND ";
     		}
@@ -189,22 +191,22 @@ class pacing extends Model
 
     	if ($client) {
     		$client_ids = implode(",", $client);
-    		$where .= "pacing_report_unit.client_id IN ('.$client_ids.')";
+    		$where .= "pacing_report_unit.client_id IN ('$client_ids')";
     	}
 
     	$sql = "
     		SELECT
-    			pacing_report_unit.ID AS 'ID',
-    			brand.name AS 'brand_name',
-    			client.name AS 'client_name',
-    			pacing_report_unit.month AS 'pacing_unit_month',
-    			pacing_report_unit.currency_value AS 'currency_value',
-    			pacing_report_unit.full_year_value AS 'full_year_value'  
+    			pacing_report_unit.ID AS 'id',
+    			brand.name AS 'brandName',
+    			client.name AS 'clientName',
+    			pacing_report_unit.month AS 'pacingUnitMonth',
+    			pacing_report_unit.currency_value AS 'currencyValue',
+    			pacing_report_unit.full_year_value AS 'fullYearValue'  
 
-    		FROM 'DLA'.'pacing_report' AS pacing
-    			LEFT JOIN 'DLA'.'pacing_report_unit' AS pacing_report_unit ON pacing_report_unit.pacing_report_id = pacing.ID 
-    			LEFT JOIN 'DLA'.'brand' AS brand ON brand.ID = pacing_report_unit.brand_id
-    			LEFT JOIN 'DLA'.'client' AS client ON client.ID = pacing_report_unit.client_id
+    		FROM 'pacing_report' AS pacing
+    			LEFT JOIN 'pacing_report_unit' ON pacing_report_unit.pacing_report_id = pacing.ID 
+    			LEFT JOIN 'brand'  ON brand.ID = pacing_report_unit.brand_id
+    			LEFT JOIN 'client' ON client.ID = pacing_report_unit.client_id
 
     		$where
 

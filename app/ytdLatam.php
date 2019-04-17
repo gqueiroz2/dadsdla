@@ -16,13 +16,9 @@ class ytdLatam extends Model
 	*Date:08/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
-    {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
+    {    	
+    	$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
 
     	$res = $con->query($sql);
 
@@ -48,7 +44,7 @@ class ytdLatam extends Model
 		$colluns = "";
 
     	if ($sales_office_id) {
-    		$colluns .= "region.name AS 'sales_office',";
+    		$colluns .= "region.name AS 'salesOffice',";
     	}
 
     	if ($currency_id) {
@@ -68,14 +64,14 @@ class ytdLatam extends Model
     	}
 
     	if ($net_revenue) {
-    		$colluns .= "plan.net_revenue AS 'net_revenue',";
+    		$colluns .= "plan.net_revenue AS 'netRevenue',";
     	}
 
     	if ($net_net_revenue) {
-    		$colluns .= "plan.net_net_revenue AS 'net_net_revenue',";
+    		$colluns .= "plan.net_net_revenue AS 'netNetRevenue',";
     	}
 
-    	$colluns .= "plan.ID = ID";
+    	$colluns .= "plan.ID = id";
 
     	return $colluns;
 	}
@@ -90,14 +86,14 @@ class ytdLatam extends Model
 		$currency
 	)
 	{
-		$table .= "'DLA'.'plan_by_brand' AS plan ";
+		$table .= "'plan_by_brand' AS plan ";
 
     	if ($region) {
-    		$table .= "LEFT JOIN 'DLA'.'region' AS region ON plan.sales_office_id = region.ID ";
+    		$table .= "LEFT JOIN 'region' ON plan.sales_office_id = region.ID ";
     	}
 
     	if ($currency) {
-    		$table .= "LEFT JOIN 'DLA'.'currency' AS currency ON plan.currency_id = currency.ID ";
+    		$table .= "LEFT JOIN 'currency' ON plan.currency_id = currency.ID ";
     	}
 
     	return $table;
@@ -134,7 +130,7 @@ class ytdLatam extends Model
 
     	if ($sales_office) {
     		$sales_office_ids = implode(",", $sales_office);
-    		$where .= "region.ID in ('.$sales_office_ids.')";
+    		$where .= "region.ID IN('$sales_office_ids')";
     	}
 
     	return $where;
@@ -149,7 +145,8 @@ class ytdLatam extends Model
 	public function order_by(
 	$month,
 	$year,
-	$sales_office
+	$sales_office,
+	$order
 
     )
     {
@@ -173,8 +170,14 @@ class ytdLatam extends Model
 			$order_by .= "region.name ";
 		}    
 
-		$order_by .= " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-		return $order_by;
+        return $order_by;
     }	
 }

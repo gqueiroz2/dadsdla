@@ -7,6 +7,30 @@ use App\Render;
 
 class dataManagementRender extends Render{
     
+    public function editOrigin($origin){
+        echo "<div class='row mt-1'>";
+
+            echo "<div class='col'> Origin </div>";          
+            echo "<div class='col'> &nbsp; </div>";                
+
+        echo "</div>";
+        for ($o=0; $o < sizeof($origin); $o++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$origin[$o]["name"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
+    }
+
 	public function editRegion($region){
         echo "<div class='row mt-1'>";
 
@@ -147,6 +171,135 @@ class dataManagementRender extends Render{
 
         }
 
+    }
+
+    public function editSalesRep($salesRep){
+
+        echo "<div class='row mt-1'>";
+
+            echo "<div class='col'> Region </div>";
+            echo "<div class='col'> Sales Rep. Group </div>";              
+            echo "<div class='col'> Sales Rep </div>";              
+            echo "<div class='col'> &nbsp; </div>";                
+
+        echo "</div>";
+        
+        for ($s=0; $s < sizeof($salesRep); $s++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["region"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["salesRepGroup"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["salesRep"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
+
+    }
+
+    public function editSalesRepUnit($salesRepUnit){
+
+        echo "<div class='row mt-1'>";
+            
+            echo "<div class='col'> Sales Rep. </div>";              
+            echo "<div class='col'> Sales Rep. Unit </div>";              
+            echo "<div class='col'> Origin </div>";              
+            echo "<div class='col'> &nbsp; </div>";                
+
+        echo "</div>";
+        
+        for ($s=0; $s < sizeof($salesRepUnit); $s++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRep"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["origin"]."' style='width:100%;'>";
+            echo "</div>";
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
+    }
+
+    public function editBrand($brand){
+
+        echo "<div class='row mt-1'>";
+            
+            echo "<div class='col'> Brand </div>";                                      
+            echo "<div class='col'> &nbsp; </div>";                
+
+        echo "</div>";
+        
+        for ($b=0; $b < sizeof($brand); $b++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$brand[$b]["name"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
+    }
+
+    public function editBrandUnit($brandUnit){
+
+        echo "<div class='row mt-1'>";
+            
+            echo "<div class='col'> Brand </div>";                                      
+            echo "<div class='col'> Origin </div>";                                      
+            echo "<div class='col'> Brand Unit </div>";                                      
+            echo "<div class='col'> &nbsp; </div>";                
+
+        echo "</div>";
+        
+        for ($b=0; $b < sizeof($brandUnit); $b++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$brandUnit[$b]["brand"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$brandUnit[$b]["origin"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$brandUnit[$b]["brandUnit"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
     }
 
 

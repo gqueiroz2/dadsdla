@@ -36,14 +36,57 @@
 							<form method="POST" action="{{ route('dataManagementAddUser') }}">
 							@csrf
 
-							
+								
 								<div class="row justify-content-center">
 									<div class="col">
-										<label for="region"> Name: </label>
-										<input type="text" name="region" class="form-control">
+										<label> Name: </label>
+										<input type="text" name="name" class="form-control">
+									</div>								
+
+									<div class="col">
+										<label> E-mail: </label>
+										<input type="text" name="email" class="form-control">
 									</div>								
 								</div>
 
+								<div class="row justify-content-center">
+									<div class="col">
+										<label> Region: </label>
+										<select class="form-control" name="region">
+											@if($region)
+												<option value=""> Select a Region </option>
+												@for($r = 0; $r < sizeof($region);$r++)
+													<option value="{{ $region[$r]["name"] }}"> 
+														{{ $region[$r]["name"] }} 
+													</option>
+												@endfor												
+											@else
+												<option value=""> There is no regions created yet. </option>
+											@endif
+										</select>
+									</div>
+
+									<div class="col">
+										<label> Level: </label>
+										<select class="form-control" name="level">
+											
+										</select>
+									</div>
+
+									<div class="col">
+										<label> Sub-Level: </label>
+										<select class="form-control" name="level">
+											
+										</select>
+									</div>
+
+									<div class="col">
+										<label> Status: </label>
+										<select class="form-control" name="level">
+											
+										</select>
+									</div>
+								</div>
 								<div class="row justify-content-end mt-1">
 									<div class="col col-sm-3">
 										<input type="submit" class="btn btn-primary" value="Add Region" style="width:100%;">
