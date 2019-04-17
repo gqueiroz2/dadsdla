@@ -16,13 +16,11 @@ class header extends Model
 	*Date:12/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
     {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
 
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
+    	$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
+ 
 
     	$res = $con->query($sql);
 
@@ -70,11 +68,11 @@ class header extends Model
         $colluns = "";
 
         if ($campaign_sales_office_id) {
-            $colluns .= "region.name AS 'campaign_sales_office', ";
+            $colluns .= "region.name AS 'campaignSalesOffice', ";
         }
 
         if ($sales_rep_sales_office_id) {
-            $colluns .= "region.name AS 'sales_rep_sales_office', ";
+            $colluns .= "region.name AS 'sales_repSalesOffice', ";
         }
 
         if ($brand_id) {
@@ -82,7 +80,7 @@ class header extends Model
         }
 
         if ($sales_rep_id) {
-            $colluns .= "sales_rep.name AS 'sales_rep',";
+            $colluns .= "sales_rep.name AS 'salesRep',";
         }
 
         if ($client_id) {
@@ -106,86 +104,86 @@ class header extends Model
         }
 
         if ($brand_feed) {
-            $colluns .= "header.brand_feed AS 'brand_feed', ";
+            $colluns .= "header.brand_feed AS 'brandFeed', ";
         }
 
         if ($sales_rep_role) {
-            $colluns .= "header.sales_rep_role AS 'sales_rep_role', ";
+            $colluns .= "header.sales_rep_role AS 'salesRepRole', ";
         }
 
         if ($client_product) {
-            $colluns .= "header.client_product AS 'client_product', ";
+            $colluns .= "header.client_product AS 'clientProduct', ";
         }
 
         if ($order_reference) {
-            $colluns .= "header.order_reference AS 'order_reference', ";
+            $colluns .= "header.order_reference AS 'orderReference', ";
         }
 
         if ($campaign_reference) {
-            $colluns .= "header.campaign_reference AS 'campaign_reference', ";
+            $colluns .= "header.campaign_reference AS 'campaignReference', ";
         }
 
         if ($spot_duration) {
-            $colluns .= "header.spot_duration AS 'spot_duration', ";
+            $colluns .= "header.spot_duration AS 'spotDuration', ";
         }
 
         if ($campaign_status_id) {
-            $colluns .= "header.campaign_status_id AS 'campaign_status_id', ";
+            $colluns .= "header.campaign_status_id AS 'campaignStatusId', ";
         }
 
         if ($campaign_option_desc) {
-            $colluns .= "header.campaign_option_desc AS 'campaign_option_desc', ";
+            $colluns .= "header.campaign_option_desc AS 'campaignOptionDesc', ";
         }
 
         if ($campaign_class_id) {
-            $colluns .= "header.campaign_class_id AS 'campaign_class_id', ";
+            $colluns .= "header.campaign_class_id AS 'campaignClassId', ";
         }
 
         if ($campaign_option_start_date) {
-            $colluns .= "header.campaign_option_start_date AS 'campaign_option_start_date', ";
+            $colluns .= "header.campaign_option_start_date AS 'campaignOptionStartDate', ";
         }
 
         if ($campaign_option_target_spot) {
-            $colluns .= "header.campaign_option_target_spot AS 'campaign_option_target_spot', ";
+            $colluns .= "header.campaign_option_target_spot AS 'campaignOptionTargetSpot', ";
         }
 
         if ($campaign_option_spend) {
-            $colluns .= "header.campaign_option_spend AS 'campaign_option_spend', ";
+            $colluns .= "header.campaign_option_spend AS 'campaignOptionSpend', ";
         }
 
         if ($impression_duration) {
-            $colluns .= "header.impression_duration AS 'impression_duration', ";
+            $colluns .= "header.impression_duration AS 'impressionDuration', ";
         }
 
         if ($num_spot_impressions) {
-            $colluns .= "header.num_spot_impressions AS 'num_spot_impressions', ";
+            $colluns .= "header.num_spot_impressions AS 'numSpotImpressions', ";
         }
 
         if ($gross_revenue) {
-            $colluns .= "header.gross_revenue AS 'gross_revenue', ";
+            $colluns .= "header.gross_revenue AS 'grossRevenue', ";
         }
 
         if ($net_revenue) {
-            $colluns .= "header.net_revenue AS 'net_revenue', ";
+            $colluns .= "header.net_revenue AS 'netRevenue', ";
         }
 
         if ($net_net_revenue) {
-            $colluns .= "header.net_net_revenue AS 'net_net_revenue', ";
+            $colluns .= "header.net_net_revenue AS 'netNetRevenue', ";
         }
 
         if ($gross_revenue_prate) {
-            $colluns .= "header.gross_revenue_prate AS 'gross_revenue_prate', ";
+            $colluns .= "header.gross_revenue_prate AS 'grossRevenuePrate', ";
         }
 
         if ($net_revenue_prate) {
-            $colluns .= "header.net_revenue_prate AS 'net_revenue_prate', ";
+            $colluns .= "header.net_revenue_prate AS 'netRevenuePrate', ";
         }
 
         if ($net_net_revenue_prate) {
-            $colluns .= "header.net_net_revenue_prate AS 'net_net_revenue_prate', ";
+            $colluns .= "header.net_net_revenue_prate AS 'netNetRevenuePrate', ";
         }
 
-        $colluns .= "header.ID AS ''ID";
+        $colluns .= "header.ID AS 'id'";
 
         return $colluns;
     }
@@ -204,30 +202,30 @@ class header extends Model
     	$region
     )
     {
-        $table = "'DLA'.'header' AS header";
+        $table = "'header' AS header";
 
         if ($client) {
-            $table .= "LEFT JOIN 'DLA'.'client' AS client ON client.ID = header.client_id";
+            $table .= "LEFT JOIN 'client'  ON client.ID = header.client_id";
         }
 
         if ($sales_rep) {
-            $table .= "LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON sales_rep.ID = header.sales_rep_id";
+            $table .= "LEFT JOIN 'sales_rep'  ON sales_rep.ID = header.sales_rep_id";
         }
 
         if ($brand) {
-            $table .= "LEFT JOIN 'DLA'.'brand' AS brand ON brand.ID = header.brand_id";
+            $table .= "LEFT JOIN 'brand' ON brand.ID = header.brand_id";
         }
 
         if ($agency) {
-            $table .= "LEFT JOIN 'DLA'.'agency' AS agency ON agency.ID = header.agency_id";
+            $table .= "LEFT JOIN 'agency'  ON agency.ID = header.agency_id";
         }
 
         if ($currency) {
-            $table .= "LEFT JOIN 'DLA'.'currency' AS currency ON currency.ID = header.campaign_currency_id";
+            $table .= "LEFT JOIN 'currency'  ON currency.ID = header.campaign_currency_id";
         }
 
         if ($region) {
-            $table .= "LEFT JOIN 'DLA'.'region' AS region ON region.ID = header.campaign_sales_office_id";
+            $table .= "LEFT JOIN 'region'  ON region.ID = header.campaign_sales_office_id";
         }
 
         return $table;
@@ -305,7 +303,8 @@ class header extends Model
         $client,
         $agency,
         $month,
-        $year
+        $year,
+        $order
     )
     {
         $order_by = "ORDER BY ";
@@ -348,8 +347,13 @@ class header extends Model
         if ($agency) {
             $order_by .= "agency.name";
         }
-
-        $order_by = " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
         return $order_by;
     }

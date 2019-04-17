@@ -16,13 +16,9 @@ class planByBrand extends Model
 	*Date:08/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
     {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
+        $sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
 
     	$res = $con->query($sql);
 
@@ -49,7 +45,7 @@ class planByBrand extends Model
 		$colluns = "";
 
     	if ($sales_office_id) {
-    		$colluns .= "region.name AS 'sales_office',";
+    		$colluns .= "region.name AS 'salesOffice',";
     	}
 
     	if ($currency_id) {
@@ -69,18 +65,18 @@ class planByBrand extends Model
     	}
 
     	if ($net_revenue) {
-    		$colluns .= "plan.net_revenue AS 'net_revenue',";
+    		$colluns .= "plan.net_revenue AS 'netRevenue',";
     	}
 
     	if ($net_net_revenue) {
-    		$colluns .= "plan.net_net_revenue AS 'net_net_revenue',";
+    		$colluns .= "plan.net_net_revenue AS 'netNetRevenue',";
     	}
 
     	if ($source_id) {
-    		$colluns .= "source.name AS 'source_name',";
+    		$colluns .= "source.name AS 'sourceName',";
     	}
 
-    	$colluns .= "plan.ID = ID";
+    	$colluns .= "plan.ID = id";
 
     	return $colluns;
 	}
@@ -96,18 +92,18 @@ class planByBrand extends Model
 		$source
 	)
 	{
-		$table .= "'DLA'.'plan_by_brand' AS plan ";
+		$table .= "'plan_by_brand' AS plan ";
 
     	if ($region) {
-    		$table .= "LEFT JOIN 'DLA'.'region' AS region ON plan.sales_office_id = region.ID ";
+    		$table .= "LEFT JOIN 'region'  ON plan.sales_office_id = region.ID ";
     	}
 
     	if ($currency) {
-    		$table .= "LEFT JOIN 'DLA'.'currency' AS currency ON plan.currency_id = currency.ID ";
+    		$table .= "LEFT JOIN 'currency'  ON plan.currency_id = currency.ID ";
     	}
 
     	if ($source) {
-    		$table .= "LEFT JOIN 'DLA'.'plan_source' AS source ON source.ID = plan.source_id";
+    		$table .= "LEFT JOIN 'plan_source'  ON source.ID = plan.source_id";
     	}
 
     	return $table;
@@ -145,7 +141,7 @@ class planByBrand extends Model
 
     	if ($sales_office) {
     		$sales_office_ids = implode(",", $sales_office);
-    		$where .= "region.ID IN ('.$sales_office_ids.')";
+    		$where .= "region.ID IN ('$sales_office_ids')";
     		if ($month OR $brand OR $year) {
     			$where .= " AND ";
     		}
@@ -153,7 +149,7 @@ class planByBrand extends Model
 
     	if($source){
     		$source_ids = implode(",", $source)
-    		$where .= "source.ID IN ('.$source_ids.')";
+    		$where .= "source.ID IN ('$source_ids')";
     	}
 
     	return $where;
@@ -168,7 +164,8 @@ class planByBrand extends Model
 	public function order_by(
 	$month,
 	$year,
-	$sales_office
+	$sales_office,
+    $order
 
     )
     {
@@ -192,8 +189,15 @@ class planByBrand extends Model
 			$order_by .= "region.name ";
 		}    
 
-		$order_by .= " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-		return $order_by;
+        return $order_by;
+
     }
 }

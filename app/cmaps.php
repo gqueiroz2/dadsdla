@@ -16,14 +16,10 @@ class cmaps extends Model
 	*Date:04/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
     {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
-
+    	$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
+    	
     	$res = $con->query($sql);
 
     	return $res;
@@ -66,7 +62,7 @@ class cmaps extends Model
     	$colluns = "";
 
     	if ($sales_group_id) {
-    		$colluns .= "sales_rep_group.name AS 'sales_group', ";
+    		$colluns .= "sales_rep_group.name AS 'salesGroup', ";
     	}
 
     	if ($decode) {
@@ -82,11 +78,11 @@ class cmaps extends Model
     	}
 
     	if ($map_number) {
-    		$colluns .= "cmaps.map_number AS 'map_number', ";
+    		$colluns .= "cmaps.map_number AS 'mapNumber', ";
     	}
 
     	if ($sales_rep_id) {
-    		$colluns .= "sales_rep.name AS 'sales_rep', " ;
+    		$colluns .= "sales_rep.name AS 'salesRep', " ;
     	}
 
     	if ($package) {
@@ -94,7 +90,7 @@ class cmaps extends Model
     	}
 
     	if ($client_id) {
-    		$colluns .= "client.name AS 'client_name', ";
+    		$colluns .= "client.name AS 'clientName', ";
     	}
 
     	if ($product) {
@@ -106,15 +102,15 @@ class cmaps extends Model
     	}
 
     	if ($agency_id) {
-    		$colluns .= "agency.name AS 'agency_name', ";
+    		$colluns .= "agency.name AS 'agencyName', ";
     	}
 
     	if ($brand_id) {
-    		$colluns .= "brand_unit.name AS 'brand_name',";
+    		$colluns .= "brand_unit.name AS 'brandName',";
     	}
 
     	if ($pi_number) {
-    		$colluns .= "cmaps.pi_number AS 'pi_number',";
+    		$colluns .= "cmaps.pi_number AS 'piNumber',";
     	}
 
     	if ($gross) {
@@ -134,15 +130,15 @@ class cmaps extends Model
     	}
 
     	if ($client_cnpj) {
-    		$colluns .= "cmaps.client_cnpj AS 'client_cnpj',";
+    		$colluns .= "cmaps.client_cnpj AS 'clientCnpj',";
     	}
 
     	if ($agency_cnpj) {
-    		$colluns .= "cmaps.agency_cnpj AS 'agency_cnpj',";
+    		$colluns .= "cmaps.agency_cnpj AS 'agencyCnpj',";
     	}
 
     	if ($media_type) {
-    		$colluns .= "cmaps.media_type AS 'media_type',";
+    		$colluns .= "cmaps.media_type AS 'mediaType',";
     	}
 
     	if ($log) {
@@ -150,7 +146,7 @@ class cmaps extends Model
     	}
 
     	if ($ad_sales_support) {
-    		$colluns .= "cmaps.ad_sales_support AS 'ad_sales_support',";
+    		$colluns .= "cmaps.ad_sales_support AS 'adSalesSupport',";
     	}
 
     	if ($obs) {
@@ -165,7 +161,7 @@ class cmaps extends Model
     		$colluns .= "cmaps.cathegory AS 'cathegory', ";
     	}
 
-    	$colluns .= "cmaps.ID AS 'ID' ";
+    	$colluns .= "cmaps.ID AS 'id' ";
 
     	return $colluns;
     }
@@ -183,31 +179,31 @@ class cmaps extends Model
     	$sales_rep_group
     )
     {
-    	$table = "'DLA'.'cmaps' AS cmaps ";
+    	$table = "'cmaps' AS cmaps ";
 
     	if ($brand) {
     		//make the bound between Brand and Channel
-    		$table .= "LEFT JOIN 'DLA'.'brand' AS brand ON ytd.channel_brand_id = brand.ID";
+    		$table .= "LEFT JOIN 'brand' ON ytd.channel_brand_id = brand.ID";
 
     		//make the bound between Brand and Brand Unit
-    		$table .= "LEFT JOIN 'DLA'.'brand_unit' AS brand_unit ON brand.ID = brand_unit.brand_id";
+    		$table .= "LEFT JOIN 'brand_unit' ON brand.ID = brand_unit.brand_id";
     	}
 
     	if ($client) {
-    		$table .= "LEFT JOIN 'DLA'.'client' AS client ON cmaps.client_id = client.ID";
+    		$table .= "LEFT JOIN 'client' ON cmaps.client_id = client.ID";
     	}
 
     	if ($agency) {
-    		$table .= "LEFT JOIN 'DLA'.'agency' AS agency ON cmaps.agency_id = agency.ID";
+    		$table .= "LEFT JOIN 'agency' ON cmaps.agency_id = agency.ID";
     	}    	
 
     	if ($sales_rep) {
     		//make the bound between Sales_rep and cmaps 
-    		$table .= "LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON cmaps.sales_representant_id = sales_rep.ID";
+    		$table .= "LEFT JOIN 'sales_rep' ON cmaps.sales_representant_id = sales_rep.ID";
     	}
 
     	if ($sales_rep_group) {
-    		$table .= "LEFT JOIN 'DLA'.'sales_rep_group' AS sales_rep_group ON cmaps.sales_group_id = sales_rep_group.ID";
+    		$table .= "LEFT JOIN 'sales_rep_group' ON cmaps.sales_group_id = sales_rep_group.ID";
     	}
 
     	return $table;
@@ -246,7 +242,7 @@ class cmaps extends Model
 
     	if ($sales_rep) {
     		$sales_rep_ids = implode(",", $sales_rep);
-    		$where .= "sales_rep.ID IN ('.$sales_rep_ids.')";
+    		$where .= "sales_rep.ID IN ('$sales_rep_ids')";
     		if ($month OR $brand OR $year) {
     			$where .= " AND ";
     		}
@@ -255,7 +251,7 @@ class cmaps extends Model
     	//in this parameter, has a exception, pass it as true or false
     	if ($brand) {
             $brand_ids = implode(",", $brand);
-    		$where .= "brand.ID IN ('.$brand_ids.') ";    		
+    		$where .= "brand.ID IN ('$brand_ids') ";    		
     	}
 
     	return $where;
@@ -270,7 +266,8 @@ class cmaps extends Model
     	$month,
     	$year,
     	$brand,
-    	$sales_rep
+    	$sales_rep,
+        $order
     )
     {
     	$order_by = "ORDER_BY ";
@@ -300,9 +297,15 @@ class cmaps extends Model
             $order_by .= "brand.name";
         }
 
-    	$order_by .= " ASC";
-    }
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-    return $order_by;
+        return $order_by;
+    }
 
 }

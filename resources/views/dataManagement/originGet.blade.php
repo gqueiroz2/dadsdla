@@ -20,7 +20,7 @@
 							</div>
 							
 							@if($origin)
-
+								{{ $render->editOrigin($origin) }}
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Origins </strong> to manage yet.
@@ -32,13 +32,27 @@
 									<h5> Add a Origin </h5>
 								</div>
 							</div>
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('error'))
+										<div class="alert alert-danger">
+  											{{ session('error') }}
+										</div>
+									@endif
 
+									@if(session('response'))
+										<div class="alert alert-info">
+  											{{ session('response') }}
+										</div>
+									@endif
+								</div>
+							</div>
 							<form method="POST" action="{{ route('dataManagementAddOrigin') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
-										<label for="region"> Name: </label>
-										<input type="text" name="region" class="form-control">
+										<label> Name: </label>
+										<input type="text" name="origin" class="form-control">
 									</div>								
 								</div>
 

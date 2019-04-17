@@ -16,13 +16,9 @@ class forecast extends Model
 	*Date:12/04/2019
 	*Razon:Query modeler
 	*/
-    public function query($con, $colluns, $tabels, $where, $order_by)
+    public function query($con, $colluns, $tabels, $where, $order_by = 1)
     {
-    	$sql = "SELECT $colluns FROM $tabels WHERE $where ;";
-
-    	if (isset($order_by)) {
-    		$sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
-    	}
+        $sql = "SELECT $colluns FROM $tabels WHERE $where $order_by ;";
 
     	$res = $con->query($sql);
 
@@ -47,15 +43,15 @@ class forecast extends Model
     	$colluns = "";
 
     	if ($region) {
-    		$colluns .= "region.name AS 'region_name', ";
+    		$colluns .= "region.name AS 'regionName', ";
     	}
 
     	if ($sales_rep) {
-    		$colluns .= "sales_rep.name AS 'sales_rep_name',";
+    		$colluns .= "sales_rep.name AS 'salesRepName',";
     	}
 
     	if ($currency) {
-    		$colluns .= "currency.name AS 'currency_name',";
+    		$colluns .= "currency.name AS 'currencyName',";
     	}
 
     	if ($date) {
@@ -63,7 +59,7 @@ class forecast extends Model
     	}
 
     	if ($type_value) {
-    		$colluns .= "forecast.type_of_value AS 'type_value', ";
+    		$colluns .= "forecast.type_of_value AS 'typeValue', ";
     	}
 
     	if ($read) {
@@ -71,10 +67,10 @@ class forecast extends Model
     	}
 
     	if ($forecast_month) {
-    		$colluns .= "forecast.forecast_month AS 'forecast_month', ";
+    		$colluns .= "forecast.forecast_month AS 'forecastMonth', ";
     	}
 
-    	$colluns .= "forecast.ID AS 'ID'";
+    	$colluns .= "forecast.ID AS 'id'";
 
     	return $colluns;
     }
@@ -90,18 +86,18 @@ class forecast extends Model
     	$currency
     )
     {
-    	$table = "'DLA'.'forecast' AS forecast";
+    	$table = "'forecast' AS forecast";
 
     	if ($region) {
-    		$table .= "LEFT JOIN 'DLA'.'region' AS region ON region.ID = forecast.region_id";
+    		$table .= "LEFT JOIN 'region'  ON region.ID = forecast.region_id";
     	}
 
     	if ($sales_rep) {
-    		$table .= "LEFT JOIN 'DLA'.'sales_rep' AS sales_rep ON sales_rep.ID = forecast.sales_rep_id";
+    		$table .= "LEFT JOIN 'sales_rep'  ON sales_rep.ID = forecast.sales_rep_id";
     	}
 
     	if ($currency) {
-    		$table .= "LEFT JOIN 'DLA'.'currency' AS currency ON currency.ID = forecast.currency_id";
+    		$table .= "LEFT JOIN 'currency' ON currency.ID = forecast.currency_id";
     	}
 
     	return $table;
@@ -122,7 +118,7 @@ class forecast extends Model
 
     	if ($region) {
     		$region_ids = implode(",", $region);
-    		$where .= "region.ID IN ('.$region_ids.')";
+    		$where .= "region.ID IN ('$region_ids')";
     		if ($sales_rep) {
     			$where .= " AND ";
     		}
@@ -130,7 +126,7 @@ class forecast extends Model
 
     	if ($sales_rep) {
     		$sales_rep_ids = implode(",", $sales_rep);
-    		$where .= "sales_rep.ID IN ('.$sales_rep_ids.')";
+    		$where .= "sales_rep.ID IN ('$sales_rep_ids')";
     	}
 
     	return $where;
@@ -143,7 +139,8 @@ class forecast extends Model
 	*/
     public function order_by(
     	$region,
-    	$sales_rep
+    	$sales_rep,
+        $order
     )
     {
     	$order_by = "ORDER BY ";
@@ -159,9 +156,15 @@ class forecast extends Model
     		$order_by .= "sales_rep.name";
     	}
 
-    	$order_by .= " ASC";
+        //this parameters, pass it as true or false, for true the result will be ASC
+        if ($order == TRUE) {
+            $order_by .= " ASC";
+        }
+        else{
+            $order_by .= " DESC";
+        }
 
-    	return $order_by;
+        return $order_by;
     }
 
     /*
@@ -179,7 +182,7 @@ class forecast extends Model
 
     	if ($forecast_id) {
     		$forecast_ids = implode(",", $forecast_id);
-    		$where .= "forecast_unit.forecast_id IN ('.$forecast_ids.')";
+    		$where .= "forecast_unit.forecast_id IN ('$forecast_ids')";
     		if ($client_id OR $brand_id) {
     			$where = " AND ";
     		}
@@ -187,7 +190,7 @@ class forecast extends Model
 
     	if ($client_id) {
     		$client_ids = implode(",", $client_id);
-    		$where .= "forecast_unit.client_id IN ('.$client_ids.')";
+    		$where .= "forecast_unit.client_id IN ('$client_ids')";
     		if ($forecast_id OR $brand_id) {
     			$where .= " AND ";
     		}
@@ -195,21 +198,21 @@ class forecast extends Model
 
     	if ($brand_id) {
     		$brand_ids = implode(",", $brand_id);
-    		$where .= !"forecast_unit.brand_id IN ('.$brand_ids.')";
+    		$where .= !"forecast_unit.brand_id IN ('$brand_ids')";
     	}
 
     	$sql = "
     		SELECT
-    			forecast_unit.ID AS 'ID',
-    			client.name AS 'client_name',
-    			brand.name AS 'brand_name',
+    			forecast_unit.ID AS 'id',
+    			client.name AS 'clientName',
+    			brand.name AS 'brandName',
     			forecast_unit.month AS 'month',
     			forecast_unit.value AS 'value'
 
-    		FROM 'DLA'.'forecast_unit' AS forecast_unit
-    			LEFT JOIN 'DLA'.'forecast' AS forecast ON forecast.ID = forecast_unit.forecast_id
-    			LEFT JOIN 'DLA'.'client' AS client ON  client.ID = forecast_unit.client_id
-    			LEFT JOIN 'DLA'.'brand' AS brand ON brand.ID = forecast_unit.brand_id
+    		FROM 'forecast_unit'  forecast_unit
+    			LEFT JOIN 'forecast'  ON forecast.ID = forecast_unit.forecast_id
+    			LEFT JOIN 'client'  ON  client.ID = forecast_unit.client_id
+    			LEFT JOIN 'brand'  ON brand.ID = forecast_unit.brand_id
 
 
     		$where
