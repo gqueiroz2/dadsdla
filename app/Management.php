@@ -88,7 +88,6 @@ class Management extends Model{
 
 	public function setUpdate($columns, $values){
 
-
 		$set = "SET ";
 		for ($i=0; $i <sizeof($columns) ; $i++) { 
 			if ($i == sizeof($columns)-1) {
@@ -113,5 +112,22 @@ class Management extends Model{
 		}
 
 		return $rtr;
+	}
+
+	public function filter($select,$table,$columns,$filter,$con){
+
+		$select1 = "";
+
+		for ($s=0; $s <sizeof($select) ; $s++) { 
+			if ($s == sizeof($select)-1) {
+				$select1 .= "$select[$s]";
+			}else{
+				$select1 .= "$select[$s],";
+			}
+		}
+
+		$result = $this->get()
+
+		//return $result;
 	}
 }

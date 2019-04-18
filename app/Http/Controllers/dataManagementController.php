@@ -318,6 +318,35 @@ class dataManagementController extends Controller
         return view('dataManagement.edit.editPRate',compact('region','currency','pRate','cYear','render'));
     }
 
+    public function editSalesRepGroupFilter(){
+        $dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $render = new dataManagementRender();
+
+
+        $temp = Request::get("filterRegion");
+        $filter = array();
+        if ($temp != null) {
+            array_push($filter, $temp);
+        }
+
+        $region = $dm->getRegions($con);
+
+        if (sizeof($filter) == 0 ) {
+            $salesRepresentativeGroup = $dm->getSalesRepresentativeGroup($con);
+        }else{
+            $select = array('id','region_id','name');
+            $columns = array('region_id');
+            $salesRepresentativeGroup = $dm->filter($select, 'sales_rep_group',$columns, $filter,$con);
+        }
+        
+
+
+        return view('dataManagement.edit.editSalesRepGroup',compact('salesRepresentativeGroup','region','render'));
+
+    }
+
     public function editRegionPost(){
         $dm = new dataManagement();
 

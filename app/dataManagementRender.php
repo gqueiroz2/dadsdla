@@ -234,7 +234,6 @@ class dataManagementRender extends Render{
 
             echo "<div class='col'> Region </div>";
             echo "<div class='col'> Sales Rep. Group </div>";              
-            echo "<div class='col'> &nbsp; </div>";                
 
         echo "</div>";
         
@@ -242,16 +241,63 @@ class dataManagementRender extends Render{
             
             echo "<div class='row mt-1'>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["region"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["region"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+
             echo "</div>";
 
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
+        }
+
+    }
+
+    public function editSalesRepGroup2($salesRepGroup,$region){
+
+        echo "<div class='row mt-1'>";
+
+            echo "<div class='col'> Old Region </div>";
+            echo "<div class='col'> Old Sales Rep. Group </div>";              
+            echo "<div class='col'> New Region </div>";
+            echo "<div class='col'> New Sales Rep. Group </div>";              
+
+        echo "</div>";
+        
+        for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
+            
+            echo "<div class='row mt-1'>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["region"]."' style='width:100%;'>";
+                echo "</div>";
+                
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<select class='form-control' name='NewRegion-$s'>";
+                    for($r = 0; $r < sizeof($region);$r++){
+                        if ($region[$r]["name"] == $salesRepGroup[$s]["region"]) {
+                            echo "<option selected='true' value='".$region[$r]["name"]."'>" ;
+                                echo $region[$r]["name"];  
+                            echo "</option>";
+                        }else{
+                            echo "<option value='".$region[$r]["name"]."'>" ;
+                                echo $region[$r]["name"];  
+                            echo "</option>";
+                        }
+                    } 
+                    echo "</select>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
 
             echo "</div>";
 
@@ -388,7 +434,25 @@ class dataManagementRender extends Render{
         }
     }
 
+    public function filters($region){
+    
+        echo "<div class='row'>";
+            echo "<div class='col col-sm-9'> Region </div>";
+        echo "</div>";
+        echo "<div class='row mt-1'>";
+            echo "<div class='col col-sm-9'>";
+                echo "<select class = 'form-control' name='filterRegion'>";
+                    echo "<option value=''> None </option>";
+                    for ($i=0; $i <sizeof($region); $i++) { 
+                        echo "<option value = \"".$region[$i]["id"]."\">".$region[$i]["name"]."</option>";
+                    }
+                echo "</select>";
+            echo "</div>";
+            echo "<div class='col col-sm-3'>";
+                echo "<input type='submit' class='btn btn-primary' value='Filter' style=\"width: 100%;\">";
+            echo "</div>";
+        echo "</div>";
 
- 
+    }
 
 }

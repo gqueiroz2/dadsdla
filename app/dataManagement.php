@@ -10,6 +10,7 @@ use App\brand;
 
 class dataManagement extends Management{
 
+
 	public function editRegion($con){
 		$size = intval(Request::get("size"));
 		$table = "region";

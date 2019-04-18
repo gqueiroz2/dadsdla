@@ -89,6 +89,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementEditPRateGet');
 		Route::post('prate','dataManagementController@editPRatePost')
 						->name('dataManagementEditPRatePost');
+		Route::post('salesRepresentativeGroup','dataManagementController@editSalesRepGroupFilter')
+						->name('dataManagementEditSalesRepGroupFilter');
 	});
 
 	Route::group(['prefix' => 'ajax'],function(){

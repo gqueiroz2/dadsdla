@@ -23,6 +23,15 @@
 								<div class="col">
 									@if($salesRepresentativeGroup)
 										{{ $render->editSalesRepGroup($salesRepresentativeGroup) }}
+										<form method="POST" action="{{ route('dataManagementEditSalesRepGroupFilter') }}">
+											@csrf
+											<input type="hidden" name="jorge">
+											<div class="row justify-content-end mt-1">
+												<div class="col col-sm-3">
+													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
+												</div>
+											</div>
+										</form>
 									@else
 										<div class="alert alert-warning">
   											There is no <strong> Sales Representative Group </strong> to manage yet.
