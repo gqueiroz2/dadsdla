@@ -317,15 +317,38 @@ class dataManagementController extends Controller
         $con = $db->openConnection('DLA');
         $region = $dm->getRegions($con);
 
-        $size = sizeof($region);
-
         $render = new dataManagementRender();
 
-        return view('dataManagement.edit.editRegion',compact('region','render','size'));
+        return view('dataManagement.edit.editRegion',compact('region','render'));
+    }
+
+    public function editCurrencyGet(){
+
+        $dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $region = $dm->getRegions($con);
+        $currency = $dm->getCurrency($con);
+        $pRate = $dm->getPRate($con);
+        $cYear = date('Y');
+        $render = new dataManagementRender();
+
+        return view('dataManagement.edit.editCurrency',compact('region','currency','pRate','cYear','render'));
     }
 
     public function editPRateGet(){
-        var_dump("to aqui mesmo");
+        $dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $region = $dm->getRegions($con);
+        $currency = $dm->getCurrency($con);
+        $pRate = $dm->getPRate($con);
+        $cYear = date('Y');
+        $render = new dataManagementRender();
+
+        return view('dataManagement.edit.editPRate',compact('region','currency','pRate','cYear','render'));
     }
 
     public function editRegionPost(){
@@ -336,6 +359,36 @@ class dataManagementController extends Controller
         $region = $dm->getRegions($con);
 
         $bool = $dm->editRegion($con);
+        
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
+    }
+
+    public function editCurrencyPost(){
+        $dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $bool = $dm->editCurrency($con); 
+        
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }   
+    }
+
+    public function editPRatePost(){
+        $dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $bool = $dm->editPRate($con); 
         
         if($bool){
             return back()->with('response',$bool['msg']);

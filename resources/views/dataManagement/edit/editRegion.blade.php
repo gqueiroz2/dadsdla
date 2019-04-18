@@ -28,7 +28,6 @@
 								<form method="POST" action=" {{ route('dataManagementEditRegionPost') }} ">
 									@csrf
 									{{ $render->editRegion2($region) }}
-									<input type="hidden" name="size" value="{{$size}}">
     								<div class='row justify-content-end mt-1'>
 										<div class="col col-sm-3">
 											<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">

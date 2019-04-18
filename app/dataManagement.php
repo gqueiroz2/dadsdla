@@ -330,4 +330,83 @@ class dataManagement extends Management{
 		return $origin;
 	}
 
+	public function addSalesRepresentative($dm,$con){
+
+		$regionID = Request::get('region');
+		$salesRepGroupID = Request::get('salesRepGroup');
+		$salesRep = Request::get('salesRep');
+
+		$table = 'sales_rep';
+		$columns = 'sales_group_id,name';
+		$values = " '$salesRepGroupID','$salesRep' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+
+	}
+
+	public function addSalesRepresentativeUnit($dm,$con){
+
+		$regionID = Request::get('region');
+		$salesRepGroupID = Request::get('salesRepGroup');
+		$salesRepID = Request::get('salesRep');
+		$salesRepUnit = Request::get('salesRepUnit');
+		$origin = Request::get('origin');
+
+		$table = 'sales_rep_unit';
+		$columns = 'sales_rep_id,origin_id,name';
+		$values = " '$salesRepID','$origin','$salesRepUnit' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+
+	}
+
+	public function addBrand($con){
+
+		$brand = Request::get('brand');
+
+		$table = 'brand';
+		$columns = 'name';
+		$values = "'$brand'";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
+
+	public function addBrandUnit($con){
+
+		$brandID = Request::get('brand');
+		$originID = Request::get('origin');
+		$brandUnit = Request::get('brandUnit');
+
+		var_dump($brandID);
+		var_dump($originID);
+		var_dump($brandUnit);
+
+		$table = 'brand_unit';
+		$columns = 'brand_id,origin_id,name';
+		$values = "'$brandID','$originID','$brandUnit'";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+		
+		return $bool;
+	}
+
+	public function addOrigin($con){
+    	$origin = Request::get('origin');
+
+    	$table = "origin";
+		$columns = 'name';
+		$values = '"'.$origin.'"';
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
+
+
 }

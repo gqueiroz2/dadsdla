@@ -59,6 +59,9 @@ class dataManagementRender extends Render{
             echo "<div class='col'> New Name </div>";                
 
         echo "</div>";
+
+        echo "<input type='hidden' name='size' value='".sizeof($region)."'>";
+
         for ($r=0; $r < sizeof($region); $r++) { 
             
             echo "<div class='row mt-1'>";
@@ -101,6 +104,49 @@ class dataManagementRender extends Render{
 
     }
 
+    public function editCurrency2($currency,$region){
+        echo "<div class='row mt-1'>";
+            echo "<div class='col'> Old Region </div>";
+            echo "<div class='col'> Old Currency </div>";  
+            echo "<div class='col'> New Region </div>";
+            echo "<div class='col'> New Currency </div>";  
+        echo "</div>";
+
+        echo "<input type='hidden' name='size' value='".sizeof($currency)."'>";
+        for ($c=0; $c < sizeof($currency); $c++) { 
+            
+            echo "<div class='row mt-1'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='OldRegion-$c' readonly='true' class='form-control' value='".$currency[$c]["region"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='OldName-$c' readonly='true' class='form-control' value='".$currency[$c]["name"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<select class='form-control' name='NewRegion-$c'>";
+                    for($r = 0; $r < sizeof($region);$r++){
+                        if ($region[$r]["name"] == $currency[$c]["region"]) {
+                            echo "<option selected='true' value='".$region[$r]["name"]."'>" ;
+                                echo $region[$r]["name"];  
+                            echo "</option>";
+                        }else{
+                            echo "<option value='".$region[$r]["name"]."'>" ;
+                                echo $region[$r]["name"];  
+                            echo "</option>";
+                        }
+                    } 
+                    echo "</select>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='NewName-$c' class='form-control' value='".$currency[$c]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+            echo "</div>";
+
+        }
+
+    }
+
     public function editPRate($pRate){
         echo "<div class='row mt-1'>";
 
@@ -108,7 +154,6 @@ class dataManagementRender extends Render{
             echo "<div class='col'> Currency </div>";
             echo "<div class='col'> Year </div>";
             echo "<div class='col'> Value </div>";                
-            echo "<div class='col'> &nbsp; </div>";                
 
         echo "</div>";
 
@@ -117,25 +162,66 @@ class dataManagementRender extends Render{
             
             echo "<div class='row mt-1'>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["region"]."' style='width:100%;'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["region"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["currency"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["year"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='". number_format( $pRate[$p]["value"] ,2 ) ."' style='width:100%;'>";
+                echo "</div>";
+
             echo "</div>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["currency"]."' style='width:100%;'>";
-            echo "</div>";
+        }
+    }
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["year"]."' style='width:100%;'>";
-            echo "</div>";
+    public function editPRate2($pRate){
+        echo "<div class='row mt-1'>";
+            echo "<div class='col'> Region </div>";
+            echo "<div class='col'> Currency </div>";
+            echo "<div class='col'> Old Year </div>";
+            echo "<div class='col'> Old Value </div>";                
+            echo "<div class='col'> New Year </div>";
+            echo "<div class='col'> New Value </div>";                
+        echo "</div>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='". number_format( $pRate[$p]["value"] ,2 ) ."' style='width:100%;'>";
-            echo "</div>";
+        echo "<input type='hidden' name='size' value='".sizeof($pRate)."'>";
 
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
+        for ($p=0; $p < sizeof($pRate); $p++) { 
+            
+            echo "<div class='row mt-1'>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' name='region-$p' class='form-control' value='".$pRate[$p]["region"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' name='currency-$p' class='form-control' value='".$pRate[$p]["currency"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' name='oldYear-$p' class='form-control' value='".$pRate[$p]["year"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' name='oldValue-$p' class='form-control' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' class='form-control' name='newYear-$p' value='".$pRate[$p]["year"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' class='form-control' name='newValue-$p' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
+                echo "</div>";
 
             echo "</div>";
 
