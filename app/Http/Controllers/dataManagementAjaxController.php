@@ -5,9 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\salesRep;
+use App\region;
+use App\sql;
 
 class dataManagementAjaxController extends Controller{
    	
+      public function subLevelGroupByRegion(){
+         $region = new region();
+         $sr = new SalesRep();
+         $sql = new sql();
+         $db = new dataBase();
+         $con = $db->openConnection('DLA');         
+         $regionID = array(Request::get('regionID'));
+
+         $result = $sr->getSalesRepGroup($con,$regionID);
+
+         $to = array('id','name');
+         $from = $to;
+
+         $salesRepGroup = $sql->fetch($result,$from,$to);
+
+         echo "<option value=''> Select </option>";
+         for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
+            echo "<option value='".$salesRepGroup[$s]['id']."'>".$salesRepGroup[$s]['name']."</option>";
+         }
+
+      }
+
       public function salesRepBySalesRepGroup(){
          $db = new dataBase();
          $con = $db->openConnection('DLA');
@@ -52,7 +76,7 @@ class dataManagementAjaxController extends Controller{
    		$db = new dataBase();
    		$con = $db->openConnection('DLA');
 
-   		$regionID = Request::get('regionID');
+   		$regionID = array(Request::get('regionID'));
 
    		$sr = new salesRep();
 

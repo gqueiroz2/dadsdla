@@ -9,98 +9,79 @@ use App\salesRep;
 use App\brand;
 
 class dataManagement extends Management{
+    
 
+
+	public function addRegion($con){
+		
+		$region = Request::get('region');
+		$table = 'region';
+		$columns = 'name';
+		$values = "'$region'";
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
+
+	public function addCurrency($dm,$con){
+        
+        $region = Request::get('region');
+        $currency = Request::get('currency');
+        $regionID = $dm->getID($con,'region',$region);
+        $table = 'currency';
+        $columns = 'name,region_id';
+        $values = " '$currency','$regionID' ";
+        $bool = $this->insert($con,$table,$columns,$values);
+
+        return $bool;
+
+	}
+
+	public function addPRate($dm,$con){
+
+		$year = Request::get('year');
+		$currency = Request::get('currency');
+		$value = doubleval(Request::get('value'));
+
+		$table = 'p_rate';
+		$columns = 'currency_id,year,value';
+		$values = " '$currency','$year','$value' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+		
+	}
+
+
+	public function addSalesRepresentativeGroup($dm,$con){
+
+		$region = Request::get('region');
+		$salesRepGroup = Request::get('salesRepGroup');
+
+		$table = 'sales_rep_group';
+		$columns = 'region_id,name';
+		$values = " '$region','$salesRepGroup' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
 
 	public function editRegion($con){
 		$size = intval(Request::get("size"));
 		$table = "region";
-		$columns = array("name");
-		$columnsWhere = array("name");
+		$columns[0] = "name";
 		for ($i=0; $i <$size ; $i++) { 
 			$old[$i] = Request::get("Old-$i");
-			$new[$i] = Request::get("New-$i");
-			$values[$i] = array($old[$i]);
-			$values2[$i] = array($new[$i]);
-			$where[$i] = $this->where($columnsWhere,$values[$i]);
-			$setUpdate[$i] = $this->setUpdate($columns,$values2[$i]);
+			$new[$i][0] = Request::get("New-$i");
+			$where[$i] = "WHERE name = '$old[$i]'";
 		}
 
-
 		for ($i=0; $i <$size ; $i++) { 
-			$bool = $this->updateValues($con,$table,$setUpdate[$i],$where[$i]);
+			$bool = $this->updateValues($con,$table,$columns,$new[$i],$where[$i]);
 			if ($bool["bool"] == false) {
 				break;
-			}
-		}
-
-		return $bool;
-	}
-
-	public function editCurrency($con){
-		$size = intval(Request::get("size"));
-		$table = "currency";
-		$columns = array('name','region_id');
-		$columnsWhere = array("name","region_id");
-
-		for ($i=0; $i <$size ; $i++) { 
-			$OldRegion[$i] = Request::get("OldRegion-$i");
-			$NewRegion[$i] = Request::get("NewRegion-$i");
-			$OldCurrency[$i] = Request::get("OldName-$i");
-			$NewCurrency[$i] = Request::get("NewName-$i");
-			$OldId[$i] = $this->getID($con,'region',$OldRegion[$i]);
-			$NewId[$i] = $this->getID($con,'region',$NewRegion[$i]);
-			$values2[$i] = array($NewCurrency[$i],$NewId[$i]);
-			$values[$i] = array($OldCurrency[$i],$OldId[$i]);
-			$set[$i] = $this->setUpdate($columns,$values2[$i]);
-			$where[$i] = $this->where($columns, $values[$i]);
-		}
-
-		for ($i=0; $i <$size ; $i++) { 
-			$bool = $this->updateValues($con,$table,$set[$i],$where[$i]);
-			if($bool["bool"] == false){
-				break;
-			}
-		}
-
-		return $bool;
-	}
-
-	public function editPRate($con){
-		$size = intval(Request::get("size"));
-		$table = "p_rate";
-		$columns = array('year','value');
-		$columnsWhere = array('currency_id','year','value');
-
-		for ($i=0; $i <$size; $i++) { 
-			$region[$i] = Request::get("region-$i");
-			$currency[$i] = Request::get("currency-$i");
-			$oldYear[$i] = Request::get("oldYear-$i");
-			$oldValue[$i] = Request::get("oldValue-$i");
-			$newYear[$i] = Request::get("newYear-$i");
-			$newValue[$i] = Request::get("newValue-$i");
-			$regionId[$i] = $this->getID($con,'region',$region[$i]);
-			$currencyId[$i] = $this->getID($con,'currency',$currency[$i]);
-
-			$values[$i] = array($newYear[$i],$newValue[$i]);
-			$values2[$i] = array($currencyId[$i],$oldYear[$i],$oldValue[$i]);
-
-			$where[$i] = $this->where($columnsWhere, $values2[$i]);
-			$set[$i] = $this->setUpdate($columns,$values[$i]);
-			
-			if ($oldYear[$i] == $newYear[$i] && $newValue[$i] == $oldValue[$i]) {
-				$verifier[$i] = false;
-			}else{
-				$verifier[$i] = true;
-			}
-		}
-
-
-		for ($i=0; $i <$size ; $i++) { 
-			if ($verifier[$i] == true) {
-				$bool = $this->updateValues($con,$table,$set[$i],$where[$i]);
-				if($bool["bool"] == false){
-					break;
-				}
 			}
 		}
 
@@ -241,7 +222,7 @@ class dataManagement extends Management{
 					p_rate p 
 				LEFT JOIN currency c ON p.currency_id = c.ID
 				LEFT JOIN region r ON c.region_id = r.ID
-				ORDER BY region,currency,year DESC
+				ORDER BY year,region,currency
 				";
 
 		$result = $con->query($sql);
@@ -272,7 +253,7 @@ class dataManagement extends Management{
 		$table = "brand";
 		$columns = "id,name";
 
-		$result = $br->select($con,$columns,$table,false,false,1);
+		$result = $br->select($con,$columns,$table,false,false);
 
 		if($result && $result->num_rows > 0){
 			$count = 0;
@@ -304,7 +285,7 @@ class dataManagement extends Management{
 				 LEFT JOIN origin o ON o.ID = brdu.origin_id
 				";
 
-		$result = $br->select($con,$columns,$table,$join,false,1);
+		$result = $br->select($con,$columns,$table,$join,false);
 
 		if($result && $result->num_rows > 0){
 			$count = 0;
@@ -345,7 +326,6 @@ class dataManagement extends Management{
 
 		return $origin;
 	}
-
 
 	public function addSalesRepresentative($dm,$con){
 
@@ -425,9 +405,5 @@ class dataManagement extends Management{
 		return $bool;
 	}
 
-	public function addAgency(){
-		
-	}
-	
 
 }

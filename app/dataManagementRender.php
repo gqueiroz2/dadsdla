@@ -432,6 +432,37 @@ class dataManagementRender extends Render{
             echo "</div>";
 
         }
+
+    }
+
+    public function editUserType($userType){
+
+        echo "<div class='row mt-1'>";
+            
+            echo "<div class='col'> User Type </div>";                                   
+            echo "<div class='col'> Level </div>";                           
+
+        echo "</div>";
+        
+        for ($u=0; $u < sizeof($userType); $u++) { 
+            
+            echo "<div class='row mt-1'>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$userType[$u]["name"]."' style='width:100%;'>";
+            echo "</div>";
+
+            echo "<div class='col'>";
+                echo "<input type='text' readonly='true' class='form-control' value='".$userType[$u]["level"]."' style='width:100%;'>";
+            echo "</div>";            
+
+            echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
+
+            echo "</div>";
+
+        }
     }
 
     public function filters($region){
@@ -452,7 +483,82 @@ class dataManagementRender extends Render{
                 echo "<input type='submit' class='btn btn-primary' value='Filter' style=\"width: 100%;\">";
             echo "</div>";
         echo "</div>";
+    }
 
+    public function editUser($user){
+        
+        
+        for ($u=0; $u < sizeof($user); $u++) { 
+            
+            echo "<hr>";
+                
+
+            echo "<p style='text-align:center;'><b> USER # ".$user[$u]['id']."</b></p>";
+
+            echo "<hr>";
+
+            echo "<div class='row mt-1'>";            
+                echo "<div class='col'> Name </div>";                                   
+                echo "<div class='col'> E-mail </div>";             
+                echo "<div class='col'> Password </div>";                                                 
+            echo "</div>";    
+
+            echo "<div class='row mt-1'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["email"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["password"]."' style='width:100%;'>";
+                echo "</div>";
+            echo "</div>";
+
+            echo "<div class='row mt-1'>";           
+                echo "<div class='col'> Region </div>";                           
+                echo "<div class='col'> Status </div>";                           
+                echo "<div class='col'> Sub Level Bool </div>";                           
+            echo "</div>";
+
+            echo "<div class='row mt-1'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["region"]."' style='width:100%;'>";
+                echo "</div>";                
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["status"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["subLevelBool"]."' style='width:100%;'>";
+                echo "</div>";
+            echo "</div>";
+
+            echo "<div class='row mt-1'>";            
+                echo "<div class='col'> User Type </div>";                                   
+                echo "<div class='col'> Level </div>";                           
+                echo "<div class='col'> Sub Rep. Group </div>";                                                   
+            echo "</div>";
+
+            echo "<div class='row mt-1'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["userType"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["level"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["salesRepGroup"]."' style='width:100%;'>";
+                echo "</div>";
+            echo "</div>";
+
+            echo "<hr>";
+
+        }
+
+        echo "<div class='col'>";
+                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+            echo "</div>";
     }
 
 }

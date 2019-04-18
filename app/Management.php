@@ -8,7 +8,7 @@ class Management extends Model{
 
 	public function insert($con,$table,$columns,$values){
 
-		$insert = "INSERT INTO $table ($columns) VALUES ($values)";		
+		$insert = "INSERT INTO $table ($columns) VALUES ($values)";	
 
 		if($con->query($insert) === true){
 			$rtr["bool"] = true;

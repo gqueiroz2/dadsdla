@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Request;
 use App\dataManagement;
 use App\dataBase;
 use App\dataManagementRender;
+
+use App\User;
 use App\queries;
 use App\matchingClientAgency;
 
@@ -31,12 +33,15 @@ class dataManagementController extends Controller
 
     	$dm = new dataManagement();
         $db = new dataBase();
+        $usr = new User();
         $con = $db->openConnection('DLA');
 
     	$region = $dm->getRegions($con);
-    	$user = $dm->getUsers($con);
+    	$user = $usr->getUser($con);
+        $userType = $usr->getUserType($con);
 
-    	return view('dataManagement.userGet',compact('user','region'));
+        $render = new dataManagementRender();
+    	return view('dataManagement.userGet',compact('user','userType','region','render'));
 
     }
 
@@ -127,6 +132,34 @@ class dataManagementController extends Controller
     }
 
     public function addUser(){
+        $usr = new User();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $bool = $usr->addUser($con);
+
+        if($bool){
+            return back()->with('addUser',$bool['msg']);
+        }else{
+            return back()->with('errorAddUser',$bool['msg']);
+        }
+    }
+
+
+
+    public function addUserType(){
+        $usr = new User();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $bool = $usr->addUserType($con);
+
+        if($bool){
+            return back()->with('addUserType',$bool['msg']);
+        }else{
+            return back()->with('errorUserType',$bool['msg']);
+        }
 
     }
 
