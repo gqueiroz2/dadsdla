@@ -10,6 +10,87 @@ use App\brand;
 
 class dataManagement extends Management{
     
+
+	public function addRegion($con){
+		
+		$region = Request::get('region');
+		$table = 'region';
+		$columns = 'name';
+		$values = "'$region'";
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
+
+	public function addCurrency($dm,$con){
+        
+        $region = Request::get('region');
+        $currency = Request::get('currency');
+        $regionID = $dm->getID($con,'region',$region);
+        $table = 'currency';
+        $columns = 'name,region_id';
+        $values = " '$currency','$regionID' ";
+        $bool = $this->insert($con,$table,$columns,$values);
+
+        return $bool;
+
+	}
+
+	public function addPRate($dm,$con){
+
+		$year = Request::get('year');
+		$currency = Request::get('currency');
+		$value = doubleval(Request::get('value'));
+
+		$table = 'p_rate';
+		$columns = 'currency_id,year,value';
+		$values = " '$currency','$year','$value' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+		
+	}
+
+	public function addUsers(){
+
+		return false;
+	}
+
+	public function addSalesRepresentativeGroup($dm,$con){
+
+		$region = Request::get('region');
+		$salesRepGroup = Request::get('salesRepGroup');
+
+		$table = 'sales_rep_group';
+		$columns = 'region_id,name';
+		$values = " '$region','$salesRepGroup' ";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+	}
+
+	public function editRegion($con){
+		$size = intval(Request::get("size"));
+		$table = "region";
+		$columns[0] = "name";
+		for ($i=0; $i <$size ; $i++) { 
+			$old[$i] = Request::get("Old-$i");
+			$new[$i][0] = Request::get("New-$i");
+			$where[$i] = "WHERE name = '$old[$i]'";
+		}
+
+		for ($i=0; $i <$size ; $i++) { 
+			$bool = $this->updateValues($con,$table,$columns,$new[$i],$where[$i]);
+			if ($bool["bool"] == false) {
+				break;
+			}
+		}
+
+		return $bool;
+	}
+
     public function getRegions($con){
 
 		$something = "id , name";
@@ -248,136 +329,5 @@ class dataManagement extends Management{
 
 		return $origin;
 	}
-
-	public function addRegion($con){
-		
-		$region = Request::get('region');
-		$table = 'region';
-		$columns = 'name';
-		$values = "'$region'";
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-	}
-
-	public function addCurrency($dm,$con){
-        
-        $region = Request::get('region');
-        $currency = Request::get('currency');
-        $regionID = $dm->getID($con,'region',$region);
-        $table = 'currency';
-        $columns = 'name,region_id';
-        $values = " '$currency','$regionID' ";
-        $bool = $this->insert($con,$table,$columns,$values);
-
-        return $bool;
-
-	}
-
-	public function addPRate($dm,$con){
-
-		$year = Request::get('year');
-		$currency = Request::get('currency');
-		$value = doubleval(Request::get('value'));
-
-		$table = 'p_rate';
-		$columns = 'currency_id,year,value';
-		$values = " '$currency','$year','$value' ";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-		
-	}
-
-	public function addSalesRepresentativeGroup($dm,$con){
-
-		$region = Request::get('region');
-		$salesRepGroup = Request::get('salesRepGroup');
-
-		$table = 'sales_rep_group';
-		$columns = 'region_id,name';
-		$values = " '$region','$salesRepGroup' ";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-	}
-
-	public function addSalesRepresentative($dm,$con){
-
-		$regionID = Request::get('region');
-		$salesRepGroupID = Request::get('salesRepGroup');
-		$salesRep = Request::get('salesRep');
-
-		$table = 'sales_rep';
-		$columns = 'sales_group_id,name';
-		$values = " '$salesRepGroupID','$salesRep' ";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-
-	}
-
-	public function addSalesRepresentativeUnit($dm,$con){
-
-		$regionID = Request::get('region');
-		$salesRepGroupID = Request::get('salesRepGroup');
-		$salesRepID = Request::get('salesRep');
-		$salesRepUnit = Request::get('salesRepUnit');
-		$origin = Request::get('origin');
-
-		$table = 'sales_rep_unit';
-		$columns = 'sales_rep_id,origin_id,name';
-		$values = " '$salesRepID','$origin','$salesRepUnit' ";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-
-	}	
-
-	public function addBrand($con){
-
-		$brand = Request::get('brand');
-
-		$table = 'brand';
-		$columns = 'name';
-		$values = "'$brand'";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-	}
-
-	public function addBrandUnit($con){
-
-		$brandID = Request::get('brand');
-		$originID = Request::get('origin');
-		$brandUnit = Request::get('brandUnit');
-
-		$table = 'brand_unit';
-		$columns = 'brand_id,origin_id,name';
-		$values = "'$brandID','$originID','$brandUnit'";
-
-		$bool = $this->insert($con,$table,$columns,$values);
-		
-		return $bool;
-	}
-
-	public function addOrigin($con){
-    	$origin = Request::get('origin');
-
-    	$table = "origin";
-		$columns = 'name';
-		$values = '"'.$origin.'"';
-
-		$bool = $this->insert($con,$table,$columns,$values);
-
-		return $bool;
-	}
-
-	
 
 }

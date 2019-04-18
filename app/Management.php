@@ -68,4 +68,26 @@ class Management extends Model{
 		return $id;
 
 	}
+
+	public function updateValues($con,$tableName,$columns,$values,$where){
+		$sql = "UPDATE $tableName SET ";
+		
+		for ($i=0; $i <sizeof($columns) ; $i++) { 
+			$sql .= "$columns[$i] = '$values[$i]', ";
+		}
+
+		$sql = substr_replace($sql, "", -2);
+
+		$sql .= " ".$where;
+
+		if($con->query($sql) === true){
+			$rtr["bool"] = true;
+			$rtr["msg"] = "Regions successfully updated!";
+		}else{
+			$rtr["bool"] = false;
+			$rtr["msg"] = "Error: ".$sql."<br>".$con->error;
+		}
+
+		return $rtr;
+	}
 }

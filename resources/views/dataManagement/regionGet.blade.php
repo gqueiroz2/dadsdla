@@ -19,8 +19,15 @@
 								</div>
 							</div>
 							
-							@if($region)								
+							@if($region)			
 								{{ $render->editRegion($region) }}
+    							<div class='row justify-content-end mt-1'>
+									<div class="col col-sm-3">
+										<form method="GET" action=" {{ route('dataManagementEditRegionGet') }} ">
+											<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
+										</form>
+									</div>
+								</div>
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Regions </strong> to manage yet.

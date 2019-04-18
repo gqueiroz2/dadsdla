@@ -9,6 +9,7 @@ use App\dataManagementRender;
 
 use App\User;
 use App\queries;
+use App\matchingClientAgency;
 
 class dataManagementController extends Controller
 {
@@ -75,6 +76,14 @@ class dataManagementController extends Controller
     	return view('dataManagement.pRateGet',compact('region','currency','pRate','cYear','render'));
     }
 
+
+    public function agencyGet(){
+
+        return view('dataManagement.agencyGet');
+
+    }
+
+
     public function originGet(){
     	$dm = new dataManagement();
         $db = new dataBase();
@@ -129,7 +138,15 @@ class dataManagementController extends Controller
         $con = $db->openConnection('DLA');
 
         $bool = $usr->addUser($con);
+
+        if($bool){
+            return back()->with('addUser',$bool['msg']);
+        }else{
+            return back()->with('errorAddUser',$bool['msg']);
+        }
     }
+
+
 
     public function addUserType(){
         $usr = new User();
@@ -280,5 +297,50 @@ class dataManagementController extends Controller
         $queries->truncateAll($con);
 
         return view('dataManagement.home');
+    }
+
+    public function addAgency(){
+
+        $dm = new dataManagement();
+        $agency = new matchingClientAgency();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $agency->match($con);
+    }
+
+    public function editRegionGet(){
+
+        $dm = new dataManagement();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $region = $dm->getRegions($con);
+
+        $size = sizeof($region);
+
+        $render = new dataManagementRender();
+
+        return view('dataManagement.edit.editRegion',compact('region','render','size'));
+    }
+
+    public function editPRateGet(){
+        var_dump("to aqui mesmo");
+    }
+
+    public function editRegionPost(){
+        $dm = new dataManagement();
+
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $region = $dm->getRegions($con);
+
+        $bool = $dm->editRegion($con);
+        
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
     }
 }

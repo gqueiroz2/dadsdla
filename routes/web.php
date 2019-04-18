@@ -66,6 +66,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementAddSalesRepresentativeGroup');
 		Route::post('salesRepresentative','dataManagementController@addSalesRepresentative')
 						->name('dataManagementAddSalesRepresentative');
+		Route::post('agency', 'dataManagementController@addAgency')
+						->name('dataManagementAddAgency');						
 		Route::post('salesRepresentativeUnit','dataManagementController@addSalesRepresentativeUnit')
 						->name('dataManagementAddSalesRepresentativeUnit');
 		Route::post('brand','dataManagementController@addBrand')
@@ -75,6 +77,15 @@ Route::group(['prefix' => 'dataManagement'],function(){
 		Route::post('origin','dataManagementController@addOrigin')
 						->name('dataManagementAddOrigin');
 	});	
+
+	Route::group(['prefix' => 'edit'],function(){
+		Route::get('region','dataManagementController@editRegionGet')
+						->name('dataManagementEditRegionGet');
+		Route::post('region','dataManagementController@editRegionPost')
+						->name('dataManagementEditRegionPost');
+		Route::get('pRate','dataManagementController@editPRateGet')
+						->name('dataManagementEditPRateGet');
+	});
 
 	Route::group(['prefix' => 'ajax'],function(){
 		Route::post('salesRepGroupByRegion','dataManagementAjaxController@salesRepGroupByRegion')

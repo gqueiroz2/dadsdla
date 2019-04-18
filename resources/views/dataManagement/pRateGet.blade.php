@@ -20,7 +20,14 @@
 							</div>
 							@if($region)
 								@if($currency)
-									{{ $render->editCurrency($currency) }}
+									<form method="GET" action="{{ route('dataManagementEditPRateGet')}}">
+										{{ $render->editCurrency($currency) }}
+										<div class="row justify-content-end mt-1">
+											<div class="col col-sm-3 ">
+												<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
+											</div>
+										</div>
+									</form>
 								@else
 									<div class="alert alert-warning">
   										There is no <strong> Currency </strong> to manage yet.
@@ -170,7 +177,7 @@
 
 									<div class="col">
 										<label> Value: </label>
-										<input class="form-control" type="number" name="value" min="0" max="2000" step="0.00001">
+										<input class="form-control" type="number" name="value" min="0" max="4000" step="0.00001">
 									</div>									
 								</div>
 

@@ -9,15 +9,15 @@ use App\queries;
 
 class matchingClientAgency extends Model
 {
-	
-	public function match($name){
-		
-		$db = new Database();
-		$conn = $db->openConnection('DLA');
 
-		$queries = new queries();
+	public function match($conn, $name){
 
-		switch ($name) {
+		$importedData = new importSpreadsheet();
+		$sheetData = $importedData->SpreadsheetHandler($importedData->base());
+
+		var_dump($sheetData);
+
+		/*switch ($name) {
 			case 'Agency':
 				$data = verifyMatch($conn, 'Agency', 'agency_unit');
 				break;
@@ -29,13 +29,13 @@ class matchingClientAgency extends Model
 			default:
 				$data = false;
 				break;
-		}
+		}*/
 	}
 
 	public function verifyMatch($conn, $name, $table){
 
 		$importedData = new importSpreadsheet();
-		$sheetData = $data->SpreadsheetHandler($importedData->base());
+		$sheetData = $importedData->SpreadsheetHandler($importedData->base());
 		$exist = array();
 
 		for ($i=0; $i < sizeof($sheetData); $i++) {
@@ -51,7 +51,12 @@ class matchingClientAgency extends Model
 			}
 		}
 
-		(sizeof($exist) > 0) ? return $exist : return false;
+		if (sizeof($exist) > 0) {
+			return $exist;
+		}else{
+			return false;
+		}
+		
 	}
 
 }

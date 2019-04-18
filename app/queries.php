@@ -89,14 +89,22 @@ class queries extends Model
 
 
 
-
 	public function getRegion(){
-		$select = "SELECT ID,name FROM region";
 
-		$temp["nome"] = array("Brazil","Colombia","Argentina","Miami","Mexico"); //matrix temporaria de exemplo de como seria a saida
-		$temp["id"] = array(1,2,3,4,5); //matrix temporaria de exemplo de como seria a saida
+		$sql = "SELECT ID,name FROM region";
+		$result = $conn->query($sql);
+
+		$region = array();
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$region[$row["name"]] = $row["ID"];
+			}
+		}else{
+			return false;
+		}
 	
-		return $temp;
+		return $region;
 	}
 
 	public function truncateAll($con){
@@ -134,23 +142,27 @@ class queries extends Model
 
 	}
 
-
 	public function getBrands(){
 		$select = "SELECT ID,name FROM brand";
 
+		$brand = array();
 
-		$temp["nome"] = array("Discovery", "Discovery Home and Health", "Discovery Kids", "Animal Planet", "TLC", "ID", "Discovery Turbo");
-		$temp["id"] = array(1,2,3,4,5,6,7);
-
-		return $temp;
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$brand[$row["name"]] = $row["ID"];
+			}
+		}else{
+			return false;
+		}
+	
+		return $brand;
 	}
 
-	public function getSalesRep($matrix){
-
+	public function getSalesRep($conn){
 
 		//posso passar região se for necessario para ter mais certeza na busca
 
-		$select = "SELECT ID,name FROM sales_rep";
+		$sql = "SELECT ID,name FROM sales_rep";
 
 		$salesRep = array();
 
@@ -272,26 +284,20 @@ class queries extends Model
 
 	public function getCampaingCurrency($matrix){
 
-		$select = "SELECT ID,name FROM currency";
+		$sql = "SELECT ID,name FROM currency";
+		$result = $conn->query($sql);
 
-		$currencyList = array();
+		$currency = array();
 
-		for ($i=0; $i <sizeof($matrix) ; $i++) { 
-			$validator = 1;
-			for ($j=0; $j <sizeof($currencyList) ; $j++) { 
-				if ($matrix[$i]["Campaign Currency"] == $currencyList[$j]) {
-					$validator = 0;
-					break;
-				}
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$currency[$row["name"]] = $row["ID"];
 			}
-
-			if ($validator == 1) {
-				array_push($currencyList, $matrix[$i]["Campaign Currency"]);
-			}
-
+		}else{
+			return false;
 		}
 
-		return $currencyList;
+		return $currency;
 	}
 
 	public function insertYTD($matrix){
