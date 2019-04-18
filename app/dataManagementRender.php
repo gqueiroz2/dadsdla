@@ -212,7 +212,7 @@ class dataManagementRender extends Render{
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' name='oldValue-$p' class='form-control' value='". number_format( $pRate[$p]["value"] ,2 ) ."' style='width:100%;'>";
+                    echo "<input type='text' readonly='true' name='oldValue-$p' class='form-control' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
                 echo "</div>";
 
                 echo "<div class='col'>";
