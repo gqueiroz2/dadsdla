@@ -20,8 +20,8 @@
 							</div>
 							@if($region)
 								@if($currency)
-									<form method="GET" action="{{ route('dataManagementEditPRateGet')}}">
-										{{ $render->editCurrency($currency) }}
+									{{ $render->editCurrency($currency) }}
+									<form method="GET" action="{{ route('dataManagementEditCurrencyGet')}}">
 										<div class="row justify-content-end mt-1">
 											<div class="col col-sm-3 ">
 												<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
@@ -110,7 +110,14 @@
 							@if($region)
 								@if($currency)
 									@if($pRate)
-        								{{ $render->editPRate($pRate) }}        								
+        								{{ $render->editPRate($pRate) }}
+										<form method="GET" action="{{route('dataManagementEditPRateGet')}}">
+        									<div class="row justify-content-end mt-2">
+        										<div class="col-sm-3">
+        											<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
+        										</div>
+        									</div>   								
+										</form>
 									@else
 										<div class="alert alert-warning">
   											There is no <strong> P-Rate </strong> to manage yet.
@@ -123,8 +130,8 @@
 								@endif
 							@else
 								<div class="alert alert-warning">
-  										There is no <strong> Region </strong> created yet, please first create a Region to relate with a currency.
-									</div>
+  									There is no <strong> Region </strong> created yet, please first create a Region to relate with a currency.
+								</div>
 							@endif
 
 							<hr>

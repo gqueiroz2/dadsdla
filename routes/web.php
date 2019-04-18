@@ -81,8 +81,14 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementEditRegionGet');
 		Route::post('region','dataManagementController@editRegionPost')
 						->name('dataManagementEditRegionPost');
-		Route::get('pRate','dataManagementController@editPRateGet')
+		Route::get('currency','dataManagementController@editCurrencyGet')
+						->name('dataManagementEditCurrencyGet');
+		Route::post('currency','dataManagementController@editCurrencyPost')
+						->name('dataManagementEditCurrencyPost');
+		Route::get('prate','dataManagementController@editPRateGet')
 						->name('dataManagementEditPRateGet');
+		Route::post('prate','dataManagementController@editPRatePost')
+						->name('dataManagementEditPRatePost');
 	});
 
 	Route::group(['prefix' => 'ajax'],function(){
