@@ -20,11 +20,11 @@
 							</div>
 							
 							@if($region)			
-								{{ $render->editRegion($region) }}
-    							<div class='row justify-content-end mt-1'>
-									<div class="col col-sm-3">
-										<form method="GET" action=" {{ route('dataManagementEditRegionGet') }} ">
-											<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
+								{{-- $render->regionEdit($region) --}}
+    							<div class='row mt-1'>
+									<div class="col">
+										<form method="GET" action=" {{ route('dataManagementRegionEditGet') }} ">
+											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
 										</form>
 									</div>
 								</div>
@@ -56,7 +56,7 @@
 								</div>
 							</div>
 																  
-							<form method="POST" action="{{ route('dataManagementAddRegion') }}">
+							<form method="POST" action="{{ route('dataManagementRegionAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -77,17 +77,5 @@
 			</div>
 		</div>
 	</div>
-	<!--
-	<script type="text/javascript">
-		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
 
-				location.href =''
-
-			});
-		});
-
-	</script>
-	-->
 @endsection

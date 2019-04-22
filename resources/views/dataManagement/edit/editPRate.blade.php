@@ -6,7 +6,7 @@
 
 	<div class="container-fluid">
 		<div class="row justify-content-center">
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 				<div class="card" style="margin-bottom:15%;">
 					<div class="card-header">
 						<center><h4> Data Management - <b> P-Rate / Currency </b> </h4></center>
@@ -22,10 +22,14 @@
 							@if($region)
 								@if($currency)
 									@if($pRate)
-										<form method="POST" action="{{route('dataManagementEditPRatePost')}}">
-											@csrf
-											<input type="hidden" name="">
-        									{{ $render->editPRate2($pRate) }}
+										<form method="POST" action="{{route('dataManagementPRateEditPost')}}">
+											@csrf											
+        									<div class="row justify-content-end mt-2">
+        										<div class="col-sm-3">
+        											<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
+        										</div>
+        									</div>   								
+        									{{ $render->pRateEdit($pRate) }}
         									<div class="row justify-content-end mt-2">
         										<div class="col-sm-3">
         											<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">

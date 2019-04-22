@@ -53,7 +53,7 @@
 								</div>
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="salesrepresentative"> 
-										<a style="color: white;" href="{{ route('dataManagementSalesRepresentativeGet') }}">
+										<a style="color: white;" href="{{ route('dataManagementSalesRepGet') }}">
 											Sales Representative 
 										</a>
 									</button>	

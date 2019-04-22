@@ -6,35 +6,34 @@
 
 	<div class="container-fluid">
 		<div class="row justify-content-center">
-			<div class="col-sm-8">
+			<div class="col-sm-6">
 				<div class="card" style="margin-bottom:15%;">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Sales Representative </b> </h4></center>
+						<center><h4> Data Management - <b> Sales Rep. </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
 							<div class="row justify-content-center">
 								<div class="col align-self-center">
-									<h5> Edit / Management Sales Representative Group </h5>
+									<h5> Edit / Management Sales Rep. Group </h5>
 								</div>
 							</div>
 							
 							<div class="row justify-content-center">
 								<div class="col">
-									@if($salesRepresentativeGroup)
-										{{ $render->editSalesRepGroup($salesRepresentativeGroup) }}
-										<form method="POST" action="{{ route('dataManagementEditSalesRepGroupFilter') }}">
+									@if($salesRepGroup)
+										<form method="POST" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
 											<input type="hidden" name="jorge">
 											<div class="row justify-content-end mt-1">
-												<div class="col col-sm-3">
+												<div class="col">
 													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
 												</div>
 											</div>
 										</form>
 									@else
 										<div class="alert alert-warning">
-  											There is no <strong> Sales Representative Group </strong> to manage yet.
+  											There is no <strong> Sales Rep. Group </strong> to manage yet.
 										</div>
 									@endif		
 								</div>
@@ -43,7 +42,7 @@
 							<hr>
 							<div class="row justify-content-center">
 								<div class="col">
-									<h5> Add a Sales Representative Group </h5>
+									<h5> Add a Sales Rep. Group </h5>
 								</div>
 							</div>
 
@@ -63,7 +62,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddSalesRepresentativeGroup') }}">
+							<form method="POST" action="{{ route('dataManagementSalesRepGroupAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -85,7 +84,7 @@
 									</div>
 
 									<div class="col">
-										<label> Sales Representative Group Name: </label>
+										<label> Sales Rep. Group Name: </label>
 										<input class="form-control" type="text" name="salesRepGroup">
 									</div>
 
@@ -93,7 +92,7 @@
 								</div>
 
 								<div class="row justify-content-end mt-1">
-									<div class="col col-sm-3">
+									<div class="col col-sm-4">
 										<input type="submit" class="btn btn-primary" value="Add Sales Rep. Group" style="width:100%;">
 									</div>
 								</div>
@@ -103,17 +102,25 @@
 							
 							<div class="row justify-content-center">
 								<div class="col align-self-center">
-									<h5> Edit / Management Sales Representative </h5>
+									<h5> Edit / Management Sales Rep. </h5>
 								</div>
 							</div>
 							
 							<div class="row justify-content-center">
 								<div class="col">
-									@if($salesRepresentative)
-										{{ $render->editSalesRep($salesRepresentative) }}
+									@if($salesRep)
+										<form method="POST" action="">
+											@csrf
+											<input type="hidden" name="jorge">
+											<div class="row justify-content-end mt-1">
+												<div class="col">
+													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
+												</div>
+											</div>
+										</form>
 									@else
 										<div class="alert alert-warning">
-  											There is no <strong> Sales Representative </strong> to manage yet.
+  											There is no <strong> Sales Rep. </strong> to manage yet.
 										</div>
 									@endif		
 								</div>
@@ -122,11 +129,11 @@
 							<hr>
 							<div class="row justify-content-center">
 								<div class="col">
-									<h5> Add a Sales Representative </h5>
+									<h5> Add a Sales Rep. </h5>
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddSalesRepresentative') }}">
+							<form method="POST" action="{{ route('dataManagementSalesRepAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -140,26 +147,26 @@
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a Sales Group Representative and Sales Group.
+	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a Sales Group Rep. and Sales Group.
 											</div>
 										@endif
 									</div>
 
 									<div class="col">
-										<label> Sales Representative Group: </label>
-										@if($salesRepresentativeGroup)
+										<label> Sales Rep. Group: </label>
+										@if($salesRepGroup)
 											<select class="form-control" style="width: 100%;" name="salesRepGroup" id="salesRep_SalesRepGroup">
 												<option value=""> Select a Region </option>
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Sales Representative Group </strong> created yet, please first create a Sales Representative Group to relate with a Sales Representative.
+	  											There is no <strong> Sales Rep. Group </strong> created yet, please first create a Sales Rep. Group to relate with a Sales Rep..
 											</div>
 										@endif
 									</div>
 
 									<div class="col">
-										<label> Sales Representative Name: </label>
+										<label> Sales Rep. Name: </label>
 										<input class="form-control" type="text" name="salesRep">
 									</div>
 
@@ -167,7 +174,7 @@
 								</div>
 
 								<div class="row justify-content-end mt-1">
-									<div class="col col-sm-3">
+									<div class="col col-sm-4">
 										<input type="submit" class="btn btn-primary" value="Add Sales. Rep" style="width:100%;">
 									</div>
 								</div>
@@ -177,17 +184,25 @@
 							
 							<div class="row justify-content-center">
 								<div class="col align-self-center">
-									<h5> Edit / Management Sales Representative Unit </h5>
+									<h5> Edit / Management Sales Rep. Unit </h5>
 								</div>
 							</div>
 							
 							<div class="row justify-content-center">
 								<div class="col">
-									@if($salesRepresentativeUnit)
-										{{ $render->editSalesRepUnit($salesRepresentativeUnit) }}
+									@if($salesRepUnit)
+										<form method="POST" action="">
+											@csrf
+											<input type="hidden" name="jorge">
+											<div class="row justify-content-end mt-1">
+												<div class="col">
+													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
+												</div>
+											</div>
+										</form>
 									@else
 										<div class="alert alert-warning">
-  											There is no <strong> Sales Representative Unit </strong> to manage yet.
+  											There is no <strong> Sales Rep. Unit </strong> to manage yet.
 										</div>
 									@endif		
 								</div>
@@ -196,7 +211,7 @@
 							<hr>
 							<div class="row justify-content-center">
 								<div class="col">
-									<h5> Add a Sales Representative Unit </h5>
+									<h5> Add a Sales Rep. Unit </h5>
 								</div>
 							</div>
 
@@ -216,7 +231,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddSalesRepresentativeUnit') }}">
+							<form method="POST" action="{{ route('dataManagementSalesRepAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -230,33 +245,33 @@
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a Sales Group Representative and Sales Group.
+	  											There is no <strong> Region </strong> created yet, please first create a Region to relate with a Sales Group Rep. and Sales Group.
 											</div>
 										@endif
 									</div>
 
 									<div class="col">
-										<label> Sales Representative Group: </label>
-										@if($salesRepresentativeGroup)
+										<label> Sales Rep. Group: </label>
+										@if($salesRepGroup)
 											<select class="form-control" style="width: 100%;" name="salesRepGroup" id="salesRepUnit_SalesRepGroup">
 												<option value=""> Select a Region </option>
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Sales Representative Group </strong> created yet, please first create a Sales Representative Group to relate with a Sales Representative.
+	  											There is no <strong> Sales Rep. Group </strong> created yet, please first create a Sales Rep. Group to relate with a Sales Rep..
 											</div>
 										@endif
 									</div>
 								
 									<div class="col">
-										<label for="region"> Sales Representative: </label>
-										@if($salesRepresentative)
+										<label for="region"> Sales Rep.: </label>
+										@if($salesRep)
 											<select class="form-control" style="width: 100%;" name="salesRep" id="salesRepUnit_SalesRep">
 												<option value=""> Select a Region </option>
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Sales Representative </strong> created yet, please first create a Sales Representative to relate with a Sales Representative Unit.
+	  											There is no <strong> Sales Rep. </strong> created yet, please first create a Sales Rep. to relate with a Sales Rep. Unit.
 											</div>
 										@endif
 									</div>
@@ -276,19 +291,19 @@
 											</select>
 										@else
 											<div class="alert alert-warning">
-	  											There is no <strong> Origin </strong> created yet, please first create a Origin to relate with a Sales Representative Unit.
+	  											There is no <strong> Origin </strong> created yet, please first create a Origin to relate with a Sales Rep. Unit.
 											</div>
 										@endif
 									</div>									
 
 									<div class="col">
-										<label> Sales Representative Unit Name: </label>
+										<label> Sales Rep. Unit Name: </label>
 										<input class="form-control" type="text" name="salesRepUnit">
 									</div>		
 								</div>
 
 								<div class="row justify-content-end mt-1">
-									<div class="col col-sm-3">
+									<div class="col col-sm-4">
 										<input type="submit" class="btn btn-primary" value="Add Sales Rep. Unit" style="width:100%;">
 									</div>
 								</div>

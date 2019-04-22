@@ -25,9 +25,9 @@
 							@endif
 							
 							@if($region)			
-								<form method="POST" action=" {{ route('dataManagementEditRegionPost') }} ">
+								<form method="POST" action=" {{ route('dataManagementRegionEditPost') }} ">
 									@csrf
-									{{ $render->editRegion2($region) }}
+									{{ $render->regionEdit($region) }}
     								<div class='row justify-content-end mt-1'>
 										<div class="col col-sm-3">
 											<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
@@ -45,17 +45,5 @@
 			</div>
 		</div>
 	</div>
-	<!--
-	<script type="text/javascript">
-		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
 
-				location.href =''
-
-			});
-		});
-
-	</script>
-	-->
 @endsection

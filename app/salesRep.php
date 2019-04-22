@@ -2,9 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use App\Management;
+use App\sql;
 
-class salesRep extends Model{
+
+class salesRep extends Management{
 	/*
 		Abreviations
 
@@ -14,16 +17,15 @@ class salesRep extends Model{
 		o = origin
 	*/
 
-
 	public function getSalesRepGroup($con,$region){
 		$where = "";
 
 		if($region){
-			$where .= "WHERE r.ID IN ('$region')";
+			$regions = implode(",", $region);
+			$where .= "WHERE r.ID IN ('$regions')";
 		}
 
-		$sql = "
-			SELECT 
+		$sql = "SELECT 
 				srg.ID AS 'id',
 				srg.name AS 'name',
 				r.name AS 'region'
@@ -34,6 +36,21 @@ class salesRep extends Model{
 		$res = $con->query($sql);
 
     	return $res;
+	}
+
+	public function addSalesRepGroup($con){
+		$sql = new sql();
+
+		$region = Request::get('region');
+		$salesRepGroup = Request::get('salesRepGroup');
+
+		$table = 'sales_rep_group';
+		$columns = 'region_id,name';
+		$values = " '$region','$salesRepGroup' ";
+
+		$bool = $sql->insert($con,$table,$columns,$values);
+
+		return $bool;
 	}
 
     public function getSalesRep($con,$sales_rep_group_id){
@@ -62,7 +79,22 @@ class salesRep extends Model{
     	return $res;
 	}
 
+	public function addSalesRep($con){
+		$sql = new sql();
 
+		$regionID = Request::get('region');
+		$salesRepGroupID = Request::get('salesRepGroup');
+		$salesRep = Request::get('salesRep');
+
+		$table = 'sales_rep';
+		$columns = 'sales_group_id,name';
+		$values = " '$salesRepGroupID','$salesRep' ";
+
+		$bool = $sql->insert($con,$table,$columns,$values);
+
+		return $bool;
+
+	}
 
 	public function getSalesRepUnit($con,$sales_rep_id){
 
@@ -89,4 +121,24 @@ class salesRep extends Model{
 
     	return $res;
 	}
+
+	public function addSalesRepUnit($con){
+		$sql = new sql();
+
+		$regionID = Request::get('region');
+		$salesRepGroupID = Request::get('salesRepGroup');
+		$salesRepID = Request::get('salesRep');
+		$salesRepUnit = Request::get('salesRepUnit');
+		$origin = Request::get('origin');
+
+		$table = 'sales_rep_unit';
+		$columns = 'sales_rep_id,origin_id,name';
+		$values = " '$salesRepID','$origin','$salesRepUnit' ";
+
+		$bool = $sql->insert($con,$table,$columns,$values);
+
+		return $bool;
+
+	}
+
 }

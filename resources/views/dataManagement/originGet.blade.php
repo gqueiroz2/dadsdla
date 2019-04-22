@@ -20,7 +20,14 @@
 							</div>
 							
 							@if($origin)
-								{{ $render->editOrigin($origin) }}
+								{{-- $render->originEdit($origin) --}}
+								<div class='row mt-1'>
+									<div class="col">
+										<form method="GET" action="">
+											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
+										</form>
+									</div>
+								</div>
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Origins </strong> to manage yet.
@@ -47,7 +54,7 @@
 									@endif
 								</div>
 							</div>
-							<form method="POST" action="{{ route('dataManagementAddOrigin') }}">
+							<form method="POST" action="{{ route('dataManagementOriginAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -68,17 +75,4 @@
 			</div>
 		</div>
 	</div>
-	<!--
-	<script type="text/javascript">
-		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
-
-				location.href =''
-
-			});
-		});
-
-	</script>
-	-->
 @endsection

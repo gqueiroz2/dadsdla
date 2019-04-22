@@ -2,38 +2,130 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
-class User extends Authenticatable
-{
-    use Notifiable;
+use App\Management;
+use App\sql;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+class User extends Management{
+	
+	public function getUserType($con){
+		$sql = new sql();
+		$table = "user_types";
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+		$columns = "ID,name,level";
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+		$from = array('ID','name','level');
+		$to = array('id','name','level');
+
+		$result = $sql->select($con,$columns,$table);
+
+        $userType = $sql->fetch($result,$from,$to);
+
+		return $userType;
+	}
+
+    public function addUserType($con){
+
+        $userType = Request::get('name');
+        $level = Request::get('level');
+
+        $table = 'user_types';
+        $columns = 'name,level';
+        $values = "'$userType','$level'";
+
+		$bool = $this->insert($con,$table,$columns,$values);
+
+		return $bool;
+
+    }
+
+    public function getUser($con){
+		
+        $sql = new sql();
+        $table = "user u";
+
+        $columns = "u.ID AS 'id',
+                    u.name AS 'name',
+                    u.email AS 'email',
+                    u.password AS 'password',
+                    u.status AS 'status',
+                    u.sub_level_bool AS 'subLevelBool',
+                    r.name AS 'region',
+                    ut.name AS 'userType',
+                    ut.level AS 'level',
+                    srg.name AS 'salesRepGroup'
+
+                   ";
+
+        $join = "LEFT JOIN region r ON r.ID = u.region_id
+                 LEFT JOIN user_types ut ON ut.ID = u.user_type_id
+                 LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
+                ";
+
+        $result = $sql->select($con,$columns,$table,$join);
+
+        $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
+        $to = $from;
+
+        $user = $sql->fetch($result,$from,$to);
+
+        return $user;
+
+	}
+
+    public function addUser($con){
+    	var_dump(Request::all());
+
+    	$name = Request::get('name');
+    	$email = Request::get('email');
+    	$password = Request::get('password');
+        $status = Request::get('status');
+        $regionID = Request::get('region');
+    	$userTypeID = Request::get('userType');
+    	$subLevelBool = Request::get('subLevelBool');
+        $subLevelGroup = Request::get('subLevelGroup');
+    	
+    	$table = 'user';
+        $columns = ' region_id , 
+                     user_type_id , 
+                     sub_level_group ,
+                     name,
+                     email,
+                     password,
+                     status,
+                     sub_level_bool
+                   ';
+
+        $values = " '$regionID',
+                    '$userTypeID',
+                    'subLevelGroup',
+                    '$name',
+                    '$email',
+                    '$password',
+                    '$status',
+                    '$subLevelBool'
+                  ";
+
+        $bool = $this->insert($con,$table,$columns,$values);
+
+        var_dump("name");
+    	var_dump($name);
+        var_dump("email");
+    	var_dump($email);
+        var_dump("password");
+        var_dump($password);
+        var_dump("status");
+        var_dump($status);
+        var_dump("region");
+    	var_dump($regionID);
+        var_dump("userTypeID");
+    	var_dump($userTypeID);
+        var_dump("subLevelBool");
+    	var_dump($subLevelBool);
+        var_dump("subLevelGroup");
+        var_dump($subLevelGroup);
+    }
+
 }

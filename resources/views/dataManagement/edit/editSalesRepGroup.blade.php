@@ -17,7 +17,7 @@
 								<div class="col">
 									<div class="row justify-content-center mt-1">
 										<div class="col">
-											<form method='Post' action="{{route('dataManagementEditSalesRepGroupFilter')}}">
+											<form method='Post' action="{{route('dataManagementSalesRepGroupEditFilter')}}">
 												@csrf
 												{{$render->filters($region)}}												
 											</form>
@@ -25,8 +25,8 @@
 									</div>
 									<br>
 									@if($salesRepresentativeGroup)
-										{{ $render->editSalesRepGroup2($salesRepresentativeGroup,$region) }}
-										<form method="Post" action="{{ route('dataManagementEditSalesRepGroupFilter') }}">
+										{{-- $render->salesRepGroupEdit($salesRepresentativeGroup,$region) --}}
+										<form method="Post" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
 											<div class="row justify-content-end mt-1">
 												<div class="col col-sm-3">

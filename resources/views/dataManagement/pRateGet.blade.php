@@ -20,10 +20,9 @@
 							</div>
 							@if($region)
 								@if($currency)
-									{{ $render->editCurrency($currency) }}
-									<form method="GET" action="{{ route('dataManagementEditCurrencyGet')}}">
-										<div class="row justify-content-end mt-1">
-											<div class="col col-sm-3 ">
+									<form method="GET" action="{{ route('dataManagementCurrencyEditGet')}}">
+										<div class="row mt-1">
+											<div class="col">
 												<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">
 											</div>
 										</div>
@@ -63,7 +62,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddCurrency') }}">
+							<form method="POST" action="{{ route('dataManagementCurrencyAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -110,10 +109,9 @@
 							@if($region)
 								@if($currency)
 									@if($pRate)
-        								{{ $render->editPRate($pRate) }}
-										<form method="GET" action="{{route('dataManagementEditPRateGet')}}">
-        									<div class="row justify-content-end mt-2">
-        										<div class="col-sm-3">
+										<form method="GET" action="{{route('dataManagementPRateEditGet')}}">
+        									<div class="row mt-2">
+        										<div class="col">
         											<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
         										</div>
         									</div>   								
@@ -158,7 +156,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddPRate') }}">
+							<form method="POST" action="{{ route('dataManagementPRateAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">

@@ -2,39 +2,68 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use App\Management;
+use App\sql;
 
-/*
-*Author: Bruno Gomes
-*Date:16/04/2019
-*Razon:Region modeler
-*/
-class region extends Model
-{
+class region extends Management{
+    
+    public function addRegion($con){
+        $sql = new sql();
 
-    /*
-    *Author: Bruno Gomes
-    *Date:16/04/2019
-    *Razon:GetRegion modeler
-    */
+        $region = Request::get('region');
+        $table = 'region';
+        $columns = 'name';
+        $values = "'$region'";
+        $bool = $sql->insert($con,$table,$columns,$values);
+
+        return $bool;
+    }
+
     public function getRegion ($con, $ID){
-    	$where = "";
-    	if (isset($ID)) {
+        $sql = new sql();
+
+        $table = "region r";
+        $columns = "r.ID AS id,
+                r.name AS name";
+
+        $where = "";
+    	if ($ID) {
     		$ids = implode(",", $ID);
-    		$where .= "WHERE region.ID IN ('$ids')";
+    		$where .= "WHERE r.ID IN ('$ids')";
     	}
 
-    	$sql = "
-    		SELECT 
-    			region.ID AS id,
-    			region.name AS name
-    		FROM region AS region 
-    		$where
-    		ORDER BY region.name ASC ;
-    	";
+        $res = $sql->select($con,$columns,$table);
 
-    	$res = $con->query($sql);
+        $from = array('id','name');
 
-        return $res;
+        $region = $sql->fetch($res,$from,$from);
+
+        return $region;
+    }
+
+    public function editRegion($con){
+
+        $size = intval(Request::get("size"));
+        $table = "region";
+        $columns = array("name");
+
+        for ($i=0; $i <$size ; $i++){ 
+            $old[$i] = Request::get("Old-$i");
+            $new[$i] = array(Request::get("New-$i"));
+
+            $set[$i] = $this->setUpdate($columns,$new[$i]);
+
+            $where[$i] = "WHERE name = '$old[$i]'";
+        }
+
+        for ($i=0; $i <$size ; $i++) { 
+            $bool = $this->updateValues($con,$table,$set[$i],$where[$i]);
+            if ($bool["bool"] == false) {
+                break;
+            }
+        }
+
+        return $bool;
     }
 }

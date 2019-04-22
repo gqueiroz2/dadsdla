@@ -17,6 +17,7 @@
         <script src="/components/jquery/jquery.min.js"></script>        
         <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 
+        <script src="/js/base.js"></script>
 
         <!-- David Stutz bootstrap-multiselect 
         <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>

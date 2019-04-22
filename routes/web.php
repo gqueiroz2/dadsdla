@@ -33,8 +33,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementUserGet');
 	Route::get('pRate','dataManagementController@pRateGet')
 						->name('dataManagementPRateGet');
-	Route::get('salesRepresentative','dataManagementController@salesRepresentativeGet')
-						->name('dataManagementSalesRepresentativeGet');
+	Route::get('salesRep','dataManagementController@salesRepGet')
+						->name('dataManagementSalesRepGet');
 	Route::get('agency','dataManagementController@agencyGet')
 						->name('dataManagementAgencyGet');
 	Route::get('client','dataManagementController@clientGet')
@@ -52,47 +52,65 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 	Route::group(['prefix' => 'add'],function(){
 		
-		Route::post('region','dataManagementController@addRegion')
-						->name('dataManagementAddRegion');
-		Route::post('user','dataManagementController@addUser')
-						->name('dataManagementAddUser');
-		Route::post('userType','dataManagementController@addUserType')
-						->name('dataManagementAddUserType');
-		Route::post('pRate','dataManagementController@addPRate')
-						->name('dataManagementAddPRate');
-		Route::post('currency','dataManagementController@addCurrency')
-						->name('dataManagementAddCurrency');
-		Route::post('salesRepresentativeGroup','dataManagementController@addSalesRepresentativeGroup')
-						->name('dataManagementAddSalesRepresentativeGroup');
-		Route::post('salesRepresentative','dataManagementController@addSalesRepresentative')
-						->name('dataManagementAddSalesRepresentative');
-		Route::post('agency', 'dataManagementController@addAgency')
-						->name('dataManagementAddAgency');						
-		Route::post('salesRepresentativeUnit','dataManagementController@addSalesRepresentativeUnit')
-						->name('dataManagementAddSalesRepresentativeUnit');
-		Route::post('brand','dataManagementController@addBrand')
-						->name('dataManagementAddBrand');
-		Route::post('brandUnit','dataManagementController@addBrandUnit')
-						->name('dataManagementAddBrandUnit');
-		Route::post('origin','dataManagementController@addOrigin')
-						->name('dataManagementAddOrigin');
+		Route::post('region','dataManagementController@regionAdd')
+						->name('dataManagementRegionAdd');
+
+		Route::post('user','dataManagementController@userAdd')
+						->name('dataManagementUserAdd');
+
+		Route::post('userType','dataManagementController@UserTypeAdd')
+						->name('dataManagementUserTypeAdd');
+
+		Route::post('pRate','dataManagementController@PRateAdd')
+						->name('dataManagementPRateAdd');
+
+		Route::post('currency','dataManagementController@CurrencyAdd')
+						->name('dataManagementCurrencyAdd');
+
+		Route::post('salesRepGroup','dataManagementController@SalesRepGroupAdd')
+						->name('dataManagementSalesRepGroupAdd');
+
+		Route::post('salesRep','dataManagementController@SalesRepAdd')
+						->name('dataManagementSalesRepAdd');
+
+		Route::post('agency', 'dataManagementController@AgencyAdd')
+						->name('dataManagementAgencyAdd');
+
+		Route::post('salesRepUnit','dataManagementController@SalesRepUnitAdd')
+						->name('dataManagementSalesRepUnitAdd');
+
+		Route::post('brand','dataManagementController@BrandAdd')
+						->name('dataManagementBrandAdd');
+
+		Route::post('brandUnit','dataManagementController@BrandUnitAdd')
+						->name('dataManagementBrandUnitAdd');
+						
+		Route::post('origin','dataManagementController@OriginAdd')
+						->name('dataManagementOriginAdd');
 	});	
 
 	Route::group(['prefix' => 'edit'],function(){
-		Route::get('region','dataManagementController@editRegionGet')
-						->name('dataManagementEditRegionGet');
-		Route::post('region','dataManagementController@editRegionPost')
-						->name('dataManagementEditRegionPost');
-		Route::get('currency','dataManagementController@editCurrencyGet')
-						->name('dataManagementEditCurrencyGet');
-		Route::post('currency','dataManagementController@editCurrencyPost')
-						->name('dataManagementEditCurrencyPost');
-		Route::get('prate','dataManagementController@editPRateGet')
-						->name('dataManagementEditPRateGet');
-		Route::post('prate','dataManagementController@editPRatePost')
-						->name('dataManagementEditPRatePost');
-		Route::post('salesRepresentativeGroup','dataManagementController@editSalesRepGroupFilter')
-						->name('dataManagementEditSalesRepGroupFilter');
+		
+		Route::get('region','dataManagementController@regionEditGet')
+						->name('dataManagementRegionEditGet');
+
+		Route::post('region','dataManagementController@regionEditPost')
+						->name('dataManagementRegionEditPost');
+
+		Route::get('currency','dataManagementController@currencyEditGet')
+						->name('dataManagementCurrencyEditGet');
+
+		Route::post('currency','dataManagementController@currencyEditPost')
+						->name('dataManagementCurrencyEditPost');
+
+		Route::get('prate','dataManagementController@pRateEditGet')
+						->name('dataManagementPRateEditGet');
+
+		Route::post('prate','dataManagementController@pRateEditPost')
+						->name('dataManagementPRateEditPost');
+
+		Route::post('salesRepGroup','dataManagementController@salesRepGroupEditFilter')
+						->name('dataManagementSalesRepGroupEditFilter');
 	});
 
 	Route::group(['prefix' => 'ajax'],function(){

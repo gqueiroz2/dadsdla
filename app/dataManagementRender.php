@@ -7,7 +7,7 @@ use App\Render;
 
 class dataManagementRender extends Render{
     
-    public function editOrigin($origin){
+    public function originEdit($origin){
         echo "<div class='row mt-1'>";
 
             echo "<div class='col'> Origin </div>";          
@@ -31,28 +31,7 @@ class dataManagementRender extends Render{
         }
     }
 
-	public function editRegion($region){
-        echo "<div class='row mt-1'>";
-
-            echo "<div class='col'> Region </div>";          
-            echo "<div class='col'> &nbsp; </div>";                
-
-        echo "</div>";
-    	for ($r=0; $r < sizeof($region); $r++) { 
-    		
-    		echo "<div class='row mt-1'>";
-
-        		echo "<div class='col'>";
-        			echo "<input type='text' readonly='true' class='form-control' value='".$region[$r]["name"]."' style='width:100%;'>";
-        		echo "</div>";
-
-    		echo "</div>";
-
-    	}
-
-    }
-
-    public function editRegion2($region){
+    public function regionEdit($region){
         echo "<div class='row mt-1'>";
 
             echo "<div class='col'> Old Name </div>";          
@@ -80,31 +59,8 @@ class dataManagementRender extends Render{
 
     }
 
-    public function editCurrency($currency){
-        echo "<div class='row mt-1'>";
 
-            echo "<div class='col'> Region </div>";
-            echo "<div class='col'> Currency </div>";  
-
-        echo "</div>";
-        for ($c=0; $c < sizeof($currency); $c++) { 
-            
-            echo "<div class='row mt-1'>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["region"]."' style='width:100%;'>";
-                echo "</div>";
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$currency[$c]["name"]."' style='width:100%;'>";
-                echo "</div>";
-
-            echo "</div>";
-
-        }
-
-    }
-
-    public function editCurrency2($currency,$region){
+    public function currencyEdit($currency,$region){
         echo "<div class='row mt-1'>";
             echo "<div class='col'> Old Region </div>";
             echo "<div class='col'> Old Currency </div>";  
@@ -147,43 +103,7 @@ class dataManagementRender extends Render{
 
     }
 
-    public function editPRate($pRate){
-        echo "<div class='row mt-1'>";
-
-            echo "<div class='col'> Region </div>";
-            echo "<div class='col'> Currency </div>";
-            echo "<div class='col'> Year </div>";
-            echo "<div class='col'> Value </div>";                
-
-        echo "</div>";
-
-
-        for ($p=0; $p < sizeof($pRate); $p++) { 
-            
-            echo "<div class='row mt-1'>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["region"]."' style='width:100%;'>";
-                echo "</div>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["currency"]."' style='width:100%;'>";
-                echo "</div>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$pRate[$p]["year"]."' style='width:100%;'>";
-                echo "</div>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='". number_format( $pRate[$p]["value"] ,2 ) ."' style='width:100%;'>";
-                echo "</div>";
-
-            echo "</div>";
-
-        }
-    }
-
-    public function editPRate2($pRate){
+    public function pRateEdit($pRate){
         echo "<div class='row mt-1'>";
             echo "<div class='col'> Region </div>";
             echo "<div class='col'> Currency </div>";
@@ -228,34 +148,7 @@ class dataManagementRender extends Render{
         }
     }
 
-    public function editSalesRepGroup($salesRepGroup){
-
-        echo "<div class='row mt-1'>";
-
-            echo "<div class='col'> Region </div>";
-            echo "<div class='col'> Sales Rep. Group </div>";              
-
-        echo "</div>";
-        
-        for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
-            
-            echo "<div class='row mt-1'>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["region"]."' style='width:100%;'>";
-                echo "</div>";
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
-                echo "</div>";
-
-
-            echo "</div>";
-
-        }
-
-    }
-
-    public function editSalesRepGroup2($salesRepGroup,$region){
+    public function salesRepEdit($salesRepGroup,$region){
 
         echo "<div class='row mt-1'>";
 
@@ -265,7 +158,7 @@ class dataManagementRender extends Render{
             echo "<div class='col'> New Sales Rep. Group </div>";              
 
         echo "</div>";
-        
+        /*
         for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
             
             echo "<div class='row mt-1'>";
@@ -300,46 +193,12 @@ class dataManagementRender extends Render{
 
 
             echo "</div>";
-
-        }
-
-    }
-
-    public function editSalesRep($salesRep){
-
-        echo "<div class='row mt-1'>";
-
-            echo "<div class='col'> Region </div>";
-            echo "<div class='col'> Sales Rep. Group </div>";              
-            echo "<div class='col'> Sales Rep </div>";              
-            echo "<div class='col'> &nbsp; </div>";                
-
-        echo "</div>";
-        
-        for ($s=0; $s < sizeof($salesRep); $s++) { 
             
-            echo "<div class='row mt-1'>";
-
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["region"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["salesRepGroup"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["salesRep"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
-
-            echo "</div>";
-
-        }
+        }*/
 
     }
 
-    public function editSalesRepUnit($salesRepUnit){
+    public function salesRepUnitEdit($salesRepUnit){
 
         echo "<div class='row mt-1'>";
             
@@ -372,7 +231,7 @@ class dataManagementRender extends Render{
         }
     }
 
-    public function editBrand($brand){
+    public function brandEdit($brand){
 
         echo "<div class='row mt-1'>";
             
@@ -398,7 +257,7 @@ class dataManagementRender extends Render{
         }
     }
 
-    public function editBrandUnit($brandUnit){
+    public function brandUnitEdit($brandUnit){
 
         echo "<div class='row mt-1'>";
             
@@ -435,7 +294,7 @@ class dataManagementRender extends Render{
 
     }
 
-    public function editUserType($userType){
+    public function userTypeEdit($userType){
 
         echo "<div class='row mt-1'>";
             
@@ -463,29 +322,9 @@ class dataManagementRender extends Render{
             echo "</div>";
 
         }
-    }
+    }   
 
-    public function filters($region){
-    
-        echo "<div class='row'>";
-            echo "<div class='col col-sm-9'> Region </div>";
-        echo "</div>";
-        echo "<div class='row mt-1'>";
-            echo "<div class='col col-sm-9'>";
-                echo "<select class = 'form-control' name='filterRegion'>";
-                    echo "<option value=''> None </option>";
-                    for ($i=0; $i <sizeof($region); $i++) { 
-                        echo "<option value = \"".$region[$i]["id"]."\">".$region[$i]["name"]."</option>";
-                    }
-                echo "</select>";
-            echo "</div>";
-            echo "<div class='col col-sm-3'>";
-                echo "<input type='submit' class='btn btn-primary' value='Filter' style=\"width: 100%;\">";
-            echo "</div>";
-        echo "</div>";
-    }
-
-    public function editUser($user){
+    public function userEdit($user){
         
         
         for ($u=0; $u < sizeof($user); $u++) { 
@@ -559,6 +398,27 @@ class dataManagementRender extends Render{
         echo "<div class='col'>";
                 echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
             echo "</div>";
+    }
+
+
+    public function filters($region){
+    
+        echo "<div class='row'>";
+            echo "<div class='col col-sm-9'> Region </div>";
+        echo "</div>";
+        echo "<div class='row mt-1'>";
+            echo "<div class='col col-sm-9'>";
+                echo "<select class = 'form-control' name='filterRegion'>";
+                    echo "<option value=''> None </option>";
+                    for ($i=0; $i <sizeof($region); $i++) { 
+                        echo "<option value = \"".$region[$i]["id"]."\">".$region[$i]["name"]."</option>";
+                    }
+                echo "</select>";
+            echo "</div>";
+            echo "<div class='col col-sm-3'>";
+                echo "<input type='submit' class='btn btn-primary' value='Filter' style=\"width: 100%;\">";
+            echo "</div>";
+        echo "</div>";
     }
 
 }

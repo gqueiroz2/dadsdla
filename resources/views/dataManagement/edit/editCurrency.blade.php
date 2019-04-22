@@ -20,9 +20,9 @@
 							@endif
 							@if($region)
 								@if($currency)
-									<form method="POST" action="{{ route('dataManagementEditCurrencyPost')}}">
+									<form method="POST" action="{{ route('dataManagementCurrencyEditPost')}}">
 										@csrf
-										{{ $render->editCurrency2($currency,$region) }}
+										{{ $render->CurrencyEdit($currency,$region) }}
 										<div class="row justify-content-end mt-1">
 											<div class="col col-sm-3 ">
 												<input type="submit" class="btn btn-primary mt-2" value="Edit" style="width: 100%;">

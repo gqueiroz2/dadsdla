@@ -20,7 +20,14 @@
 							</div>
 							
 							@if($brand)
-								{{ $render->editBrand($brand) }}
+								{{-- $render->brandEdit($brand) --}}
+								<div class='row mt-1'>
+									<div class="col">
+										<form method="GET" action="">
+											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
+										</form>
+									</div>
+								</div>
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Brands </strong> to manage yet.
@@ -49,7 +56,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementAddBrand') }}">
+							<form method="POST" action="{{ route('dataManagementBrandAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -74,7 +81,14 @@
 							</div>
 							
 							@if($brandUnit)
-								{{ $render->editBrandUnit($brandUnit) }}
+								{{-- $render->brandUnitEdit($brandUnit) --}}
+								<div class='row mt-1'>
+									<div class="col">
+										<form method="GET" action="">
+											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
+										</form>
+									</div>
+								</div>
 							@else
 								<div class="alert alert-warning">
   									There is no <strong> Brand Unit </strong> to manage yet.
@@ -101,7 +115,7 @@
 									@endif
 								</div>
 							</div>
-							<form method="POST" action="{{ route('dataManagementAddBrandUnit') }}">
+							<form method="POST" action="{{ route('dataManagementBrandUnitAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -162,17 +176,5 @@
 			</div>
 		</div>
 	</div>
-	<!--
-	<script type="text/javascript">
-		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
 
-				location.href =''
-
-			});
-		});
-
-	</script>
-	-->
 @endsection
