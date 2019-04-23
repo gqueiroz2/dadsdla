@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
-
 use App\Management;
 use App\sql;
 
@@ -13,39 +12,27 @@ class User extends Management{
 	public function getUserType($con){
 		$sql = new sql();
 		$table = "user_types";
-
 		$columns = "ID,name,level";
-
 		$from = array('ID','name','level');
 		$to = array('id','name','level');
-
 		$result = $sql->select($con,$columns,$table);
-
         $userType = $sql->fetch($result,$from,$to);
-
 		return $userType;
 	}
 
     public function addUserType($con){
-
         $userType = Request::get('name');
         $level = Request::get('level');
-
         $table = 'user_types';
         $columns = 'name,level';
         $values = "'$userType','$level'";
-
 		$bool = $this->insert($con,$table,$columns,$values);
-
 		return $bool;
-
     }
 
-    public function getUser($con){
-		
+    public function getUser($con){		
         $sql = new sql();
         $table = "user u";
-
         $columns = "u.ID AS 'id',
                     u.name AS 'name',
                     u.email AS 'email',
@@ -56,21 +43,15 @@ class User extends Management{
                     ut.name AS 'userType',
                     ut.level AS 'level',
                     srg.name AS 'salesRepGroup'
-
                    ";
-
         $join = "LEFT JOIN region r ON r.ID = u.region_id
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
-
         $result = $sql->select($con,$columns,$table,$join);
-
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
         $to = $from;
-
         $user = $sql->fetch($result,$from,$to);
-
         return $user;
 
 	}
