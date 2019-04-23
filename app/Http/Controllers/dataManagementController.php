@@ -118,7 +118,7 @@ class dataManagementController extends Controller{
 
     }
 
-    /*END OF REGIONS FUNCTIONS*/
+    /*END OF USER FUNCTIONS*/
 
     /*START OF P-RATE FUNCTIONS*/
 
@@ -205,10 +205,11 @@ class dataManagementController extends Controller{
     }
 
     public function currencyEditPost(){
-        $dm = new dataManagement();
         $db = new dataBase();
+        $p = new pRate();
         $con = $db->openConnection('DLA');
-
+        $r = new region();
+        $bool = $p->editCurrency($con);
         //$bool = $dm->editCurrency($con);  /* NÃO FOI ENCONTRADA REFAZER */
         /*
         if($bool){
