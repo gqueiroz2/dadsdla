@@ -24,8 +24,8 @@
 										</div>
 									</div>
 									<br>
-									@if($salesRepresentativeGroup)
-										{{-- $render->salesRepGroupEdit($salesRepresentativeGroup,$region) --}}
+									@if($salesRepGroup)
+										{{ $render->salesRepGroupEdit($salesRepGroup,$region)}}
 										<form method="Post" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
 											<div class="row justify-content-end mt-1">

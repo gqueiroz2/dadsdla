@@ -136,11 +136,11 @@ class dataManagementRender extends Render{
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' class='form-control' name='newYear-$p' value='".$pRate[$p]["year"]."' style='width:100%;'>";
+                    echo "<input type='number' class='form-control' name='newYear-$p' value='".$pRate[$p]["year"]."' style='width:100%;'>";
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' class='form-control' name='newValue-$p' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
+                    echo "<input type='number' class='form-control' name='newValue-$p' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
                 echo "</div>";
 
             echo "</div>";
@@ -148,7 +148,7 @@ class dataManagementRender extends Render{
         }
     }
 
-    public function salesRepEdit($salesRepGroup,$region){
+    public function salesRepGroupEdit($salesRepGroup,$region){
 
         echo "<div class='row mt-1'>";
 
@@ -158,7 +158,7 @@ class dataManagementRender extends Render{
             echo "<div class='col'> New Sales Rep. Group </div>";              
 
         echo "</div>";
-        /*
+        
         for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
             
             echo "<div class='row mt-1'>";
@@ -194,7 +194,7 @@ class dataManagementRender extends Render{
 
             echo "</div>";
             
-        }*/
+        }
 
     }
 

@@ -21,13 +21,18 @@ class User extends Management{
 	}
 
     public function addUserType($con){
+        $sql = new sql();
         $userType = Request::get('name');
         $level = Request::get('level');
         $table = 'user_types';
         $columns = 'name,level';
         $values = "'$userType','$level'";
-		$bool = $this->insert($con,$table,$columns,$values);
-		return $bool;
+
+
+        $bool = $sql->insert($con,$table,$columns,$values);
+		
+
+        return $bool;
     }
 
     public function getUser($con){		

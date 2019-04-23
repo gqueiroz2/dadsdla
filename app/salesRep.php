@@ -34,6 +34,7 @@ class salesRep extends Management{
 
 		$res = $con->query($sql);
 
+
     	return $res;
 	}
 
