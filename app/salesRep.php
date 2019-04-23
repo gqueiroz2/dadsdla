@@ -17,6 +17,12 @@ class salesRep extends Management{
 	*/
 
 	public function getSalesRepGroup($con,$region){
+		$sql = new sql();
+
+		$table = "sales_rep_group srg";
+		$columns = "srg.ID AS 'id',
+				    srg.name AS 'name',
+				    r.name AS 'region'";
 		$where = "";
 
 		if($region){
@@ -24,18 +30,20 @@ class salesRep extends Management{
 			$where .= "WHERE r.ID IN ('$regions')";
 		}
 
-		$sql = "SELECT 
-				srg.ID AS 'id',
-				srg.name AS 'name',
-				r.name AS 'region'
-			FROM sales_rep_group srg
-				LEFT JOIN region r ON srg.region_id = r.ID
-			$where";
+		$join = "LEFT JOIN region r ON srg.region_id = r.ID";
 
-		$res = $con->query($sql);
+		$res = $sql->select($con,$columns,$table,$join,$where);
 
+		$from = array('id','name','region');
+
+<<<<<<< HEAD
 
     	return $res;
+=======
+		$salesRepGroup = $sql->fetch($res,$from,$from);
+
+    	return $salesRepGroup;
+>>>>>>> f10e9e681cc259cddb31ad0aa752f7190c3cad5a
 	}
 
 	public function addSalesRepGroup($con){
@@ -53,30 +61,32 @@ class salesRep extends Management{
 		return $bool;
 	}
 
-    public function getSalesRep($con,$sales_rep_group_id){
-		
-		$where = "";
+    public function getSalesRep($con,$salesRepGroupID){
+		$sql = new sql();
 
-		if($sales_rep_group_id){
-			$sales_rep_ids = implode(",", $sales_rep_group_id);
-			$where .= "WHERE srg.ID in ('$sales_rep_ids')";
-		}
-
-		$sql = "
-			SELECT 
-				sr.ID AS 'id',
+		$table = "sales_rep sr";
+		$columns = "sr.ID AS 'id',
 				sr.name AS 'salesRep',	
 				srg.name AS 'salesRepGroup',
-				r.name AS 'region'			
-			FROM sales_rep sr
-				LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
-				LEFT JOIN region r ON r.ID = srg.region_id
-			$where
-		";
+				r.name AS 'region'";
 
-		$res = $con->query($sql);
+		$where = "";
 
-    	return $res;
+		if($salesRepGroupID){
+			$salesRepGroupIDS = implode(",", $salesRepGroupID);
+			$where .= "WHERE srg.ID IN (salesRepGroupIDS)";
+		}
+
+		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				LEFT JOIN region r ON r.ID = srg.region_id";
+
+		$res = $sql->select($con,$columns,$table,$join,$where);
+
+		$from = array('id','salesRep','salesRepGroup','region');
+
+		$salesRep = $sql->fetch($res,$from,$from);
+
+    	return $salesRep;
 	}
 
 	public function addSalesRep($con){
@@ -96,30 +106,31 @@ class salesRep extends Management{
 
 	}
 
-	public function getSalesRepUnit($con,$sales_rep_id){
+	public function getSalesRepUnit($con,$salesRepID){
+		$sql = new sql();
 
+		$table = "sales_rep_unit sru";
+		$columns = "sru.ID AS 'id',
+				    sru.name AS 'salesRepUnit',
+				    sr.name AS 'salesRep',
+				    o.name AS 'origin'";
 		$where = "";
 
-		if($sales_rep_id){
-			$sales_rep_ids = implode(",", $sales_rep_id);
-			$where .= "WHERE sr.ID in ('$sales_rep_ids')";
+		if($salesRepID){
+			$salesRepIDS = implode(",", $salesRepID);
+			$where .= "WHERE sr.ID in ('$salesRepIDS')";
 		}
 
-		$sql = "
-			SELECT 
-				sru.ID AS 'id',
-				sru.name AS 'salesRepUnit',
-				sr.name AS 'salesRep',
-				o.name AS 'origin'				
-			FROM sales_rep_unit sru
-				LEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
-				LEFT JOIN origin o ON o.ID = sru.origin_id
-			$where
-		";
+		$join = "lEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
+				LEFT JOIN origin o ON o.ID = sru.origin_id";
 
-		$res = $con->query($sql);
+		$res = $sql->select($con,$columns,$table,$join,$where);
 
-    	return $res;
+		$from = array('id','salesRepUnit','salesRep','origin');
+
+		$salesRepUnit = $sql->fetch($res,$from,$from);
+
+    	return $salesRepUnit;
 	}
 
 	public function addSalesRepUnit($con){
