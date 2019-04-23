@@ -167,7 +167,6 @@ class dataManagementController extends Controller{
 
     public function UserTypeAdd(){
         $usr = new User();
-
         $db = new dataBase();
         $con = $db->openConnection('DLA');
         $bool = $usr->addUserType($con);
@@ -217,7 +216,7 @@ class dataManagementController extends Controller{
         $p = new pRate();
         $db = new dataBase();
         $con = $db->openConnection('DLA');
-        $region = $r->getRegions($con);
+        $region = $r->getRegion($con,"");
         $currency = $p->getCurrency($con);
         $pRate = $p->getPRate($con);
         $cYear = date('Y');
@@ -272,14 +271,11 @@ class dataManagementController extends Controller{
         $con = $db->openConnection('DLA');
         $r = new region();
         $bool = $p->editCurrency($con);
-        //$bool = $dm->editCurrency($con);  /* NÃO FOI ENCONTRADA REFAZER */
-        /*
         if($bool){
             return back()->with('response',$bool['msg']);
         }else{
             return back()->with('error',$bool['msg']);
         }   
-        */
     }
 
     /*END OF P-RATE FUNCTIONS*/
@@ -349,6 +345,8 @@ class dataManagementController extends Controller{
     public function salesRepGroupEditFilter(){
         $dm = new dataManagement();
         $db = new dataBase();
+        $r = new region();
+        $sr = new salesRep();
         $con = $db->openConnection('DLA');
         $render = new dataManagementRender();
 
@@ -359,17 +357,15 @@ class dataManagementController extends Controller{
             array_push($filter, $temp);
         }
 
-        $region = $dm->getRegions($con);
+        $region = $r->getRegion($con,"");
 
-        if (sizeof($filter) == 0 ) {
-            $salesRepGroup = $dm->getSalesRepGroup($con);
-        }else{
-            $select = array('id','region_id','name');
-            $columns = array('region_id');
-            $salesRepGroup = $dm->filter($select, 'sales_rep_group',$columns, $filter,$con);
-        }
+        $filter = null;
 
-        return view('dataManagement.edit.editSalesRepGroup',compact('salesRepGroup','region','render'));
+        $salesRepGroup = $sr->getSalesRepGroup($con,$filter);
+
+
+
+        //return view('dataManagement.edit.editSalesRepGroup',compact('salesRepGroup','region','render'));
 
     } 
 
