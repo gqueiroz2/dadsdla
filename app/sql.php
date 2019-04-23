@@ -45,4 +45,68 @@ class sql extends Model{
     	return $info;
 
     }
+
+    public function setUpdate($columns, $values){
+
+        $set = "SET ";
+        for ($i=0; $i <sizeof($columns) ; $i++) { 
+            if ($i == sizeof($columns)-1) {
+                $set .= "$columns[$i] = \"$values[$i]\"";
+            }else{
+                $set .= "$columns[$i] = \"$values[$i]\", ";
+            }
+        }
+
+        return $set;
+    }
+
+    public function updateValues($con,$tableName,$set,$where){
+
+
+        $sql = "UPDATE $tableName $set $where";
+
+        if($con->query($sql) === true){
+            $rtr["bool"] = true;
+            $rtr["msg"] = "Successfully updated!";
+        }else{
+            $rtr["bool"] = false;
+            $rtr["msg"] = "Error: ".$sql."<br>".$con->error;
+        }
+
+        return $rtr;
+    }
+
+    public function where($columns,$variables){
+
+        $where = "WHERE ";
+
+
+        for ($i=0; $i <sizeof($columns) ; $i++) { 
+            if ($i == sizeof($columns)-1) {
+                $where .= "($columns[$i] = \"$variables[$i]\")";
+            }else{
+                $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+            }
+        }
+
+        return $where;
+
+    }
+
+    public function deleteValues($con,$table,$where){
+        $sql = "DELETE FROM $table $where";
+
+        if($con->query($sql) === true){
+            $rtr["bool"] = true;
+            $rtr["msg"] = "Successfully updated!";
+        }else{
+            $rtr["bool"] = false;
+            $rtr["msg"] = "Error: ".$sql."<br>".$con->error;
+        }
+
+
+        return $rtr;
+
+    }
+
 }

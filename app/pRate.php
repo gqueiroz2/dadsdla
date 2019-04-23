@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
+use App\region;
 
 class pRate extends Management{
     
@@ -65,6 +66,34 @@ class pRate extends Management{
         $values = " '$currency','$regionID' ";
         $bool = $sql->insert($con,$table,$columns,$values);
         return $bool;
+
+	}
+
+	public function editCurrency($con){
+		$sql = new sql();
+		$r = new region();
+		$regions = $r->getRegion($con,"");
+		$size = Request::get("size");
+		$table = "currency";
+		$col = array('name','region_id');
+
+		for ($i=0; $i <$size ; $i++) { 
+			$or[$i] = Request::get("OldRegion-$i");
+			$on[$i] = Request::get("OldName-$i");
+			$nr[$i] = Request::get("NewRegion-$i");
+			$nn[$i] = Request::get("NewName-$i");
+			for ($j=0; $j <sizeof($regions); $j++) { 
+				if ($or[$i] == $regions[$j]["name"]) {
+					$oldID[$i] = $regions[$j]["id"];
+				}
+				if ($nr[$i] == $regions[$j]["name"]) {
+					$newID[$i] = $regions[$j]["id"];
+				}
+			}
+			$arrayWhere[$i] = array($on[$i],$oldID[$i]);
+			$where[$i] = $sql->where($col,$arrayWhere[$i]);
+			
+		}
 
 	}
 
