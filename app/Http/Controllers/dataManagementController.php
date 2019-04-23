@@ -20,6 +20,68 @@ use App\pRate;
 
 class dataManagementController extends Controller{
     public function home(){
+        
+        $sql = new sql(); 
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+
+        $qr = "SELECT 
+                    cu.ID AS 'clientUnityID',
+                    cu.name AS 'clientUnity',
+                    c.name AS 'client',
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region',
+                    o.name AS 'origin'
+                FROM client_unit cu
+                LEFT JOIN client c ON c.ID = cu.client_id
+                LEFT JOIN client_group cg ON cg.ID = c.client_group_id                
+                LEFT JOIN region r ON r.ID = cg.region_id
+                LEFT JOIN origin o ON o.ID = cu.origin_id 
+
+              ";
+        echo($qr)."<br>";
+        $res = $con->query($qr);
+
+        $from = array('clientUnityID','clientUnity','status','client','clientGroup','region','origin');
+
+        $agencies = $sql->fetch($res,$from,$from);
+
+        var_dump($res);
+        var_dump($agencies);
+
+
+        /*
+        $sql = new sql(); 
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+
+        $qr = "SELECT 
+                    au.ID AS 'agencyUnityID',
+                    au.name AS 'agencyUnity',
+                    au.status AS 'status',
+                    a.name AS 'agency',
+                    ag.name AS 'agencyGroup',
+                    r.name AS 'region',
+                    o.name AS 'origin'
+                FROM agency_unit au
+                LEFT JOIN agency a ON a.ID = au.agency_id
+                LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id                
+                LEFT JOIN region r ON r.ID = ag.region_id
+                LEFT JOIN origin o ON o.ID = au.origin_id 
+
+              ";
+
+        $res = $con->query($qr);
+
+        $from = array('agencyUnityID','agencyUnity','status','agency','agencyGroup','region','origin');
+
+        $agencies = $sql->fetch($res,$from,$from);
+
+        var_dump($res);
+        var_dump($agencies);
+*/
     	return view('dataManagement.home');
     }
 
@@ -318,13 +380,6 @@ class dataManagementController extends Controller{
 
     public function agencyAdd(){
 
-        $dm = new dataManagement();
-        $agency = new matchingClientAgency();
-
-        $db = new dataBase();
-        $con = $db->openConnection('DLA');
-
-        $agency->match($con);
     }
 
     public function agencyGet(){
@@ -333,7 +388,29 @@ class dataManagementController extends Controller{
 
     }
 
+
+
+
     /*END OF SALES AGENCY FUNCTIONS*/
+
+
+    /*START OF CLIENT FUNCTIONS*/
+
+    public function clientAdd(){
+
+
+    }
+
+    public function clientGet(){
+
+        return view('dataManagement.clientGet');
+
+    }
+
+
+    
+
+    /*END OF SALES CLIENT FUNCTIONS*/
     
     /*START OF ORIGIN FUNCTIONS*/
 
@@ -341,7 +418,7 @@ class dataManagementController extends Controller{
         $o = new origin();
         $db = new dataBase();
         $con = $db->openConnection('DLA');
-        $bool = $o->addOrigin($dm,$con);
+        $bool = $o->addOrigin($con);
         
         if($bool){
             return back()->with('response',$bool['msg']);
@@ -410,36 +487,7 @@ class dataManagementController extends Controller{
     }
 
     /*END OF BRAND FUNCTIONS*/
-
-
-    
-
-    
-
-    
-
-    
-
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+/*
     public function truncateGet(){
 
         $queries = new queries();
@@ -459,7 +507,7 @@ class dataManagementController extends Controller{
 
         return view('dataManagement.home');
     }
-
+*/
     
 
     

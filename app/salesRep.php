@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
 
-
 class salesRep extends Management{
 	/*
 		Abreviations

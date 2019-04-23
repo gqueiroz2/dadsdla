@@ -7,6 +7,21 @@ use App\Management;
 use App\sql;
 
 class origin extends Management{
+    public function getOriginID($con,$origin){
+    	$sql = new sql();
+		$table ='origin o';
+		$columns = 'ID';
+		$where = "";
+    	if($origin) {
+    		$origins = implode(",", $origin);
+    		$where .= "WHERE o.name IN ('$origins')";
+    	}
+    	$res = $sql->select($con,$columns,$table,null,$where);
+    	$row = $res->fetch_assoc();
+    	$originID = array($row['ID'],$origin);
+		return $originID;    	
+    }
+
     public function getOrigin($con,$ID){
 		$sql = new sql();
 		
