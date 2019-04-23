@@ -20,7 +20,7 @@ use App\pRate;
 
 class dataManagementController extends Controller{
     public function home(){
-        
+        /*
         $sql = new sql(); 
         $db = new dataBase();
         $con = $db->openConnection('DLA');
@@ -40,16 +40,17 @@ class dataManagementController extends Controller{
                 LEFT JOIN origin o ON o.ID = cu.origin_id 
 
               ";
+
         echo($qr)."<br>";
         $res = $con->query($qr);
 
-        $from = array('clientUnityID','clientUnity','status','client','clientGroup','region','origin');
+        $from = array('clientUnityID','clientUnity','client','clientGroup','region','origin');
 
         $agencies = $sql->fetch($res,$from,$from);
 
         var_dump($res);
         var_dump($agencies);
-
+        */
 
         /*
         $sql = new sql(); 

@@ -8,7 +8,9 @@ class sql extends Model{
     
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
-    	$res = $con->query($sql);
+    	var_dump($sql);
+        $res = $con->query($sql);
+        var_dump($res);
     	return $res;
     }
 
