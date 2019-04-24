@@ -24,7 +24,6 @@ Route::get('/','adSalesController@home');
 
 Route::group(['prefix' => 'dataManagement'],function(){
 
-
 	Route::get('/','dataManagementController@home')
 						->name('dataManagementHomeGet');
 	Route::get('region','dataManagementController@regionGet')
@@ -49,6 +48,16 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementTrueTruncateGet');
 	Route::get('importTable','dataManagementController@importTableGet')
 						->name('dataManagementImportTableGet');
+
+	Route::group(['prefix' => 'file'],function(){
+
+		Route::post('agency','fileUploadController@agency')	
+						->name('fileUploadAgency');
+
+		Route::post('client','fileUploadController@client')	
+						->name('fileUploadClient');
+
+	});
 
 	Route::group(['prefix' => 'add'],function(){
 		
