@@ -150,3 +150,11 @@ Route::group(['prefix' => 'ajax'],function(){
 
 });
 
+Route::group(['prefix' => 'User'], function(){
+
+	Route::get('login', 'AuthController@loginGet')->name('loginGet');
+	Route::post('login', 'AuthController@loginPost')->name('loginPost');
+	Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
+	Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
+});
+
