@@ -25,9 +25,10 @@
 									</div>
 									<br>
 									@if($salesRepGroup)
-										{{ $render->salesRepGroupEdit($salesRepGroup,$region)}}
 										<form method="Post" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
+											{{ $render->salesRepGroupEdit($salesRepGroup,$region)}}
+
 											<div class="row justify-content-end mt-1">
 												<div class="col col-sm-3">
 													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">

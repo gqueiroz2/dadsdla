@@ -159,11 +159,53 @@ class dataManagementController extends Controller{
         $usr = new User();
         $con = $db->openConnection('DLA');
         $region = $r->getRegion($con,false);
-        $user = $usr->getUser($con);
+        $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
     	return view('dataManagement.userGet',compact('user','userType','region','render'));
 
+    }
+
+    public function userEditFilter(){
+        $sql = new sql();
+        $sr = new salesRep();
+        $r = new region();
+        $db = new dataBase();
+        $usr = new User();
+        $con = $db->openConnection('DLA');
+        if (!is_null(Request::get('filterRegion'))) {
+            $filter = array(Request::get('filterRegion'));
+        }else{
+            $filter = null;
+        }
+        $region = $r->getRegion($con,null);
+        $regionFilter = $r->getRegion($con,$filter);
+        if (!is_null(Request::get('filterRegion'))) {
+            $filters = array();
+            for ($i=0; $i <sizeof($regionFilter) ; $i++) { 
+                array_push($filters, $regionFilter[$i]["id"]);
+            }
+        }else{
+            $filters = null;
+        }
+        
+        $user = $usr->getUser($con,$filters);
+        $render = new dataManagementRender();
+        $userType = $usr->getUserType($con);
+
+        if ( !is_null( Request::get('size') ) ) {
+           $bool = $usr->editUser($con);
+
+        }else{
+            $bool = false;
+        }
+
+
+        for ($i=0; $i <sizeof($region) ; $i++) { 
+            $salesGroup[$region[$i]["name"]] = $sr->getSalesRepGroup($con,array($region[$i]["id"]));
+        }
+
+        return view('dataManagement.edit.editUser',compact('user','region','render','userType','salesGroup','bool'));
     }
 
     public function UserTypeAdd(){
@@ -177,6 +219,32 @@ class dataManagementController extends Controller{
         }else{
             return back()->with('errorUserType',$bool['msg']);
         }
+
+    }
+
+    public function userTypeEditGet(){
+        $usr = new User();
+        $db = new dataBase();
+        $render = new dataManagementRender();
+        $con = $db->openConnection('DLA');
+        $userType = $usr->getUserType($con);
+        
+        return view('dataManagement.edit.editUserType',compact('userType','render'));
+    }
+
+    public function userTypeEditPost(){
+        $usr = new User();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+
+        $bool = $usr->editUserType($con);
+
+        if($bool){
+            return back()->with('response',$bool['msg']);
+        }else{
+            return back()->with('error',$bool['msg']);
+        }
+
 
     }
 
@@ -328,6 +396,39 @@ class dataManagementController extends Controller{
         }
     }
 
+    public function salesRepEditFilter(){
+        $db = new dataBase();
+        $r = new region();
+        $sr = new salesRep();
+        $con = $db->openConnection('DLA');
+        $render = new dataManagementRender();
+
+
+        $temp = Request::get("filterRegion");
+        $filter = array();
+        if ($temp != null) {
+            array_push($filter, $temp);
+        }else{
+            $filter = null;
+        }
+
+        $region = $r->getRegion($con,null);
+
+        if ( !is_null( Request::get('size') ) ) {
+           $bool = $sr->editSalesRep($con);
+        }else{
+            $bool = false;
+        }
+
+        $salesRep = $sr->getSalesRepByRegion($con,$filter); 
+
+        for ($i=0; $i <sizeof($region) ; $i++) { 
+            $salesGroup[$region[$i]["name"]] = $sr->getSalesRepGroup($con,array($region[$i]["id"]));
+        }
+
+        return view('dataManagement.edit.editSalesRep',compact('salesRep','render','region','salesGroup'));
+    }
+
     public function salesRepUnitAdd(){
         $sql = new sql(); 
         $r = new region();
@@ -351,22 +452,23 @@ class dataManagementController extends Controller{
         $con = $db->openConnection('DLA');
         $render = new dataManagementRender();
 
-
         $temp = Request::get("filterRegion");
         $filter = array();
         if ($temp != null) {
             array_push($filter, $temp);
         }
 
-        $region = $r->getRegion($con,"");
+        $region = $r->getRegion($con,null);
 
-        $filter = null;
+        if ( !is_null( Request::get('size') ) ) {
+           $bool = $sr->editSalesRepGroup($con);
+        }else{
+            $bool = false;
+        }
 
         $salesRepGroup = $sr->getSalesRepGroup($con,$filter);
 
-
-
-        //return view('dataManagement.edit.editSalesRepGroup',compact('salesRepGroup','region','render'));
+        return view('dataManagement.edit.editSalesRepGroup',compact('salesRepGroup','region','render'));
 
     } 
 

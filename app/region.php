@@ -33,7 +33,7 @@ class region extends Management{
     		$where .= "WHERE r.ID IN ('$ids')";
     	}
 
-        $res = $sql->select($con,$columns,$table);
+        $res = $sql->select($con,$columns,$table, null, $where);
 
         $from = array('id','name');
 
