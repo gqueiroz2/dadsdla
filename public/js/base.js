@@ -9,14 +9,14 @@ function ajaxSetup(){
 
 function getSubLevelGroupByRegion(regionID){
 	$.ajax({
-	url:"/dataManagement/ajax/subLevelGroupByRegion",
-	method:"POST",
-	data:{regionID},
+		url:"/dataManagement/ajax/subLevelGroupByRegion",
+		method:"POST",
+		data:{regionID},
 		success: function(output){
-		$('#user_sub_level_group').html(output);                			                		
+			$('#user_sub_level_group').html(output);                			                		
 		},
 		error: function(xhr, ajaxOptions,thrownError){
-		alert(xhr.status+""+thrownError);
+			alert(xhr.status+""+thrownError);
 		}
 	});
 }

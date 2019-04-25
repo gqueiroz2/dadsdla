@@ -11,14 +11,21 @@
 |
 */
 
-Auth::routes();
-
 Route::get('test','RootController@getTest')
 						->name('getTest');
 Route::post('test','RootController@postTest')
 						->name('postTest');
 
-Route::get('/','adSalesController@home');
+Route::get('/','AuthController@loginGet')->name('loginGet');
+Route::post('/', 'AuthController@loginPost')->name('loginPost');
+
+Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
+Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
+
+Route::post('requestToChangePassword', 'AuthController@requestToChangePassword')->name('requestToChangePassword');
+Route::post('resetPassword', 'AuthController@resetPassword')->name('resetPassword');
+
+Route::get('home','adSalesController@home');
 
 
 
@@ -131,6 +138,19 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 		Route::post('salesRepGroup','dataManagementController@salesRepGroupEditFilter')
 						->name('dataManagementSalesRepGroupEditFilter');
+
+		Route::post('salesRep','dataManagementController@salesRepEditFilter')
+						->name('dataManagementSalesRepEditFilter');
+
+		Route::get('userType','dataManagementController@userTypeEditGet')
+						->name('dataManagementUserTypeEditGet');
+
+		Route::post('userType','dataManagementController@userTypeEditPost')
+						->name('dataManagementUserTypeEditPost');
+
+		Route::post('user','dataManagementController@userEditFilter')
+						->name('dataManagementUserEditFilter');
+
 	});
 
 	Route::group(['prefix' => 'ajax'],function(){

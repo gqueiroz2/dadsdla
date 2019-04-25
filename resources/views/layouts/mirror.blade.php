@@ -130,6 +130,7 @@
                     <li class="nav-item dropdown dropleft">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> @User </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('loginGet') }}"> Login </a>
                             <a class="dropdown-item" href="#"> Logout </a>
                             <a class="dropdown-item" href="#"> DB Panel </a>
                         </div>

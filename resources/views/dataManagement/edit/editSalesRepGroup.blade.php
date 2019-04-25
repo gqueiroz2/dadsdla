@@ -24,10 +24,11 @@
 										</div>
 									</div>
 									<br>
-									@if($salesRepresentativeGroup)
-										{{-- $render->salesRepGroupEdit($salesRepresentativeGroup,$region) --}}
+									@if($salesRepGroup)
 										<form method="Post" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
+											{{ $render->salesRepGroupEdit($salesRepGroup,$region)}}
+
 											<div class="row justify-content-end mt-1">
 												<div class="col col-sm-3">
 													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">

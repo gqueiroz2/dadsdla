@@ -41,6 +41,53 @@ class pRate extends Management{
 		
 	}
 
+	public function editpRate($con){
+		$sql = new sql();
+		$r = new region();
+		$size = Request::get('size');
+		$columnsWhere = array('currency_id','value','year');
+		$columnsSet = array('value','year');
+		$table = "p_rate";
+		$cc = $this->getCurrency($con);
+
+
+		for ($i=0; $i <$size ; $i++) { 
+			$region[$i] = Request::get("region-$i");
+			$currency[$i] = Request::get("currency-$i");
+			$oY[$i] = Request::get("oldYear-$i");
+			$oV[$i] = Request::get("oldValue-$i");
+			$nY[$i] = Request::get("newYear-$i");
+			$nV[$i] = Request::get("newValue-$i");
+			for ($j=0; $j <sizeof($cc); $j++) { 
+				if ($region[$i] == $cc[$j]["region"] && $currency[$i] == $cc[$j]["name"]) {
+					$currencyID[$i] = $cc[$j]["id"];
+				}
+			}
+
+			$arrayWhere[$i] = array($currencyID[$i],$oV[$i],$oY[$i]);
+			$arraySet[$i] = array($nV[$i],$nY[$i]);
+
+
+			$where[$i] = $sql->where($columnsWhere,$arrayWhere[$i]);
+
+			$set[$i] = $sql->setUpdate($columnsSet,$arraySet[$i]);
+		}
+
+		$bool = false;
+
+		for ($i=0; $i <$size ; $i++) { 
+			if ($oY[$i] != $nY[$i] || $oV[$i] != $nV[$i]) {
+				$bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
+				if ($bool["bool"] == false) {
+					break;
+				}
+			}
+		}
+
+
+		return $bool;
+	}
+
 	public function getCurrency($con){
 		$sql = new sql();
 		$table = "currency c";
@@ -91,10 +138,24 @@ class pRate extends Management{
 				}
 			}
 			$arrayWhere[$i] = array($on[$i],$oldID[$i]);
+			$arraySet[$i] = array($nn[$i],$newID[$i]);
+
 			$where[$i] = $sql->where($col,$arrayWhere[$i]);
-			
+			$set[$i] = $sql->setUpdate($col,$arraySet[$i]);
 		}
 
+		$bool = false;
+
+		for ($i=0; $i <$size ; $i++) { 
+			if ($or[$i] != $nr[$i] || $on[$i] != $nn[$i]) {
+				$bool = $sql->updateValues($con,$table,$set[$i],$where[$i]); 
+				if ($bool["bool"] == false) {
+					break;
+				}
+			}
+		}
+
+		return $bool;
 	}
 
 }
