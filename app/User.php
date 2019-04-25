@@ -84,18 +84,18 @@ class User extends Management{
                     r.name AS 'region',
                     ut.name AS 'userType',
                     ut.level AS 'level',
-                    srg.name AS 'salesRepGroup'
-                    u.token AS 'token'
-                    u.token_start_date AS 'token_start_date'
+                    srg.name AS 'salesRepGroup',
+                    u.token AS 'token',
+                    u.token_start_date AS 'token_start_date',
                     u.token_end_date AS 'token_end_date'
                    ";
         $join = "LEFT JOIN region r ON r.ID = u.region_id
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
-<<<<<<< HEAD
+
         $result = $sql->select($con,$columns,$table,$join);
-=======
+
 
         $where = "";
         if ($region) {
@@ -103,7 +103,7 @@ class User extends Management{
             $where .= "WHERE u.region_id IN ('$ids')";
         }
         $result = $sql->select($con,$columns,$table,$join,$where);
->>>>>>> 1d73c4be6a9953f481648e9dd6a713facbadf1f4
+
 
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
         $to = $from;
@@ -126,9 +126,9 @@ class User extends Management{
                     r.name AS 'region',
                     ut.name AS 'userType',
                     ut.level AS 'level',
-                    srg.name AS 'salesRepGroup'
-                    u.token AS 'token'
-                    u.token_start_date AS 'token_start_date'
+                    srg.name AS 'salesRepGroup',
+                    u.token AS 'token',
+                    u.token_start_date AS 'token_start_date',
                     u.token_end_date AS 'token_end_date'
                    ";
 
@@ -137,9 +137,11 @@ class User extends Management{
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
 
-        $where = "email=$email";
+        $where = "WHERE email='$email'";
 
         $result = $sql->select($con,$columns,$table,$join, $where);
+
+        var_dump($result);
 
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;
@@ -246,6 +248,8 @@ class User extends Management{
         $password = Request::get('password');
 
         $usr = $this->getUserByEmail($con, $email);
+
+        //var_dump($usr);
 
         if (password_verify($password, $usr[0]['password'])) {
             $resp['name'] = $usr[0]['name'];

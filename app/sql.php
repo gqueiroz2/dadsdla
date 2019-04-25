@@ -9,11 +9,10 @@ class sql extends Model{
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-<<<<<<< HEAD
+
         //var_dump($res);
-=======
-        //var_dump($sql);
->>>>>>> 1d73c4be6a9953f481648e9dd6a713facbadf1f4
+        //echo ($sql);
+
     	return $res;
     }
 

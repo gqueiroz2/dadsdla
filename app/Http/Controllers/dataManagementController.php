@@ -163,8 +163,8 @@ class dataManagementController extends Controller{
         $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
-        
-    	//return view('dataManagement.userGet',compact('user','userType','region','render'));
+
+    	return view('dataManagement.userGet',compact('user','userType','region','render'));
 
     }
 
