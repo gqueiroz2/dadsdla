@@ -11,14 +11,21 @@
 |
 */
 
-Auth::routes();
-
 Route::get('test','RootController@getTest')
 						->name('getTest');
 Route::post('test','RootController@postTest')
 						->name('postTest');
 
-Route::get('/','adSalesController@home');
+Route::get('/','AuthController@loginGet')->name('loginGet');
+Route::post('/', 'AuthController@loginPost')->name('loginPost');
+
+Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
+Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
+
+Route::post('requestToChangePassword', 'AuthController@requestToChangePassword')->name('requestToChangePassword');
+Route::post('resetPassword', 'AuthController@resetPassword')->name('resetPassword');
+
+Route::get('home','adSalesController@home');
 
 
 
@@ -157,13 +164,5 @@ Route::group(['prefix' => 'ajax'],function(){
 		Route::post('currencyByRegion','ajaxController@currencyByRegion');
 	});
 
-});
-
-Route::group(['prefix' => 'User'], function(){
-
-	Route::get('login', 'AuthController@loginGet')->name('loginGet');
-	Route::post('login', 'AuthController@loginPost')->name('loginPost');
-	Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
-	Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
 });
 

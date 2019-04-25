@@ -18,12 +18,9 @@ class dataManagementAjaxController extends Controller{
          $con = $db->openConnection('DLA');         
          $regionID = array(Request::get('regionID'));
 
-         $result = $sr->getSalesRepGroup($con,$regionID);
+         var_dump($regionID);
 
-         $to = array('id','name');
-         $from = $to;
-
-         $salesRepGroup = $sql->fetch($result,$from,$to);
+         $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
 
          echo "<option value=''> Select </option>";
          for ($s=0; $s < sizeof($salesRepGroup); $s++) { 

@@ -145,7 +145,8 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $con = $db->openConnection('DLA');
         $bool = $usr->addUser($con);
-        if($bool){
+
+        if($bool['bool']){
             return back()->with('addUser',$bool['msg']);
         }else{
             return back()->with('errorAddUser',$bool['msg']);
@@ -162,7 +163,8 @@ class dataManagementController extends Controller{
         $user = $usr->getUser($con);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
-    	return view('dataManagement.userGet',compact('user','userType','region','render'));
+        
+    	//return view('dataManagement.userGet',compact('user','userType','region','render'));
 
     }
 

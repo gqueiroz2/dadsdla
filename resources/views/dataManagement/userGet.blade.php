@@ -47,13 +47,13 @@
 								<div class="col">
 									@if(session('errorAddUser'))
 										<div class="alert alert-danger">
-  											{{ session('error') }}
+  											{{ session('errorAddUser') }}
 										</div>
 									@endif
 
 									@if(session('addUser'))
 										<div class="alert alert-info">
-  											{{ session('response') }}
+  											{{ session('addUser') }}
 										</div>
 									@endif
 								</div>
@@ -62,7 +62,6 @@
 							<form method="POST" action="{{ route('dataManagementUserAdd') }}">
 							@csrf
 
-								
 								<div class="row justify-content-center">
 									<div class="col">
 										<label> Name: </label>
@@ -196,7 +195,6 @@
 							</div>
 							<form method="POST" action="{{ route('dataManagementUserTypeAdd') }}">
 							@csrf
-
 								
 								<div class="row justify-content-center">
 									<div class="col">

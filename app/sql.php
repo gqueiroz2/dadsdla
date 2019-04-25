@@ -10,7 +10,7 @@ class sql extends Model{
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
     	var_dump($sql);
         $res = $con->query($sql);
-        var_dump($res);
+        //var_dump($res);
     	return $res;
     }
 

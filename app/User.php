@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
+use App\password;
 
 class User extends Management{
 
@@ -43,12 +44,16 @@ class User extends Management{
                     ut.name AS 'userType',
                     ut.level AS 'level',
                     srg.name AS 'salesRepGroup'
+                    u.token AS 'token'
+                    u.token_start_date AS 'token_start_date'
+                    u.token_end_date AS 'token_end_date'
                    ";
         $join = "LEFT JOIN region r ON r.ID = u.region_id
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
         $result = $sql->select($con,$columns,$table,$join);
+
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
         $to = $from;
         $user = $sql->fetch($result,$from,$to);
@@ -71,7 +76,9 @@ class User extends Management{
                     ut.name AS 'userType',
                     ut.level AS 'level',
                     srg.name AS 'salesRepGroup'
-
+                    u.token AS 'token'
+                    u.token_start_date AS 'token_start_date'
+                    u.token_end_date AS 'token_end_date'
                    ";
 
         $join = "LEFT JOIN region r ON r.ID = u.region_id
@@ -83,7 +90,7 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
+        $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;
 
         $user = $sql->fetch($result,$from,$to);
@@ -97,45 +104,63 @@ class User extends Management{
 
         date_default_timezone_set('America/Sao_Paulo');
 
+        $sql = new sql();
+
     	$name = Request::get('name');
     	$email = Request::get('email');
+
     	$password = Request::get('password');
+
+        //tirar daqui
+        $pwd = new password();
+        $bool = $pwd->checkPassword($password);
+
+        if (!$bool['bool']) {
+            return $bool;
+        }
+
+        $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
+        //até aqui
+
         $status = Request::get('status');
         $regionID = Request::get('region');
     	$userTypeID = Request::get('userType');
     	$subLevelBool = Request::get('subLevelBool');
         $subLevelGroup = Request::get('subLevelGroup');
-        
-        $creation_date = date("Y-m-d h:i:s");
-        $modification_date = $creation_date;
     	
         $token = 'inicial';
-        $tokenStartDate = mktime(0, 0, 0, 1, 1, 1970);
-        $tokenStartDate = date("Y-m-d h:i:s", $tokenStartDate);
+        $tokenStartDate = mktime(23, 59, 59, 1, 1, 1970);
+        $tokenStartDate = date("Y-m-d H:i:s", $tokenStartDate);
         $tokenEndDate = $tokenStartDate;
 
     	$table = 'user';
-        $columns = ' region_id , 
-                     user_type_id , 
-                     sub_level_group ,
+        $columns = ' region_id, 
+                     user_type_id, 
+                     sub_level_group,
                      name,
                      email,
                      password,
                      status,
-                     sub_level_bool
+                     sub_level_bool,
+                     token,
+                     token_start_date,
+                     token_end_date
                    ';
 
         $values = " '$regionID',
                     '$userTypeID',
-                    'subLevelGroup',
+                    '$subLevelGroup',
                     '$name',
                     '$email',
                     '$password',
                     '$status',
-                    '$subLevelBool'
+                    '$subLevelBool',
+                    '$token',
+                    '$tokenStartDate',
+                    '$tokenEndDate'
                   ";
 
-        $bool = $this->insert($con,$table,$columns,$values);
+        $bool = $sql->insert($con,$table,$columns,$values);
 
         var_dump("name");
     	var_dump($name);
@@ -153,16 +178,14 @@ class User extends Management{
     	var_dump($subLevelBool);
         var_dump("subLevelGroup");
         var_dump($subLevelGroup);
-        var_dump("creation_date");
-        var_dump($creation_date);
-        var_dump("modification_date");
-        var_dump($modification_date);
         var_dump("token");
         var_dump($token);
         var_dump("tokenStartDate");
         var_dump($tokenStartDate);
         var_dump("tokenEndDate");
         var_dump($tokenEndDate);
+
+        return $bool;
 
     }
 
