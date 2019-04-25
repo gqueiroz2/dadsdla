@@ -10,15 +10,8 @@ class sql extends Model{
         
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-<<<<<<< HEAD
+        
         return $res;
-=======
-
-        //var_dump($res);
-        //echo ($sql);
-
-    	return $res;
->>>>>>> 7e7b533b56faf9de0e660bacaa1cab9cc1a879d2
     }
 
     public function insert($con,$table,$columns,$values){
