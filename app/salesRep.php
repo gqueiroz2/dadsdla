@@ -69,11 +69,11 @@ class salesRep extends Management{
 
 		if($salesRepGroupID){
 			$salesRepGroupIDS = implode(",", $salesRepGroupID);
-			$where .= "WHERE srg.ID IN (salesRepGroupIDS)";
+			$where .= "WHERE srg.ID IN ('$salesRepGroupIDS')";
 		}
 
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
-				LEFT JOIN region r ON r.ID = srg.region_id";
+				 LEFT JOIN region r ON r.ID = srg.region_id";
 
 		$res = $sql->select($con,$columns,$table,$join,$where);
 
@@ -108,12 +108,13 @@ class salesRep extends Management{
 		$columns = "sru.ID AS 'id',
 				    sru.name AS 'salesRepUnit',
 				    sr.name AS 'salesRep',
+				    sr.ID AS 'salesRepID',
 				    o.name AS 'origin'";
 		$where = "";
 
 		if($salesRepID){
 			$salesRepIDS = implode(",", $salesRepID);
-			$where .= "WHERE sr.ID in ('$salesRepIDS')";
+			$where .= "WHERE sr.ID IN ('$salesRepIDS')";
 		}
 
 		$join = "lEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
@@ -121,7 +122,7 @@ class salesRep extends Management{
 
 		$res = $sql->select($con,$columns,$table,$join,$where);
 
-		$from = array('id','salesRepUnit','salesRep','origin');
+		$from = array('id','salesRepUnit','salesRep','salesRepID','origin');
 
 		$salesRepUnit = $sql->fetch($res,$from,$from);
 
@@ -143,8 +144,8 @@ class salesRep extends Management{
 
 		$bool = $sql->insert($con,$table,$columns,$values);
 
-		return $bool;
-
+		return $bool; 
+       
 	}
 
 }

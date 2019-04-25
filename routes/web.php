@@ -48,14 +48,25 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementTrueTruncateGet');
 	Route::get('importTable','dataManagementController@importTableGet')
 						->name('dataManagementImportTableGet');
+	Route::get('ytdLatam','dataManagementController@ytdLatamGet')
+						->name('dataManagementYtdLatamGet');
+	
+	Route::get('agency','dataManagementController@agencyGetFromExcel')
+						->name('dataManagementAgencyGetFromExcel');
+	Route::get('client','dataManagementController@clientGetFromExcel')
+						->name('dataManagementClientGetFromExcel');
+
 
 	Route::group(['prefix' => 'file'],function(){
 
 		Route::post('agency','fileUploadController@agency')	
-						->name('fileUploadAgency');
+						->name('fileUploadAgencyFromExcel');
 
 		Route::post('client','fileUploadController@client')	
-						->name('fileUploadClient');
+						->name('fileUploadClientFromExcel');
+
+		Route::post('ytdLatam','fileUploadController@ytdLatam')	
+						->name('fileUploadYtdLatam');
 
 	});
 

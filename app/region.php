@@ -20,6 +20,27 @@ class region extends Management{
         return $bool;
     }
 
+    public function getIDRegion ($con, $region){
+        $sql = new sql();
+
+        $table = "region r";
+        $columns = "r.ID AS id";
+
+        $where = "";
+        if ($region) {
+            $regions = implode(",", $region);
+            $where .= "WHERE r.name IN ('$regions')";
+        }
+
+        $res = $sql->select($con,$columns,$table);
+
+        $from = array('id');
+
+        $region = $sql->fetch($res,$from,$from);
+
+        return $region;
+    }    
+
     public function getRegion ($con, $ID){
         $sql = new sql();
 

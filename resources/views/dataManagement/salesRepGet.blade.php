@@ -231,7 +231,7 @@
 								</div>
 							</div>
 
-							<form method="POST" action="{{ route('dataManagementSalesRepAdd') }}">
+							<form method="POST" action="{{ route('dataManagementSalesRepUnitAdd') }}">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -399,6 +399,7 @@
             			method:"POST",
             			data:{regionID,salesRepGroupID},
 	              		success: function(output){
+	                		///$('#vlau').html(output);                
 	                		$('#salesRepUnit_SalesRep').html(output);                		
 	              		},
 	              		error: function(xhr, ajaxOptions,thrownError){
