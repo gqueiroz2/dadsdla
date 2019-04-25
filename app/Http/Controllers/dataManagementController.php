@@ -86,6 +86,96 @@ class dataManagementController extends Controller{
     	return view('dataManagement.home');
     }
 
+    public function ytdLatamGet(){
+        /*
+        $sql = new sql(); 
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $con->set_charset('utf8');
+
+        $qr = "SELECT * FROM agency_unit ORDER BY name";
+
+        $from = array('ID','name');
+
+        $res = $con->query($qr);
+
+        var_dump($res);
+/*
+
+        $qr = "SELECT 
+                    y.year AS 'year',
+                    y.month AS 'month',
+                    y.brand_feed AS 'brandFeed',
+
+                    y.client_product AS 'clientProduct',
+                    y.order_reference AS 'orderReference',
+                    y.campaign_reference AS 'campaignReference',
+
+                    y.spot_duration AS 'spotDuration',
+                    y.impression_duration AS 'impressionDuration',
+                    y.num_spot AS 'numSpot',
+
+                    y.gross_revenue AS 'grossRevenue',
+                    y.net_revenue AS 'netRevenue',
+                    y.net_net_revenue AS 'netNetRevenue',
+
+                    y.gross_revenue_prate AS 'grossRevenuePrate',
+                    y.net_revenue_prate AS 'netPrate',
+                    y.net_net_revenue_prate AS 'netNetPrate',
+
+                    r.name AS 'region',
+                    b.name AS 'brand',
+                    sr.name AS 'salesRep',
+                    c.name AS 'client',
+                    a.name AS 'agency',
+                    cr.name AS 'currency'
+                    
+
+                FROM ytd y
+                LEFT JOIN region r ON r.ID = y.campaign_sales_office_id
+                LEFT JOIN brand b ON b.ID = y.brand_id
+                LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
+                LEFT JOIN client c ON c.ID = y.client_id
+                LEFT JOIN agency a ON a.ID = y.agency_id
+                LEFT JOIN currency cr ON cr.ID = y.campaign_currency_id
+
+                ORDER BY orderReference
+              ";
+
+
+        $res = $con->query($qr);
+        $from = array('year',
+                    'month',
+                    'brandFeed',
+
+                    'clientProduct',
+                    'orderReference',
+                    'campaignReference',
+
+                    'spotDuration',
+                    'impressionDuration',
+                    'numSpot',
+
+                    'grossRevenue',
+                    'netRevenue',
+                    'netNetRevenue',
+
+                    'grossRevenuePrate',
+                    'netPrate',
+                    'netNetPrate',
+
+                    'region',
+                    'brand',
+                    'salesRep',
+                    'client',
+                    'agency',
+                    'currency');
+*/
+        //$ytd = $sql->fetch($res,$from,$from);
+
+        return view('dataManagement.ytdLatamGet'/*,compact('ytd')*/);
+    }
+
     /*START OF REGIONS FUNCTIONS*/
 
     public function regionAdd(){
@@ -145,7 +235,8 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $con = $db->openConnection('DLA');
         $bool = $usr->addUser($con);
-        if($bool){
+
+        if($bool['bool']){
             return back()->with('addUser',$bool['msg']);
         }else{
             return back()->with('errorAddUser',$bool['msg']);
@@ -162,6 +253,7 @@ class dataManagementController extends Controller{
         $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
+
     	return view('dataManagement.userGet',compact('user','userType','region','render'));
 
     }
@@ -436,8 +528,7 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $con = $db->openConnection('DLA');
         $sr = new salesRep();
-        $bool = $sr->addSalesRepUnit($dm,$con);
-
+        $bool = $sr->addSalesRepUnit($con);
         if($bool){
             return back()->with('response',$bool['msg']);
         }else{
@@ -516,6 +607,12 @@ class dataManagementController extends Controller{
 
     }
 
+    public function agencyGetFromExcel(){
+
+        return view('dataManagement.agencyGetFromExcel');
+
+    }
+
     public function agencyGet(){
 
         return view('dataManagement.agencyGet');
@@ -532,6 +629,12 @@ class dataManagementController extends Controller{
 
     public function clientAdd(){
 
+
+    }
+
+    public function clientGetFromExcel(){
+
+        return view('dataManagement.clientGetFromExcel');
 
     }
 

@@ -17,48 +17,20 @@ class dataManagementAjaxController extends Controller{
          $db = new dataBase();
          $con = $db->openConnection('DLA');         
          $regionID = array(Request::get('regionID'));
-
-         //$result = 
-
-         //$to = array('id','name');
-         //$from = $to;
-
          $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
-
          echo "<option value=''> Select </option>";
          for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
             echo "<option value='".$salesRepGroup[$s]['id']."'>".$salesRepGroup[$s]['name']."</option>";
          }
-
       }
 
       public function salesRepBySalesRepGroup(){
          $db = new dataBase();
          $con = $db->openConnection('DLA');
-
          $sr = new salesRep();
-
          $regionID = Request::get('regionID');
-         $salesRepGroupID = array( Request::get('salesRepGroupID') );
-         
-         $result = $sr->getSalesRep($con,$salesRepGroupID);
-
-         if($result && $result->num_rows > 0){
-            $count = 0;
-            while($row = $result->fetch_assoc()){
-
-               $salesRep[$count]['id'] = $row['id'];
-               $salesRep[$count]['region'] = $row['region'];
-               $salesRep[$count]['salesRepGroup'] = $row['salesRepGroup'];
-               $salesRep[$count]['salesRep'] = $row['salesRep'];
-
-               $count ++;
-            }
-
-         }else{
-            $salesRep = false;
-         }
-
+         $salesRepGroupID = array( Request::get('salesRepGroupID') );         
+         $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
          if($salesRep){
             echo "<option value=''> Select </option>";
             for ($s=0; $s < sizeof($salesRep); $s++) { 
@@ -69,31 +41,14 @@ class dataManagementAjaxController extends Controller{
          }else{
             echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
          }
-
       }
 
    	public function salesRepGroupByRegion(){
-   		$db = new dataBase();
+         $db = new dataBase();
    		$con = $db->openConnection('DLA');
-
    		$regionID = array(Request::get('regionID'));
-
    		$sr = new salesRep();
-
-   		$result = $sr->getSalesRepGroup($con,$regionID);
-
-   		if($result && $result->num_rows > 0){
-   			$count = 0;
-   			while($row = $result->fetch_assoc()){
-   				$salesRepGroup[$count]["id"] = $row["id"];
-   				$salesRepGroup[$count]["name"] = $row["name"];
-
-   				$count ++;
-   			}
-   		}else{
-   			$salesRepGroup = false;
-   		}
-
+   		$salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
    		if($salesRepGroup){
    			echo "<option value=''> Select </option>";
 	   		for ($s=0; $s < sizeof($salesRepGroup); $s++) { 

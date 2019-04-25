@@ -11,14 +11,21 @@
 |
 */
 
-Auth::routes();
-
 Route::get('test','RootController@getTest')
 						->name('getTest');
 Route::post('test','RootController@postTest')
 						->name('postTest');
 
-Route::get('/','adSalesController@home');
+Route::get('/','AuthController@loginGet')->name('loginGet');
+Route::post('/', 'AuthController@loginPost')->name('loginPost');
+
+Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
+Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
+
+Route::post('requestToChangePassword', 'AuthController@requestToChangePassword')->name('requestToChangePassword');
+Route::post('resetPassword', 'AuthController@resetPassword')->name('resetPassword');
+
+Route::get('home','adSalesController@home');
 
 
 
@@ -48,14 +55,25 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('dataManagementTrueTruncateGet');
 	Route::get('importTable','dataManagementController@importTableGet')
 						->name('dataManagementImportTableGet');
+	Route::get('ytdLatam','dataManagementController@ytdLatamGet')
+						->name('dataManagementYtdLatamGet');
+	
+	Route::get('agency','dataManagementController@agencyGetFromExcel')
+						->name('dataManagementAgencyGetFromExcel');
+	Route::get('client','dataManagementController@clientGetFromExcel')
+						->name('dataManagementClientGetFromExcel');
+
 
 	Route::group(['prefix' => 'file'],function(){
 
 		Route::post('agency','fileUploadController@agency')	
-						->name('fileUploadAgency');
+						->name('fileUploadAgencyFromExcel');
 
 		Route::post('client','fileUploadController@client')	
-						->name('fileUploadClient');
+						->name('fileUploadClientFromExcel');
+
+		Route::post('ytdLatam','fileUploadController@ytdLatam')	
+						->name('fileUploadYtdLatam');
 
 	});
 

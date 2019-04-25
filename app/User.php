@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
+use App\password;
 
 class User extends Management{
-	
+
 	public function getUserType($con){
 		$sql = new sql();
 		$table = "user_types";
@@ -83,12 +84,18 @@ class User extends Management{
                     r.name AS 'region',
                     ut.name AS 'userType',
                     ut.level AS 'level',
-                    srg.name AS 'salesRepGroup'
+                    srg.name AS 'salesRepGroup',
+                    u.token AS 'token',
+                    u.token_start_date AS 'token_start_date',
+                    u.token_end_date AS 'token_end_date'
                    ";
         $join = "LEFT JOIN region r ON r.ID = u.region_id
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
+
+        $result = $sql->select($con,$columns,$table,$join);
+
 
         $where = "";
         if ($region) {
@@ -97,6 +104,7 @@ class User extends Management{
         }
         $result = $sql->select($con,$columns,$table,$join,$where);
 
+
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
         $to = $from;
         $user = $sql->fetch($result,$from,$to);
@@ -104,27 +112,92 @@ class User extends Management{
 
 	}
 
+    public function getUserByEmail($con, $email){
+        
+        $sql = new sql();
+        $table = "user u";
+
+        $columns = "u.ID AS 'id',
+                    u.name AS 'name',
+                    u.email AS 'email',
+                    u.password AS 'password',
+                    u.status AS 'status',
+                    u.sub_level_bool AS 'subLevelBool',
+                    r.name AS 'region',
+                    ut.name AS 'userType',
+                    ut.level AS 'level',
+                    srg.name AS 'salesRepGroup',
+                    u.token AS 'token',
+                    u.token_start_date AS 'token_start_date',
+                    u.token_end_date AS 'token_end_date'
+                   ";
+
+        $join = "LEFT JOIN region r ON r.ID = u.region_id
+                 LEFT JOIN user_types ut ON ut.ID = u.user_type_id
+                 LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
+                ";
+
+        $where = "WHERE email='$email'";
+
+        $result = $sql->select($con,$columns,$table,$join, $where);
+
+        var_dump($result);
+
+        $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
+        $to = $from;
+
+        $user = $sql->fetch($result,$from,$to);
+
+        return $user;
+
+    }
+
     public function addUser($con){
+        $sql = new sql();
+
+        date_default_timezone_set('America/Sao_Paulo');
+
         $sql = new sql();
 
     	$name = Request::get('name');
     	$email = Request::get('email');
+
     	$password = Request::get('password');
+
+        //tirar daqui
+        $pwd = new password();
+        $bool = $pwd->checkPassword($password);
+
+        if (!$bool['bool']) {
+            return $bool;
+        }
+
+        $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
+        //até aqui
+
         $status = Request::get('status');
         $regionID = Request::get('region');
     	$userTypeID = Request::get('userType');
     	$subLevelBool = Request::get('subLevelBool');
         $subLevelGroup = Request::get('subLevelGroup');
     	
+        $token = 'inicial';
+        $tokenStartDate = mktime(23, 59, 59, 1, 1, 1970);
+        $tokenStartDate = date("Y-m-d H:i:s", $tokenStartDate);
+        $tokenEndDate = $tokenStartDate;
+
     	$table = 'user';
-        $columns = ' region_id , 
-                     user_type_id , 
-                     sub_level_group ,
+        $columns = ' region_id, 
+                     user_type_id, 
+                     sub_level_group,
                      name,
                      email,
                      password,
                      status,
-                     sub_level_bool
+                     sub_level_bool,
+                     token,
+                     token_start_date,
+                     token_end_date
                    ';
 
         $values = " '$regionID',
@@ -134,7 +207,10 @@ class User extends Management{
                     '$email',
                     '$password',
                     '$status',
-                    '$subLevelBool'
+                    '$subLevelBool',
+                    '$token',
+                    '$tokenStartDate',
+                    '$tokenEndDate'
                   ";
 
         $bool = $sql->insert($con,$table,$columns,$values);
@@ -155,6 +231,36 @@ class User extends Management{
     	var_dump($subLevelBool);
         var_dump("subLevelGroup");
         var_dump($subLevelGroup);
+        var_dump("token");
+        var_dump($token);
+        var_dump("tokenStartDate");
+        var_dump($tokenStartDate);
+        var_dump("tokenEndDate");
+        var_dump($tokenEndDate);
+
+        return $bool;
+
+    }
+
+    public function login($con){
+
+        $email = Request::get('email');
+        $password = Request::get('password');
+
+        $usr = $this->getUserByEmail($con, $email);
+
+        //var_dump($usr);
+
+        if (password_verify($password, $usr[0]['password'])) {
+            $resp['name'] = $usr[0]['name'];
+            $resp['bool'] = true;
+            $resp['msg'] = "Login Successfull";
+        }else{
+            $resp['bool'] = false;
+            $resp['msg'] = "Your E-Mail Address or Password is incorrect";
+        }
+
+        return $resp;
     }
 
 
