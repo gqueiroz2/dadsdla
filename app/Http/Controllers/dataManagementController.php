@@ -173,11 +173,13 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $usr = new User();
         $con = $db->openConnection('DLA');
+        
         if (!is_null(Request::get('filterRegion'))) {
             $filter = array(Request::get('filterRegion'));
         }else{
             $filter = null;
         }
+        
         $region = $r->getRegion($con,null);
         $regionFilter = $r->getRegion($con,$filter);
         if (!is_null(Request::get('filterRegion'))) {
@@ -188,8 +190,6 @@ class dataManagementController extends Controller{
         }else{
             $filters = null;
         }
-        
-        $user = $usr->getUser($con,$filters);
         $render = new dataManagementRender();
         $userType = $usr->getUserType($con);
 
@@ -200,6 +200,7 @@ class dataManagementController extends Controller{
             $bool = false;
         }
 
+        $user = $usr->getUser($con,$filters);
 
         for ($i=0; $i <sizeof($region) ; $i++) { 
             $salesGroup[$region[$i]["name"]] = $sr->getSalesRepGroup($con,array($region[$i]["id"]));
@@ -442,6 +443,40 @@ class dataManagementController extends Controller{
         }else{
             return back()->with('error',$bool['msg']);
         }
+    }
+
+    public function salesRepUnitEditFilter(){
+        $o = new origin();
+        $sql = new sql(); 
+        $r = new region();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $sr = new salesRep();
+        $region = $r->getRegion($con,false);
+        $salesRepGroup = $sr->getSalesRepGroup($con,false);
+        $salesRep = $sr->getSalesRep($con,false);       
+        $origin = $o->getOrigin($con,false);
+        $render = new dataManagementRender();
+
+        if (!is_null(Request::get('filterRep'))) {
+            $filter = array(Request::get('filterRep'));
+        }else{
+            $filter = null;
+        }
+
+
+        if (!is_null(Request::get('size'))) {
+            $bool = $sr->editSalesRepUnit($con);
+        }else{
+            $bool = null;
+        }
+
+
+
+
+        $salesRepUnit = $sr->getSalesRepUnit($con,$filter);       
+
+        return view('dataManagement.edit.editSalesRepUnit',compact('salesRep','salesRepUnit','salesRepGroup','origin','render','region'));       
     }
 
     public function salesRepGroupEditFilter(){
