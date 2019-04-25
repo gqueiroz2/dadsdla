@@ -24,7 +24,6 @@
 									@if($salesRepGroup)
 										<form method="POST" action="{{ route('dataManagementSalesRepGroupEditFilter') }}">
 											@csrf
-											<input type="hidden" name="jorge">
 											<div class="row justify-content-end mt-1">
 												<div class="col">
 													<input type="submit" class="btn btn-primary" value="Edit" style="width: 100%;">
@@ -109,7 +108,7 @@
 							<div class="row justify-content-center">
 								<div class="col">
 									@if($salesRep)
-										<form method="POST" action="">
+										<form method="POST" action="{{route('dataManagementSalesRepEditFilter')}}">
 											@csrf
 											<input type="hidden" name="jorge">
 											<div class="row justify-content-end mt-1">

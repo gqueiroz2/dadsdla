@@ -22,16 +22,57 @@ class User extends Management{
 	}
 
     public function addUserType($con){
+        $sql = new sql();
         $userType = Request::get('name');
         $level = Request::get('level');
         $table = 'user_types';
         $columns = 'name,level';
         $values = "'$userType','$level'";
-		$bool = $this->insert($con,$table,$columns,$values);
-		return $bool;
+
+
+        $bool = $sql->insert($con,$table,$columns,$values);
+		
+
+        return $bool;
     }
 
-    public function getUser($con){		
+    public function editUserType($con){
+        $sql = new sql();
+        $size = Request::get("size");
+        $table = "user_types";
+        $columns = array('name','level');
+
+        for ($i=0; $i <$size ; $i++) { 
+            $oldUser[$i] = Request::get("oldUserType-$i");
+            $oldLevel[$i] = Request::get("oldLevel-$i");
+            $newUser[$i] = Request::get("newUserType-$i");
+            $newLevel[$i] = Request::get("newLevel-$i");
+            
+            $arrayWhere[$i] = array($oldUser[$i],$oldLevel[$i]);
+            $arraySet[$i] = array($newUser[$i],$newLevel[$i]);
+
+            $where[$i] = $sql->where($columns,$arrayWhere[$i]);
+            $set[$i] = $sql->setUpdate($columns,$arraySet[$i]);
+        }
+
+        $bool = false;
+
+        for ($i=0; $i <$size; $i++) {
+            if($oldUser[$i] != $newUser[$i] || $oldLevel[$i] != $newLevel[$i]){
+                $bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
+
+                if ($bool == false) {
+                    break;
+                }
+            }
+        }
+
+
+        return $bool;
+
+    }
+
+    public function getUser($con,$region){		
         $sql = new sql();
         $table = "user u";
         $columns = "u.ID AS 'id',
@@ -52,7 +93,17 @@ class User extends Management{
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
+<<<<<<< HEAD
         $result = $sql->select($con,$columns,$table,$join);
+=======
+
+        $where = "";
+        if ($region) {
+            $ids = implode(",", $region);
+            $where .= "WHERE u.region_id IN ('$ids')";
+        }
+        $result = $sql->select($con,$columns,$table,$join,$where);
+>>>>>>> 1d73c4be6a9953f481648e9dd6a713facbadf1f4
 
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup');
         $to = $from;
@@ -100,7 +151,7 @@ class User extends Management{
     }
 
     public function addUser($con){
-    	var_dump(Request::all());
+        $sql = new sql();
 
         date_default_timezone_set('America/Sao_Paulo');
 
@@ -206,6 +257,56 @@ class User extends Management{
         }
 
         return $resp;
+    }
+
+
+    public function editUser($con){
+        $sql = new sql();
+        $size = Request::get('size');
+        $table = "user";
+
+        $columns = array('region_id','user_type_id','name','status','sub_level_group','sub_level_bool');
+
+        for ($i=0; $i <$size; $i++) { 
+            $oldName[$i] = Request::get("oldName-$i");
+            $newName[$i] = Request::get("newName-$i");
+
+            $oldRegion[$i] = Request::get("oldRegion-$i");
+            $newRegion[$i] = Request::get("newRegion-$i");
+
+            $oldStatus[$i] = Request::get("oldStatus-$i");
+            $newStatus[$i] = Request::get("newStatus-$i");
+
+            $oldSubLevelBool[$i] = Request::get("oldSubLevelBool-$i");
+            $newSubLevelBool[$i] = Request::get("newSubLevelBool-$i");
+
+            $oldUserType[$i] = Request::get("oldUserType-$i");
+            $newUserType[$i] = Request::get("newUserType-$i");
+
+            $oldSalesGroup[$i] = Request::get("oldSalesGroup-$i");
+            $newSalesGroup[$i] = Request::get("newSalesGroup-$i");
+
+            $arrayWhere[$i] = array($oldRegion[$i],$oldUserType[$i],$oldName[$i],$oldStatus[$i],$oldSalesGroup[$i],$oldSubLevelBool[$i]);
+            
+            $arraySet[$i] = array($newRegion[$i],$newUserType[$i],$newName[$i],$newStatus[$i],$newSalesGroup[$i],$newSubLevelBool[$i]);
+
+            $where[$i] = $sql->where($columns,$arrayWhere[$i]); 
+
+            $set[$i] = $sql->setUpdate($columns,$arraySet[$i]);
+        }
+
+        $bool = false;
+
+        for ($i=0; $i <$size ; $i++) { 
+            if ($oldName[$i] != $newName[$i] || $oldRegion[$i] != $newRegion[$i] || $oldStatus[$i] != $newStatus[$i] || $oldSubLevelBool[$i] != $newSubLevelBool[$i] || $oldUserType[$i] != $newUserType[$i] ||  $oldSalesGroup[$i] != $newSalesGroup[$i]) {
+                $bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
+                if ($bool == false) {
+                    break;
+                }
+            }
+        }
+
+        return $bool;
     }
 
 }

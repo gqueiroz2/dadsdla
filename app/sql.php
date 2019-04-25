@@ -8,9 +8,12 @@ class sql extends Model{
     
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
-    	var_dump($sql);
         $res = $con->query($sql);
+<<<<<<< HEAD
         //var_dump($res);
+=======
+        //var_dump($sql);
+>>>>>>> 1d73c4be6a9953f481648e9dd6a713facbadf1f4
     	return $res;
     }
 
@@ -60,10 +63,11 @@ class sql extends Model{
         return $set;
     }
 
-    public function updateValues($con,$tableName,$set,$where){
+
+    public function updateValues($con,$tableName,$set,$where,$join = null){
 
 
-        $sql = "UPDATE $tableName $set $where";
+        $sql = "UPDATE $tableName $set $join $where";
 
         if($con->query($sql) === true){
             $rtr["bool"] = true;

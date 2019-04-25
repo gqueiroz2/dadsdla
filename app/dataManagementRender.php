@@ -136,11 +136,11 @@ class dataManagementRender extends Render{
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' class='form-control' name='newYear-$p' value='".$pRate[$p]["year"]."' style='width:100%;'>";
+                    echo "<input type='number' class='form-control' name='newYear-$p' value='".$pRate[$p]["year"]."' style='width:100%;'>";
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' class='form-control' name='newValue-$p' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
+                    echo "<input type='number' class='form-control' name='newValue-$p' value='". number_format( $pRate[$p]["value"] ,5 ) ."' style='width:100%;'>";
                 echo "</div>";
 
             echo "</div>";
@@ -148,7 +148,7 @@ class dataManagementRender extends Render{
         }
     }
 
-    public function salesRepEdit($salesRepGroup,$region){
+    public function salesRepGroupEdit($salesRepGroup,$region){
 
         echo "<div class='row mt-1'>";
 
@@ -158,28 +158,35 @@ class dataManagementRender extends Render{
             echo "<div class='col'> New Sales Rep. Group </div>";              
 
         echo "</div>";
-        /*
+        
+        echo "<input type='hidden' name='size' value='".sizeof($salesRepGroup)."'>"; 
+    
         for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
-            
+               
             echo "<div class='row mt-1'>";
 
                 echo "<div class='col'>";
+                    for($r = 0; $r < sizeof($region);$r++){
+                        if ($region[$r]["name"] == $salesRepGroup[$s]["region"]) {
+                            echo "<input type='hidden' name='oldRegion-$s' readonly='true' class='form-control' value='".$region[$r]["id"]."' style='width:100%;'>";
+                        }   
+                    }
                     echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["region"]."' style='width:100%;'>";
                 echo "</div>";
                 
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                    echo "<input type='text' name='oldName-$s' readonly='true' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<select class='form-control' name='NewRegion-$s'>";
+                    echo "<select class='form-control' name='newRegion-$s'>";
                     for($r = 0; $r < sizeof($region);$r++){
                         if ($region[$r]["name"] == $salesRepGroup[$s]["region"]) {
-                            echo "<option selected='true' value='".$region[$r]["name"]."'>" ;
+                            echo "<option selected='true' value='".$region[$r]["id"]."'>" ;
                                 echo $region[$r]["name"];  
                             echo "</option>";
                         }else{
-                            echo "<option value='".$region[$r]["name"]."'>" ;
+                            echo "<option value='".$region[$r]["id"]."'>" ;
                                 echo $region[$r]["name"];  
                             echo "</option>";
                         }
@@ -188,13 +195,76 @@ class dataManagementRender extends Render{
                 echo "</div>";
 
                 echo "<div class='col'>";
-                    echo "<input type='text' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
+                    echo "<input type='text' name='newName-$s' class='form-control' value='".$salesRepGroup[$s]["name"]."' style='width:100%;'>";
                 echo "</div>";
 
 
             echo "</div>";
             
-        }*/
+        }
+
+    }
+
+    public function salesRepEdit($salesRep,$region,$salesGroup){
+        echo "<div class='row mt-1'>";
+            
+            echo "<div class='col'> Region </div>";              
+            echo "<div class='col'> Old Sales Rep. Group </div>";              
+            echo "<div class='col'> Old Sales Rep. Name </div>";              
+            echo "<div class='col'> New Sales Rep. Group </div>";              
+            echo "<div class='col'> New Sales Rep. Name </div>";              
+
+        echo "</div>";
+
+        echo "<input type='hidden' value='".sizeof($salesRep)."' name='size'>";
+
+        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+            echo "<div class='row mt-1'>";
+                echo "<div class='col'>";
+                    for ($i=0; $i <sizeof($region) ; $i++) { 
+                        if ($region[$i]["name"] == $salesRep[$s]["region"]) {
+                            echo "<input type='hidden' name='region-$s' class='form-control' value='".$region[$i]["id"]."'     style='width:100%;'>";
+                        }
+                    }
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["region"]."' >";
+                echo "</div>";
+                echo "<div class='col'>";
+                    for ($i=0; $i <sizeof($region) ; $i++) { 
+                        if ($region[$i]["name"] == $salesRep[$s]["region"]) {
+                            for ($j=0; $j <sizeof($salesGroup[$region[$i]["name"]]) ; $j++) { 
+                                if ($salesGroup[$region[$i]["name"]][$j]["name"] == $salesRep[$s]["salesRepGroup"]) {
+                                    echo "<input type='hidden' class='form-control' name='oldSalesGroup-$s' value='".$salesGroup[$region[$i]["name"]][$j]["id"]."' >";
+                                }
+                            }
+                        }
+                    }
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRep[$s]["salesRepGroup"]."' >";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' name='oldSalesRep-$s' class='form-control' value='".$salesRep[$s]["salesRep"]."' >";
+                echo "</div>";
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
+                echo "<div class='col'>";
+                    echo "<select class='form-control' name='newSalesGroup-$s'>";
+                        for ($i=0; $i <sizeof($region) ; $i++) { 
+                            if ($region[$i]["name"] == $salesRep[$s]["region"]) {
+                                for ($j=0; $j <sizeof($salesGroup[$region[$i]["name"]]) ; $j++) { 
+                                    if ($salesGroup[$region[$i]["name"]][$j]["name"] == $salesRep[$s]["salesRepGroup"]) {
+                                        echo "<option value=".$salesGroup[$region[$i]["name"]][$j]["id"]." selected='true'>".$salesGroup[$region[$i]["name"]][$j]["name"]."</option>";
+                                    }else{
+                                        echo "<option value=".$salesGroup[$region[$i]["name"]][$j]["id"].">".$salesGroup[$region[$i]["name"]][$j]["name"]."</option>";
+                                    }
+                                }
+                            }
+                        }
+                    echo "</select>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='newSalesRep-$s' class='form-control' value='".$salesRep[$s]["salesRep"]."' >";
+                echo "</div>";
+            echo "</div>";
+        }
 
     }
 
@@ -208,23 +278,24 @@ class dataManagementRender extends Render{
             echo "<div class='col'> &nbsp; </div>";                
 
         echo "</div>";
+
         
         for ($s=0; $s < sizeof($salesRepUnit); $s++) { 
             
             echo "<div class='row mt-1'>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRep"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["origin"]."' style='width:100%;'>";
-            echo "</div>";
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRep"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["origin"]."' style='width:100%;'>";
+                echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+                echo "</div>";
 
             echo "</div>";
 
@@ -298,34 +369,43 @@ class dataManagementRender extends Render{
 
         echo "<div class='row mt-1'>";
             
-            echo "<div class='col'> User Type </div>";                                   
-            echo "<div class='col'> Level </div>";                           
+            echo "<div class='col'> Old User Type </div>";                                   
+            echo "<div class='col'> Old Level </div>";                           
+            echo "<div class='col'> New User Type </div>";                                   
+            echo "<div class='col'> New Level </div>";                           
 
         echo "</div>";
+
+        echo "<input type='hidden' name='size' value='".sizeof($userType)."'>";
         
         for ($u=0; $u < sizeof($userType); $u++) { 
             
             echo "<div class='row mt-1'>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$userType[$u]["name"]."' style='width:100%;'>";
-            echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='oldUserType-$u' readonly='true' class='form-control' value='".$userType[$u]["name"]."' style='width:100%;'>";
+                echo "</div>";
 
-            echo "<div class='col'>";
-                echo "<input type='text' readonly='true' class='form-control' value='".$userType[$u]["level"]."' style='width:100%;'>";
-            echo "</div>";            
+                echo "<div class='col'>";
+                    echo "<input type='text' name='oldLevel-$u' readonly='true' class='form-control' value='".$userType[$u]["level"]."' style='width:100%;'>";
+                echo "</div>";
 
-            echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
+                echo "<div class='col'>";
+                    echo "<input type='text' name='newUserType-$u' class='form-control' value='".$userType[$u]["name"]."' style='width:100%;'>";
+                echo "</div>";
+
+                echo "<div class='col'>";
+                    echo "<input type='text' name='newLevel-$u' class='form-control' value='".$userType[$u]["level"]."' style='width:100%;'>";
+                echo "</div>";            
 
             echo "</div>";
 
         }
     }   
 
-    public function userEdit($user){
+    public function userEdit($user,$region,$userType,$salesGroup){
         
+        echo "<input type='hidden' name='size' value='".sizeof($user)."'>";
         
         for ($u=0; $u < sizeof($user); $u++) { 
             
@@ -337,67 +417,107 @@ class dataManagementRender extends Render{
             echo "<hr>";
 
             echo "<div class='row mt-1'>";            
-                echo "<div class='col'> Name </div>";                                   
-                echo "<div class='col'> E-mail </div>";             
-                echo "<div class='col'> Password </div>";                                                 
+                echo "<div class='col'> Name </div>";
+                echo "<div class='col'> Region </div>";                           
+                echo "<div class='col'> Status </div>";                                   
             echo "</div>";    
 
             echo "<div class='row mt-1'>";
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["name"]."' style='width:100%;'>";
-                echo "</div>";
-
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["email"]."' style='width:100%;'>";
+                    echo "<input type='hidden' name='oldName-$u' class='form-control' value='".$user[$u]["name"]."' style='width:100%;'>";
+                    echo "<input type='text' name='newName-$u' class='form-control' value='".$user[$u]["name"]."' style='width:100%;'>";
                 echo "</div>";
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["password"]."' style='width:100%;'>";
+                    for ($i=0; $i <sizeof($region) ; $i++) { 
+                        if ($region[$i]["name"] == $user[$u]["region"]) {
+                            echo "<input type='hidden' name='oldRegion-$u' class='form-control' value='".$region[$i]["id"]."'     style='width:100%;'>";
+                        }
+                    }
+                    echo "<select name='newRegion-$u' class='form-control' style='width:100%;'>";
+                        for ($i=0; $i <sizeof($region) ; $i++) { 
+                            if ($region[$i]["name"] == $user[$u]["region"]) {
+                                echo "<option selected='true' value ='".$region[$i]["id"]."'>".$region[$i]["name"]."</option>";
+                            }else{
+                                echo "<option  value ='".$region[$i]["id"]."'>".$region[$i]["name"]."</option>";
+                            }
+                        }
+                    echo "</select>";
+                echo "</div>";                
+                echo "<div class='col'>";
+                    echo "<input type='hidden' name='oldStatus-$u' class='form-control' value='".$user[$u]["status"]."' style='width:100%;'>";
+                    echo "<select name='newStatus-$u' class='form-control' style='width:100%;'>";
+                        if ($user[$u]["status"] == 1) {
+                            echo "<option selected='true' value ='1' >Enable</option>";
+                            echo "<option value ='0'>Disable</option>";
+                        }else{
+                            echo "<option value ='1' >Enable</option>";
+                            echo "<option selected='true' value ='0'>Disable</option>";
+                        }                            
+                        
+                    echo "</select>";
                 echo "</div>";
             echo "</div>";
 
             echo "<div class='row mt-1'>";           
-                echo "<div class='col'> Region </div>";                           
-                echo "<div class='col'> Status </div>";                           
-                echo "<div class='col'> Sub Level Bool </div>";                           
-            echo "</div>";
-
-            echo "<div class='row mt-1'>";
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["region"]."' style='width:100%;'>";
-                echo "</div>";                
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["status"]."' style='width:100%;'>";
-                echo "</div>";
-                echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["subLevelBool"]."' style='width:100%;'>";
-                echo "</div>";
-            echo "</div>";
-
-            echo "<div class='row mt-1'>";            
+                        
+                echo "<div class='col'> Sub Level Bool </div>";   
                 echo "<div class='col'> User Type </div>";                                   
-                echo "<div class='col'> Level </div>";                           
-                echo "<div class='col'> Sub Rep. Group </div>";                                                   
+                echo "<div class='col'> Sub Rep. Group </div>";                         
             echo "</div>";
 
             echo "<div class='row mt-1'>";
+                
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["userType"]."' style='width:100%;'>";
+                    echo "<input type='hidden' name='oldSubLevelBool-$u' class='form-control' value='".$user[$u]["subLevelBool"]."' style='width:100%;'>";
+                    echo "<select name='newSubLevelBool-$u' class='form-control' style='width:100%;'>";
+                        if ($user[$u]["subLevelBool"] == 1) {
+                            echo "<option selected='true' value ='1' >Yes</option>";
+                            echo "<option value ='0'>No</option>";
+                        }else{
+                            echo "<option value ='1' >Yes</option>";
+                            echo "<option selected='true' value ='0'>No</option>";
+                        }                            
+                        
+                    echo "</select>";
                 echo "</div>";
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["level"]."' style='width:100%;'>";
+                    for ($i=0; $i <sizeof($userType) ; $i++) { 
+                        if ($userType[$i]['name'] == $user[$u]["userType"]) {
+                            echo "<input type='hidden' name='oldUserType-$u' class='form-control' value='".$userType[$i]['id']."' style='width:100%;'>";
+                        }
+                    }
+                    echo "<select name='newUserType-$u' class='form-control' style='width:100%;'>";
+                        for ($i=0; $i <sizeof($userType) ; $i++) { 
+                            if ($userType[$i]['name'] == $user[$u]["userType"]) {
+                                echo "<option selected='true' value ='".$userType[$i]["id"]."'>".$userType[$i]["name"]."</option>";
+                            }else{
+                                echo "<option value ='".$userType[$i]["id"]."'>".$userType[$i]["name"]."</option>";
+                            }
+                        }
+                    echo "</select>";
                 echo "</div>";
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$user[$u]["salesRepGroup"]."' style='width:100%;'>";
+                    for ($i=0; $i <sizeof($salesGroup[$user[$u]["region"]]) ; $i++) { 
+                        if ($user[$u]["salesRepGroup"] == $salesGroup[$user[$u]["region"]][$i]["name"]) {
+                            echo "<input type='hidden' name='oldSalesGroup-$u' class='form-control' value='".$salesGroup[$user[$u]["region"]][$i]["id"]."' style='width:100%;'>";
+                        }
+                    }
+                    echo "<select name='newSalesGroup-$u' class='form-control' style='width:100%;'>";
+                        for ($i=0; $i <sizeof($salesGroup[$user[$u]["region"]]) ; $i++) { 
+                            if ($user[$u]["salesRepGroup"] == $salesGroup[$user[$u]["region"]][$i]["name"]) {
+                                echo "<option selected='true' value ='".$salesGroup[$user[$u]["region"]][$i]["id"]."'>".$salesGroup[$user[$u]["region"]][$i]["name"]."</option>";
+                            }else{
+                                echo "<option value ='".$salesGroup[$user[$u]["region"]][$i]["id"]."'>".$salesGroup[$user[$u]["region"]][$i]["name"]."</option>";
+                            }
+                        }
+                    echo "</select>";
                 echo "</div>";
             echo "</div>";
+
 
             echo "<hr>";
 
         }
-
-        echo "<div class='col'>";
-                echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
-            echo "</div>";
     }
 
 

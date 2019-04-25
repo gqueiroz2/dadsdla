@@ -27,7 +27,8 @@
 								{{-- $render->userEdit($user) --}}
 								<div class='row mt-1'>
 									<div class="col">
-										<form method="GET" action="">
+										<form method="POST" action="{{route('dataManagementUserEditFilter')}}">
+											@csrf
 											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
 										</form>
 									</div>
@@ -162,7 +163,7 @@
 								{{-- $render->userTypeEdit($userType) --}}
 								<div class='row mt-1'>
 									<div class="col">
-										<form method="GET" action="">
+										<form method="GET" action="{{route('dataManagementUserTypeEditGet')}}">
 											<input type="submit" class="btn btn-primary mt-2" value="Edit/Delete" style="width: 100%;">
 										</form>
 									</div>

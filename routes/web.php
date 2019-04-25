@@ -127,6 +127,19 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 		Route::post('salesRepGroup','dataManagementController@salesRepGroupEditFilter')
 						->name('dataManagementSalesRepGroupEditFilter');
+
+		Route::post('salesRep','dataManagementController@salesRepEditFilter')
+						->name('dataManagementSalesRepEditFilter');
+
+		Route::get('userType','dataManagementController@userTypeEditGet')
+						->name('dataManagementUserTypeEditGet');
+
+		Route::post('userType','dataManagementController@userTypeEditPost')
+						->name('dataManagementUserTypeEditPost');
+
+		Route::post('user','dataManagementController@userEditFilter')
+						->name('dataManagementUserEditFilter');
+
 	});
 
 	Route::group(['prefix' => 'ajax'],function(){
