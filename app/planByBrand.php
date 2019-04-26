@@ -2,24 +2,45 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use App\Management;
+use App\sql;
 
-/*
-*Author: Bruno Gomes
-*Date:08/04/2019
-*Razon:Plan by brand modeler, which you can pass as parameters: colluns, tables, where and order_by. Be aware to matching the colluns and tables names to be used.
-*/
-class planByBrand extends Model
-{
-    /*
-	*Author: Bruno Gomes
-	*Date:08/04/2019
-	*Razon:Query modeler
-	*/
-    public function select($con, $columns, $table, $join, $where, $order_by = 1){       
+class planByBrand extends Management{
+    
+    public function getPlanByBrand($con, $region = false){
         
-        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by";       
-        $res = $con->query($sql);
-        return $res;
-    }       
+        $sql = new $sql();
+
+        $table = 'plan_by_brand pb';
+        $columns = "pb.ID AS 'id',
+                    r.name AS 'region',
+                    c.name AS 'currency',
+                    b.name AS 'brand',
+                    pb.source AS 'source',
+                    pb.year AS 'year',
+                    pb.type_of_revenue AS 'typeOfRevenue',
+                    pb.month AS 'month',
+                    pb.revenue AS 'revenue'
+                    ";
+        $join = "LEFT JOIN region r ON r.ID = pb.sales_office_id
+                 LEFT JOIN currency c ON c.ID = pb.currency_id
+                 LEFT JOIN brand b ON B.id = pb.brand_id";
+
+        $where = "";
+
+        if ($region) {
+            $ids = implode(",", $region);
+            $where .= "WHERE region_id IN ('$ids')";
+        }
+
+        $result = $sql->select($con, $columns, $table, $join);
+
+        $from = array('id', 'region', 'currency', 'brand', 'source', 'year', 'typeOfRevenue', 'month', 'revenue');
+        $to = $from;
+
+        $planByBrand = $sql->fetch($result,$from,$to);
+
+        return $planByBrand;
+    }
 }

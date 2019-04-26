@@ -40,11 +40,15 @@ class client extends Management{
         $r = new region();
         $region = $r->getRegion($con,false);
         $sheet = $this->removeDuplicates($spreadSheet,array('region','group','type'));
+        
+        
         for ($s=0; $s < sizeof($sheet); $s++) { 
-            if($sheet[$s]['type'] == 'Client'){
+            if($sheet[$s]['type'] == 'Client'){  
                 $bool[$s] = $this->insertFromExcelGroup($con,$sql,$sheet[$s],$region);           
             }
+            
         }
+        
     }
 
     public function insertFromExcelGroup($con,$sql,$sheet,$region){
@@ -55,18 +59,17 @@ class client extends Management{
         }
         $table ='client_group';
         $columns = 'region_id,name';
-        $values = "'$regionID','".$sheet['group']."'";
-        
+        $values = " \" ".$regionID."  \"  ,   \" ".$sheet['group']." \"  ";
         $bool = $sql->insert($con,$table,$columns,$values);
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
     }
 
     public function handler($con,$spreadSheet){
         $sql = new sql();
         $r = new region();
         $region = $r->getRegion($con,false);
-        
         $sheet = $this->removeDuplicates($spreadSheet,array('region','group','parent','type'));
-        
         for ($s=0; $s < sizeof($sheet); $s++) {
             if($sheet[$s]['type'] == 'Client'){ 
                 $bool[$s] = $this->insertFromExcel($con,$sql,$sheet[$s],$region);
@@ -80,43 +83,157 @@ class client extends Management{
                 $regionID = $region[$r]['id'];
             }
         }
-
         $clientGroupID = $this->getClientGroupID($con,$sql,$sheet['group'],$regionID);
-        
         $table = 'client';
         $columns = 'client_group_id,name';
-        $values = "'$clientGroupID','".$sheet['parent']."'";
-
+        $values = " \" ".$clientGroupID."  \"  ,  \"  ".$sheet['parent']."  \"   ";
         $bool = $sql->insert($con,$table,$columns,$values);
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
     }
 
     public function handlerUnit($con,$spreadSheet){
         $sql = new sql();
         $o = new origin();
         $origins = $o->getOrigin($con,false);
-        
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-            $this->insertFromExcelUnit($con,$sql,$spreadSheet[$s],$origins);
+            if($sheet[$s]['type'] == 'Client'){  
+                $this->insertFromExcelUnit($con,$sql,$spreadSheet[$s],$origins);
+            }
         }
-
     }
 
 
     public function insertFromExcelUnit($con,$sql,$sheet,$origins){
         $clientID = $this->getClientID($con,$sql,$sheet['parent']);
-
         for ($or=0; $or < sizeof($origins); $or++) { 
             if($sheet['source'] == $origins[$or]['name']){
                 $originID = $origins[$or]['id'];
             }
         }
-
         $table = 'client_unit';
         $columns = 'client_id,origin_id,name';
-        $values = "'".$clientID."','".$originID."','".$sheet['child']."'";
-
+        $values = "   \" ".$clientID."  \"  ,   \" ".$originID."  \" ,  \" ".$sheet['child']."  \" ";
         $bool = $sql->insert($con,$table,$columns,$values);
-
-        return (" FIM CLIENTE  !!! ");
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
     }
+
+    public function getClientGroup($con,$clientID){
+        $sql = new sql();
+
+        $table = "client_group cg";
+        $columns = "cg.ID AS 'id',                    
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($clientID){
+            $clientIDS = implode(",",$clientID);
+            $where .= "WHERE cg.ID IN ('$clientIDS')";
+        }
+
+        $join = "LEFT JOIN region r ON r.ID = cg.region_id
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+    public function getClient($con,$clientID){
+        $sql = new sql();
+
+        $table = "client c";
+        $columns = "c.name AS 'client',
+                    c.ID AS 'id',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($clientID){
+            $clientIDS = implode(",",$clientID);
+            $where .= "WHERE c.ID IN ('$clientIDS')";
+        }
+
+        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON r.ID = cg.region_id
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','client','clientGroupID','clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+    public function getClientUnit($con,$clientID){
+
+        $sql = new sql();
+
+        $table = "client_unit cu";
+        $columns = "cu.name AS 'clientUnit',
+                    cu.ID AS 'id',
+                    o.name AS 'origin',
+                    c.name AS 'client',
+                    c.ID AS 'clientID',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($clientID){
+            $clientIDS = implode(",",$clientID);
+            $where .= "WHERE cu.ID IN ('$clientIDS')";
+        }
+
+        $join = "LEFT JOIN client c ON c.ID = cu.client_id
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON r.ID = cg.region_id
+                 LEFT JOIN origin o ON o.ID = cu.origin_id
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('clientUnit','id','origin','client','clientID','clientGroupID','clientGroup','region');
+
+        $clientUnit = $sql->fetch($res,$from,$from);
+
+        return $clientUnit;
+
+
+    }
+
+
+    public function checkClientUnit($con,$clientSearch){
+        $sql = new sql();
+
+        $select = "SELECT id,name FROM client_unit WHERE ( name = '$clientSearch')";
+
+        $res = $con->query($select);
+
+        $from = array("id","name");
+
+        $clientBack = $sql->fetch($res,$from,$from);
+
+        if($clientBack){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

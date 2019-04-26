@@ -100,13 +100,13 @@ class password extends Model
         
         date_default_timezone_set('America/Sao_Paulo');
 
-        $pwd = Request::post('password');
-        $email = Request::post('email');
+        $password = Request::get('password');
+        $email = Request::get('email');
 
-        $bool = $this->checkPassword($pwd);
+        $bool = $this->checkPassword($password);
 
         if ($bool['bool']) {
-            $pwd = password_hash($pwd, PASSWORD_DEFAULT, ['cost' => 5]);
+            $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
 
             $sql = new sql();
 
@@ -114,7 +114,7 @@ class password extends Model
             $time = date("Y-m-d h:i:s", $time);
 
             $columns = array('password', 'token', 'token_start_date', 'token_end_date');
-            $values = array($pwd, 'inicial', $time, $time);
+            $values = array($password, 'inicial', $time, $time);
 
             $set = $sql->setUpdate($columns, $values);
             $where = "WHERE email='$email'";

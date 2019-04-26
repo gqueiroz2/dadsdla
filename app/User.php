@@ -139,8 +139,6 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        //var_dump($result);
-
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;
 
@@ -213,29 +211,6 @@ class User extends Management{
 
         $bool = $sql->insert($con,$table,$columns,$values);
 
-        var_dump("name");
-    	var_dump($name);
-        var_dump("email");
-    	var_dump($email);
-        var_dump("password");
-        var_dump($password);
-        var_dump("status");
-        var_dump($status);
-        var_dump("region");
-    	var_dump($regionID);
-        var_dump("userTypeID");
-    	var_dump($userTypeID);
-        var_dump("subLevelBool");
-    	var_dump($subLevelBool);
-        var_dump("subLevelGroup");
-        var_dump($subLevelGroup);
-        var_dump("token");
-        var_dump($token);
-        var_dump("tokenStartDate");
-        var_dump($tokenStartDate);
-        var_dump("tokenEndDate");
-        var_dump($tokenEndDate);
-
         return $bool;
 
     }
@@ -246,8 +221,6 @@ class User extends Management{
         $password = Request::get('password');
 
         $usr = $this->getUserByEmail($con, $email);
-
-        //var_dump($usr);
 
         if (password_verify($password, $usr[0]['password'])) {
             $resp['name'] = $usr[0]['name'];

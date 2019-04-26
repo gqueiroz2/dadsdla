@@ -22,7 +22,11 @@
         <!-- David Stutz bootstrap-multiselect 
         <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
-        -->
+        --><!--
+
+        <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+        <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
+-->
         <!-- Include the plugin's CSS and JS:-->
         <script type="text/javascript" src="/multiselect/dist/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
@@ -85,7 +89,7 @@
                             <a class="dropdown-item" href="#"> Resume </a>
                             <a class="dropdown-item" href="{{ route('monthlyResultsGet') }}"> Monthly </a>
                             <a class="dropdown-item" href="#"> Quarter </a>
-                            <a class="dropdown-item" href="#"> Share (Channel/Executive) </a>
+                            <a class="dropdown-item" href="{{ route('shareResultsGet') }}"> Share (Channel/Executive) </a>
                             <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>                               
                         </div>

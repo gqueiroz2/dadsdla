@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\User;
 use App\password;
@@ -40,8 +40,6 @@ class AuthController extends Controller
 		$pwd = new password();
 		$bool = $pwd->requestToEmail($con);
 
-        var_dump($bool);
-
 		if ($bool) {
 			return back()->with('response',"E-mail envied with success");
 		}else{
@@ -57,9 +55,8 @@ class AuthController extends Controller
     	$db = new dataBase();
         $con = $db->openConnection('DLA');
 
-        $pwd = new password();
-        $email = $pwd->getValuesRequest()['email'];
-        $token = $pwd->getValuesRequest()['token'];
+        $email = Request::get('x_email');
+        $token = Request::get('x_token');        
 
         $usr = new User();
         $user = $usr->getUserByEmail($con, $email);
@@ -87,11 +84,13 @@ class AuthController extends Controller
 
         $pwd = new password();
         $resp = $pwd->choosePassword($con);
+        $permission = Request::get('permission');
 
         if ($resp['bool']) {
-            return back()->with('response',$resp['msg']);
+            return redirect('/');
+            //return back()->with('response',$resp['msg']);
         }else{
-            return back()->with('error',$resp['msg']);
+            return view('auth.passwords.password', compact('permission'))->with('error',$resp['msg']);
         }
     }
 }

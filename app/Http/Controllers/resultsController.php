@@ -8,10 +8,15 @@ use App\dataBase;
 use App\base;
 use App\monthly;
 use App\region;
+use App\salesRep;
+use App\share;
+use App\shareRender;
 use App\brand;
-use App\planByBrand;
+use App\pRate;
 
 class resultsController extends Controller{
+
+    /* START MONTHLY */
 
     public function monthlyGet(){
         
@@ -28,7 +33,7 @@ class resultsController extends Controller{
 
         $base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+        $con = $db->openConnection("DLA");
         $monthly = new monthly();
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );      
         $salesRegion = $base->getSalesRegion();
@@ -69,28 +74,4 @@ class resultsController extends Controller{
         return view("adSales.results.0monthlyPost");
     }
 
-    public function YoYGet(){
-
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-
-        $region = new region();
-        $salesRegion = $region->getRegion($con);
-
-        $currentYear = intval(date('Y'));
-        $years = array($currentYear, $currentYear-1);
-
-        $brand = new brand();
-        $brands = $brand->getBrand($con);
-
-        $plan = new planByBrand();
-        //var_dump($brands);
-
-        return view("adSales.results.YoYGet", compact('salesRegion', 'years', 'brands'));
-
-    }
-
-    public function YoYPost(){
-        
-    }
 }
