@@ -72,7 +72,7 @@ class User extends Management{
 
     }
 
-    public function getUser($con,$region){		
+    public function getUser($con,$region = false){		
         $sql = new sql();
         $table = "user u";
         $columns = "u.ID AS 'id',
@@ -89,13 +89,11 @@ class User extends Management{
                     u.token_start_date AS 'token_start_date',
                     u.token_end_date AS 'token_end_date'
                    ";
+
         $join = "LEFT JOIN region r ON r.ID = u.region_id
                  LEFT JOIN user_types ut ON ut.ID = u.user_type_id
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
-
-        $result = $sql->select($con,$columns,$table,$join);
-
 
         $where = "";
         if ($region) {
@@ -141,7 +139,7 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        var_dump($result);
+        //var_dump($result);
 
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;

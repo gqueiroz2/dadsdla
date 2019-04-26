@@ -177,6 +177,11 @@ Route::group(['prefix' => 'adsales'],function(){
 						->name('monthlyResultsGet');
 		Route::post('monthly','resultsController@monthlyPost')
 						->name('monthlyResultsPost');
+
+		Route::get('YoY','resultsController@YoYGet')
+						->name('YoYResultsGet');
+		Route::post('YoY','resultsController@YoYPost')
+						->name('YoYResultsPost');						
 	});
 });
 

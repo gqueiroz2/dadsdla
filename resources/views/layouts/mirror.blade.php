@@ -86,7 +86,7 @@
                             <a class="dropdown-item" href="{{ route('monthlyResultsGet') }}"> Monthly </a>
                             <a class="dropdown-item" href="#"> Quarter </a>
                             <a class="dropdown-item" href="#"> Share (Channel/Executive) </a>
-                            <a class="dropdown-item" href="#"> YoY </a>                               
+                            <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>                               
                         </div>
                     </li>
@@ -130,7 +130,6 @@
                     <li class="nav-item dropdown dropleft">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> @User </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('loginGet') }}"> Login </a>
                             <a class="dropdown-item" href="#"> Logout </a>
                             <a class="dropdown-item" href="#"> DB Panel </a>
                         </div>

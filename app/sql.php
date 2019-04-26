@@ -10,15 +10,11 @@ class sql extends Model{
         
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-<<<<<<< HEAD
-        return $res;
-=======
 
         //var_dump($res);
         //echo ($sql);
 
     	return $res;
->>>>>>> 7e7b533b56faf9de0e660bacaa1cab9cc1a879d2
     }
 
     public function insert($con,$table,$columns,$values){
@@ -67,12 +63,14 @@ class sql extends Model{
     }
 
 
-    public function updateValues($con,$tableName,$set,$where,$join = null){
+    public function updateValues($con,$tableName,$set,$where){
 
+        $sql = "UPDATE $tableName $set $where";
 
-        $sql = "UPDATE $tableName $set $join $where";
-
-        if($con->query($sql) === true){
+        if($con->affected_rows == 0){
+            $rtr["bool"] = false;
+            $rtr["msg"] = "Error: Update failed, no data matching encountered";
+        }else if($con->query($sql) === true){
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
         }else{

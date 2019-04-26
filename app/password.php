@@ -84,7 +84,7 @@ class password extends Model
     	$values = array($token, $today, $tomorrow);
 
     	$set = $sql->setUpdate($columns, $values);
-    	$where = "WHERE email='$email'";
+    	$where = "WHERE (email = '$email')";
     	$resp = $sql->updateValues($con, 'user', $set, $where);
 
     	$bool = false;
@@ -94,23 +94,14 @@ class password extends Model
     	}
 
     	return $bool;
-    }
-
-    public function getValuesRequest(){
-    	
-    	$email = Request::get('x_email');
-		$token = Request::get('x_token');
-		
-		$values = array('email' => $email, 'token' => $token);
-
-		return $values;
-    }
+    }    
 
     public function choosePassword($con){
         
         date_default_timezone_set('America/Sao_Paulo');
 
-        $pwd = Request::get('password');
+        $pwd = Request::post('password');
+        $email = Request::post('email');
 
         $bool = $this->checkPassword($pwd);
 
@@ -123,7 +114,7 @@ class password extends Model
             $time = date("Y-m-d h:i:s", $time);
 
             $columns = array('password', 'token', 'token_start_date', 'token_end_date');
-            $values = array($password, 'inicial', $time, $time);
+            $values = array($pwd, 'inicial', $time, $time);
 
             $set = $sql->setUpdate($columns, $values);
             $where = "WHERE email='$email'";

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\base;
 use App\monthly;
+use App\region;
+use App\brand;
+use App\planByBrand;
 
 class resultsController extends Controller{
 
@@ -64,5 +67,30 @@ class resultsController extends Controller{
         $mtx = $monthly->caller($con,$_salesRegion,$_year,$_brand,$_currency,$_value,$brandFirstPos,$brandSecondPos,$tableFirstPos,$tableSecondPos,$operand,$sumFirstPos,$sumSecondPos,$firstPosMonth,$secondPosMonth);
 
         return view("adSales.results.0monthlyPost");
+    }
+
+    public function YoYGet(){
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $region = new region();
+        $salesRegion = $region->getRegion($con);
+
+        $currentYear = intval(date('Y'));
+        $years = array($currentYear, $currentYear-1);
+
+        $brand = new brand();
+        $brands = $brand->getBrand($con);
+
+        $plan = new planByBrand();
+        //var_dump($brands);
+
+        return view("adSales.results.YoYGet", compact('salesRegion', 'years', 'brands'));
+
+    }
+
+    public function YoYPost(){
+        
     }
 }
