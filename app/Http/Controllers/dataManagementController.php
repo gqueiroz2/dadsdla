@@ -274,11 +274,7 @@ class dataManagementController extends Controller{
         }else{
             $filter = null;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> b9828a776e1bb8c08c2557215cd2c6f7ea6b9ab8
         $region = $r->getRegion($con,null);
         $regionFilter = $r->getRegion($con,$filter);
         
@@ -290,10 +286,7 @@ class dataManagementController extends Controller{
         }else{
             $filters = null;
         }
-<<<<<<< HEAD
-                
-=======
->>>>>>> b9828a776e1bb8c08c2557215cd2c6f7ea6b9ab8
+
         $render = new dataManagementRender();
         $userType = $usr->getUserType($con);
 
@@ -303,11 +296,6 @@ class dataManagementController extends Controller{
             $bool = false;
         }
 
-<<<<<<< HEAD
-=======
-        $user = $usr->getUser($con,$filters);
-
->>>>>>> b9828a776e1bb8c08c2557215cd2c6f7ea6b9ab8
         for ($i=0; $i <sizeof($region) ; $i++) { 
             $salesGroup[$region[$i]["name"]] = $sr->getSalesRepGroup($con,array($region[$i]["id"]));
         }

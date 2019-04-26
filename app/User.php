@@ -94,9 +94,6 @@ class User extends Management{
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
 
-        $result = $sql->select($con,$columns,$table,$join);
-
-
         $where = "";
         if ($region) {
             $ids = implode(",", $region);
