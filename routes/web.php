@@ -162,11 +162,9 @@ Route::group(['prefix' => 'dataManagement'],function(){
 						->name('AjaxSalesRepGroupByRegion');
 		Route::post('salesRepBySalesRepGroup','dataManagementAjaxController@salesRepBySalesRepGroup')
 						->name('AjaxSalesRepBySalesRepGroup');
+						
 		Route::post('subLevelGroupByRegion','dataManagementAjaxController@subLevelGroupByRegion')
 						->name('AjaxSubLevelGroupByRegion');
-
-
-						
 	});	
 
 });
@@ -181,7 +179,12 @@ Route::group(['prefix' => 'adsales'],function(){
 						->name('monthlyResultsGet');
 		Route::post('monthly','resultsController@monthlyPost')
 						->name('monthlyResultsPost');
+		Route::get('share','shareController@shareGet')
+						->name('shareResultsGet');
+		Route::post('share','shareController@sharePost')
+						->name('shareResultsPost');
 	});
+
 });
 
 Route::group(['prefix' => 'ajax'],function(){

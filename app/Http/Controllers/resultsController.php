@@ -7,8 +7,16 @@ use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\base;
 use App\monthly;
+use App\region;
+use App\salesRep;
+use App\share;
+use App\shareRender;
+use App\brand;
+use App\pRate;
 
 class resultsController extends Controller{
+
+    /* START MONTHLY */
 
     public function monthlyGet(){
         
@@ -25,7 +33,7 @@ class resultsController extends Controller{
 
         $base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+        $con = $db->openConnection("DLA");
         $monthly = new monthly();
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );      
         $salesRegion = $base->getSalesRegion();
@@ -65,4 +73,8 @@ class resultsController extends Controller{
 
         return view("adSales.results.0monthlyPost");
     }
+    
+    /* END MONTHLY */
+
+
 }

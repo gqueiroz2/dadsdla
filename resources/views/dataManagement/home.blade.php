@@ -63,14 +63,14 @@
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('dataManagementAgencyGet') }}" style="color: white">
+										<a href="" style="color: white">
 											Agency
 										</a>
 									</button>	
 								</div>
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="client">
-										<a href="{{ route('dataManagementClientGet') }}" style="color: white">
+										<a href="" style="color: white">
 										 	Client 
 										</a>
 									</button>	
