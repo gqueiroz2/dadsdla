@@ -23,11 +23,10 @@ Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPa
 Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
 
 Route::post('requestToChangePassword', 'AuthController@requestToChangePassword')->name('requestToChangePassword');
+
 Route::post('resetPassword', 'AuthController@resetPassword')->name('resetPassword');
 
 Route::get('home','adSalesController@home');
-
-
 
 Route::group(['prefix' => 'dataManagement'],function(){
 
@@ -99,6 +98,18 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 		Route::post('salesRep','dataManagementController@SalesRepAdd')
 						->name('dataManagementSalesRepAdd');
+
+		Route::post('newAgency','dataManagementController@newAgencyAdd')
+						->name('fileUploadAgencyAdd');
+
+		Route::post('newAgencyGroup','dataManagementController@newAgencyGroupAdd')
+						->name('fileUploadAgencyGroupAdd');
+
+		Route::post('newClient','dataManagementController@newClientAdd')
+						->name('fileUploadClientAdd');
+
+		Route::post('newClientGroup','dataManagementController@newClientGroupAdd')
+						->name('fileUploadClientGroupAdd');
 
 		Route::post('agency', 'dataManagementController@AgencyAdd')
 						->name('dataManagementAgencyAdd');

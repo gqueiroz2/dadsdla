@@ -7,7 +7,8 @@ use App\dataManagement;
 use App\dataBase;
 use App\dataManagementRender;
 
-
+use App\agency;
+use App\client;
 use App\brand;
 use App\region;
 use App\User;
@@ -85,6 +86,8 @@ class dataManagementController extends Controller{
 */
     	return view('dataManagement.home');
     }
+    
+    
 
     public function ytdLatamGet(){
         /*
@@ -265,13 +268,16 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $usr = new User();
         $con = $db->openConnection('DLA');
+        
         if (!is_null(Request::get('filterRegion'))) {
             $filter = array(Request::get('filterRegion'));
         }else{
             $filter = null;
         }
+
         $region = $r->getRegion($con,null);
         $regionFilter = $r->getRegion($con,$filter);
+        
         if (!is_null(Request::get('filterRegion'))) {
             $filters = array();
             for ($i=0; $i <sizeof($regionFilter) ; $i++) { 
@@ -280,23 +286,21 @@ class dataManagementController extends Controller{
         }else{
             $filters = null;
         }
-        
-        $user = $usr->getUser($con,$filters);
+                
         $render = new dataManagementRender();
         $userType = $usr->getUserType($con);
 
         if ( !is_null( Request::get('size') ) ) {
            $bool = $usr->editUser($con);
-
         }else{
             $bool = false;
         }
 
-
         for ($i=0; $i <sizeof($region) ; $i++) { 
             $salesGroup[$region[$i]["name"]] = $sr->getSalesRepGroup($con,array($region[$i]["id"]));
         }
-
+        
+        $user = $usr->getUser($con,$filters);        
         return view('dataManagement.edit.editUser',compact('user','region','render','userType','salesGroup','bool'));
     }
 
@@ -568,6 +572,47 @@ class dataManagementController extends Controller{
 
     /*START OF AGENCY FUNCTIONS*/
 
+    public function newAgencyAdd(){
+        $sql = new sql();
+        $r = new region();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $ag = new agency();
+        $agencyGroupID = array( Request::get('agencyGroup') );
+        $agencyGroup = $ag->getAgencyGroup($con,$agencyGroupID);
+        
+
+
+        var_dump($agencyGroup);
+        var_dump("New Agency Add");
+
+    }
+
+    public function newAgencyGroupAdd(){
+        $sql = new sql();
+        $r = new region();
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $ag = new agency();
+
+        $regionID = Request::get('region');
+        $agencyGroupName = Request::get('createAgencyGroup');
+
+        $table = 'agency_group';
+        $columns = 'region_id,name';
+        $values = " \" ".$regionID." \" , \" ".$agencyGroupName." \"  ";
+
+        $bool = $sql->insert($con,$table,$columns,$values);
+
+        if($bool){
+
+            return view("dataManagement.ytdLatamPost",compact('tmpSheet','clientMissMatches','agencyMissMatches','region','agency','client','agencyGroup','clientGroup'));
+            
+        }else{
+
+        }
+    }
+
     public function agencyAdd(){
 
     }
@@ -609,7 +654,13 @@ class dataManagementController extends Controller{
 
     }
 
+    public function newClientAdd(){
+        var_dump("New Client Add");
+    }
 
+    public function newClientGroupAdd(){
+        var_dump("New Client Group Add");
+    }
     
 
     /*END OF SALES CLIENT FUNCTIONS*/
