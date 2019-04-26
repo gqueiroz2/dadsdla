@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class basics extends Model
 {
-<<<<<<< HEAD
     //função para formatar a data
 	public function formatData($pattern, $from, $to){
 			switch($from) {
@@ -35,7 +34,4 @@ class basics extends Model
 					break;
 			}
 	}
-=======
-
->>>>>>> f10e9e681cc259cddb31ad0aa752f7190c3cad5a
 }

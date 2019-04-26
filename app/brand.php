@@ -26,12 +26,13 @@ class brand extends Management{
 		$columns = "brdu.ID AS 'id',
 					brdu.name AS 'brandUnit',
 					brd.name AS 'brand',
+					brd.ID AS 'brandID',
 					o.name AS 'origin'
 					";
 		$join = "LEFT JOIN brand brd ON brd.ID = brdu.brand_id
 				 LEFT JOIN origin o ON o.ID = brdu.origin_id
 				";
-		$from = array('id','brandUnit','brand','origin');
+		$from = array('id','brandUnit','brand','brandID','origin');
 		$result = $sql->select($con,$columns,$table,$join,false);
 		$brandUnit = $sql->fetch($result,$from,$from);
 		return $brandUnit;

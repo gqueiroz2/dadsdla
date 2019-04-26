@@ -141,8 +141,6 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        var_dump($result);
-
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;
 

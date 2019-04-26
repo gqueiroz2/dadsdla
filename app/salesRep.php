@@ -174,8 +174,6 @@ class salesRep extends Management{
 
 		$table = "sales_rep sr";
 
-		var_dump(Request::all());
-
 		$columns = array('sales_group_id','name');
 
 		for ($i=0; $i <$size; $i++) { 
@@ -187,10 +185,22 @@ class salesRep extends Management{
 
 			$arrayWhere[$i] = array($oldSalesGroup[$i],$oldSalesRep[$i]);
 			$arraySet[$i] = array($newSalesGroup[$i],$newSalesRep[$i]);
+
+			$where[$i] = $sql->where($columns,$arrayWhere[$i]);
+			$set[$i] = $sql->setUpdate($columns,$arraySet[$i]);
+
+		}
+		$bool = false;
+		for ($i=0; $i <$size ; $i++) { 
+			if ($oldSalesGroup[$i] != $newSalesGroup[$i] || $oldSalesRep[$i] != $newSalesRep[$i]) {
+				$bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
+				if ($bool == false) {
+					break;
+				}
+			}
 		}
 
-		var_dump($arrayWhere);
-		var_dump($arraySet);
+		return $bool;
 	}
 
 	public function getSalesRepUnit($con,$salesRepID){
@@ -238,6 +248,50 @@ class salesRep extends Management{
 
 		return $bool; 
        
+	}
+
+	public function editSalesRepUnit($con){
+		$sql = new sql();
+
+		$size = Request::get('size');
+
+		$table = "sales_rep_unit";
+
+		$columnsWhere = array("sales_rep_id","name","origin_id");
+		$columnsSet = array("name","origin_id");
+		
+		for ($i=0; $i <$size ; $i++) { 
+			
+			$salesRep[$i] = Request::get("salesRep-$i");
+
+			$oldSalesRepUnit[$i] = Request::get("oldSalesRepUnit-$i");
+			$newSalesRepUnit[$i] = Request::get("newSalesRepUnit-$i");
+
+			$oldOrigin[$i] = Request::get("oldOrigin-$i");
+			$newOrigin[$i] = Request::get("newOrigin-$i");
+
+
+			$arrayWhere[$i] = array($salesRep[$i],$oldSalesRepUnit[$i],$oldOrigin[$i]);
+			$arraySet[$i] = array($newSalesRepUnit[$i],$newOrigin[$i]);
+
+			$where[$i] = $sql->where($columnsWhere,$arrayWhere[$i]);
+			$set[$i] = $sql->setUpdate($columnsSet,$arraySet[$i]);
+
+		}
+
+		$bool = false;
+
+		for ($i=0; $i <$size ; $i++) { 
+			if ($oldSalesRepUnit[$i] != $newSalesRepUnit[$i] || $oldOrigin[$i] != $newOrigin[$i]) {
+				$bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
+				var_dump($bool);
+				if ($bool == false) {
+					break;
+				}
+			}
+		}
+
+		return $bool;
 	}
 
 }

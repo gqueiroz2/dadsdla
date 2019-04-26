@@ -190,7 +190,7 @@
 							<div class="row justify-content-center">
 								<div class="col">
 									@if($salesRepUnit)
-										<form method="POST" action="">
+										<form method="POST" action="{{route("salesRepUnitEditFilter")}}">
 											@csrf
 											<input type="hidden" name="jorge">
 											<div class="row justify-content-end mt-1">

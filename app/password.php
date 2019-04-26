@@ -110,12 +110,13 @@ class password extends Model
         
         date_default_timezone_set('America/Sao_Paulo');
 
-        $pwd = Request::get('password');
+        $password = Request::get('password');
+        $email = Request::get('email');
 
-        $bool = $this->checkPassword($pwd);
+        $bool = $this->checkPassword($password);
 
         if ($bool['bool']) {
-            $pwd = password_hash($pwd, PASSWORD_DEFAULT, ['cost' => 5]);
+            $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
 
             $sql = new sql();
 

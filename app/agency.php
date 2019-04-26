@@ -9,6 +9,8 @@ use App\region;
 use App\sql;
 
 class agency extends Management{
+    
+
     public function getAgencyGroupID($con,$sql,$group,$region){
         $table = "agency_group";
         $columns = "ID";
@@ -45,6 +47,7 @@ class agency extends Management{
                 $bool[$s] = $this->insertFromExcelGroup($con,$sql,$sheet[$s],$region);           
             }
         }
+        
     }
 
     public function insertFromExcelGroup($con,$sql,$sheet,$region){
@@ -55,17 +58,17 @@ class agency extends Management{
         }
         $table ='agency_group';
         $columns = 'region_id,name';
-        $values = "'$regionID','".$sheet['group']."'";
+        $values =  " \" $region \" ,  \" ".$sheet['group']." \" ";
         $bool = $sql->insert($con,$table,$columns,$values);
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
     }
 
     public function handler($con,$spreadSheet){
         $sql = new sql();
         $r = new region();
         $region = $r->getRegion($con,false);
-        
         $sheet = $this->removeDuplicates($spreadSheet,array('region','group','parent','type'));
-        
         for ($s=0; $s < sizeof($sheet); $s++) {
             if($sheet[$s]['type'] == 'Agency'){ 
                 $bool[$s] = $this->insertFromExcel($con,$sql,$sheet[$s],$region);
@@ -84,18 +87,22 @@ class agency extends Management{
         
         $table = 'agency';
         $columns = 'agency_group_id,name';
-        $values = "'$agencyGroupID','".$sheet['parent']."'";
+        $values = " \" ".$agencyGroupID." \" , \" ".$sheet['parent']." \" ";//    "'$agencyGroupID','".$sheet['parent']."'";
 
         $bool = $sql->insert($con,$table,$columns,$values);
+
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
     }
 
     public function handlerUnit($con,$spreadSheet){
         $sql = new sql();
         $o = new origin();
         $origins = $o->getOrigin($con,false);
-        
-        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-            $this->insertFromExcelUnit($con,$sql,$spreadSheet[$s],$origins);
+        for ($s=0; $s < sizeof($spreadSheet); $s++) {             
+            if($sheet[$s]['type'] == 'Agency'){ 
+                $this->insertFromExcelUnit($con,$sql,$spreadSheet[$s],$origins);
+            }
         }
 
     }
@@ -103,20 +110,138 @@ class agency extends Management{
 
     public function insertFromExcelUnit($con,$sql,$sheet,$origins){
         $agencyID = $this->getAgencyID($con,$sql,$sheet['parent']);
-
         for ($or=0; $or < sizeof($origins); $or++) { 
             if($sheet['source'] == $origins[$or]['name']){
                 $originID = $origins[$or]['id'];
             }
         }
-
         $table = 'agency_unit';
-        $columns = 'agency_id,origin_id,name,status';
-        $values = "'".$agencyID."','".$originID."','".$sheet['child']."','1' ";
-
+        $columns = 'agency_id,origin_id,name';
+        $values =  " \" ".$agencyID." \" , \" ".$originID." \" , \" ".$sheet['child']." \" ";
         $bool = $sql->insert($con,$table,$columns,$values);
-
+        var_dump($bool['bool']);
+        echo $bool['msg']."<br>";
         return (" FIM AGÊNCIA  !!! ");
+    }
+
+    public function getAgencyGroup($con,$agencyID){
+
+        $sql = new sql();
+
+        $table = "agency_group ag";
+
+        $columns = "ag.name AS 'agencyGroup',
+                    ag.ID AS 'id',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyID){
+            $agencyIDS = implode(",", $agencyID);
+            $where .= "WHERE ag.ID IN ('$agencyIDS')";
+        }
+
+        $join = "LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','agencyGroup','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgency($con,$agencyID){
+
+        $sql = new sql();
+
+        $table = "agency a";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyID){
+            $agencyIDS = implode(",", $agencyID);
+            $where .= "WHERE a.ID IN ('$agencyIDS')";
+        }
+
+        $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','agency','agencyGroup','agencyGroupID','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyUnit($con,$agencyID){
+
+        $sql = new sql();
+
+        $table = "agency_unit au";
+
+        $columns = "au.name AS 'agencyUnit',
+                    au.ID AS 'id',
+                    o.name AS 'origin',
+                    a.name AS 'agency',
+                    a.ID AS 'agencyID',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyID){
+            $agencyIDS = implode(",", $agencyID);
+            $where .= "WHERE au.agency_id IN ('$agencyIDS')";
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = au.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 LEFT JOIN origin o ON o.ID = au.origin_id
+                ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('agencyUnit','id','origin','agency','agencyID','agencyGroup','agencyGroupID','region');
+
+        $agencyUnit = $sql->fetch($res,$from,$from);
+
+        return $agencyUnit;
+
+    }
+
+    public function checkAgencyUnit($con,$agencySearch){
+        $sql = new sql();
+        $select = "SELECT id,name FROM agency_unit WHERE ( name = '$agencySearch')";
+        $res = $con->query($select);
+
+        $from = array("id","name");
+
+        $agencyBack = $sql->fetch($res,$from,$from);
+
+        if($agencyBack){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

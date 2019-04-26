@@ -268,35 +268,57 @@ class dataManagementRender extends Render{
 
     }
 
-    public function salesRepUnitEdit($salesRepUnit){
+    public function salesRepUnitEdit($salesRepUnit,$salesRep,$origin){
 
         echo "<div class='row mt-1'>";
             
             echo "<div class='col'> Sales Rep. </div>";              
-            echo "<div class='col'> Sales Rep. Unit </div>";              
-            echo "<div class='col'> Origin </div>";              
-            echo "<div class='col'> &nbsp; </div>";                
+            echo "<div class='col'> Old Sales Rep. Unit </div>";              
+            echo "<div class='col'> Old Origin </div>";              
+            echo "<div class='col'> New Sales Rep. Unit </div>";                
+            echo "<div class='col'> New Origin </div>";                
 
         echo "</div>";
 
+        echo "<input type='hidden' name='size' value='".sizeof($salesRepUnit)."'>";
         
         for ($s=0; $s < sizeof($salesRepUnit); $s++) { 
             
             echo "<div class='row mt-1'>";
 
                 echo "<div class='col'>";
+                    for ($i=0; $i <sizeof($salesRep) ; $i++) { 
+                        if ($salesRep[$i]["salesRep"] == $salesRepUnit[$s]["salesRep"]) {
+                            echo "<input type='hidden' value='".$salesRep[$i]["id"]."' name='salesRep-$s' >";
+                        }
+                    }
                     echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRep"]."' style='width:100%;'>";
                 echo "</div>";
                 echo "<div class='col'>";
-                    echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
+                    echo "<input type='text' name='oldSalesRepUnit-$s' readonly='true' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
                 echo "</div>";
                 echo "<div class='col'>";
+                    for ($i=0; $i <sizeof($origin) ; $i++) { 
+                        if($origin[$i]["name"] == $salesRepUnit[$s]["origin"]){
+                            echo "<input type='hidden' value='".$origin[$i]["id"]."' name='oldOrigin-$s' >";
+                        }
+                    }
                     echo "<input type='text' readonly='true' class='form-control' value='".$salesRepUnit[$s]["origin"]."' style='width:100%;'>";
                 echo "</div>";
                 echo "<div class='col'>";
-                    echo "<input type='button' class='btn btn-primary' style='width:100%;' value='Edit'>";
+                    echo "<input type='text' name='newSalesRepUnit-$s' class='form-control' value='".$salesRepUnit[$s]["salesRepUnit"]."' style='width:100%;'>";
                 echo "</div>";
-
+                echo "<div class='col'>";
+                    echo "<select class='form-control' name='newOrigin-$s'>";
+                        for ($i=0; $i <sizeof($origin); $i++) { 
+                            if($origin[$i]["name"] == $salesRepUnit[$s]["origin"]){
+                                echo "<option selected='true' value='".$origin[$i]["id"]."'>".$origin[$i]["name"]."</option>";
+                            }else{
+                                echo "<option value='".$origin[$i]["id"]."'>".$origin[$i]["name"]."</option>";
+                            }
+                        }
+                    echo "</select>";
+                echo "</div>";
             echo "</div>";
 
         }
@@ -540,5 +562,25 @@ class dataManagementRender extends Render{
             echo "</div>";
         echo "</div>";
     }
+
+    public function filterBySalesRep($salesRep){
+        echo "<div class='row'>";
+            echo "<div class='col col-sm-9'> Sales Rep. </div>";
+        echo "</div>";
+        echo "<div class='row mt-1'>";
+            echo "<div class='col col-sm-9'>";
+                echo "<select class = 'form-control' name='filterRep'>";
+                    echo "<option value=''> None </option>";
+                    for ($i=0; $i <sizeof($salesRep); $i++) { 
+                        echo "<option value = \"".$salesRep[$i]["id"]."\">".$salesRep[$i]["salesRep"]."</option>";
+                    }
+                echo "</select>";
+            echo "</div>";
+            echo "<div class='col col-sm-3'>";
+                echo "<input type='submit' class='btn btn-primary' value='Filter' style=\"width: 100%;\">";
+            echo "</div>";
+        echo "</div>";
+    }
+
 
 }

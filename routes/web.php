@@ -153,6 +153,9 @@ Route::group(['prefix' => 'dataManagement'],function(){
 		Route::post('salesRep','dataManagementController@salesRepEditFilter')
 						->name('dataManagementSalesRepEditFilter');
 
+		Route::post('salesRepUnit','dataManagementController@salesRepUnitEditFilter')
+						->name('salesRepUnitEditFilter');
+
 		Route::get('userType','dataManagementController@userTypeEditGet')
 						->name('dataManagementUserTypeEditGet');
 
@@ -161,6 +164,7 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 		Route::post('user','dataManagementController@userEditFilter')
 						->name('dataManagementUserEditFilter');
+
 
 	});
 
