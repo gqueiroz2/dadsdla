@@ -9,16 +9,7 @@ class sql extends Model{
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-<<<<<<< HEAD
-
-        //var_dump($res);
-        //echo ($sql);
-
     	return $res;
-=======
-
-        return $res;
->>>>>>> ad5002e24116a5a80b14df3068e642f877690593
     }
 
     public function insert($con,$table,$columns,$values){
@@ -67,24 +58,20 @@ class sql extends Model{
         return $set;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ad5002e24116a5a80b14df3068e642f877690593
     public function updateValues($con,$tableName,$set,$where){
 
         $sql = "UPDATE $tableName $set $where";
 
-<<<<<<< HEAD
         if($con->affected_rows == 0){
             $rtr["bool"] = false;
             $rtr["msg"] = "Error: Update failed, no data matching encountered";
         }else if($con->query($sql) === true){
-=======
+        
         $sql = "UPDATE $tableName $set $where";
 
+        }
+
         if($con->query($sql) === true){
->>>>>>> ad5002e24116a5a80b14df3068e642f877690593
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
         }else{

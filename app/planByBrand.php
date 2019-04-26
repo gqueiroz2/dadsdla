@@ -10,7 +10,7 @@ class planByBrand extends Management{
     
     public function getPlanByBrand($con, $region = false){
         
-        $sql = new $sql();
+        $sql = new sql();
 
         $table = 'plan_by_brand pb';
         $columns = "pb.ID AS 'id',

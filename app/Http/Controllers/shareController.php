@@ -13,9 +13,8 @@ use App\shareRender;
 use App\brand;
 use App\pRate;
 
-class shareController extends Controller
-{
-    
+class shareController extends Controller{
+
     public function shareGet(){
         $base = new base();
         $db = new dataBase();
