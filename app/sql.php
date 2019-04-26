@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class sql extends Model{
     
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
-        
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-        
+
         return $res;
     }
 
     public function insert($con,$table,$columns,$values){
-        $insert = "INSERT INTO $table ($columns) VALUES ($values)"; 
+        $insert = "INSERT INTO $table ($columns) VALUES ($values)";
+
         if($con->query($insert) === true){
             $rtr["bool"] = true;
             $rtr["msg"] = "A New record on the table $table was successfully created!";
@@ -59,11 +59,10 @@ class sql extends Model{
         return $set;
     }
 
+    public function updateValues($con,$tableName,$set,$where){
 
-    public function updateValues($con,$tableName,$set,$where,$join = null){
 
-
-        $sql = "UPDATE $tableName $set $join $where";
+        $sql = "UPDATE $tableName $set $where";
 
         if($con->query($sql) === true){
             $rtr["bool"] = true;

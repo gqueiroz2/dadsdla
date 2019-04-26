@@ -94,9 +94,6 @@ class User extends Management{
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
 
-        $result = $sql->select($con,$columns,$table,$join);
-
-
         $where = "";
         if ($region) {
             $ids = implode(",", $region);
@@ -140,8 +137,6 @@ class User extends Management{
         $where = "WHERE email='$email'";
 
         $result = $sql->select($con,$columns,$table,$join, $where);
-
-        var_dump($result);
 
         $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
         $to = $from;
