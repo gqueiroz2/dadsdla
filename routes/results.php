@@ -11,14 +11,27 @@
 |
 */
 
+
 Route::group(['prefix' => 'results'],function(){
 	Route::get('YoY','resultsController@YoYGet')
 						->name('YoYResultsGet');
 	Route::post('YoY','resultsController@YoYPost')
-					->name('YoYResultsPost');	
+					->name('YoYResultsPost');
+
+	Route::get('share','shareController@shareGet')
+					->name('resultsShareGet');
+	Route::post('share','shareController@sharePost')
+					->name('resultsSharePost');
 						
 	Route::get('resume','resultsResumeController@get')
 					->name('resultsResumeGet');				
 	Route::post('resume','resultsResumeController@post')
-					->name('resultsResumePost');				
+					->name('resultsResumePost');	
+
+	Route::get('quarter','resultsQuarterController@get')
+					->name('quarterResultsGet');				
+	Route::post('quarter','resultsQuarterController@post')
+					->name('quarterResultsPost');				
+
+
 });

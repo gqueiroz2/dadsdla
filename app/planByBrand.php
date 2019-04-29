@@ -8,7 +8,7 @@ use App\sql;
 
 class planByBrand extends Management{
     
-    public function getPlanByBrand($con, $region = false){
+    public function get($con, $region = false){
         
         $sql = new sql();
 
@@ -34,7 +34,7 @@ class planByBrand extends Management{
             $where .= "WHERE region_id IN ('$ids')";
         }
 
-        $result = $sql->select($con, $columns, $table, $join);
+        $result = $sql->select($con, $columns, $table, $join, $where);
 
         $from = array('id', 'region', 'currency', 'brand', 'source', 'year', 'typeOfRevenue', 'month', 'revenue');
         $to = $from;
