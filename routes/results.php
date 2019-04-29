@@ -31,7 +31,12 @@ Route::group(['prefix' => 'results'],function(){
 	Route::get('quarter','resultsQuarterController@get')
 					->name('quarterResultsGet');				
 	Route::post('quarter','resultsQuarterController@post')
-					->name('quarterResultsPost');				
+					->name('quarterResultsPost');	
+
+	Route::get('monthly','resultsController@monthlyGet')
+					->name('monthlyGet');				
+	Route::post('monthly','resultsController@monthlyPost')
+					->name('monthlyPost');				
 
 
 });

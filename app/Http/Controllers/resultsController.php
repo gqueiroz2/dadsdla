@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
-
 use App\dataBase;
 use App\base;
 use App\monthly;
@@ -13,6 +12,8 @@ use App\share;
 use App\shareRender;
 use App\brand;
 use App\pRate;
+use App\Render;
+use App\monthlyRender;
 
 class resultsController extends Controller{
 
@@ -21,12 +22,24 @@ class resultsController extends Controller{
     public function monthlyGet(){
         
         $base = new base();
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
 
-        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );      
-        $salesRegion = $base->getSalesRegion();
-        $brand = $base->getBrand();
+        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+        $render = new Render();
 
-        return view("adSales.results.0monthlyGet",compact('years','salesRegion','brand'));
+        $region = new region();
+        $salesRegion = $region->getRegion($con, NULL);
+
+        $currency = new pRate();
+        $currencies = $currency->getCurrency($con); 
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $mRender = new monthlyRender();
+
+        return view("adSales.results.10monthlyGet",compact('salesRegion','brand', 'render', 'currencies', 'mRender'));
     }
 
     public function monthlyPost(){              
