@@ -3,9 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Render;
 
-class shareRender extends Model
-{
+class shareRender extends Render{
     public function region($region){
     	echo "<select name='region'>";
     		echo "<option value=''> Select </option>";

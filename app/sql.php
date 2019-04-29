@@ -67,6 +67,12 @@ class sql extends Model{
             $rtr["bool"] = false;
             $rtr["msg"] = "Error: Update failed, no data matching encountered";
         }else if($con->query($sql) === true){
+        
+            $sql = "UPDATE $tableName $set $where";
+
+        }
+
+        if($con->query($sql) === true){
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
         }else{

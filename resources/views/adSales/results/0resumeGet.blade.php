@@ -1,30 +1,21 @@
 @extends('layouts.mirror')
 
-@section('title', 'Share')
+@section('title', 'Resume Results')
 
 @section('head')	
 
 @endsection
-<?php
-	$filev = array(1,2,3,"leo","pier");
 
-	var_dump($filev);
-
-?>
 @section('content')
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('resultsSharePost') }}">
+				<form method="POST" action="{{ route('resultsResumePost') }}">
 					@csrf
 					<div class="row">
 						<div class="col">
 							<label>Region:</label>
 							{{$render->region($region)}}
-						</div>
-						<div class="col">
-							<label>Year:</label>
-							{{$render->year()}}
 						</div>
 						<div class="col">
 							<label>Brands:</label>
@@ -33,14 +24,6 @@
 						<div class="col">
 							<label>Font:</label>
 							{{$render->font()}}
-						</div>
-						<div class="col">
-							<label>Sales Rep Group:</label>
-							{{$render->salesRepGroup($salesRepGroup)}}
-						</div>
-						<div class="col">
-							<label>Sales Rep:</label>
-							{{$render->salesRep($salesRep)}}
 						</div>
 						<div class="col">
 							<label>Months:</label>
@@ -55,7 +38,8 @@
 							{{$render->value()}}
 						</div>
 						<div class="col">
-							<input type="submit" value="Search" class="btn btn-primary">		
+							<label> &nbsp; </label>
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">		
 						</div>
 					</div>
 				</form>

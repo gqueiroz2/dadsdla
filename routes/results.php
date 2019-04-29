@@ -11,11 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'dataManagement'],function(){
-
-	Route::get('/','resultsResumeController@get')
-										->name('resultsResume');
-
+Route::group(['prefix' => 'results'],function(){
 	Route::get('YoY','resultsController@YoYGet')
 						->name('YoYResultsGet');
 	Route::post('YoY','resultsController@YoYPost')
@@ -25,4 +21,9 @@ Route::group(['prefix' => 'dataManagement'],function(){
 					->name('resultsShareGet');
 	Route::post('share','shareController@sharePost')
 					->name('resultsSharePost');
+						
+	Route::get('resume','resultsResumeController@get')
+					->name('resultsResumeGet');				
+	Route::post('resume','resultsResumeController@post')
+					->name('resultsResumePost');				
 });
