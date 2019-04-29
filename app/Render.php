@@ -26,7 +26,7 @@ class Render extends Model{
     }
 
     public function brand($brand){
-    	echo "<select name='brand' multiple='true' style='width:100%;'>";
+    	echo "<select name='brand[]' multiple='true' style='width:100%;'>";
     		echo "<option value='dn' selected='true'> DN </option>";
     		for ($i=0; $i <sizeof($brand) ; $i++) { 
 	    		echo "<option value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
@@ -65,7 +65,7 @@ class Render extends Model{
     }
 
     public function months(){
-    	echo "<select value='months' multiple='true' style='width:100%;'>";
+    	echo "<select name='month[]' multiple='true' style='width:100%;'>";
     		echo "<option value='all'>All</option>";
     		for ($m=0; $m < sizeof($this->month); $m++) { 
     			echo "<option value='".($m+1)."'>".$this->month[$m]."</option>";
@@ -74,7 +74,7 @@ class Render extends Model{
     }
 
     public function currency($currency){
-    	echo "<select value='currency' style='width:100%;'>";
+    	echo "<select name='currency' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
     		for ($i=0; $i <sizeof($currency) ; $i++) { 
     			echo "<option value='".$currency[$i]["id"]."'>".$currency[$i]["name"]."</option>";
@@ -83,7 +83,7 @@ class Render extends Model{
     }
 
     public function value(){
-    	echo "<select value='value' style='width:100%;'>";
+    	echo "<select name='value' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
     		echo "<option value='gross'> Gross </option>";
     		echo "<option value='net'> Net </option>";

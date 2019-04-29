@@ -7,7 +7,24 @@ use App\dataBase;
 
 class base extends Model{
 
-    protected $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
+    protected $month = array( array("Jan",1),
+                              array("Feb",2),
+                              array("Mar",3),
+                              array("Apr",4),
+                              array("May",5),
+                              array("Jun",6),
+                              array("Jul",7),
+                              array("Aug",8),
+                              array("Sep",9),
+                              array("Oct",10),
+                              array("Nov",11),
+                              array("Dec",12)
+
+                            );
+
+    public function getMonth(){
+        return $this->month;
+    }
 
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
@@ -37,6 +54,25 @@ class base extends Model{
                                 );
 
     
+    public function handleBrand($con,$b,$array){
+        $b = new brand();
+        $check = false;
+        for ($a=0; $a < sizeof($array); $a++) { 
+            if($array[$a] == 'dn'){
+                $check = true;
+            }
+        }
+        if($check){ 
+            $brand = $b->getBrand($con);
+            for ($i=0; $i < sizeof($brand); $i++) { 
+                $brandID[$i] = $brand[$i]['id'];
+            }
+            $return = $brandID;
+        }else{
+            $return = $array;
+        }
+        return $return;
+    }
 
     public function getSalesRegion(){   
         return $this->salesRegion;
