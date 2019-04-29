@@ -1,6 +1,6 @@
 @extends('layouts.mirror')
 
-@section('title', 'Quarter Results')
+@section('title', 'Monthly Results')
 
 @section('head')	
 
@@ -29,7 +29,14 @@
 						<label>Brand</label>
 						{{$render->brand($brand)}}
 					</div>
-				</div>				
+				</div>		
+
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label>Year</label>
+						{{$render->year()}}
+					</div>
+				</div>			
 
 				<!-- 1st Pos Area -->
 				<div class="col-12 col-lg">

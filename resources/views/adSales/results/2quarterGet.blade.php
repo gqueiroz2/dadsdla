@@ -22,6 +22,13 @@
 						{{$render->region($salesRegion)}}
 					</div>
 				</div>
+				
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label>Year</label>
+						{{$render->year()}}
+					</div>
+				</div>
 
 				<!-- Region Area -->
 				<div class="col-12 col-lg">
