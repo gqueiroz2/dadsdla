@@ -8,7 +8,7 @@
 
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('YoYResultsPost') }}">
+	<form class="form-inline" role="form" method="POST" action="{{ route('ResultsYoYPost') }}">
 		
 		@csrf
 
@@ -69,7 +69,9 @@
 					<div class="form-inline">
 						<label> 2st Pos </label>
 						<select name="secondPos" id="secondPos" style="width: 100%;">
-							
+							@for ($i = 0; $i < 10; $i++)
+								<option value="{{ $plans[$i]['id'] }}"> {{ $plans[$i]['name'] }} </option>
+							@endfor
 						</select>
 					</div>
 				</div>				
@@ -86,11 +88,6 @@
 
 			</div>
 		</div>
-
 	</form>
-
-	<script type="text/javascript">
-		ajaxSetup();
-	</script>
 
 @endsection

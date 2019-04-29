@@ -2,25 +2,62 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use App\Management;
+use App\sql;
 
-/*
-*Author: Bruno Gomes
-*Date:04/04/2019
-*Razon:Cmaps modeler, which you can pass as parameters: colluns, tables, where and order_by. Be aware to matching the colluns and tables names to be used.
-*/
-class cmaps extends Model
-{
-    /*
-	*Author: Bruno Gomes
-	*Date:04/04/2019
-	*Razon:Query modeler
-	*/
-    public function select($con, $columns, $table, $join, $where, $order_by = 1){       
-    
-    $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by";       
-    $res = $con->query($sql);
-    return $res;
-    }   
+class cmaps extends Management{
+
+    public function get($con){
+        
+        $sql = new sql();
+
+        $table = "cmaps cm";
+        $columns = "cm.ID AS 'id',
+                    srg.name AS 'salesRepGroup',
+                    sr.name AS 'salesRep',
+                    cl.name AS 'client',
+                    agc.name AS 'agency',
+                    b.name AS 'brand',
+                    cm.decode AS 'decode',
+                    cm.year AS 'year',
+                    cm.month AS 'month',
+                    cm.map_number AS 'mapNumber',
+                    cm.package AS 'package',
+                    cm.product AS 'product',
+                    cm.segment AS 'segment',
+                    cm.pi_number AS 'piNumber',
+                    cm.gross AS 'gross',
+                    cm.net AS 'net',
+                    cm.market AS 'market',
+                    cm.discount AS 'discount',
+                    cm.client_cnpj AS 'clientCNPJ',
+                    cm.agency_cnpj AS 'agencyCNPJ',
+                    cm.media_type AS 'mediaType',
+                    cm.log AS 'log',
+                    cm.ad_sales_support AS 'adSalesSupport',
+                    cm.obs AS 'obs',
+                    cm.sector AS 'sector',
+                    cm.category AS 'category'
+                    ";
+
+        $join = "LEFT JOIN sales_rep_group srg ON srg.ID = cm.sales_group_id
+                 LEFT JOIN sales_rep sr ON sr.ID = cm.sales_rep_id
+                 LEFT JOIN client cl ON cl.ID = cm.client_id
+                 LEFT JOIN agency agc ON agc.ID = cm.agency_id
+                 LEFT JOIN brand b ON b.ID = cm.brand_id";
+
+        $result = $sql->select($con, $columns, $table, $join);
+
+        $from = array('id', 'salesRepGroup', 'salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'mapNumber',
+         'package', 'product', 'segment', 'piNumber', 'gross', 'net', 'market', 'discount', 'clientCNPJ', 'agencyCNPJ', 'mediaType',
+          'log', 'adSalesSupport', 'obs', 'sector', 'category');
+
+        $to = $from;
+
+        $cmaps = $sql->fetch($result, $from, $to);
+
+        return $cmaps;
+    }
  
 }

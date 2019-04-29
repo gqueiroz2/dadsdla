@@ -64,14 +64,14 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 
-										<a href="{{ route('dataManagementAgencyGetFromExcel') }}" style="color: white">
+										<a href="#" style="color: white">
 											Agency from Excel
 										</a>
 									</button>	
 								</div>
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="client">
-										<a href="{{ route('dataManagementClientGetFromExcel') }}" style="color: white">
+										<a href="#" style="color: white">
 										 	Client from Excel
 										</a>
 									</button>	

@@ -7,6 +7,7 @@ use App\dataBase;
 use App\region;
 use App\brand;
 use App\planByBrand;
+use App\cmaps;
 
 class resultsYoYController extends Controller{
     
@@ -21,13 +22,20 @@ class resultsYoYController extends Controller{
         $currentYear = intval(date('Y'));
         $years = array($currentYear, $currentYear-1);
 
-        $brand = new brand();
-        $brands = $brand->getBrand($con);
+        $brands = new brand();
+        $brandsValue = $brand->getBrand($con);
 
         $plan = new planByBrand();
+        $planValue = $plan->get($con);
+
+        $cmaps = new cmaps();
+        $cmapsValue = $cmaps->get($con);
+
+        
+
         //var_dump($brands);
 
-        return view("adSales.results.YoYGet", compact('salesRegion', 'years', 'brands'));
+        return view("adSales.results.YoYGet", compact('salesRegion', 'years', 'brandsValue', 'planValue', 'cmapsValue'));
 
     }
 

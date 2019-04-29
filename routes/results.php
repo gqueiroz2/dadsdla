@@ -11,13 +11,20 @@
 |
 */
 
-Route::group(['prefix' => 'dataManagement'],function(){
 
-	Route::get('/','resultsResumeController@get')
-										->name('resultsResume');
+Route::group(['prefix' => 'results'],function(){
+	Route::get('YoY','resultsController@YoYGet')
+						->name('YoYResultsGet');
+	Route::post('YoY','resultsController@YoYPost')
+					->name('YoYResultsPost');
 
-	Route::get('YoY','resultsYoYController@YoYGet')
-						->name('ResultsYoYGet');
-	Route::post('YoY','resultsYoYController@YoYPost')
-					->name('ResultsYoYPost');				
+	Route::get('share','shareController@shareGet')
+					->name('resultsShareGet');
+	Route::post('share','shareController@sharePost')
+					->name('resultsSharePost');
+						
+	Route::get('resume','resultsResumeController@get')
+					->name('resultsResumeGet');				
+	Route::post('resume','resultsResumeController@post')
+					->name('resultsResumePost');				
 });

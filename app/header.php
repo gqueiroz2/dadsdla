@@ -2,24 +2,24 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
+use App\Management;
+use App\sql;
 
-/*
-*Author: Bruno Gomes
-*Date:12/04/2019
-*Razon:Header modeler ,which you can pass as parameters: colluns, tables, where and order_by. Be aware to matching the colluns and tables names to be used.
-*/
-class header extends Model
+class header extends Management
 {
-    /*
-	*Author: Bruno Gomes
-	*Date:12/04/2019
-	*Razon:Query modeler
-	*/
-    public function select($con, $columns, $table, $join, $where, $order_by = 1){       
+    public function get($con){       
     
-    $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by";       
-    $res = $con->query($sql);
-    return $res;
+        $sql = new sql();
+
+        $table = 'header h';
+
+        $columns = "h.ID AS 'id',
+                    r.name AS 'campaignRegion',
+                    r.name AS 'Salesregion',
+                    b.name AS 'brand',
+                    sr.name AS 'salesRep',
+                    "
+                    ;
     }  
 }
