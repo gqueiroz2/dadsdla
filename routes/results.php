@@ -16,8 +16,8 @@ Route::group(['prefix' => 'dataManagement'],function(){
 	Route::get('/','resultsResumeController@get')
 										->name('resultsResume');
 
-	Route::get('YoY','resultsController@YoYGet')
-						->name('YoYResultsGet');
-	Route::post('YoY','resultsController@YoYPost')
-					->name('YoYResultsPost');						
+	Route::get('YoY','resultsYoYController@YoYGet')
+						->name('ResultsYoYGet');
+	Route::post('YoY','resultsYoYController@YoYPost')
+					->name('ResultsYoYPost');				
 });

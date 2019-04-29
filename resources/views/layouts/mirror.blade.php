@@ -89,8 +89,8 @@
                             <a class="dropdown-item" href="#"> Resume </a>
                             <a class="dropdown-item" href="{{ route('monthlyResultsGet') }}"> Monthly </a>
                             <a class="dropdown-item" href="#"> Quarter </a>
-                            <a class="dropdown-item" href="{{ route('shareResultsGet') }}"> Share (Channel/Executive) </a>
-                            <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
+                            <a class="dropdown-item" href="#"> Share (Channel/Executive) </a>
+                            <a class="dropdown-item" href="{{ route('ResultsYoYGet') }}"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>                               
                         </div>
                     </li>
