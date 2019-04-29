@@ -6,6 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 use App\Render;
 
 class shareRender extends Render{
-
     
 }

@@ -1,6 +1,6 @@
 @extends('layouts.mirror')
 
-@section('title', 'YoY Results')
+@section('title', 'Quarter Results')
 
 @section('head')	
 
@@ -8,7 +8,7 @@
 
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('ResultsYoYPost') }}">
+	<form class="form-inline" role="form" method="POST" action="resultsQuarterController">
 		
 		@csrf
 
@@ -21,8 +21,8 @@
 						<label>Sales Region</label>
 						<select id="salesRegion" name="salesRegion" style="width: 100%">
 							<option value=""> Select </option>
-							@for ($i = 0; $i < sizeof($salesRegion); $i++)
-								<option value="{{ $salesRegion[$i]['id'] }}"> {{ $salesRegion[$i]['name'] }} </option>	
+							@for ($r = 0; $r < sizeof($salesRegion); $r++)
+								<option value="{{ $salesRegion[$r]['id'] }}"> {{ $salesRegion[$r]['name'] }} </option>	
 							@endfor
 						</select>
 					</div>
@@ -34,8 +34,8 @@
 						<label>Year</label>
 						<select id="year" name="year" style="width: 100%">
 							<option value=""> Select </option>
-							@for ($i = 0; $i < sizeof($years); $i++)
-								<option value="{{ $years[$i] }}"> {{ $years[$i] }} </option>
+							@for ($y = 0; $y < sizeof($years); $y++)
+								<option value="{{ $years[$y] }}"> {{ $years[$y] }} </option>
 							@endfor
 						</select>
 					</div>
@@ -47,8 +47,8 @@
 						<label>Brand</label>
 						<select id="brand[]" name="brand" style="width: 100%" multiple="true">
 							<option value="DN"> DN </option>
-							@for ($i = 0; $i < sizeof($brands); $i++)
-								<option value="{{ $brands[$i]['id'] }}"> {{ $brands[$i]['name'] }} </option>
+							@for ($b = 0; $b < sizeof($brands); $b++)
+								<option value="{{ $brands[$b]['id'] }}"> {{ $brands[$b]['name'] }} </option>
 							@endfor
 						</select>
 					</div>
@@ -69,25 +69,32 @@
 					<div class="form-inline">
 						<label> 2st Pos </label>
 						<select name="secondPos" id="secondPos" style="width: 100%;">
-							@for ($i = 0; $i < 10; $i++)
-								<option value="{{ $plans[$i]['id'] }}"> {{ $plans[$i]['name'] }} </option>
-							@endfor
-						</select>
-					</div>
-				</div>				
-
-				<!-- 3st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 2st Pos </label>
-						<select name="secondPos" id="secondPos" style="width: 100%;">
 							
 						</select>
 					</div>
 				</div>				
 
+				
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label> Currency </label>
+						<select name="currency" id="currency" style="width: 100%;">
+							<option value=""> Select </option>
+							@for ($c = 0; $c < sizeof($currencies); $c++)
+								<option value="{{ $currencies[$c]['id'] }}"> {{ $currencies[$c]['name'] }} </option>
+							@endfor
+						</select>
+
+						
+					</div>
+				</div>
 			</div>
 		</div>
+
 	</form>
+
+	<script type="text/javascript">
+		ajaxSetup();
+	</script>
 
 @endsection

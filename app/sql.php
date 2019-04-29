@@ -13,6 +13,12 @@ class sql extends Model{
         return $res;
     }
 
+    public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
+        $sql = "SELECT SUM($sum) AS $as FROM $table $join $where ORDER BY $order_by ";
+        $res = $con->query($sql);
+        return $res;
+    }
+
     public function insert($con,$table,$columns,$values){
         $insert = "INSERT INTO $table ($columns) VALUES ($values)";
 
@@ -45,6 +51,19 @@ class sql extends Model{
 
     }
 
+    public function fetchSum($result,$sum){
+
+        if($result && $result->num_rows > 0){            
+            $row = $result->fetch_assoc();                
+                $info[$sum] = doubleval($row[$sum]);               
+        }else{
+            $info = false;
+        }
+
+        return $info;
+
+    }
+
     public function setUpdate($columns, $values){
 
         $set = "SET ";
@@ -67,12 +86,6 @@ class sql extends Model{
             $rtr["bool"] = false;
             $rtr["msg"] = "Error: Update failed, no data matching encountered";
         }else if($con->query($sql) === true){
-        
-            $sql = "UPDATE $tableName $set $where";
-
-        }
-
-        if($con->query($sql) === true){
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
         }else{
