@@ -1,16 +1,21 @@
 @extends('layouts.mirror')
 
-@section('title', 'Monthly Results')
+@section('title', 'Share')
 
 @section('head')	
 
 @endsection
+<?php
+	$filev = array(1,2,3,"leo","pier");
 
+	var_dump($filev);
+
+?>
 @section('content')
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('shareResultsPost') }}">
+				<form method="POST" action="{{ route('resultsSharePost') }}">
 					@csrf
 					<div class="row">
 						<div class="col">

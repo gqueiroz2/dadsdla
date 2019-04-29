@@ -19,5 +19,10 @@ Route::group(['prefix' => 'dataManagement'],function(){
 	Route::get('YoY','resultsController@YoYGet')
 						->name('YoYResultsGet');
 	Route::post('YoY','resultsController@YoYPost')
-					->name('YoYResultsPost');						
+					->name('YoYResultsPost');
+
+	Route::get('share','shareController@shareGet')
+					->name('resultsShareGet');
+	Route::post('share','shareController@sharePost')
+					->name('resultsSharePost');
 });
