@@ -13,6 +13,12 @@ class sql extends Model{
         return $res;
     }
 
+    public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
+        $sql = "SELECT SUM($sum) AS $as FROM $table $join $where ORDER BY $order_by ";
+        $res = $con->query($sql);
+        return $res;
+    }
+
     public function insert($con,$table,$columns,$values){
         $insert = "INSERT INTO $table ($columns) VALUES ($values)";
 
@@ -42,6 +48,19 @@ class sql extends Model{
     	}
 
     	return $info;
+
+    }
+
+    public function fetchSum($result,$sum){
+
+        if($result && $result->num_rows > 0){            
+            $row = $result->fetch_assoc();                
+                $info[$sum] = doubleval($row[$sum]);               
+        }else{
+            $info = false;
+        }
+
+        return $info;
 
     }
 
@@ -84,9 +103,19 @@ class sql extends Model{
 
         for ($i=0; $i <sizeof($columns) ; $i++) { 
             if ($i == sizeof($columns)-1) {
-                $where .= "($columns[$i] = \"$variables[$i]\")";
+                if (is_array($variables[$i])) {
+                    $tmp = implode(",", $variables[$i]);
+                    $where .= "($columns[$i] IN ($tmp))";
+                }else{
+                    $where .= "($columns[$i] = \"$variables[$i]\")";
+                }
             }else{
-                $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                if (is_array($variables[$i])) {
+                    $tmp = implode(",", $variables[$i]);
+                    $where .= "($columns[$i] IN ($tmp)) AND ";
+                }else{
+                    $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                }
             }
         }
 

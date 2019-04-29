@@ -10,7 +10,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('shareResultsPost') }}">
+				<form method="POST" action="{{ route('resultsSharePost') }}">
 					@csrf
 					<div class="row">
 						<div class="col">

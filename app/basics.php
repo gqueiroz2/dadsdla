@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class basics extends Model
-{
+class basics extends Model{
+    
+    public function handleBrand($array){
+    	
+    }
+
     //função para formatar a data
 	public function formatData($pattern, $from, $to){
 			switch($from) {

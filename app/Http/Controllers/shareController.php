@@ -15,7 +15,7 @@ use App\pRate;
 
 class shareController extends Controller{
 
-    public function shareGet(){
+    public function get(){
         $base = new base();
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -34,7 +34,7 @@ class shareController extends Controller{
         return view("adSales.results.3shareGet",compact('region','salesRep','salesRepGroup','render','brand','currency'));
     }
 
-    public function sharePost(){
+    public function post(){
     	$base = new base();
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -43,6 +43,9 @@ class shareController extends Controller{
         $render = new shareRender();
         $b = new brand();
         $pr = new pRate();
+        $s = new share();
+
+        $mtx = $s->generateShare($con);
 
         $region = $r->getRegion($con,null);
         $brand = $b->getBrand($con);

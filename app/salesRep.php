@@ -101,24 +101,23 @@ class salesRep extends Management{
 		$columns = "sr.ID AS 'id',
 				sr.name AS 'salesRep',	
 				srg.name AS 'salesRepGroup',
+				srg.ID AS 'salesRepGroupID',
 				r.name AS 'region'";
 
 		$where = "";
 
 		if($salesRepGroupID){
 			$salesRepGroupIDS = implode(",", $salesRepGroupID);
-			$where .= "WHERE srg.ID IN ('$salesRepGroupIDS')";
+			$where .= "WHERE srg.ID IN ($salesRepGroupIDS)";
 		}
 
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
 				 LEFT JOIN region r ON r.ID = srg.region_id";
 
 		$res = $sql->select($con,$columns,$table,$join,$where);
-
 		$from = array('id','salesRep','salesRepGroup','region');
 
 		$salesRep = $sql->fetch($res,$from,$from);
-
     	return $salesRep;
 	}
 
