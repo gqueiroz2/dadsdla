@@ -200,5 +200,89 @@ class ytdLatam extends Management{
 
 		return $fMatrix;
 	}
+
+	public function getYtd ($con, $regionID, $year, $brandID, $currencyID){
+		$ytdLatam = new sql();
+
+		$columns = "
+			ytd.ID AS 'id',
+			reg.name AS 'campaignSalesOffice',
+			reg.name AS 'salesRepOffice',
+			br.name AS 'brandName',
+			srep.name AS 'salesRep',
+			cli.name AS 'client',
+			ag.name AS 'agency',
+			cur.name AS 'campaignCurrency',
+			ytd.year AS 'year',
+			ytd.month AS 'month',
+			ytd.brand_feed AS 'brandFeed',
+			ytd.client_product AS 'clientProduct',
+			ytd.order_reference AS 'orderReference',
+			ytd.campaign_reference AS 'campaignReference',
+			ytd.spot_duration AS 'spotDuration',
+			ytd.impression_duration AS 'impressionDuration',
+			ytd.num_spot AS 'numSpot',
+			ytd.gross_revenue AS 'grossRevenue',
+			ytd.net_revenue AS 'netRevenue',
+			ytd.net_net_revenue AS 'netNetRevenue',
+			ytd.gross_revenue_prate AS 'grossRevenuePrate',
+			ytd.net_revenue_prate AS 'netRevenuePrate',
+			ytd.net_net_revenue_prate AS 'netNetRevenuePrate'
+		";
+
+		$table = "ytdLatam ytd";
+
+		$join = "
+			LEFT JOIN brand br ON br.ID = ytd.brand_id
+			LEFT JOIN client cli ON cli.ID = ytd.client_id
+			LEFT JOIN currency cur ON cur.ID = ytd.campaign_currency_id
+			LEFT JOIN region reg ON reg.ID = ytd.campaign_sales_office_id
+			LEFT JOIN region reg ON reg.ID = ytd.sales_representant_office_id
+			LEFT JOIN agency ag ON ag.ID = ytd.agency_id
+			LEFT JOIJ sales_rep sRep ON sRep.ID = ytd.sales_rep_id
+		";
+
+		$where = "WHERE reg.ID = $regionID AND ytd.year = $year AND br.ID IN ($brandID) AND cur.ID = $currencyID";
+
+		$order_by = "";
+
+		$result = $ytdLatam->select($con, $columns, $table, $join, $where, $order_by);
+
+		if ($result && $result->num_rows > 0) {
+			$count = 0;
+			while ($row = $result->fetch_assoc()) {
+				$ytd[$count]['id'] = $row['id'];
+				$ytd[$count]['campaignSalesOffice'] = $row['campaignSalesOffice'];
+				$ytd[$count]['salesRepOffice'] = $row['salesRepOffice'];
+				$ytd[$count]['brandName'] = $row['brandName'];
+				$ytd[$count]['salesRep'] = $row['salesRep'];
+				$ytd[$count]['client'] = $row['client'];
+				$ytd[$count]['agency'] = $row['agency'];
+				$ytd[$count]['campaignCurrency'] = $row['campaignCurrency'];
+				$ytd[$count]['year'] = $row['year'];
+				$ytd[$count]['month'] = $row['month'];
+				$ytd[$count]['brandFeed'] = $row['brandFeed'];
+				$ytd[$count]['clientProduct'] = $row['clientProduct'];
+				$ytd[$count]['orderReference'] = $row['orderReference'];
+				$ytd[$count]['campaignReference'] = $row['campaignReference'];
+				$ytd[$count]['spotDuration'] = $row['spotDuration'];
+				$ytd[$count]['impressionDuration'] = $row['impressionDuration'];
+				$ytd[$count]['numSpot'] = $row['numSpot'];
+				$ytd[$count]['grossRevenue'] = $row['grossRevenue'];
+				$ytd[$count]['netRevenue'] = $row['netRevenue'];
+				$ytd[$count]['netNetRevenue'] = $row['netNetRevenue'];
+				$ytd[$count]['grossRevenuePrate'] = $row['grossRevenuePrate'];
+				$ytd[$count]['netRevenuePrate'] = $row['netRevenuePrate'];
+				$ytd[$count]['netNetRevenuePrate'] = $row['netNetRevenuePrate'];
+
+				$count++;
+			}
+		}
+		else{
+			$ytd = false;
+		}
+
+		return $ytd;
+	} 
   
 }

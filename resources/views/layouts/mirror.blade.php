@@ -87,10 +87,10 @@
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Resultados </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Resume </a>
-                            <a class="dropdown-item" href="{{ route('monthlyResultsGet') }}"> Monthly </a>
-                            <a class="dropdown-item" href="#"> Quarter </a>
+                            <a class="dropdown-item" href="#"> Monthly </a>
+                            <a class="dropdown-item" href="{{ route('quarterResultsGet') }}"> Quarter </a>
                             <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
-                            <a class="dropdown-item" href="{{ route('ResultsYoYGet') }}"> YoY </a>
+                            <a class="dropdown-item" href="#"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>
                         </div>
                     </li>
