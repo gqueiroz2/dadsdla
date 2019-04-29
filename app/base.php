@@ -7,6 +7,8 @@ use App\dataBase;
 
 class base extends Model{
 
+    protected $monthNumber = array('1','2','3','4','5','6','7','8','9','10','11','12');
+
     protected $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
 
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
@@ -37,6 +39,24 @@ class base extends Model{
                                 );
 
     
+
+    public function getMonthNumber(){
+        return $this->monthNumber;
+    }
+
+    public function getYtdMonthNumber(){
+        $month = date('n');
+        $tmp = array();
+
+        for ($i=0; $i <sizeof($this->monthNumber) ; $i++) { 
+            array_push($tmp,$this->monthNumber[$i]);
+            if ($month == $this->monthNumber[$i]) {
+                break;
+            }
+        }
+
+        return $tmp;
+    }
 
     public function getSalesRegion(){   
         return $this->salesRegion;

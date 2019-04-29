@@ -17,9 +17,9 @@ Route::group(['prefix' => 'results'],function(){
 	Route::post('YoY','resultsController@YoYPost')
 					->name('YoYResultsPost');
 
-	Route::get('share','shareController@shareGet')
+	Route::get('share','shareController@get')
 					->name('resultsShareGet');
-	Route::post('share','shareController@sharePost')
+	Route::post('share','shareController@post')
 					->name('resultsSharePost');
 						
 	Route::get('resume','resultsResumeController@get')

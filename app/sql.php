@@ -90,9 +90,19 @@ class sql extends Model{
 
         for ($i=0; $i <sizeof($columns) ; $i++) { 
             if ($i == sizeof($columns)-1) {
-                $where .= "($columns[$i] = \"$variables[$i]\")";
+                if (is_array($variables[$i])) {
+                    $tmp = implode(",", $variables[$i]);
+                    $where .= "($columns[$i] IN ($tmp))";
+                }else{
+                    $where .= "($columns[$i] = \"$variables[$i]\")";
+                }
             }else{
-                $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                if (is_array($variables[$i])) {
+                    $tmp = implode(",", $variables[$i]);
+                    $where .= "($columns[$i] IN ($tmp)) AND ";
+                }else{
+                    $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                }
             }
         }
 
