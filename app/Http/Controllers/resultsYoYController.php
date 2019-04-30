@@ -53,6 +53,10 @@ class resultsYoYController extends Controller{
 
         $yoy = new YoY();
         $brandsName = $yoy->getBrandsName($con, $brand);
+
+
+        $lineForm1 = $yoy->line($con,$table,$year,$value,$regionID);
+
         $lineForm1 = $yoy->line13Get($con, $form1, $yearLine1, $value, $regionID);
         $lineForm2 = $yoy->line2Get($con, $form2, $regionID, $year);
         $lineForm1 = $yoy->line13Get($con, $form1, $year, $value, $regionID);

@@ -37,6 +37,36 @@ class YoY extends results {
     	return $brands;
     }
 
+    public function line($con,$form,$year,$value,$region){
+        $sql = new sql();
+
+        switch ($form) {
+            case 'IBMS':
+
+
+                for ($m=0; $m < sizeof($month); $m++) { 
+                    
+                    $where[$m] = "";
+
+                    $rtr = $sql->selectSum($con,$sum,$as,$table,$where);
+                    
+
+                }
+
+
+                break;
+
+            case 'IBMS':
+                # code...
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+    }
+
     public function line1Get($con, $form1, $year, $value, $region){
 
     	$form = null;
@@ -52,7 +82,7 @@ class YoY extends results {
 			$order_by = 10;
 
 			$value .= "_revenue";
-    	} elseif($form1 == "CMAPS"){
+    	}elseif($form1 == "CMAPS"){
     		$form = new cmaps();
 
     		$columnsName = array("sales_group_id", "sales_rep_id", "year");
