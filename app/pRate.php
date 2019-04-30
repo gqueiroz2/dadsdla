@@ -98,16 +98,11 @@ class pRate extends Management{
 	public function getCurrency($con,$id){
 		$sql = new sql();
 		$table = "currency c";
-			
 		$where = "";
-
-		var_dump($id);
-
 		if($id){
 			$ids = implode($id);
 			$where .= "WHERE c.ID IN ($ids)";
 		}
-
 		$columns = "c.ID AS 'id',
 					c.name AS 'name',
 					r.name AS 'region'
@@ -115,7 +110,7 @@ class pRate extends Management{
 		$from = array('id','name','region');	
 		$join = "LEFT JOIN region r ON c.region_id = r.ID";
 		$order = "3";
-		$result = $sql->select($con,$columns,$table,$join,false,$order);
+		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 		$currency = $sql->fetch($result,$from,$from);
 		return $currency;
 	}
