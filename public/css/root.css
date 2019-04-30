@@ -1,0 +1,38 @@
+body{
+	text-align:center;
+    vertical-align:middle;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+table{
+	font-weight: bold;
+}
+
+.center{
+	text-align: center;
+}
+
+.darkBlue{
+	background-color: #002060;
+    color: white;
+}
+
+.lightBlue{
+	background-color: #0070c0;
+	color:white;	
+}
+
+.grey{
+	background-color: #757171;
+    color:white;
+}
+
+.odd{
+	background-color: #e7eff9;
+}
+
+.even{
+	background-color: #f9fbfd;
+}
+

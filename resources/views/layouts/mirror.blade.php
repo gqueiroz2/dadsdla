@@ -35,6 +35,7 @@
         <script src="{{ asset('js/jquery.multiselect.js') }}" defer></script>
 --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/root.css') }}" rel="stylesheet">
 
         <style type="text/css">
   
@@ -87,7 +88,7 @@
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Resultados </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Resume </a>
-                            <a class="dropdown-item" href="#"> Monthly </a>
+                            <a class="dropdown-item" href="{{ route('monthlyGet')}}"> Monthly </a>
                             <a class="dropdown-item" href="{{ route('quarterResultsGet') }}"> Quarter </a>
                             <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
                             <a class="dropdown-item" href="#"> YoY </a>
