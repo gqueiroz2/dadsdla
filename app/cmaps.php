@@ -8,7 +8,7 @@ use App\sql;
 
 class cmaps extends Management{
 
-    public function get($con){
+    public function get($con, $colNames = null, $values = null, $order_by = 1){
         
         $sql = new sql();
 
@@ -45,9 +45,15 @@ class cmaps extends Management{
                  LEFT JOIN sales_rep sr ON sr.ID = cm.sales_rep_id
                  LEFT JOIN client cl ON cl.ID = cm.client_id
                  LEFT JOIN agency agc ON agc.ID = cm.agency_id
-                 LEFT JOIN brand b ON b.ID = cm.brand_id";
+                 LEFT JOIN brand b ON b.ID = cm.brand_id
+                 ";
 
-        $result = $sql->select($con, $columns, $table, $join);
+        $where = "";
+        if ($values) {
+            $where = $sql->where($colNames, $values);
+        }
+
+        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('id', 'salesRepGroup', 'salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'mapNumber',
          'package', 'product', 'segment', 'piNumber', 'gross', 'net', 'market', 'discount', 'clientCNPJ', 'agencyCNPJ', 'mediaType',
@@ -58,6 +64,23 @@ class cmaps extends Management{
         $cmaps = $sql->fetch($result, $from, $to);
 
         return $cmaps;
+    }
+
+    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+        
+        $sql = new sql();
+
+        $table = "cmaps";
+
+        $sum = "$value";
+
+        $as = "sum";
+
+        $where = $sql->where($columnsName, $columnsValue);
+
+        $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
+
+        $res = $sql->fetchSum($result, $sum);
     }
  
 }
