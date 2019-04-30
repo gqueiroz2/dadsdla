@@ -39,6 +39,9 @@ Route::group(['prefix' => 'ajax'],function(){
 		Route::post('firstPosMonthly','ajaxController@firstPosMonthly');
 		Route::post('secondPosMonthly','ajaxController@secondPosMonthly');
 		Route::post('currencyByRegion','ajaxController@currencyByRegion');
+		Route::post('firstPosByRegion','ajaxController@firstPosByRegion');
+		Route::post('secondPosByRegion','ajaxController@secondPosByRegion');
+		Route::post('thirdPosByRegion','ajaxController@thirdPosByRegion');
 	});
 
 });

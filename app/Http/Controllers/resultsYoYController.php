@@ -8,22 +8,25 @@ use App\region;
 use App\brand;
 use App\planByBrand;
 use App\cmaps;
+use App\header;
+use App\ytd;
+use App\Render;
+use App\pRate;
 
 class resultsYoYController extends Controller{
-    
+
     public function YoYGet(){
 
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
+        $render = new Render();
+
         $region = new region();
         $salesRegion = $region->getRegion($con);
 
-        $currentYear = intval(date('Y'));
-        $years = array($currentYear, $currentYear-1);
-
         $brands = new brand();
-        $brandsValue = $brand->getBrand($con);
+        $brandsValue = $brands->getBrand($con);
 
         $plan = new planByBrand();
         $planValue = $plan->get($con);
@@ -31,15 +34,23 @@ class resultsYoYController extends Controller{
         $cmaps = new cmaps();
         $cmapsValue = $cmaps->get($con);
 
-        
+        $header = new header();
+        $headerValue = $header->get($con);
 
-        //var_dump($brands);
+        $ytd = new ytd();
+        $ytdValue = $ytd->get($con);
 
-        return view("adSales.results.YoYGet", compact('salesRegion', 'years', 'brandsValue', 'planValue', 'cmapsValue'));
+        //var_dump($planValue);
+
+        return view("adSales.results.YoYGet", compact('render', 'salesRegion', 'brandsValue', 'planValue', 'cmapsValue',
+         'headerValue', 'ytdValue'));
 
     }
 
     public function YoYPost(){
         
+        $all = Request::all();
+        var_dump($all);
+
     }
 }

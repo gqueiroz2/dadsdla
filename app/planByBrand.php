@@ -12,20 +12,20 @@ class planByBrand extends Management{
         
         $sql = new sql();
 
-        $table = 'plan_by_brand pb';
-        $columns = "pb.ID AS 'id',
+        $table = 'plan_by_brand pbb';
+        $columns = "pbb.ID AS 'id',
                     r.name AS 'region',
                     c.name AS 'currency',
                     b.name AS 'brand',
-                    pb.source AS 'source',
-                    pb.year AS 'year',
-                    pb.type_of_revenue AS 'typeOfRevenue',
-                    pb.month AS 'month',
-                    pb.revenue AS 'revenue'
+                    pbb.source AS 'source',
+                    pbb.year AS 'year',
+                    pbb.type_of_revenue AS 'typeOfRevenue',
+                    pbb.month AS 'month',
+                    pbb.revenue AS 'revenue'
                     ";
-        $join = "LEFT JOIN region r ON r.ID = pb.sales_office_id
-                 LEFT JOIN currency c ON c.ID = pb.currency_id
-                 LEFT JOIN brand b ON B.id = pb.brand_id";
+        $join = "LEFT JOIN region r ON r.ID = pbb.sales_office_id
+                 LEFT JOIN currency c ON c.ID = pbb.currency_id
+                 LEFT JOIN brand b ON b.id = pbb.brand_id";
 
         $where = "";
 

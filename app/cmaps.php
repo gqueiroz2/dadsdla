@@ -45,7 +45,8 @@ class cmaps extends Management{
                  LEFT JOIN sales_rep sr ON sr.ID = cm.sales_rep_id
                  LEFT JOIN client cl ON cl.ID = cm.client_id
                  LEFT JOIN agency agc ON agc.ID = cm.agency_id
-                 LEFT JOIN brand b ON b.ID = cm.brand_id";
+                 LEFT JOIN brand b ON b.ID = cm.brand_id
+                 ";
 
         $result = $sql->select($con, $columns, $table, $join);
 

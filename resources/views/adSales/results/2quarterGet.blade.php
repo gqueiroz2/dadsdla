@@ -1,6 +1,6 @@
 @extends('layouts.mirror')
 
-@section('title', 'Monthly Results')
+@section('title', 'Quarter Results')
 
 @section('head')	
 
@@ -8,7 +8,7 @@
 
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('monthlyResultsPost') }}">
+	<form class="form-inline" role="form" method="POST" action="{{ route('quarterResultsPost') }}">
 		
 		@csrf
 
@@ -22,27 +22,35 @@
 						{{$render->region($salesRegion)}}
 					</div>
 				</div>
-
-				<!-- Brand Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Brand</label>
-						{{$render->brand($brand)}}
-					</div>
-				</div>		
-
+				
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Year</label>
 						{{$render->year()}}
 					</div>
-				</div>			
+				</div>
+
+				<!-- Region Area -->
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label>Quarter</label>
+						{{$qRender->quarters()}}
+					</div>
+				</div>
+
+				<!-- Brand Area -->
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label>Brand</label>
+						{{$render->brand($brands)}}
+					</div>
+				</div>				
 
 				<!-- 1st Pos Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 1st Pos </label>
-						{{$mRender->firstPos()}}
+						{{$qRender->firstPos()}}
 					</div>
 				</div>				
 
@@ -50,7 +58,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 2st Pos </label>
-						{{$mRender->secondPos()}}
+						{{$qRender->secondPos()}}
 					</div>
 				</div>				
 
@@ -80,7 +88,8 @@
 
 	</form>
 
+	<script type="text/javascript">
+		ajaxSetup();
+	</script>
 
-
-	
 @endsection
