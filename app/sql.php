@@ -14,8 +14,10 @@ class sql extends Model{
         return $res;
     }
 
-    public function selectSum($con, $sum, $as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
-        $sql = "SELECT SUM($sum) AS $as FROM $table $join $where ORDER BY $order_by ";
+
+    public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
+        $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
+
         $res = $con->query($sql);
         return $res;
     }
@@ -23,7 +25,6 @@ class sql extends Model{
     public function insert($con,$table,$columns,$values){
         
         $insert = "INSERT INTO $table ($columns) VALUES ($values)";
-
         if($con->query($insert) === true){
             $rtr["bool"] = true;
             $rtr["msg"] = "A New record on the table $table was successfully created!";
@@ -31,7 +32,6 @@ class sql extends Model{
             $rtr["bool"] = false;
             $rtr["msg"] = "Error: ".$insert."<br>".$con->error;
         }
-
         return $rtr;
     }
 

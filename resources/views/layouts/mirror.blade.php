@@ -35,6 +35,7 @@
         <script src="{{ asset('js/jquery.multiselect.js') }}" defer></script>
 --}}
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/root.css') }}" rel="stylesheet">
 
         <style type="text/css">
   

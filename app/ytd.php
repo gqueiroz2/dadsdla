@@ -13,7 +13,7 @@ class ytd extends Management{
         example ytd_2019
     */
 
-    public function get($con){
+    public function get($con, $colNames = null, $values = null, $order_by = 1){
 
         $sql = new sql();
 
@@ -51,7 +51,14 @@ class ytd extends Management{
                  LEFT JOIN agency agc ON agc.ID = ytd.agency_id
                  LEFT JOIN currency c ON c.ID = ytd.campaign_currency";
 
-        $result = $sql->select($con, $columns, $table, $join);
+        $where = "";
+        if ($values) {
+            $where = $sql->where($colNames, $values);
+        }
+
+        $order_by = 10;
+
+        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('id', 'campaignRegion', 'Salesregion', 'brand', 'salesRep', 'client', 'agency', 'campaignCurrency',
                       'year', 'month', 'brandFeed', 'clientProduct', 'orderReference', 'campaignReference', 'spotDuration',
@@ -64,5 +71,22 @@ class ytd extends Management{
         $ytd = $sql->fetch($result, $from, $to);
 
         return $ytd;
+    }
+
+    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+        
+        $sql = new sql();
+
+        $table = "ytd";
+
+        $sum = "$value";
+
+        $as = "sum";
+
+        $where = $sql->where($columnsName, $columnsValue);
+
+        $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
+
+        $res = $sql->fetchSum($result, $sum);
     }
 }

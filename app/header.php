@@ -8,7 +8,7 @@ use App\sql;
 
 class header extends Management
 {
-    public function get($con){       
+    public function get($con, $colNames = null, $values = null, $order_by = 1){       
     
         $sql = new sql();
 
@@ -54,7 +54,12 @@ class header extends Management
                  LEFT JOIN currency c ON c.ID = h.campaign_currency
                  ";
 
-        $result = $sql->select($con, $columns, $table, $join);
+        $where = "";
+        if ($values) {
+            $where = $sql->where($colNames, $values);
+        }
+
+        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('id', 'campaignRegion', 'Salesregion', 'brand', 'salesRep', 'client', 'agency', 'campaignCurrency',
                       'year', 'month', 'brandFeed', 'salesRepRole', 'clientProduct', 'orderReference', 'campaignReference',
@@ -68,5 +73,22 @@ class header extends Management
         $header = $sql->fetch($result, $from, $to);
 
         return $header;
-    }  
+    }
+
+    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+        
+        $sql = new sql();
+
+        $table = "header";
+
+        $sum = "$value";
+
+        $as = "sum";
+
+        $where = $sql->where($columnsName, $columnsValue);
+
+        $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
+
+        $res = $sql->fetchSum($result, $sum);
+    }
 }
