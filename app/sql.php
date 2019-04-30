@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class sql extends Model{
     
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
+        
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
-
+        
         return $res;
     }
 
     public function insert($con,$table,$columns,$values){
+        
         $insert = "INSERT INTO $table ($columns) VALUES ($values)";
 
         if($con->query($insert) === true){

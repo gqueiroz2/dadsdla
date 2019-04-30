@@ -23,7 +23,7 @@
 						</div>
 						<div class="col">
 							<label>Font:</label>
-							{{$render->font()}}
+							{{$render->font($region,2019)}}
 						</div>
 						<div class="col">
 							<label>Months:</label>
