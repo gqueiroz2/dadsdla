@@ -46,7 +46,7 @@ class Render extends Model{
 
     public function salesRepGroup($salesRepGroup){
     	echo "<select name='salesRepGroup' style='width:100%;'>";
-    		echo "<option value='all'> All </option>";
+            echo "<option value='all'> All </option>";
     		for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
 	    		echo "<option value='".$salesRepGroup[$i]["id"]."'>".$salesRepGroup[$i]["name"]."</option>";
     		}
@@ -66,7 +66,8 @@ class Render extends Model{
 
     public function months(){
     	echo "<select name='month[]' multiple='true' style='width:100%;'>";
-    		echo "<option value='all'>All</option>";
+            echo "<option selected='true' value='all'>All</option>";
+    		echo "<option value='ytd'>YTD</option>";
     		for ($m=0; $m < sizeof($this->month); $m++) { 
     			echo "<option value='".($m+1)."'>".$this->month[$m]."</option>";
     		}

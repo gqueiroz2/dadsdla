@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\dataBase;
+use App\base;
+use App\monthly;
 use App\region;
+use App\salesRep;
+use App\share;
 use App\brand;
-use App\planByBrand;
-use App\ytdLatam;
-use App\cmaps;
 use App\pRate;
+use App\Render;
+use App\quarterRender;
 
 /*
 Author: Bruno Gomes
@@ -19,7 +22,7 @@ Author: Bruno Gomes
 class resultsQuarterController extends Controller
 {
 	public function get(){
-		$db = new dataBase();
+	$db = new dataBase();
         $con = $db->openConnection("DLA");
 
         $region = new region();
@@ -34,9 +37,11 @@ class resultsQuarterController extends Controller
         $currency = new pRate();
         $currencies = $currency->getCurrency($con); 
 
-        $plan = new planByBrand();
+        $render = new Render();
 
-        return view("adSales.results.2quarterGet", compact('salesRegion', 'years', 'brands', 'currencies'));
+        $qRender = new quarterRender();
+
+        return view("adSales.results.2quarterGet", compact('salesRegion', 'years', 'brands', 'currencies', 'render', 'qRender'));
 	}
 
 	public function post(){

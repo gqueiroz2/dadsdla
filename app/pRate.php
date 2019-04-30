@@ -10,7 +10,14 @@ use App\region;
 
 class pRate extends Management{
     
-	public function getPRate($con){
+	public function getPRate($con,$id){
+		$where = "";
+
+		if($id){
+			$ids = implode($id);
+			$where .= "WHERE p.ID IN ($ids)";
+		}
+
 		$sql = new sql();
 		$table = "p_rate p";
 		$columns = "p.ID AS 'id',					
@@ -23,7 +30,7 @@ class pRate extends Management{
 		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
 				 LEFT JOIN region r ON c.region_id = r.ID";
 		$order = "2,5,4";
-		$result = $sql->select($con,$columns,$table,$join,false,$order);
+		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 		$pRate = $sql->fetch($result,$from,$from);		
 		return $pRate;
 	}
@@ -88,9 +95,19 @@ class pRate extends Management{
 		return $bool;
 	}
 
-	public function getCurrency($con){
+	public function getCurrency($con,$id){
 		$sql = new sql();
 		$table = "currency c";
+			
+		$where = "";
+
+		var_dump($id);
+
+		if($id){
+			$ids = implode($id);
+			$where .= "WHERE c.ID IN ($ids)";
+		}
+
 		$columns = "c.ID AS 'id',
 					c.name AS 'name',
 					r.name AS 'region'
