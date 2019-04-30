@@ -14,11 +14,11 @@
 					@csrf
 					<div class="row">
 						<div class="col">
-							<label>Region:</label>
+							<label class="labelLeft"><span class="bold"> Region: </span></label>
 							{{$render->region($region)}}
 						</div>
 						<div class="col">
-							<label>Brands:</label>
+							<label class="labelLeft"><span class="bold"> Brands: </span></label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
@@ -26,7 +26,7 @@
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
-							<label>Value:</label>
+							<label class="labelLeft"><span class="bold"> Value: </span></label>
 							{{$render->value()}}
 						</div>
 						<div class="col">

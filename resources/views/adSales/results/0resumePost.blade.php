@@ -39,12 +39,12 @@
 		</div>
 	</div>
 
-	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%;">
+	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
 		<div class="row">
 			<div class="col">				
 				<table class="table table-bordered" style="width: 100%;">
 					<tr>
-						<td class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume ($currency/$value) - $cYear </span> </td>
+						<td class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume ({{$currencyS}}/{{$valueS}}) - {{$cYear}} </span> </td>
 					</tr>
 					<tr>
 						<th class="darkBlue"> Month </th>
@@ -53,11 +53,11 @@
 						<th class="darkBlue"> Target </th>
 						<th class="darkBlue"> P&R FCST </th>
 						<th class="darkBlue"> Finance FCST </th>
-						<th class="darkBlue"> <? ( date('Y') - 1 ) ;?> </th>
+						<th class="darkBlue"> {{$pYear}} </th>
 						<th class="grey"> Sales/Plan </th>
 						<th class="grey"> Sales/P&R </th>
 						<th class="grey"> Sales/Finance </th>
-						<th class="grey"> Sales/<? ( date('Y') - 1 ) ;?> </th>
+						<th class="grey"> Sales/{{$pYear}} </th>
 					</tr>
 					@for($m = 0;$m < sizeof($matrix);$m++)
 						@if($matrix[$m]['month'] == "Total")

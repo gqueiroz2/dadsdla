@@ -8,7 +8,7 @@
 
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('ResultsYoYPost') }}">
+	<form class="form-inline" role="form" method="POST" action="{{ route('YoYResultsPost') }}">
 		
 		@csrf
 
@@ -19,25 +19,15 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Sales Region</label>
-						<select id="salesRegion" name="salesRegion" style="width: 100%">
-							<option value=""> Select </option>
-							@for ($i = 0; $i < sizeof($salesRegion); $i++)
-								<option value="{{ $salesRegion[$i]['id'] }}"> {{ $salesRegion[$i]['name'] }} </option>	
-							@endfor
-						</select>
+						{{ $render->region($salesRegion) }}
 					</div>
 				</div>
 
-				<!-- Region Area -->
+				<!-- Year Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Year</label>
-						<select id="year" name="year" style="width: 100%">
-							<option value=""> Select </option>
-							@for ($i = 0; $i < sizeof($years); $i++)
-								<option value="{{ $years[$i] }}"> {{ $years[$i] }} </option>
-							@endfor
-						</select>
+						{{ $render->year() }}
 					</div>
 				</div>
 
@@ -45,49 +35,164 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Brand</label>
-						<select id="brand[]" name="brand" style="width: 100%" multiple="true">
-							<option value="DN"> DN </option>
-							@for ($i = 0; $i < sizeof($brands); $i++)
-								<option value="{{ $brands[$i]['id'] }}"> {{ $brands[$i]['name'] }} </option>
-							@endfor
-						</select>
+						{{ $render->brand($brandsValue) }}
 					</div>
-				</div>				
+				</div>	
 
 				<!-- 1st Pos Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 1st Pos </label>
-						<select name="firstPos" id="firstPos" style="width: 100%;">
-							
+						<select id="firstPos" name="firstPos" style="width: 100%;">
+							<option id="option1" value=''> Select </option>
 						</select>
 					</div>
-				</div>				
+				</div>	
 
 				<!-- 2st Pos Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label> 2st Pos </label>
-						<select name="secondPos" id="secondPos" style="width: 100%;">
-							@for ($i = 0; $i < 10; $i++)
-								<option value="{{ $plans[$i]['id'] }}"> {{ $plans[$i]['name'] }} </option>
-							@endfor
-						</select>
+						<select id="secondPos" name="secondPos" style="width: 100%;">
+							<option value=""> Select </option>
+						</select> 
 					</div>
-				</div>				
+				</div>	
 
 				<!-- 3st Pos Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
-						<label> 2st Pos </label>
-						<select name="secondPos" id="secondPos" style="width: 100%;">
-							
+						<label> 3st Pos </label>
+						<select id="thirdPos" name="thirdPos" style="width: 100%;">
+							<option value=''> All Selected </option>
 						</select>
 					</div>
-				</div>				
+				</div>	
+
+				<!-- Currency Area -->
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label> Currency </label>
+						<select id="currency" name="currency" style="width: 100%;">
+							<option value=""> Select </option>
+						</select>
+					</div>
+				</div>	
+
+				<!-- Value Area -->
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label> Value </label>
+						{{ $render->value() }}
+					</div>
+				</div>	
+
+				<div class="col-12 col-lg">
+					<div class="form-inline">
+						<label> &nbsp; </label>
+						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
+					</div>
+				</div>
+				
 
 			</div>
 		</div>
+
 	</form>
+
+	<div id="vlau"></div>
+
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+
+			$('#region').click(function(){
+
+				var region = $(this).val();
+
+				if (region != "") {
+					
+					ajaxSetup();
+
+					$.ajax({
+            			url:"/ajax/adsales/currencyByRegion",
+            			method:"POST",
+            			data:{region},
+	              		success: function(output){
+	                		$('#currency').html(output);
+	              		},
+	              		error: function(xhr, ajaxOptions,thrownError){
+	                		alert(xhr.status+" "+thrownError);
+	          			}
+	          		});
+
+				}
+
+			});
+
+			$('#year').click(function(){
+				
+				var year = $(this).val();
+
+				if (year != "") {
+					var regionID = $('#region').val();
+
+					if (regionID != "") {
+
+						ajaxSetup();
+
+						$.ajax({
+	            			url:"/ajax/adsales/thirdPosByRegion",
+	            			method:"POST",
+	            			data:{regionID, year},
+		              		success: function(output){
+		                		$('#thirdPos').html(output);
+		                		$('#option1').html("");
+		              		},
+		              		error: function(xhr, ajaxOptions,thrownError){
+		                		alert(xhr.status+" "+thrownError);
+		          			}
+		          		});
+
+		          		$.ajax({
+	            			url:"/ajax/adsales/secondPosByRegion",
+	            			method:"POST",
+	            			data:{year},
+		              		success: function(output){
+		                		$('#secondPos').html(output);
+		              		},
+		              		error: function(xhr, ajaxOptions,thrownError){
+		                		alert(xhr.status+" "+thrownError);
+		          			}
+		          		});
+					}
+				}
+			});
+
+			$('#thirdPos').click(function(){
+
+				var year = $('#year').val();
+				var form = $(this).val();
+
+				if (year != "" || form != "") {
+
+					ajaxSetup();
+
+					$.ajax({
+						url:"/ajax/adsales/firstPosByRegion",
+						method:"POST",
+						data:{form, year},
+						success: function(output){
+	                		$('#firstPos').html(output);
+	              		},
+	              		error: function(xhr, ajaxOptions,thrownError){
+	                		alert(xhr.status+" "+thrownError);
+	          			}
+					});
+				}
+
+			});
+		});
+	</script>
 
 @endsection
