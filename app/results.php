@@ -6,6 +6,37 @@ use Illuminate\Database\Eloquent\Model;
 
 class results extends Model{
     
+
+    public function generateVector($con,$table,$region,$year,$month,$brand,$currency,$value,$join,$where){
+        $sql = new sql();
+        if($table == "cmaps"){
+            if($value == "gross"){
+                $sum = $value;
+            }else{
+                $sum = $value;
+            }
+        }elseif($table == "plan_by_brand"){
+            $sum = "revenue";
+        }else{
+            if($value == "gross"){
+                $sum = $value."_value";
+            }else{
+                $sum = $value."_value";
+            }
+        }
+        $as = "sum";
+        for ($m=0; $m < sizeof($month); $m++) { 
+            $res[$m] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m]);
+            $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];
+        }
+
+        return $vector;
+    }
+
+
+
+
+/*
     public function assembler($con,$region,$year,$brand,$currency,$value,$brandFirstPos,$brandSecondPos,$tableFirstPos,$tableSecondPos,$operand,$sumFirstPos,$sumSecondPos,$firstPosMonth,$secondPosMonth){
 
         for ($b=0; $b < sizeof($brand); $b++) { 
@@ -50,7 +81,7 @@ class results extends Model{
         echo "<pre>".var_dump($region)."</pre>";
 
         echo "                             SUB FIM  <br>";
-        */
+        *//*
         switch ($table) {
             case 'target':
                 //
@@ -68,7 +99,7 @@ class results extends Model{
         }
 
         //echo "                             SUB FIM<br><br><br><br>";
-    }
+    }*/
 
 
 
