@@ -26,8 +26,8 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label>Font:</label>
-							{{$render->font()}}
+							<label>Source:</label>
+							{{$render->source()}}
 						</div>
 						<div class="col">
 							<label>Sales Rep Group:</label>
@@ -56,6 +56,11 @@
 				</form>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col">
+				{{$render->mtx($mtx)}}
+			</div>
+		</div>	
 	</div>
 
 

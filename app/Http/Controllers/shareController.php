@@ -29,7 +29,7 @@ class shareController extends Controller{
         $brand = $b->getBrand($con);
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $salesRep = $sr->getSalesRep($con,null);
-        $currency = $pr->getCurrency($con);
+        $currency = $pr->getCurrency($con,null);
 
         return view("adSales.results.3shareGet",compact('region','salesRep','salesRepGroup','render','brand','currency'));
     }
@@ -51,8 +51,8 @@ class shareController extends Controller{
         $brand = $b->getBrand($con);
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $salesRep = $sr->getSalesRep($con,null);
-        $currency = $pr->getCurrency($con);
+        $currency = $pr->getCurrency($con,null);
 
-        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency'));
+        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx'));
     }
 }
