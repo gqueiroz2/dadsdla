@@ -42,16 +42,15 @@ class Render extends Model{
     	echo "</select>";
     }
 
-    public function font($region, $year){
+    public function font(){
     	echo "<select name='font' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
-            echo "<option value='IBMS'> Real (IBMS) $year </option>";
+            echo "<option value='IBMS'> Real (IBMS) </option>";
             
-            if ($region != 'Brazil') {
-                echo "<option value='CMAPS'> Real (CMAPS) $year </option>";
-            }else{
-                echo "<option value='HEADER'> Real (HEADER) $year </option>";//somente se for brasil a região selecionada
-            }
+            
+                echo "<option value='CMAPS'> Real (CMAPS) </option>";
+            
+                echo "<option value='Header'> Real (HEADER) </option>";//somente se for brasil a região 
     		
     	echo "</select>";	
     }
