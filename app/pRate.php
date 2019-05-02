@@ -113,17 +113,10 @@ class pRate extends Management{
 					r.name AS 'region'
 				   ";
 
-		$join = "LEFT JOIN region r ON c.region_id = r.ID";
+		$join = "LEFT JOIN region r ON c.region_id = r.ID";		
 
-		$where = "";
-    	if ($ID) {
-    		$ids = implode(",", $ID);
-    		$where .= "WHERE r.name IN ('$ids')";
-    	}
 
-    	$order = "3";
-
-		$result = $sql->select($con,$columns,$table,$join,$where,$order);
+		$result = $sql->select($con,$columns,$table,$join,$where);
 
 		$from = array('id','name','region');	
 		

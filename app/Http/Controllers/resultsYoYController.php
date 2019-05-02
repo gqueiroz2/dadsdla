@@ -34,8 +34,6 @@ class resultsYoYController extends Controller{
         $con = $db->openConnection("DLA");
 
     	$regionID = Request::get("region");
-    	$r = new region();
-    	$regionName = $r->getRegion($con, array($regionID));
 
     	$year = Request::get("year");
     	$brand = Request::get("brand");
