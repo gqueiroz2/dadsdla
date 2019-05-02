@@ -9,9 +9,8 @@ class Render extends Model{
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
     public function region($region){
-    	echo "<select id='region' name='region' style='width:100%;'>";
-		  echo "<option value=''> Select </option>";
-    		
+    	echo "<select name='region' style='width:100%;' class='form-control'>";
+    		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
     			echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
     		}
@@ -43,7 +42,7 @@ class Render extends Model{
     	echo "</select>";
     }
 
-    public function font($region, $year){
+    /*public function font($region, $year){
     	echo "<select name='font' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> Real (IBMS) $year </option>";
@@ -55,6 +54,16 @@ class Render extends Model{
             }
     		
     	echo "</select>";	
+    }*/
+
+    public function source(){
+        echo "<select name='font' style='width:100%;'>";
+            echo "<option value=''> Select </option>";
+            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='CMAPS'> CMAPS </option>";
+            echo "<option value='HEADER'> HEADER </option>";//somente se for brasil a região selecionada
+            
+        echo "</select>";   
     }
 
     public function salesRepGroup($salesRepGroup){

@@ -29,7 +29,7 @@ class region extends Management{
         $where = "";
         if ($region) {
             $regions = implode(",", $region);
-            $where .= "WHERE r.name IN ('$regions')";
+            $where .= "WHERE r.name IN ($regions)";
         }
 
         $res = $sql->select($con,$columns,$table);
@@ -51,7 +51,7 @@ class region extends Management{
         $where = "";
     	if ($ID) {
     		$ids = implode(",", $ID);
-    		$where .= "WHERE r.ID IN ('$ids')";
+    		$where .= "WHERE r.ID IN ($ids)";
     	}
 
         $res = $sql->select($con,$columns,$table, null, $where);

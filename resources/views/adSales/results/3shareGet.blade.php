@@ -26,8 +26,8 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label>Font:</label>
-							{{$render->font()}}
+							<label>Source:</label>
+							{{$render->source()}}
 						</div>
 						<div class="col">
 							<label>Sales Rep Group:</label>

@@ -15,7 +15,8 @@ class brand extends Management{
 		$table = "brand";
 		$columns = "id,name";
 		$from = array('id','name');	
-		$result = $sql->select($con,$columns,$table);
+		$where = "Where name != 'OTH'";
+		$result = $sql->select($con,$columns,$table,null,$where);
 		$brand = $sql->fetch($result,$from,$from);
 		return $brand;
 	}

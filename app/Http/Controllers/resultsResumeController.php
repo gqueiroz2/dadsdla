@@ -28,13 +28,11 @@ class resultsResumeController extends Controller{
         $pr = new pRate();
 		$render = new Render();
 
-		$region = $r->getRegion($con,null);
+		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
-        $salesRepGroup = $sr->getSalesRepGroup($con,null);
-        $salesRep = $sr->getSalesRep($con,null);
-        $currency = $pr->getCurrency($con);
+        $currency = $pr->getCurrency($con,false);
 
-		return view('adSales.results.0resumeGet',compact('render','region','brand','salesRepGroup','salesRep','currency'));
+		return view('adSales.results.0resumeGet',compact('render','region','brand','currency'));
 
 	}
 
@@ -48,46 +46,28 @@ class resultsResumeController extends Controller{
         $b = new brand();
         $pr = new pRate();
 		$render = new Render();
-
-		$region = $r->getRegion($con,null);
+		$cYear = intval( date('Y') );
+		$pYear = $cYear - 1;
+		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
-        $salesRepGroup = $sr->getSalesRepGroup($con,null);
-        $salesRep = $sr->getSalesRep($con,null);
         $currency = $pr->getCurrency($con,false);
-
 		$regionID = Request::get('region');
 		$brandID = $base->handleBrand( $con, $b ,Request::get('brand'));
 		$currencyID = Request::get('currency');
 		$value = Request::get('value');		
 		$month = $base->getMonth();
-
-		
-
-		$currencyS = $pr->getCurrency($con,array($currencyID));
+		$tmp = $pr->getCurrency($con,array($currencyID));
+		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
 		$valueS = strtoupper($value);
-
-
-		var_dump($currencyS);
-		var_dump($valueS);
-
 		$resume = new resultsResume();
-
 		$tableCMAPS = "cmaps";
 		$tableTarget = "plan_by_brand";
-
 		$joinCMAPS = false;
 		$joinTarget = false;
-
 		for ($m=0; $m < sizeof($month); $m++) { 
             $whereCMAPS[$m] = "WHERE (cmaps.month IN (".$month[$m][1].") ) ";//" AND ( cmaps.brand_id IN ($id) )";
         }
-
-        if($value == "gross"){
-        	$tr = "GROSS";
-        }else{
-        	$tr = "NET";
-        }
-
+        if($value == "gross"){$tr = "GROSS";}else{$tr = "NET";}
         for ($m=0; $m < sizeof($month); $m++) { 
             $whereTarget[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
                                    AND ( type_of_revenue = \"".$tr."\" )";
@@ -101,12 +81,12 @@ class resultsResumeController extends Controller{
 		$actual = $cmaps;
 		$pAndR = $cmaps;
 		$finance = $cmaps;
-		$pYear = $target;
+		$previousYear = $target;
 
 		//$id = implode(",", $brandID);
-		$matrix = $resume->assembler($month,$cmaps,$actual,$target,$pAndR,$finance,$pYear);
+		$matrix = $resume->assembler($month,$cmaps,$actual,$target,$pAndR,$finance,$previousYear);
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','salesRepGroup','salesRep','currency','matrix'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear'));
 
 	}
 
