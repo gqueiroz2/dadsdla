@@ -239,7 +239,7 @@ class share extends results
 
     public function assembler($brand,$salesRep,$values,$div){
 
-        var_dump($div);
+        var_dump($values);
 
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 

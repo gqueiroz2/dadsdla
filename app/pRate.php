@@ -179,8 +179,6 @@ class pRate extends Management{
 
 		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 
-
-
 		$from = array('id','name','region');	
 		
 		$currency = $sql->fetch($result,$from,$from);
