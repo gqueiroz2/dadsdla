@@ -14,43 +14,43 @@
 					@csrf
 					<div class="row">
 						<div class="col">
-							<label>Region:</label>
+							<label style="float: left;">Region:</label>
 							{{$render->region($region)}}
 						</div>
 						<div class="col">
-							<label>Year:</label>
+							<label style="float: left;">Year:</label>
 							{{$render->year()}}
 						</div>
 						<div class="col">
-							<label>Brands:</label>
+							<label style="float: left;">Brands:</label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label>Source:</label>
+							<label style="float: left;">Source:</label>
 							{{$render->source()}}
 						</div>
 						<div class="col">
-							<label>Sales Rep Group:</label>
+							<label style="float: left;">Sales Rep Group:</label>
 							{{$render->salesRepGroup($salesRepGroup)}}
 						</div>
 						<div class="col">
-							<label>Sales Rep:</label>
+							<label style="float: left;">Sales Rep:</label>
 							{{$render->salesRep($salesRep)}}
 						</div>
 						<div class="col">
-							<label>Months:</label>
+							<label style="float: left;">Months:</label>
 							{{$render->months()}}
 						</div>
 						<div class="col">
-							<label>Currency:</label>
+							<label style="float: left;">Currency:</label>
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
-							<label>Value:</label>
+							<label style="float: left;">Value:</label>
 							{{$render->value()}}
 						</div>
 						<div class="col">
-							<input type="submit" value="Search" class="btn btn-primary">		
+							<input type="submit" value="Generate" class="btn btn-primary">		
 						</div>
 					</div>
 				</form>
@@ -58,5 +58,6 @@
 		</div>
 	</div>
 
+	<div id="vlau"></div>
 
 @endsection
