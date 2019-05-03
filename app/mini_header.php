@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
 
-class digital extends Management {
+class mini_header extends Management {
     
     public function sum($con, $value, $columnsName, $columnsValue){
-        
-        $sql = new sql();
+    	
+    	$sql = new sql();
 
-        $table = "digital";
+        $table = "mini_header";
 
         $sum = "$value";
 

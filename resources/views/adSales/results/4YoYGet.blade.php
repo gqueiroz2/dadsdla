@@ -8,97 +8,95 @@
 
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('YoYResultsPost') }}">
-		
-		@csrf
-
-		<div class="container-fluid">
-			<div class="row">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<form class="form-inline" role="form" method="POST" action="{{ route('YoYResultsPost') }}">
+				@csrf
 				
-				<!-- Region Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Sales Region</label>
-						{{ $render->region($salesRegion) }}
+					<!-- Region Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label>Sales Region</label>
+							{{ $render->region($salesRegion) }}
+						</div>
 					</div>
-				</div>
 
-				<!-- Year Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Year</label>
-						{{ $render->year() }}
+					<!-- Year Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label>Year</label>
+							{{ $render->year() }}
+						</div>
 					</div>
-				</div>
 
-				<!-- Brand Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Brand</label>
-						{{ $render->brand($brandsValue) }}
+					<!-- Brand Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label>Brand</label>
+							{{ $render->brand($brandsValue) }}
+						</div>
+					</div>	
+
+					<!-- 1st Pos Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> 1st Pos </label>
+							<select id="firstPos" name="firstPos" style="width: 100%;">
+								<option id="option1" value=''> Select </option>
+							</select>
+						</div>
+					</div>	
+
+					<!-- 2st Pos Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> 2st Pos </label>
+							<select id="secondPos" name="secondPos" style="width: 100%;">
+								<option value=""> Select </option>
+							</select> 
+						</div>
+					</div>	
+
+					<!-- 3st Pos Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> 3st Pos </label>
+							<select id="thirdPos" name="thirdPos" style="width: 100%;">
+								<option value=''> All Selected </option>
+							</select>
+						</div>
+					</div>	
+
+					<!-- Currency Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> Currency </label>
+							<select id="currency" name="currency" style="width: 100%;">
+								<option value=""> Select </option>
+							</select>
+						</div>
+					</div>	
+
+					<!-- Value Area -->
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> Value </label>
+							{{ $render->value() }}
+						</div>
 					</div>
-				</div>	
 
-				<!-- 1st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 1st Pos </label>
-						<select id="firstPos" name="firstPos" style="width: 100%;">
-							<option id="option1" value=''> Select </option>
-						</select>
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label> &nbsp; </label>
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
+						</div>
 					</div>
-				</div>	
 
-				<!-- 2st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 2st Pos </label>
-						<select id="secondPos" name="secondPos" style="width: 100%;">
-							<option value=""> Select </option>
-						</select> 
-					</div>
-				</div>	
-
-				<!-- 3st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 3st Pos </label>
-						<select id="thirdPos" name="thirdPos" style="width: 100%;">
-							<option value=''> All Selected </option>
-						</select>
-					</div>
-				</div>	
-
-				<!-- Currency Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> Currency </label>
-						<select id="currency" name="currency" style="width: 100%;">
-							<option value=""> Select </option>
-						</select>
-					</div>
-				</div>	
-
-				<!-- Value Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> Value </label>
-						{{ $render->value() }}
-					</div>
-				</div>	
-
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> &nbsp; </label>
-						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
-					</div>
-				</div>
-				
-
+				</form>
 			</div>
 		</div>
-
-	</form>
+	</div>
 
 	<div id="vlau"></div>
 
@@ -107,7 +105,6 @@
 		$(document).ready(function(){
 
 			$('#region').change(function(){
-
 
 				var region = $(this).val();
 

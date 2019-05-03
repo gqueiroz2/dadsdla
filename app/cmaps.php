@@ -66,7 +66,7 @@ class cmaps extends Management{
         return $cmaps;
     }
 
-    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+    public function sum($con, $value, $columnsName, $columnsValue){
         
         $sql = new sql();
 
@@ -80,7 +80,9 @@ class cmaps extends Management{
 
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
 
-        $res = $sql->fetchSum($result, $sum);
+        $res = $sql->fetchSum($result, $as);
+
+        return $res;
     }
  
 }

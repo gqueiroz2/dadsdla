@@ -9,6 +9,7 @@ class Render extends Model{
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
     public function region($region){
+
     	echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
@@ -32,6 +33,7 @@ class Render extends Model{
     }
 
     public function brand($brand){
+
     	echo "<select id='brand' name='brand[]' multiple='true' style='width:100%;'>";
     		echo "<option value='dn' selected='true'> DN </option>";
     		
@@ -56,7 +58,9 @@ class Render extends Model{
     }
 */
     public function source(){
+
         echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
+
             echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";

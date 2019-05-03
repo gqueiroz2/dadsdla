@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class sql extends Model{
     
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
-        
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";    
         $res = $con->query($sql);
         return $res;
@@ -16,9 +15,7 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        var_dump($sql);
         $res = $con->query($sql);
-        var_dump($res);
         return $res;
     }
 
@@ -40,7 +37,7 @@ class sql extends Model{
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
-    			for ($i=0; $i < sizeof($from); $i++) { 
+    			for ($i=0; $i < sizeof($from); $i++) {
     				$info[$count][$to[$i]] = $row[$from[$i]];  				
     			}
     			$count++;
@@ -54,7 +51,7 @@ class sql extends Model{
     }
 
     public function fetchSum($result,$sum){
-
+        
         if($result && $result->num_rows > 0){            
             $row = $result->fetch_assoc();                
                 $info[$sum] = doubleval($row[$sum]);               

@@ -18,7 +18,7 @@
         <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 
         <script src="/js/base.js"></script>
-
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <!-- David Stutz bootstrap-multiselect 
         <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
         <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">

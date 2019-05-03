@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
 use App\Render;
+use App\renderYoY;
 use App\region;
 use App\dataBase;
 use App\salesRep;
@@ -59,9 +60,9 @@ class ajaxController extends Controller{
 
         $year = Request::get("year");
 
-        $render = new Render();
+        $renderYoY = new renderYoY();
 
-        $render->font($region[0]['name'], $year);
+        $renderYoY->source($region[0]['name'], $year);
     }
 
 
@@ -118,8 +119,9 @@ class ajaxController extends Controller{
     public function currencyByRegion(){
         $db = new dataBase();
         $con = $db->openConnection('DLA');
+        
         $pr = new pRate();
-        $regionID = array(Request::get('regionID'));
+        $regionID = array(Request::get('region'));
         
         $currency = $pr->getCurrencyByRegion($con,$regionID);
 

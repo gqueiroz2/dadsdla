@@ -7,11 +7,14 @@ use App\dataBase;
 use App\region;
 use App\brand;
 use App\Render;
-use App\YoY;
+use App\resultsYoY;
+use App\base;
+use App\pRate;
+use App\renderYoY;
 
 class resultsYoYController extends Controller{
 
-    public function YoYGet(){
+    public function get(){
 
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -24,43 +27,55 @@ class resultsYoYController extends Controller{
         $brands = new brand();
         $brandsValue = $brands->getBrand($con);
 
-        return view("adSales.results.YoYGet", compact('render', 'salesRegion', 'brandsValue'));
+        return view("adSales.results.4YoYGet", compact('render', 'salesRegion', 'brandsValue'));
 
     }
 
-    public function YoYPost(){
+    public function post(){
+
+    	$base = new base();
 
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
 
-    	$regionID = Request::get("region");
+        //seleciona as brands que foram escolhidas
+        $brand = Request::get("brand");
+        $brands = new brand();
+        $brandsValue = $brands->getBrand($con);
+        $brandsValueAux = $base->getBrands();
+        $b = $base->handleBrand($con,$brands,$brand);
+
+    	$region = Request::get("region");
     	$r = new region();
-    	$regionName = $r->getRegion($con, array($regionID));
+    	$salesRegion = $r->getRegion($con);
 
     	$year = Request::get("year");
-    	$brand = Request::get("brand");
+    	
     	$currency = Request::get("currency");
     	$value = Request::get("value");
-    	$form1 = Request::get("firstPos");
-    	$form2 = Request::get("secondPos");
 
-    	$yearLine1 = $year - 1;
-    	$nameLine1 = "Real $yearLine1";
-
-    	$nameLine2 = "Target $year";
-
-    	$nameLine3 = "Real $year";
-
+    	$form = Request::get("firstPos");
+    	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
-        $brandsName = $yoy->getBrandsName($con, $brand);
+        
+        //pegando valores das linhas das tabelas
+        $lines = $yoy->lines($con, $b, $region, $year, $value, $form, $source);
+        
+        //criando matriz que será renderizada
+    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);
 
+    	$render = new Render();
+    	$renderYoY = new renderYoY();
 
-        $lineForm1 = $yoy->line($con,$table,$year,$value,$regionID);
+    	$brandsValueArray = array();
+    	for ($i=0; $i < sizeof($b); $i++) { 
+    		$index = intval($b[$i]);
+    		$index -= 1;
+    		$brandsValueArray[$i] = $brandsValueAux[$index];
+    	}
 
-        $lineForm1 = $yoy->line13Get($con, $form1, $yearLine1, $value, $regionID);
-        $lineForm2 = $yoy->line2Get($con, $form2, $regionID, $year);
-        $lineForm1 = $yoy->line13Get($con, $form1, $year, $value, $regionID);
-        //var_dump($brandsName);
+    	//var_dump($matrix);
 
+	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'brandsValueArray', 'form', 'year', 'value', 'currency', 'matrix'));
     }
 }
