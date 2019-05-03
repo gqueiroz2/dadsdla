@@ -49,9 +49,9 @@ class resultsYoYController extends Controller{
 
     	$nameLine2 = "Target $year";
 
-    	$nameLine3 = "Real $year"
+    	$nameLine3 = "Real $year";
 
-        $yoy = new YoY();
+        $yoy = new resultsYoY();
         $brandsName = $yoy->getBrandsName($con, $brand);
 
 
