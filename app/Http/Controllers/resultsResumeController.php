@@ -60,32 +60,59 @@ class resultsResumeController extends Controller{
 		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
-		$tableCMAPS = "cmaps";
+		
+		if($regionID == 1){
+			$tableSales = "cmaps";
+		}else{
+			$table = "mini_header";
+		}
 		$tableTarget = "plan_by_brand";
-		$joinCMAPS = false;
+		$tableActual = $tableTarget;
+		$tableCorporate = $tableActual;
+		
+		$joinSales = false;
 		$joinTarget = false;
+		$joinActual = false;
+		$joinCorporate = false;
+
 		for ($m=0; $m < sizeof($month); $m++) { 
-            $whereCMAPS[$m] = "WHERE (cmaps.month IN (".$month[$m][1].") ) ";//" AND ( cmaps.brand_id IN ($id) )";
+            /* SE FOR CMAPS */
+            $whereSales[$m] = "WHERE (cmaps.month IN (".$month[$m][1].") ) AND ( cmaps.year IN ($cYear) )";
+            /* FAZER SE FOR HEADER */
+
+            /* SE FOR CMAPS */
+            $whereSalesPYear[$m] = "WHERE (cmaps.month IN (".$month[$m][1].") ) AND ( cmaps.year IN ($pYear) )";
+            /* FAZER SE FOR HEADER */
         }
+
         if($value == "gross"){$tr = "GROSS";}else{$tr = "NET";}
+        
         for ($m=0; $m < sizeof($month); $m++) { 
             $whereTarget[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
+            					   AND ( source  = \"TARGET\" )
+                                   AND ( type_of_revenue = \"".$tr."\" )";
+
+            $whereActual[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
+            					   AND ( source  = \"ACTUAL\" )
+                                   AND ( type_of_revenue = \"".$tr."\" )";
+
+            $whereCorporate[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
+            					   AND ( source  = \"CORPORATE\" )
                                    AND ( type_of_revenue = \"".$tr."\" )";
         }
 
-		$cmaps = $resume->generateVector($con,$tableCMAPS,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinCMAPS,$whereCMAPS);
-		
-
-		$target = $resume->generateVector($con,$tableTarget,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinTarget,$whereTarget);	
-
-		$actual = $cmaps;
+		$salesCYear = $resume->generateVector($con,$tableSales,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinSales,$whereSales);
+		$target = $resume->generateVector($con,$tableTarget,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinTarget,$whereTarget);
+		$actual = $resume->generateVector($con,$tableActual,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinActual,$whereActual);	
+		$corporate = $resume->generateVector($con,$tableCorporate,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinCorporate,$whereCorporate);;
+		/*
 		$pAndR = $cmaps;
 		$finance = $cmaps;
-		$previousYear = $target;
+		*/
+		$previousYear = $resume->generateVector($con,$tableSales,$regionID,date('Y'),$month,$brandID,$currencyID,$value,$joinSales,$whereSalesPYear);
 
 		//$id = implode(",", $brandID);
-		$matrix = $resume->assembler($month,$cmaps,$actual,$target,$pAndR,$finance,$previousYear);
-
+		$matrix = $resume->assembler($month,$salesCYear,$actual,$target,$corporate/*$pAndR,$finance*/,$previousYear);
 		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear'));
 
 	}

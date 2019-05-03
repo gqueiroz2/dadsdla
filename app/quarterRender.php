@@ -28,8 +28,8 @@ class quarterRender extends Render
     	echo "<select name='secondPos'>";
     		echo "<option value=''> Select </option>";
     		echo "<option value='IBMS'> IBMS </option>";
-    		echo "<option value='CMAPS'> CMAPS </option>";
-    		echo "<option value='Header'> Header </option>";//somente se for brasil a região selecionada
+    		echo "<option value='CMAPS'> CMAPS </option>";//somente se for brasil a região selecionada
+    		echo "<option value='Header'> Header </option>";
     	echo "</select>";
     }
 }

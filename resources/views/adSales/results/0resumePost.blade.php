@@ -51,12 +51,18 @@
 						<th class="lightBlue"> Sales </th>
 						<th class="lightBlue"> Actual </th>
 						<th class="darkBlue"> Target </th>
+						<th class="darkBlue"> Corporate </th>
+						<!--
 						<th class="darkBlue"> P&R FCST </th>
 						<th class="darkBlue"> Finance FCST </th>
+						-->
 						<th class="darkBlue"> {{$pYear}} </th>
-						<th class="grey"> Sales/Plan </th>
+						<th class="grey"> Sales/Target </th>
+						<th class="grey"> Sales/Corporate </th>
+						{{--
 						<th class="grey"> Sales/P&R </th>
 						<th class="grey"> Sales/Finance </th>
+						--}}
 						<th class="grey"> Sales/{{$pYear}} </th>
 					</tr>
 					@for($m = 0;$m < sizeof($matrix);$m++)
@@ -70,13 +76,19 @@
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['sales']) }} </td>
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['actual']) }} </td>
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['target']) }} </td>
+								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['corporate']) }} </td>
+								{{--
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['pAndR']) }} </td>
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['finance']) }} </td>
+								--}}
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['pYear']) }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverTarget']) }} </td>
+								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverTarget']) }}% </td>
+								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverCorporate']) }}% </td>
+								{{--
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverPAndR']) }} </td>
 								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverFinance']) }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesYoY']) }} </td>
+								--}}
+								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesYoY']) }}% </td>
 							</tr>
 						
 					@endfor

@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\documentsHead;
 
-class rootSpreadsheet extends Model
-{
+class excel extends Model{
     
 	public function filterMonthYear($matrix){
 
@@ -48,13 +47,6 @@ class rootSpreadsheet extends Model
 	}
 
 	public function fixExcelNumber($number){
-		$number = str_replace(',', '', $number);
-		$number = doubleval($number);
-
-		return $number;
-	}
-
-	public function fixExcelNumber2($number){
 		$number = str_replace('$', '', $number);
 		$number = str_replace(',', '', $number);
 		$number = doubleval($number);

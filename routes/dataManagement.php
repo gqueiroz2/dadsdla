@@ -48,6 +48,12 @@ Route::group(['prefix' => 'dataManagement'],function(){
 
 	Route::group(['prefix' => 'file'],function(){
 
+		Route::get('excel','fileUploadController@excelGet')
+						->name('fileUploadExcelGet');
+
+		Route::post('excel','fileUploadController@excelPost')
+						->name('fileUploadExcelPost');
+
 		Route::post('agency','fileUploadController@agency')	
 						->name('fileUploadAgencyFromExcel');
 

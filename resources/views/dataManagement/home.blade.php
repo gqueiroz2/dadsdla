@@ -63,8 +63,18 @@
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('fileUploadExcelGet') }}" style="color: white">
+											Excel
+										</a>
+									</button>
+								</div>
+							</div>
 
-										<a href="#" style="color: white">
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+
+										<a href="{{ route('dataManagementAgencyGetFromExcel') }}" style="color: white">
 											Agency from Excel
 										</a>
 									</button>	
