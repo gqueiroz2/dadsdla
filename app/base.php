@@ -7,8 +7,6 @@ use App\dataBase;
 
 class base extends Model{
 
-    protected $monthNumber = array('1','2','3','4','5','6','7','8','9','10','11','12');
-
     protected $month = array( array("Jan",1),
                               array("Feb",2),
                               array("Mar",3),
@@ -27,6 +25,20 @@ class base extends Model{
 
     public function getMonth(){
         return $this->month;
+    }
+
+    public function getYtdMonth(){
+        $month = date('n');
+        $tmp = array();
+
+        for ($i=0; $i <sizeof($this->month) ; $i++) { 
+            array_push($tmp,$this->month[$i]);
+            if ($month == $this->month[$i][2]) {
+                break;
+            }
+        }
+
+        return $tmp;
     }
 
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
@@ -58,7 +70,6 @@ class base extends Model{
 
     
     public function handleBrand($con,$b,$array){
-        $b = new brand();
         $check = false;
         for ($a=0; $a < sizeof($array); $a++) { 
             if($array[$a] == 'dn'){
@@ -77,23 +88,7 @@ class base extends Model{
         return $return;
     }
 
-    public function getMonthNumber(){
-        return $this->monthNumber;
-    }
-
-    public function getYtdMonthNumber(){
-        $month = date('n');
-        $tmp = array();
-
-        for ($i=0; $i <sizeof($this->monthNumber) ; $i++) { 
-            array_push($tmp,$this->monthNumber[$i]);
-            if ($month == $this->monthNumber[$i]) {
-                break;
-            }
-        }
-
-        return $tmp;
-    }
+    
 
     public function getSalesRegion(){   
         return $this->salesRegion;

@@ -22,15 +22,6 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label class="labelLeft"><span class="bold"> Currency: </span></label>
-							<label>Font:</label>
-							{{$render->font($region,2019)}}
-						</div>
-						<div class="col">
-							<label>Months:</label>
-							{{$render->months()}}
-						</div>
-						<div class="col">
 							<label>Currency:</label>
 							{{$render->currency($currency)}}
 						</div>

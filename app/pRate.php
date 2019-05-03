@@ -101,6 +101,9 @@ class pRate extends Management{
 
 		$table = "currency c";
 		$where = "";
+
+		$where = "";
+
 		if($id){
 			$ids = implode($id);
 			$where .= "WHERE c.ID IN ($ids)";
@@ -112,6 +115,7 @@ class pRate extends Management{
 
 		$join = "LEFT JOIN region r ON c.region_id = r.ID";
 		$result = $sql->select($con,$columns,$table,$join,$where);
+
 		$from = array('id','name','region');	
 		
 		$currency = $sql->fetch($result,$from,$from);

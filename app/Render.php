@@ -41,7 +41,7 @@ class Render extends Model{
     		
     	echo "</select>";
     }
-
+/*
     public function font(){
     	echo "<select name='font' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
@@ -53,6 +53,16 @@ class Render extends Model{
                 echo "<option value='Header'> Real (HEADER) </option>";//somente se for brasil a região 
     		
     	echo "</select>";	
+    }
+*/
+    public function source(){
+        echo "<select name='font' style='width:100%;'>";
+            echo "<option value=''> Select </option>";
+            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='CMAPS'> CMAPS </option>";
+            echo "<option value='HEADER'> HEADER </option>";//somente se for brasil a região selecionada
+            
+        echo "</select>";   
     }
 
     public function salesRepGroup($salesRepGroup){
