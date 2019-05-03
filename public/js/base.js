@@ -6,6 +6,8 @@ function ajaxSetup(){
 	});
 }
 
+
+
 function getSubLevelGroupByRegion(regionID){
 	$.ajax({
 		url:"/dataManagement/ajax/subLevelGroupByRegion",
