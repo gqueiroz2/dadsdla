@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
 use App\Render;
+use App\renderYoY;
 use App\region;
 use App\dataBase;
 
@@ -94,8 +95,8 @@ class ajaxController extends Controller{
 
         $year = Request::get("year");
 
-        $render = new Render();
+        $renderYoY = new renderYoY();
 
-        $render->font($region[0]['name'], $year);
+        $renderYoY->source($region[0]['name'], $year);
     }
 }

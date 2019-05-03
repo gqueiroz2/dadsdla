@@ -7,18 +7,18 @@ use App\dataBase;
 
 class base extends Model{
 
-    protected $month = array( array("Jan",1),
-                              array("Feb",2),
-                              array("Mar",3),
-                              array("Apr",4),
-                              array("May",5),
-                              array("Jun",6),
-                              array("Jul",7),
-                              array("Aug",8),
-                              array("Sep",9),
-                              array("Oct",10),
-                              array("Nov",11),
-                              array("Dec",12)
+    protected $month = array( array("Jan",1, "January"),
+                              array("Feb",2, "February"),
+                              array("Mar",3, "March"),
+                              array("Apr",4, "April"),
+                              array("May",5, "May"),
+                              array("Jun",6, "June"),
+                              array("Jul",7, "July"),
+                              array("Aug",8, "August"),
+                              array("Sep",9, "September"),
+                              array("Oct",10, "October"),
+                              array("Nov",11, "November"),
+                              array("Dec",12, "December")
 
                             );
 
@@ -70,21 +70,28 @@ class base extends Model{
 
     
     public function handleBrand($con,$b,$array){
+        
         $check = false;
+        
         for ($a=0; $a < sizeof($array); $a++) { 
             if($array[$a] == 'dn'){
                 $check = true;
             }
         }
+
         if($check){ 
             $brand = $b->getBrand($con);
+            
             for ($i=0; $i < sizeof($brand); $i++) { 
                 $brandID[$i] = $brand[$i]['id'];
             }
+
             $return = $brandID;
+            
         }else{
             $return = $array;
         }
+
         return $return;
     }
 

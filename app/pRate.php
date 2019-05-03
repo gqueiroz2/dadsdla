@@ -10,7 +10,7 @@ use App\region;
 
 class pRate extends Management{
     
-	public function getPRate($con,$id){
+	public function getPRate($con, $id = false){
 		$where = "";
 
 		if($id){
@@ -115,14 +115,9 @@ class pRate extends Management{
 
 		$join = "LEFT JOIN region r ON c.region_id = r.ID";		
 
-<<<<<<< HEAD
-=======
 		$order = "3";
->>>>>>> b6ae98f9e8c7814fd1742d64febd05d29ef578ed
 
 		$result = $sql->select($con,$columns,$table,$join,$where);
-
-
 
 		$from = array('id','name','region');	
 		

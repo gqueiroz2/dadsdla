@@ -85,7 +85,7 @@
 						<label> Value </label>
 						{{ $render->value() }}
 					</div>
-				</div>	
+				</div>
 
 				<div class="col-12 col-lg">
 					<div class="form-inline">
@@ -107,7 +107,7 @@
 		$(document).ready(function(){
 
 			$('#region').click(function(){
-
+			
 				var region = $(this).val();
 
 				if (region != "") {

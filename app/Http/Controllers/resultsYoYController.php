@@ -7,11 +7,13 @@ use App\dataBase;
 use App\region;
 use App\brand;
 use App\Render;
-use App\YoY;
+use App\resultsYoY;
+use App\base;
+use App\pRate;
 
 class resultsYoYController extends Controller{
 
-    public function YoYGet(){
+    public function get(){
 
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -28,37 +30,40 @@ class resultsYoYController extends Controller{
 
     }
 
-    public function YoYPost(){
+    public function post(){
+
+    	$base = new base();
 
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
 
-    	$regionID = Request::get("region");
+        //seleciona as brands que foram escolhidas
+        $brand = Request::get("brand");
+        $brands = new brand();
+        $b = $base->handleBrand($con,$brands,$brand);
 
+    	$region = Request::get("region");
     	$year = Request::get("year");
-    	$brand = Request::get("brand");
+    	
     	$currency = Request::get("currency");
     	$value = Request::get("value");
-    	$form1 = Request::get("firstPos");
-    	$form2 = Request::get("secondPos");
+    	$form = Request::get("firstPos");
 
-    	$yearLine1 = $year - 1;
-    	$nameLine1 = "Real $yearLine1";
+    	/*$columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+    	$values = array(1, 2, 2019, 1);
 
-    	$nameLine2 = "Target $year";
+    	$mini = new mini_header();
+    	$res = $mini->sum($con, 'gross_revenue', $columns, $values, $region, $year);*/
+    	
+        $yoy = new resultsYoY();
 
-    	$nameLine3 = "Real $year"
+        $p = new pRate();
+        $pRate = $p->getCurrency($con, array($currency));
+		var_dump($currency);//var_dump($pRate);
 
-        $yoy = new YoY();
-        $brandsName = $yoy->getBrandsName($con, $brand);
-
-
-        $lineForm1 = $yoy->line($con,$table,$year,$value,$regionID);
-
-        $lineForm1 = $yoy->line13Get($con, $form1, $yearLine1, $value, $regionID);
-        $lineForm2 = $yoy->line2Get($con, $form2, $regionID, $year);
-        $lineForm1 = $yoy->line13Get($con, $form1, $year, $value, $regionID);
-        //var_dump($brandsName);
-
+        //pegando valores das linhas das tabelas
+        /*$lines = $yoy->lines($con, $b, $region, $year, $value, $form);
+        
+    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);*/
     }
 }
