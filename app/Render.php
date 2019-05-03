@@ -9,7 +9,8 @@ class Render extends Model{
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
     public function region($region){
-    	echo "<select name='region' id='region' style='width:100%;' class='form-control'>";
+
+    	echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
     			echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
@@ -24,7 +25,7 @@ class Render extends Model{
         $currentYear = intval(date('Y'));
         $year = array($currentYear, $currentYear-1);
 
-    	echo "<select id='year' name='year' style='width:100%;'>";
+    	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
     		echo "<option value='$year[0]'> $year[0] </option>";
     		echo "<option value='$year[1]'> $year[1] </option>";
@@ -32,7 +33,8 @@ class Render extends Model{
     }
 
     public function brand($brand){
-    	echo "<select name='brand[]' id='brand' multiple='true' style='width:100%;'>";
+
+    	echo "<select id='brand' name='brand[]' multiple='true' style='width:100%;'>";
     		echo "<option value='dn' selected='true'> DN </option>";
     		
             for ($i = 0; $i < sizeof($brand); $i++) { 
@@ -43,7 +45,9 @@ class Render extends Model{
     }
 
     public function source(){
-        echo "<select name='source' style='width:100%;'>";
+
+        echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
+
             echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";
@@ -53,24 +57,16 @@ class Render extends Model{
     }
 
     public function salesRepGroup($salesRepGroup){
-    	echo "<select name='salesRepGroup' style='width:100%;'>";
-    		echo "<option value='all'> All </option>";
-    		
-            for ($i = 0; $i < sizeof($salesRepGroup); $i++) { 
-	    		echo "<option value='".$salesRepGroup[$i]["id"]."'>".$salesRepGroup[$i]["name"]."</option>";
-    		}
+    	echo "<select id='salesRepGroup' name='salesRepGroup' style='width:100%;' class='form-control'>";
+    		echo "<option value=''> Select </option>";
 
     	echo "</select>";	
 
     }
 
     public function salesRep($salesRep){
-    	echo "<select name='salesRep' style='width:100%;'>";
-    		echo "<option value='all'>All</option>";
-    		
-            for ($i = 0; $i < sizeof($salesRep); $i++) { 
-    			echo "<option value='".$salesRep[$i]["id"]."'>".$salesRep[$i]["salesRep"]."</option>";
-    		}
+    	echo "<select id='salesRep' name='salesRep' style='width:100%;' class='form-control'>";
+    		echo "<option value=''>Select</option>";
 
     	echo "</select>";	
 
@@ -78,7 +74,7 @@ class Render extends Model{
 
     public function months(){
 
-    	echo "<select name='month[]' multiple='true' style='width:100%;'>";
+    	echo "<select id='month' name='month[]' multiple='true' style='width:100%;'>";
             echo "<option selected='true' value='all'>All</option>";
     		echo "<option value='ytd'>YTD</option>";
             
@@ -90,18 +86,18 @@ class Render extends Model{
     }
 
     public function currency($currency){
-    	echo "<select name='currency' style='width:100%;'>";
+    	echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
     		
             for ($i = 0; $i < sizeof($currency); $i++) { 
-    			echo "<option value='".$currency[$i]["id"]."'>".$currency[$i]["name"]."</option>";
+    			echo "<option value='".$currency[$i]["name"]."'>".$currency[$i]["name"]."</option>";
     		}
 
     	echo "</select>";
     }
 
     public function value(){
-    	echo "<select name='value' style='width:100%;'>";
+    	echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
     		echo "<option value='gross'> Gross </option>";
     		echo "<option value='net'> Net </option>";

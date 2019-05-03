@@ -106,8 +106,8 @@
 
 		$(document).ready(function(){
 
-			$('#region').click(function(){
-			
+			$('#region').change(function(){
+
 				var region = $(this).val();
 
 				if (region != "") {

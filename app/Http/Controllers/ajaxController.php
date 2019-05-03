@@ -7,6 +7,8 @@ use App\Render;
 use App\renderYoY;
 use App\region;
 use App\dataBase;
+use App\salesRep;
+use App\pRate;
 
 class ajaxController extends Controller{
 
@@ -23,43 +25,6 @@ class ajaxController extends Controller{
         echo "<option> Selecione </option>";
         echo "<option value='ibms'> IBMS ".$year." </option>";
         echo "<option value='cmaps'> CMAPS/Header ".$year." </option>";
-    }
-
-    public function currencyByRegion(){
-
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-
-        $salesRegion = Request::get("region");
-
-        $regions = new region();
-        $region = $regions->getRegion($con, array($salesRegion));
-
-        if($region[0]['name'] == "Argentina"){
-            echo "<select value='currency' style='width:100%;'>";
-                echo "<option value='arg'> ARS </option>";
-                echo "<option value='usd'> USD </option>";
-            echo "</select>";
-        }if($region[0]['name'] == "Brazil"){
-            echo "<select value='currency' style='width:100%;'>";
-                echo "<option value='brl'> BRL </option>";
-                echo "<option value='usd'> USD </option>";
-            echo "</select>";
-        }if($region[0]['name'] == "Colombia"){
-            echo "<select value='currency' style='width:100%;'>";
-                echo "<option value='cop'> COP </option>";
-                echo "<option value='usd'> USD </option>";
-            echo "</select>";
-        }if($region[0]['name'] == "Mexico"){
-            echo "<select value='currency' style='width:100%;'>";
-                echo "<option value='mxn'> MXN </option>";
-                echo "<option value='usd'> USD </option>";
-            echo "</select>";
-        }if($region[0]['name'] == "Pan-Regional"){
-            echo "<select value='currency' style='width:100%;'>";
-                echo "<option value='usd'> USD </option>";
-            echo "</select>";
-        }
     }
 
     public function firstPosByRegion(){
@@ -98,5 +63,78 @@ class ajaxController extends Controller{
         $renderYoY = new renderYoY();
 
         $renderYoY->source($region[0]['name'], $year);
+    }
+
+
+    public function salesRepGroupByRegion(){
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $regionID = array(Request::get('regionID'));
+        $sr = new salesRep();
+        $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
+        if($salesRepGroup){
+            echo "<option value=''> Select </option>";
+            echo "<option value='all'> All </option>";
+            for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
+                echo "<option value='".$salesRepGroup[$s]["id"]."'>"
+                    .$salesRepGroup[$s]["name"].
+                "</option>";
+            }
+        }else{
+            echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
+        }
+    }
+
+    public function salesRepBySalesRepGroup(){
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $sr = new salesRep();
+        $regionID = Request::get('regionID');
+
+        $salesRepGroupID = array( Request::get('salesRepGroupID') );         
+
+        if ($salesRepGroupID[0] == 'all') {
+            $regionID = array($regionID);
+            $salesRep = $sr->getSalesRepByRegion($con,$regionID);
+        }else{
+            $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
+        }
+
+
+
+         if($salesRep){
+            echo "<option value=''> Select </option>";
+            echo "<option value='all'> All </option>";
+            for ($s=0; $s < sizeof($salesRep); $s++) { 
+                echo "<option value='".$salesRep[$s]["id"]."'>"
+                    .$salesRep[$s]["salesRep"].
+                "</option>";
+            }
+        }else{
+            echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+        }
+    }
+
+
+    public function currencyByRegion(){
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $pr = new pRate();
+        $regionID = array(Request::get('regionID'));
+        
+        $currency = $pr->getCurrencyByRegion($con,$regionID);
+
+        if ($currency) {
+            for ($c=0; $c <sizeof($currency); $c++) {
+                if ($currency[$c]["name"] != "USD" ) {
+                    echo "<option value='".$currency[$c]["name"]."'>".$currency[$c]["name"]."</option>";
+                }
+            }
+            echo "<option value='USD'>USD</option>";
+        }else{
+            echo "<option value=''> There is no Currency for this Region </option>";
+        }
+        //echo $regionID;
+
     }
 }

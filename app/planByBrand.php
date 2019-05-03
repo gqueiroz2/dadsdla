@@ -42,4 +42,21 @@ class planByBrand extends Management{
 
         return $planByBrand;
     }
+
+    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+        
+        $sql = new sql();
+
+        $table = "cmaps";
+
+        $sum = "$value";
+
+        $as = "sum";
+
+        $where = $sql->where($columnsName, $columnsValue);
+
+        $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
+
+        $res = $sql->fetchSum($result, $sum);
+    }
 }

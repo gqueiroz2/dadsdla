@@ -7,6 +7,7 @@ use App\sql;
 use App\base;
 use App\brand;
 use App\salesRep;
+use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
@@ -20,12 +21,13 @@ class share extends results
         $base = new base();
         $sql = new sql();
         $sr = new salesRep();
+        $pr = new pRate();
 
     	//Começando a pegar as informações necessarias
     	$region = Request::get('region');
-    	$year = Request::get('year');
+    	$year = array(Request::get('year'));
     	$brand = Request::get('brand');
-    	$font = Request::get('font');
+    	$source = Request::get('source');
     	$salesRepGroup = Request::get('salesRepGroup');
     	$salesRep = Request::get('salesRep');
         $currency = Request::get('currency');
@@ -33,6 +35,10 @@ class share extends results
         $month = Request::get('month');
 
 
+
+
+
+        $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
         $tmp = $b->getBrand($con);
@@ -50,19 +56,17 @@ class share extends results
                 }
             }
         }
-        
-        //adiciona DN se existir mais de um canal na pesquisa
 
-        //definindo a fonte de cada canal, Digital, VIX e OTH são diferentes do normal
+        //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($t=0; $t <sizeof($tmp); $t++) { 
                 if ($brand[$b] == $tmp[$t]["id"]) {
                     if ($tmp[$t]["name"] == "ONL" || $tmp[$t]["name"] == "VIX") {
-                        $fontBrand[$b] = "Digital";
+                        $sourceBrand[$b] = "Digital";
                     }elseif ($tmp[$t]["name"] == "OTH") {
-                        $fontBrand[$b] = "IBMS";
+                        $sourceBrand[$b] = "IBMS";
                     }else{
-                        $fontBrand[$b] = $font;
+                        $sourceBrand[$b] = $source;
                     }
                 }
             }
@@ -81,11 +85,13 @@ class share extends results
             $month = $tmp;
         }elseif($month[0] == 'ytd'){
             $month = $base->getYtdMonth();
+            $tmp = array();
             for ($m=0; $m <sizeof($month) ; $m++) { 
-                $tmp[$m] = $month[$m];
+                $tmp[$m] = $month[$m][1];
                 $monthName[$m] = $month[$m];
-                $month = $tmp;
             }
+            $month = $tmp;
+
         }else{
             $tmp = $base->getMonth();
             $monthName = array();
@@ -97,7 +103,6 @@ class share extends results
                 }
             }
         }
-
 
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
         $salesRepName = array();
@@ -139,14 +144,14 @@ class share extends results
         }
 
 
-        for ($b=0; $b <sizeof($fontBrand) ; $b++) { 
+        for ($b=0; $b <sizeof($sourceBrand) ; $b++) { 
             //procura tabela para fazer a consulta (digital e OTH são em tabelas diferentes)
-            $table[$b] = $this->defineTable($fontBrand[$b]);
+            $table[$b] = $this->defineTable($sourceBrand[$b]);
             //gera as colunas para o Where
-            $sum[$b] = $this->generateColumns($fontBrand[$b],$value);
+            $sum[$b] = $this->generateColumns($sourceBrand[$b],$value);
         }
 
-        //$where = $this->createWhere($sql,$font,$region,$year,$brand,$salesRep,$month);
+        //$where = $this->createWhere($sql,$source,$region,$year,$brand,$salesRep,$month);
         for ($b=0; $b < sizeof($brand)+1; $b++) { 
             for ($s=0; $s <sizeof($salesRep)+1 ; $s++) {
                 $values[$b][$s] = 0;
@@ -157,34 +162,33 @@ class share extends results
         //gera o where, puxa do banco, gera o total por executivo, e gera DN se tiver mais de um canal
         for ($b=0; $b < sizeof($brand); $b++) { 
             for ($s=0; $s <sizeof($salesRep) ; $s++) {
-                $where[$b][$s] = $this->createWhere($sql,$fontBrand[$b],$region,$year,$brand[$b],$salesRep[$s],$month);
+                $where[$b][$s] = $this->createWhere($sql,$sourceBrand[$b],$region,$year,$brand[$b],$salesRep[$s],$month);
                 $results[$b][$s] = $sql->selectSum($con,$sum[$b],"sum",$table[$b],false,$where[$b][$s]);
                 $values[$b][$s] = $sql->fetchSum($results[$b][$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
             }
         }
 
-
-        $mtx = $this->assembler($brandName,$salesRepName,$values);
+        $mtx = $this->assembler($brandName,$salesRepName,$values,$div);
 
         return $mtx;
     }
 
-    public function generateColumns($font,$value){
-        if ($font == "CMAPS") {
+    public function generateColumns($source,$value){
+        if ($source == "CMAPS") {
             if ($value == "gross") {
                 $columns = "gross";
             }else{
                 $columns = "net";
             }
-        }elseif($font == "IBMS"){
+        }elseif($source == "IBMS"){
             if ($value == "gross") {
                 $columns = "gross_revenue";
             }else{
                 $columns = "net_revenue";
             }
-        }elseif($font == "Header"){
+        }elseif($source == "Header"){
             $columns = "gross_revenue";
-        }elseif ($font == "Digital") {
+        }elseif ($source == "Digital") {
             if ($value == "gross") {
                 $columns = "gross_revenue";
             }else{
@@ -195,34 +199,34 @@ class share extends results
         return $columns;
     }
 
-    public function defineTable($font){
-        if ($font == "CMAPS") {
+    public function defineTable($source){
+        if ($source == "CMAPS") {
             $table = "cmaps";
-        }elseif($font == "IBMS"){
+        }elseif($source == "IBMS"){
             $table = "ytd";
-        }elseif($font == "Header"){
+        }elseif($source == "Header"){
             $table = "mini-header";
-        }elseif($font == "Digital"){
+        }elseif($source == "Digital"){
             $table = "digital";
         }
 
         return $table;
     }
 
-    public function createWhere($sql,$font,$region,$year,$brand,$salesRep,$month){
-        if ($font == "CMAPS") {
+    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
+        if ($source == "CMAPS") {
             $columns = array("year","brand_id","sales_rep_id","month");
             $arrayWhere = array($year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
-        }elseif ($font == "IBMS") {
+        }elseif ($source == "IBMS") {
             $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
-        }elseif ($font == "Header") {
+        }elseif ($source == "Header") {
             $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
-        }elseif ($font == "Digital"){
+        }elseif ($source == "Digital"){
             $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
@@ -233,7 +237,15 @@ class share extends results
         return $where;
     }
 
-    public function assembler($brand,$salesRep,$values){
+    public function assembler($brand,$salesRep,$values,$div){
+
+        var_dump($div);
+
+        for ($b=0; $b <sizeof($values) ; $b++) { 
+            for ($s=0; $s <sizeof($values[$b]) ; $s++) { 
+                $values[$b][$s] = $values[$b][$s]/$div;
+            }
+        }
 
         $mtx["brand"] = $brand;
         $mtx["salesRep"] = $salesRep;

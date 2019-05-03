@@ -47,7 +47,10 @@ class resultsYoYController extends Controller{
     	
     	$currency = Request::get("currency");
     	$value = Request::get("value");
+
     	$form = Request::get("firstPos");
+
+        $yoy = new resultsYoY();
 
     	/*$columns = array("campaign_sales_office_id", "brand_id", "year", "month");
     	$values = array(1, 2, 2019, 1);

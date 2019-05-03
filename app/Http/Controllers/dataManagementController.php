@@ -369,7 +369,7 @@ class dataManagementController extends Controller{
         $con = $db->openConnection('DLA');
         $region = $r->getRegion($con,false);
         $currency = $p->getCurrency($con);
-        $pRate = $p->getPRate($con);
+        $pRate = $p->getPRate($con,null);
         $cYear = date('Y');
         $render = new dataManagementRender();
         return view('dataManagement.pRateGet',compact('region','currency','pRate','cYear','render'));
@@ -383,7 +383,7 @@ class dataManagementController extends Controller{
         $con = $db->openConnection('DLA');
         $region = $r->getRegion($con,"");
         $currency = $p->getCurrency($con);
-        $pRate = $p->getPRate($con);
+        $pRate = $p->getPRate($con,null);
         $cYear = date('Y');
         $render = new dataManagementRender();
 
@@ -424,7 +424,7 @@ class dataManagementController extends Controller{
         $con = $db->openConnection('DLA');
         $region = $r->getRegion($con,false);
         $currency = $p->getCurrency($con);
-        $pRate = $p->getPRate($con);
+        $pRate = $p->getPRate($con,null);
         $cYear = date('Y');
         $render = new dataManagementRender();
         return view('dataManagement.edit.editCurrency',compact('region','currency','pRate','cYear','render'));

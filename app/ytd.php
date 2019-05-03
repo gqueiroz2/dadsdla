@@ -13,7 +13,7 @@ class ytd extends Management{
         example ytd_2019
     */
 
-    public function get($con, $colNames = null, $values = null, $order_by = 1){
+    public function get($con, $colNames = null, $values = null){
 
         $sql = new sql();
 
@@ -73,7 +73,7 @@ class ytd extends Management{
         return $ytd;
     }
 
-    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+    public function sum($con, $value, $columnsName, $columnsValue){
         
         $sql = new sql();
 
@@ -87,6 +87,9 @@ class ytd extends Management{
 
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
 
-        $res = $sql->fetchSum($result, $sum);
+        $res = $sql->fetchSum($result, $as);
+
+        return $res;
     }
+    
 }

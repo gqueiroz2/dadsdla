@@ -26,12 +26,44 @@ class pRate extends Management{
 					c.name AS 'currency',
 					r.name AS 'region'
 				   ";
+
 		$from = array('id','year','value','currency','region');	
 		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
 				 LEFT JOIN region r ON c.region_id = r.ID";
 		$order = "2,5,4";
 		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 		$pRate = $sql->fetch($result,$from,$from);		
+		return $pRate;
+	}
+
+	public function getPRateByRegionAndYear($con,$region,$year){
+		$where = "";
+
+		if($region && $year){
+			$ids = implode($region);
+			$year = implode($year);
+			$where .= "WHERE r.ID IN ($ids) AND p.year = ($year)";
+		}
+
+		$sql = new sql();
+		$table = "p_rate p";
+		$columns = "p.ID AS 'id',					
+					p.year AS 'year',
+					p.value AS 'value',				
+					c.name AS 'currency',
+					r.name AS 'region'
+				   ";
+
+		$from = array('id','year','value','currency','region');	
+		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
+				 LEFT JOIN region r ON c.region_id = r.ID";
+		$order = "2,5,4";
+		$limit = "LIMIT 1";
+		$result = $sql->select($con,$columns,$table,$join,$where,$order,$limit);
+		$pRate = doubleval($sql->fetch($result,$from,$from)[0]['value']);
+		if ($pRate == 0) {
+			$pRate = 1;
+		}	
 		return $pRate;
 	}
 
@@ -100,7 +132,6 @@ class pRate extends Management{
 		$sql = new sql();
 
 		$table = "currency c";
-		$where = "";
 
 		$where = "";
 
@@ -123,6 +154,39 @@ class pRate extends Management{
 		
 		$currency = $sql->fetch($result,$from,$from);
 		return $currency;
+	}
+
+	public function getCurrencyByRegion($con,$id = false){
+
+		$sql = new sql();
+
+		$table = "currency c";
+
+		$where = "";
+
+		if($id){
+			$ids = implode($id);
+			$where .= "WHERE r.ID IN ($ids)";
+		}
+		$columns = "c.ID AS 'id',
+					c.name AS 'name',
+					r.name AS 'region'
+				   ";
+
+		$join = "LEFT JOIN region r ON c.region_id = r.ID";
+
+		$order = "3";
+
+		$result = $sql->select($con,$columns,$table,$join,$where,$order);
+
+
+
+		$from = array('id','name','region');	
+		
+		$currency = $sql->fetch($result,$from,$from);
+		
+		return $currency;
+	
 	}
 
 	public function addCurrency($con){

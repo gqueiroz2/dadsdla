@@ -33,7 +33,7 @@ class base extends Model{
 
         for ($i=0; $i <sizeof($this->month) ; $i++) { 
             array_push($tmp,$this->month[$i]);
-            if ($month == $this->month[$i][2]) {
+            if ($month == $this->month[$i][1]) {
                 break;
             }
         }
@@ -95,7 +95,19 @@ class base extends Model{
         return $return;
     }
 
-    
+    public function generateDiv($con,$pr,$region,$year,$currency){
+        
+        $region = array($region);
+
+        if ($currency == 'USD') {
+            $div = $pr->getPRateByRegionAndYear($con,$region,$year);
+        }else{
+            $div = 1;
+        }
+
+        return $div; 
+
+    }
 
     public function getSalesRegion(){   
         return $this->salesRegion;

@@ -40,3 +40,10 @@ Route::group(['prefix' => 'results'],function(){
 
 
 });
+
+
+Route::group(['prefix' => 'ajaxResults'], function(){
+	Route::post('currencyByRegion','ajaxController@currencyByRegion');
+	Route::post('salesRepGroupByRegion','ajaxController@salesRepGroupByRegion');
+	Route::post('salesRepBySalesRepGroup','ajaxController@salesRepBySalesRepGroup');
+});
