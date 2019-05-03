@@ -43,11 +43,11 @@ class planByBrand extends Management{
         return $planByBrand;
     }
 
-    public function sum($con, $value, $columnsName, $columnsValue, $region, $year){
+    public function sum($con, $value, $columnsName, $columnsValue){
         
         $sql = new sql();
 
-        $table = "cmaps";
+        $table = "plan_by_brand";
 
         $sum = "$value";
 
@@ -57,6 +57,8 @@ class planByBrand extends Management{
 
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
 
-        $res = $sql->fetchSum($result, $sum);
+        $res = $sql->fetchSum($result, $as);
+
+        return $res;
     }
 }

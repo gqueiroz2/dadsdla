@@ -34,10 +34,6 @@ class share extends results
         $value = Request::get('value');
         $month = Request::get('month');
 
-
-
-
-
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
@@ -65,6 +61,8 @@ class share extends results
                         $sourceBrand[$b] = "Digital";
                     }elseif ($tmp[$t]["name"] == "OTH") {
                         $sourceBrand[$b] = "IBMS";
+                    }elseif($tmp[$t]["name"] == "FN" && $region == "1"){
+                        $sourceBrand[$b] = "CMAPS";
                     }else{
                         $sourceBrand[$b] = $source;
                     }
@@ -160,17 +158,95 @@ class share extends results
 
 
         //gera o where, puxa do banco, gera o total por executivo, e gera DN se tiver mais de um canal
+        
+
+        
         for ($b=0; $b < sizeof($brand); $b++) { 
-            for ($s=0; $s <sizeof($salesRep) ; $s++) {
-                $where[$b][$s] = $this->createWhere($sql,$sourceBrand[$b],$region,$year,$brand[$b],$salesRep[$s],$month);
-                $results[$b][$s] = $sql->selectSum($con,$sum[$b],"sum",$table[$b],false,$where[$b][$s]);
-                $values[$b][$s] = $sql->fetchSum($results[$b][$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
+            if ($sourceBrand[$b] == "Header") {
+                $values[$b] = $this->Header($con,$sql,$salesRep,$region,$year,$month,$brand[$b],$table[$b],$sourceBrand[$b],$sum[$b]);
+            }else{
+                $values[$b] = $this->CMAPS_IBMS($con,$sql,$sourceBrand[$b],$region,$year,$brand[$b],$salesRep,$month,$sum[$b],$table[$b]);       
             }
         }
 
         $mtx = $this->assembler($brandName,$salesRepName,$values,$div);
 
         return $mtx;
+    }
+
+    public function Header($con,$sql,$salesRep,$region,$year,$month,$brand,$table,$sourceBrand,$sum){
+        $col = "sales_rep_role, order_reference";
+        
+        $columnsWhere = array("campaign_sales_office_id","brand_id","month","year");
+
+        $vars_Where = array($region,$brand,$month,$year);
+
+        $where = $sql->where($columnsWhere,$vars_Where);
+
+        $tmp = $sql->select($con,$col,$table,null,$where);
+
+        $from = array("sales_rep_role","order_reference");
+
+
+        $res = $sql->fetch($tmp,$from,$from);
+
+        $orders = array();
+
+        if ($res) {
+            for ($r=0; $r <sizeof($res) ; $r++) { 
+                if ($res[$r]["sales_rep_role"] == "Sales Representitive") {
+                    array_push($orders, $res[$r]["order_reference"]);
+                }
+            }    
+        }
+
+        $orders = array_unique($orders);
+            
+        $values = array();
+
+        $nOrders = "";
+
+
+        if ($res) {
+            for ($o=0; $o <sizeof($orders) ; $o++) { 
+                if ($o == 0) {
+                    $nOrders .= "'".$orders[$o]."'";
+                }else{
+                    $nOrders .= ",'".$orders[$o]."'";
+                }
+            }
+        }else{
+            $nOrders = "false";
+        }
+
+
+        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+            $values[$s] = 0;
+
+            $where = $this->createWhere($sql,$sourceBrand,$region,$year,$brand,$salesRep[$s],$month);
+
+            $select[$s] = "SELECT SUM(IF($sum IN ($nOrders), $sum*1/2, $sum)) AS sum FROM mini_header $where";
+
+            $resp[$s] = $con->query($select[$s]);
+
+            $from = array("sum");
+
+            $values[$s] = doubleval($sql->fetch($resp[$s],$from,$from)[0]["sum"]);
+
+
+        }
+        
+        return $values;
+    }
+
+
+    public function CMAPS_IBMS($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
+        for ($s=0; $s <sizeof($salesRep) ; $s++) {
+            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand,$salesRep[$s],$month);
+            $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
+            $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
+        }
+        return $values;
     }
 
     public function generateColumns($source,$value){
@@ -187,7 +263,7 @@ class share extends results
                 $columns = "net_revenue";
             }
         }elseif($source == "Header"){
-            $columns = "gross_revenue";
+            $columns = "campaign_option_spend";
         }elseif ($source == "Digital") {
             if ($value == "gross") {
                 $columns = "gross_revenue";
@@ -205,7 +281,7 @@ class share extends results
         }elseif($source == "IBMS"){
             $table = "ytd";
         }elseif($source == "Header"){
-            $table = "mini-header";
+            $table = "mini_header";
         }elseif($source == "Digital"){
             $table = "digital";
         }
@@ -219,15 +295,15 @@ class share extends results
             $arrayWhere = array($year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "IBMS") {
-            $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Header") {
-            $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Digital"){
-            $columns = array("campaing_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
         }else{
@@ -238,8 +314,6 @@ class share extends results
     }
 
     public function assembler($brand,$salesRep,$values,$div){
-
-        var_dump($values);
 
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 

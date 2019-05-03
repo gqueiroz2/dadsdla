@@ -14,7 +14,7 @@ class pRate extends Management{
 		$where = "";
 
 		if($id){
-			$ids = implode($id);
+			$ids = implode(",",$id);
 			$where .= "WHERE p.ID IN ($ids)";
 		}
 

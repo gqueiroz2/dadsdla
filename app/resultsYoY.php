@@ -15,8 +15,8 @@ use App\digital;
 
 class resultsYoY extends results {
     
-    public function lines($con, $brands, $region, $year, $value, $form, $lineNumber){
-        
+    public function lines($con, $brands, $region, $year, $value, $form, $source){
+
         $lines = array();
 
         if (sizeof($brands) == 0) {
@@ -32,9 +32,12 @@ class resultsYoY extends results {
                 }
 
                 for ($j=0; $j < 3; $j++) { 
-                    $lines[$i][$j] = $this->line($con, $brands[$i], $region, $year, $finalValue, $form, ($j+1));
-                }
+                    $lines[$i][$j] = $this->line($con, $brands[$i], $region, $year, $finalValue, $form, ($j+1), $source);
 
+                    if (!$lines[$i][$j]) {
+                        $lines[$i][$j] = "This brand doesn't has values";
+                    }
+                }
             }
         }
 
@@ -42,62 +45,73 @@ class resultsYoY extends results {
 
     }
 
-    public function line($con, $brand, $region, $year, $value, $form, $lineNumber){        
+    public function line($con, $brand, $region, $year, $value, $form, $lineNumber, $source){        
 
         switch ($lineNumber) {
             case 1:
                 
-                $res = $this->createObject($form);
+                $res = $this->createObject($form, $value);
                 $formResp = $res[0];
-
+                
                 if (!is_null($formResp)) {
 
-                    $columns = $formResp[1];
+                    $columns = $res[1];
 
-                    $p = new pRate();
-                    $pRate = 3;
+                    if ($columns) {
 
-                    if (sizeof($columns) == 4) {
-                        $colValues = array($region, $brand, $year);
-                    } else{
-                        $colValues = array($brand, $year);
+                        if (sizeof($columns) == 4) {
+                            $colValues = array($region, $brand, ($year-1));
+                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+
+                        } elseif (sizeof($columns) == 3) {
+                            $colValues = array($brand, ($year-1));
+                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+                        }else{
+
+                            $line = false;
+                        }
+                    }else{
+                        $line = false;
                     }
-
-                    $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $pRate);
+                    
                 }
 
                 break;
             
             case 2:
                 
-                $columns = array("sales_office_id", "brand_id", "year", "month");
-                $colValues = array($region, $brand, $year);
-                array_push($colValues, 0);
-
+                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
+                $colValues = array($region, $source, strtoupper($value), $brand, $year);
+                
                 $p = new planByBrand();
 
-                $pR = new pRate();
-                $pRate = 3;
-
-                $line = $this->lineValues($con, $p, $columns, $colValues, $pRate);
+                $line = $this->lineValues($con, "revenue", $p, $columns, $colValues, $region, $year);
 
                 break;
 
             case 3:
                 
-                $res = $this->createObject($form);
+                $res = $this->createObject($form, $value);
                 $formResp = $res[0];
 
                 if (!is_null($formResp)) {
 
-                    $columns = $formResp[1];
+                    $columns = $res[1];
 
-                    $p = new pRate();
-                    $pRate = 3;
-
-                    $colValues = array($region, $region, $brand, $year);
-
-                    $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $pRate);
+                    if ($columns) {
+                        if (sizeof($columns) == 4) {
+                            $colValues = array($region, $brand, $year);
+                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+                        } elseif (sizeof($columns) == 3) {
+                            $colValues = array($brand, $year);
+                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+                        }else{
+                            $line = false;
+                        }
+                    }else{
+                        $line = false;
+                    }
+                    
                 }
 
                 break;
@@ -111,8 +125,11 @@ class resultsYoY extends results {
         
     }
 
-    public function lineValues($con, $value, $form, $columns, $colValues, $pRate){
+    public function lineValues($con, $value, $form, $columns, $colValues, $region, $year){
         
+        $p = new pRate();
+        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+
         array_push($colValues, 0);
 
         $tam = sizeof($columns);
@@ -129,15 +146,16 @@ class resultsYoY extends results {
             }
 
         }
-
+        
         return $formValue;
     }
 
-    public function createObject($value){
+    public function createObject($form, $value){
         
         $obj = null;
+        $columns = array();
 
-        switch ($value) {
+        switch ($form) {
             case 'IBMS':
                 $obj = new ytd();
 
@@ -183,9 +201,15 @@ class resultsYoY extends results {
         
         $matrix = array();
 
-        for ($i = 0; $i < sizeof($brands); $i++) { 
-            $matrix[$i] = $this->assembler($brand[$i], $lines[$i][0], $lines[$i][1], $lines[$i][2],
-                          $month, $year);
+        for ($i = 0; $i < sizeof($brands); $i++) {
+
+            if (is_string($lines[$i][2])) {
+                $matrix[$i] = $lines[$i][2];       
+            }else{
+                $matrix[$i] = $this->assembler($brands[$i], $lines[$i][2], $lines[$i][1], $lines[$i][0],
+                                                $month, $year);
+            }
+            
         }
 
         return $matrix;
@@ -193,7 +217,7 @@ class resultsYoY extends results {
     }
 
     public function assembler($brand, $valueCurrentYear, $target, $valuePastYear, $month, $year){
-        
+
         $matrix = array();
 
         $valueCurrentYearSum = 0;
@@ -203,7 +227,7 @@ class resultsYoY extends results {
         $difYoYSum = 0;
 
         $matrix['month'][0] = " ";
-        $matrix['valuePastYear'][0] = "Real".($year-1);
+        $matrix['valuePastYear'][0] = "Real ".($year-1);
         $matrix['target'][0] = "Target $year";
         $matrix['valueCurrentYear'][0] = "Real $year";
         $matrix['difExpected'][0] = "Dif. 3° - 2°";
@@ -211,16 +235,16 @@ class resultsYoY extends results {
 
         for ($i = 1; $i <= sizeof($month); $i++) { 
 
-            $matrix['month'][$i] = $month[$i-1][3];
+            $matrix['month'][$i] = $month[$i-1][2];
 
             $matrix['valuePastYear'][$i] = $valuePastYear[$i-1];
-            $valueCurrentYearSum += $valueCurrentYear[$i-1];
+            $valuePastYearSum += $valuePastYear[$i-1];
 
             $matrix['target'][$i] = $target[$i-1];
             $targetSum += $target[$i-1];
 
             $matrix['valueCurrentYear'][$i] = $valueCurrentYear[$i-1];
-            $valuePastYearSum += $valuePastYear[$i-1];
+            $valueCurrentYearSum += $valueCurrentYear[$i-1];
 
             $matrix['difExpected'][$i] = $matrix['valueCurrentYear'][$i] - $matrix['target'][$i];
             $difExpectedSum += $matrix['difExpected'][$i];
@@ -232,12 +256,12 @@ class resultsYoY extends results {
 
         $last = $i;
 
-        $matrix[$last]['month'] = "Total";
-        $matrix[$last]['valuePastYear'] = $valueCurrentYearSum;
-        $matrix[$last]['target'] = $targetSum;
-        $matrix[$last]['valueCurrentYear'] = $valuePastYearSum;
-        $matrix[$last]['difExpected'] = $difExpectedSum;
-        $matrix[$last]['difYoY'] = $difYoYSum;
+        $matrix['month'][$last] = "Total";
+        $matrix['valuePastYear'][$last] = $valuePastYearSum;
+        $matrix['target'][$last] = $targetSum;
+        $matrix['valueCurrentYear'][$last] = $valueCurrentYearSum;
+        $matrix['difExpected'][$last] = $difExpectedSum;
+        $matrix['difYoY'][$last] = $difYoYSum;
 
         return $matrix;
     }

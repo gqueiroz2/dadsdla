@@ -10,6 +10,7 @@ use App\Render;
 use App\resultsYoY;
 use App\base;
 use App\pRate;
+use App\renderYoY;
 
 class resultsYoYController extends Controller{
 
@@ -26,7 +27,7 @@ class resultsYoYController extends Controller{
         $brands = new brand();
         $brandsValue = $brands->getBrand($con);
 
-        return view("adSales.results.YoYGet", compact('render', 'salesRegion', 'brandsValue'));
+        return view("adSales.results.4YoYGet", compact('render', 'salesRegion', 'brandsValue'));
 
     }
 
@@ -40,33 +41,41 @@ class resultsYoYController extends Controller{
         //seleciona as brands que foram escolhidas
         $brand = Request::get("brand");
         $brands = new brand();
+        $brandsValue = $brands->getBrand($con);
+        $brandsValueAux = $base->getBrands();
         $b = $base->handleBrand($con,$brands,$brand);
 
     	$region = Request::get("region");
+    	$r = new region();
+    	$salesRegion = $r->getRegion($con);
+
     	$year = Request::get("year");
     	
     	$currency = Request::get("currency");
     	$value = Request::get("value");
 
     	$form = Request::get("firstPos");
-
+    	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
-
-    	/*$columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-    	$values = array(1, 2, 2019, 1);
-
-    	$mini = new mini_header();
-    	$res = $mini->sum($con, 'gross_revenue', $columns, $values, $region, $year);*/
-    	
-        $yoy = new resultsYoY();
-
-        $p = new pRate();
-        $pRate = $p->getCurrency($con, array($currency));
-		var_dump($currency);//var_dump($pRate);
-
-        //pegando valores das linhas das tabelas
-        /*$lines = $yoy->lines($con, $b, $region, $year, $value, $form);
         
-    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);*/
+        //pegando valores das linhas das tabelas
+        $lines = $yoy->lines($con, $b, $region, $year, $value, $form, $source);
+        
+        //criando matriz que será renderizada
+    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);
+
+    	$render = new Render();
+    	$renderYoY = new renderYoY();
+
+    	$brandsValueArray = array();
+    	for ($i=0; $i < sizeof($b); $i++) { 
+    		$index = intval($b[$i]);
+    		$index -= 1;
+    		$brandsValueArray[$i] = $brandsValueAux[$index];
+    	}
+
+    	//var_dump($matrix);
+
+	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'brandsValueArray', 'form', 'year', 'value', 'currency', 'matrix'));
     }
 }

@@ -44,6 +44,7 @@ class base extends Model{
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");
+    protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX");
     protected $brandTarget = array(  "Discovery",
                                      "Discovery Home and Health",
                                      "Discovery Kids",
@@ -115,6 +116,10 @@ class base extends Model{
 
     public function getBrand(){
         return $this->brand;
+    }
+
+    public function getBrands(){
+        return $this->brands;
     }
 
     public function pattern($type,$region,$pattern,$from,$to,$con){
