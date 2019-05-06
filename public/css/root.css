@@ -1,9 +1,27 @@
-body{
-	text-align:center;
-    vertical-align:middle;
+html {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+    margin-bottom: 60px; /* Margin bottom by footer height */
+    font-size: 10px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 60px;
+    max-height: 120px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #f5f5f5;
+}      
+a {
+    text-decoration:none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: block;
+}  
 
 table{
 	font-weight: bold;
@@ -102,8 +120,13 @@ table{
 }
 
 .medBlue{
+   font-weight: bold;
+   background-color:  #c3d8ef;
+}
+
+.coralBlue{
+    background-color: #bde3ff;
     font-weight: bold;
-    background-color: #c3d8ef;
 }
 
 .rcBlue{
@@ -113,7 +136,6 @@ table{
 
 .lightb{
     background-color: #bde3ff;
-    font-weight: bold;
 }
 
 .othersc{
@@ -121,9 +143,21 @@ table{
     font-weight: bold;
 }
 
+
+.darkBlue{
+    background-color: #0f243e;
+    color: white;
+    font-weight: bold;
+}
+
 .grey{
 	background-color: #757171;
     color:white;
+}
+
+.lightGrey{
+	background-color: #a6a6a6;
+    color:black;	
 }
 
 .odd{

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,36 +28,6 @@
         <link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css">
         <!-- Include the plugin's CSS and JS:-->
         
-
-
-        <style type="text/css">
-  
-            html {
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                position: relative;
-                min-height: 100%;
-            }
-            body {
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
-                margin-bottom: 60px; /* Margin bottom by footer height */
-            }
-            .footer {
-                position: absolute;
-                bottom: 0;
-                width: 100%;
-                min-height: 60px;
-                max-height: 120px; /* Set the fixed height of the footer here */
-                line-height: 60px; /* Vertically center the text there */
-                background-color: #f5f5f5;
-            }      
-            a {
-                text-decoration:none;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                display: block;
-            }  
-
-        </style>
-
         @yield('head')
     </head>
     <body>       
@@ -73,15 +44,16 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
+            <?php $userName = Request::session()->get('userName'); ?>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Resultados </a>
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Resume </a>
-                            <a class="dropdown-item" href="{{ route('monthlyGet')}}"> Monthly </a>
-                            <a class="dropdown-item" href="{{ route('quarterResultsGet') }}"> Quarter </a>
+                            <a class="dropdown-item" href="{{ route('resultsMonthlyGet')}}"> Monthly </a>
+                            <a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
                             <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
                             <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>
@@ -123,9 +95,10 @@
                         <a class="nav-link" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
                     </li>
                 </ul>    
+
                 <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
                     <li class="nav-item dropdown dropleft">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> @User </a>
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#"> Logout </a>
                             <a class="dropdown-item" href="#"> DB Panel </a>

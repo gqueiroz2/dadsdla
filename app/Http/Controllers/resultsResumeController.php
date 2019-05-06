@@ -23,7 +23,6 @@ class resultsResumeController extends Controller{
         $db = new dataBase();
         $con = $db->openConnection("DLA");
         $r = new region();
-        $sr = new salesRep();
         $b = new brand();
         $pr = new pRate();
 		$render = new Render();
@@ -60,15 +59,10 @@ class resultsResumeController extends Controller{
 		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
-		
-
 		$tableSales = $resume->salesTable($regionID);
-
-		
 		$tableTarget = "plan_by_brand";
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
-		
 		$joinSales = false;
 		$joinTarget = false;
 		$joinActual = false;

@@ -2,18 +2,26 @@
 @section('title', 'Share')
 @section('head')	
 	<script src="/js/resultsShare.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
+    
+
+
 	<div class="container-fluid">
 		
 		<div class="row">
 			<div class="col">
 				<form method="POST" action="{{ route('resultsSharePost') }}">
 					@csrf
-					<div class="row">
+					<div class="row justify-content-center">
 						<div class="col col-2">
 							<label class='labelLeft'>Region:</label>
-							{{$render->region($region)}}
+							@if($userLevel == 'L0' || $userLevel == 'L1')								
+								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
+							@endif
 						</div>
 						<div class="col col-2">
 							<label class='labelLeft'>Year:</label>
@@ -31,6 +39,9 @@
 							<label class='labelLeft'>Sales Rep Group:</label>
 							{{$render->salesRepGroup($salesRepGroup)}}
 						</div>
+
+					</div>
+					<div class="row justify-content-center">
 						<div class="col col-2">
 							<label class='labelLeft'>Sales Rep:</label>
 							{{$render->salesRep($salesRep)}}

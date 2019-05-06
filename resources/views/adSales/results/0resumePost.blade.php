@@ -15,7 +15,7 @@
 							{{$render->region($region)}}
 						</div>
 						<div class="col">
-							<label>Brands:</label>
+							<label>Brand:</label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
@@ -37,11 +37,11 @@
 	</div>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row mt-2">
+		<div class="row mt-2	">
 			<div class="col">				
 				<table class="table table-bordered" style="width: 100%;">
 					<tr>
-						<td class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume ({{$currencyS}}/{{$valueS}}) - {{$cYear}} </span> </td>
+						<th class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume ({{$currencyS}}/{{$valueS}}) - {{$cYear}} </span> </th>
 					</tr>
 					<tr>
 						<th class="darkBlue"> Month </th>

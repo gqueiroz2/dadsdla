@@ -315,15 +315,25 @@ class share extends results
 
     public function assembler($brand,$salesRep,$values,$div){
 
+        $base = new base();
+
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 
                 $values[$b][$s] = $values[$b][$s]/$div;
             }
         }
 
+        $brandColor = array();
+
         $mtx["brand"] = $brand;
         $mtx["salesRep"] = $salesRep;
         $mtx["values"] = $values;
+
+        for ($b=0; $b <sizeof($brand) ; $b++) { 
+            $brandColor[$b] = $base->getBrandColor($brand[$b]);
+        }
+
+        $mtx["brandColor"] = $brandColor;        
 
         $dn = array();
         for ($s=0; $s <sizeof($salesRep) ; $s++) { 

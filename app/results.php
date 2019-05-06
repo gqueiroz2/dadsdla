@@ -37,4 +37,18 @@ class results extends Model{
         }
         return $vector;
     }
+
+    public function salesTable($regionID,$year){
+        if($year){
+            if($regionID == 1){ 
+                $table = "cmaps"; 
+            }else{  
+                $table = "mini_header"; 
+            }
+        }else{
+            $table = 'ytd';
+        }
+        return $table;
+    }
+    
 }

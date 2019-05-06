@@ -9,12 +9,12 @@ class renderYoY extends Model {
     public function source($region, $year){
     	echo "<select name='source' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
-            echo "<option value='IBMS'> Real (IBMS) $year </option>";
+            echo "<option value='ytd'> Real (IBMS) $year </option>";
             
             if ($region == 'Brazil') {
-                echo "<option value='CMAPS'> Real (CMAPS) $year </option>";
+                echo "<option value='cmaps'> Real (CMAPS) $year </option>";
             }else{
-                echo "<option value='Header'> Real (Header) $year </option>";//somente se for brasil a região selecionada
+                echo "<option value='mini_header'> Real (Header) $year </option>";//somente se for brasil a região selecionada
             }
     		
     	echo "</select>";	
@@ -27,7 +27,6 @@ class renderYoY extends Model {
         echo "<td ".$class." rowspan='7'>";
             echo "<span style='font-size: 18px'>".$value."</span>";
         echo "</td>";
-
     }
 
     public function renderData($value, $line, $firstColor, $secondColor, $thirdColor=null){
@@ -46,7 +45,6 @@ class renderYoY extends Model {
                 }else{
                     $class = $secondClass;
                 }
-            }
             else{
                 if ($col == 0){
                     $class = $firstClass;

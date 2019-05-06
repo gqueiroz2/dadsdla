@@ -58,11 +58,12 @@ class resultsYoYController extends Controller{
     	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
         
+        //var_dump($b);
         //pegando valores das linhas das tabelas
         $lines = $yoy->lines($con, $b, $region, $year, $value, $form, $source);
         
         //criando matriz que será renderizada
-    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);
+    	$matrix = $yoy->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
 
     	$render = new Render();
     	$renderYoY = new renderYoY();
@@ -74,7 +75,9 @@ class resultsYoYController extends Controller{
     		$brandsValueArray[$i] = $brandsValueAux[$index];
     	}
 
-    	//var_dump($matrix);
+        if (sizeof($brandsValueArray) == 10) {
+            array_push($brandsValueArray, "DN");
+        }
 
 	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'brandsValueArray', 'form', 'year', 'value', 'currency', 'matrix'));
     }

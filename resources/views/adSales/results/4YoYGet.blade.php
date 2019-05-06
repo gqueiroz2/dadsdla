@@ -103,15 +103,10 @@
 	<script type="text/javascript">
 
 		$(document).ready(function(){
-
 			$('#region').change(function(){
-
 				var regionID = $(this).val();
-
 				if (regionID != "") {
-					
 					ajaxSetup();
-
 					$.ajax({
             			url:"/ajax/adsales/currencyByRegion",
             			method:"POST",
@@ -123,15 +118,11 @@
 	                		alert(xhr.status+" "+thrownError);
 	          			}
 	          		});
-
 				}
-
 			});
 
 			$('#year').click(function(){
-				
 				var year = $(this).val();
-
 				if (year != "") {
 					var regionID = $('#region').val();
 

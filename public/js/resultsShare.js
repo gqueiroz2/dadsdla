@@ -26,6 +26,20 @@
             alert(xhr.status+" "+thrownError);
           }
         });
+
+        $.ajax({
+          url:"/ajaxResults/sourceByRegion",
+          method:"POST",
+          data:{regionID},
+          success: function(output){
+            $('#source').html(output);                   
+          },
+          error: function(xhr, ajaxOptions,thrownError){
+            alert(xhr.status+" "+thrownError);
+          }
+        });
+
+
       }
     });
 

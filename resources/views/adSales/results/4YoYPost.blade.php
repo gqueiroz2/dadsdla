@@ -88,45 +88,85 @@
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label> &nbsp; </label>
-							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">	
 						</div>
 					</div>
-
 				</form>
 			</div>
 		</div>
+		
+		<br>
+		
+		<div class="row no-gutters">
+			<div class="col-9"></div>
+			<div class="col-3" style="color: #0070c0;font-size: 25px">
+				Year Over Year ({{$form}}) {{$year}}
+			</div>
+		</div>
+
+		<br>
+
+		<div class="row no-gutters">
+			<div class="col-9"></div>
+			<div class="col-3" style="color: #0070c0;font-size: 25px">
+				<form class="form-inline" method="POST" action="#">
+					@csrf
+					 <button class="btn btn-primary" style="width: 100%">Generate Excel</button>
+				</form>
+			</div>
+		</div>
+
 	</div>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row">
 			<div class="col">
-				<table class="table table-bordered" style="width: 100%">
-					<tr>
-						<td class="darkBlue center" colspan="15">
-							<span style="font-size:18px;"> 
-								Year Over Year :({{$form}}) {{$year}} ({{$value}}/{{strtoupper($currency)}})
-							</span>
-						</td>
-					</tr>
-				</table>
 				<br>
-				@for($i = 0; $i < sizeof($brandsValue); $i++)
-					<table class="table table-bordered table-striped table-sm" style="width: 100%;">
+				<table style="width: 100%">
+					<tbody>
 						<tr>
-							<td class="darkBlue" rowspan="7">
-								<span style="font-size: 18px">
-									{{ $brandsValueArray[$i] }}
+							<td class="lightBlue center" colspan="30">
+								<span style="font-size:18px;"> 
+									Year Over Year :({{$form}}) {{$year}} ({{($value == "gross") ? "Gross" : "Net"}}
+									/{{strtoupper($currency)}})
 								</span>
 							</td>
 						</tr>
-						<tr>{{$renderYoY->renderDataHead($matrix[0]['month'])}}</tr>
-						<tr>{{$renderYoY->renderDataBody($matrix[0]['valuePastYear'])}}</tr>
-						<tr>{{$renderYoY->renderDataBody($matrix[0]['target'])}}</tr>
-						<tr>{{$renderYoY->renderDataBody($matrix[0]['valueCurrentYear'])}}</tr>
-						<tr>{{$renderYoY->renderDataBody($matrix[0]['difExpected'])}}</tr>
-						<tr>{{$renderYoY->renderDataBody($matrix[0]['difYoY'])}}</tr>
-					</table>
-				@endfor
+						<tr><td>&nbsp;</td></tr>
+
+						<?php $size = sizeof($brandsValueArray) ?>
+
+						@for($i = 0; $i < $size; $i++)
+							
+							<tr>{{$renderYoY->brandTable($brandsValueArray[$i], $brandsValueArray[$i])}}</tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][0],1,"grey","darkBlue")}}
+                            </tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][1],2,
+                                "lightb","othersc","smBlue")}}
+                            </tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][2],3,
+                                "rcBlue","othersc","smBlue")}}
+                            </tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][3],4,"rcBlue","smBlue")}}
+                            </tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][4],5,"medBlue","smBlue")}}
+                            </tr>
+                            <tr>
+                                {{$renderYoY->renderData($matrix[$i][5],6,"medBlue","darkBlue")}}
+                            </tr>
+
+                            @if($i != $size-1)
+                                <tr><td>&nbsp;</td></tr>
+                            @endif
+
+						@endfor
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
