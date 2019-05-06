@@ -1,11 +1,8 @@
 @extends('layouts.mirror')
-
 @section('title', 'Resume Results')
-
 @section('head')	
-
+	<script src="/js/resultsResume.js"></script>
 @endsection
-
 @section('content')
 	<div class="container-fluid">
 		<div class="row">

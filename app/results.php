@@ -21,8 +21,6 @@ class results extends Model{
                 $sum = $value;
             }
         }elseif($table == "plan_by_brand"){
-            var_dump($souce);
-            var_dump($where);
             $sum = "revenue";
         }else{
             if($value == "gross"){

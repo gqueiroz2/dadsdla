@@ -121,7 +121,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection('DLA');
         
         $pr = new pRate();
-        $regionID = array(Request::get('region'));
+        $regionID = array(Request::get('regionID'));
         
         $currency = $pr->getCurrencyByRegion($con,$regionID);
 

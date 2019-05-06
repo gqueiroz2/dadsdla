@@ -36,14 +36,14 @@ class dataBase extends Model{
     public function closeConnection(){
         $con->close();
     }
-/*
+
     protected $ip = "127.0.0.1";    
     protected $pass = "";
     protected $user = "root";
-*/
+/*
     protected $ip = "dads-dev-mysql.c7wizdvhr2cq.us-east-1.rds.amazonaws.com";    
     protected $pass = "DT3WDDhmcx63D7HF";
-    protected $user = "rdsroot";    
+    protected $user = "rdsroot";    */
     protected $con;
   
 }

@@ -61,11 +61,10 @@ class resultsResumeController extends Controller{
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
 		
-		if($regionID == 1){
-			$tableSales = "cmaps";
-		}else{
-			$table = "mini_header";
-		}
+
+		$tableSales = $resume->salesTable($regionID);
+
+		
 		$tableTarget = "plan_by_brand";
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;

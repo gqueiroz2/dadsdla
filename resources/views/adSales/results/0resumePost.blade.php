@@ -1,11 +1,8 @@
 @extends('layouts.mirror')
-
 @section('title', 'Resume Results')
-
 @section('head')	
-
+	<script src="/js/resultsResume.js"></script>
 @endsection
-
 @section('content')
 	<div class="container-fluid">
 		<div class="row">
@@ -40,7 +37,7 @@
 	</div>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row">
+		<div class="row mt-2">
 			<div class="col">				
 				<table class="table table-bordered" style="width: 100%;">
 					<tr>

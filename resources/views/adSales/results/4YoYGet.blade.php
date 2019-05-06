@@ -99,23 +99,24 @@
 	</div>
 
 	<div id="vlau"></div>
-
+region
+region
 	<script type="text/javascript">
 
 		$(document).ready(function(){
 
 			$('#region').change(function(){
 
-				var region = $(this).val();
+				var regionID = $(this).val();
 
-				if (region != "") {
+				if (regionID != "") {
 					
 					ajaxSetup();
 
 					$.ajax({
             			url:"/ajax/adsales/currencyByRegion",
             			method:"POST",
-            			data:{region},
+            			data:{regionID},
 	              		success: function(output){
 	                		$('#currency').html(output);
 	              		},

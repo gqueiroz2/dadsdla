@@ -4,38 +4,30 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
         <title> D|ADS DLA - @yield('title') </title>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
 
-        <link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>        
-
-        <script src="/components/jquery/jquery.min.js"></script>        
-        <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
-
-        <script src="/js/base.js"></script>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <!-- David Stutz bootstrap-multiselect 
-        <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
-        <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
-        --><!--
-
-        <script src="/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
-        <link rel="stylesheet" href="/bootstrap-multiselect/css/bootstrap-multiselect.css">
--->
-        <!-- Include the plugin's CSS and JS:-->
-        <script type="text/javascript" src="/multiselect/dist/js/bootstrap-multiselect.js"></script>
-        <link rel="stylesheet" href="/multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
-        {{--
-        <script src="{{ asset('js/app.js') }}" defer></script>
-        <script src="{{ asset('js/jquery.multiselect.js') }}" defer></script>
---}}
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" 
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" 
+                integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
+        </script>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/root.css') }}" rel="stylesheet">
+        <link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>        
+        <script src="/components/jquery/jquery.min.js"></script>        
+        <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/js/base.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <!-- David Stutz bootstrap-multiselect -->
+        <script src="/bootstrap-select/dist/js/bootstrap-select.js"></script>
+        <link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css">
+        <!-- Include the plugin's CSS and JS:-->
+        
+
 
         <style type="text/css">
   
