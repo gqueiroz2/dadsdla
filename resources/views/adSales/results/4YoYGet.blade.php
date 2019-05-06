@@ -99,8 +99,7 @@
 	</div>
 
 	<div id="vlau"></div>
-region
-region
+
 	<script type="text/javascript">
 
 		$(document).ready(function(){

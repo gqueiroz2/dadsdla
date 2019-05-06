@@ -9,6 +9,70 @@ table{
 	font-weight: bold;
 }
 
+.dc{
+	background-color: #0070c0;
+    font-weight: bold;
+    color: white;
+}
+
+.hh{
+	background-color: #ff3300;
+    font-weight: bold;
+    color: white;
+}
+
+.dk{
+    background-color: #ffff00;
+    font-weight: bold;
+}
+
+.ap{
+    background-color: #009933;
+    font-weight: bold;
+    color: white;
+}
+
+.tlc{
+    background-color: #ff0000;
+    font-weight: bold;
+    color: white;
+}
+
+.id{
+    background-color: #000000;
+    font-weight: bold;
+    color: white;
+}
+
+.dt{
+    background-color: #000066;
+    font-weight: bold;
+    color: white;
+}
+
+.fn{
+	background-color: white;
+	font-weight: bold;
+	color: black;
+}
+
+.dn {
+    background-color: #999999;
+    font-weight: bold;
+}
+
+.onl{
+	background-color: #0070c0;
+	font-weight: bold;
+    color: white;
+}
+
+.vix{
+	background-color: #ff0000;
+    font-weight: bold;
+    color: white;
+}
+
 .labelLeft{
 	float: left;	
 }
@@ -21,6 +85,12 @@ table{
 	text-align: center;
 }
 
+.smBlue{
+    background-color: #143052;
+    color: white;
+    font-weight: bold;
+}
+
 .darkBlue{
 	background-color: #002060;
     color: white;
@@ -29,6 +99,26 @@ table{
 .lightBlue{
 	background-color: #0070c0;
 	color:white;	
+}
+
+.medBlue{
+    font-weight: bold;
+    background-color: #c3d8ef;
+}
+
+.rcBlue{
+    font-weight: bold;
+    background-color: #dce6f1;
+}
+
+.lightb{
+    background-color: #bde3ff;
+    font-weight: bold;
+}
+
+.othersc{
+    background-color: transparent;
+    font-weight: bold;
 }
 
 .grey{

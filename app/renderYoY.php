@@ -20,34 +20,52 @@ class renderYoY extends Model {
     	echo "</select>";	
     }
 
-    public function renderDataHead($value){
+    public function brandTable($value, $color){
         
-        $style = "style='color: blue;height: auto;width: auto;'";
+        $class = "class='".strtolower($color)." center'";
 
-        for ($i=0; $i < 14; $i++) { 
+        echo "<td ".$class." rowspan='7'>";
+            echo "<span style='font-size: 18px'>".$value."</span>";
+        echo "</td>";
 
-            if ($i == 13) {
-                echo "<th ".$style." >".number_format(doubleval($value[$i]))."<th/>";   
-            }
-            else{
-                echo "<th>".number_format(doubleval($value[$i]))."<th/>";
-            }
-        }
     }
 
-    public function renderDataBody($value){
-        
-        $style = "style='height: auto;width: auto;'";
+    public function renderData($value, $line, $firstColor, $secondColor, $thirdColor=null){
 
-        for ($i=0; $i < 14; $i++) { 
+        $class = null;
 
-            if ($i == 13) {
-                echo "<td ".$style." >".number_format(doubleval($value[$i]))."<td/>";   
+        $firstClass = "class='".$firstColor." center'";
+        $secondClass = "class='".$secondColor." center'";
+        $thirdClass = "class='".$thirdColor." center'";
+
+        for ($col = 0; $col < 14; $col++) { 
+
+            if ($line == 1 || $line == 4 || $line == 5 || $line == 6) {
+                if ($col >= 0 && $col <= 12) {
+                    $class = $firstClass;
+                }else{
+                    $class = $secondClass;
+                }
             }
             else{
-                echo "<td>".number_format(doubleval($value[$i]))."<td/>";
+                if ($col == 0){
+                    $class = $firstClass;
+                }elseif ($col >= 1 && $col <= 12) {
+                    $class = $secondClass;
+                }else{
+                    $class = $thirdClass;
+                }
+            }
+
+            if (is_numeric($value[$col])) {
+                echo "<td ".$class." >".number_format($value[$col])."<td/>";
+            }else{
+                echo "<td ".$class." >".$value[$col]."<td/>";
             }
         }
+
     }
 
 }
+
+/**/
