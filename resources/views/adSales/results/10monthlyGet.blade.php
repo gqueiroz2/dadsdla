@@ -3,7 +3,7 @@
 @section('title', 'Monthly Results')
 
 @section('head')	
-
+<script src="/js/resultsShare.js"></script>
 @endsection
 
 @section('content')
