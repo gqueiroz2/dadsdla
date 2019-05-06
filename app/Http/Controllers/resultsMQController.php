@@ -59,12 +59,13 @@ class resultsMQController extends Controller{
                 $firstPos = Request::get('secondPos');
                 $secondPos = Request::get('thirdPos');
                 $tmp = $pr->getCurrency($con,array($currencyID));
+                var_dump($currencyID);
                 if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
                 $valueS = strtoupper($value);
                 $cYear = $year;
                 $pYear = $cYear - 1;
                 $mq = new resultsMQ();
-                $lines = $mq->lines($con,$brandID,$regionID,$year,$value,$firstPos,$secondPos);
+                $lines = $mq->lines($con,$brandID,$regionID,$year,$currencyID,$value,$firstPos,$secondPos);
 
                 $mtx = $mq->assembler($con,$b,$brandID,$lines,$month,$year);
 

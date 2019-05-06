@@ -9,12 +9,12 @@ class renderYoY extends Model {
     public function source($region, $year){
     	echo "<select name='source' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
-            echo "<option value='ytd'> Real (IBMS) $year </option>";
+            echo "<option value='ytd'> IBMS - $year </option>";
             
             if ($region == 'Brazil') {
-                echo "<option value='cmaps'> Real (CMAPS) $year </option>";
+                echo "<option value='cmaps'> CMAPS - $year </option>";
             }else{
-                echo "<option value='mini_header'> Real (Header) $year </option>";//somente se for brasil a região selecionada
+                echo "<option value='mini_header'> Header - $year </option>";//somente se for brasil a região selecionada
             }
     		
     	echo "</select>";	
@@ -24,8 +24,8 @@ class renderYoY extends Model {
         
         $class = "class='".strtolower($color)." center'";
 
-        echo "<td ".$class." rowspan='7'>";
-            echo "<span style='font-size: 18px'>".$value."</span>";
+        echo "<td ".$class." rowspan='7' style='font-size: 18px; width:3.5%;'>";
+            echo $value;
         echo "</td>";
     }
 
@@ -45,7 +45,7 @@ class renderYoY extends Model {
                 }else{
                     $class = $secondClass;
                 }
-            else{
+            }else{
                 if ($col == 0){
                     $class = $firstClass;
                 }elseif ($col >= 1 && $col <= 12) {
@@ -55,15 +55,16 @@ class renderYoY extends Model {
                 }
             }
 
-            if (is_numeric($value[$col])) {
-                echo "<td ".$class." >".number_format($value[$col])."<td/>";
+            if(is_numeric( $value[$col] )){
+                echo "<td $class>".number_format($value[$col])."</td>";
             }else{
-                echo "<td ".$class." >".$value[$col]."<td/>";
+                echo "<td $class>".$value[$col]."</td>";
             }
+            
         }
 
     }
 
 }
 
-/**/
+

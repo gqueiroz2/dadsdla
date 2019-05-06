@@ -5,11 +5,7 @@
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
-    
-
-
-	<div class="container-fluid">
-		
+	<div class="container-fluid">		
 		<div class="row">
 			<div class="col">
 				<form method="POST" action="{{ route('resultsSharePost') }}">
@@ -17,7 +13,7 @@
 					<div class="row justify-content-center">
 						<div class="col col-2">
 							<label class='labelLeft'>Region:</label>
-							@if($userLevel == 'L0' || $userLevel == 'L1')								
+							@if($userLevel == 'L0' || $userLevel == 'L1')
 								{{$render->region($region)}}							
 							@else
 								{{$render->regionFiltered($region, $regionID )}}

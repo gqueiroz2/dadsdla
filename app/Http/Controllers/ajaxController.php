@@ -34,8 +34,20 @@ class ajaxController extends Controller{
 
         $form = Request::get("form");
 
+        
+        if($form == "ytd"){
+            $showForm = "IBMS";
+        }elseif($form == "cmaps"){
+            $showForm = "CMAPS";
+        }elseif($form == "mini_header"){
+            $showForm = "HEADER";
+        }else{
+            $showForm = false;
+        }
+        
+
         echo "<select name='font' style='width:100%;'>";
-            echo "<option value='$form'> ($form) $year </option>";
+            echo "<option value='$form'> $showForm - $year </option>";
         echo "</select>";   
     }
 
@@ -61,6 +73,8 @@ class ajaxController extends Controller{
         $year = Request::get("year");
 
         $renderYoY = new renderYoY();
+
+        var_dump("AKI");
 
         $renderYoY->source($region[0]['name'], $year);
     }
