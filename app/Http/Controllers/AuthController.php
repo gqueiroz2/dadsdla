@@ -21,9 +21,24 @@ class AuthController extends Controller
 		$usr = new User();
 		$resp = $usr->login($con);
 
+
 		if (!$resp['bool']) {
             return back()->with('error',$resp['msg']);
         }else{
+            Request::session()->put('userName',$resp['name']);
+            Request::session()->put('userRegion',$resp['region']);
+            Request::session()->put('userRegionID',$resp['regionID']);
+            Request::session()->put('userEmail',$resp['email']);
+            Request::session()->put('userLevel',$resp['level']);
+
+            if($resp['subLevelBool'] == 1){
+                Request::session()->put('userSalesRepGroup',$resp['salesRepGroup']);
+                Request::session()->put('userSalesRepGroupID',$resp['salesRepGroupID']);
+            }else{
+                Request::session()->put('userSalesRepGroup',false);
+                Request::session()->put('userSalesRepGroupID',false);
+            }
+
         	return redirect('home');
         }
     }

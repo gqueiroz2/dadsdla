@@ -136,6 +136,16 @@ class ajaxController extends Controller{
             echo "<option value=''> There is no Currency for this Region </option>";
         }
         //echo $regionID;
+    }
 
+    public function sourceByRegion(){
+        $region = Request::get('regionID');
+        if ($region == 1) {
+            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='CMAPS'> CMAPS </option>";
+        }else{
+            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='Header'> Header </option>";
+        }
     }
 }
