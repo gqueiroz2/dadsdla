@@ -41,10 +41,23 @@ class base extends Model{
         return $tmp;
     }
 
+    public function getBrandColor($brand){
+        $rtr = false;
+
+        for ($i=0; $i <sizeof($this->brands) ; $i++) { 
+            if ($brand == $this->brands[$i]) {
+                $rtr = $this->brandsColor[$i];
+            }
+        }
+
+        return $rtr;
+    }
+
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");
     protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX");
+    protected $brandsColor = array("#0070c0","#ff3300","#ffff00","#009933","#ff0000","#000000","#000066","#ff0000","#6600ff","#004b84");
     protected $brandTarget = array(  "Discovery",
                                      "Discovery Home and Health",
                                      "Discovery Kids",
@@ -99,6 +112,8 @@ class base extends Model{
     public function generateDiv($con,$pr,$region,$year,$currency){
         
         $region = array($region);
+
+        
 
         if ($currency == 'USD') {
             $div = $pr->getPRateByRegionAndYear($con,$region,$year);

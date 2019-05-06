@@ -122,9 +122,11 @@ class User extends Management{
                     u.status AS 'status',
                     u.sub_level_bool AS 'subLevelBool',
                     r.name AS 'region',
+                    r.id AS 'regionID',
                     ut.name AS 'userType',
                     ut.level AS 'level',
                     srg.name AS 'salesRepGroup',
+                    srg.ID AS 'salesRepGroupID',
                     u.token AS 'token',
                     u.token_start_date AS 'token_start_date',
                     u.token_end_date AS 'token_end_date'
@@ -139,10 +141,10 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        $from = array('id','name','email','password','status','subLevelBool','region','userType','level','salesRepGroup','token','token_start_date','token_end_date');
+        $from = array('id','name','email','password','status','subLevelBool','region','regionID','userType','level','salesRepGroup','salesRepGroupID','token','token_start_date','token_end_date');
         $to = $from;
 
-        $user = $sql->fetch($result,$from,$to);
+        $user = $sql->fetch($result,$from,$to)[0];
 
         return $user;
 
@@ -222,9 +224,16 @@ class User extends Management{
 
         $usr = $this->getUserByEmail($con, $email);
 
-        if (password_verify($password, $usr[0]['password'])) {
-            $resp['name'] = $usr[0]['name'];
+       if (password_verify($password, $usr['password'])) {
+            $resp['name'] = $usr['name'];
             $resp['bool'] = true;
+            $resp['region'] = $usr['region'];
+            $resp['regionID'] = $usr['regionID'];
+            $resp['email'] = $usr['email'];
+            $resp['level'] = $usr['level'];
+            $resp['salesRepGroup'] = $usr['salesRepGroup'];
+            $resp['salesRepGroupID'] = $usr['salesRepGroupID'];
+            $resp['subLevelBool'] = $usr['subLevelBool'];
             $resp['msg'] = "Login Successfull";
         }else{
             $resp['bool'] = false;
