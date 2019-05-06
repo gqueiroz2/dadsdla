@@ -34,7 +34,7 @@ class Render extends Model{
 
     public function brand($brand){
 
-    	echo "<select id='brand' class='selectpicker form-control' multiple='true' name='brand[]' style='width:100%;'>";
+    	echo "<select id='brand' class='selectpicker' multiple='true' name='brand[]' data-size='3 ' data-width='100%'>";
     		echo "<option value='dn' selected='true'> DN </option>";
     		
             for ($i = 0; $i < sizeof($brand); $i++) { 
@@ -43,6 +43,13 @@ class Render extends Model{
     		
     	echo "</select>";
     }
+
+    public function position($pos){
+        echo "<select id='".$pos."Pos' name='".$pos."Pos' class='form-control' style='width: 100%;'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
 /*
     public function font(){
     	echo "<select name='font' style='width:100%;'>";
@@ -99,12 +106,12 @@ class Render extends Model{
 
     public function currency($currency){
     	echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
-    		echo "<option value=''> Select </option>";
-    		
+    		echo "<option value=''> Select Region </option>";
+    		/*
             for ($i = 0; $i < sizeof($currency); $i++) { 
     			echo "<option value='".$currency[$i]["id"]."'>".$currency[$i]["name"]."</option>";
     		}
-
+            */
     	echo "</select>";
     }
 

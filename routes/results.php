@@ -28,15 +28,17 @@ Route::group(['prefix' => 'results'],function(){
 	Route::post('resume','resultsResumeController@post')
 					->name('resultsResumePost');	
 
-	Route::get('quarter','resultsQuarterController@get')
-					->name('quarterResultsGet');				
-	Route::post('quarter','resultsQuarterController@post')
-					->name('quarterResultsPost');	
+	Route::get('monthly','resultsMQController@getMonthly')
+					->name('resultsMonthlyGet');				
+	Route::post('monthly','resultsMQController@postMonthly')
+					->name('resultsMonthlyPost');				
 
-	Route::get('monthly','resultsController@monthlyGet')
-					->name('monthlyGet');				
-	Route::post('monthly','resultsController@monthlyPost')
-					->name('monthlyPost');				
+	Route::get('quarter','resultsMQController@get')
+					->name('resultsQuarterGet');				
+	Route::post('quarter','resultsMQController@post')
+					->name('resultsQuarterPost');	
+
+	
 
 
 });

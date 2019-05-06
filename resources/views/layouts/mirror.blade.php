@@ -27,36 +27,6 @@
         <link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css">
         <!-- Include the plugin's CSS and JS:-->
         
-
-
-        <style type="text/css">
-  
-            html {
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                position: relative;
-                min-height: 100%;
-            }
-            body {
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
-                margin-bottom: 60px; /* Margin bottom by footer height */
-            }
-            .footer {
-                position: absolute;
-                bottom: 0;
-                width: 100%;
-                min-height: 60px;
-                max-height: 120px; /* Set the fixed height of the footer here */
-                line-height: 60px; /* Vertically center the text there */
-                background-color: #f5f5f5;
-            }      
-            a {
-                text-decoration:none;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                display: block;
-            }  
-
-        </style>
-
         @yield('head')
     </head>
     <body>       
@@ -77,11 +47,11 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Resultados </a>
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Resume </a>
-                            <a class="dropdown-item" href="{{ route('monthlyGet')}}"> Monthly </a>
-                            <a class="dropdown-item" href="{{ route('quarterResultsGet') }}"> Quarter </a>
+                            <a class="dropdown-item" href="{{ route('resultsMonthlyGet')}}"> Monthly </a>
+                            <a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
                             <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
                             <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
                             <a class="dropdown-item" href="#"> Monthly YoY </a>
