@@ -1,7 +1,7 @@
-      
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -73,6 +73,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
+            <?php $userName = Request::session()->get('userName'); ?>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -123,9 +124,10 @@
                         <a class="nav-link" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
                     </li>
                 </ul>    
+
                 <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
                     <li class="nav-item dropdown dropleft">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> @User </a>
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#"> Logout </a>
                             <a class="dropdown-item" href="#"> DB Panel </a>

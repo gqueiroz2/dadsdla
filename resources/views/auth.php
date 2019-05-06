@@ -1,6 +1,6 @@
 <?php
     
-        $username = Request::session()->get('userName');
+        $userName = Request::session()->get('userName');
         $regionName = Request::session()->get('userRegion');
         $regionID = Request::session()->get('userRegionID');
         $userEmail = Request::session()->get('userEmail');
