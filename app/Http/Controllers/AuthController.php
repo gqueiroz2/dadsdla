@@ -87,9 +87,9 @@ class AuthController extends Controller
         $time = mktime(0, 0, 0, 1, 1, 1970);
         $time = date("Y-m-d h:i:s", $time);
 
-        if ($user[0]['token'] == $token) {
-            if ($user[0]['token_start_date'] != $time) {
-                if (date("Y-m-d h:i:s") < $user[0]['token_end_date']) {
+        if ($user['token'] == $token) {
+            if ($user['token_start_date'] != $time) {
+                if (date("Y-m-d h:i:s") < $user['token_end_date']) {
                     $permission = true;     
                 }
             }

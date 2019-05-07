@@ -107,12 +107,16 @@
                         </li>
                     </ul>    
                 </div>
+            @else
+
             @endif
         </nav>
         <div id="app"></div>
         
         @if($userName != null)
             @yield('content')
+        @else
+            @yield('contentLogout')
         @endif
     </body>
 

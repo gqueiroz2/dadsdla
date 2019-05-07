@@ -1,12 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.mirror')
 
 @section('head')
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 
-@section('content')
+@section('contentLogout')
 
-    @if($userName == null)
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -46,11 +45,14 @@
                                 </div>
 
                                 <div class="form-group row mb-0">
-                                    <div class="col-md-8 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
+                                    <label for="password" class="col-md-4 col-form-label text-md-right">
+                                        &nbsp;
+                                    </label>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary" style="width: 100%;">
                                             {{ __('Login') }}
                                         </button>
-                                        <a class="btn btn-link" href="{{ route('forgotPasswordGet') }}">
+                                        <a class="btn btn-link" href="{{ route('forgotPasswordGet') }}" style="float:right;">
                                             {{ __('Forgot Your Password?') }}
                                         </a>
                                     </div>
@@ -80,5 +82,5 @@
                 </div>
             </div>
         </div>
-    @endif
+        
 @endsection

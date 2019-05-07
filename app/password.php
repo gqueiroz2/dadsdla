@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Request;
 use App\User;
 use App\sql;
 
-class password extends Model
-{
+class password extends Model{
     public function checkPassword($password){
         
         $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
@@ -71,8 +70,9 @@ class password extends Model
     	$usr = new User();
     	$user = $usr->getUserByEmail($con, $email);
 
-    	$emailToHash = $user[0]['email'].rand(rand(), rand());
-    	$token = md5($emailToHash);
+    	$emailToHash = $user['email'].rand(rand(), rand());
+    	
+        $token = md5($emailToHash);
 
     	$today = date("Y-m-d h:i:s");
     	$tomorrow = strtotime("+1 day");
