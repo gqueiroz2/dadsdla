@@ -14,9 +14,14 @@
 
 Route::group(['prefix' => 'results'],function(){
 	Route::get('YoY','resultsYoYController@get')
-						->name('YoYResultsGet');
+						->name('resultsYoYGet');
 	Route::post('YoY','resultsYoYController@post')
-					->name('YoYResultsPost');
+					->name('resultsYoYPost');
+
+	Route::get('monthlyYoY','resultsMonthlyYoYController@get')
+						->name('resultsMonthlyYoYGet');
+	Route::post('monthlyYoY','resultsMonthlyYoYController@post')
+					->name('resultsMonthlyYoYPost');
 
 	Route::get('share','shareController@get')
 					->name('resultsShareGet');
@@ -39,8 +44,6 @@ Route::group(['prefix' => 'results'],function(){
 					->name('resultsQuarterPost');	
 
 	
-
-
 });
 
 
