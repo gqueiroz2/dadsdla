@@ -67,10 +67,9 @@ class Render extends Model{
 
     public function source(){
         
-        /*
         echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
-        echo "</select>";   */
+        echo "</select>";   
     }
 
     public function salesRepGroup($salesRepGroup){

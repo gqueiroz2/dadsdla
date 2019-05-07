@@ -44,6 +44,7 @@ class resultsYoYController extends Controller{
         $brandsValue = $brands->getBrand($con);
         $brandsValueAux = $base->getBrands();
         $b = $base->handleBrand($con,$brands,$brand);
+
     	$region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
@@ -51,6 +52,9 @@ class resultsYoYController extends Controller{
     	$year = Request::get("year");
     	
     	$currency = Request::get("currency");
+        $p = new pRate();
+        $pRate = $p->getCurrency($con, array($currency));
+
     	$value = Request::get("value");
 
     	$form = Request::get("firstPos");
@@ -72,12 +76,15 @@ class resultsYoYController extends Controller{
             $index -= 1;
             $brandsValueArray[$i] = $brandsValueAux[$index];
         }
+        
         if (sizeof($brandsValueArray) > 1) {
             array_push($brandsValueArray, "DN");
         }
 
+        //var_dump($pRate);
+
         $size = sizeof($brandsValueArray);
 
-	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'currency', 'matrix','size','brandsValueArray'));
+	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'pRate', 'matrix','size','brandsValueArray'));
     }
 }

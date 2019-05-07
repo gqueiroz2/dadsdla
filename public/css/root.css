@@ -69,26 +69,26 @@ table{
 }
 
 .fn{
-	background-color: white;
+	background-color: #ff0000;
 	font-weight: bold;
-	color: black;
-}
-
-.dn {
-    background-color: #999999;
-    font-weight: bold;
+	color: white;
 }
 
 .onl{
-	background-color: #0070c0;
+	background-color: #6600ff;
 	font-weight: bold;
     color: white;
 }
 
 .vix{
-	background-color: #ff0000;
+	background-color: #004b84;
     font-weight: bold;
     color: white;
+}
+
+.dn {
+    background-color: #999999;
+    font-weight: bold;
 }
 
 .labelLeft{

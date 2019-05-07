@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
 
-@section('content')
-@if ($permission)
+@section('contentLogout')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -66,5 +66,5 @@
         </div>
     </div>
 </div>
-@endif
+
 @endsection

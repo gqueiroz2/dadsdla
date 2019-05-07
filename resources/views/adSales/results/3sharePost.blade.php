@@ -11,8 +11,7 @@
 		th, td{
 			padding: 6px;
 			text-align: center;
-			font-size: 14px;
-			border:1px solid black;
+			font-size: 12px;
 		}
 	</style>
 
@@ -25,10 +24,10 @@
 					<div class="row justify-content-center">
 						<div class="col col-2">
 							<label class='labelLeft'>Region:</label>
-							@if($userLevel == 'L0' || $userLevel == 'L1')								
-								{{$render->regionFiltered($region, $regionID )}}
-							@else
+							@if($userLevel == 'L0' || $userLevel == 'SU')								
 								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
 							@endif
 						</div>
 						<div class="col col-2">
@@ -80,10 +79,10 @@
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%;">
-								<div class="col col-3" style="width: 100%; height: 100%; zoom: 170%; display: block;">
+								<div class="col col-3" style="zoom:175%; display: block; margin-top: 8%;">
 									<div id="chart_div"></div>
 								</div>
-								<div class="col col-9" style="">
+								<div class="col col-9" style=" width: 100%; margin-top: 5%;">
 									{{$render->mtx($mtx)}}
 								</div>
 							</div>	
@@ -119,10 +118,10 @@
 			var options = {
 				chartArea:{
 					'width':'100%',
-					'height':'80%'
+					'height':'100%'
 				},
-				'width': '100%',
-				'height': '80%',
+				'width': '1000px',
+				'height': '800px',
 				backgroundColor:'transparent',
 				legend:'none',
 				pieSliceText: 'label',

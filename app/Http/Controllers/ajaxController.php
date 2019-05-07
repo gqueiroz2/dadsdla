@@ -155,9 +155,11 @@ class ajaxController extends Controller{
     public function sourceByRegion(){
         $region = Request::get('regionID');
         if ($region == 1) {
+            echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";
         }else{
+            echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='Header'> Header </option>";
         }

@@ -15,6 +15,8 @@
 Route::get('/','AuthController@loginGet')->name('loginGet');
 Route::post('/', 'AuthController@loginPost')->name('loginPost');
 
+Route::get('/logout','AuthController@logout')->name('logout');
+
 Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
 Route::post('forgotPassword', 'AuthController@forgotPasswordPost')->name('forgotPasswordPost');
 
