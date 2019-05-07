@@ -10,12 +10,19 @@ use App\sql;
 
 class brand extends Management{
 
-    public function getBrand($con){
+    public function getBrand($con , $ID = false){
+		
 		$sql = new sql();
 		$table = "brand";
 		$columns = "id,name";
 		$from = array('id','name');	
-		$where = "Where name != 'OTH'";
+		$where = "WHERE name != 'OTH'";
+
+		if($ID){
+			$IDS = implode(",", $ID);
+			$where.= " AND brand.id IN ($IDS)";
+		}
+
 		$result = $sql->select($con,$columns,$table,null,$where);
 		$brand = $sql->fetch($result,$from,$from);
 		return $brand;

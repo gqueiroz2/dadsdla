@@ -54,7 +54,6 @@ class planByBrand extends Management{
         $as = "sum";
 
         $where = $sql->where($columnsName, $columnsValue);
-
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
 
         $res = $sql->fetchSum($result, $as);

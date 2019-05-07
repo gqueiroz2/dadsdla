@@ -35,7 +35,7 @@ class ajaxController extends Controller{
         $form = Request::get("form");
 
         echo "<select name='font' style='width:100%;'>";
-            echo "<option value='$form'> Real ($form) $year </option>";
+            echo "<option value='$form'> ($form) $year </option>";
         echo "</select>";   
     }
 
@@ -128,7 +128,7 @@ class ajaxController extends Controller{
         if ($currency) {
             for ($c=0; $c <sizeof($currency); $c++) {
                 if ($currency[$c]["name"] != "USD" ) {
-                    echo "<option value='".$currency[$c]["name"]."'>".$currency[$c]["name"]."</option>";
+                    echo "<option value='".$currency[$c]["id"]."'>".$currency[$c]["name"]."</option>";
                 }
             }
             echo "<option value='USD'>USD</option>";

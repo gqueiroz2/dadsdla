@@ -15,7 +15,7 @@
 							{{$render->region($region)}}
 						</div>
 						<div class="col">
-							<label class="labelLeft"><span class="bold"> Brands: </span></label>
+							<label class="labelLeft"><span class="bold"> Brand: </span></label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">

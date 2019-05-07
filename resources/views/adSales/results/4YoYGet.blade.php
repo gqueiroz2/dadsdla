@@ -99,20 +99,14 @@
 	</div>
 
 	<div id="vlau"></div>
-region
-region
+
 	<script type="text/javascript">
 
 		$(document).ready(function(){
-
 			$('#region').change(function(){
-
 				var regionID = $(this).val();
-
 				if (regionID != "") {
-					
 					ajaxSetup();
-
 					$.ajax({
             			url:"/ajax/adsales/currencyByRegion",
             			method:"POST",
@@ -124,15 +118,11 @@ region
 	                		alert(xhr.status+" "+thrownError);
 	          			}
 	          		});
-
 				}
-
 			});
 
 			$('#year').click(function(){
-				
 				var year = $(this).val();
-
 				if (year != "") {
 					var regionID = $('#region').val();
 

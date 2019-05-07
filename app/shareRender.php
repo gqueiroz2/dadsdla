@@ -13,7 +13,7 @@ class shareRender extends Render{
 				echo "<th colspan='".(sizeof($mtx["brand"]) + 3)."'>Share</th>";
 			echo "</tr>";
 			echo "<tr class='lightBlue'>";
-				echo "<th>Sales Rep</th>";
+				echo "<th style='width:180px'>Sales Rep</th>";
 				for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
     	 			echo "<th>";
     	 				echo $mtx["brand"][$b];
@@ -30,7 +30,7 @@ class shareRender extends Render{
 		    		$string = "even";
 		    	}
 	    		echo "<tr class='".$string."'>";
-    				echo "<td >".$mtx["salesRep"][$s]."</td>";
+    				echo "<td style='width:100%'>".$mtx["salesRep"][$s]."</td>";
 	    			for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 	    				echo "<td>".(number_format($mtx["values"][$b][$s],2))."</td>";
 	    			}
@@ -41,7 +41,7 @@ class shareRender extends Render{
 	    	}
 	    	//Começa o total
 	    	echo "<tr class='darkBlue'>";
-		    	echo "<td>Total</td>";
+		    	echo "<td style='width:100%'>Total</td>";
 		    		for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 		    			echo "<td>".(number_format($mtx["total"][$b],2))."</td>";
 		    		}

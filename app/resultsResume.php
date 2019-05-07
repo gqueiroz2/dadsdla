@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\results;
 
-
 class resultsResume extends results{
     
 	public function assembler($month,$sales,$actual,$target,$corporate/*$pAndR,$finance*/,$pYear){
@@ -110,9 +109,6 @@ class resultsResume extends results{
 		return ($matrix);
 	}
 
-	public function salesTable($regionID){
-		if($regionID == 1){ $table = "cmaps"; }else{  $table = "mini_header"; }
-		return $table;
-	}
+	
 
 }
