@@ -356,7 +356,11 @@ class share extends results
         }
 
         $mtx["total"] = $total;
-        $mtx["dn"] = $dn;
+        if (sizeof($brand)>1) {
+            $mtx["dn"] = $dn;
+        }else{
+            $mtx["dn"] = false;
+        }
         $mtx["totalT"] = $totalT;
 
         $share = array();

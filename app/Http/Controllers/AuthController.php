@@ -13,6 +13,12 @@ class AuthController extends Controller
     	return view('auth.login');
     }
 
+    public function logout(){
+        Request::session()->flush();
+
+        return view('auth.login');
+    }
+
     public function loginPost(){
 
     	$db = new dataBase();

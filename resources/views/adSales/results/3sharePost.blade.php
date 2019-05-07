@@ -24,10 +24,10 @@
 					<div class="row justify-content-center">
 						<div class="col col-2">
 							<label class='labelLeft'>Region:</label>
-							@if($userLevel == 'L0' || $userLevel == 'L1')								
-								{{$render->regionFiltered($region, $regionID )}}
-							@else
+							@if($userLevel == 'L0' || $userLevel == 'SU')								
 								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
 							@endif
 						</div>
 						<div class="col col-2">

@@ -81,6 +81,8 @@ class sql extends Model{
 
         $sql = "UPDATE $tableName $set $where";
 
+        var_dump($sql);
+
         if($con->affected_rows == 0){
             $rtr["bool"] = false;
             $rtr["msg"] = "Error: Update failed, no data matching encountered";
