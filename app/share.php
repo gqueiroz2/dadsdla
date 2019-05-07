@@ -36,6 +36,15 @@ class share extends results
 
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
+        $tmp = array($currency);
+        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+        if ($value == "gross") {
+            $valueView = "Gross";
+        }else{
+            $valueView = "Net";
+        }
+
+
         //se for todos os canais, ele já pesquisa todos os canais atuais
         $tmp = $b->getBrand($con);
         if($brand[0] == 'dn') {
@@ -105,20 +114,36 @@ class share extends results
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
         $salesRepName = array();
 
+
         if ($salesRep == 'all') {
             
             if ($salesRepGroup == 'all') {
+                
+                $salesRepView = "All";
+
                 $tmp = array($region);
+            
                 $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
+            
                 $tmp = array();
+                
                 for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
                     array_push($tmp, $salesRepGroup[$i]["id"]);
                 }
 
                 $salesRepGroup = $tmp;
+            
             }else{
+
                 $salesRepGroup = array($salesRepGroup);
+
+                $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
+
+                                
             }
+
+            $salesRepGroupView = "All";                
+            
             $tmp = $sr->getSalesRep($con,$salesRepGroup);
 
             $salesRep = array();
@@ -128,13 +153,23 @@ class share extends results
                 array_push($salesRepName, $tmp[$i]["salesRep"]);
             }
         }else{
+            
             $salesRep = array($salesRep);
+            
+            $salesRepGroup = array($salesRepGroup);
+
+            $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
+            
             $tmp = $sr->getSalesRep($con,null);
+            
+
+
             for ($t=0; $t <sizeof($tmp) ; $t++) { 
                 if(is_array($salesRep)){
                     for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                         if ($tmp[$t]["id"] == $salesRep[$s]) {
                             array_push($salesRepName, $tmp[$t]["salesRep"]);
+                            $salesRepView = $tmp[$t]["salesRep"];
                         }
                     }
                 }
@@ -169,7 +204,7 @@ class share extends results
             }
         }
 
-        $mtx = $this->assembler($brandName,$salesRepName,$values,$div);
+        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView);
 
         return $mtx;
     }
@@ -313,9 +348,13 @@ class share extends results
         return $where;
     }
 
-    public function assembler($brand,$salesRep,$values,$div){
+    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup){
 
         $base = new base();
+
+        $mtx["value"] = $value;
+        $mtx["currency"] = $currency;
+        $mtx["salesRepGroup"] = $salesRepGroup;
 
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 

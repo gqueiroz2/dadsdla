@@ -16,6 +16,31 @@ class salesRep extends Management{
 		o = origin
 	*/
 
+	public function getSalesRepGroupById($con,$id){
+		$sql = new sql();
+
+		$table = "sales_rep_group srg";
+		$columns = "srg.ID AS 'id',
+				    srg.name AS 'name',
+				    r.name AS 'region'";
+		$where = "";
+
+		if($id){
+			$ids = implode(",", $id);
+			$where .= "WHERE srg.ID IN ('$ids')";
+		}
+
+		$join = "LEFT JOIN region r ON srg.region_id = r.ID";
+
+		$res = $sql->select($con,$columns,$table,$join,$where);
+
+		$from = array('id','name','region');
+
+		$salesRepGroup = $sql->fetch($res,$from,$from)[0];
+
+    	return $salesRepGroup;
+	}
+
 	public function getSalesRepGroup($con,$region){
 		$sql = new sql();
 
