@@ -44,7 +44,6 @@ class resultsYoYController extends Controller{
         $brandsValue = $brands->getBrand($con);
         $brandsValueAux = $base->getBrands();
         $b = $base->handleBrand($con,$brands,$brand);
-
     	$region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
@@ -58,24 +57,27 @@ class resultsYoYController extends Controller{
     	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
         
+        //var_dump($b);
         //pegando valores das linhas das tabelas
-        $lines = $yoy->lines($con, $b, $region, $year, $value, $form, $source);
+        $lines = $yoy->lines($con, $b, $region, $year,$currency, $value, $form, $source);
         
         //criando matriz que será renderizada
-    	$matrix = $yoy->assemblers($b, $lines, $base->getMonth(), $year);
+    	$matrix = $yoy->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
 
     	$render = new Render();
     	$renderYoY = new renderYoY();
 
-    	$brandsValueArray = array();
-    	for ($i=0; $i < sizeof($b); $i++) { 
-    		$index = intval($b[$i]);
-    		$index -= 1;
-    		$brandsValueArray[$i] = $brandsValueAux[$index];
-    	}
+        for ($i=0; $i < sizeof($b); $i++) { 
+            $index = intval($b[$i]);
+            $index -= 1;
+            $brandsValueArray[$i] = $brandsValueAux[$index];
+        }
+        if (sizeof($brandsValueArray) > 1) {
+            array_push($brandsValueArray, "DN");
+        }
 
-    	//var_dump($matrix);
+        $size = sizeof($brandsValueArray);
 
-	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'brandsValueArray', 'form', 'year', 'value', 'currency', 'matrix'));
+	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'currency', 'matrix','size','brandsValueArray'));
     }
 }

@@ -5,10 +5,17 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\results;
 use App\brand;
+use App\region;
+
 class resultsMQ extends results{
     
-    public function lines($con, $brands, $region, $year, $value, $form, $source){
-        $lines = array();
+    public function lines($con, $brands, $region, $year,$currency, $value, $form, $source){
+
+        $p = new pRate();
+        
+        $currency = $p->getCurrency($con,array($currency))[0]['name'];
+
+        var_dump($currency);
 
         if (sizeof($brands) == 0) {
             $lines = false;
@@ -23,7 +30,7 @@ class resultsMQ extends results{
                 }
 
                 for ($j=0; $j < 2; $j++) { 
-                    $lines[$i][$j] = $this->line($con, $brands[$i], $region, $year, $finalValue, $form, ($j+1), $source);
+                    $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $finalValue, $form, ($j+1), $source);
 
                     if (!$lines[$i][$j]) {
                     	var_dump("AKI");
@@ -37,7 +44,7 @@ class resultsMQ extends results{
 
     }
 
-    public function line($con, $brand, $region, $year, $value, $form, $lineNumber, $source){        
+    public function line($con,$currency, $brand, $region, $year, $value, $form, $lineNumber, $source){        
 
     	$newSource = strtoupper($form);
         switch ($lineNumber) {
@@ -46,7 +53,7 @@ class resultsMQ extends results{
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $newSource, strtoupper($value), $brand, $year);
                 $p = new planByBrand();
-                $line = $this->lineValues($con, "revenue", $p, $columns, $colValues, $region, $year);
+                $line = $this->lineValues($con,$currency, "revenue", $p, $columns, $colValues, $region, $year);
                 break;
 
             case 2:
@@ -60,10 +67,10 @@ class resultsMQ extends results{
                     if ($columns) {
                         if (sizeof($columns) == 4) {
                             $colValues = array($region, $brand, $year);
-                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
                         } elseif (sizeof($columns) == 3) {
                             $colValues = array($brand, $year);
-                            $line = $this->lineValues($con, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
                         }else{
                             $line = false;
                         }
@@ -84,10 +91,16 @@ class resultsMQ extends results{
         
     }
 
-    public function lineValues($con, $value, $form, $columns, $colValues, $region, $year){
+    public function lineValues($con,$currency, $value, $form, $columns, $colValues, $region, $year){
         
+        $r = new region();
         $p = new pRate();
-        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+        if($currency == "USD"){            
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+        }else{
+            $pRate = 1.0;
+        }
+        
         array_push($colValues, 0);
         $tam = sizeof($columns);
         for ($i = 0; $i < 12; $i++) {
@@ -98,7 +111,9 @@ class resultsMQ extends results{
             if ($formValue[$i] == 0) {
                 $formValue[$i] = 0;
             }else{
-                $formValue[$i] *= $pRate;
+
+                $formValue[$i] = $formValue[$i]/$pRate;
+
             }
         }
         return $formValue;

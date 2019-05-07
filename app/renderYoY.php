@@ -9,54 +9,62 @@ class renderYoY extends Model {
     public function source($region, $year){
     	echo "<select name='source' style='width:100%;'>";
     		echo "<option value=''> Select </option>";
-            echo "<option value='ytd'> Real (IBMS) $year </option>";
+            echo "<option value='ytd'> IBMS - $year </option>";
             
             if ($region == 'Brazil') {
-                echo "<option value='cmaps'> Real (CMAPS) $year </option>";
+                echo "<option value='cmaps'> CMAPS - $year </option>";
             }else{
-                echo "<option value='mini_header'> Real (Header) $year </option>";//somente se for brasil a região selecionada
+                echo "<option value='mini_header'> Header - $year </option>";//somente se for brasil a região selecionada
             }
     		
     	echo "</select>";	
     }
 
-    public function renderDataHead($value){
+    public function brandTable($value, $color){
         
-        $style = "style='color: blue;height: auto;width: auto;'";
+        $class = "class='".strtolower($color)." center'";
 
-        for ($i=0; $i < 14; $i++) { 
-
-            if ($i == 13) {
-                if(is_numeric($value[$i])){
-                    echo "<th ".$style." >".number_format(doubleval($value[$i]))."<th/>";   
-                }else{
-                    echo "<th ".$style." >".$value[$i]."<th/>";   
-                }
-            }
-            else{
-                if(is_numeric($value[$i])){
-                    echo "<th>".number_format(doubleval($value[$i]))."<th/>";
-                }else{
-                    echo "<th>".$value[$i]."<th/>";
-                }
-            }
-        }
+        echo "<td ".$class." rowspan='7' style='font-size: 18px; width:3.5%;'>";
+            echo $value;
+        echo "</td>";
     }
 
-    public function renderDataBody($value){
-        
-        $style = "style='height: auto;width: auto;'";
+    public function renderData($value, $line, $firstColor, $secondColor, $thirdColor=null){
 
-        for ($i=0; $i < 14; $i++) { 
+        $class = null;
 
-            if ($i == 13) {
-                
-                echo "<td ".$style." >".number_format(doubleval($value[$i]))."<td/>";   
+        $firstClass = "class='".$firstColor." center'";
+        $secondClass = "class='".$secondColor." center'";
+        $thirdClass = "class='".$thirdColor." center'";
+
+        for ($col = 0; $col < 14; $col++) { 
+
+            if ($line == 1 || $line == 4 || $line == 5 || $line == 6) {
+                if ($col >= 0 && $col <= 12) {
+                    $class = $firstClass;
+                }else{
+                    $class = $secondClass;
+                }
+            }else{
+                if ($col == 0){
+                    $class = $firstClass;
+                }elseif ($col >= 1 && $col <= 12) {
+                    $class = $secondClass;
+                }else{
+                    $class = $thirdClass;
+                }
             }
-            else{
-                echo "<td>".number_format(doubleval($value[$i]))."<td/>";
+
+            if(is_numeric( $value[$col] )){
+                echo "<td $class>".number_format($value[$col])."</td>";
+            }else{
+                echo "<td $class>".$value[$col]."</td>";
             }
+            
         }
+
     }
 
 }
+
+
