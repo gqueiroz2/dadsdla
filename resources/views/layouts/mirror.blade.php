@@ -55,8 +55,8 @@
                             <a class="dropdown-item" href="{{ route('resultsMonthlyGet')}}"> Monthly </a>
                             <a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
                             <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
-                            <a class="dropdown-item" href="{{ route('YoYResultsGet') }}"> YoY </a>
-                            <a class="dropdown-item" href="#"> Monthly YoY </a>
+                            <a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY </a>
+                            <a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> Monthly YoY </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">

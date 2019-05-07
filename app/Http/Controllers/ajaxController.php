@@ -74,7 +74,7 @@ class ajaxController extends Controller{
 
         $renderYoY = new renderYoY();
 
-        var_dump("AKI");
+        //var_dump("AKI");
 
         $renderYoY->source($region[0]['name'], $year);
     }
