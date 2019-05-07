@@ -29,6 +29,7 @@
         <!-- Include the plugin's CSS and JS:-->
         
         @yield('head')
+        
     </head>
     <body>       
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -46,7 +47,7 @@
             </button>
             <?php $userName = Request::session()->get('userName'); ?>
 
-            @if($userName != null)
+            @if(! is_null($userName))
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown">
@@ -113,7 +114,7 @@
         </nav>
         <div id="app"></div>
         
-        @if($userName != null)
+        @if(! is_null($userName))
             @yield('content')
         @else
             @yield('contentLogout')
