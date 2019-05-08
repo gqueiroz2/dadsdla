@@ -12,6 +12,7 @@ use App\renderMonthlyYoY;
 use App\base;
 use App\pRate;
 use App\resultsMonthlyYoY;
+use Validator;
 
 class resultsMonthlyYoYController extends Controller{
     
@@ -38,6 +39,21 @@ class resultsMonthlyYoYController extends Controller{
 
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'brand' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+            'firstPos' => 'required',
+            'secondPos' => 'required',
+            'thirdPos' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         //seleciona as brands que foram escolhidas
         $brand = Request::get("brand");
@@ -74,6 +90,8 @@ class resultsMonthlyYoYController extends Controller{
             $brandsValueArray[$i] = $brandsValueAux[$index];
         }
         
+        var_dump($brandsValueArray);
+
         if (sizeof($brandsValueArray) > 1) {
             array_push($brandsValueArray, "DN");
         }

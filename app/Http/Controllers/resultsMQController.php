@@ -15,6 +15,7 @@ use App\Render;
 use App\quarterRender;
 use App\resultsMQ;
 use App\renderMQ;
+use Validator;
 
 class resultsMQController extends Controller{
 	
@@ -46,6 +47,20 @@ class resultsMQController extends Controller{
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
                 
+                $validator = Validator::make(Request::all(),[
+                        'region' => 'required',
+                        'year' => 'required',
+                        'brand' => 'required',
+                        'secondPos' => 'required',
+                        'thirdPos' => 'required',
+                        'currency' => 'required',
+                        'value' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                        return back()->withErrors($validator)->withInput();
+                }
+
                 $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
@@ -59,7 +74,6 @@ class resultsMQController extends Controller{
                 $firstPos = Request::get('secondPos');
                 $secondPos = Request::get('thirdPos');
                 $tmp = $pr->getCurrency($con,array($currencyID));
-                var_dump($currencyID);
                 if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
                 $valueS = strtoupper($value);
                 $cYear = $year;
@@ -68,9 +82,7 @@ class resultsMQController extends Controller{
                 $lines = $mq->lines($con,$brandID,$regionID,$year,$currencyID,$value,$firstPos,$secondPos);
 
                 $mtx = $mq->assembler($con,$b,$brandID,$lines,$month,$year);
-
                 $render = new renderMQ();
-
                 return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','valueS','currencyS','year','mtx'));
         }
 

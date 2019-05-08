@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\region;
 use App\results;
 use App\sql;
 use App\base;
@@ -18,6 +19,7 @@ class share extends results
     public function generateShare($con){
 
         $b = new brand();
+        $r = new region();
         $base = new base();
         $sql = new sql();
         $sr = new salesRep();
@@ -35,6 +37,19 @@ class share extends results
         $month = Request::get('month');
 
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
+
+        $tmp = array($currency);
+        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+        if ($value == "gross") {
+            $valueView = "Gross";
+        }else{
+            $valueView = "Net";
+        }
+
+        $yearView = $year[0];
+
+        $tmp = array($region);
+        $regionView = $r->getRegion($con,$tmp)[0]["name"];
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
         $tmp = $b->getBrand($con);
@@ -105,20 +120,36 @@ class share extends results
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
         $salesRepName = array();
 
+
         if ($salesRep == 'all') {
             
+            $salesRepView = "All";
+
             if ($salesRepGroup == 'all') {
+                
                 $tmp = array($region);
+            
                 $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
+            
                 $tmp = array();
+                
                 for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
                     array_push($tmp, $salesRepGroup[$i]["id"]);
                 }
 
                 $salesRepGroup = $tmp;
+            
             }else{
+
                 $salesRepGroup = array($salesRepGroup);
+
+                $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
+
+                                
             }
+
+            $salesRepGroupView = "All";                
+            
             $tmp = $sr->getSalesRep($con,$salesRepGroup);
 
             $salesRep = array();
@@ -128,13 +159,23 @@ class share extends results
                 array_push($salesRepName, $tmp[$i]["salesRep"]);
             }
         }else{
+            
             $salesRep = array($salesRep);
+            
+            $salesRepGroup = array($salesRepGroup);
+
+            $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
+            
             $tmp = $sr->getSalesRep($con,null);
+            
+
+
             for ($t=0; $t <sizeof($tmp) ; $t++) { 
                 if(is_array($salesRep)){
                     for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                         if ($tmp[$t]["id"] == $salesRep[$s]) {
                             array_push($salesRepName, $tmp[$t]["salesRep"]);
+                            $salesRepView = $tmp[$t]["salesRep"];
                         }
                     }
                 }
@@ -169,7 +210,8 @@ class share extends results
             }
         }
 
-        $mtx = $this->assembler($brandName,$salesRepName,$values,$div);
+        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView,$salesRepView,$regionView,$yearView,$source);
+
 
         return $mtx;
     }
@@ -236,6 +278,7 @@ class share extends results
 
         }
         
+
         return $values;
     }
 
@@ -313,9 +356,17 @@ class share extends results
         return $where;
     }
 
-    public function assembler($brand,$salesRep,$values,$div){
+    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup,$salesRepView,$region,$year,$source){
 
         $base = new base();
+
+        $mtx["value"] = $value;
+        $mtx["currency"] = $currency;
+        $mtx["salesRepGroup"] = $salesRepGroup;
+        $mtx["salesRepView"] = $salesRepView;
+        $mtx["region"] = $region;
+        $mtx["year"] = $year;
+        $mtx["source"] = $source;
 
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 

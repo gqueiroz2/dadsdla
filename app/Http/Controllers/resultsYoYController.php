@@ -11,6 +11,7 @@ use App\resultsYoY;
 use App\base;
 use App\pRate;
 use App\renderYoY;
+use Validator;
 
 class resultsYoYController extends Controller{
 
@@ -37,6 +38,21 @@ class resultsYoYController extends Controller{
 
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'brand' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+            'firstPos' => 'required',
+            'secondPos' => 'required',
+            'thirdPos' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         //seleciona as brands que foram escolhidas
         $brand = Request::get("brand");

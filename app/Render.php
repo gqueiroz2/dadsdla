@@ -13,7 +13,9 @@ class Render extends Model{
     	echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
-    			echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+    			if($region[$i]['name'] != "LATAM" ){
+                    echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+                }
     		}
 
 	   echo "</select>";
@@ -25,7 +27,7 @@ class Render extends Model{
             echo "<option value=''> Select </option>";
 
             for ($i = 0; $i < sizeof($region); $i++) { 
-                if ($region[$i]['id'] == $regionFiltered) {
+                if ( $region[$i]['id'] == $regionFiltered && ($region[$i]['name'] != "LATAM" )) {
                 echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
                     
                 }
@@ -49,11 +51,9 @@ class Render extends Model{
 
     public function brand($brand){
 
-    	echo "<select id='brand' class='selectpicker' multiple='true' name='brand[]' data-size='3 ' data-width='100%'>";
-    		echo "<option value='dn' selected='true'> DN </option>";
-    		
+    	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
-	    		echo "<option value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
+	    		echo "<option selected='true' value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
     		}
     		
     	echo "</select>";
@@ -82,7 +82,7 @@ class Render extends Model{
 
     public function salesRep($salesRep){
     	echo "<select id='salesRep' name='salesRep' style='width:100%;' class='form-control'>";
-    		echo "<option value=''> Select Sales Rep Group </option>";
+    		echo "<option value=''> Select Region </option>";
 
     	echo "</select>";	
 
@@ -90,11 +90,11 @@ class Render extends Model{
 
     public function months(){
 
-    	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' style='width:100%;' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
+    	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%'>";
             //echo "<option selected='true' value='all'>All</option>";
     		//echo "<option value='ytd'>YTD</option>";
     		for ($m=0; $m < sizeof($this->month); $m++) { 
-    			echo "<option value='".($m+1)."'>".$this->month[$m]."</option>";
+    			echo "<option selected='true' value='".($m+1)."'>".$this->month[$m]."</option>";
     		}
 
     	echo "</select>";
@@ -108,7 +108,6 @@ class Render extends Model{
 
     public function value(){
     	echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
-    		echo "<option value=''> Select </option>";
     		echo "<option value='gross'> Gross </option>";
     		echo "<option value='net'> Net </option>";
     	echo "</select>";

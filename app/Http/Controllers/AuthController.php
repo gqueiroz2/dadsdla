@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function logout(){
         Request::session()->flush();
 
-        return view('auth.login');
+        return redirect('');
     }
 
     public function loginPost(){

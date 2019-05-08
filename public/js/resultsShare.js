@@ -1,9 +1,14 @@
   $(document).ready(function(){      
     $('#region').change(function(){
-		  var regionID = $(this).val();                		
+		  var regionID = $(this).val();
+
 		  if(regionID != ""){        			
 			  ajaxSetup();
-			  $.ajax({
+			  
+        var option = "<option> Select Sales Group </option>";
+        $('#salesRep').html(option);
+
+        $.ajax({
     			url:"/ajaxResults/salesRepGroupByRegion",
   			  method:"POST",
   			  data:{regionID},
@@ -37,8 +42,18 @@
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);
           }
+
+
+
         });
 
+
+      }else{
+        var option = "<option> Select Region </option>";
+        $('#salesRepGroup').html(option);
+        $('#currency').html(option);
+        $('#source').html(option);
+        $('#salesRep').html(option);
 
       }
     });
@@ -46,7 +61,7 @@
 	  $('#salesRepGroup').change(function(){
 		  var regionID = $("#region").val();                		
 		  var salesRepGroupID = $(this).val();   
-   		if(regionID != ""){        			
+   		if(regionID != "" && salesRepGroupID != ""){        			
 		 	  ajaxSetup();
 			  $.ajax({
   			  url:"/ajaxResults/salesRepBySalesRepGroup",
@@ -59,7 +74,11 @@
         		alert(xhr.status+" "+thrownError);
     			}
     		});
+      }else{
+        var option = "<option> Select Sales Group </option>";
+        $('#salesRep').html(option);
       }
+      
     });
   });
 

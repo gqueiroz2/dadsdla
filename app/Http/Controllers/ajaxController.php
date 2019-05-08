@@ -86,17 +86,30 @@ class ajaxController extends Controller{
         $regionID = array(Request::get('regionID'));
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
-        if($salesRepGroup){
+
+        $userLevel = Request::session()->get('userLevel');
+
+        if ($userLevel == "L3" || $userLevel == "L4") {
+            $groupID = Request::session()->get('userSalesRepGroupID');
+            $groupName = Request::session()->get('userSalesRepGroup');
             echo "<option value=''> Select </option>";
-            echo "<option value='all'> All </option>";
-            for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
-                echo "<option value='".$salesRepGroup[$s]["id"]."'>"
-                    .$salesRepGroup[$s]["name"].
-                "</option>";
-            }
+            echo "<option value='".$groupID."'>".$groupName."</option>";
+
         }else{
-            echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
+            if($salesRepGroup){
+                echo "<option value=''> Select </option>";
+                echo "<option value='all'> All </option>";
+                for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
+                    echo "<option value='".$salesRepGroup[$s]["id"]."'>"
+                        .$salesRepGroup[$s]["name"].
+                    "</option>";
+                }
+            }else{
+                echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
+            }
         }
+
+        
     }
 
     public function salesRepBySalesRepGroup(){
@@ -107,25 +120,41 @@ class ajaxController extends Controller{
 
         $salesRepGroupID = array( Request::get('salesRepGroupID') );         
 
-        if ($salesRepGroupID[0] == 'all') {
-            $regionID = array($regionID);
-            $salesRep = $sr->getSalesRepByRegion($con,$regionID);
-        }else{
+        $userLevel = Request::session()->get('userLevel');
+
+        if ($userLevel == "L4") {
+            $userName = Request::session()->get('userName');
             $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
-        }
-
-
-
-         if($salesRep){
-            echo "<option value=''> Select </option>";
-            echo "<option value='all'> All </option>";
-            for ($s=0; $s < sizeof($salesRep); $s++) { 
-                echo "<option value='".$salesRep[$s]["id"]."'>"
-                    .$salesRep[$s]["salesRep"].
-                "</option>";
+            $check = false;            
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                if($salesRep[$s]["salesRep"] == $userName){
+                    echo "<option value='".$salesRep[$s]["id"]."'> ".$salesRep[$s]["salesRep"]." </option>";
+                    $check = true;
+                }
+            }
+            if (!$check) {
+                echo "<option value=''> Sales Rep Not Found </option>";
             }
         }else{
-            echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+
+            if ($salesRepGroupID[0] == 'all') {
+                $regionID = array($regionID);
+                $salesRep = $sr->getSalesRepByRegion($con,$regionID);
+            }else{
+                $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
+            }
+
+            if($salesRep){
+                echo "<option value=''> Select </option>";
+                echo "<option value='all'> All </option>";
+                for ($s=0; $s < sizeof($salesRep); $s++) { 
+                    echo "<option value='".$salesRep[$s]["id"]."'>"
+                        .$salesRep[$s]["salesRep"].
+                    "</option>";
+                }
+            }else{
+                echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+            }
         }
     }
 
@@ -145,7 +174,7 @@ class ajaxController extends Controller{
                     echo "<option value='".$currency[$c]["id"]."'>".$currency[$c]["name"]."</option>";
                 }
             }
-            echo "<option value='USD'>USD</option>";
+            echo "<option value='4'>USD</option>";
         }else{
             echo "<option value=''> There is no Currency for this Region </option>";
         }

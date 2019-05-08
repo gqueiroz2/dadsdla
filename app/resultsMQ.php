@@ -15,8 +15,6 @@ class resultsMQ extends results{
         
         $currency = $p->getCurrency($con,array($currency))[0]['name'];
 
-        var_dump($currency);
-
         if (sizeof($brands) == 0) {
             $lines = false;
         }else{
@@ -24,7 +22,8 @@ class resultsMQ extends results{
             for ($i=0; $i < sizeof($brands); $i++) { 
 
                 if ($brands[$i] == 9 || $brands[$i] == 10) {
-                    $finalValue = 'Digital';
+                    $finalValue = $value;
+                    $source = 'Digital';
                 }else{
                     $finalValue = $value;
                 }
@@ -33,7 +32,6 @@ class resultsMQ extends results{
                     $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $finalValue, $form, ($j+1), $source);
 
                     if (!$lines[$i][$j]) {
-                    	var_dump("AKI");
                         $lines[$i][$j] = "This brand doesn't has values";
                     }
                 }
@@ -49,7 +47,6 @@ class resultsMQ extends results{
     	$newSource = strtoupper($form);
         switch ($lineNumber) {
             case 1:
-                
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $newSource, strtoupper($value), $brand, $year);
                 $p = new planByBrand();
@@ -57,9 +54,9 @@ class resultsMQ extends results{
                 break;
 
             case 2:
-                $res = $this->createObject($source, $value);
-
+                $res = $this->createObject($source, $value);                
                 $formResp = $res[0];
+
                 if (!is_null($formResp)) {
 
                     $columns = $res[1];
@@ -100,7 +97,7 @@ class resultsMQ extends results{
         }else{
             $pRate = 1.0;
         }
-        
+    
         array_push($colValues, 0);
         $tam = sizeof($columns);
         for ($i = 0; $i < 12; $i++) {
@@ -126,49 +123,44 @@ class resultsMQ extends results{
 
         switch ($form) {
             case 'IBMS':
+                $create = 'ytd';
                 $obj = new ytd();
-
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $value .= "_revenue";
-
                 break;
 
             case 'ytd':
+                $create = 'ytd';
                 $obj = new ytd();
-
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $value .= "_revenue";
-
                 break;
             
             case 'CMAPS':
+                $create = 'cmaps';
                 $obj = new cmaps();
-
                 $columns = array("brand_id", "year", "month");
-
                 break;
 
             case 'cmaps':
+                $create = 'cmaps';
                 $obj = new cmaps();
-
                 $columns = array("brand_id", "year", "month");
-
                 break;
 
             case 'Header':
+                $create = 'mini_header';
                 $obj = new mini_header();
-
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $value .= "_revenue";
 
                 break;
 
             case 'Digital':
+                $create = 'digital';
                 $obj = new digital();
-
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $value .= "_revenue";
-
                 break;
 
             default:
@@ -177,22 +169,79 @@ class resultsMQ extends results{
                 break;
         }
 
-        return array($obj, $columns, $value);
+        return array($obj, $columns, $value ,$create);
     }
 
     public function assembler($con,$brand,$brandID, $lines, $month, $year){
-
     	for ($i = 0; $i < sizeof($brandID); $i++) {
-
     		$brandName[$i] = $brand->getBrand($con, array($brandID[$i]) )[0];
-
             if (is_string($lines[$i][1])) {
                 $matrix[$i] = $lines[$i][1];       
             }else{
                 $matrix[$i] = $this->handler($brandName[$i],$lines[$i][1],$lines[$i][0],$month,$year);
             }
         }
+
+        $matrix[sizeof($brandID)] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year);
+
         return $matrix;
+    }
+
+    public function assemblerDN($matrix, $pos, $month, $year){
+        
+        $currentMatrix[0][0] = "DN";
+        $currentMatrix[1][0] = "Target $year";
+        $currentMatrix[2][0] = "Real $year";
+        $currentMatrix[3][0] = "Var(%)";
+        $currentMatrix[4][0] = "Absolut Var.";
+
+        for ($i = 1; $i <= sizeof($month); $i++) {
+
+            $currentMatrix[0][$i] = $month[$i-1][2];
+            $currentMatrix[1][$i] = 0;
+            $currentMatrix[2][$i] = 0;            
+        }
+
+        $valueCurrentYearSum = 0;
+        $targetSum = 0;
+
+        for ($i = 0; $i < $pos; $i++) { 
+            for ($j = 1; $j <= sizeof($month); $j++) { 
+                $currentMatrix[1][$j] += $matrix[$i][1][$j];
+                $targetSum += $matrix[$i][1][$j];
+
+                $currentMatrix[2][$j] += $matrix[$i][2][$j];
+                $valueCurrentYearSum += $matrix[$i][2][$j];                
+            }
+        }
+
+        for ($n=1; $n < 13; $n++) { 
+                
+            if($currentMatrix[1][$n] > 0){
+                $currentMatrix[3][$n] = (($currentMatrix[2][$n]/$currentMatrix[1][$n])*100);
+            }else{
+                $currentMatrix[3][$n] = 0.0;
+            }
+
+            $currentMatrix[4][$n] = $currentMatrix[2][$n] - $currentMatrix[1][$n];
+
+        }
+
+        $last = $j;
+
+        $currentMatrix[0][$last] = "Total";
+        $currentMatrix[1][$last] = $targetSum;
+        $currentMatrix[2][$last] = $valueCurrentYearSum;
+        if($targetSum > 0){
+            $currentMatrix[3][$last] = (($valueCurrentYearSum/$targetSum )*100);
+        }else{
+            $currentMatrix[3][$last] = 0.0;
+        }
+        $currentMatrix[4][$last] = $valueCurrentYearSum - $targetSum ;
+
+
+        return $currentMatrix;
+
     }
 
     public function handler($brand, $valueCurrentYear, $target, $month, $year){

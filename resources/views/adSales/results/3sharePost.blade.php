@@ -8,11 +8,16 @@
 @section('content')
 
 	<style type="text/css">
+		table{
+			width: 100%;
+			float: right !important;
+		}
 		th, td{
-			padding: 6px;
 			text-align: center;
 			font-size: 12px;
+			padding: 3px;
 		}
+
 	</style>
 
 
@@ -22,7 +27,7 @@
 				<form method="POST" action="{{ route('resultsSharePost') }}">
 					@csrf
 					<div class="row justify-content-center">
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Region:</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')								
 								{{$render->region($region)}}							
@@ -30,47 +35,62 @@
 								{{$render->regionFiltered($region, $regionID )}}
 							@endif
 						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Year:</label>
 							{{$render->year()}}
 						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Brands:</label>
 							{{$render->brand($brand)}}
 						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Source:</label>
 							{{$render->source()}}
 						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Sales Rep Group:</label>
 							{{$render->salesRepGroup($salesRepGroup)}}
 						</div>
 
 					</div>
 					<div class="row justify-content-center">
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Sales Rep:</label>
 							{{$render->salesRep($salesRep)}}
 						</div>
-						<div class="col col-2">
-							<label class='labelLeft'>Months:</label>
-							{{$render->months()}}
-						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'>Currency:</label>
 							{{$render->currency($currency)}}
 						</div>
-						<div class="col col-2">
+						<div class="col">
+							<label class='labelLeft'>Months:</label>
+							{{$render->months()}}
+						</div>
+						<div class="col">
 							<label class='labelLeft'>Value:</label>
 							{{$render->value()}}
 						</div>
-						<div class="col col-2">
+						<div class="col">
 							<label class='labelLeft'> &nbsp; </label>
 							<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 						</div>
 					</div>
 				</form>
+				<div class="row justify-content-end">
+					<div class="col col-3" style="text-align: center; margin-top: 2%; ">
+						<h1 class="reportsTitle" >Share ({{$mtx["region"]}} / {{$mtx["year"]}})</h1>
+					</div>
+				</div>
+				
+				<!--<div class="row justify-content-end no-gutters">
+					<div class="col-3" style="color: #0070c0;font-size: 25px">
+						<form class="form-inline" method="POST" action="#">
+							@csrf
+							 <button class="btn btn-primary" style="width: 100%">Generate Excel</button>
+						</form>
+					</div>
+				</div>-->
+
 			</div>
 		</div>
 		<div class="row mt-2">
@@ -78,8 +98,8 @@
 				<div class="container-fluid">
 					<div class="form-group">
 						<div class="form-inline">
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%;">
-								<div class="col col-3" style="zoom:175%; display: block; margin-top: 8%;">
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col col-3" style="zoom:125%; display: block; margin-top: 8%;">
 									<div id="chart_div"></div>
 								</div>
 								<div class="col col-9" style=" width: 100%; margin-top: 5%;">
@@ -120,8 +140,8 @@
 					'width':'100%',
 					'height':'100%'
 				},
-				'width': '1000px',
-				'height': '800px',
+				'width': '100%',
+				'height': '100%',
 				backgroundColor:'transparent',
 				legend:'none',
 				pieSliceText: 'label',

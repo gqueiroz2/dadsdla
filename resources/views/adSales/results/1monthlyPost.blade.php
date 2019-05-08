@@ -2,6 +2,7 @@
 @section('title', 'Monthly Results')
 @section('head')	
 	<script src="/js/results.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -14,7 +15,11 @@
 
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Region: </span></label>
-							{{$render->region($region)}}
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
+							@endif
 						</div>
 
 						<div class="col">
@@ -38,7 +43,7 @@
 						</div>				
 
 						<div class="col">
-							<label>Currency:</label>
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
 							{{$render->currency($currency)}}
 						</div>
 

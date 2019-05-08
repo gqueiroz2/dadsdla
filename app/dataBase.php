@@ -37,7 +37,7 @@ class dataBase extends Model{
         $con->close();
     }
 
-    protected $ip = "127.0.0.1";    
+    protected $ip = "127.0.0.1";
     protected $pass = "secret";
     protected $user = "root";
 

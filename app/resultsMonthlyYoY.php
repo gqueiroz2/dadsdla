@@ -238,104 +238,105 @@ class resultsMonthlyYoY extends results{
 
     public function assemblers($months, $year, $brands, $cols){
     	
-    	$pos = 1;
+        $size = sizeof($brands);
 
     	for ($i=0; $i < sizeof($months); $i++) {
-            for ($j=0; $j < sizeof($brands); $j++) { 
-                $matrix[$i] = $this->assembler($brands[$j], $j, $cols, $i, $pos);
-                $pos++; 
-
-                if ($i == 2 || $i == 5 || $i == 8 || $i == 11) {
-                   $quarter[$q] = $this->assemblerQuarter($matrix, $brands);
-                    $q++;
-                }
-            }
-
-    		$pos = 1;
+            
+            $matrix[$i] = $this->assembler($brands, $cols, $i);
 
             if ($size > 1) {
                 
-                for ($i=0; $i < 3; $i++) { 
-                    $valuesDN[$i] = 0;
-                }
+                $sizeBrands = $size+1;
 
-                for ($k=0; $k < 3; $k++) { 
-                    for ($c=1; $c <= sizeof($brands); $c++) { 
-                        $valuesDN[$k] += $matrix[$i][$c][$k]; 
-                    }
-                }
-
-                $matrix[$i][sizeof($matrix[$i][$c])][0] += $valuesDN[0];
-                $matrix[$i][sizeof($matrix[$i][$c])][1] += $valuesDN[1];
-                $matrix[$i][sizeof($matrix[$i][$c])][2] += $valuesDN[2];
+                $value = $this->assemblerDN($i, $matrix[$i], $brands);
+                $matrix[$i][sizeof($brands)][0] = $value[0];
+                $matrix[$i][sizeof($brands)][1] = $value[1];
+                $matrix[$i][sizeof($brands)][2] = $value[2];
+            }else{
+                $sizeBrands = $size;
             }
 
     	}
 
-    	/*if (sizeof($brands) > 1) {
-			$matrixDn = $this->assemblerDN($matrix, $months, $brands);
-			$quarterDn = $this->assemblerDNQuarter($quarter, $brands);
+        $quarters[0] = $this->assemblerQuarter($matrix, 0, 2, $sizeBrands);
+        $quarters[1] = $this->assemblerQuarter($matrix, 3, 5, $sizeBrands);
+        $quarters[2] = $this->assemblerQuarter($matrix, 6, 8, $sizeBrands);
+        $quarters[3] = $this->assemblerQuarter($matrix, 9, 11, $sizeBrands);
 
-    	}*/
-
-        //var_dump($matrix);
-    	return $matrix;
+        //var_dump($quarters);
+    	return array($matrix, $quarters);
     }
 
-    public function assembler($brand, $brandPos, $cols, $month, $pos){
+    public function assembler($brands, $cols, $month){
 
-        $matrix[$month][0][$brandPos] = $brand;
+        for ($i=0; $i <= sizeof($brands); $i++) {
+            
+            $matrix[$i][0] = 0;
+            $matrix[$i][1] = 0;
+            $matrix[$i][2] = 0;
+            
+        }
 
-    	for ($j = 0; $j < 3; $j++) {
-    		$matrix[$month][$pos][$j] = $cols[$month][$j][$pos-1];
+        $pos = 0;
+        //var_dump($matrix);
 
-    	}
+        for ($i=0; $i < 3; $i++) { 
 
+            for ($j = 0; $j < sizeof($brands); $j++) {
+                $matrix[$pos][$i] += $cols[$month][$i][$j];
+                $pos++;   
+
+            }
+
+            $pos = 0;
+
+        }
+    	
+
+        //var_dump($matrix);
         return $matrix;
 
     }
 
-    public function assemblerQuarter($matrix, $brands){
-
-    	for ($i=0; $i < sizeof($brands); $i++) { 
-    		$quarter[$i][0] = 0;
-    		$quarter[$i][1] = 0;
-    		$quarter[$i][2] = 0;
-    	}
-
-        for ($i = 0; $i < 3; $i++) { 
-        	for ($k = 0; $k < sizeof($brands); $k++) {
-        		for ($j = 0; $j < 3; $j++) { 
-        		 	$quarter[$k][$j] += $matrix[$i][$k][$j];
-        		 } 
-        		
-        	}
+    public function assemblerDN($month, $matrix, $brands){
+        
+        for ($i=0; $i < 3; $i++) { 
+            $valuesDN[$i] = 0;
+        }
+        //var_dump($matrix);
+        for ($c=0; $c < 3; $c++) { 
+            for ($k=0; $k < sizeof($brands); $k++) { 
+                $valuesDN[$c] += $matrix[$k][$c]; 
+            }
         }
 
+        //var_dump($valuesDN);
+        return $valuesDN;
+
+    }
+
+    public function assemblerQuarter($matrix, $min, $max, $brands){
+
+        //var_dump($matrix);
+
+        for ($i=0; $i < $brands; $i++) { 
+            for ($j=0; $j < 3; $j++) { 
+                $quarter[$j][$i] = 0;
+            }
+        }
+
+        for ($i=$min; $i < $max; $i++) { 
+            for ($j=0; $j < 3; $j++) { 
+                for ($k=0; $k < $brands; $k++) { 
+                    $quarter[$j][$k] += $matrix[$i][$k][$j];
+                }
+            }
+            
+        }
+    	
+        //var_dump($quarter);
    		return $quarter;
 
     }
 
-    
-
-    public function assemblerDNQuarter($quarter, $brands){
-    	
-    	for ($i=0; $i < 4; $i++) { 
-    		for ($j=0; $j < 3; $j++) { 
-    			$currentQuarter[$i][$j] = 0;
-    		}
-    	}
-
-    	//var_dump($quarter);
-
-    	for ($i = 0; $i < 4; $i++) { 
-    		for ($j = 0; $j < 3; $j++) { 
-    			for ($k = 0; $k < sizeof($brands); $k++) { 
-    				$currentQuarter[$i][$j] += $quarter[$i][$k][$j];
-    			}
-    		}
-    	}
-    	//var_dump($currentQuarter);
-    	return $currentQuarter;
-    }
 }
