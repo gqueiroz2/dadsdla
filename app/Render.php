@@ -49,11 +49,9 @@ class Render extends Model{
 
     public function brand($brand){
 
-    	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' data-size='3 ' data-width='100%'>";
-    		echo "<option value='dn' selected='true'> DN </option>";
-    		
+    	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
-	    		echo "<option value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
+	    		echo "<option  value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
     		}
     		
     	echo "</select>";

@@ -2,6 +2,7 @@
 @section('title', 'Resume Results')
 @section('head')	
 	<script src="/js/resultsResume.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -12,7 +13,11 @@
 					<div class="row">
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Region: </span></label>
-							{{$render->region($region)}}
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
+							@endif
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Brand: </span></label>
