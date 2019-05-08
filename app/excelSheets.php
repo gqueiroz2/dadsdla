@@ -54,7 +54,8 @@ class excelSheets extends excel{
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
 					   $columns[$c] == 'revenue' ||
-					   $columns[$c] == 'REVENUE'
+					   $columns[$c] == 'REVENUE' ||
+					   $columns[$c] == 'campaign_option_spend'
 				      ){
 						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$c]) );
 					}else{
@@ -83,7 +84,7 @@ class excelSheets extends excel{
 	public function values($spreadSheet,$columns){
 		$values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
-			$values .= " \" ".$spreadSheet[$columns[$c]]." \" ";
+			$values .= "\"".$spreadSheet[$columns[$c]]."\"";
 
 			if($c != (sizeof($columns) - 1) ){
 				$values .= ", ";
@@ -96,14 +97,15 @@ class excelSheets extends excel{
 		$values = $this->values($spreadSheet,$columns);
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
 
-		var_dump($ins);
-
 		if($con->query($ins) === TRUE ){
+			//var_dump("FOI");
 			$error = false;
 		}else{
 			if($table == 'cmaps'){
 				$error = $spreadSheet['decode'];
 			}elseif($table == 'mini_header'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
 				$error = array($spreadSheet['campaign_reference'],$spreadSheet['order_reference']);
 			}elseif($table = 'plan_by_brand'){
 				var_dump($ins);
@@ -121,7 +123,7 @@ class excelSheets extends excel{
 		$spreadSheet = $this->assembler($spreadSheet,$columns);
 		$into = $this->into($columns);		
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+			//$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
 		}			
 		return $bool;
 	}
