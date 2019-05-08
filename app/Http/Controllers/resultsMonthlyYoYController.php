@@ -8,6 +8,7 @@ use App\region;
 use App\brand;
 use App\Render;
 use App\renderYoY;
+use App\renderMonthlyYoY;
 use App\base;
 use App\pRate;
 use App\resultsMonthlyYoY;
@@ -83,19 +84,25 @@ class resultsMonthlyYoYController extends Controller{
 
     	$matrix = $monthlyYoY->assemblers($base->getMonth(), $year, $b, $cols);
 
-    	/*for ($i=0; $i < sizeof($b); $i++) { 
+    	for ($i=0; $i < sizeof($b); $i++) { 
             $index = intval($b[$i]);
             $index -= 1;
             $brandsValueArray[$i] = $brandsValueAux[$index];
         }
         
+        var_dump($brandsValueArray);
+
         if (sizeof($brandsValueArray) > 1) {
             array_push($brandsValueArray, "DN");
         }
 
-        $size = sizeof($brandsValueArray);*/
+        $size = sizeof($brandsValueArray);
 
-    	//return view("adSales.results.5monthlyYoYPost", compact('matrix', 'size','$brandsValueArray', 'base'));
+        $render = new Render();
+        $renderYoY = new renderYoY();
+        $renderMonthlyYoY = new renderMonthlyYoY();
+
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brandsValue', 'year', 'size','brandsValueArray', 'base', 'form', 'pRate', 'value'));
 	}
 
 }
