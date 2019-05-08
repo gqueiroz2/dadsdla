@@ -8,7 +8,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form class="form-inline" role="form" method="POST" action="{{ route('YoYResultsPost') }}">
+				<form class="form-inline" role="form" method="POST" action="{{ route('resultsYoYGet') }}">
 				@csrf
 					<div class="col-12 col-lg">
 						<div class="form-inline">
@@ -87,7 +87,7 @@
 
 		<br>
 
-		<div class="row no-gutters">
+		<!--<div class="row no-gutters">
 			<div class="col-9"></div>
 			<div class="col-3" style="color: #0070c0;font-size: 25px">
 				<form class="form-inline" method="POST" action="#">
@@ -95,7 +95,7 @@
 					 <button class="btn btn-primary" style="width: 100%">Generate Excel</button>
 				</form>
 			</div>
-		</div>
+		</div>-->
 
 	</div>
 
@@ -107,7 +107,7 @@
 						<th class="lightBlue center" colspan="15">
 							<span style="font-size:18px;"> 
 								Year Over Year :({{$form}}) {{$year}} ({{($value == "gross") ? "Gross" : "Net"}}
-								/{{strtoupper($currency)}})
+								/{{strtoupper($pRate[0]['name'])}})
 							</span>
 						</th>
 					</tr>

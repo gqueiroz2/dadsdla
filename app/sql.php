@@ -79,7 +79,8 @@ class sql extends Model{
 
     public function updateValues($con,$tableName,$set,$where){
 
-        $sql = "UPDATE $tableName $set $where";
+        $sql = "UPDATE DLA.$tableName $set $where";
+
 
         if($con->affected_rows == 0){
             $rtr["bool"] = false;

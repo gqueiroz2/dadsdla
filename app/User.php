@@ -55,7 +55,6 @@ class User extends Management{
             $set[$i] = $sql->setUpdate($columns,$arraySet[$i]);
         }
 
-
         $bool = false;
 
         for ($i=0; $i <$size; $i++) {

@@ -335,6 +335,7 @@ class dataManagementController extends Controller{
 
         $bool = $usr->editUserType($con);
 
+
         if($bool){
             return back()->with('response',$bool['msg']);
         }else{

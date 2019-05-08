@@ -16,9 +16,7 @@ use App\digital;
 class resultsYoY extends results {
     
     public function lines($con, $brands, $region, $year, $currency, $value, $form, $source){
-
-        $lines = array();
-
+        
         if (sizeof($brands) == 0) {
             $lines = false;
         }else{
@@ -42,7 +40,6 @@ class resultsYoY extends results {
         }
 
         return $lines;
-
     }
 
     public function line($con, $currency, $brand, $region, $year, $value, $form, $lineNumber, $source){        
