@@ -1,11 +1,9 @@
 @extends('layouts.mirror')
-
 @section('title', 'Quarter Results')
-
 @section('head')	
-
+	<script src="/js/results.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
-
 @section('content')
 
 	<form class="form-inline" role="form" method="POST" action="{{ route('quarterResultsPost') }}">
@@ -19,7 +17,11 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Sales Region</label>
-						{{$render->region($salesRegion)}}
+						@if($userLevel == 'L0' || $userLevel == 'SU')
+							{{$render->region($region)}}							
+						@else
+							{{$render->regionFiltered($region, $regionID )}}
+						@endif
 					</div>
 				</div>
 				

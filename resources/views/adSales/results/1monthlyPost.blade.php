@@ -43,7 +43,7 @@
 						</div>				
 
 						<div class="col">
-							<label>Currency:</label>
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
 							{{$render->currency($currency)}}
 						</div>
 

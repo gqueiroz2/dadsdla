@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\base;
@@ -44,6 +45,23 @@ class shareController extends Controller{
         $b = new brand();
         $pr = new pRate();
         $s = new share();
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'brand' => 'required',
+            'source' => 'required',
+            'salesRepGroup' => 'required',
+            'salesRep' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+            'month' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         $mtx = $s->generateShare($con);
 

@@ -8,7 +8,7 @@ use App\Render;
 class shareRender extends Render{
 
     public function mtx($mtx){
-   		echo "<table style='width:100%;' >";
+   		echo "<table>";
 			echo "<tr class='lightBlue'>";
 				echo "<th colspan='".(sizeof($mtx["brand"]) + 3)."'>Share - Sales Group: ".$mtx["salesRepGroup"]." - (".$mtx["currency"]."/".$mtx["value"].")</th>";
 			echo "</tr>";

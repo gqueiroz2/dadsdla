@@ -52,6 +52,8 @@ class resultsMQController extends Controller{
                 $regionID = Request::get('region');
                 $brandID = $base->handleBrand( $con, $b ,Request::get('brand'));
 
+                
+
                 $currencyID = Request::get('currency');
                 $value = Request::get('value');        
                 $year = Request::get('year');
@@ -59,7 +61,6 @@ class resultsMQController extends Controller{
                 $firstPos = Request::get('secondPos');
                 $secondPos = Request::get('thirdPos');
                 $tmp = $pr->getCurrency($con,array($currencyID));
-                var_dump($currencyID);
                 if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
                 $valueS = strtoupper($value);
                 $cYear = $year;
@@ -68,7 +69,7 @@ class resultsMQController extends Controller{
                 $lines = $mq->lines($con,$brandID,$regionID,$year,$currencyID,$value,$firstPos,$secondPos);
 
                 $mtx = $mq->assembler($con,$b,$brandID,$lines,$month,$year);
-
+                //var_dump($mtx);
                 $render = new renderMQ();
 
                 return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','valueS','currencyS','year','mtx'));

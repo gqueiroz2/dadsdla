@@ -13,7 +13,9 @@ class Render extends Model{
     	echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
-    			echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+    			if($region[$i]['name'] != "LATAM" ){
+                    echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+                }
     		}
 
 	   echo "</select>";
@@ -25,7 +27,7 @@ class Render extends Model{
             echo "<option value=''> Select </option>";
 
             for ($i = 0; $i < sizeof($region); $i++) { 
-                if ($region[$i]['id'] == $regionFiltered) {
+                if ( $region[$i]['id'] == $regionFiltered && ($region[$i]['name'] != "LATAM" )) {
                 echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
                     
                 }

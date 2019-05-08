@@ -8,23 +8,18 @@
 @section('content')
 
 	<style type="text/css">
+		table{
+			width: 100%;
+			zoom:110%;
+		}
 		th, td{
+			width: 100%;
 			padding: 6px;
 			text-align: center;
 			font-size: 12px;
 		}
 
-		.bootstrap-select{
-			  border-style: solid;
-			  border-left-width: 3px;
-			  border-top: none;
-			  border-bottom: none;
-			  border-right: none;
-			  color: white;
-			  -webkit-appearance: none;
-			  -moz-appearance: none;
-			  appearance: none;
-		}
+		
 
 	</style>
 

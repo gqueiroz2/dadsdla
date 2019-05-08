@@ -2,6 +2,7 @@
 @section('title', 'monthly YoY Results')
 @section('head')	
 	<script src="/js/resultsYoY.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 
@@ -14,7 +15,11 @@
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label>Sales Region</label>
-							{{ $render->region($salesRegion) }}
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($salesRegion)}}							
+							@else
+								{{$render->regionFiltered($salesRegion, $regionID )}}
+							@endif
 						</div>
 					</div>
 

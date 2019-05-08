@@ -53,7 +53,8 @@ class excelSheets extends excel{
 
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
-					   $columns[$c] == 'revenue'
+					   $columns[$c] == 'revenue' ||
+					   $columns[$c] == 'REVENUE'
 				      ){
 						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$c]) );
 					}else{
@@ -94,6 +95,8 @@ class excelSheets extends excel{
 	public function insert($con,$spreadSheet,$columns,$table,$into){
 		$values = $this->values($spreadSheet,$columns);
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
+
+		var_dump($ins);
 
 		if($con->query($ins) === TRUE ){
 			$error = false;
@@ -137,13 +140,20 @@ class excelSheets extends excel{
 		$columns = $this->planByBrandColumns;
 		$spreadSheet = $this->assembler($spreadSheet,$columns);
 		$into = $this->into($columns);
+/*
+		$del = "DELETE FROM plan_by_brand WHERE (source = 'TARGET')";
+		if($con->query($del) == TRUE){
+			var_dump("DELETOU");
+		}
+*/
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
 		}			
 		return $bool;
+
 	}
 
-	public $planByBrandColumns = array('sales_office_id','currency_id','brand_id','source','year','type_of_revenue','month','revenue');
+	public $planByBrandColumns = array('sales_office_id','currency_id','brand_id','source','year','month','type_of_revenue','revenue');
 
 	public $miniHeaderColumns = array('campaign_sales_office_id','sales_rep_sales_office_id','brand_id','sales_rep_id','client_id','agency_id','campaign_currency_id','sales_group_id','year','month','brand_feed','sales_rep_role','order_reference','campaign_reference','campaign_status_id','campaign_option_desc','campaign_class_id','campaign_option_start_date','campaign_option_target_spot','campaign_option_spend','gross_revenue');
 

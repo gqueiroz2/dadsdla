@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Validator;
 use App\results;
 use App\sql;
 use App\base;

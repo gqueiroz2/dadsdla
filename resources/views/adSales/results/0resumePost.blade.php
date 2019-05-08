@@ -12,7 +12,7 @@
 					@csrf
 					<div class="row">
 						<div class="col">
-							<label>Region:</label>
+							<label class="labelLeft"><span class="bold"> Region: </span></label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($region)}}							
 							@else
@@ -20,15 +20,15 @@
 							@endif
 						</div>
 						<div class="col">
-							<label>Brand:</label>
+							<label class="labelLeft"><span class="bold"> Brand: </span></label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label>Currency:</label>
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
-							<label>Value:</label>
+							<label class="labelLeft"><span class="bold"> Value: </span></label>
 							{{$render->value()}}
 						</div>
 						<div class="col">
@@ -40,7 +40,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
 		<div class="row mt-2	">
 			<div class="col">				
@@ -50,7 +49,7 @@
 					</tr>
 					<tr>
 						<th class="darkBlue"> Month </th>
-						<th class="lightBlue"> Sales </th>
+						<th class="lightBlue"> {{$salesShow}} </th>
 						<th class="lightBlue"> Actual </th>
 						<th class="darkBlue"> Target </th>
 						<th class="darkBlue"> Corporate </th>
@@ -59,13 +58,13 @@
 						<th class="darkBlue"> Finance FCST </th>
 						-->
 						<th class="darkBlue"> {{$pYear}} </th>
-						<th class="grey"> Sales/Target </th>
-						<th class="grey"> Sales/Corporate </th>
+						<th class="grey"> {{$salesShow}}/Target </th>
+						<th class="grey"> {{$salesShow}}/Corporate </th>
 						{{--
 						<th class="grey"> Sales/P&R </th>
 						<th class="grey"> Sales/Finance </th>
 						--}}
-						<th class="grey"> Sales/{{$pYear}} </th>
+						<th class="grey"> {{$salesShow}}/{{$pYear}} </th>
 					</tr>
 					@for($m = 0;$m < sizeof($matrix);$m++)
 						@if($matrix[$m]['month'] == "Total")

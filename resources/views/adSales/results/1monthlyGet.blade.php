@@ -2,7 +2,7 @@
 @section('title', 'Monthly Results')
 @section('head')	
 	<script src="/js/results.js"></script>
-    <?php include(resource_path('views/auth.php')); ?>
+	<?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -43,7 +43,7 @@
 						</div>				
 
 						<div class="col">
-							<label>Currency:</label>
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
 							{{$render->currency($currency)}}
 						</div>
 
