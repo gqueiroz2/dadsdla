@@ -9,11 +9,13 @@
 	<div class="container-fluid">		
 		<div class="row">
 			<div class="col">
+				
+
 				<form method="POST" action="{{ route('resultsSharePost') }}">
 					@csrf
 					<div class="row justify-content-center">
 						<div class="col">	
-							<label class='labelLeft'>Region:</label>
+							<label class='labelLeft'><span class="bold">Region:</span></label>
 							@if($errors->has('region'))
 								<label style="color: red;">* Required</label>
 							@endif
@@ -24,28 +26,28 @@
 							@endif
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Year:</label>
+							<label class='labelLeft'><span class="bold">Year:</span></label>
 							@if($errors->has('year'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->year()}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Brands:</label>
+							<label class='labelLeft'><span class="bold">Brands:</span></label>
 							@if($errors->has('brand'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Source:</label>
+							<label class='labelLeft'><span class="bold">Source:</span></label>
 							@if($errors->has('source'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->source()}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Sales Rep Group:</label>
+							<label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
 							@if($errors->has('salesRepGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
@@ -55,28 +57,28 @@
 					</div>
 					<div class="row justify-content-center">
 						<div class="col">
-							<label class='labelLeft'>Sales Rep:</label>
+							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 							@if($errors->has('salesRep'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->salesRep($salesRep)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Currency:</label>
+							<label class='labelLeft'><span class="bold">Currency:</span></label>
 							@if($errors->has('currency'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Months:</label>
+							<label class='labelLeft'><span class="bold">Months:</span></label>
 							@if($errors->has('month'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->months()}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'>Value:</label>
+							<label class='labelLeft'><span class="bold">Value:</span></label>
 							@if($errors->has('value'))
 								<label style="color: red;">* Required</label>
 							@endif
@@ -88,6 +90,11 @@
 						</div>
 					</div>
 				</form>
+				<div class="row justify-content-end">
+					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
+						<span class="reportsTitle">Share Report</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
