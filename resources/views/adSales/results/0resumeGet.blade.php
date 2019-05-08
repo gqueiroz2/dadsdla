@@ -13,6 +13,9 @@
 					<div class="row">
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Region: </span></label>
+							@if($errors->has('region'))
+								<label style="color: red;">* Required</label>
+							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($region)}}							
 							@else
@@ -21,14 +24,23 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Brand: </span></label>
+							@if($errors->has('brand'))
+								<label style="color: red;">* Required</label>
+							@endif
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Currency: </span></label>
+							@if($errors->has('currency'))
+								<label style="color: red;">* Required</label>
+							@endif
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Value: </span></label>
+							@if($errors->has('value'))
+								<label style="color: red;">* Required</label>
+							@endif
 							{{$render->value()}}
 						</div>
 						<div class="col">
