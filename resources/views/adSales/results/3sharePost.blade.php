@@ -8,22 +8,14 @@
 @section('content')
 
 	<style type="text/css">
+		table{
+			width: 100%;
+			float: right !important;
+		}
 		th, td{
-			padding: 6px;
 			text-align: center;
 			font-size: 12px;
-		}
-
-		.bootstrap-select{
-			  border-style: solid;
-			  border-left-width: 3px;
-			  border-top: none;
-			  border-bottom: none;
-			  border-right: none;
-			  color: white;
-			  -webkit-appearance: none;
-			  -moz-appearance: none;
-			  appearance: none;
+			padding: 3px;
 		}
 
 	</style>
@@ -84,6 +76,21 @@
 						</div>
 					</div>
 				</form>
+				<div class="row justify-content-end">
+					<div class="col col-3" style="text-align: center; margin-top: 2%; ">
+						<h1 class="reportsTitle" >Share ({{$mtx["region"]}} / {{$mtx["year"]}})</h1>
+					</div>
+				</div>
+				
+				<!--<div class="row justify-content-end no-gutters">
+					<div class="col-3" style="color: #0070c0;font-size: 25px">
+						<form class="form-inline" method="POST" action="#">
+							@csrf
+							 <button class="btn btn-primary" style="width: 100%">Generate Excel</button>
+						</form>
+					</div>
+				</div>-->
+
 			</div>
 		</div>
 		<div class="row mt-2">
@@ -91,8 +98,8 @@
 				<div class="container-fluid">
 					<div class="form-group">
 						<div class="form-inline">
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%;">
-								<div class="col col-3" style="zoom:175%; display: block; margin-top: 8%;">
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col col-3" style="zoom:125%; display: block; margin-top: 8%;">
 									<div id="chart_div"></div>
 								</div>
 								<div class="col col-9" style=" width: 100%; margin-top: 5%;">
@@ -133,8 +140,8 @@
 					'width':'100%',
 					'height':'100%'
 				},
-				'width': '1000px',
-				'height': '800px',
+				'width': '100%',
+				'height': '100%',
 				backgroundColor:'transparent',
 				legend:'none',
 				pieSliceText: 'label',

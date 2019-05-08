@@ -15,6 +15,7 @@ use App\Render;
 use App\quarterRender;
 use App\resultsMQ;
 use App\renderMQ;
+use Validator;
 
 class resultsMQController extends Controller{
 	
@@ -46,6 +47,20 @@ class resultsMQController extends Controller{
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
                 
+                $validator = Validator::make(Request::all(),[
+                        'region' => 'required',
+                        'year' => 'required',
+                        'brand' => 'required',
+                        'secondPos' => 'required',
+                        'thirdPos' => 'required',
+                        'currency' => 'required',
+                        'value' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                        return back()->withErrors($validator)->withInput();
+                }
+
                 $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);

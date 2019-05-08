@@ -1,9 +1,8 @@
 @extends('layouts.mirror')
 @section('title', 'Resume Results')
 @section('head')	
-	<script src="/js/results.js">
-	<?php include(resource_path('views/auth.php')); ?>
-	</script>
+	<script src="/js/resultsResume.js"></script>
+    <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 	<div class="container-fluid">

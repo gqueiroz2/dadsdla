@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Validator;
 use Illuminate\Support\Facades\Request;
 use App\Render;
 use App\dataBase;
@@ -50,6 +50,18 @@ class resultsResumeController extends Controller{
 		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
         $currency = $pr->getCurrency($con,false);
+
+        $validator = Validator::make(Request::all(),[
+        	'region' => 'required',
+        	'brand' => 'required',
+        	'currency' => 'required',
+        	'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
 		$regionID = Request::get('region');
 
 		$tmp = $r->getRegion($con,array($regionID));
@@ -142,6 +154,7 @@ class resultsResumeController extends Controller{
 
 		//$id = implode(",", $brandID);
 		$matrix = $resume->assembler($month,$salesCYear,$actual,$target,$corporate/*$pAndR,$finance*/,$previousYear);
+
 		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow'));
 
 	}

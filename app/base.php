@@ -113,9 +113,11 @@ class base extends Model{
         
         $region = array($region);
 
-        
+        $currency = array($currency);
 
-        if ($currency == 'USD') {
+        $currency = $pr->getCurrency($con,$currency)[0];
+
+        if ($currency["name"] == 'USD') {
             $div = $pr->getPRateByRegionAndYear($con,$region,$year);
         }else{
             $div = 1;

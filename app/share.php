@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\region;
 use App\results;
 use App\sql;
 use App\base;
@@ -18,6 +19,7 @@ class share extends results
     public function generateShare($con){
 
         $b = new brand();
+        $r = new region();
         $base = new base();
         $sql = new sql();
         $sr = new salesRep();
@@ -44,6 +46,10 @@ class share extends results
             $valueView = "Net";
         }
 
+        $yearView = $year[0];
+
+        $tmp = array($region);
+        $regionView = $r->getRegion($con,$tmp)[0]["name"];
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
         $tmp = $b->getBrand($con);
@@ -117,10 +123,10 @@ class share extends results
 
         if ($salesRep == 'all') {
             
+            $salesRepView = "All";
+
             if ($salesRepGroup == 'all') {
                 
-                $salesRepView = "All";
-
                 $tmp = array($region);
             
                 $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
@@ -204,7 +210,8 @@ class share extends results
             }
         }
 
-        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView);
+        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView,$salesRepView,$regionView,$yearView,$source);
+
 
         return $mtx;
     }
@@ -271,6 +278,7 @@ class share extends results
 
         }
         
+
         return $values;
     }
 
@@ -348,13 +356,17 @@ class share extends results
         return $where;
     }
 
-    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup){
+    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup,$salesRepView,$region,$year,$source){
 
         $base = new base();
 
         $mtx["value"] = $value;
         $mtx["currency"] = $currency;
         $mtx["salesRepGroup"] = $salesRepGroup;
+        $mtx["salesRepView"] = $salesRepView;
+        $mtx["region"] = $region;
+        $mtx["year"] = $year;
+        $mtx["source"] = $source;
 
         for ($b=0; $b <sizeof($values) ; $b++) { 
             for ($s=0; $s <sizeof($values[$b]) ; $s++) { 
