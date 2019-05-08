@@ -1,7 +1,9 @@
 @extends('layouts.mirror')
 @section('title', 'Resume Results')
 @section('head')	
-	<script src="/js/resultsResume.js"></script>
+	<script src="/js/results.js">
+	<?php include(resource_path('views/auth.php')); ?>
+	</script>
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -12,14 +14,18 @@
 					<div class="row">
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Region: </span></label>
-							{{$render->region($region)}}
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($region)}}							
+							@else
+								{{$render->regionFiltered($region, $regionID )}}
+							@endif
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Brand: </span></label>
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label>Currency:</label>
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
 							{{$render->currency($currency)}}
 						</div>
 						<div class="col">

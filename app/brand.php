@@ -16,11 +16,11 @@ class brand extends Management{
 		$table = "brand";
 		$columns = "id,name";
 		$from = array('id','name');	
-		$where = "WHERE name != 'OTH'";
+		$where = "";//false;//"WHERE name != 'OTH'";
 
 		if($ID){
 			$IDS = implode(",", $ID);
-			$where.= " AND brand.id IN ($IDS)";
+			$where.= " WHERE brand.id IN ($IDS)";
 		}
 
 		$result = $sql->select($con,$columns,$table,null,$where);
