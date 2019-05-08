@@ -16,8 +16,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" 
                 integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
         </script>
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/root.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('css/root.css') }}" rel="stylesheet">
         <link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>        
         <script src="/components/jquery/jquery.min.js"></script>        
         <script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>

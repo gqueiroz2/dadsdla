@@ -96,8 +96,6 @@ class excelSheets extends excel{
 		$values = $this->values($spreadSheet,$columns);
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
 
-		var_dump($ins);
-
 		if($con->query($ins) === TRUE ){
 			$error = false;
 		}else{
