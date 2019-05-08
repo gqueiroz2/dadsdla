@@ -46,7 +46,6 @@
             </button>
             <?php $userName = Request::session()->get('userName'); ?>
 
-<<<<<<< HEAD
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
@@ -88,8 +87,8 @@
                                 <a class="dropdown-item" href="{{ route('resultsMonthlyGet')}}"> Monthly </a>
                                 <a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
                                 <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
-                                <a class="dropdown-item" href="{{ route('resultsYoYResultsGet') }}"> YoY </a>
-                                <a class="dropdown-item" href="{{ route('resultsMonthlyYoYResultsGet') }}"> Monthly YoY </a>
+                                <a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY </a>
+                                <a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> Monthly YoY </a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">

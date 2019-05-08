@@ -106,7 +106,7 @@
 					<tr>
 						<th class="lightBlue center" colspan="15">
 							<span style="font-size:18px;"> 
-								Year Over Year :({{$form}}) {{$year}} ({{($value == "gross") ? "Gross" : "Net"}}
+								Year Over Year :({{$form}}) {{$year}} ({{strtoupper($value)}}
 								/{{strtoupper($pRate[0]['name'])}})
 							</span>
 						</th>
