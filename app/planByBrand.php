@@ -43,7 +43,7 @@ class planByBrand extends Management{
         return $planByBrand;
     }
 
-    public function sum($con, $value, $columnsName, $columnsValue){
+    public function sum($con,$region, $value, $columnsName, $columnsValue){
         
         $sql = new sql();
 
@@ -54,6 +54,10 @@ class planByBrand extends Management{
         $as = "sum";
 
         $where = $sql->where($columnsName, $columnsValue);
+
+        $where .= " AND (currency_id = $region)";
+
+        var_dump($where);
 
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
 
