@@ -24,7 +24,7 @@
 
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Year: </span></label>
-							{{$render->year()}}					
+							{{$render->year($regionID)}}					
 						</div>	
 
 						<div class="col">

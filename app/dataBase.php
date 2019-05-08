@@ -5,6 +5,21 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class dataBase extends Model{
+    
+    public function __construct(){
+        
+        if($_SERVER['SERVER_ADDR'] == '10.36.12.151'){
+            $this->ip = "dads-dev-mysql.c7wizdvhr2cq.us-east-1.rds.amazonaws.com";    
+            $this->pass = "DT3WDDhmcx63D7HF";
+            $this->user = "rdsroot";
+        }else{
+            $this->ip = "127.0.0.1";    
+            $this->pass = "";
+            $this->user = "root";
+        }
+
+    }
+
     public function openConnection($base){
         $this->con = new \Mysqli($this->ip,$this->user,$this->pass,$base,3306);
         $this->con->set_charset("utf8");
@@ -33,17 +48,17 @@ class dataBase extends Model{
 
     }
 
+
     public function closeConnection(){
         $con->close();
     }
 
-    protected $ip = "127.0.0.1";
-    protected $pass = "secret";
-    protected $user = "root";
 
-    /*protected $ip = "dads-dev-mysql.c7wizdvhr2cq.us-east-1.rds.amazonaws.com";    
-    protected $pass = "DT3WDDhmcx63D7HF";
-    protected $user = "rdsroot";*/
+
+    protected $ip = null;
+    protected $pass = null;
+    protected $user = null;
+
     protected $con;
   
 }
