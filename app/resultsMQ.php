@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\results;
 use App\brand;
 use App\region;
-
+use App\ytd;
+use App\mini_header;
 class resultsMQ extends results{
     
     public function lines($con, $brands, $region, $year,$currency, $value, $form, $source){
@@ -50,7 +51,7 @@ class resultsMQ extends results{
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $newSource, strtoupper($value), $brand, $year);
                 $p = new planByBrand();
-                $line = $this->lineValues($con,$currency, "revenue", $p, $columns, $colValues, $region, $year);
+                $line = $this->lineValues($con,true,$currency, "revenue", $p, $columns, $colValues, $region, $year);
                 break;
 
             case 2:
@@ -60,14 +61,13 @@ class resultsMQ extends results{
                 if (!is_null($formResp)) {
 
                     $columns = $res[1];
-
                     if ($columns) {
                         if (sizeof($columns) == 4) {
                             $colValues = array($region, $brand, $year);
-                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,false,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
                         } elseif (sizeof($columns) == 3) {
                             $colValues = array($brand, $year);
-                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,false,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
                         }else{
                             $line = false;
                         }
@@ -88,22 +88,49 @@ class resultsMQ extends results{
         
     }
 
-    public function lineValues($con,$currency, $value, $form, $columns, $colValues, $region, $year){
+    public function lineValues($con,$type,$currency, $value, $form, $columns, $colValues, $region, $year){
+        /*
+            $type == TYPE 
+
+            True = TARGET
+            False = REAL
+
+        */
         
         $r = new region();
         $p = new pRate();
-        if($currency == "USD"){            
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-        }else{
+            
+        if($type){
             $pRate = 1.0;
+        }else{
+            if($currency == "USD"){            
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+            }else{
+                $pRate = 1.0;
+            }
         }
-    
+
         array_push($colValues, 0);
         $tam = sizeof($columns);
+
+        $currentMonth = intval(date('m')) - 1;
+
         for ($i = 0; $i < 12; $i++) {
             $colValues[$tam-1] = ($i+1);
 
-            $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
+            if($type){
+                $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
+            }else{
+                if($i < $currentMonth){                                        
+                    $form = new ytd();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                    $value = 'gross_revenue';
+                }else{
+                    $form = new mini_header();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                }
+                $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
+            }
 
             if ($formValue[$i] == 0) {
                 $formValue[$i] = 0;
@@ -152,7 +179,15 @@ class resultsMQ extends results{
                 $create = 'mini_header';
                 $obj = new mini_header();
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
+                $value = "campaign_option_spend";
+
+                break;
+
+            case 'mini_header':
+                $create = 'mini_header';
+                $obj = new mini_header();
+                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $value = "campaign_option_spend";
 
                 break;
 
@@ -164,8 +199,11 @@ class resultsMQ extends results{
                 break;
 
             default:
-                $obj = false;
 
+                $create = false;
+                $obj = false;
+                $columns = false;
+                $value = false;
                 break;
         }
 
