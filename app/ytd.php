@@ -74,14 +74,15 @@ class ytd extends Management{
     }
 
     public function sum($con, $value, $columnsName, $columnsValue){
-        var_dump("YTD");
+        
         $sql = new sql();
         $table = "ytd";
         $sum = "$value";
-        var_dump($sum);
+        //var_dump($sum);
+
         $as = "sum";
         $where = $sql->where($columnsName, $columnsValue);
-        var_dump($where);
+        //var_dump($where);
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
         $res = $sql->fetchSum($result, $as);
         return $res;

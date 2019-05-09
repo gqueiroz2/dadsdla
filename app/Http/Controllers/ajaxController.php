@@ -12,6 +12,29 @@ use App\pRate;
 
 class ajaxController extends Controller{
 
+    public function yearByRegion(){
+        $regionID = Request::get('regionID');
+        $cYear = intval(date('Y'));
+        $pYear = $cYear - 1;
+        $ppYear = $pYear - 1;
+        if($regionID == 1){
+            $year = array($cYear,$pYear,$ppYear);           
+        }else{
+            $year = array($cYear);
+        }
+
+        echo "<option value=''> </option>";
+        for ($y=0; $y < sizeof($year); $y++) { 
+            if($y == 0){
+                echo "<option selected='true' value='".$year[$y]."'> ".$year[$y]." </option>";    
+            }else{
+                echo "<option value='".$year[$y]."'> ".$year[$y]." </option>";    
+            }   
+        }
+        
+
+    }
+
     public function firstPosMonthly(){
         $year = Request::get("year");
         echo "<option> Selecione </option>";
@@ -19,10 +42,7 @@ class ajaxController extends Controller{
     }
 
     public function secondPosMonthly(){
-
         $year = Request::get("year");
-
-        echo "<option> Selecione </option>";
         echo "<option value='ibms'> IBMS ".$year." </option>";
         echo "<option value='cmaps'> CMAPS/Header ".$year." </option>";
     }

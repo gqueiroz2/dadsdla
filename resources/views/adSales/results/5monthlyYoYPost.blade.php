@@ -109,16 +109,8 @@
 				</div>
 				<div class="modal-body">
 					<table style="width: 100%" class="table-responsive">
-						<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
-						<tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
-
-						@for($i = 0; $i < sizeof($brandsValueArray); $i++)
-							<tr>
-								{{
-									$renderMonthlyYoY->renderDataModal($brandsValueArray[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
-								}}
-							</tr>
-						@endfor
+						
+						
 					</table>
 				</div>
 				<div class="modal-footer">
@@ -135,10 +127,9 @@
 			<div class="col">
 
 				<tr><td>&nbsp;</td></tr>
-
-				@for($i = 0, $j = 1; $i < sizeof($base->getMonth()); $i+=3, $j++)
+				
+				@for($i = 1, $j = 1; $i <= sizeof($base->getMonth()); $i+=3, $j++)
 					<table style="width: 100%">
-
 						@if($i == 0)
 							<th class="dc center" colspan="13">
 								<span style="font-size:22px;"> 
@@ -151,19 +142,21 @@
 						@endif
 
 						<tr>
-							{{ $renderMonthlyYoY->renderHead($base->getMonth(), $i, $j, "dc", "vix", "darkBlue") }}	
-						</tr>
-						<tr>
-							{{ $renderMonthlyYoY->renderHead2($year, $i, "dc", "vix", "darkBlue") }}
-						</tr>
+                            {{ $renderMonthlyYoY->renderHead($base->getMonth(), $i, $j, "dc", "vix", "darkBlue") }} 
+                        </tr>
+                        <tr>
+                            {{ $renderMonthlyYoY->renderHead2($year, $i, "dc", "vix", "darkBlue") }}
+                        </tr>
+
 						@for($b = 0; $b < sizeof($brandsValueArray); $b++)
 							<tr>
-								{{
-									$renderMonthlyYoY->renderData($brandsValueArray[$b],
-																  $matrix[0], $matrix[1][$j-1], $b, $i, "dc", "rcBlue", "white", "medBlue") 
-								}}
-							</tr>
+                                {{
+                                    $renderMonthlyYoY->renderData($brandsValueArray[$b],
+                                                                  $matrix[0], $matrix[1][$j-1], $b, $i, "dc", "rcBlue", "white", "medBlue") 
+                                }}
+                            </tr>
 						@endfor
+						
 					</table>
 
 					@if($i != (sizeof($base->getMonth())-1))

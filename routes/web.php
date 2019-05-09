@@ -42,6 +42,7 @@ Route::group(['prefix' => 'ajax'],function(){
 		Route::post('firstPosByRegion','ajaxController@firstPosByRegion');
 		Route::post('secondPosByRegion','ajaxController@secondPosByRegion');
 		Route::post('thirdPosByRegion','ajaxController@thirdPosByRegion');
+		Route::post('yearByRegion','ajaxController@yearByRegion');
 	});
 
 });

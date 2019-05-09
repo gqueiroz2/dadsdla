@@ -99,9 +99,8 @@ class sql extends Model{
     public function where($columns,$variables){
 
         $where = "WHERE ";
-
-
-        for ($i=0; $i <sizeof($columns) ; $i++) { 
+        
+        for ($i=0; $i < sizeof($columns); $i++) { 
             if ($i == sizeof($columns)-1) {
                 if (is_array($variables[$i])) {
                     $tmp = implode(",", $variables[$i]);

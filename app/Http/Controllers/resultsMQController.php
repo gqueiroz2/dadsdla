@@ -20,6 +20,7 @@ use Validator;
 class resultsMQController extends Controller{
 	
         public function getMonthly(){
+                
                 $base = new base();
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
@@ -27,11 +28,9 @@ class resultsMQController extends Controller{
                 $b = new brand();
                 $pr = new pRate();
                 $render = new Render();
-
                 $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
-
                 return view('adSales.results.1monthlyGet',compact('render','region','brand','currency'));
         }
 
@@ -45,8 +44,7 @@ class resultsMQController extends Controller{
                 $render = new Render();
                 $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
-                $currency = $pr->getCurrency($con,false);
-                
+                $currency = $pr->getCurrency($con,false);                
                 $validator = Validator::make(Request::all(),[
                         'region' => 'required',
                         'year' => 'required',

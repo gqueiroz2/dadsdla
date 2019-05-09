@@ -8,6 +8,7 @@ use App\brand;
 use App\region;
 use App\ytd;
 use App\mini_header;
+
 class resultsMQ extends results{
     
     public function lines($con, $brands, $region, $year,$currency, $value, $form, $source){
@@ -50,6 +51,7 @@ class resultsMQ extends results{
             case 1:
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $newSource, strtoupper($value), $brand, $year);
+                var_dump($colValues);
                 $p = new planByBrand();
                 $line = $this->lineValues($con,true,$currency, "revenue", $p, $columns, $colValues, $region, $year);
                 break;
@@ -121,7 +123,7 @@ class resultsMQ extends results{
             if($type){
                 $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
             }else{
-                if($i < $currentMonth){                                        
+                if($i < $currentMonth){
                     $form = new ytd();
                     $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                     $value = 'gross_revenue';
@@ -129,6 +131,7 @@ class resultsMQ extends results{
                     $form = new mini_header();
                     $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 }
+                
                 $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
             }
 
@@ -140,6 +143,7 @@ class resultsMQ extends results{
 
             }
         }
+        
         return $formValue;
     }
 

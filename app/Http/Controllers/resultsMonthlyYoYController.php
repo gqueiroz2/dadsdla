@@ -80,20 +80,21 @@ class resultsMonthlyYoYController extends Controller{
     	$monthlyYoY = new resultsMonthlyYoY();
 
     	//pegando valores das colunas das tabelas
-    	$cols = $monthlyYoY->cols($con, $b, $region, $year,$currency, $value, $form, $source);
+    	//$cols = $monthlyYoY->cols($con, $b, $region, $year,$currency, $value, $form, $source);
+        $lines = $monthlyYoY->lines($con, $b, $region, $year,$currency, $value, $form, $source);
+        //var_dump($lines);
+    	//$matrix = $monthlyYoY->assemblers($base->getMonth(), $year, $b, $cols);
+        $matrix = $monthlyYoY->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
+        //var_dump($matrix);
 
-    	$matrix = $monthlyYoY->assemblers($base->getMonth(), $year, $b, $cols);
+    	if (sizeof($b) > 1) {
+            array_push($brandsValueAux, "DN");
+        }
 
-    	for ($i=0; $i < sizeof($b); $i++) { 
+        for ($i=0; $i < sizeof($b); $i++) { 
             $index = intval($b[$i]);
             $index -= 1;
             $brandsValueArray[$i] = $brandsValueAux[$index];
-        }
-        
-        var_dump($brandsValueArray);
-
-        if (sizeof($brandsValueArray) > 1) {
-            array_push($brandsValueArray, "DN");
         }
 
         $size = sizeof($brandsValueArray);
@@ -106,3 +107,15 @@ class resultsMonthlyYoYController extends Controller{
 	}
 
 }
+
+/*
+<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
+                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
+
+@for($i = 0; $i < sizeof($brandsValueArray); $i++)
+                            <tr>
+                                {{
+                                    $renderMonthlyYoY->renderDataModal($brandsValueArray[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
+                                }}
+                            </tr>
+                        @endfor*/

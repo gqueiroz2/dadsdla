@@ -77,7 +77,8 @@ class resultsYoYController extends Controller{
     	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
         
-        //var_dump($b);
+        //var_dump(Request::all());
+
         //pegando valores das linhas das tabelas
         $lines = $yoy->lines($con, $b, $region, $year,$currency, $value, $form, $source);
         
@@ -87,20 +88,21 @@ class resultsYoYController extends Controller{
     	$render = new Render();
     	$renderYoY = new renderYoY();
 
+        if (sizeof($b) > 1) {
+            array_push($brandsValueAux, "DN");
+        }
+
+
         for ($i=0; $i < sizeof($b); $i++) { 
             $index = intval($b[$i]);
             $index -= 1;
             $brandsValueArray[$i] = $brandsValueAux[$index];
         }
-        
-        if (sizeof($brandsValueArray) > 1) {
-            array_push($brandsValueArray, "DN");
-        }
-
-        //var_dump($pRate);
 
         $size = sizeof($brandsValueArray);
 
-	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'pRate', 'matrix','size','brandsValueArray'));
+        $region = $r->getRegion($con, array($region));
+
+	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'pRate', 'matrix','size','brandsValueArray', 'region'));
     }
 }

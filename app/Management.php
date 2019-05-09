@@ -69,23 +69,6 @@ class Management extends Model{
 		return($rtr);
 	}
 
-	public function where($columns,$variables){
-
-		$where = "WHERE ";
-
-
-		for ($i=0; $i <sizeof($columns) ; $i++) { 
-			if ($i == sizeof($columns)-1) {
-				$where .= "($columns[$i] = \"$variables[$i]\")";
-			}else{
-				$where .= "($columns[$i] = \"$variables[$i]\") AND ";
-			}
-		}
-
-		return $where;
-
-	}
-
 	public function setUpdate($columns, $values){
 
 		$set = "SET ";

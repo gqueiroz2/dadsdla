@@ -24,16 +24,16 @@ class resultsYoY extends results {
             for ($i=0; $i < sizeof($brands); $i++) {
 
                 if ($brands[$i] == "9" || $brands[$i] == "10") {
-                    $finalForm = 'Digital';
+                    $newForm = 'Digital';
                 }else{
-                    $finalForm = $form;
+                    $newForm = $form;
                 }
                 
                 for ($j=0; $j < 3; $j++) { 
-                    $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $value, $finalForm, ($j+1), $source);
+                    $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $value, $newForm, ($j+1), $source);
 
                     if (!$lines[$i][$j]) {
-                        $lines[$i][$j] = false;//"This brand doesn't has values";
+                        $lines[$i][$j] = "This brand doesn't has values";
                     }
                 }
             }
@@ -53,16 +53,15 @@ class resultsYoY extends results {
                 if (!is_null($formResp)) {
 
                     $columns = $res[1];
-
                     if ($columns) {
 
                         if (sizeof($columns) == 4) {
                             $colValues = array($region, $brand, ($year-1));
-                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
 
                         } elseif (sizeof($columns) == 3) {
                             $colValues = array($brand, ($year-1));
-                            $line = $this->lineValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
                         }else{
 
                             $line = false;
@@ -79,10 +78,10 @@ class resultsYoY extends results {
                 
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $source, strtoupper($value), $brand, $year);
-                
+                //var_dump($colValues);
                 $p = new planByBrand();
 
-                $line = $this->lineValues($con,$currency, "revenue", $p, $columns, $colValues, $region, $year);
+                $line = $this->lineValues($con, true, $currency, "revenue", $p, $columns, $colValues, $region, $year);
 
                 break;
 
@@ -98,10 +97,10 @@ class resultsYoY extends results {
                     if ($columns) {
                         if (sizeof($columns) == 4) {
                             $colValues = array($region, $brand, $year);
-                            $line = $this->lineValues($con,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
                         } elseif (sizeof($columns) == 3) {
                             $colValues = array($brand, $year);
-                            $line = $this->lineValues($con,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
+                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
                         }else{
                             $line = false;
                         }
@@ -122,30 +121,59 @@ class resultsYoY extends results {
         
     }
 
-    public function lineValues($con,$currency, $value, $form, $columns, $colValues, $region, $year){
+    public function lineValues($con,$type,$currency, $value, $form, $columns, $colValues, $region, $year){
         
+         /*
+            $type == TYPE 
+
+            True = TARGET
+            False = REAL
+
+        */
+
         $r = new region();
         $p = new pRate();
-        if($currency == "USD"){            
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-        }else{
+
+        if($type){
             $pRate = 1.0;
+        }else{
+            if($currency == "USD"){            
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+            }else{
+                $pRate = 1.0;
+            }
         }
 
         array_push($colValues, 0);
         $tam = sizeof($columns);
 
+        $currentMonth = intval(date('m')) - 1;
+
         for ($i = 0; $i < 12; $i++) {
             $colValues[$tam-1] = ($i+1);
 
-            $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
+            if($type){
+                    $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
+            }else{
+                if($i < $currentMonth){
+                    $form = new ytd();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                    $value = 'gross_revenue';
+                }else{
+                    $form = new mini_header();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                }
+                
+                $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
+            }
 
             if ($formValue[$i] == 0) {
                 $formValue[$i] = 0;
             }else{
-                $formValue[$i] = $formValue[$i]/$pRate;
-            }
 
+                $formValue[$i] = $formValue[$i]/$pRate;
+
+            }
         }
         
         return $formValue;
@@ -229,9 +257,7 @@ class resultsYoY extends results {
 
     }
 
-    public function assemblers($totalBrands, $brands, $lines, $month, $year){
-        
-        $matrix = array();
+    public function assemblers($totalBrands, $brands, $lines, $month, $year){        
 
         for ($i = 0; $i < sizeof($brands); $i++) {
 
@@ -247,6 +273,7 @@ class resultsYoY extends results {
         if (sizeof($brands) > 1) {
             $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $month, $year);
         }
+        
         return $matrix;
 
     }

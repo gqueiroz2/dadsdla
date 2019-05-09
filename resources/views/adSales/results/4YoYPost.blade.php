@@ -74,7 +74,7 @@
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label> &nbsp; </label>
-							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">
 						</div>
 					</div>
 				</form>
@@ -112,7 +112,7 @@
 						<th class="lightBlue center" colspan="15">
 							<span style="font-size:18px;"> 
 								Year Over Year :({{$form}}) {{$year}} ({{strtoupper($value)}}
-								/{{strtoupper($pRate[0]['name'])}})
+								/{{strtoupper($pRate[0]['name'])}}) {{ $region[0]['name'] }}
 							</span>
 						</th>
 					</tr>
@@ -120,7 +120,7 @@
 					<tr><td>&nbsp;</td></tr>
 
 					@for($i = 0; $i < $size; $i++)
-						
+						{{var_dump($size)}}
 						<tr>
 							{{$renderYoY->brandTable($brandsValueArray[$i], $brandsValueArray[$i])}}
 						</tr> 

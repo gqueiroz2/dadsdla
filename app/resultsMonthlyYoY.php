@@ -14,145 +14,166 @@ use App\mini_header;
 use App\digital;
 
 class resultsMonthlyYoY extends results{
-    
-	public function cols($con, $brands, $region, $year, $currency, $value, $form, $source){
 
-		$digital = false;
-
+    public function lines($con, $brands, $region, $year, $currency, $value, $form, $source){
+        
         if (sizeof($brands) == 0) {
-            $cols = false;
+            $lines = false;
         }else{
-            for ($i=1; $i <= 12; $i++) {
-        		for ($j=1; $j <= 3; $j++) { 
 
-	    			$cols[$i-1][$j-1] = $this->col($con, $currency, $brands, $region, $year,
-	                            $value, $form, $j, $source, $i, sizeof($brands));	
-            	}
+            for ($i=0; $i < sizeof($brands); $i++) {
+
+                if ($brands[$i] == "9" || $brands[$i] == "10") {
+                    $newForm = 'Digital';
+                }else{
+                    $newForm = $form;
+                }
                 
+                for ($j=0; $j < 3; $j++) { 
+                    $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $value, $newForm, ($j+1), $source);
+
+                    if (!$lines[$i][$j]) {
+                        $lines[$i][$j] = "This brand doesn't has values";
+                    }
+                }
             }
         }
 
-        return $cols;
-
+        return $lines;
     }
-
     
+    public function line($con, $currency, $brand, $region, $year, $value, $form, $lineNumber, $source){        
 
-    public function col($con, $currency, $brands, $region, $year, $value, $form,
-    					$colNumber, $source, $month, $numBrands){
-    	
-    	for ($i=0; $i < $numBrands; $i++) { 
-    		
-    		if ($brands[$i] == "9" || $brands[$i] == "10") {
-                $finalForm = 'Digital';
-            }else{
-                $finalForm = $form;
-            }
+        switch ($lineNumber) {
+            case 1:
+                
+                $res = $this->createObject($form, $value);
+                $formResp = $res[0];
+                
+                if (!is_null($formResp)) {
 
-    		switch ($colNumber) {
-	    		case 1:
-	    			$res = $this->createObject($finalForm, $value);
-	    			$formResp = $res[0];
+                    $columns = $res[1];
+                    if ($columns) {
 
-	    			if (!is_null($formResp)) {
-	    				
-	    				$columns = $res[1];
+                        if (sizeof($columns) == 4) {
+                            $colValues = array($region, $brand, ($year-1));
+                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
 
-	    				if ($columns) {
-	    					
-	    					if (sizeof($columns) == 4) {
-	    						
-								$colValues = array($region, ($year-1), $month, $brands[$i]);
-	                        	$col[$i] = $this->colValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year, $brands);
-	    						
-	    					} elseif (sizeof($columns) == 3) {
+                        } elseif (sizeof($columns) == 3) {
+                            $colValues = array($brand, ($year-1));
+                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
+                        }else{
 
-								$colValues = array(($year-1), $month, $brands[$i]);
-	                        	$col[$i] = $this->colValues($con,$currency, $res[2], $formResp, $columns, $colValues, $region, $year, $brands);
-	                            
-	                        }else{
-	                            $col[$i] = false;
-	                        }
-	    				}else{
-	    					$col[$i] = false;
-	    				}
+                            $line = false;
+                        }
+                    }else{
+                        $line = false;
+                    }
+                    
+                }
 
-	    			}
+                break;
+            
+            case 2:
+                
+                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
+                $colValues = array($region, $source, strtoupper($value), $brand, $year);
+                //var_dump($colValues);
+                $p = new planByBrand();
 
-	    			break;
+                $line = $this->lineValues($con, true, $currency, "revenue", $p, $columns, $colValues, $region, $year);
 
-	    		case 2:
-	    			$columns = array("sales_office_id", "source", "type_of_revenue", "year", "month", "brand_id");
-	                $colValues = array($region, $source, strtoupper($value), $year, $month, $brands[$i]);
-	                
-	                $p = new planByBrand();
+                break;
 
-	                $col[$i] = $this->colValues($con,$currency, "revenue", $p, $columns, $colValues, $region, $year, $brands);
+            case 3:
+                
+                $res = $this->createObject($form, $value);
+                $formResp = $res[0];
 
-	                break;
+                if (!is_null($formResp)) {
 
-	            case 3:
-	                	$res = $this->createObject($finalForm, $value);
-		    			$formResp = $res[0];
+                    $columns = $res[1];
 
-		    			if (!is_null($formResp)) {
-		    				
-		    				$columns = $res[1];
+                    if ($columns) {
+                        if (sizeof($columns) == 4) {
+                            $colValues = array($region, $brand, $year);
+                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
+                        } elseif (sizeof($columns) == 3) {
+                            $colValues = array($brand, $year);
+                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
+                        }else{
+                            $line = false;
+                        }
+                    }else{
+                        $line = false;
+                    }
+                    
+                }
 
-		    				if ($columns) {
-		    					
-		    					if (sizeof($columns) == 4) {
-		    						
-									$colValues = array($region, $year, $month, $brands[$i]);
-		                        	$col[$i] = $this->colValues($con,$currency, $res[2], $formResp, $columns, $colValues,
-		                            						    $region, $year, $brands);
-		    						
-		    					} elseif (sizeof($columns) == 3) {
+                break;
 
-									$colValues = array($year, $month, $brands[$i]);
-		                        	$col[$i] = $this->colValues($con,$currency, $res[2], $formResp, $columns, $colValues,
-		                         						    $region, $year, $brands);
-		                            
-		                        }else{
-		                            $col[$i] = false;
-		                        }
-		    				}else{
-		    					$col[$i] = false;
-		    				}
+            default:
+                $line = false;
+                break;
+        }
 
-		    			}
-
-	                	break;
-
-	    		default:
-	    			$col[$i] = false;
-	    			break;
-	    	}
-
-    	}
-    	
-
-    	return $col;
-
+        return $line;
+        
     }
 
-    public function colValues($con, $currency, $value, $form, $columns, $colValues, $region, $year, $brands){
-    	
-    	$r = new region();
+    public function lineValues($con,$type,$currency, $value, $form, $columns, $colValues, $region, $year){
+        
+         /*
+            $type == TYPE 
+
+            True = TARGET
+            False = REAL
+
+        */
+
+        $r = new region();
         $p = new pRate();
 
-        if($currency == "USD"){            
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-        }else{
+        if($type){
             $pRate = 1.0;
+        }else{
+            if($currency == "USD"){            
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+            }else{
+                $pRate = 1.0;
+            }
         }
 
-    	$formValue = $form->sum($con, $value, $columns, $colValues)['sum'];
+        array_push($colValues, 0);
+        $tam = sizeof($columns);
 
-    	if ($formValue == 0) {
-            $formValue = 0;
-        }else{
-            $formValue = $formValue/$pRate;
+        $currentMonth = intval(date('m')) - 1;
+
+        for ($i = 0; $i < 12; $i++) {
+            $colValues[$tam-1] = ($i+1);
+
+            if($type){
+                    $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
+            }else{
+                if($i < $currentMonth){
+                    $form = new ytd();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                    $value = 'gross_revenue';
+                }else{
+                    $form = new mini_header();
+                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                }
+                
+                $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
+            }
+
+            if ($formValue[$i] == 0) {
+                $formValue[$i] = 0;
+            }else{
+
+                $formValue[$i] = $formValue[$i]/$pRate;
+
+            }
         }
         
         return $formValue;
@@ -236,82 +257,81 @@ class resultsMonthlyYoY extends results{
 
     }
 
-    public function assemblers($months, $year, $brands, $cols){
-    	
-        $size = sizeof($brands);
+    public function assemblers($totalBrands, $brands, $lines, $month, $year){        
 
-    	for ($i=0; $i < sizeof($months); $i++) {
-            
-            $matrix[$i] = $this->assembler($brands, $cols, $i);
+        for ($i = 0; $i < sizeof($brands); $i++) {
 
-            if ($size > 1) {
-                
-                $sizeBrands = $size+1;
-
-                $value = $this->assemblerDN($i, $matrix[$i], $brands);
-                $matrix[$i][sizeof($brands)][0] = $value[0];
-                $matrix[$i][sizeof($brands)][1] = $value[1];
-                $matrix[$i][sizeof($brands)][2] = $value[2];
+            if (is_string($lines[$i][2])) {
+                $matrix[$i] = $lines[$i][2];       
             }else{
-                $sizeBrands = $size;
+                $matrix[$i] = $this->assembler($lines[$i][2], $lines[$i][1], $lines[$i][0],
+                                                $month, $year, $brands[$i]);
             }
+            
+        }
 
-    	}
+        if (sizeof($brands) > 1) {
+            $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $month, $year);
+        }
 
-        $quarters[0] = $this->assemblerQuarter($matrix, 0, 2, $sizeBrands);
-        $quarters[1] = $this->assemblerQuarter($matrix, 3, 5, $sizeBrands);
-        $quarters[2] = $this->assemblerQuarter($matrix, 6, 8, $sizeBrands);
-        $quarters[3] = $this->assemblerQuarter($matrix, 9, 11, $sizeBrands);
+        $quarters[0] = $this->assemblerQuarter($matrix, 1, 3, sizeof($brands));
+        $quarters[1] = $this->assemblerQuarter($matrix, 4, 6, sizeof($brands));
+        $quarters[2] = $this->assemblerQuarter($matrix, 7, 9, sizeof($brands));
+        $quarters[3] = $this->assemblerQuarter($matrix, 10, 12, sizeof($brands));
 
-        //var_dump($quarters);
-    	return array($matrix, $quarters);
+        return array($matrix, $quarters);
+
     }
 
-    public function assembler($brands, $cols, $month){
+    public function assembler($valueCurrentYear, $target, $valuePastYear, $month, $year){
 
-        for ($i=0; $i <= sizeof($brands); $i++) {
-            
-            $matrix[$i][0] = 0;
-            $matrix[$i][1] = 0;
-            $matrix[$i][2] = 0;
-            
-        }
+        $matrix[0][0] = " ";
+        $matrix[0][1] = "Real ".($year-1);
+        $matrix[0][2] = "Target $year";
+        $matrix[0][3] = "Real $year";
 
-        $pos = 0;
-        //var_dump($matrix);
+        for ($i = 1; $i <= sizeof($month); $i++) { 
 
-        for ($i=0; $i < 3; $i++) { 
+            $matrix[$i][1] = $valuePastYear[$i-1];
 
-            for ($j = 0; $j < sizeof($brands); $j++) {
-                $matrix[$pos][$i] += $cols[$month][$i][$j];
-                $pos++;   
+            $matrix[$i][2] = $target[$i-1];
 
-            }
-
-            $pos = 0;
+            $matrix[$i][3] = $valueCurrentYear[$i-1];
 
         }
-    	
 
-        //var_dump($matrix);
         return $matrix;
-
     }
 
-    public function assemblerDN($month, $matrix, $brands){
-        
-        for ($i=0; $i < 3; $i++) { 
-            $valuesDN[$i] = 0;
+    public function assemblerDN($matrix, $pos, $month, $year){
+
+        var_dump($matrix);
+
+        $currentMatrix[0][0] = "DN";
+        $currentMatrix[0][1] = "Real ".($year-1);
+        $currentMatrix[0][2] = "Target $year";
+        $currentMatrix[0][3] = "Real $year";
+
+        for ($i = 1; $i <= sizeof($month); $i++) {
+
+            $currentMatrix[$i][1] = 0;
+            $currentMatrix[$i][2] = 0;
+            $currentMatrix[$i][3] = 0;
+
         }
-        //var_dump($matrix);
-        for ($c=0; $c < 3; $c++) { 
-            for ($k=0; $k < sizeof($brands); $k++) { 
-                $valuesDN[$c] += $matrix[$k][$c]; 
+
+        for ($i = 0; $i < $pos; $i++) { 
+            for ($j = 1; $j <= sizeof($month); $j++) { 
+                $currentMatrix[$j][1] += $matrix[$i][$j][1];
+
+                $currentMatrix[$j][2] += $matrix[$i][$j][2];
+
+                $currentMatrix[$j][3] += $matrix[$i][$j][3];
+
             }
         }
 
-        //var_dump($valuesDN);
-        return $valuesDN;
+        return $currentMatrix;
 
     }
 
@@ -321,21 +341,21 @@ class resultsMonthlyYoY extends results{
 
         for ($i=0; $i < $brands; $i++) { 
             for ($j=0; $j < 3; $j++) { 
-                $quarter[$j][$i] = 0;
+                $quarter[$i][$j] = 0;
             }
         }
 
-        for ($i=$min; $i < $max; $i++) { 
-            for ($j=0; $j < 3; $j++) { 
-                for ($k=0; $k < $brands; $k++) { 
-                    $quarter[$j][$k] += $matrix[$i][$k][$j];
-                }
+        for ($i=0; $i < $brands; $i++) { 
+            for ($j=$min; $j <= $max; $j++) {
+                for ($k=1; $k <= 3; $k++) { 
+                    $quarter[$i][$k-1] += $matrix[$i][$j][$k]; 
+                } 
+                
             }
-            
         }
-    	
+        
         //var_dump($quarter);
-   		return $quarter;
+        return $quarter;
 
     }
 
