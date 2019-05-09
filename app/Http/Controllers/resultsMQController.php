@@ -112,7 +112,7 @@ class resultsMQController extends Controller{
 
 	public function postQuarter(){
 
-	  } 
+	} 
 
     
 }

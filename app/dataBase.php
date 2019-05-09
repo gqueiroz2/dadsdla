@@ -38,7 +38,7 @@ class dataBase extends Model{
     }
 
     protected $ip = "127.0.0.1";
-    protected $pass = "secret";
+    protected $pass = "";
     protected $user = "root";
 
     /*protected $ip = "dads-dev-mysql.c7wizdvhr2cq.us-east-1.rds.amazonaws.com";    
