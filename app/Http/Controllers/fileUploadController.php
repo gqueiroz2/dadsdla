@@ -27,7 +27,9 @@ class fileUploadController extends Controller{
 							array( 'table' => 'mini_header', 'show' => 'Mini-Header'),
 							array( 'table' => 'plan_by_brand', 'show' => 'Plan By Brand'),
 							array( 'table' => 'plan_by_sales', 'show' => 'Plan By Sales'),
-							array( 'table' => 'rolling_forecast', 'show' => 'Rolling Forecast')
+							array( 'table' => 'rolling_forecast', 'show' => 'Rolling Forecast'),
+							array( 'table' => 'sales_rep', 'show' => 'Sales Rep'),
+							array( 'table' => 'sales_rep_unit', 'show' => 'Sales Rep Unit')
 
 						);
 
@@ -41,14 +43,10 @@ class fileUploadController extends Controller{
 		$spreadSheet = $i->base();
 		unset($spreadSheet[0]);
 		$spreadSheet = array_values($spreadSheet);
-		$eS = new excelSheets();
-		
+		$eS = new excelSheets();		
 		$table = Request::get('table');
-
 		var_dump($table);
-
 		$eS->handler($con,$table,$spreadSheet);
-
 		//$eS->cmaps($con,$spreadSheet); 
 	}
 
