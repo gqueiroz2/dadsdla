@@ -2,8 +2,8 @@
 
 namespace App;
 
-
 use App\sql;
+use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 
 class results extends Model{
@@ -47,4 +47,99 @@ class results extends Model{
         return $table;
     }
     
+    public function matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $source=false){
+        
+        $cMonth = date('m') - 1;
+        $cYear = date('Y');
+
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            for ($m=0; $m < sizeof($months); $m++) { 
+                if (!$source){
+                    if ($form == "mini_header" && $year  == $cYear) {
+                        if (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
+                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                        }else{
+                            $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                        }    
+                    }elseif(($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX')){
+                        $where[$b][$m] = $this->defineValues($con, $form, $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                    }else{
+                        $where[$b][$m] = $this->defineValues($con, "digital", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);       
+                    }
+                }else{
+                    $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $source);
+                }
+
+            }
+        }
+
+        //var_dump($where);
+        return $where;
+    }
+
+    public function defineValues($con, $table, $currency, $brand, $month, $year, $region, $value, $source=false){
+
+        if ($table != "plan_by_brand") {
+            $p = new pRate();
+
+            if ($currency == "USD") {
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+            }else{
+                $pRate = 1.0;
+            }    
+        }
+
+        switch ($table) {
+
+            case 'cmaps':
+                $columns = array("brand_id", "year", "month");
+                $columnsValue = array($brand, $year, $month);
+                break;
+
+            case 'ytd':
+                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);
+                $value .= "_revenue";
+                break;
+
+            case 'mini_header':
+                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);
+                $value .= "_revenue";
+                break;
+
+            case 'digital':
+                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);
+                $value .= "_revenue";
+                break;
+
+            case 'plan_by_brand':
+                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
+                $columnsValue = array($region, strtoupper($source), $value, $brand, $year, $month);
+                $value = "revenue";
+                break;
+
+            default:
+                $columns = false;
+                break;
+        }
+
+        if (!$columns) {
+            $rtr = false;
+        }else{
+            $sql = new sql();
+
+            $as = "sum";
+
+            $where = $sql->where($columns, $columnsValue);
+
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            $rtr = $sql->fetchSum($selectSum, $as)["sum"]/$pRate;
+            //var_dump($rtr);
+
+        }
+
+        return $rtr;
+    }
 }
