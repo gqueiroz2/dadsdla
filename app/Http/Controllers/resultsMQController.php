@@ -65,7 +65,7 @@ class resultsMQController extends Controller{
                 $regionID = Request::get('region');
                 $brandID = $base->handleBrand( $con, $b ,Request::get('brand'));
 
-                $currencyID = Request::get('currency');var_dump($currencyID);
+                $currencyID = Request::get('currency');
                 $value = Request::get('value');        
                 $year = Request::get('year');
                 $month = $base->getMonth();

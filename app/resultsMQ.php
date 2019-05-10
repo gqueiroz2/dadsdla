@@ -16,7 +16,6 @@ class resultsMQ extends results{
         $p = new pRate();
         
         $currency = $p->getCurrency($con,array($currency))[0]['name'];
-        var_dump($currency);
         if (sizeof($brands) == 0) {
             $lines = false;
         }else{
