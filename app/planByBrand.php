@@ -43,26 +43,20 @@ class planByBrand extends Management{
         return $planByBrand;
     }
 
-    public function sum($con, $region, $value, $columnsName, $columnsValue){
-        
+    public function sum($con, $region, $value,$currency, $columnsName, $columnsValue){
         $sql = new sql();
-
         $table = "plan_by_brand";
-
         $sum = "$value";
-
         $as = "sum";
-
         $where = $sql->where($columnsName, $columnsValue);
-
-        $where .= " AND (currency_id = $region)";
-
-        //var_dump($where);
-
+        if($currency == 'USD'){
+            $seek = 4;
+        }else{
+            $seek = $region;
+        }
+        $where .= " AND (currency_id = $seek)";
         $result = $sql->selectSum($con, $sum, $as, $table, null, $where);
-
         $res = $sql->fetchSum($result, $as);
-
         return $res;
     }
 }

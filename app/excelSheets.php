@@ -38,8 +38,17 @@ class excelSheets extends excel{
 				break;
 			case 'plan_by_brand':
 				$bool = $this->planByBrand($con,$table,$spreadSheet);
-
 				break;			
+			case 'sales_rep':
+				$bool = $this->salesRep($con,$table,$spreadSheet);
+				break;
+			case 'sales_rep_unit':
+				$bool = $this->salesRepUnit($con,$table,$spreadSheet);
+				break;			
+			case 'ytd':
+				$bool = $this->ytd($con,$table,$spreadSheet);
+				break;
+
 			default:
 				# code...
 				break;
@@ -53,9 +62,16 @@ class excelSheets extends excel{
 
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
+					   $columns[$c] == 'net_revenue' ||						
+					   $columns[$c] == 'net_net_revenue' ||						
+					   $columns[$c] == 'gross_revenue_prate' ||
+					   $columns[$c] == 'net_revenue_prate' ||						
+					   $columns[$c] == 'net_net_revenue_prate' ||						
 					   $columns[$c] == 'revenue' ||
-					   $columns[$c] == 'REVENUE' ||
-					   $columns[$c] == 'campaign_option_spend'
+					   $columns[$c] == 'campaign_option_spend' ||
+					   $columns[$c] == 'spot_duration' ||
+				       $columns[$c] == 'impression_duration' ||
+                       $columns[$c] == 'num_spot'
 				      ){
 						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$c]) );
 					}else{
@@ -96,9 +112,7 @@ class excelSheets extends excel{
 	public function insert($con,$spreadSheet,$columns,$table,$into){
 		$values = $this->values($spreadSheet,$columns);
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
-
 		if($con->query($ins) === TRUE ){
-			//var_dump("FOI");
 			$error = false;
 		}else{
 			if($table == 'cmaps'){
@@ -111,11 +125,32 @@ class excelSheets extends excel{
 				var_dump($ins);
 				var_dump(mysqli_error($con));
 				$error = true;
+			}elseif($table = 'ytd'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
+			}elseif($table = 'sales_rep' || $table = 'sales_rep_unity'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
 			}else{
 				$error = true;
 			}
 		}
+		
 		return $error;
+
+	}
+
+	public function ytd($con,$table,$spreadSheet){
+		$columns = $this->ytdColumns;
+		var_dump($columns);
+		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		$into = $this->into($columns);		
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+		}			
+		return $bool;
 	}
 
 	public function cmaps($con,$table,$spreadSheet){
@@ -138,16 +173,35 @@ class excelSheets extends excel{
 		return $bool;
 	}
 
+	public function salesRep($con,$table,$spreadSheet){
+		$columns = $this->salesRepColumns;
+		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		$into = $this->into($columns);		
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+		}
+	}
+
+	public function salesRepUnit($con,$table,$spreadSheet){
+		$columns = $this->salesRepUnitColumns;
+		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		$into = $this->into($columns);		
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+		}
+	}
+
 	public function planByBrand($con,$table,$spreadSheet){
 		$columns = $this->planByBrandColumns;
+
 		$spreadSheet = $this->assembler($spreadSheet,$columns);
 		$into = $this->into($columns);
-/*
+
 		$del = "DELETE FROM plan_by_brand WHERE (source = 'TARGET')";
 		if($con->query($del) == TRUE){
 			var_dump("DELETOU");
 		}
-*/
+
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
 		}			
@@ -160,5 +214,9 @@ class excelSheets extends excel{
 	public $miniHeaderColumns = array('campaign_sales_office_id','sales_rep_sales_office_id','brand_id','sales_rep_id','client_id','agency_id','campaign_currency_id','sales_group_id','year','month','brand_feed','sales_rep_role','order_reference','campaign_reference','campaign_status_id','campaign_option_desc','campaign_class_id','campaign_option_start_date','campaign_option_target_spot','campaign_option_spend','gross_revenue');
 
 	public $cmapsColumns = array('sales_group_id','sales_rep_id','client_id','agency_id','brand_id','decode','year','month','map_number','package','product','segment','pi_number','gross','net','market','discount','client_cnpj','agency_cnpj','media_type','log','ad_sales_support','obs','sector','category');
+
+	public $salesRepColumns = array('sales_group_id','name');
+	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
+	public $ytdColumns = array('campaign_sales_office_id', 'sales_representant_office_id','brand_id','sales_rep_id', 'client_id','agency_id','campaign_currency_id','year','month','brand_feed','client_product','order_reference','campaign_reference','spot_duration','impression_duration','num_spot','gross_revenue','net_revenue','net_net_revenue','gross_revenue_prate','net_revenue_prate','net_net_revenue_prate');
 
 }

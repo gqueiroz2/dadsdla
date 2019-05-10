@@ -13,6 +13,7 @@ use App\pRate;
 class ajaxController extends Controller{
 
     public function yearByRegion(){
+        
         $regionID = Request::get('regionID');
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;
@@ -22,7 +23,6 @@ class ajaxController extends Controller{
         }else{
             $year = array($cYear);
         }
-
         echo "<option value=''> </option>";
         for ($y=0; $y < sizeof($year); $y++) { 
             if($y == 0){
@@ -30,8 +30,7 @@ class ajaxController extends Controller{
             }else{
                 echo "<option value='".$year[$y]."'> ".$year[$y]." </option>";    
             }   
-        }
-        
+        }        
 
     }
 
