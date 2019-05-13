@@ -14,9 +14,12 @@ use App\mini_header;
 use App\digital;
 
 class resultsYoY extends results {
-    
+                        //brand, region, currency, value, source
     public function lines($con, $brands, $region, $year, $currency, $value, $form, $source){
-        
+
+
+
+
         if (sizeof($brands) == 0) {
             $lines = false;
         }else{
@@ -25,6 +28,7 @@ class resultsYoY extends results {
 
                 if ($brands[$i] == "9" || $brands[$i] == "10") {
                     $newForm = 'Digital';
+                    //nova abertura, por mes
                 }else{
                     $newForm = $form;
                 }

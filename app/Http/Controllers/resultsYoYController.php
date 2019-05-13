@@ -80,6 +80,7 @@ class resultsYoYController extends Controller{
         //var_dump(Request::all());
 
         //pegando valores das linhas das tabelas
+        //pegando do banco as informações (nenhuma conta)
         $lines = $yoy->lines($con, $b, $region, $year,$currency, $value, $form, $source);
         
         //criando matriz que será renderizada
