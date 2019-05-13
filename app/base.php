@@ -56,7 +56,7 @@ class base extends Model{
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");
-    protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX");
+    protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX", "OTH");
     protected $brandsColor = array("#0070c0","#ff3300","#ffff00","#009933","#ff0000","#000000","#000066","#ff0000","#6600ff","#004b84");
     protected $brandTarget = array(  "Discovery",
                                      "Discovery Home and Health",
@@ -82,31 +82,13 @@ class base extends Model{
                                      "Digital - Others")
                                 );
 
-    
-    public function handleBrand($con,$b,$array){
+    public function handleBrand($tmp){
         
-        $check = false;
-        
-        for ($a=0; $a < sizeof($array); $a++) { 
-            if($array[$a] == 'dn'){
-                $check = true;
-            }
+        for ($t=0; $t < sizeof($tmp); $t++) {
+            $brands[$t] = json_decode(base64_decode($tmp[$t]));
         }
 
-        if($check){ 
-            $brand = $b->getBrand($con);
-            
-            for ($i=0; $i < sizeof($brand); $i++) { 
-                $brandID[$i] = $brand[$i]['id'];
-            }
-
-            $return = $brandID;
-            
-        }else{
-            $return = $array;
-        }
-
-        return $return;
+        return $brands;
     }
 
     public function generateDiv($con,$pr,$region,$year,$currency){

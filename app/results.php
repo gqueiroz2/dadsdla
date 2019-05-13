@@ -48,18 +48,21 @@ class results extends Model{
     
     public function matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $source=false){
         
-        $cMonth = date('m') - 1;
-        $cYear = date('Y');
-
+        $cMonth = intval(date('m'));
+        $cYear = intval(date('Y'));
         for ($b=0; $b < sizeof($brands); $b++) { 
             for ($m=0; $m < sizeof($months); $m++) { 
                 if (!$source){
-                    if ($form == "mini_header" && $year  == $cYear) {
-                        if (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
-                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                    if ($form == "mini_header" ) {
+                        if($year == $cYear){
+                            if (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
+                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }else{
+                                $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }    
                         }else{
-                            $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
-                        }    
+                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);// VERIFICAR O ELSE - APARECE O MES CORRENTE COMO BUSCA NO YTD
+                        }
                     }elseif(($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX')){
                         $where[$b][$m] = $this->defineValues($con, $form, $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
                     }else{
@@ -86,6 +89,8 @@ class results extends Model{
             }else{
                 $pRate = 1.0;
             }    
+        }else{
+            $pRate = 1.0;
         }
 
         switch ($table) {
@@ -114,8 +119,15 @@ class results extends Model{
                 break;
 
             case 'plan_by_brand':
-                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
-                $columnsValue = array($region, strtoupper($source), $value, $brand, $year, $month);
+
+                if($currency == 'USD'){
+                    $seek = 4;
+                }else{
+                    $seek = $region;
+                }
+
+                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
+                $columnsValue = array($region, strtoupper($source), $value, $brand, $year, $month, $seek);
                 $value = "revenue";
                 break;
 

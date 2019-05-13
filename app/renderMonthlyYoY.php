@@ -24,7 +24,7 @@ class renderMonthlyYoY extends Model{
 				$class = $firstClass;
 			}
 
-			echo "<td colspan='3' $class>".$months[$i-1][0]."</td>";
+			echo "<td colspan='3' $class>".$months[$i][0]."</td>";
 		}
 
 		echo "<td colspan='3' $thirdClass>Q".$index."</td>";
@@ -61,7 +61,7 @@ class renderMonthlyYoY extends Model{
     }
 
     public function renderData($brand, $matrix, $quarter, $brandPos, $size, $firstColor, $secondColor, $thirdColor, $fourthColor){
-		
+
     	$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
 		$thirdClass = "class='center ".$thirdColor."' style='font-weight: bold;'";
@@ -70,7 +70,7 @@ class renderMonthlyYoY extends Model{
 		echo "<td $firstClass>$brand</td>";
 		
 		for ($i=$size; $i < ($size+3); $i++) { 
-			for ($j=1; $j <= 3; $j++) {
+			for ($j=0; $j < 3; $j++) {
 
 				if ($j == 0) {
 					$class = $secondClass;
@@ -80,6 +80,9 @@ class renderMonthlyYoY extends Model{
 					$class = $fourthClass;
 				}
 
+				if($brandPos == 10){
+					//var_dump($matrix[$brandPos]);
+				}
 				echo "<td $class>".number_format($matrix[$brandPos][$i][$j])."</td>";
 			}
 		}

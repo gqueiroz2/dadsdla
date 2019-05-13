@@ -54,12 +54,15 @@ class resultsYoYController extends Controller{
             return back()->withErrors($validator)->withInput();
         }
 
-        //seleciona as brands que foram escolhidas
-        $brand = Request::get("brand");
-        $brands = new brand();
-        $brandsValue = $brands->getBrand($con);
-        $brandsValueAux = $base->getBrands();
-        $b = $base->handleBrand($con,$brands,$brand);
+        $tmp = Request::get("brand");
+        $base = new base();
+        $brands = $base->handleBrand($tmp);
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        //var_dump("Request");
+        //var_dump($brands);
 
     	$region = Request::get("region");
     	$r = new region();
@@ -76,33 +79,26 @@ class resultsYoYController extends Controller{
     	$form = Request::get("firstPos");
     	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
-        
-        //var_dump(Request::all());
 
         //pegando valores das linhas das tabelas
-        $lines = $yoy->lines($con, $b, $region, $year,$currency, $value, $form, $source);
+        $lines = $yoy->lines($con, $pRate[0]['name'], $base->getMonth(), $form, $brands, $year, $region, $value, $source);
         
-        //criando matriz que será renderizada
-    	$matrix = $yoy->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
+        //criando matriz que será renderizada        
+    	$matrix = $yoy->assemblers($brands, $lines, $base->getMonth(), $year);
+        //var_dump($matrix);
 
     	$render = new Render();
     	$renderYoY = new renderYoY();
 
-        if (sizeof($b) > 1) {
-            array_push($brandsValueAux, "DN");
-        }
-
-
-        for ($i=0; $i < sizeof($b); $i++) { 
-            $index = intval($b[$i]);
-            $index -= 1;
-            $brandsValueArray[$i] = $brandsValueAux[$index];
-        }
-
-        $size = sizeof($brandsValueArray);
-
         $region = $r->getRegion($con, array($region));
 
-	   	return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brandsValue', 'form', 'year', 'value', 'pRate', 'matrix','size','brandsValueArray', 'region'));
+        if (sizeof($brands) > 1) {
+            array_push($brands, array('12', 'DN'));
+        }
+
+        //var_dump($brands);
+        //var_dump($matrix);
+
+	   	  return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region'));
     }
 }

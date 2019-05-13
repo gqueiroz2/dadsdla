@@ -70,7 +70,8 @@ class Render extends Model{
 
     	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
-	    		echo "<option selected='true' value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
+                $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+	    		echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";
     		}
     		
     	echo "</select>";
