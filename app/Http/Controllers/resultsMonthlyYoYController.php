@@ -61,7 +61,7 @@ class resultsMonthlyYoYController extends Controller{
         $brandsValue = $brands->getBrand($con);
         $brandsValueAux = $base->getBrands();
         $b = $base->handleBrand($con,$brands,$brand);
-
+        
         $region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
@@ -85,7 +85,7 @@ class resultsMonthlyYoYController extends Controller{
         //var_dump($lines);
     	//$matrix = $monthlyYoY->assemblers($base->getMonth(), $year, $b, $cols);
         $matrix = $monthlyYoY->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
-        //var_dump($matrix);
+        //var_dump($matrix[0]);
 
     	if (sizeof($b) > 1) {
             array_push($brandsValueAux, "DN");

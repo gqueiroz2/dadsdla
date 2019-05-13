@@ -2,6 +2,7 @@
 @section('title', 'YoY Results')
 @section('head')	
 	<script src="/js/resultsYoY.js"></script>
+	<script src="/js/results.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')

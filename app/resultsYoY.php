@@ -14,281 +14,48 @@ use App\mini_header;
 use App\digital;
 
 class resultsYoY extends results {
-                        //brand, region, currency, value, source
-    public function lines($con, $brands, $region, $year, $currency, $value, $form, $source){
 
+    public function lines($con, $currency, $months, $form, $brands, $year, $region, $value, $source){
+        
+        $cYear = $year;
+        $pYear = $year-1;
 
+        for ($l=0; $l < 3; $l++) { 
 
-
-        if (sizeof($brands) == 0) {
-            $lines = false;
-        }else{
-
-            for ($i=0; $i < sizeof($brands); $i++) {
-
-                if ($brands[$i] == "9" || $brands[$i] == "10") {
-                    $newForm = 'Digital';
-                    //nova abertura, por mes
-                }else{
-                    $newForm = $form;
-                }
-                
-                for ($j=0; $j < 3; $j++) { 
-                    $lines[$i][$j] = $this->line($con, $currency, $brands[$i], $region, $year, $value, $newForm, ($j+1), $source);
-
-                    if (!$lines[$i][$j]) {
-                        $lines[$i][$j] = "This brand doesn't has values";
-                    }
-                }
+            if ($l == 0) {
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $pYear, $region, $value);
+            }elseif($l == 1) {
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value, $source);
+            }else{
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value);
             }
         }
 
+        //var_dump($lines);
         return $lines;
     }
 
-    public function line($con, $currency, $brand, $region, $year, $value, $form, $lineNumber, $source){        
-
-        switch ($lineNumber) {
-            case 1:
-                
-                $res = $this->createObject($form, $value);
-                $formResp = $res[0];
-                
-                if (!is_null($formResp)) {
-
-                    $columns = $res[1];
-                    if ($columns) {
-
-                        if (sizeof($columns) == 4) {
-                            $colValues = array($region, $brand, ($year-1));
-                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
-
-                        } elseif (sizeof($columns) == 3) {
-                            $colValues = array($brand, ($year-1));
-                            $line = $this->lineValues($con, false, $currency, $res[2], $formResp, $columns, $colValues, $region, $year);
-                        }else{
-
-                            $line = false;
-                        }
-                    }else{
-                        $line = false;
-                    }
-                    
-                }
-
-                break;
-            
-            case 2:
-                
-                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
-                $colValues = array($region, $source, strtoupper($value), $brand, $year);
-                //var_dump($colValues);
-                $p = new planByBrand();
-
-                $line = $this->lineValues($con, true, $currency, "revenue", $p, $columns, $colValues, $region, $year);
-
-                break;
-
-            case 3:
-                
-                $res = $this->createObject($form, $value);
-                $formResp = $res[0];
-
-                if (!is_null($formResp)) {
-
-                    $columns = $res[1];
-
-                    if ($columns) {
-                        if (sizeof($columns) == 4) {
-                            $colValues = array($region, $brand, $year);
-                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
-                        } elseif (sizeof($columns) == 3) {
-                            $colValues = array($brand, $year);
-                            $line = $this->lineValues($con,false,$currency,$res[2], $formResp, $columns, $colValues, $region, $year);
-                        }else{
-                            $line = false;
-                        }
-                    }else{
-                        $line = false;
-                    }
-                    
-                }
-
-                break;
-
-            default:
-                $line = false;
-                break;
-        }
-
-        return $line;
-        
-    }
-
-    public function lineValues($con,$type,$currency, $value, $form, $columns, $colValues, $region, $year){
-        
-         /*
-            $type == TYPE 
-
-            True = TARGET
-            False = REAL
-
-        */
-
-        $r = new region();
-        $p = new pRate();
-
-        if($type){
-            $pRate = 1.0;
-        }else{
-            if($currency == "USD"){            
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-            }else{
-                $pRate = 1.0;
-            }
-        }
-
-        array_push($colValues, 0);
-        $tam = sizeof($columns);
-
-        $currentMonth = intval(date('m')) - 1;
-
-        for ($i = 0; $i < 12; $i++) {
-            $colValues[$tam-1] = ($i+1);
-
-            if($type){
-                    $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
-            }else{
-                if($i < $currentMonth){
-                    $form = new ytd();
-                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                    $value = 'gross_revenue';
-                }else{
-                    $form = new mini_header();
-                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                }
-                
-                $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
-            }
-
-            if ($formValue[$i] == 0) {
-                $formValue[$i] = 0;
-            }else{
-
-                $formValue[$i] = $formValue[$i]/$pRate;
-
-            }
-        }
-        
-        return $formValue;
-    }
-
-    public function createObject($form, $value){
-        
-        $obj = null;
-        $columns = array();
-
-        switch ($form) {
-            case 'IBMS':
-                $obj = new ytd();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-
-            case 'ytd':
-                $obj = new ytd();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-            
-            case 'CMAPS':
-                $obj = new cmaps();
-
-                $columns = array("brand_id", "year", "month");
-
-                break;
-
-            case 'cmaps':
-                $obj = new cmaps();
-
-                $columns = array("brand_id", "year", "month");
-
-                break;
-
-            case 'Header':
-                $obj = new mini_header();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-
-            case 'mini_header':
-                $obj = new mini_header();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-
-            case 'Digital':
-                $obj = new digital();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-
-            case 'digital':
-                $obj = new digital();
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $value .= "_revenue";
-
-                break;
-
-            default:
-                $obj = false;
-
-                break;
-        }
-
-        return array($obj, $columns, $value);
-
-    }
-
-    public function assemblers($totalBrands, $brands, $lines, $month, $year){        
+    public function assemblers($brands, $lines, $months, $year){        
 
         for ($i = 0; $i < sizeof($brands); $i++) {
 
-            if (is_string($lines[$i][2])) {
-                $matrix[$i] = $lines[$i][2];       
-            }else{
-                $matrix[$i] = $this->assembler($lines[$i][2], $lines[$i][1], $lines[$i][0],
-                                                $month, $year);
-            }
-            
+            $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
+                                                $months, $year);
         }
 
         if (sizeof($brands) > 1) {
-            $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $month, $year);
+            $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $months, $year);
         }
         
         return $matrix;
 
     }
 
-    public function assembler($valueCurrentYear, $target, $valuePastYear, $month, $year){
+    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year){
 
         $valueCurrentYearSum = 0;
         $targetSum = 0;
         $valuePastYearSum = 0;
-        $difExpectedSum = 0;
-        $difYoYSum = 0;     
 
         $matrix[0][0] = " ";
         $matrix[1][0] = "Real ".($year-1);
@@ -297,9 +64,9 @@ class resultsYoY extends results {
         $matrix[4][0] = "Dif. 3° - 2°";
         $matrix[5][0] = "Dif. YoY";
 
-        for ($i = 1; $i <= sizeof($month); $i++) { 
+        for ($i = 1; $i <= sizeof($months); $i++) {
 
-            $matrix[0][$i] = $month[$i-1][2];
+            $matrix[0][$i] = $months[$i-1][2];
 
             $matrix[1][$i] = $valuePastYear[$i-1];
             $valuePastYearSum += $valuePastYear[$i-1];
@@ -311,39 +78,34 @@ class resultsYoY extends results {
             $valueCurrentYearSum += $valueCurrentYear[$i-1];
 
             $matrix[4][$i] = $matrix[3][$i] - $matrix[2][$i];
-            $difExpectedSum += $matrix[4][$i];
 
             $matrix[5][$i] = $matrix[3][$i] - $matrix[1][$i];
-            $difYoYSum += $matrix[5][$i];
-
         }
 
         $last = $i;
-
+ 
         $matrix[0][$last] = "Total";
         $matrix[1][$last] = $valuePastYearSum;
         $matrix[2][$last] = $targetSum;
         $matrix[3][$last] = $valueCurrentYearSum;
-        $matrix[4][$last] = $difExpectedSum;
-        $matrix[5][$last] = $difYoYSum;
+        $matrix[4][$last] = ($valueCurrentYearSum - $targetSum);
+        $matrix[5][$last] = ($valueCurrentYearSum - $valuePastYearSum);
 
         return $matrix;
     }
 
-    public function assemblerDN($matrix, $pos, $month, $year){
-        
-        $currentMatrix = array();
+    public function assemblerDN($matrix, $pos, $months, $year){
 
-        $currentMatrix[0][0] = "DN";
+        $currentMatrix[0][0] = " ";
         $currentMatrix[1][0] = "Real ".($year-1);
         $currentMatrix[2][0] = "Target $year";
         $currentMatrix[3][0] = "Real $year";
         $currentMatrix[4][0] = "Dif. 3° - 2°";
         $currentMatrix[5][0] = "Dif. YoY";
 
-        for ($i = 1; $i <= sizeof($month); $i++) {
+        for ($i = 1; $i <= sizeof($months); $i++) {
 
-            $currentMatrix[0][$i] = $month[$i-1][2];
+            $currentMatrix[0][$i] = $months[$i-1][2];
             $currentMatrix[1][$i] = 0;
             $currentMatrix[2][$i] = 0;
             $currentMatrix[3][$i] = 0;
@@ -354,36 +116,31 @@ class resultsYoY extends results {
         $valueCurrentYearSum = 0;
         $targetSum = 0;
         $valuePastYearSum = 0;
-        $difExpectedSum = 0;
-        $difYoYSum = 0;     
 
         for ($i = 0; $i < $pos; $i++) { 
-            for ($j = 1; $j <= sizeof($month); $j++) { 
+            for ($j = 1; $j <= sizeof($months); $j++) { 
                 $currentMatrix[1][$j] += $matrix[$i][1][$j];
-                $valueCurrentYearSum += $matrix[$i][1][$j];
+                $valuePastYearSum += $matrix[$i][1][$j];
 
                 $currentMatrix[2][$j] += $matrix[$i][2][$j];
                 $targetSum += $matrix[$i][2][$j];
 
                 $currentMatrix[3][$j] += $matrix[$i][3][$j];
-                $valuePastYearSum += $matrix[$i][3][$j];
+                $valueCurrentYearSum += $matrix[$i][3][$j];
 
                 $currentMatrix[4][$j] += $matrix[$i][4][$j];
-                $difExpectedSum += $matrix[$i][4][$j];
 
                 $currentMatrix[5][$j] += $matrix[$i][5][$j];
-                $difYoYSum += $matrix[$i][5][$j];
             }
         }
 
         $last = $j;
-
         $currentMatrix[0][$last] = "Total";
         $currentMatrix[1][$last] = $valuePastYearSum;
         $currentMatrix[2][$last] = $targetSum;
         $currentMatrix[3][$last] = $valueCurrentYearSum;
-        $currentMatrix[4][$last] = $difExpectedSum;
-        $currentMatrix[5][$last] = $difYoYSum;
+        $currentMatrix[4][$last] = ($valueCurrentYearSum - $targetSum);
+        $currentMatrix[5][$last] = ($valueCurrentYearSum - $valuePastYearSum);
 
         return $currentMatrix;
 

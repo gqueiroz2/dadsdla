@@ -8,7 +8,6 @@ class renderYoY extends Model {
     
     public function source($region, $year){
     	echo "<select name='source' style='width:100%;'>";
-    		echo "<option value=''> Select </option>";
             echo "<option value='ytd'> IBMS - $year </option>";
             
             if ($region == 'Brazil') {
@@ -30,14 +29,14 @@ class renderYoY extends Model {
     }
 
     public function renderData($value, $line, $firstColor, $secondColor, $thirdColor=null){
-
+        
         $class = null;
 
         $firstClass = "class='".$firstColor." center'";
         $secondClass = "class='".$secondColor." center'";
         $thirdClass = "class='".$thirdColor." center'";
 
-        for ($col = 0; $col < 14; $col++) { 
+        for ($col = 0; $col < sizeof($value); $col++) { 
 
             if ($line == 1 || $line == 4 || $line == 5 || $line == 6) {
                 if ($col >= 0 && $col <= 12) {

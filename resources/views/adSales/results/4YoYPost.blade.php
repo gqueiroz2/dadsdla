@@ -2,6 +2,7 @@
 @section('title', 'YoY Results')
 @section('head')	
 	<script src="/js/resultsYoY.js"></script>
+	<script src="/js/results.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
@@ -32,7 +33,7 @@
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label>Brand</label>
-							{{ $render->brand($brandsValue) }}
+							{{ $render->brand($brand) }}
 						</div>
 					</div>	
 
@@ -106,7 +107,7 @@
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
-			<div class="col">				
+			<div class="col">
 				<table style="width: 100%">
 					<tr>
 						<th class="lightBlue center" colspan="15">
@@ -118,32 +119,16 @@
 					</tr>
 
 					<tr><td>&nbsp;</td></tr>
-
-					@for($i = 0; $i < $size; $i++)
-						{{var_dump($size)}}
-						<tr>
-							{{$renderYoY->brandTable($brandsValueArray[$i], $brandsValueArray[$i])}}
-						</tr> 
-
-                        <tr>
-                            {{$renderYoY->renderData($matrix[$i][0],1,"grey","darkBlue")}}
-                        </tr>
-                    
-                        <tr>
-                           	{{$renderYoY->renderData($matrix[$i][1],2,"lightb","othersc","smBlue")}}
-                        </tr>
-                        <tr>
-                            {{$renderYoY->renderData($matrix[$i][2],3,"rcBlue","othersc","smBlue")}}
-                        </tr>
-                        <tr>
-                            {{$renderYoY->renderData($matrix[$i][3],4,"rcBlue","smBlue")}}
-                        </tr>
-                        <tr>
-                            {{$renderYoY->renderData($matrix[$i][4],5,"medBlue","smBlue")}}
-                        </tr>
-                        <tr>
-                            {{$renderYoY->renderData($matrix[$i][5],6,"medBlue","darkBlue")}}
-                        </tr>
+					
+					@for($i = 0; $i < sizeof($brands); $i++)
+						
+						<tr>{{$renderYoY->brandTable($brands[$i][1], $brands[$i][1])}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][0],1,"grey","darkBlue")}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][1],2,"lightb","othersc","smBlue")}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][2],3,"rcBlue","othersc","smBlue")}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][3],4,"rcBlue","smBlue")}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][4],5,"medBlue","smBlue")}}</tr>
+                        <tr>{{$renderYoY->renderData($matrix[$i][5],6,"medBlue","darkBlue")}}</tr>
                    
                         <tr><td>&nbsp;</td></tr>
 

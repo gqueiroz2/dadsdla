@@ -36,33 +36,10 @@ class Render extends Model{
     }
 
     public function year(){
-    	//Fazer uma funçao na controler pra pegar os anos disponiveis, por enquanto estou setando quais nos vamos utilizar
-        /*
-        $cYear = intval(date('Y'));
-        $pYear = $cYear - 1;
-        $ppYear = $pYear - 1;
-
-        if($regionID == 1){
-            $year = array($cYear,$pYear,$ppYear);           
-        }else{
-            $year = array($cYear);
-        }
-
-        var_dump($year);
-        */
-
+    	
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
 
-        /*
-    		if($regionID == 1){
-                for ($y=0; $y < sizeof($year); $y++) { 
-                    echo "<option value='".$year[$y]."'> ".$year[$y]." </option>";    
-                }
-            }else{
-                echo "<option value='$cYear'> $cYear </option>";    
-            }
-        */
     	echo "</select>";
     }
 
@@ -70,7 +47,8 @@ class Render extends Model{
 
     	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
-	    		echo "<option selected='true' value='".$brand[$i]["id"]."'>".$brand[$i]["name"]."</option>";
+                $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+	    		echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";
     		}
     		
     	echo "</select>";

@@ -2,6 +2,7 @@
 @section('title', 'monthly YoY Results')
 @section('head')	
 	<script src="/js/resultsYoY.js"></script>
+	<script src="/js/results.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
@@ -128,7 +129,7 @@
 
 				<tr><td>&nbsp;</td></tr>
 				
-				@for($i = 1, $j = 1; $i <= sizeof($base->getMonth()); $i+=3, $j++)
+				@for($i = 0, $j = 0; $i < sizeof($base->getMonth()); $i+=3, $j++)
 					<table style="width: 100%">
 						@if($i == 0)
 							<th class="dc center" colspan="13">
@@ -152,7 +153,7 @@
 							<tr>
                                 {{
                                     $renderMonthlyYoY->renderData($brandsValueArray[$b],
-                                                                  $matrix[0], $matrix[1][$j-1], $b, $i, "dc", "rcBlue", "white", "medBlue") 
+                                                                  $matrix[0], $matrix[1][$j], $b, $i, "dc", "rcBlue", "white", "medBlue") 
                                 }}
                             </tr>
 						@endfor

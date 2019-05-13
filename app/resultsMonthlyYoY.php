@@ -258,7 +258,7 @@ class resultsMonthlyYoY extends results{
     }
 
     public function assemblers($totalBrands, $brands, $lines, $month, $year){        
-
+        var_dump($totalBrands);
         for ($i = 0; $i < sizeof($brands); $i++) {
 
             if (is_string($lines[$i][2])) {
@@ -274,10 +274,10 @@ class resultsMonthlyYoY extends results{
             $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $month, $year);
         }
 
-        $quarters[0] = $this->assemblerQuarter($matrix, 1, 3, sizeof($brands));
-        $quarters[1] = $this->assemblerQuarter($matrix, 4, 6, sizeof($brands));
-        $quarters[2] = $this->assemblerQuarter($matrix, 7, 9, sizeof($brands));
-        $quarters[3] = $this->assemblerQuarter($matrix, 10, 12, sizeof($brands));
+        $quarters[0] = $this->assemblerQuarter($matrix, 0, 2, sizeof($brands));
+        $quarters[1] = $this->assemblerQuarter($matrix, 3, 5, sizeof($brands));
+        $quarters[2] = $this->assemblerQuarter($matrix, 6, 8, sizeof($brands));
+        $quarters[3] = $this->assemblerQuarter($matrix, 9, 11, sizeof($brands));
 
         return array($matrix, $quarters);
 
@@ -285,18 +285,13 @@ class resultsMonthlyYoY extends results{
 
     public function assembler($valueCurrentYear, $target, $valuePastYear, $month, $year){
 
-        $matrix[0][0] = " ";
-        $matrix[0][1] = "Real ".($year-1);
-        $matrix[0][2] = "Target $year";
-        $matrix[0][3] = "Real $year";
+        for ($i = 0; $i < sizeof($month); $i++) { 
 
-        for ($i = 1; $i <= sizeof($month); $i++) { 
+            $matrix[$i][0] = $valuePastYear[$i];
 
-            $matrix[$i][1] = $valuePastYear[$i-1];
+            $matrix[$i][1] = $target[$i];
 
-            $matrix[$i][2] = $target[$i-1];
-
-            $matrix[$i][3] = $valueCurrentYear[$i-1];
+            $matrix[$i][2] = $valueCurrentYear[$i];
 
         }
 
@@ -305,28 +300,23 @@ class resultsMonthlyYoY extends results{
 
     public function assemblerDN($matrix, $pos, $month, $year){
 
-        var_dump($matrix);
+        //var_dump($matrix);
 
-        $currentMatrix[0][0] = "DN";
-        $currentMatrix[0][1] = "Real ".($year-1);
-        $currentMatrix[0][2] = "Target $year";
-        $currentMatrix[0][3] = "Real $year";
+        for ($i = 0; $i < sizeof($month); $i++) {
 
-        for ($i = 1; $i <= sizeof($month); $i++) {
-
+            $currentMatrix[$i][0] = 0;
             $currentMatrix[$i][1] = 0;
             $currentMatrix[$i][2] = 0;
-            $currentMatrix[$i][3] = 0;
 
         }
 
         for ($i = 0; $i < $pos; $i++) { 
-            for ($j = 1; $j <= sizeof($month); $j++) { 
+            for ($j = 0; $j < sizeof($month); $j++) { 
+                $currentMatrix[$j][0] += $matrix[$i][$j][0];
+
                 $currentMatrix[$j][1] += $matrix[$i][$j][1];
 
                 $currentMatrix[$j][2] += $matrix[$i][$j][2];
-
-                $currentMatrix[$j][3] += $matrix[$i][$j][3];
 
             }
         }
@@ -347,14 +337,14 @@ class resultsMonthlyYoY extends results{
 
         for ($i=0; $i < $brands; $i++) { 
             for ($j=$min; $j <= $max; $j++) {
-                for ($k=1; $k <= 3; $k++) { 
-                    $quarter[$i][$k-1] += $matrix[$i][$j][$k]; 
+                for ($k=0; $k < 3; $k++) { 
+                    $quarter[$i][$k] += $matrix[$i][$j][$k]; 
                 } 
                 
             }
         }
         
-        //var_dump($quarter);
+        
         return $quarter;
 
     }
