@@ -26,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
         if($_SERVER['SERVER_ADDR'] == '10.36.12.151'){
            \URL::forceScheme('https');
         }
+        //\URL::forceScheme('https');
     }
 }

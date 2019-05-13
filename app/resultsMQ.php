@@ -16,7 +16,6 @@ class resultsMQ extends results{
         $p = new pRate();
         
         $currency = $p->getCurrency($con,array($currency))[0]['name'];
-
         if (sizeof($brands) == 0) {
             $lines = false;
         }else{
@@ -51,7 +50,6 @@ class resultsMQ extends results{
             case 1:
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month");
                 $colValues = array($region, $newSource, strtoupper($value), $brand, $year);
-                var_dump($colValues);
                 $p = new planByBrand();
                 $line = $this->lineValues($con,true,$currency, "revenue", $p, $columns, $colValues, $region, $year);
                 break;
@@ -121,16 +119,16 @@ class resultsMQ extends results{
             $colValues[$tam-1] = ($i+1);
 
             if($type){
-                $formValue[$i] = $form->sum($con,$region,$value, $columns, $colValues)['sum'];
+                $formValue[$i] = $form->sum($con,$region,$value,$currency,$columns,$colValues)['sum'];
             }else{
-                if($i < $currentMonth){
+                //if($i < $currentMonth){
                     $form = new ytd();
                     $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                     $value = 'gross_revenue';
-                }else{
-                    $form = new mini_header();
-                    $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                }
+                //}else{
+                  //  $form = new mini_header();
+                    //$columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                //}
                 
                 $formValue[$i] = $form->sum($con, $value, $columns, $colValues)['sum'];
             }
