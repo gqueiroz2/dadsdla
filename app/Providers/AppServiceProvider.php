@@ -22,7 +22,10 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
+    {     
+        if($_SERVER['SERVER_ADDR'] == '10.36.12.151'){
+           \URL::forceScheme('https');
+        }
         //\URL::forceScheme('https');
     }
 }

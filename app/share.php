@@ -28,7 +28,7 @@ class share extends results
     	//Começando a pegar as informações necessarias
     	$region = Request::get('region');
     	$year = array(Request::get('year'));
-    	$brand = Request::get('brand');
+    	$brand = $base->handleBrand(Request::get('brand'));
     	$source = Request::get('source');
     	$salesRepGroup = Request::get('salesRepGroup');
     	$salesRep = Request::get('salesRep');
@@ -39,7 +39,9 @@ class share extends results
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
         $tmp = array($currency);
+        
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+
         if ($value == "gross") {
             $valueView = "Gross";
         }else{
@@ -52,36 +54,23 @@ class share extends results
         $regionView = $r->getRegion($con,$tmp)[0]["name"];
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
-        $tmp = $b->getBrand($con);
-        if($brand[0] == 'dn') {
-            for ($b=0; $b <sizeof($tmp) ; $b++) { 
-                $brand[$b] = $tmp[$b]["id"];
-            }
-        }
-
+        
         $brandName = array();
-        for ($t=0; $t <sizeof($tmp) ; $t++) {
-            for ($b=0; $b <sizeof($brand) ; $b++) { 
-                if ($brand[$b] == $tmp[$t]["id"]) {
-                    array_push($brandName, $tmp[$t]["name"]);
-                }
-            }
+        
+        for ($b=0; $b <sizeof($brand) ; $b++) { 
+            array_push($brandName, $brand[$b][1]);
         }
 
         //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
         for ($b=0; $b <sizeof($brand); $b++) { 
-            for ($t=0; $t <sizeof($tmp); $t++) { 
-                if ($brand[$b] == $tmp[$t]["id"]) {
-                    if ($tmp[$t]["name"] == "ONL" || $tmp[$t]["name"] == "VIX") {
-                        $sourceBrand[$b] = "Digital";
-                    }elseif ($tmp[$t]["name"] == "OTH") {
-                        $sourceBrand[$b] = "IBMS";
-                    }elseif($tmp[$t]["name"] == "FN" && $region == "1"){
-                        $sourceBrand[$b] = "CMAPS";
-                    }else{
-                        $sourceBrand[$b] = $source;
-                    }
-                }
+            if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                $sourceBrand[$b] = "Digital";
+            }elseif ($brand[$b][1] == "OTH") {
+                $sourceBrand[$b] = "IBMS";
+            }elseif($brand[$b][1] == "FN" && $region == "1"){
+                $sourceBrand[$b] = "CMAPS";
+            }else{
+                $sourceBrand[$b] = $source;
             }
         }
 
@@ -120,7 +109,7 @@ class share extends results
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
         $salesRepName = array();
 
-
+        //refazer inteiro
         if ($salesRep == 'all') {
             
             $salesRepView = "All";
@@ -139,16 +128,14 @@ class share extends results
 
                 $salesRepGroup = $tmp;
             
+                $salesRepGroupView = "All";   
             }else{
 
                 $salesRepGroup = array($salesRepGroup);
 
                 $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
 
-                                
             }
-
-            $salesRepGroupView = "All";                
             
             $tmp = $sr->getSalesRep($con,$salesRepGroup);
 
@@ -285,7 +272,7 @@ class share extends results
 
     public function CMAPS_IBMS($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
-            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand,$salesRep[$s],$month);
+            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand[0],$salesRep[$s],$month);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
             $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
         }

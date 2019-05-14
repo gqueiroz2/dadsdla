@@ -16,6 +16,54 @@ class salesRep extends Management{
 		o = origin
 	*/
 
+	public function getSalesRepFilteredYear($con,$salesRepGroupID,$regionID,$year,$source){
+		$sql = new sql();
+
+		$table = "sales_rep sr";
+		$columns = "sr.name AS 'name',
+					sr.ID as 'id',
+					srg.name as 'salesRepGroup'";
+
+		if($source == "IBMS"){
+			$table = "ytd";
+			$gross = "gross_revenue";
+		}elseif($source == "CMAPS"){
+			$table = "cmaps";
+			$gross = "gross";
+		}else{
+			$table = "mini-header";
+			$gross = "gross_revenue";
+		}
+
+		if ($salesRepGroupID[0] == 'all') {
+            $regionsID = array($regionID);
+            $reps = $this->getSalesRepByRegion($con,$regionsID);
+        }else{
+			$reps = $this->getSalesRep($con,$salesRepGroupID);
+        }
+
+
+        for ($r=0; $r <sizeof($reps) ; $r++) { 
+        	$firstSelect[$r] = "SELECT SUM($gross) AS sum FROM $table WHERE year = '$year' AND sales_rep_id = '".$reps[$r]['id']."' AND sales_representant_office_id = '$regionID'";
+
+        	$firstResult[$r] = $con->query($firstSelect[$r]);
+
+        	$results[$r] = $sql->fetchSum($firstResult[$r],"sum")["sum"];
+
+        }
+
+        for ($r=0; $r <sizeof($results); $r++) { 
+        	if ($results[$r] == 0) {
+        		unset($reps[$r]);
+        	}
+        }
+
+        $reps = array_values($reps);
+
+
+        return $reps;
+	}
+
 	public function getSalesRepGroupById($con,$id){
 		$sql = new sql();
 

@@ -23,7 +23,6 @@ class ajaxController extends Controller{
         }else{
             $year = array($cYear);
         }
-        echo "<option value=''> </option>";
         for ($y=0; $y < sizeof($year); $y++) { 
             if($y == 0){
                 echo "<option selected='true' value='".$year[$y]."'> ".$year[$y]." </option>";    
@@ -36,7 +35,6 @@ class ajaxController extends Controller{
 
     public function firstPosMonthly(){
         $year = Request::get("year");
-        echo "<option> Selecione </option>";
         echo "<option value='target'> Target ".$year." </option>";
     }
 
@@ -116,7 +114,6 @@ class ajaxController extends Controller{
 
         }else{
             if($salesRepGroup){
-                echo "<option value=''> Select </option>";
                 echo "<option value='all'> All </option>";
                 for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
                     echo "<option value='".$salesRepGroup[$s]["id"]."'>"
@@ -138,12 +135,16 @@ class ajaxController extends Controller{
         $regionID = Request::get('regionID');
 
         $salesRepGroupID = array( Request::get('salesRepGroupID') );         
-
+        $year = Request::get('year');        
+        $source = Request::get('source');
         $userLevel = Request::session()->get('userLevel');
+
+        
+
+        $salesRep = $sr->getSalesRepFilteredYear($con,$salesRepGroupID,$regionID,$year,$source);
 
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
-            $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
             $check = false;            
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                 if($salesRep[$s]["salesRep"] == $userName){
@@ -156,15 +157,7 @@ class ajaxController extends Controller{
             }
         }else{
 
-            if ($salesRepGroupID[0] == 'all') {
-                $regionID = array($regionID);
-                $salesRep = $sr->getSalesRepByRegion($con,$regionID);
-            }else{
-                $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
-            }
-
             if($salesRep){
-                echo "<option value=''> Select </option>";
                 echo "<option value='all'> All </option>";
                 for ($s=0; $s < sizeof($salesRep); $s++) { 
                     echo "<option value='".$salesRep[$s]["id"]."'>"
@@ -203,11 +196,9 @@ class ajaxController extends Controller{
     public function sourceByRegion(){
         $region = Request::get('regionID');
         if ($region == 1) {
-            echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";
         }else{
-            echo "<option value=''> Select </option>";
             echo "<option value='IBMS'> IBMS </option>";
             echo "<option value='Header'> Header </option>";
         }

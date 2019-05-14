@@ -2,6 +2,7 @@
 @section('title', 'Monthly Results')
 @section('head')	
 	<script src="/js/resultsShare.js"></script>
+	<script src="/js/results.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 

@@ -36,33 +36,10 @@ class Render extends Model{
     }
 
     public function year(){
-    	//Fazer uma funçao na controler pra pegar os anos disponiveis, por enquanto estou setando quais nos vamos utilizar
-        /*
-        $cYear = intval(date('Y'));
-        $pYear = $cYear - 1;
-        $ppYear = $pYear - 1;
-
-        if($regionID == 1){
-            $year = array($cYear,$pYear,$ppYear);           
-        }else{
-            $year = array($cYear);
-        }
-
-        var_dump($year);
-        */
-
+    	
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
 
-        /*
-    		if($regionID == 1){
-                for ($y=0; $y < sizeof($year); $y++) { 
-                    echo "<option value='".$year[$y]."'> ".$year[$y]." </option>";    
-                }
-            }else{
-                echo "<option value='$cYear'> $cYear </option>";    
-            }
-        */
     	echo "</select>";
     }
 

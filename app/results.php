@@ -75,7 +75,6 @@ class results extends Model{
             }
         }
 
-        //var_dump($where);
         return $where;
     }
 

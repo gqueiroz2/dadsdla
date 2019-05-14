@@ -8,7 +8,6 @@ class renderYoY extends Model {
     
     public function source($region, $year){
     	echo "<select name='source' style='width:100%;'>";
-    		echo "<option value=''> Select </option>";
             echo "<option value='ytd'> IBMS - $year </option>";
             
             if ($region == 'Brazil') {

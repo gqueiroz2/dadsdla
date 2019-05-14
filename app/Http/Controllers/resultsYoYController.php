@@ -78,6 +78,7 @@ class resultsYoYController extends Controller{
         $yoy = new resultsYoY();
 
         //pegando valores das linhas das tabelas
+        //pegando do banco as informações (nenhuma conta)
         $lines = $yoy->lines($con, $pRate[0]['name'], $base->getMonth(), $form, $brands, $year, $region, $value, $source);
         
         //criando matriz que será renderizada        
