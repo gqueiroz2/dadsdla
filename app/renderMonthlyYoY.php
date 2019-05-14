@@ -60,16 +60,17 @@ class renderMonthlyYoY extends Model{
 
     }
 
-    public function renderData($brand, $matrix, $quarter, $brandPos, $size, $firstColor, $secondColor, $thirdColor, $fourthColor){
-
+    public function renderData($brand, $matrix, $quarter, $month, $brandPos, $firstColor, $secondColor, $thirdColor, $fourthColor){
+    	
     	$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
 		$thirdClass = "class='center ".$thirdColor."' style='font-weight: bold;'";
 		$fourthClass = "class='center ".$fourthColor."'";
 
-		echo "<td $firstClass>$brand</td>";
+		echo "<td $firstClass>".$brand[1]."</td>";
 		
-		for ($i=$size; $i < ($size+3); $i++) { 
+		for ($i=$month; $i < ($month+3); $i++) { 
+
 			for ($j=0; $j < 3; $j++) {
 
 				if ($j == 0) {
@@ -80,13 +81,10 @@ class renderMonthlyYoY extends Model{
 					$class = $fourthClass;
 				}
 
-				if($brandPos == 10){
-					//var_dump($matrix[$brandPos]);
-				}
-				echo "<td $class>".number_format($matrix[$brandPos][$i][$j])."</td>";
+				echo "<td $class>".number_format($matrix[$brandPos][$j][$i+1])."</td>";
 			}
 		}
-		
+		//var_dump($quarter);
 		for ($i=0; $i < 3; $i++) { 
 
 			if ($i == 0) {
@@ -97,12 +95,12 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
-			echo "<td $class>".number_format($quarter[$brandPos][$i])."</td>";
+			echo "<td $class>".number_format($quarter[$i][$brandPos+1])."</td>";
 		}
 
     }
 
-    public function renderModalHeader($firstcolor, $secondColor){
+    /*public function renderModalHeader($firstcolor, $secondColor){
     	
     	$firstClass = "class='center ".$firstcolor."'";
     	$secondClass = "class='center ".$secondColor."'";
@@ -191,5 +189,5 @@ class renderMonthlyYoY extends Model{
 				"</td>";
 		}
 
-    }
+    }*/
 }

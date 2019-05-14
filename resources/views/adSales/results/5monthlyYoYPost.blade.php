@@ -34,7 +34,7 @@
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label>Brand</label>
-							{{ $render->brand($brandsValue) }}
+							{{ $render->brand($brand) }}
 						</div>
 					</div>	
 
@@ -145,19 +145,12 @@
 						<tr>
                             {{ $renderMonthlyYoY->renderHead($base->getMonth(), $i, $j, "dc", "vix", "darkBlue") }} 
                         </tr>
-                        <tr>
-                            {{ $renderMonthlyYoY->renderHead2($year, $i, "dc", "vix", "darkBlue") }}
-                        </tr>
-
-						@for($b = 0; $b < sizeof($brandsValueArray); $b++)
-							<tr>
-                                {{
-                                    $renderMonthlyYoY->renderData($brandsValueArray[$b],
-                                                                  $matrix[0], $matrix[1][$j], $b, $i, "dc", "rcBlue", "white", "medBlue") 
-                                }}
-                            </tr>
-						@endfor
-						
+                       	
+                        @for($b = 0; $b < sizeof($brands); $b++)
+                        	<tr>
+                        		{{ $renderMonthlyYoY->renderData($brands[$b], $matrix[0], $matrix[1][$j], $i, $b, "blue", "blue", "blue", "blue") }}	
+                    		</tr>
+                        @endfor
 					</table>
 
 					@if($i != (sizeof($base->getMonth())-1))

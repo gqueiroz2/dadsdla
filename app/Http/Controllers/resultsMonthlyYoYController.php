@@ -56,11 +56,12 @@ class resultsMonthlyYoYController extends Controller{
         }
 
         //seleciona as brands que foram escolhidas
-        $brand = Request::get("brand");
-        $brands = new brand();
-        $brandsValue = $brands->getBrand($con);
-        $brandsValueAux = $base->getBrands();
-        $b = $base->handleBrand($con,$brands,$brand);
+        $tmp = Request::get("brand");
+        $base = new base();
+        $brands = $base->handleBrand($tmp);
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
         
         $region = Request::get("region");
     	$r = new region();
@@ -80,30 +81,20 @@ class resultsMonthlyYoYController extends Controller{
     	$monthlyYoY = new resultsMonthlyYoY();
 
     	//pegando valores das colunas das tabelas
-    	//$cols = $monthlyYoY->cols($con, $b, $region, $year,$currency, $value, $form, $source);
-        $lines = $monthlyYoY->lines($con, $b, $region, $year,$currency, $value, $form, $source);
-        //var_dump($lines);
-    	//$matrix = $monthlyYoY->assemblers($base->getMonth(), $year, $b, $cols);
-        $matrix = $monthlyYoY->assemblers($brandsValue, $b, $lines, $base->getMonth(), $year);
+        $lines = $monthlyYoY->lines($con, $pRate[0]['name'], $base->getMonth(), $form, $brands, $year, $region, $value, $source);
+        
+        $matrix = $monthlyYoY->assemblers($brands, $lines, $base->getMonth(), $year);
         //var_dump($matrix[0]);
-
-    	if (sizeof($b) > 1) {
-            array_push($brandsValueAux, "DN");
-        }
-
-        for ($i=0; $i < sizeof($b); $i++) { 
-            $index = intval($b[$i]);
-            $index -= 1;
-            $brandsValueArray[$i] = $brandsValueAux[$index];
-        }
-
-        $size = sizeof($brandsValueArray);
 
         $render = new Render();
         $renderYoY = new renderYoY();
         $renderMonthlyYoY = new renderMonthlyYoY();
 
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brandsValue', 'year', 'size','brandsValueArray', 'base', 'form', 'pRate', 'value'));
+    	if (sizeof($brands) > 1) {
+            array_push($brands, array('12', 'DN'));
+        }
+
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value'));
 	}
 
 }
