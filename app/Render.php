@@ -107,4 +107,11 @@ class Render extends Model{
     		echo "<option value='net'> Net </option>";
     	echo "</select>";
     }
+
+    public function plan(){
+        echo "<select id='plan' name='plan' style='width:100%;' class='form-control'>";
+            echo "<option value='target'> Target </option>";
+        echo "</select>";
+
+    }
 }

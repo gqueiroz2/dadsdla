@@ -1,8 +1,7 @@
 @extends('layouts.mirror')
 @section('title', 'Share')
 @section('head')	
-	<script src="/js/resultsShare.js"></script>
-	<script src="/js/results.js"></script>
+<script src="/js/performance.js"></script>
     <?php include(resource_path('views/auth.php')); 
     ?>
 @endsection
@@ -12,7 +11,7 @@
 			<div class="col">
 				
 
-				<form method="POST" action="{{ route('resultsSharePost') }}">
+				<form method="POST" action="{{ route('corePerformancePost') }}">
 					@csrf
 					<div class="row justify-content-center">
 						<div class="col">	
@@ -47,22 +46,15 @@
 							@endif
 							{{$render->source()}}
 						</div>
+						
+					</div>
+					<div class="row justify-content-center">
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
 							@if($errors->has('salesRepGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->salesRepGroup($salesRepGroup)}}
-						</div>
-
-					</div>
-					<div class="row justify-content-center">
-						<div class="col">
-							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
-							@if($errors->has('salesRep'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->salesRep($salesRep)}}
 						</div>
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Currency:</span></label>
@@ -93,7 +85,7 @@
 				</form>
 				<div class="row justify-content-end">
 					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
-						<span class="reportsTitle">Share Report</span>
+						<span class="reportsTitle">Core Performance</span>
 					</div>
 				</div>
 			</div>

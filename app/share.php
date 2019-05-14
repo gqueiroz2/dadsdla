@@ -62,99 +62,92 @@ class share extends results
         }
 
         //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
-        for ($b=0; $b <sizeof($brand); $b++) { 
-            if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
-                $sourceBrand[$b] = "Digital";
-            }elseif ($brand[$b][1] == "OTH") {
-                $sourceBrand[$b] = "IBMS";
-            }elseif($brand[$b][1] == "FN" && $region == "1"){
-                $sourceBrand[$b] = "CMAPS";
-            }else{
-                $sourceBrand[$b] = $source;
-            }
-        }
+        $actualMonth = date("m");
 
-
-        //se for todos os meses já pega todos os meses, e se for YTD ele pega todos os meses, até o mes atual
-        if($month[0] == 'all'){
-            $month = $base->getMonth();
-            $tmp = array();
-            $monthName = array();
-            for ($m=0; $m <sizeof($month) ; $m++) { 
-                $tmp[$m] = $month[$m][1];
-                $monthName[$m] = $month[$m][0];
-            }
-            $month = $tmp;
-        }elseif($month[0] == 'ytd'){
-            $month = $base->getYtdMonth();
-            $tmp = array();
-            for ($m=0; $m <sizeof($month) ; $m++) { 
-                $tmp[$m] = $month[$m][1];
-                $monthName[$m] = $month[$m];
-            }
-            $month = $tmp;
-
-        }else{
-            $tmp = $base->getMonth();
-            $monthName = array();
-            for ($m=0; $m <sizeof($month) ; $m++) { 
-                for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                    if ($month[$m] == $tmp[$t][1]) {
-                        array_push($monthName, $tmp[$t][0]);
+        for ($m=0; $m <sizeof($month) ; $m++) {
+            for ($b=0; $b <sizeof($brand); $b++) {
+                if ($m > $actualMonth-1) {
+                    if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                        $sourceBrand[$m][$b] = "Digital";
+                    }elseif ($region == "1") {
+                        $sourceBrand[$m][$b] = "CMAPS";
+                    }else{
+                        $sourceBrand[$m][$b] = "Header";
+                    }
+                }else{
+                    if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                        $sourceBrand[$m][$b] = "Digital";
+                    }elseif ($brand[$b][1] == "OTH") {
+                        $sourceBrand[$m][$b] = "IBMS";
+                    }elseif($brand[$b][1] == "FN" && $region == "1"){
+                        $sourceBrand[$m][$b] = "CMAPS";
+                    }else{
+                        $sourceBrand[$m][$b] = $source;
                     }
                 }
             }
         }
 
+
+        
+        $tmp = $base->getMonth();
+        $monthName = array();
+        for ($m=0; $m <sizeof($month) ; $m++) { 
+            for ($t=0; $t <sizeof($tmp) ; $t++) { 
+                if ($month[$m] == $tmp[$t][1]) {
+                    array_push($monthName, $tmp[$t][0]);
+                }
+            }
+        }
+        
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
         $salesRepName = array();
 
-        //refazer inteiro
+
+        if ($salesRepGroup == 'all') {
+                
+            $tmp = array($region);
+        
+            $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
+        
+            $tmp = array();
+            
+            for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
+                array_push($tmp, $salesRepGroup[$i]["id"]);
+            }
+
+            $salesRepGroup = $tmp;
+        
+            $salesRepGroupView = "All";   
+        }else{
+
+            $salesRepGroup = array($salesRepGroup);
+
+            $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
+
+        }
+        
         if ($salesRep == 'all') {
             
-            $salesRepView = "All";
-
-            if ($salesRepGroup == 'all') {
-                
-                $tmp = array($region);
+            $tempYear = $year[0];
             
-                $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
-            
-                $tmp = array();
-                
-                for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
-                    array_push($tmp, $salesRepGroup[$i]["id"]);
-                }
-
-                $salesRepGroup = $tmp;
-            
-                $salesRepGroupView = "All";   
-            }else{
-
-                $salesRepGroup = array($salesRepGroup);
-
-                $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
-
-            }
-            
-            $tmp = $sr->getSalesRep($con,$salesRepGroup);
+            $tmp = $sr->getSalesRepFilteredYear($con,$salesRepGroup,$region,$tempYear,$source);
 
             $salesRep = array();
+
+            $salesRepView = "All";
 
             for ($i=0; $i <sizeof($tmp) ; $i++) { 
                 array_push($salesRep, $tmp[$i]["id"]);
                 array_push($salesRepName, $tmp[$i]["salesRep"]);
             }
+
         }else{
-            
             $salesRep = array($salesRep);
             
             $salesRepGroup = array($salesRepGroup);
-
-            $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
             
             $tmp = $sr->getSalesRep($con,null);
-            
 
 
             for ($t=0; $t <sizeof($tmp) ; $t++) { 
@@ -170,17 +163,21 @@ class share extends results
         }
 
 
-        for ($b=0; $b <sizeof($sourceBrand) ; $b++) { 
-            //procura tabela para fazer a consulta (digital e OTH são em tabelas diferentes)
-            $table[$b] = $this->defineTable($sourceBrand[$b]);
-            //gera as colunas para o Where
-            $sum[$b] = $this->generateColumns($sourceBrand[$b],$value);
+
+        for ($m=0; $m <sizeof($sourceBrand); $m++) { 
+            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) { 
+                //procura tabela para fazer a consulta (digital e OTH são em tabelas diferentes)
+                $table[$m][$b] = $this->defineTable($sourceBrand[$m][$b]);
+                //gera as colunas para o Where
+                $sum[$m][$b] = $this->generateColumns($sourceBrand[$m][$b],$value);
+            }
         }
 
+
         //$where = $this->createWhere($sql,$source,$region,$year,$brand,$salesRep,$month);
-        for ($b=0; $b < sizeof($brand)+1; $b++) { 
-            for ($s=0; $s <sizeof($salesRep)+1 ; $s++) {
-                $values[$b][$s] = 0;
+        for ($m=0; $m < sizeof($sourceBrand); $m++) { 
+            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) {
+                $values[$m][$b] = 0;
             }
         }
 
@@ -188,17 +185,17 @@ class share extends results
         //gera o where, puxa do banco, gera o total por executivo, e gera DN se tiver mais de um canal
         
 
-        
-        for ($b=0; $b < sizeof($brand); $b++) { 
-            if ($sourceBrand[$b] == "Header") {
-                $values[$b] = $this->Header($con,$sql,$salesRep,$region,$year,$month,$brand[$b],$table[$b],$sourceBrand[$b],$sum[$b]);
-            }else{
-                $values[$b] = $this->CMAPS_IBMS($con,$sql,$sourceBrand[$b],$region,$year,$brand[$b],$salesRep,$month,$sum[$b],$table[$b]);       
+        for ($m=0; $m <sizeof($sourceBrand) ; $m++) {
+            for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
+                if ($sourceBrand[$m][$b] == "Header") {
+                    $values[$m][$b] = $this->Header($con,$sql,$salesRep,$region,$year,$month[$m],$brand[$b],$table[$m][$b],$sourceBrand[$m][$b],$sum[$m][$b]);
+                }else{
+                    $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b]);
+                }
             }
         }
 
         $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView,$salesRepView,$regionView,$yearView,$source);
-
 
         return $mtx;
     }
@@ -270,7 +267,7 @@ class share extends results
     }
 
 
-    public function CMAPS_IBMS($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
+    public function generateValue($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
             $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand[0],$salesRep[$s],$month);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
@@ -280,6 +277,7 @@ class share extends results
     }
 
     public function generateColumns($source,$value){
+        $columns = false;
         if ($source == "CMAPS") {
             if ($value == "gross") {
                 $columns = "gross";
@@ -306,6 +304,7 @@ class share extends results
     }
 
     public function defineTable($source){
+        $table = false;
         if ($source == "CMAPS") {
             $table = "cmaps";
         }elseif($source == "IBMS"){
@@ -355,9 +354,26 @@ class share extends results
         $mtx["year"] = $year;
         $mtx["source"] = $source;
 
-        for ($b=0; $b <sizeof($values) ; $b++) { 
-            for ($s=0; $s <sizeof($values[$b]) ; $s++) { 
-                $values[$b][$s] = $values[$b][$s]/$div;
+
+        for ($m=0; $m <sizeof($values) ; $m++) { 
+            for ($b=0; $b <sizeof($values[$m]) ; $b++) { 
+                for ($s=0; $s <sizeof($values[$m][$b]) ; $s++) { 
+                    $values[$m][$b][$s] = $values[$m][$b][$s]/$div;
+                }
+            }
+        }
+
+        $tmp = array();
+        for ($b=0; $b <sizeof($brand) ; $b++) { 
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                $tmp[$b][$s] = 0;
+            }
+        }
+        for ($m=0; $m <sizeof($values) ; $m++) { 
+            for ($b=0; $b <sizeof($brand) ; $b++) { 
+                for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                    $tmp[$b][$s] += $values[$m][$b][$s];
+                }
             }
         }
 
@@ -365,7 +381,8 @@ class share extends results
 
         $mtx["brand"] = $brand;
         $mtx["salesRep"] = $salesRep;
-        $mtx["values"] = $values;
+        $mtx["values"] = $tmp;
+
 
         for ($b=0; $b <sizeof($brand) ; $b++) { 
             $brandColor[$b] = $base->getBrandColor($brand[$b]);
@@ -387,9 +404,9 @@ class share extends results
 
         for ($b=0; $b <sizeof($brand) ; $b++) { 
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                $total[$b] += $values[$b][$s];
-                $dn[$s] += $values[$b][$s];
-                $totalT += $values[$b][$s];
+                $total[$b] += $mtx["values"][$b][$s];
+                $dn[$s] += $mtx["values"][$b][$s];
+                $totalT += $mtx["values"][$b][$s];
             }
         }
 
@@ -412,6 +429,32 @@ class share extends results
         }
 
         $mtx["share"] = $share;
+
+
+
+        $check = false;
+        for ($d=0; $d <sizeof($mtx['dn']) ; $d++) { 
+            if ($mtx['dn'][$d] == 0) {
+                unset($mtx['salesRep'][$d]);
+                for ($v=0; $v <sizeof($mtx['values']) ; $v++) { 
+                    unset($mtx['values'][$v][$d]);
+                }
+                unset($mtx['dn'][$d]);
+                unset($mtx['share'][$d]);
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            $mtx['salesRep'] = array_values($mtx['salesRep']);
+            for ($v=0; $v <sizeof($mtx['values']) ; $v++) { 
+                $mtx['values'][$v] = array_values($mtx['values'][$v]);
+            }
+            $mtx['dn'] = array_values($mtx['dn']);
+            $mtx['share'] = array_values($mtx['share']);
+
+        }
+
 
         return $mtx;
     }
