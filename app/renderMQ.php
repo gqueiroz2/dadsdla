@@ -62,4 +62,5 @@ class renderMQ extends Render{
 			}		
 		echo "</table>";
     }
+
 }

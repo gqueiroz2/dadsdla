@@ -67,7 +67,7 @@
 
 	<div class="row mt-2">
 		<div class="col table-responsive">
-			{{ $render->assemble($mtx,$currencyS,$valueS,$year) }}
+			{{ $render->assemble($mtx,$currencyS,$value,$year) }}
 		</div>
 	</div>
 </div>

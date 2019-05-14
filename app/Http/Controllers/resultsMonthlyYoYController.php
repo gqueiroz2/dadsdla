@@ -98,15 +98,3 @@ class resultsMonthlyYoYController extends Controller{
 	}
 
 }
-
-/*
-<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
-                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
-
-@for($i = 0; $i < sizeof($brandsValueArray); $i++)
-                            <tr>
-                                {{
-                                    $renderMonthlyYoY->renderDataModal($brandsValueArray[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
-                                }}
-                            </tr>
-                        @endfor*/

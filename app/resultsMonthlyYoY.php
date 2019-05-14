@@ -50,10 +50,9 @@ class resultsMonthlyYoY extends results{
             $size += 1;
         }
 
-        $quarters[0] = $this->assemblerQuarter($matrix, 1, 3, $size, $year);
-        $quarters[1] = $this->assemblerQuarter($matrix, 4, 6, $size, $year);
-        $quarters[2] = $this->assemblerQuarter($matrix, 7, 9, $size, $year);
-        $quarters[3] = $this->assemblerQuarter($matrix, 10, 12, $size, $year);
+        for ($q=1, $i = 0; $q <= 12; $q+=3, $i++) {
+            $quarters[$i] = $this->assemblerQuarter($matrix, $q, ($q+2), $size, $year);
+        }
         
         //var_dump($quarters);
 
@@ -109,7 +108,7 @@ class resultsMonthlyYoY extends results{
 
     public function assemblerQuarter($matrix, $min, $max, $brands, $year){
 
-        var_dump($matrix);
+        //var_dump($matrix);
 
         $quarter[0][0] = "Real ".($year-1);
         $quarter[1][0] = "Target $year";

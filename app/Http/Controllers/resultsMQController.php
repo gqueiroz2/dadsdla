@@ -60,12 +60,14 @@ class resultsMQController extends Controller{
                 }
 
                 $region = $r->getRegion($con,false);
-                $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
                 $regionID = Request::get('region');
-                $brandID = $base->handleBrand( $con, $b ,Request::get('brand'));
 
-                $currencyID = Request::get('currency');
+                $brandTmp = Request::get('brand');
+                $brandID = $base->handleBrand($brandTmp);
+
+                $currencyID = Request::get("currency");
+
                 $value = Request::get('value');        
                 $year = Request::get('year');
                 $month = $base->getMonth();
@@ -73,42 +75,86 @@ class resultsMQController extends Controller{
                 $secondPos = Request::get('thirdPos');
                 $tmp = $pr->getCurrency($con,array($currencyID));
                 if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
-                $valueS = strtoupper($value);
-                $cYear = $year;
-                $pYear = $cYear - 1;
+                
                 $mq = new resultsMQ();
-                $lines = $mq->lines($con,$brandID,$regionID,$year,$currencyID,$value,$firstPos,$secondPos);
+                $lines = $mq->lines($con,$tmp,$month,$secondPos,$brandID,$year,$regionID,$value,$firstPos);
 
-                $mtx = $mq->assembler($con,$b,$brandID,$lines,$month,$year);
+                $mtx = $mq->assembler($con,$brandID,$lines,$month,$year);
                 $render = new renderMQ();
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','valueS','currencyS','year','mtx'));
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx'));
         }
 
 
         public function getQuarter(){
-	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        	$db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-        $region = new region();
-        $salesRegion = $region->getRegion($con);
+                $region = new region();
+                $salesRegion = $region->getRegion($con);
 
-        $currentYear = intval(date('Y'));
-        $years = array($currentYear, $currentYear-1);
+                $brand = new brand();
+                $brands = $brand->getBrand($con);
 
-        $brand = new brand();
-        $brands = $brand->getBrand($con);
+                $render = new Render();
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con); 
+                $qRender = new quarterRender();
 
-        $render = new Render();
-
-        $qRender = new quarterRender();
-
-        return view("adSales.results.2quarterGet", compact('salesRegion', 'years', 'brands', 'currencies', 'render', 'qRender'));
+                return view("adSales.results.2quarterGet", compact('salesRegion', 'brands', 'render', 'qRender'));
 	}
 
 	public function postQuarter(){
+
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+
+                $base = new base();
+
+                $validator = Validator::make(Request::all(),[
+                        'region' => 'required',
+                        'year' => 'required',
+                        'quarter' => 'required',
+                        'brand' => 'required',
+                        'secondPos' => 'required',
+                        'thirdPos' => 'required',
+                        'currency' => 'required',
+                        'value' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                        return back()->withErrors($validator)->withInput();
+                }
+
+                $tmp = Request::get("brand");
+                $base = new base();
+                $brands = $base->handleBrand($tmp);
+
+                $b = new brand();
+                $brand = $b->getBrand($con);
+
+                $region = Request::get("region");
+                $r = new region();
+                $salesRegion = $r->getRegion($con);
+
+                $year = Request::get("year");
+                
+                $currency = Request::get("currency");
+                $p = new pRate();
+                $pRate = $p->getCurrency($con, array($currency));
+
+                $value = Request::get("value");
+
+                $form = Request::get("thirdPos");
+                $source = strtoupper(Request::get("secondPos"));
+
+                $mq = new resultsMQ();
+                $lines = $mq->lines($con,$tmp,$base->getMonth(),$form,$brands,$year,$region,$value,$source);
+                //var_dump($quarter);
+                $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year);
+                //var_dump($matrix);
+                $render = new Render();
+                $qRender = new quarterRender();
+
+                //return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'quarters'));
 
 	} 
 

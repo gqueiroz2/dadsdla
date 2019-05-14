@@ -110,8 +110,16 @@
 				</div>
 				<div class="modal-body">
 					<table style="width: 100%" class="table-responsive">
-						
-						
+						<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
+                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
+
+						@for($i = 0; $i < sizeof($brands); $i++)
+                            <tr>
+                                {{
+                                    $renderMonthlyYoY->renderDataModal($brands[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
+                                }}
+                            </tr>
+                        @endfor
 					</table>
 				</div>
 				<div class="modal-footer">
@@ -145,10 +153,12 @@
 						<tr>
                             {{ $renderMonthlyYoY->renderHead($base->getMonth(), $i, $j, "dc", "vix", "darkBlue") }} 
                         </tr>
-                       	
+                       	<tr>
+                       		{{ $renderMonthlyYoY->renderHead2($year, $i, "dc", "vix", "darkBlue") }}
+                       	</tr>
                         @for($b = 0; $b < sizeof($brands); $b++)
                         	<tr>
-                        		{{ $renderMonthlyYoY->renderData($brands[$b], $matrix[0], $matrix[1][$j], $i, $b, "blue", "blue", "blue", "blue") }}	
+                        		{{ $renderMonthlyYoY->renderData($brands[$b], $matrix[0], $matrix[1][$j], $i, $b, "dc", "rcBlue", "month", "medBlue") }}	
                     		</tr>
                         @endfor
 					</table>

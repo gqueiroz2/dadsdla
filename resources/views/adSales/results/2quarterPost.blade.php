@@ -44,7 +44,7 @@
 				<div class="col-12 col-lg">
 					<div class="form-inline">
 						<label>Brand</label>
-						{{$render->brand($brands)}}
+						{{$render->brand($brand)}}
 					</div>
 				</div>				
 
@@ -62,8 +62,7 @@
 						<label> 2st Pos </label>
 						{{$render->position("third")}}
 					</div>
-				</div>				
-
+				</div>
 				
 				<div class="col-12 col-lg">
 					<div class="form-inline">
@@ -86,8 +85,15 @@
 				</div>
 			</div>
 		</div>
-
 	</form>
+
+	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
+		<div class="row mt-2">
+			<div class="col">
+				{{$qRender->assemble($matrix, $pRate, $value, $year, $quarters)}}
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript">
 		ajaxSetup();

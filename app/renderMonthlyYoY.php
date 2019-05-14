@@ -27,7 +27,7 @@ class renderMonthlyYoY extends Model{
 			echo "<td colspan='3' $class>".$months[$i][0]."</td>";
 		}
 
-		echo "<td colspan='3' $thirdClass>Q".$index."</td>";
+		echo "<td colspan='3' $thirdClass>Q".($index+1)."</td>";
 
 	}
 
@@ -68,9 +68,9 @@ class renderMonthlyYoY extends Model{
 		$fourthClass = "class='center ".$fourthColor."'";
 
 		echo "<td $firstClass>".$brand[1]."</td>";
-		
-		for ($i=$month; $i < ($month+3); $i++) { 
 
+		for ($i=$month; $i < ($month+3); $i++) { 
+			
 			for ($j=0; $j < 3; $j++) {
 
 				if ($j == 0) {
@@ -100,7 +100,7 @@ class renderMonthlyYoY extends Model{
 
     }
 
-    /*public function renderModalHeader($firstcolor, $secondColor){
+    public function renderModalHeader($firstcolor, $secondColor){
     	
     	$firstClass = "class='center ".$firstcolor."'";
     	$secondClass = "class='center ".$secondColor."'";
@@ -143,7 +143,7 @@ class renderMonthlyYoY extends Model{
 		$thirdClass = "class='center ".$thirdColor."' style='font-weight: bold;'";
 		$fourthClass = "class='center ".$fourthColor."'";
 
-		echo "<td $firstClass>$brand</td>";
+		echo "<td $firstClass>".$brand[1]."</td>";
 		
 		for ($j=0; $j < 3; $j++) { 
 
@@ -155,7 +155,7 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
-			echo "<td $class colspan='1'>".number_format(($quarter[0][$j][$brandPos]+$quarter[1][$j][$brandPos]))."</td>";
+			echo "<td $class colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]))."</td>";
 		}
 		
 		for ($j=0; $j < 3; $j++) { 
@@ -168,7 +168,7 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
-			echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos]+$quarter[3][$j][$brandPos]))."</td>";
+			echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]))."</td>";
 		}
 		for ($i=0; $i < 3; $i++) { 
 
@@ -182,12 +182,12 @@ class renderMonthlyYoY extends Model{
 
 			echo "<td $class colspan='1'>".number_format(
 				(
-					$quarter[0][$i][$brandPos]+$quarter[1][$i][$brandPos]+
-					$quarter[2][$i][$brandPos]+$quarter[3][$i][$brandPos]
+					$quarter[0][$i][$brandPos+1]+$quarter[1][$i][$brandPos+1]+
+					$quarter[2][$i][$brandPos+1]+$quarter[3][$i][$brandPos+1]
 				)
 				).
 				"</td>";
 		}
 
-    }*/
+    }
 }

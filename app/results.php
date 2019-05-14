@@ -111,31 +111,6 @@ class results extends Model{
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $columnsValue = array($region, $brand, $year, $month);
 
-                /*
-                $columnsTmp = array("sales_rep_role", "order_reference");
-
-                $whereTmp = $sql->where($columns,$columnsValue);
-
-                $selectTmp = $sql->select($con,$columnsTmp,$table,null,$where);
-                $from = array("sales_rep_role","order_reference");
-
-                $result = $sql->fetch($tmp,$from,$from);
-
-                $orders = array();
-
-                if ($result) {
-                    for ($r=0; $r < sizeof($result); $r++) { 
-                        if ($result[$r]["sales_rep_role"] == "Sales Representitive") {
-                            array_push($orders, $res[$r]["order_reference"]);
-                        }
-                    }
-                }
-
-                $orders = array_unique($orders);
-
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $columnsValue = array($region, $brand, $year, $month);*/
-
                 $value .= "_revenue";
                 break;
 
@@ -174,7 +149,7 @@ class results extends Model{
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             $rtr = $sql->fetchSum($selectSum, $as)["sum"]/$pRate;
-            //var_dump($rtr);
+            //var_dump(number_format($rtr));
         }
 
         return $rtr;

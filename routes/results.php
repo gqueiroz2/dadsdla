@@ -39,9 +39,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('monthly','resultsMQController@postMonthly')
 						->name('resultsMonthlyPost');				
 
-		Route::get('quarter','resultsMQController@get')
+		Route::get('quarter','resultsMQController@getQuarter')
 						->name('resultsQuarterGet');				
-		Route::post('quarter','resultsMQController@post')
+		Route::post('quarter','resultsMQController@postQuarter')
 						->name('resultsQuarterPost');	
 
 		
