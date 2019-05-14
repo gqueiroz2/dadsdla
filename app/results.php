@@ -53,7 +53,7 @@ class results extends Model{
         for ($b=0; $b < sizeof($brands); $b++) { 
             for ($m=0; $m < sizeof($months); $m++) { 
                 if (!$source){
-                    if ($form == "mini_header" ) {
+                    if ($form == "mini_header"){
                         if($year == $cYear){
                             if (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
@@ -61,7 +61,7 @@ class results extends Model{
                                 $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
                             }    
                         }else{
-                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);// VERIFICAR O ELSE - APARECE O MES CORRENTE COMO BUSCA NO YTD
+                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
                         }
                     }elseif(($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX')){
                         $where[$b][$m] = $this->defineValues($con, $form, $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
@@ -107,8 +107,36 @@ class results extends Model{
                 break;
 
             case 'mini_header':
+                $sql = new sql();
+
                 $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
                 $columnsValue = array($region, $brand, $year, $month);
+
+                /*
+                $columnsTmp = array("sales_rep_role", "order_reference");
+
+                $whereTmp = $sql->where($columns,$columnsValue);
+
+                $selectTmp = $sql->select($con,$columnsTmp,$table,null,$where);
+                $from = array("sales_rep_role","order_reference");
+
+                $result = $sql->fetch($tmp,$from,$from);
+
+                $orders = array();
+
+                if ($result) {
+                    for ($r=0; $r < sizeof($result); $r++) { 
+                        if ($result[$r]["sales_rep_role"] == "Sales Representitive") {
+                            array_push($orders, $res[$r]["order_reference"]);
+                        }
+                    }
+                }
+
+                $orders = array_unique($orders);
+
+                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);*/
+
                 $value .= "_revenue";
                 break;
 
@@ -148,7 +176,6 @@ class results extends Model{
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             $rtr = $sql->fetchSum($selectSum, $as)["sum"]/$pRate;
             //var_dump($rtr);
-
         }
 
         return $rtr;

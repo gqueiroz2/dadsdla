@@ -61,9 +61,6 @@ class resultsYoYController extends Controller{
         $b = new brand();
         $brand = $b->getBrand($con);
 
-        //var_dump("Request");
-        //var_dump($brands);
-
     	$region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
