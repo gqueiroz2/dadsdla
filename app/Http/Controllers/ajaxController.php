@@ -78,7 +78,7 @@ class ajaxController extends Controller{
     }
 
     public function thirdPosByRegion(){
-
+        
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
