@@ -31,7 +31,7 @@ class salesRep extends Management{
 			$table = "cmaps";
 			$gross = "gross";
 		}else{
-			$table = "mini-header";
+			$table = "mini_header";
 			$gross = "gross_revenue";
 		}
 
@@ -42,15 +42,27 @@ class salesRep extends Management{
 			$reps = $this->getSalesRep($con,$salesRepGroupID);
         }
 
+        $add = "";
 
-        for ($r=0; $r <sizeof($reps) ; $r++) { 
-        	$firstSelect[$r] = "SELECT SUM($gross) AS sum FROM $table WHERE year = '$year' AND sales_rep_id = '".$reps[$r]['id']."' AND sales_representant_office_id = '$regionID'";
+        if (date('m') == 01) {
+        	$year = $year-1;
+        	$add = "AND month = '12'";	
+        }
+        for ($r=0; $r <sizeof($reps) ; $r++) {
+        	
+
+        	$firstSelect[$r] = "SELECT SUM($gross) AS sum FROM $table WHERE year = '$year' AND sales_rep_id = '".$reps[$r]['id']."' $add";
+
+        	if ($source != "CMAPS") {
+        		$firstSelect[$r] .= "AND campaign_sales_office_id = '$regionID'";
+        	}
 
         	$firstResult[$r] = $con->query($firstSelect[$r]);
 
         	$results[$r] = $sql->fetchSum($firstResult[$r],"sum")["sum"];
 
         }
+
 
         for ($r=0; $r <sizeof($results); $r++) { 
         	if ($results[$r] == 0) {
@@ -277,7 +289,7 @@ class salesRep extends Management{
 		return $bool;
 	}
 
-	public function getSalesRepUnit($con,$salesRepID){
+	public function getSalesRepUnit($con,$salesRepID=false){
 		$sql = new sql();
 
 		$table = "sales_rep_unit sru";
@@ -355,7 +367,7 @@ class salesRep extends Management{
 
 		$bool = false;
 
-		for ($i=0; $i <$size ; $i++) { 
+		for ($i=0; $i <$size ; $i++) {
 			if ($oldSalesRepUnit[$i] != $newSalesRepUnit[$i] || $oldOrigin[$i] != $newOrigin[$i]) {
 				$bool = $sql->updateValues($con,$table,$set[$i],$where[$i]);
 				var_dump($bool);
@@ -367,5 +379,79 @@ class salesRep extends Management{
 
 		return $bool;
 	}
+
+
+
+	//comparando duas fontes para pegar os representantes
+	/*$sql = new sql();
+
+		$table = "sales_rep sr";
+		$columns = "sr.name AS 'name',
+					sr.ID as 'id',
+					srg.name as 'salesRepGroup'";
+
+
+		$firstTable = "ytd";
+		$firstGross = "gross_revenue";
+
+		if ($regionID == "1") {
+			$secondTable = "cmaps";
+			$secondGross = "gross";
+		}else{
+			$secondTable = "mini_header";
+			$secondGross = "gross_revenue";
+		}
+
+
+	
+		if ($salesRepGroupID[0] == 'all') {
+            $regionsID = array($regionID);
+            $reps = $this->getSalesRepByRegion($con,$regionsID);
+        }else{
+			$reps = $this->getSalesRep($con,$salesRepGroupID);
+        }
+
+        $add = "";
+
+        if (date('m') == 01) {
+        	$year = $year-1;
+        	$add = "AND month = '12'";
+        }
+
+        for ($r=0; $r <sizeof($reps) ; $r++) {
+
+        	$firstSelect[$r] = "SELECT SUM($firstGross) AS sum FROM $firstTable WHERE year = '$year' AND sales_rep_id = '".$reps[$r]['id']."' $add";
+
+        	if ($regionID != "1") {
+        		$firstSelect[$r] .= "AND campaign_sales_office_id = '$regionID'";
+        	}
+
+        	$firstResult[$r] = $con->query($firstSelect[$r]);
+
+        	$results1[$r] = $sql->fetchSum($firstResult[$r],"sum")["sum"];
+
+
+        	$secondSelect[$r] = "SELECT SUM($secondGross) AS sum FROM $secondTable WHERE year = '$year' AND sales_rep_id = '".$reps[$r]['id']."' $add";
+
+        	$secondResult[$r] = $con->query($secondSelect[$r]);
+
+        	$results2[$r] = $sql->fetchSum($secondResult[$r],"sum")["sum"];
+        }
+
+        for ($i=0; $i <sizeof($results1) ; $i++) { 
+        	if ($results1[$i] == 0 || $results2[$i] == 0) {
+        		unset($reps[$i]);
+        	}
+        }
+
+
+        $reps = array_values($reps);
+
+
+        return $reps;*/
+
+
+
+
 
 }

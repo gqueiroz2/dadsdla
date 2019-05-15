@@ -46,8 +46,23 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::get('client','dataManagementController@clientGetFromExcel')
 							->name('dataManagementClientGetFromExcel');
 
+		Route::group(['prefix' => 'chain'],function(){
+			Route::post('miniHeaderSecond','ChainController@secondChain')
+							->name('miniHeaderSecondChain');
+			Route::post('miniHeaderThird','ChainController@thirdChain')
+							->name('miniHeaderThirdChain');
+			Route::post('miniHeaderThirdToDLA','ChainController@thirdToDLA')
+							->name('miniHeaderThirdToDLA');
+
+		});
 
 		Route::group(['prefix' => 'file'],function(){
+
+			Route::get('miniHeader','ChainController@miniHeaderGet')
+							->name('fileUploadMiniHeaderGet');
+
+			Route::post('miniHeader','ChainController@miniHeaderPost')
+							->name('fileUploadMiniHeaderPost');
 
 			Route::get('excel','fileUploadController@excelGet')
 							->name('fileUploadExcelGet');

@@ -109,7 +109,6 @@ class ajaxController extends Controller{
         if ($userLevel == "L3" || $userLevel == "L4") {
             $groupID = Request::session()->get('userSalesRepGroupID');
             $groupName = Request::session()->get('userSalesRepGroup');
-            echo "<option value=''> Select </option>";
             echo "<option value='".$groupID."'>".$groupName."</option>";
 
         }else{

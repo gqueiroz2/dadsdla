@@ -66,7 +66,7 @@
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Resume </a>
-                                <a class="dropdown-item" href="{{ route('resultsMonthlyGet')}}"> Monthly </a>
+                                <a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Monthly </a>
                                 <a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
                                 <a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share (Channel/Executive) </a>
                                 <a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY </a>
@@ -76,7 +76,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#"> Core </a>
+                                <a class="dropdown-item" href="{{ route('corePerformanceGet') }}"> Core </a>
                                 <a class="dropdown-item" href="#"> Executive </a>                                
                                 <a class="dropdown-item" href="#"> Quarter </a>
                             </div>

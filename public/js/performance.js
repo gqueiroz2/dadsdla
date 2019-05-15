@@ -38,19 +38,33 @@
               }
             },60);
             
-            
       		},
       		error: function(xhr, ajaxOptions,thrownError){
         		alert(xhr.status+" "+thrownError);
   		    }
+
+
     	  });
 
+
         $.ajax({
-          url:"/ajaxResults/currencyByRegion",
+          url:"/ajax/adsales/yearByRegion",
           method:"POST",
           data:{regionID},
           success: function(output){
-            $('#currency').html(output);                   
+            $('#year').html(output);
+          },
+          error: function(xhr, ajaxOptions,thrownError){
+            alert(xhr.status+" "+thrownError);
+          }
+        });
+
+        $.ajax({
+          url:"/ajax/adsales/currencyByRegion",
+          method:"POST",
+          data:{regionID},
+          success: function(output){
+            $('#currency').html(output);
           },
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);
@@ -67,11 +81,9 @@
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);
           }
-
-
-
         });
 
+              
 
       }else{
         var option = "<option> Select Region </option>";
@@ -120,7 +132,7 @@
           method:"POST",
           data:{regionID,salesRepGroupID,year,source},
           success: function(output){
-            $('#salesRep').html(output);
+            $('#salesRep').html(output);                    
           },
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);
