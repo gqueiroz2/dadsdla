@@ -172,6 +172,11 @@ tr{
     color:black;	
 }
 
+.quarter{
+    background-color: #4f81bd;
+    color:white;   
+}
+
 .odd{
 	background-color: #e7eff9;
 }

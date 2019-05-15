@@ -32,14 +32,6 @@
 					</div>
 				</div>
 
-				<!-- Region Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Quarter</label>
-						{{$qRender->quarters()}}
-					</div>
-				</div>
-
 				<!-- Brand Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
@@ -90,7 +82,7 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{$qRender->assemble($matrix, $pRate, $value, $year, $quarters)}}
+				{{$qRender->assemble($matrix, $pRate, $value, $year)}}
 			</div>
 		</div>
 	</div>

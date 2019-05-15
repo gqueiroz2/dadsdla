@@ -40,7 +40,7 @@ class resultsYoY extends results {
         for ($i = 0; $i < sizeof($brands); $i++) {
 
             $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
-                                                $months, $year);
+                                                $months, $year, $brands[$i]);
         }
 
         if (sizeof($brands) > 1) {
@@ -51,13 +51,13 @@ class resultsYoY extends results {
 
     }
 
-    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year){
+    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year, $brand){
 
         $valueCurrentYearSum = 0;
         $targetSum = 0;
         $valuePastYearSum = 0;
 
-        $matrix[0][0] = " ";
+        $matrix[0][0] = $brand[1];
         $matrix[1][0] = "Real ".($year-1);
         $matrix[2][0] = "Target $year";
         $matrix[3][0] = "Real $year";
@@ -96,7 +96,7 @@ class resultsYoY extends results {
 
     public function assemblerDN($matrix, $pos, $months, $year){
 
-        $currentMatrix[0][0] = " ";
+        $currentMatrix[0][0] = "DN";
         $currentMatrix[1][0] = "Real ".($year-1);
         $currentMatrix[2][0] = "Target $year";
         $currentMatrix[3][0] = "Real $year";

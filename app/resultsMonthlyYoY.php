@@ -42,7 +42,7 @@ class resultsMonthlyYoY extends results{
         for ($i = 0; $i < $size; $i++) {
 
             $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
-                                                $months, $year);
+                                                $months, $year, $brands[$i]);
         }
         
         if ($size > 1) {
@@ -60,7 +60,7 @@ class resultsMonthlyYoY extends results{
 
     }
 
-    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year){
+    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year,$brand){
 
         $matrix[0][0] = "Real ".($year-1);
         $matrix[1][0] = "Target $year";
@@ -107,9 +107,7 @@ class resultsMonthlyYoY extends results{
     }
 
     public function assemblerQuarter($matrix, $min, $max, $brands, $year){
-
         //var_dump($matrix);
-
         $quarter[0][0] = "Real ".($year-1);
         $quarter[1][0] = "Target $year";
         $quarter[2][0] = "Real $year";
@@ -119,7 +117,7 @@ class resultsMonthlyYoY extends results{
             $quarter[1][$i] = 0;
             $quarter[2][$i] = 0;
         }
-        //var_dump($quarter);
+        
         for ($i=0; $i < $brands; $i++) { 
             for ($m=$min; $m <= $max; $m++) {
                 for ($c=0; $c < 3; $c++) { 

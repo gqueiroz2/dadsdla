@@ -93,7 +93,7 @@ class resultsMonthlyYoYController extends Controller{
     	if (sizeof($brands) > 1) {
             array_push($brands, array('12', 'DN'));
         }
-
+        //var_dump($matrix[1]);
     	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value'));
 	}
 
