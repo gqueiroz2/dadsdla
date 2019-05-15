@@ -120,7 +120,7 @@
           method:"POST",
           data:{regionID,salesRepGroupID,year,source},
           success: function(output){
-            $('#salesRep').html(output);                    
+            $('#salesRep').html(output);
           },
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);

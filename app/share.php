@@ -187,11 +187,7 @@ class share extends results
 
         for ($m=0; $m <sizeof($sourceBrand) ; $m++) {
             for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
-                if ($sourceBrand[$m][$b] == "Header") {
-                    $values[$m][$b] = $this->Header($con,$sql,$salesRep,$region,$year,$month[$m],$brand[$b],$table[$m][$b],$sourceBrand[$m][$b],$sum[$m][$b]);
-                }else{
-                    $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b]);
-                }
+                $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b]);
             }
         }
 
@@ -199,73 +195,6 @@ class share extends results
 
         return $mtx;
     }
-
-    public function Header($con,$sql,$salesRep,$region,$year,$month,$brand,$table,$sourceBrand,$sum){
-        $col = "sales_rep_role, order_reference";
-        
-        $columnsWhere = array("campaign_sales_office_id","brand_id","month","year");
-
-        $vars_Where = array($region,$brand,$month,$year);
-
-        $where = $sql->where($columnsWhere,$vars_Where);
-
-        $tmp = $sql->select($con,$col,$table,null,$where);
-
-        $from = array("sales_rep_role","order_reference");
-
-
-        $res = $sql->fetch($tmp,$from,$from);
-
-        $orders = array();
-
-        if ($res) {
-            for ($r=0; $r <sizeof($res) ; $r++) { 
-                if ($res[$r]["sales_rep_role"] == "Sales Representitive") {
-                    array_push($orders, $res[$r]["order_reference"]);
-                }
-            }    
-        }
-
-        $orders = array_unique($orders);
-            
-        $values = array();
-
-        $nOrders = "";
-
-
-        if ($res) {
-            for ($o=0; $o <sizeof($orders) ; $o++) { 
-                if ($o == 0) {
-                    $nOrders .= "'".$orders[$o]."'";
-                }else{
-                    $nOrders .= ",'".$orders[$o]."'";
-                }
-            }
-        }else{
-            $nOrders = "false";
-        }
-
-
-        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-            $values[$s] = 0;
-
-            $where = $this->createWhere($sql,$sourceBrand,$region,$year,$brand,$salesRep[$s],$month);
-
-            $select[$s] = "SELECT SUM(IF($sum IN ($nOrders), $sum*1/2, $sum)) AS sum FROM mini_header $where";
-
-            $resp[$s] = $con->query($select[$s]);
-
-            $from = array("sum");
-
-            $values[$s] = doubleval($sql->fetch($resp[$s],$from,$from)[0]["sum"]);
-
-
-        }
-        
-
-        return $values;
-    }
-
 
     public function generateValue($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
@@ -431,7 +360,8 @@ class share extends results
         $mtx["share"] = $share;
 
 
-
+        //remove linha zerada 
+        /*
         $check = false;
         for ($d=0; $d <sizeof($mtx['dn']) ; $d++) { 
             if ($mtx['dn'][$d] == 0) {
@@ -453,10 +383,82 @@ class share extends results
             $mtx['dn'] = array_values($mtx['dn']);
             $mtx['share'] = array_values($mtx['share']);
 
-        }
+        }*/
+
 
 
         return $mtx;
     }
+
+
+
+
+    //antiga função pra pegar o header, deixei aq por recordação
+    /*public function Header($con,$sql,$salesRep,$region,$year,$month,$brand,$table,$sourceBrand,$sum){
+        $col = "sales_rep_role, order_reference";
+        
+        $columnsWhere = array("campaign_sales_office_id","brand_id","month","year");
+
+        $vars_Where = array($region,$brand,$month,$year);
+
+        $where = $sql->where($columnsWhere,$vars_Where);
+
+        $tmp = $sql->select($con,$col,$table,null,$where);
+
+        $from = array("sales_rep_role","order_reference");
+
+
+        $res = $sql->fetch($tmp,$from,$from);
+
+        $orders = array();
+
+        if ($res) {
+            for ($r=0; $r <sizeof($res) ; $r++) { 
+                if ($res[$r]["sales_rep_role"] == "Sales Representitive") {
+                    array_push($orders, $res[$r]["order_reference"]);
+                }
+            }    
+        }
+
+        $orders = array_unique($orders);
+            
+        $values = array();
+
+        $nOrders = "";
+
+
+        if ($res) {
+            for ($o=0; $o <sizeof($orders) ; $o++) { 
+                if ($o == 0) {
+                    $nOrders .= "'".$orders[$o]."'";
+                }else{
+                    $nOrders .= ",'".$orders[$o]."'";
+                }
+            }
+        }else{
+            $nOrders = "false";
+        }
+
+
+        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+            $values[$s] = 0;
+
+            $where = $this->createWhere($sql,$sourceBrand,$region,$year,$brand,$salesRep[$s],$month);
+
+            $select[$s] = "SELECT SUM(IF($sum IN ($nOrders), $sum*1/2, $sum)) AS sum FROM mini_header $where";
+
+            $resp[$s] = $con->query($select[$s]);
+
+            $from = array("sum");
+
+            $values[$s] = doubleval($sql->fetch($resp[$s],$from,$from)[0]["sum"]);
+
+
+        }
+        
+
+        return $values;
+    }*/
+
 
 }

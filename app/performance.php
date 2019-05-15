@@ -111,9 +111,9 @@ class performance extends Model{
 
         }
 
+
         //pega informações dos representantes do nucleo(s)
-        $tempYear = $year[0];
-        $tmp = $sr->getSalesRepFilteredYear($con,$salesRepGroup,$region,$tempYear,$source);
+        $tmp = $sr->getSalesRepFilteredYear($con,$salesRepGroup,$region,$year,$source);
         $salesRep = array();
         $salesRepView = "All";
         for ($i=0; $i <sizeof($tmp) ; $i++) { 
@@ -122,7 +122,115 @@ class performance extends Model{
         }
 
 
-        
+        for ($m=0; $m <sizeof($sourceBrand); $m++) { 
+            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) { 
+                //procura tabela para fazer a consulta (digital e OTH são em tabelas diferentes)
+                $table[$m][$b] = $this->defineTable($sourceBrand[$m][$b]);
+                //gera as colunas para o Where
+                $sum[$m][$b] = $this->generateColumns($sourceBrand[$m][$b],$value);
+            }
+        }
+
+        for ($m=0; $m < sizeof($sourceBrand); $m++) { 
+            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) {
+                $values[$m][$b] = 0;
+            }
+        }
+
+        for ($m=0; $m <sizeof($sourceBrand) ; $m++) {
+            for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
+                $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b]);
+                $planValues[$m][$b] = $this->generateValue($con,$sql,"Plan",$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales");
+            }
+        }
+
+        $mtx = $this->assembler($values,$planValues);
 
     }
+
+    public function assembler($values,$planValues){
+
+    }
+
+
+
+    public function generateColumns($source,$value){
+        $columns = false;
+        if ($source == "CMAPS") {
+            if ($value == "gross") {
+                $columns = "gross";
+            }else{
+                $columns = "net";
+            }
+        }elseif($source == "IBMS"){
+            if ($value == "gross") {
+                $columns = "gross_revenue";
+            }else{
+                $columns = "net_revenue";
+            }
+        }elseif($source == "Header"){
+            $columns = "campaign_option_spend";
+        }elseif ($source == "Digital") {
+            if ($value == "gross") {
+                $columns = "gross_revenue";
+            }else{
+                $columns = "net_revenue";
+            }
+        }
+
+        return $columns;
+    }
+
+    public function defineTable($source){
+        $table = false;
+        if ($source == "CMAPS") {
+            $table = "cmaps";
+        }elseif($source == "IBMS"){
+            $table = "ytd";
+        }elseif($source == "Header"){
+            $table = "mini_header";
+        }elseif($source == "Digital"){
+            $table = "digital";
+        }
+
+        return $table;
+    }
+
+    public function generateValue($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
+        for ($s=0; $s <sizeof($salesRep) ; $s++) {
+            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand[0],$salesRep[$s],$month);
+            $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
+            $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
+        }
+        return $values;
+    }
+
+    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
+        if ($source == "CMAPS") {
+            $columns = array("year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($year,$brand,$salesRep,$month);
+            $where = $sql->where($columns,$arrayWhere);
+        }elseif ($source == "IBMS") {
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $where = $sql->where($columns,$arrayWhere);
+        }elseif ($source == "Header") {
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $where = $sql->where($columns,$arrayWhere);
+        }elseif ($source == "Digital"){
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $where = $sql->where($columns,$arrayWhere);
+        }elseif($source == "Plan"){
+            $columns = array("region_id","year","month","sales_rep_id","brand_id");
+            $arrayWhere = array($region,$year,$month,$salesRep,$brand);
+            $where = $sql->where($columns,$arrayWhere);
+        }else{
+            $where = false;
+        }
+    
+        return $where;
+    }
+
 }
