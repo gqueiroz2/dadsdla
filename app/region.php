@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
 
-class region extends Management{
+class  region extends Management{
     
     public function addRegion($con){
         $sql = new sql();
@@ -20,19 +20,20 @@ class region extends Management{
         return $bool;
     }
 
-    public function getIDRegion ($con, $region){
+    public function getIDRegion ($con, $region = false){
         $sql = new sql();
 
-        $table = "region r";
-        $columns = "r.ID AS id";
+        $table = "region";
+        $columns = "region.ID AS id";
 
         $where = "";
+
         if ($region) {
             $regions = implode(",", $region);
-            $where .= "WHERE r.name IN ($regions)";
+            $where .= "WHERE region.name IN ('$regions')";
         }
 
-        $res = $sql->select($con,$columns,$table);
+        $res = $sql->select($con,$columns,$table,false,$where);
 
         $from = array('id');
 

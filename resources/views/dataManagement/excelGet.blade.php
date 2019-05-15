@@ -52,11 +52,7 @@
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-								        	<label for="exampleInputFile">File Upload</label>
-								        	<div class="custom-file">                
-												<input type="file" class="input-control-file" id="file" name="file"0>                
-												<label class="custom-file-label" for="file">Choose file</label>              
-											</div>  
+											<input type="file" name="file">                
 								    	</div>
 								    </div>
 								</div>

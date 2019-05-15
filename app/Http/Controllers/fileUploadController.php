@@ -29,7 +29,9 @@ class fileUploadController extends Controller{
 							array( 'table' => 'plan_by_sales', 'show' => 'Plan By Sales'),
 							array( 'table' => 'rolling_forecast', 'show' => 'Rolling Forecast'),
 							array( 'table' => 'sales_rep', 'show' => 'Sales Rep'),
-							array( 'table' => 'sales_rep_unit', 'show' => 'Sales Rep Unit')
+							array( 'table' => 'sales_rep_unit', 'show' => 'Sales Rep Unit'),
+							array( 'table' => 'brand', 'show' => 'Brand'),
+							array( 'table' => 'brand_unit', 'show' => 'Brand Unit')
 
 						);
 

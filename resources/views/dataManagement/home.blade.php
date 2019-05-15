@@ -60,15 +60,7 @@
 								</div>
 							</div>
 
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('fileUploadExcelGet') }}" style="color: white">
-											Excel
-										</a>
-									</button>
-								</div>
-							</div>
+							
 
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
@@ -120,6 +112,26 @@
 										</a>
 									</button>	
 								</div>								--}}
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('fileUploadExcelGet') }}" style="color: white">
+											Excel
+										</a>
+									</button>
+								</div>
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('fileUploadMiniHeaderGet') }}" style="color: white">
+											Mini-Header Chain
+										</a>
+									</button>
+								</div>
 							</div>
 							{{--
 							<div class="row mt-2 justify-content-start">

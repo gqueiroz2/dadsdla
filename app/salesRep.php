@@ -277,7 +277,7 @@ class salesRep extends Management{
 		return $bool;
 	}
 
-	public function getSalesRepUnit($con,$salesRepID){
+	public function getSalesRepUnit($con,$salesRepID=false){
 		$sql = new sql();
 
 		$table = "sales_rep_unit sru";
