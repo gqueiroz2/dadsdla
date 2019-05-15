@@ -22,6 +22,49 @@ class base extends Model{
 
                             );
 
+    public function monthToInt($month){
+        $tmp = explode(" ",$month);
+        $newMonth = trim($tmp[0]);
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            if($newMonth == $this->month[$m][2]){
+                $intMonth = $this->month[$m][1];
+            }
+        }
+        return $intMonth;
+    }
+
+    public function formatData($from,$to,$string){
+        switch ($from) {
+            case 'dd/mm/aaaa':                
+                switch ($to) {
+                    case 'aaaa-mm-dd':
+
+                        $tmp = explode("/", $string);
+
+                        $dd = $tmp[0];
+                        $mm = $tmp[1];
+                        $aaaa = $tmp[2];
+
+                        $newString = $aaaa."-".$mm."-".$dd;
+
+                        break;
+                    
+                    default:
+                        $newString = false;
+                        break;
+                }
+
+
+                break;
+            
+            default:
+                $newString = false;
+                break;
+        }
+
+        return $newString;
+
+    }
 
     public function getMonth(){
         return $this->month;

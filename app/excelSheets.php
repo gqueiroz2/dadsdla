@@ -34,6 +34,7 @@ class excelSheets extends excel{
 				$bool = $this->cmaps($con,$table,$spreadSheet);		
 				break;			
 			case 'mini_header':
+				var_dump("MINI_HEADER");
 				$bool = $this->miniHeader($con,$table,$spreadSheet);
 				break;
 			case 'plan_by_brand':
@@ -47,6 +48,9 @@ class excelSheets extends excel{
 				break;			
 			case 'ytd':
 				$bool = $this->ytd($con,$table,$spreadSheet);
+				break;
+			case 'brand_unit':
+				$bool = $this->brandUnit($con,$table,$spreadSheet);
 				break;
 
 			default:
@@ -112,7 +116,11 @@ class excelSheets extends excel{
 	public function insert($con,$spreadSheet,$columns,$table,$into){
 		$values = $this->values($spreadSheet,$columns);
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
+		var_dump($ins)."<br>";
+		
 		if($con->query($ins) === TRUE ){
+			var_dump("FOI");
+
 			$error = false;
 		}else{
 			if($table == 'cmaps'){
@@ -134,17 +142,30 @@ class excelSheets extends excel{
 				var_dump(mysqli_error($con));
 				$error = true;
 			}else{
+				var_dump($ins);
+				var_dump(mysqli_error($con));
 				$error = true;
 			}
 		}
 		
 		return $error;
+		
+	}
+
+	public function brandUnit($con,$table,$spreadSheet){
+		$columns = $this->brandUnit;
+		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		$into = $this->into($columns);
+
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+		}			
+		return $bool;
 
 	}
 
 	public function ytd($con,$table,$spreadSheet){
-		$columns = $this->ytdColumns;
-		var_dump($columns);
+		$columns = $this->ytdColumns;		
 		$spreadSheet = $this->assembler($spreadSheet,$columns);
 		$into = $this->into($columns);		
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
@@ -165,7 +186,9 @@ class excelSheets extends excel{
 
 	public function miniHeader($con,$table,$spreadSheet){
 		$columns = $this->miniHeaderColumns;
+		var_dump($columns);
 		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		var_dump($spreadSheet);
 		$into = $this->into($columns);		
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
@@ -218,5 +241,6 @@ class excelSheets extends excel{
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
 	public $ytdColumns = array('campaign_sales_office_id', 'sales_representant_office_id','brand_id','sales_rep_id', 'client_id','agency_id','campaign_currency_id','year','month','brand_feed','client_product','order_reference','campaign_reference','spot_duration','impression_duration','num_spot','gross_revenue','net_revenue','net_net_revenue','gross_revenue_prate','net_revenue_prate','net_net_revenue_prate');
+	public $brandUnit = array('brand_id','origin_id','name');
 
 }
