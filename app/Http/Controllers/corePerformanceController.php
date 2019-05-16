@@ -10,7 +10,7 @@ use App\monthly;
 use App\region;
 use App\salesRep;
 use App\share;
-use App\shareRender;
+use App\renderPerformance;
 use App\brand;
 use App\pRate;
 use App\performance;
@@ -25,7 +25,7 @@ class corePerformanceController extends Controller{
                 $con = $db->openConnection("DLA");
                 $r = new region();
                 $sr = new salesRep();
-                $render = new shareRender();
+                $render = new renderPerformance();
                 $b = new brand();
                 $pr = new pRate();
 
@@ -45,7 +45,7 @@ class corePerformanceController extends Controller{
                 $con = $db->openConnection("DLA");
                 $r = new region();
                 $sr = new salesRep();
-                $render = new shareRender();
+                $render = new renderPerformance();
                 $b = new brand();
                 $pr = new pRate();
                 $p = new performance();
@@ -73,6 +73,6 @@ class corePerformanceController extends Controller{
                 $salesRepGroup = $sr->getSalesRepGroup($con,null);
                 $currency = $pr->getCurrency($con,null);
 
-                //return view("adSales.performance.0coreGet",compact('region','salesRepGroup','render','brand','currency'));
+                return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx'));
         }
 }

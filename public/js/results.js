@@ -22,6 +22,7 @@ $(document).ready(function(){
               data:{regionID, year},
                 success: function(output){
                   $('#thirdPos').html(output);
+                  //aqui
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                   alert(xhr.status+" "+thrownError);

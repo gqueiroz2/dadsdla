@@ -137,10 +137,16 @@ class ajaxController extends Controller{
         $year = Request::get('year');        
         $source = Request::get('source');
         $userLevel = Request::session()->get('userLevel');
-
         
 
-        $salesRep = $sr->getSalesRepFilteredYear($con,$salesRepGroupID,$regionID,$year,$source);
+
+        if($salesRepGroupID[0] == "all"){        
+            $regionInArray = array($regionID);
+            $salesRep = $sr->getSalesRepByRegion($con,$regionInArray);
+        }else{
+            $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
+        }
+        $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
 
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
