@@ -55,16 +55,26 @@ class results extends Model{
                 if (!$source){
                     if ($form == "mini_header"){
                         if($year == $cYear){
-                            if (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
+                            if ($brands[$b][1] == 'FN') {
+                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }elseif (($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') && ($months[$m][1] < $cMonth) ) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
                             }else{
                                 $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
                             }    
                         }else{
-                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            if ($brands[$b][1] == 'FN') {
+                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }else{
+                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }
                         }
                     }elseif(($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX')){
-                        $where[$b][$m] = $this->defineValues($con, $form, $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                        if ($brands[$b][1] == 'FN') {
+                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }else{
+                               $where[$b][$m] = $this->defineValues($con, $form, $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                            }
                     }else{
                         $where[$b][$m] = $this->defineValues($con, "digital", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);       
                     }
