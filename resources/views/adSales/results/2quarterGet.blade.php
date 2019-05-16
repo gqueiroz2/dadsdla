@@ -32,14 +32,6 @@
 					</div>
 				</div>
 
-				<!-- Region Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Quarter</label>
-						{{$qRender->quarters()}}
-					</div>
-				</div>
-
 				<!-- Brand Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">

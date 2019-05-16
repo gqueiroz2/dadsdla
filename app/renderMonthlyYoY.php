@@ -6,6 +6,42 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderMonthlyYoY extends Model{
     
+	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands){
+		
+		echo "<table style='width: 100%; zoom:80%;'>";
+
+			echo "<th class='dc center' colspan='13'>";
+				echo "<span style='font-size:22px;''>";
+					echo "$form to Monthly Year Over Year : (".strtoupper($pRate[0]['name'])."/".strtoupper($value).")";
+				echo "</span>";
+			echo "</th>";
+
+			echo "<tr><td></td></tr>";
+		for($i = 0, $j = 0; $i < sizeof($months); $i+=3, $j++){
+			echo "<tr>";
+
+			echo "<tr>";
+                $this->renderHead($months, $i, $j, "dc", "vix", "darkBlue");
+            echo "</tr>";
+           	echo "<tr>";
+           		$this->renderHead2($year, $i, "dc", "vix", "darkBlue");
+           	echo "</tr>";
+            for($b = 0; $b < sizeof($brands); $b++){
+            	echo "<tr>";
+            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "dc", "rcBlue", "month", "medBlue");
+        		echo "</tr>";
+            }
+            echo "</tr>";
+
+			if($i != (sizeof($months)-1)){
+				echo "<tr><td>&nbsp;</td></tr>";
+			}
+		}
+
+		echo "</table>";
+
+	}
+
 	public function renderHead($months, $size, $index, $firstColor, $secondColor, $thirdColor){
 		
 		$firstClass = "class='center ".$firstColor."' style='font-size: 18px'";
@@ -33,9 +69,9 @@ class renderMonthlyYoY extends Model{
 
     public function renderHead2($year, $size, $firstColor, $secondColor, $thirdColor){
 
-    	$firstClass = "class='center ".$firstColor."' style='font-size: 18px'";
-		$secondClass = "class='center ".$secondColor."' style='font-size: 18px'";
-		$thirdClass = "class='center ".$thirdColor."' style='font-size: 18px'";
+    	$firstClass = "class='center ".$firstColor."'";
+		$secondClass = "class='center ".$secondColor."'";
+		$thirdClass = "class='center ".$thirdColor."'";
 
     	echo "<td $firstClass>&nbsp;</td>";
 
@@ -97,6 +133,25 @@ class renderMonthlyYoY extends Model{
 
 			echo "<td $class>".number_format($quarter[$i][$brandPos+1])."</td>";
 		}
+
+    }
+
+    public function assembleModal($brands, $quarters, $year){
+    	echo "<table style='width: 100%; zoom:100%;' class='table-responsive'>";
+	    	echo "<tr>";
+	    		$this->renderModalHeader("dc", "darkBlue");
+			echo "</tr>";
+	        
+	        echo "<tr>";
+	        	$this->renderModalHeader2($year, "dc", "darkBlue");
+	    	echo "</tr>";
+
+			for($i = 0; $i < sizeof($brands); $i++){
+	            echo "<tr>";
+	                $this->renderDataModal($brands[$i], $quarters, $i, "dc", "rcBlue", "white", "medBlue");
+	            echo "</tr>";
+	        }
+        echo "</table>";
 
     }
 
@@ -191,3 +246,14 @@ class renderMonthlyYoY extends Model{
 
     }
 }
+
+				/*<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
+                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
+
+						@for($i = 0; $i < sizeof($brands); $i++)
+                            <tr>
+                                {{
+                                    $renderMonthlyYoY->renderDataModal($brands[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
+                                }}
+                            </tr>
+                        @endfor*/

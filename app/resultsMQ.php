@@ -108,6 +108,7 @@ class resultsMQ extends results{
             $quarter[$b][0][4] = "Q3";
             $quarter[$b][0][5] = "Q4";
             $quarter[$b][0][6] = "S2";
+            $quarter[$b][0][7] = "Total";
 
             $quarter[$b][1][0] = "Target $year";
             $quarter[$b][2][0] = "Real $year";
@@ -115,70 +116,60 @@ class resultsMQ extends results{
             $quarter[$b][4][0] = "Absolut Var.";
 
             for ($l=1; $l < sizeof($matrix[$b]); $l++) { 
-                for ($m=1, $j=1; $m < sizeof($matrix[$b][$l])-1; $m+=3,$j++) { 
-                    for ($mq=$m; $mq < ($m+3); $mq++) {
-                        $quarter[$b][$l][$j] += $matrix[$b][$l][$mq];
-                        if ($j == 3) {
-                            $quarter[$b][$l][$j] = $quarter[$b][$l][2] + $quarter[$b][$l][1];
-                            $j++;
-                        }elseif($j == 6){
-                            $quarter[$b][$l][$j] = $quarter[$b][$l][5] + $quarter[$b][$l][4];
-                            $j++;
-                        }
-                    }        
-                 }     
-            }    
-        }
-        var_dump($quarter);
-
-        /*for ($b=0; $b < sizeof($matrix); $b++) { 
-            for ($c=0; $c < sizeof($matrix[$b]); $c++) { 
-                for ($m=0; $m < sizeof($matrix[$b][$c]); $m++) { 
-                    for ($q=1; $q <= 4; $q++) { 
-                        if ($j == 0) {
-                            $quarter[$b][$c][$j] = $matrix[$b][$c][$m];
-                            $j++;
-                        }elseif($j == 2){
-                            $quarter[$b][$c][$j] = "Q$q";
-                            $j++;
+                for ($m=1, $j=1; $m < sizeof($matrix[$b][$l])-1; $m+=3,$j++) {
+                    if ($j == 3) {
+                        if ($l == 3) {
+                            if ($quarter[$b][1][$j] > 0) {
+                                $quarter[$b][$l][$j] = ($quarter[$b][2][$j] / $quarter[$b][1][$j])*100;
+                            }else{
+                                $quarter[$b][$l][$j] = 0.0;
+                            }
                         }else{
-
+                            $quarter[$b][$l][$j] = $quarter[$b][$l][$j-1] + $quarter[$b][$l][$j-2];    
+                        }
+                        $m -= 3;
+                    }else{
+                        for ($mq=$m; $mq < ($m+3); $mq++) {
+                            if ($l == 3) {
+                                if ($quarter[$b][1][$j] > 0) {
+                                    $quarter[$b][$l][$j] = ($quarter[$b][2][$j] / $quarter[$b][1][$j])*100;
+                                }else{
+                                    $quarter[$b][$l][$j] = 0.0;
+                                }
+                                
+                            }else{
+                                $quarter[$b][$l][$j] += $matrix[$b][$l][$mq];
+                            }
                         }
                     }
+                 }
+
+                 if ($l == 3) {
+                     if ($quarter[$b][1][$j] > 0) {
+                            $quarter[$b][$l][$j] = ($quarter[$b][2][$j] / $quarter[$b][1][$j])*100;
+                        }else{
+                            $quarter[$b][$l][$j] = 0.0;
+                        }
+                }else{
+                    $quarter[$b][$l][$j] = $quarter[$b][$l][$j-1] + $quarter[$b][$l][$j-2];    
                 }
-                
-            }
-        }*/
 
-    }
-
-    public function handlerQuarter($mtx, $min, $max, $brand, $year, $month, $index){
-        
-        //var_dump($mtx);
-
-        $valueCurrentYearSum = 0;
-        $targetSum = 0;
-     
-        $matrix[0][0] = $brand;
-        $matrix[1][0] = "Target $year";
-        $matrix[2][0] = "Real $year";
-        $matrix[3][0] = "Var(%)";
-        $matrix[4][0] = "Absolut Var.";
-
-        $matrix[1][1] = 0;
-        $matrix[2][1] = 0;
-        $matrix[3][1] = 0;
-        $matrix[4][1] = 0;
-
-        for ($i=$min; $i <= $max; $i++) {
-            $matrix[1][1] += $mtx[1][$i];
-            $matrix[2][1] += $mtx[2][$i];
-            $matrix[3][1] += $mtx[3][$i];
-            $matrix[4][1] += $mtx[4][$i];
+                 if ($l == 3) {
+                     if ($quarter[$b][1][$j+1] > 0) {
+                         $quarter[$b][$l][$j+1] = ($quarter[$b][2][$j+1] / $quarter[$b][1][$j+1])*100; 
+                     }else{
+                        $quarter[$b][$l][$j+1] = 0.0;
+                     }
+                 }else{
+                    $quarter[$b][$l][$j+1] = $quarter[$b][$l][$j] + $quarter[$b][$l][$j/2];   
+                 }
+                 
+            }    
         }
 
-        var_dump($matrix);
-        return $matrix;
+
+        return $quarter;
+        //var_dump($quarter);
 
     }
 
