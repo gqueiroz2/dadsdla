@@ -131,7 +131,9 @@ class share extends results
             
             $tempYear = $year[0];
             
-            $tmp = $sr->getSalesRepFilteredYear($con,$salesRepGroup,$region,$tempYear,$source);
+            $tmp = $sr->getSalesRep($con,$salesRepGroup);
+
+            $tmp = $sr->getSalesRepStatus($con,$tmp,$tempYear);
 
             $salesRep = array();
 

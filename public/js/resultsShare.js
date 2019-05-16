@@ -108,31 +108,6 @@
       
     });
 
-    $('#source').change(function(){
-      var regionID = $("#region").val();  
-      var salesRepGroupID = $('#salesRepGroup').val();
-      var year = $("#year").val();
-      var source = $("#source").val();
-      if(regionID != "" && salesRepGroupID != ""){              
-        ajaxSetup();
-        $.ajax({
-          url:"/ajaxResults/salesRepBySalesRepGroup",
-          method:"POST",
-          data:{regionID,salesRepGroupID,year,source},
-          success: function(output){
-            $('#salesRep').html(output);
-          },
-          error: function(xhr, ajaxOptions,thrownError){
-            alert(xhr.status+" "+thrownError);
-          }
-        });
-      }else{
-        var option = "<option> Select Sales Group </option>";
-        $('#salesRep').html(option);
-      }
-
-    });
-
     $('#year').change(function(){
       var regionID = $("#region").val();  
       var salesRepGroupID = $('#salesRepGroup').val();

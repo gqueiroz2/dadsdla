@@ -34,22 +34,37 @@ class resultsMonthlyYoY extends results{
         //var_dump($lines);
         return $lines;
     }
+  
 
+    /*monta a matriz para renderização*/
     public function assemblers($brands, $lines, $months, $year){        
         
         $size = sizeof($brands);
 
+        /*
+        *Monta a matriz
+        *primeiro indice são os meses
+        *segundo indice são as colunas (actual passado, target, actual atual)
+        *terceiro indice são os canais
+        */
         for ($i = 0; $i < $size; $i++) {
 
             $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
                                                 $months, $year);
         }
         
+        /*verifica se existe DN*/
         if ($size > 1) {
             $matrix[$size] = $this->assemblerDN($matrix, sizeof($brands), $months, $year);
             $size += 1;
         }
 
+        /*
+        *monta os quarters
+        *o primeiro indice é o numero do quarter ,  e valor
+        *segundo indice são as colunas(real passado, target, real atual)
+        *terceiro indice são os canais
+        */
         for ($q=1, $i = 0; $q <= 12; $q+=3, $i++) {
             $quarters[$i] = $this->assemblerQuarter($matrix, $q, ($q+2), $size, $year);
         }
@@ -60,11 +75,49 @@ class resultsMonthlyYoY extends results{
 
     }
 
+    /*
+    *faz o calculo do quarter
+    *$matrix = matriz com os valores
+    *$min = o mes inicial usado para o quarter
+    *$max = o mes final usado para o quarter
+    */
+    public function assemblerQuarter($matrix, $min, $max, $brands, $year){
+
+        $quarter[0][0] = "Actual ".($year-1);
+        $quarter[1][0] = "Target $year";
+        $quarter[2][0] = "Actual $year";
+
+        //zera os valores do quarter para calculo
+        for ($i=1; $i <= $brands; $i++) { 
+            $quarter[0][$i] = 0;
+            $quarter[1][$i] = 0;
+            $quarter[2][$i] = 0;
+        }
+        
+        //faz o calculo dos quarters
+        for ($i=0; $i < $brands; $i++) { 
+            for ($m=$min; $m <= $max; $m++) {
+                for ($c=0; $c < 3; $c++) { 
+                    $quarter[$c][$i+1] += $matrix[$i][$c][$m];
+                }
+                
+            }    
+        }
+        
+        return $quarter;
+
+    }
+
+    /*
+    *$valueCurrentYear = valor do real passado
+    *$target = valor do plano
+    *$valuePastYear = valor do real atual
+    */
     public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year){
 
-        $matrix[0][0] = "Real ".($year-1);
+        $matrix[0][0] = "Actual ".($year-1);
         $matrix[1][0] = "Target $year";
-        $matrix[2][0] = "Real $year";
+        $matrix[2][0] = "Actual $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) { 
 
@@ -81,9 +134,9 @@ class resultsMonthlyYoY extends results{
 
     public function assemblerDN($matrix, $pos, $months, $year){
         
-        $currentMatrix[0][0] = "Real ".($year-1);
+        $currentMatrix[0][0] = "Actual ".($year-1);
         $currentMatrix[1][0] = "Target $year";
-        $currentMatrix[2][0] = "Real $year";
+        $currentMatrix[2][0] = "Actual $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) {
 
@@ -106,31 +159,6 @@ class resultsMonthlyYoY extends results{
 
     }
 
-    public function assemblerQuarter($matrix, $min, $max, $brands, $year){
-
-        //var_dump($matrix);
-
-        $quarter[0][0] = "Real ".($year-1);
-        $quarter[1][0] = "Target $year";
-        $quarter[2][0] = "Real $year";
-
-        for ($i=1; $i <= $brands; $i++) { 
-            $quarter[0][$i] = 0;
-            $quarter[1][$i] = 0;
-            $quarter[2][$i] = 0;
-        }
-        //var_dump($quarter);
-        for ($i=0; $i < $brands; $i++) { 
-            for ($m=$min; $m <= $max; $m++) {
-                for ($c=0; $c < 3; $c++) { 
-                    $quarter[$c][$i+1] += $matrix[$i][$c][$m];
-                }
-                
-            }    
-        }
-        
-        return $quarter;
-
-    }
+    
 
 }

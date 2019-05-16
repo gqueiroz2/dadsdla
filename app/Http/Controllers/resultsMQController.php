@@ -112,7 +112,6 @@ class resultsMQController extends Controller{
                 $validator = Validator::make(Request::all(),[
                         'region' => 'required',
                         'year' => 'required',
-                        'quarter' => 'required',
                         'brand' => 'required',
                         'secondPos' => 'required',
                         'thirdPos' => 'required',
@@ -150,11 +149,11 @@ class resultsMQController extends Controller{
                 $lines = $mq->lines($con,$tmp,$base->getMonth(),$form,$brands,$year,$region,$value,$source);
                 //var_dump($quarter);
                 $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year);
-                //var_dump($matrix);
+                
                 $render = new Render();
                 $qRender = new quarterRender();
 
-                //return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'quarters'));
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year'));
 
 	} 
 

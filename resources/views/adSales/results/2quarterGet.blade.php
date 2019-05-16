@@ -32,14 +32,6 @@
 					</div>
 				</div>
 
-				<!-- Region Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Quarter</label>
-						{{$qRender->quarters()}}
-					</div>
-				</div>
-
 				<!-- Brand Area -->
 				<div class="col-12 col-lg">
 					<div class="form-inline">
@@ -79,9 +71,11 @@
 						
 					</div>
 				</div>
+				
 				<div class="col-12 col-lg">
 					<div class="form-inline">
-						<input type="submit" value="Search" class="btn btn-primary">
+						<label> &nbsp; </label>
+						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
 					</div>
 				</div>
 			</div>

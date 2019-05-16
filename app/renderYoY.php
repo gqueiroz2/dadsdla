@@ -19,48 +19,54 @@ class renderYoY extends Model {
     	echo "</select>";	
     }
 
-    public function brandTable($value, $color){
-        
-        $class = "class='".strtolower($color)." center'";
+    public function assemble($mtx,$form,$pRate,$value,$year,$region){
 
-        echo "<td ".$class." rowspan='7' style='font-size: 18px; width:3.5%;'>";
-            echo $value;
-        echo "</td>";
-    }
+        echo "<table style='width: 100%; zoom:80%;'>";
+            echo "<tr>";
+                echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
+            echo "</tr>";
 
-    public function renderData($value, $line, $firstColor, $secondColor, $thirdColor=null){
-        
-        $class = null;
+            echo "<tr><td> &nbsp; </td></tr>";
 
-        $firstClass = "class='".$firstColor." center'";
-        $secondClass = "class='".$secondColor." center'";
-        $thirdClass = "class='".$thirdColor." center'";
-
-        for ($col = 0; $col < sizeof($value); $col++) { 
-
-            if ($line == 1 || $line == 4 || $line == 5 || $line == 6) {
-                if ($col >= 0 && $col <= 12) {
-                    $class = $firstClass;
-                }else{
-                    $class = $secondClass;
+        for ($b=0; $b < sizeof($mtx); $b++) { 
+            echo "<tr><td class='".strtolower($mtx[$b][0][0])." center' rowspan='7'>".$mtx[$b][0][0]."</td></tr>";
+            for ($l=0; $l < sizeof($mtx[$b]); $l++) { 
+                echo "<tr>";
+                for ($v=0; $v < sizeof($mtx[$b][$l]); $v++) { 
+                    if (is_numeric($mtx[$b][$l][$v])) {
+                        if ($v == 13) {
+                            echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                        }elseif ($l == 1 || $l == 2) {
+                            echo "<td class='center'>".number_format($mtx[$b][$l][$v])."</td>";
+                        }elseif ($l == 3) {
+                            echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                        }else{
+                            echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                        }
+                    }else{
+                        if ($l == 0) {
+                            if ($v == 0) {
+                                echo "<td class='lightGrey center'>&nbsp;</td>";
+                            }elseif ($v != 13) {
+                                echo "<td class='lightGrey center'>".$mtx[$b][$l][$v]."</td>";
+                            }else{
+                                echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }
+                        }elseif ($l == 1) {
+                            echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";
+                        }elseif ($l == 2 || $l == 3) {
+                            echo "<td class='rcBlue center'>".$mtx[$b][$l][$v]."</td>";
+                        }else{
+                            echo "<td class='medBlue center'>".$mtx[$b][$l][$v]."</td>";
+                        }
+                    }
                 }
-            }else{
-                if ($col == 0){
-                    $class = $firstClass;
-                }elseif ($col >= 1 && $col <= 12) {
-                    $class = $secondClass;
-                }else{
-                    $class = $thirdClass;
-                }
+                echo "</tr>";
             }
-
-            if(is_numeric( $value[$col] )){
-                echo "<td $class>".number_format($value[$col])."</td>";
-            }else{
-                echo "<td $class>".$value[$col]."</td>";
-            }
-            
+            echo "<tr><td> &nbsp; </td></tr>";
         }
+
+        echo "</table>";
 
     }
 

@@ -103,24 +103,13 @@
 		<div id="myModal" class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{$value}})</h4>
+					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{strtoupper($value)}})</h4>
 					<button type="button" class="close" data-dismiss="modal">
           				<span aria-hidden="true">&times;</span>
         			</button>
 				</div>
 				<div class="modal-body">
-					<table style="width: 100%" class="table-responsive">
-						<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
-                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
-
-						@for($i = 0; $i < sizeof($brands); $i++)
-                            <tr>
-                                {{
-                                    $renderMonthlyYoY->renderDataModal($brands[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
-                                }}
-                            </tr>
-                        @endfor
-					</table>
+					{{ $renderMonthlyYoY->assembleModal($brands, $matrix[1], $year) }}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -136,37 +125,7 @@
 			<div class="col">
 
 				<tr><td>&nbsp;</td></tr>
-				
-				@for($i = 0, $j = 0; $i < sizeof($base->getMonth()); $i+=3, $j++)
-					<table style="width: 100%">
-						@if($i == 0)
-							<th class="dc center" colspan="13">
-								<span style="font-size:22px;"> 
-									{{ $form }} to Monthly Year Over Year : ({{strtoupper($pRate[0]['name'])}}/{{strtoupper($value)}})
-								</span>
-							</th>
-
-							<tr><td>&nbsp;</td></tr>
-
-						@endif
-
-						<tr>
-                            {{ $renderMonthlyYoY->renderHead($base->getMonth(), $i, $j, "dc", "vix", "darkBlue") }} 
-                        </tr>
-                       	<tr>
-                       		{{ $renderMonthlyYoY->renderHead2($year, $i, "dc", "vix", "darkBlue") }}
-                       	</tr>
-                        @for($b = 0; $b < sizeof($brands); $b++)
-                        	<tr>
-                        		{{ $renderMonthlyYoY->renderData($brands[$b], $matrix[0], $matrix[1][$j], $i, $b, "dc", "rcBlue", "month", "medBlue") }}	
-                    		</tr>
-                        @endfor
-					</table>
-
-					@if($i != (sizeof($base->getMonth())-1))
-						<tr><td>&nbsp;</td></tr>
-					@endif
-				@endfor
+				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands)}}	
 			</div>
 		</div>
 	</div>

@@ -19,7 +19,6 @@ class salesRep extends Management{
 	public function getSalesRepFilteredYear($con,$salesRepGroupID,$regionID,$year,$source){
 		$sql = new sql();
 
-		$table = "sales_rep sr";
 		$columns = "sr.name AS 'name',
 					sr.ID as 'id',
 					srg.name as 'salesRepGroup'";
@@ -74,6 +73,32 @@ class salesRep extends Management{
 
 
         return $reps;
+	}
+
+	public function getSalesRepStatus($con,$salesRep,$year){
+		$sql = new sql();
+		$from = array("status");
+
+		for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+			$sqls[$s] = "SELECT status FROM sales_rep_status WHERE (sales_rep_id = '".$salesRep[$s]["id"]."') AND (year = '$year')";
+
+			$result[$s] = $con->query($sqls[$s]);
+
+			$salesStatus[$s] = $sql->fetch($result[$s],$from,$from)[0];
+
+		}
+
+
+		for ($s=0; $s <sizeof($salesStatus); $s++) { 
+			if ($salesStatus[$s]["status"] == 0) {
+				unset($salesRep[$s]);
+			}
+		}
+
+		$salesRep = array_values($salesRep);
+
+
+		return $salesRep;
 	}
 
 	public function getSalesRepGroupById($con,$id){

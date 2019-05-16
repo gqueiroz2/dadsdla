@@ -6,7 +6,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Chain Mini-Header </b> </h4></center>
+						<center><h4> Data Management - <b> Chain YTD </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -38,7 +38,7 @@
 									@endif
 								</div>
 							</div>
-							<form action="{{ route('fileUploadMiniHeaderPost') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('fileUploadytdPost') }}" method="POST" enctype="multipart/form-data">
 							@csrf
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -69,17 +69,56 @@
 								</div>
 							</form>
 							<br><hr>
+
+							<div class="row">
+								<div class="col">
+									<center><span style="font-size: 18px;"> CHECK NEW ELEMENTS </span></center>
+								</div>
+							</div>
+							<form action="{{ route('ytdCheckElementsPost') }}" method="POST">
+							@csrf
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											<input type="hidden" name="table" value="ytd">                
+								    	</div>
+								    </div>
+								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+
+											@if(session('secondChainResponse'))
+												<div class="alert alert-danger">
+		  											{{ session('secondChainResponse') }}
+												</div>
+											@endif
+
+										</div>
+									</div>
+								</div>
+
+								<div class="row justify-content-end">          
+							 		<div class="col">		
+								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+									</div>
+								</div>
+							</form>
+
+							<br><hr>
+
 							<div class="row">
 								<div class="col">
 									<center><span style="font-size: 18px;"> SECOND CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderSecondChain') }}" method="POST">
+							<form action="{{ route('ytdSecondChain') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="ytd">                
 								    	</div>
 								    </div>
 								</div>
@@ -111,12 +150,12 @@
 									<center><span style="font-size: 18px;"> THIRD CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderThirdChain') }}" method="POST">
+							<form action="{{ route('ytdThirdChain') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="ytd">                
 								    	</div>
 								    </div>
 								</div>
@@ -147,12 +186,12 @@
 									<center><span style="font-size: 18px;"> THIRD TO DLA </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderThirdToDLA') }}" method="POST">
+							<form action="{{ route('ytdThirdToDLA') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="ytd">                
 								    	</div>
 								    </div>
 								</div>

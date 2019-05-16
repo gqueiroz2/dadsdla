@@ -11,28 +11,144 @@ use App\salesRep;
 use App\pRate;
 
 class chain extends excel{
-    public function thirdToDLA($sql,$con,$tCon,$table){
-    	var_dump("FINALLY TO DLA");
-    	$base = new base(); 
-    	$columns = $this->miniHeaderColumnsT;
-    	$into = $this->into($columns);
-    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
-    	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
+    
+    public function handler($con,$table,$spreadSheet){
+		$base = new base();
+		switch ($table) {
+			case 'cmaps':
+				$bool = $this->cmaps($con,$table,$spreadSheet,$base);		
+				break;			
+			case 'mini_header':
+				$bool = $this->miniHeader($con,$table,$spreadSheet,$base);
+				break;
+			case 'ytd':
+				$bool = $this->ytd($con,$table,$spreadSheet,$base);
+				break;
+			default:
+				# code...
+				break;
+		}
+		return $bool;
+	}
 
-    	
-    }
+	public function insert($con,$spreadSheet,$columns,$table,$into){
+		
+		$values = $this->values($spreadSheet,$columns);
+		$ins = " INSERT INTO $table ($into) VALUES ($values)";
+		echo($ins)."<br>";		
+		
+		if($con->query($ins) === TRUE ){
+			$error = false;
+		}else{
+			if($table == 'cmaps'){
+				$error = $spreadSheet['decode'];
+			}elseif($table == 'mini_header'){
+				//var_dump($ins);
+				echo($ins)."<br>";		
+				var_dump(mysqli_error($con));
+				$error = array($spreadSheet['campaign_reference'],$spreadSheet['order_reference']);
+			}elseif($table = 'plan_by_brand'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
+			}elseif($table = 'ytd'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
+			}elseif($table = 'sales_rep' || $table = 'sales_rep_unity'){
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
+			}else{
+				var_dump($ins);
+				var_dump(mysqli_error($con));
+				$error = true;
+			}
+		}
+		return $error;
+		
+	}
+
+	public function miniHeader($con,$table,$spreadSheet,$base){
+		$columns = $this->miniHeaderColumnsF;
+		$spreadSheet = $this->assembler($spreadSheet,$columns,$base);
+		$into = $this->into($columns);		
+		$check = 0;
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+			if($bool){
+				$check++;
+			}
+		}			
+		$rtr = false;
+		if($check == sizeof($spreadSheet)){
+			$rtr = true;
+		}
+
+		return $rtr;
+	}
+
+	public function ytd($con,$table,$spreadSheet,$base){
+		$columns = $this->ytdColumnsF;		
+		$spreadSheet = $this->assembler($spreadSheet,$columns,$base);
+		$into = $this->into($columns);		
+		
+		
+		$check = 0;
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+			if($bool){
+				$check++;
+			}
+		}			
+		$rtr = false;
+		if($check == sizeof($spreadSheet)){
+			$rtr = true;
+		}
+
+		return $rtr;
+		
+	}
+
+	public function secondChain($sql,$con,$fCon,$sCon,$table){
+    	$base = new base();
+    	$columns = $this->defineColumns($table,'first');
+    	$columnsS = $this->defineColumns($table,'second');
+    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
+    	$into = $this->into($columnsS);		
+    	$next = $this->handleForNextTable($con,$table,$current,$columns);
+   		$bool = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into);
+   		return $bool;
+    }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
     	$base = new base();    	
-    	$columnsS = $this->miniHeaderColumnsS;
-    	$columnsT = $this->miniHeaderColumnsT;
+
+		$columnsS = $this->defineColumns($table,'second');
+    	$columnsT = $this->defineColumns($table,'third');
+
     	$into = $this->into($columnsT);		
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$sCon,$table,$columnsS),$columnsS);
-    	$orderReference = $this->getOrderReferences($current);
-    	$cleanedValues = $this->cleanValues($current,$orderReference);
+
+    	if($table == 'mini_header'){
+    		$orderReference = $this->getOrderReferences($current);
+    		$cleanedValues = $this->cleanValues($current,$orderReference);
+    	}else{
+    		$cleanedValues = $current;
+    	}
+    	
     	$next = $this->handleForLastTable($con,$cleanedValues,$columnsS);
     	$bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
-		
+    }
+
+     public function thirdToDLA($sql,$con,$tCon,$table){
+    	$base = new base(); 
+    	
+    	$columns = $this->defineColumns($table,'third');
+    	
+    	$into = $this->into($columns);
+    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
+    	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
     }
 
     public function cleanValues($current,$orderReference){
@@ -55,37 +171,17 @@ class chain extends excel{
     	return $current;
     }
 
-
     public function getOrderReferences($current){
-
     	$or = array();
-
     	for ($c=0; $c < sizeof($current); $c++) { 
 	    	if($current[$c]['sales_rep_role'] == 'Sales Representitive'){
 	    		$or[] = $current[$c]['order_reference'];
 	    	}
 	    }
-
 	    $or = array_values(array_unique($or));
-
     	sort($or);
-
     	return($or);
-    }
-
-    public function secondChain($sql,$con,$fCon,$sCon,$table){
-    	$base = new base();
-    	$columns = $this->miniHeaderColumnsF;
-    	$columnsS = $this->miniHeaderColumnsS;
-    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
-    	$into = $this->into($columnsS);		
-    	$next = $this->handleForNextTable($con,$current,$columns);
-   		$bool = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into);
-
-   		return $bool;
-    }
-
-
+    }    
 
     public function selectFromCurrentTable($sql,$con,$table,$columns){
     	$res = $sql->select($con,"*",$table);
@@ -94,55 +190,40 @@ class chain extends excel{
     }
 
     public function handleForLastTable($con,$current,$columns){
-    	
     	/*
-
-    	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCCA NA AGENCIA E NO CLIENTE
-
+    	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
     	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
-
     	*/
-
     	for ($c=0; $c < sizeof($current); $c++) { 
     		$current[$c]['agency_id'] = $current[$c]['campaign_sales_office_id'];
     		$current[$c]['client_id'] = $current[$c]['campaign_sales_office_id'];
     	}
-
 		return $current;
-
-
     }
 
 
-    public function handleForNextTable($con,$current,$columns){
+    public function handleForNextTable($con,$table,$current,$columns){
     	$r = new region;
     	$sr = new salesRep();
     	$b = new brand();
     	$pr = new pRate();
-
     	$regions = $r->getRegion($con);
     	$brands = $b->getBrandUnit($con);
     	$salesReps = $sr->getSalesRepUnit($con);
     	$currencies = $pr->getCurrency($con);
-
     	for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
-    			//$current[$c][$cc] = $this->handle($current[$c][$columns[$cc]],$columns[$cc]);
-
-    			$tmp = $this->handle($con,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies);
+    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies);
     			$current[$c][$tmp[1]] = $tmp[0];
     			if($columns[$cc] != $tmp[1]){
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
     	}
-
 		return $current;
-
-
     }
 
-    public function handle($con,$current,$column,$regions,$brands,$salesReps,$currencies){
+    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies){
     		if($column == 'campaign_sales_office'){
     			
     			$rtr =  array(false,'campaign_sales_office_id');
@@ -153,13 +234,17 @@ class chain extends excel{
     				}
     			}
     			
-    		}elseif($column == 'sales_representant_sales_office'){
+    		}elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
     			
     			$rtr =  array(false,'campaign_sales_office_id');
 
     			for ($r=0; $r < sizeof($regions); $r++) { 
     				if($current == $regions[$r]['name']){	
-    					$rtr =  array( $regions[$r]['id'],'sales_representant_sales_office_id');
+    					if($table == 'mini_header'){
+    						$rtr =  array( $regions[$r]['id'],'sales_representant_sales_office_id');
+    					}else{
+    						$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
+    					}
     				}
     			}
     			
@@ -182,25 +267,21 @@ class chain extends excel{
     			}
     			
             }elseif($column == 'sales_rep'){
+            	
+            	$rtr =  array(false,'sales_rep_id');
+
             	for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
     				if($current == $salesReps[$sr]['salesRepUnit']){	
     					$rtr =  array( $salesReps[$sr]['salesRepID'],'sales_rep_id');
     				}
     			}
-            }/*elseif(){
-
-            }*/else{
+            }else{
             	$rtr = array($current,$column);
             }
-
-            
-
             return $rtr;
-
     }
 
     public function insertToDLA($con,$table,$columns,$current,$into){
-    	var_dump($columns);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -217,7 +298,6 @@ class chain extends excel{
     }
 
     public function insertToLastTable($con,$table,$columns,$current,$into){
-    	var_dump($columns);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -225,7 +305,6 @@ class chain extends excel{
     			$count++;
     		}
     	}
-
     	if($count == sizeof($current)){
     		return true;
     	}else{
@@ -234,7 +313,6 @@ class chain extends excel{
     }
 
     public function insertToNextTable($con,$table,$columns,$current,$into){
-    	var_dump($columns);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -242,7 +320,6 @@ class chain extends excel{
     			$count++;
     		}
     	}
-
     	if($count == sizeof($current)){
     		return true;
     	}else{
@@ -307,40 +384,10 @@ class chain extends excel{
 		}
 	}
 
-	public function handler($con,$table,$spreadSheet){
-		$base = new base();
-		switch ($table) {
-			case 'cmaps':
-				$bool = $this->cmaps($con,$table,$spreadSheet,$base);		
-				break;			
-			case 'mini_header':
-				var_dump("MINI_HEADER");
-				$bool = $this->miniHeader($con,$table,$spreadSheet,$base);
-				break;
-			case 'plan_by_brand':
-				$bool = $this->planByBrand($con,$table,$spreadSheet,$base);
-				break;			
-			case 'sales_rep':
-				$bool = $this->salesRep($con,$table,$spreadSheet,$base);
-				break;
-			case 'sales_rep_unit':
-				$bool = $this->salesRepUnit($con,$table,$spreadSheet,$base);
-				break;			
-			case 'ytd':
-				$bool = $this->ytd($con,$table,$spreadSheet,$base);
-				break;
-			default:
-				# code...
-				break;
-		}
-		return $bool;
-	}
-
 	public function assembler($spreadSheet,$columns,$base){
 		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			for ($c=0; $c < sizeof($columns); $c++) { 
 				$bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
-
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
 					   $columns[$c] == 'net_revenue' ||						
@@ -356,14 +403,12 @@ class chain extends excel{
 				      ){
 						if( is_null($spreadSheet[$s][$c])){
 							$columnValue = $c + 1;
+							//$c++;
 						}else{
 							$columnValue = $c;
 						}
-
 						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
-
 					}else{
-						
 						if($columns[$c] == 'campaign_option_start_date'){
 							$spreadSheetV2[$s][$columns[$c]] = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
 						}elseif($columns[$c] == 'month'){
@@ -375,6 +420,7 @@ class chain extends excel{
 				}
 			}
 		}
+
 		$spreadSheetV2 = array_values($spreadSheetV2);
 
 		return $spreadSheetV2;
@@ -394,6 +440,8 @@ class chain extends excel{
 
 	public function values($spreadSheet,$columns){
 		
+
+
 		$values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
 			$values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$columns[$c]] )."\"";
@@ -402,53 +450,6 @@ class chain extends excel{
 			}
 		}
 		return $values;
-	}
-
-	public function insert($con,$spreadSheet,$columns,$table,$into){
-		$values = $this->values($spreadSheet,$columns);
-		$ins = " INSERT INTO $table ($into) VALUES ($values)";
-		echo($ins)."<br>";		
-		
-		if($con->query($ins) === TRUE ){
-			$error = false;
-		}else{
-			if($table == 'cmaps'){
-				$error = $spreadSheet['decode'];
-			}elseif($table == 'mini_header'){
-				//var_dump($ins);
-				echo($ins)."<br>";		
-				var_dump(mysqli_error($con));
-				$error = array($spreadSheet['campaign_reference'],$spreadSheet['order_reference']);
-			}elseif($table = 'plan_by_brand'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}elseif($table = 'ytd'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}elseif($table = 'sales_rep' || $table = 'sales_rep_unity'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}else{
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}
-		}
-		return $error;
-		
-	}
-
-	public function ytd($con,$table,$spreadSheet){
-		$columns = $this->ytdColumns;		
-		$spreadSheet = $this->assembler($spreadSheet,$columns);
-		$into = $this->into($columns);		
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-		}			
-		return $bool;
 	}
 
 	public function cmaps($con,$table,$spreadSheet){
@@ -461,65 +462,170 @@ class chain extends excel{
 		return $bool;
 	}
 
-	public function miniHeader($con,$table,$spreadSheet,$base){
-		$columns = $this->miniHeaderColumnsF;
-		$spreadSheet = $this->assembler($spreadSheet,$columns,$base);
-		$into = $this->into($columns);		
-		$check = 0;
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-			if($bool){
-				$check++;
-			}
-		}			
-		$rtr = false;
-		if($check == sizeof($spreadSheet)){
-			$rtr = true;
-		}
+	public function defineColumns($table,$recurrency){
 
-		return $rtr;
-	}
+    	switch ($table) {
+    		case 'ytd':
+    			switch ($recurrency) {
+    				case 'first':
+    					return $this->ytdColumnsF;
+    					break;
+    				case 'second':
+    					return $this->ytdColumnsS;
+    					break;
+    				case 'third':
+    					return $this->ytdColumnsT;
+    					break;
+    				case 'DLA':
+    					return $this->ytdColumns;
+    					break;
+    			}
+    			break;
 
-	public function salesRep($con,$table,$spreadSheet){
-		$columns = $this->salesRepColumns;
-		$spreadSheet = $this->assembler($spreadSheet,$columns);
-		$into = $this->into($columns);		
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-		}
-	}
+    		case 'mini_header':
+    			switch ($recurrency) {
+    				case 'first':
+    					return $this->miniHeaderColumnsF;
+    					break;
+    				case 'second':
+    					return $this->miniHeaderColumnsS;
+    					break;
+    				case 'third':
+    					return $this->miniHeaderColumnsT;
+    					break;
+    				case 'DLA':
+    					return $this->miniHeaderColumns;
+    					break;
+    			}
+    			break;
 
-	public function salesRepUnit($con,$table,$spreadSheet){
-		$columns = $this->salesRepUnitColumns;
-		$spreadSheet = $this->assembler($spreadSheet,$columns);
-		$into = $this->into($columns);		
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-		}
-	}
+    		case 'cmaps':
+    			switch ($recurrency) {
+    				case 'first':
+    					return $this->cmapsColumnsF;
+    					break;
+    				case 'second':
+    					return $this->cmapsColumnsS;
+    					break;
+    				case 'third':
+    					return $this->cmapsColumnsT;
+    					break;
+    				case 'DLA':
+    					return $this->cmapsColumns;
+    					break;
+    			}
+    			break;
+    		
+    		
+    	}
 
-	public function planByBrand($con,$table,$spreadSheet){
-		$columns = $this->planByBrandColumns;
+    }
 
-		$spreadSheet = $this->assembler($spreadSheet,$columns);
-		$into = $this->into($columns);
-
-		$del = "DELETE FROM plan_by_brand WHERE (source = 'TARGET')";
-		if($con->query($del) == TRUE){
-			var_dump("DELETOU");
-		}
-
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-		}			
-		return $bool;
-
-	}
 
 	public $planByBrandColumns = array('sales_office_id','currency_id','brand_id','source','year','month','type_of_revenue','revenue');
 
+	public $ytdColumnsF = array(
+		 					'campaign_sales_office', 
+		 					'sales_representant_office',
+		 					'year',
+		 					'month',
+		 					'brand',
+		 					'brand_feed',
+		 					'sales_rep', 
+		 					'client',
+		 					'client_product',
+		 					'agency',
+		 					'order_reference',
+		 					'campaign_reference',
+		 					'spot_duration',
+		 					'campaign_currency',
+		 					'impression_duration',
+		 					'num_spot',		 								
+		 					'gross_revenue',
+		 					'net_revenue',
+		 					'net_net_revenue',
+		 					'gross_revenue_prate',
+		 					'net_revenue_prate',
+		 					'net_net_revenue_prate'
+		 				   );
+
+	public $ytdColumnsS = array(
+		 					'campaign_sales_office_id', 
+		 					'sales_representant_office_id',
+		 					'brand_id',
+		 					'sales_rep_id',
+		 					'client',
+		 					'agency',
+		 					'campaign_currency_id', 
+		 					'year',
+		 					'month',		 					
+		 					'brand_feed',
+		 					'client_product',		 					
+		 					'order_reference',
+		 					'campaign_reference',
+		 					'spot_duration',		 					
+		 					'impression_duration',
+		 					'num_spot',		 								
+		 					'gross_revenue',
+		 					'net_revenue',
+		 					'net_net_revenue',
+		 					'gross_revenue_prate',
+		 					'net_revenue_prate',
+		 					'net_net_revenue_prate'
+		 				   );
+
+	public $ytdColumnsT = array(
+		 					'campaign_sales_office_id', 
+		 					'sales_representant_office_id',
+		 					'brand_id',
+		 					'sales_rep_id',
+		 					'client_id',
+		 					'agency_id',
+		 					'campaign_currency_id', 
+		 					'year',
+		 					'month',		 					
+		 					'brand_feed',
+		 					'client_product',		 					
+		 					'order_reference',
+		 					'campaign_reference',
+		 					'spot_duration',		 					
+		 					'impression_duration',
+		 					'num_spot',		 								
+		 					'gross_revenue',
+		 					'net_revenue',
+		 					'net_net_revenue',
+		 					'gross_revenue_prate',
+		 					'net_revenue_prate',
+		 					'net_net_revenue_prate'
+		 				   );
+
+	public $ytdColumns = array(
+		 					'campaign_sales_office_id', 
+		 					'sales_representant_office_id',
+		 					'brand_id',
+		 					'sales_rep_id',
+		 					'client_id',
+		 					'agency_id',
+		 					'campaign_currency_id', 
+		 					'year',
+		 					'month',		 					
+		 					'brand_feed',
+		 					'client_product',		 					
+		 					'order_reference',
+		 					'campaign_reference',
+		 					'spot_duration',		 					
+		 					'impression_duration',
+		 					'num_spot',		 								
+		 					'gross_revenue',
+		 					'net_revenue',
+		 					'net_net_revenue',
+		 					'gross_revenue_prate',
+		 					'net_revenue_prate',
+		 					'net_net_revenue_prate'
+		 				   );
+
 	public $miniHeaderColumnsF = array('campaign_sales_office',
-		                               'sales_representant_sales_office',
+		                               'sales_representant_office',
 		                               'year',
 		                               'month',
 		                               'brand',
@@ -541,7 +647,7 @@ class chain extends excel{
 		                              );
 
 	public $miniHeaderColumnsS = array('campaign_sales_office_id',
-		                               'sales_representant_sales_office_id',
+		                               'sales_representant_office_id',
 		                               'brand_id',
 		                               'sales_rep_id',
 		                               'client',
@@ -563,7 +669,7 @@ class chain extends excel{
 		                              );
 
 	public $miniHeaderColumnsT = array('campaign_sales_office_id',
-		                               'sales_representant_sales_office_id',
+		                               'sales_representant_office_id',
 		                               'brand_id',
 		                               'sales_rep_id',
 		                               'client_id',
@@ -590,5 +696,5 @@ class chain extends excel{
 
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
-	public $ytdColumns = array('campaign_sales_office_id', 'sales_representant_office_id','brand_id','sales_rep_id', 'client_id','agency_id','campaign_currency_id','year','month','brand_feed','client_product','order_reference','campaign_reference','spot_duration','impression_duration','num_spot','gross_revenue','net_revenue','net_net_revenue','gross_revenue_prate','net_revenue_prate','net_net_revenue_prate');
+	
 }

@@ -78,8 +78,8 @@ class resultsResumeController extends Controller{
 			$salesShow = 'Header';
 		}
 
-
-		$brandID = $base->handleBrand( $con, $b ,Request::get('brand'));
+		$tmp = Request::get("brand");
+		$brandID = $base->handleBrand($tmp);
 		$currencyID = Request::get('currency');
 		$value = Request::get('value');		
 		$month = $base->getMonth();
