@@ -9,7 +9,70 @@ use App\chain;
 use App\sql;
 
 class ChainController extends Controller{
-    
+    public function ytdGet(){
+    	return view('dataManagement.Chain.ytdGet');
+    }
+
+    public function ytdPost(){
+    	$db = new dataBase();
+		$chain = new chain();		
+		$i = new import();
+
+		$con = $db->openConnection('firstMatch');	
+		$spreadSheet = $i->base();
+		unset($spreadSheet[0]);
+		unset($spreadSheet[1]);		
+		unset($spreadSheet[2]);		
+		$spreadSheet = array_values($spreadSheet);
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
+				$pivot = $s;
+			}
+		}
+		unset($spreadSheet[$pivot]);
+		$spreadSheet = array_values($spreadSheet);
+				
+		$table = 'ytd';
+
+		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
+	}
+
+    public function CMAPSGet(){
+    	return view('dataManagement.Chain.CMAPSGet');
+    }
+
+    public function CMAPSPost(){
+    	$db = new dataBase();
+		$chain = new chain();		
+		$i = new import();
+
+		$con = $db->openConnection('firstMatch');	
+		
+		/*$spreadSheet = $i->base();
+		unset($spreadSheet[0]);
+		unset($spreadSheet[1]);		
+		unset($spreadSheet[2]);		
+		$spreadSheet = array_values($spreadSheet);
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
+				$pivot = $s;
+			}
+		}
+		unset($spreadSheet[$pivot]);
+		$spreadSheet = array_values($spreadSheet);
+				
+		$table = 'mini_header';		
+		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
+
+		if($miniHeaderBool){
+			$msg = "Data insert successfully !!! ";
+		}else{
+			$msg = "Error, try it again !!!";
+		}
+		var_dump($msg);
+		//return back()->with('firstChainResponse',$msg);*/
+    }
+
 
     public function miniHeaderGet(){
     	return view('dataManagement.Chain.miniHeaderGet');
@@ -42,7 +105,7 @@ class ChainController extends Controller{
 		}else{
 			$msg = "Error, try it again !!!";
 		}
-		var_dump($msg);
+		
 		//return back()->with('firstChainResponse',$msg);
     }
 

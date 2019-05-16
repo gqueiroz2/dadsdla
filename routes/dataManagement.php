@@ -47,38 +47,60 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('dataManagementClientGetFromExcel');
 
 		Route::group(['prefix' => 'chain'],function(){
+			
+			Route::post('ytdCheckElements','CheckElementsController@base')
+							->name('ytdCheckElementsPost');
+							/*
+			Route::post('ytdCheckElements','CheckElementsController@basePost')
+							->name('ytdCheckElementsPost');
+*/
 			Route::post('miniHeaderSecond','ChainController@secondChain')
 							->name('miniHeaderSecondChain');
 			Route::post('miniHeaderThird','ChainController@thirdChain')
 							->name('miniHeaderThirdChain');
 			Route::post('miniHeaderThirdToDLA','ChainController@thirdToDLA')
 							->name('miniHeaderThirdToDLA');
+			Route::post('CMAPSSecond','ChainController@secondChain')
+							->name('CMAPSSecondChain');
+			Route::post('CMAPSThird','ChainController@thirdChain')
+							->name('CMAPSThirdChain');
+			Route::post('CMAPSThirdToDLA','ChainController@thirdToDLA')
+							->name('CMAPSThirdToDLA');
+			Route::post('ytdSecond','ChainController@secondChain')
+							->name('ytdSecondChain');
+			Route::post('ytdThird','ChainController@thirdChain')
+							->name('ytdThirdChain');
+			Route::post('ytdThirdToDLA','ChainController@thirdToDLA')
+							->name('ytdThirdToDLA');
 
 		});
 
 		Route::group(['prefix' => 'file'],function(){
-
+			Route::get('ytd','ChainController@ytdGet')
+							->name('fileUploadytdGet');
+			Route::post('ytd','ChainController@ytdPost')
+							->name('fileUploadytdPost');
+			Route::get('CMAPS','ChainController@CMAPSGet')
+							->name('fileUploadCMAPSGet');
+			Route::post('CMAPS','ChainController@CMAPSPost')
+							->name('fileUploadCMAPSPost');
 			Route::get('miniHeader','ChainController@miniHeaderGet')
 							->name('fileUploadMiniHeaderGet');
-
 			Route::post('miniHeader','ChainController@miniHeaderPost')
 							->name('fileUploadMiniHeaderPost');
+			
+
 
 			Route::get('excel','fileUploadController@excelGet')
 							->name('fileUploadExcelGet');
-
 			Route::post('excel','fileUploadController@excelPost')
 							->name('fileUploadExcelPost');
-
 			Route::post('agency','fileUploadController@agency')	
 							->name('fileUploadAgencyFromExcel');
-
 			Route::post('client','fileUploadController@client')	
 							->name('fileUploadClientFromExcel');
-
 			Route::post('ytdLatam','fileUploadController@ytdLatam')	
 							->name('fileUploadYtdLatam');
-
 		});
 
 		Route::group(['prefix' => 'add'],function(){

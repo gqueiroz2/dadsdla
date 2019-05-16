@@ -6,7 +6,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Chain Mini-Header </b> </h4></center>
+						<center><h4> Data Management - <b> Chain CMAPS </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -38,7 +38,7 @@
 									@endif
 								</div>
 							</div>
-							<form action="{{ route('fileUploadMiniHeaderPost') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('fileUploadCMAPSPost') }}" method="POST" enctype="multipart/form-data">
 							@csrf
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -74,7 +74,7 @@
 									<center><span style="font-size: 18px;"> SECOND CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderSecondChain') }}" method="POST">
+							<form action="{{ route('CMAPSSecondChain') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -111,7 +111,7 @@
 									<center><span style="font-size: 18px;"> THIRD CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderThirdChain') }}" method="POST">
+							<form action="{{ route('CMAPSThirdChain') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -147,7 +147,7 @@
 									<center><span style="font-size: 18px;"> THIRD TO DLA </span></center>
 								</div>
 							</div>
-							<form action="{{ route('miniHeaderThirdToDLA') }}" method="POST">
+							<form action="{{ route('CMAPSThirdToDLA') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
