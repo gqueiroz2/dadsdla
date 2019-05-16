@@ -94,6 +94,8 @@ class resultsYoYController extends Controller{
             array_push($brands, array('12', 'DN'));
         }
 
+        $form = $yoy->TruncateName($form);
+
         //var_dump($brands);
         //var_dump($matrix);
 

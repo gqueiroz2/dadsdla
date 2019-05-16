@@ -103,7 +103,7 @@
 		<div id="myModal" class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{$value}})</h4>
+					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{strtoupper($value)}})</h4>
 					<button type="button" class="close" data-dismiss="modal">
           				<span aria-hidden="true">&times;</span>
         			</button>
@@ -125,8 +125,7 @@
 			<div class="col">
 
 				<tr><td>&nbsp;</td></tr>
-				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands)}}
-				
+				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands)}}	
 			</div>
 		</div>
 	</div>

@@ -14,8 +14,10 @@ class quarterRender extends Render
     	echo "<table style='width: 100%; zoom:80%;'>";
     		
     		echo "<tr>";
-				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:18px;'> Monthly (".$currency[0]['name']."/".$value.") - ".$year." </span></center></th>";
+				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> Monthly (".$currency[0]['name']."/".strtoupper($value).") - ".$year." </span></center></th>";
 			echo "</tr>";
+
+			echo "<tr><td>&nbsp;</td></tr>";
 
 			for ($b=0; $b < sizeof($mtx); $b++) {
 				for ($l=0; $l < sizeof($mtx[$b]); $l++) { 
@@ -25,13 +27,18 @@ class quarterRender extends Render
 							if ($v == 3 || $v == 6) {
 								if ($l == 3) {
 									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])." %</td>";	
+								}elseif ($l == 4) {
+									echo "<td class='quarter center'>".number_format($mtx[$b][$l][$v])."</td>";	
 								}else{
 									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
 								}
 							}elseif($v == 7){
 								if ($l == 3) {
 									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])." %</td>";
-								}else{
+								}elseif ($l == 4) {
+									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+								}
+								else{
 									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
 								}
 								
@@ -43,7 +50,7 @@ class quarterRender extends Render
 								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
 							}
 						}else{
-							if($l == 0){
+							if($l == 0 ){
 								if ($v == 0) {
 									echo "<td class='lightBlue center'>".$mtx[$b][$l][$v]."</td>";		
 								}elseif (($v >= 1 && $v <= 2) || ($v >= 4 && $v <= 5)) {
@@ -72,11 +79,3 @@ class quarterRender extends Render
     	echo "</table>";
     }
 }
-
-/*if($l == 0){
-							
-						}elseif ($l == 1) {
-							if ($v == 0) {
-								echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";	
-							}
-						}

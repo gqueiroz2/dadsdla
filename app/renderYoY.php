@@ -23,8 +23,10 @@ class renderYoY extends Model {
 
         echo "<table style='width: 100%; zoom:80%;'>";
             echo "<tr>";
-                echo "<th colspan='15' class='lightBlue'><center><span style='font-size:18px;'> Monthly Year Over Year :(".$form.") ".$year." (".$value."/".$pRate[0]['name'].") ".$region[0]['name']."</span></center></th>";
+                echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
             echo "</tr>";
+
+            echo "<tr><td> &nbsp; </td></tr>";
 
         for ($b=0; $b < sizeof($mtx); $b++) { 
             echo "<tr><td class='".strtolower($mtx[$b][0][0])." center' rowspan='7'>".$mtx[$b][0][0]."</td></tr>";

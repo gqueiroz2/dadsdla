@@ -2,21 +2,25 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;				
 
 class renderMonthlyYoY extends Model{
-    
+
+	/*
+	*$mtx = matriz dos meses
+	*$quarters = quarters
+	*/
 	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands){
 		
 		echo "<table style='width: 100%; zoom:80%;'>";
 
 			echo "<th class='dc center' colspan='13'>";
-				echo "<span style='font-size:22px;''>";
+				echo "<span style='font-size:24px;''>";
 					echo "$form to Monthly Year Over Year : (".strtoupper($pRate[0]['name'])."/".strtoupper($value).")";
 				echo "</span>";
 			echo "</th>";
 
-			echo "<tr><td></td></tr>";
+		echo "<tr><td>&nbsp;</td></tr>";
 		for($i = 0, $j = 0; $i < sizeof($months); $i+=3, $j++){
 			echo "<tr>";
 
@@ -24,7 +28,7 @@ class renderMonthlyYoY extends Model{
                 $this->renderHead($months, $i, $j, "dc", "vix", "darkBlue");
             echo "</tr>";
            	echo "<tr>";
-           		$this->renderHead2($year, $i, "dc", "vix", "darkBlue");
+           		$this->renderHead2($year, "dc", "vix", "darkBlue");
            	echo "</tr>";
             for($b = 0; $b < sizeof($brands); $b++){
             	echo "<tr>";
@@ -42,19 +46,23 @@ class renderMonthlyYoY extends Model{
 
 	}
 
+	/*
+	*renderiza o primeiro cabeçalho (meses e quarter)
+	*$index = indice do quarter
+	*$size = utilizada para indicar quais os meses para o cabeçalho nesta linha
+	*as cores são sempre essas 3 e são determinadas pelo numero da coluna
+	*/
 	public function renderHead($months, $size, $index, $firstColor, $secondColor, $thirdColor){
 		
-		$firstClass = "class='center ".$firstColor."' style='font-size: 18px'";
-		$secondClass = "class='center ".$secondColor."' style='font-size: 18px'";
-		$thirdClass = "class='center ".$thirdColor."' style='font-size: 18px'";
+		$firstClass = "class='center ".$firstColor."'";
+		$secondClass = "class='center ".$secondColor."'";
+		$thirdClass = "class='center ".$thirdColor."'";
 
 		echo "<td $firstClass>&nbsp;</td>";
 
 		for ($i = $size, $j=0; $i < ($size+3); $i++, $j++) {
 			
-			if ($j == 0) {
-				$class = $firstClass;
-			}elseif($j == 1){
+			if($j == 1){
 				$class = $secondClass;
 			}else{
 				$class = $firstClass;
@@ -67,7 +75,11 @@ class renderMonthlyYoY extends Model{
 
 	}
 
-    public function renderHead2($year, $size, $firstColor, $secondColor, $thirdColor){
+	/*
+	*renderiza o segundo cabeçalho (actual passado, target, actual atual)
+	*as cores são sempre essas 3 e são determinadas pelo numero da coluna
+	*/
+    public function renderHead2($year, $firstColor, $secondColor, $thirdColor){
 
     	$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
@@ -75,17 +87,15 @@ class renderMonthlyYoY extends Model{
 
     	echo "<td $firstClass>&nbsp;</td>";
 
-		for ($i = $size, $j=0; $i <= ($size+3); $i++, $j++) {
+		for ($i = 0, $j=0; $i <= 3; $i++, $j++) {
 
-			if ($j == 0) {
-				$class = $firstClass;
-			}elseif($j == 1){
+			if($j == 1){
 				$class = $secondClass;
 			}else{
 				$class = $firstClass;
 			}
 
-			if ($i == ($size+3)) {
+			if ($i == 3) {
 				$class = $thirdClass;
 			}
 
@@ -96,6 +106,10 @@ class renderMonthlyYoY extends Model{
 
     }
 
+	/*
+	*renderiza o corpo cabeçalho (valores de cada coluna)
+	*as cores são sempre essas 4 e são determinadas pelo numero da coluna
+	*/
     public function renderData($brand, $matrix, $quarter, $month, $brandPos, $firstColor, $secondColor, $thirdColor, $fourthColor){
     	
     	$firstClass = "class='center ".$firstColor."'";
@@ -117,6 +131,7 @@ class renderMonthlyYoY extends Model{
 					$class = $fourthClass;
 				}
 
+				//é feita (pos + 1) no ultimo indice, pois as marcas começam no indice 1, sendo que o indice 0 é o nome da coluna
 				echo "<td $class>".number_format($matrix[$brandPos][$j][$i+1])."</td>";
 			}
 		}
@@ -131,13 +146,16 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
+			//é feita (pos + 1) no ultimo indice, pois as marcas começam no indice 1, sendo que o indice 0 é o nome da coluna
 			echo "<td $class>".number_format($quarter[$i][$brandPos+1])."</td>";
 		}
 
     }
 
+
+    //aqui começa a renderização do modal, os parametros passados ja foram explicados nas funções da tabela principal
     public function assembleModal($brands, $quarters, $year){
-    	echo "<table style='width: 100%; zoom:100%;' class='table-responsive'>";
+    	echo "<table style='width: 100%; zoom:80%;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");
 			echo "</tr>";
@@ -210,6 +228,7 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
+			//feito calculo dos quarters 1 e 2 para formar o primeiro semestre
 			echo "<td $class colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]))."</td>";
 		}
 		
@@ -223,8 +242,10 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
+			//feito calculo dos quarters 3 e 4 para formar o segundo semestre
 			echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]))."</td>";
 		}
+
 		for ($i=0; $i < 3; $i++) { 
 
 			if ($i == 0) {
@@ -235,6 +256,7 @@ class renderMonthlyYoY extends Model{
 				$class = $fourthClass;
 			}
 
+			//feito calculo de todos os quarters
 			echo "<td $class colspan='1'>".number_format(
 				(
 					$quarter[0][$i][$brandPos+1]+$quarter[1][$i][$brandPos+1]+
@@ -246,14 +268,3 @@ class renderMonthlyYoY extends Model{
 
     }
 }
-
-				/*<tr>{{ $renderMonthlyYoY->renderModalHeader("dc", "darkBlue") }}</tr>
-                        <tr>{{ $renderMonthlyYoY->renderModalHeader2($year, "dc", "darkBlue")}}</tr>
-
-						@for($i = 0; $i < sizeof($brands); $i++)
-                            <tr>
-                                {{
-                                    $renderMonthlyYoY->renderDataModal($brands[$i], $matrix[1], $i, "dc", "rcBlue", "white", "medBlue") 
-                                }}
-                            </tr>
-                        @endfor*/

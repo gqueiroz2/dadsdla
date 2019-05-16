@@ -13,6 +13,7 @@ $(document).ready(function(){
           var year = $('#year').val();
           if(year == ""){
             var option = "<option> Select Year </option>";
+            $('#firstPos').empty().append(option);
             $('#secondPos').empty().append(option);
             $('#thirdPos').empty().append(option);
           }else{
@@ -22,6 +23,18 @@ $(document).ready(function(){
               data:{regionID, year},
                 success: function(output){
                   $('#thirdPos').html(output);
+                  var form = $('#thirdPos').val();
+                  $.ajax({
+                    url:"/ajax/adsales/firstPosByRegion",
+                    method:"POST",
+                    data:{year,form},
+                      success: function(output){
+                        $('#firstPos').html(output);
+                      },
+                      error: function(xhr, ajaxOptions,thrownError){
+                        alert(xhr.status+" "+thrownError);
+                    }
+                  });
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                   alert(xhr.status+" "+thrownError);
@@ -62,6 +75,7 @@ $(document).ready(function(){
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);
       $('#currency').empty().append(option);
+      $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
     }
@@ -80,6 +94,18 @@ $(document).ready(function(){
     			data:{regionID, year},
         		success: function(output){
           		$('#thirdPos').html(output);
+              var form = $('#thirdPos').val();
+              $.ajax({
+                url:"/ajax/adsales/firstPosByRegion",
+                method:"POST",
+                data:{year,form},
+                  success: function(output){
+                    $('#firstPos').html(output);
+                  },
+                  error: function(xhr, ajaxOptions,thrownError){
+                    alert(xhr.status+" "+thrownError);
+                }
+              });
         		},
         		error: function(xhr, ajaxOptions,thrownError){
           		alert(xhr.status+" "+thrownError);
@@ -101,6 +127,7 @@ $(document).ready(function(){
       }
 		}else{
       var option = "<option> Select Year </option>";
+      $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
     }

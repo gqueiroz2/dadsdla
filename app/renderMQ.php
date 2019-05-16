@@ -5,13 +5,15 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Render;
 
-
 class renderMQ extends Render{
     public function assemble($mtx,$currency,$value,$year){
     	echo "<table style='width: 100%; zoom:80%;'>";
 			echo "<tr>";
-				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:18px;'> Monthly (".$currency."/".$value.") - ".$year." </span></center></th>";
+				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> Monthly (".$currency."/".strtoupper($value).") - ".$year." </span></center></th>";
 			echo "</tr>";
+
+			echo "<tr><td>&nbsp;</td></tr>";
+
 			for ($m=0; $m < sizeof($mtx); $m++) { 
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					echo "<tr>";

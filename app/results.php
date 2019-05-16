@@ -154,4 +154,17 @@ class results extends Model{
 
         return $rtr;
     }
+
+    public function TruncateName($form){
+        
+        if ($form == 'mini_header') {
+            $newForm = "Header";
+        }elseif ($form == 'cmaps') {
+            $newForm = "CMAPS";
+        }else{
+            $newForm = "IBMS";
+        }
+
+        return $newForm;
+    }
 }
