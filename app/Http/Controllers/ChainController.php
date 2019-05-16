@@ -45,32 +45,12 @@ class ChainController extends Controller{
     	$db = new dataBase();
 		$chain = new chain();		
 		$i = new import();
-
-		$con = $db->openConnection('firstMatch');	
-		
-		/*$spreadSheet = $i->base();
+		$con = $db->openConnection('firstMatch');			
+		$spreadSheet = $i->base();
 		unset($spreadSheet[0]);
-		unset($spreadSheet[1]);		
-		unset($spreadSheet[2]);		
-		$spreadSheet = array_values($spreadSheet);
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
-				$pivot = $s;
-			}
-		}
-		unset($spreadSheet[$pivot]);
-		$spreadSheet = array_values($spreadSheet);
-				
-		$table = 'mini_header';		
-		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
-
-		if($miniHeaderBool){
-			$msg = "Data insert successfully !!! ";
-		}else{
-			$msg = "Error, try it again !!!";
-		}
-		var_dump($msg);
-		//return back()->with('firstChainResponse',$msg);*/
+		$spreadSheet = array_values($spreadSheet);				
+		$table = 'cmaps';		
+		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);		
     }
 
 
@@ -100,13 +80,7 @@ class ChainController extends Controller{
 		$table = 'mini_header';		
 		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
 
-		if($miniHeaderBool){
-			$msg = "Data insert successfully !!! ";
-		}else{
-			$msg = "Error, try it again !!!";
-		}
 		
-		//return back()->with('firstChainResponse',$msg);
     }
 
     public function secondChain(){
@@ -119,7 +93,13 @@ class ChainController extends Controller{
 		$sCon = $db->openConnection('secondMatch');	
     	$table = Request::get('table');
 
-    	$bool = $chain->secondChain($sql,$con,$fCon,$sCon,$table);
+    	if($table == 'cmaps'){
+    		$year = Request::get('year');
+    	}else{
+    		$year = false;
+    	}
+
+    	$bool = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
 
     }
 

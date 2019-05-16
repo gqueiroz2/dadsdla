@@ -45,6 +45,9 @@ class excelSheets extends excel{
 				break;
 			case 'sales_rep_unit':
 				$bool = $this->salesRepUnit($con,$table,$spreadSheet);
+				break;
+			case 'sales_rep_status':
+				$bool = $this->salesRepStatus($con,$table,$spreadSheet);
 				break;			
 			case 'ytd':
 				$bool = $this->ytd($con,$table,$spreadSheet);
@@ -214,6 +217,15 @@ class excelSheets extends excel{
 		}
 	}
 
+	public function salesRepStatus($con,$table,$spreadSheet){
+		$columns = $this->salesRepStatusColumns;
+		$spreadSheet = $this->assembler($spreadSheet,$columns);
+		$into = $this->into($columns);		
+		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+			$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
+		}
+	}
+
 	public function planByBrand($con,$table,$spreadSheet){
 		$columns = $this->planByBrandColumns;
 
@@ -240,6 +252,7 @@ class excelSheets extends excel{
 
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
+	public $salesRepStatusColumns = array('sales_rep_id','status','year');
 	public $ytdColumns = array('campaign_sales_office_id', 'sales_representant_office_id','brand_id','sales_rep_id', 'client_id','agency_id','campaign_currency_id','year','month','brand_feed','client_product','order_reference','campaign_reference','spot_duration','impression_duration','num_spot','gross_revenue','net_revenue','net_net_revenue','gross_revenue_prate','net_revenue_prate','net_net_revenue_prate');
 	public $brandUnit = array('brand_id','origin_id','name');
 

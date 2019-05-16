@@ -31,17 +31,25 @@ class chain extends excel{
 		return $bool;
 	}
 
-	public function insert($con,$spreadSheet,$columns,$table,$into){
-		
-		$values = $this->values($spreadSheet,$columns);
+	public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
+
+		if($nextColumns && $table = 'cmaps'){
+            $values = $this->values($spreadSheet,$columns,$nextColumns);
+        }else{
+            $values = $this->values($spreadSheet,$columns);
+        }
 		$ins = " INSERT INTO $table ($into) VALUES ($values)";
-		echo($ins)."<br>";		
+		//echo($ins)."<br>";		
 		
 		if($con->query($ins) === TRUE ){
-			$error = false;
+            $error = false;
+
 		}else{
 			if($table == 'cmaps'){
 				$error = $spreadSheet['decode'];
+                echo($ins)."<br>";      
+                var_dump($ins);
+                var_dump(mysqli_error($con));
 			}elseif($table == 'mini_header'){
 				//var_dump($ins);
 				echo($ins)."<br>";		
@@ -65,8 +73,9 @@ class chain extends excel{
 				$error = true;
 			}
 		}
-		return $error;
 		
+        return $error;
+        
 	}
 
 	public function miniHeader($con,$table,$spreadSheet,$base){
@@ -110,14 +119,36 @@ class chain extends excel{
 		
 	}
 
-	public function secondChain($sql,$con,$fCon,$sCon,$table){
-    	$base = new base();
+    public function cmaps($con,$table,$spreadSheet,$base){
+        $columns = $this->cmapsColumnsF;
+        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$table);
+        $into = $this->into($columns);       
+        
+              
+        $check = 0;
+        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+            $bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
+            if($bool){
+                $check++;
+            }
+        }           
+        $rtr = false;
+        if($check == sizeof($spreadSheet)){
+            $rtr = true;
+        }
+
+        return $rtr;
+        
+    }
+
+	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
+        $base = new base();
     	$columns = $this->defineColumns($table,'first');
     	$columnsS = $this->defineColumns($table,'second');
-    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
+        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
     	$into = $this->into($columnsS);		
-    	$next = $this->handleForNextTable($con,$table,$current,$columns);
-   		$bool = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into);
+        $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
+        $bool = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
    		return $bool;
     }  
 
@@ -137,13 +168,25 @@ class chain extends excel{
     		$cleanedValues = $current;
     	}
     	
-    	$next = $this->handleForLastTable($con,$cleanedValues,$columnsS);
+    	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
     	$bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
     }
 
      public function thirdToDLA($sql,$con,$tCon,$table){
     	$base = new base(); 
     	
+    	if($table == 'ytd' || $table = 'cmaps'){
+
+    		$delete = "DELETE FROM $table WHERE(year = '2019')";
+
+    		$con->query($delete);
+
+    	}elseif($table == 'mini_header'){
+
+    	}else{
+
+    	}
+
     	$columns = $this->defineColumns($table,'third');
     	
     	$into = $this->into($columns);
@@ -189,20 +232,28 @@ class chain extends excel{
     	return $current;
     }
 
-    public function handleForLastTable($con,$current,$columns){
+    public function handleForLastTable($con,$table,$current,$columns){
     	/*
     	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
     	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
     	*/
-    	for ($c=0; $c < sizeof($current); $c++) { 
-    		$current[$c]['agency_id'] = $current[$c]['campaign_sales_office_id'];
-    		$current[$c]['client_id'] = $current[$c]['campaign_sales_office_id'];
-    	}
+
+        if($table == 'cmaps'){
+        	for ($c=0; $c < sizeof($current); $c++) { 
+                $current[$c]['agency_id'] = 1;
+                $current[$c]['client_id'] = 1;
+            }
+        }else{
+            for ($c=0; $c < sizeof($current); $c++) { 
+                $current[$c]['agency_id'] = $current[$c]['campaign_sales_office_id'];
+                $current[$c]['client_id'] = $current[$c]['campaign_sales_office_id'];
+            }            
+        }
 		return $current;
     }
 
 
-    public function handleForNextTable($con,$table,$current,$columns){
+    public function handleForNextTable($con,$table,$current,$columns,$year){
     	$r = new region;
     	$sr = new salesRep();
     	$b = new brand();
@@ -211,20 +262,25 @@ class chain extends excel{
     	$brands = $b->getBrandUnit($con);
     	$salesReps = $sr->getSalesRepUnit($con);
     	$currencies = $pr->getCurrency($con);
-    	for ($c=0; $c < sizeof($current); $c++) { 
+    	
+        for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
-    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies);
+    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year);
     			$current[$c][$tmp[1]] = $tmp[0];
     			if($columns[$cc] != $tmp[1]){
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
+
+            $current[$c]['year'] = $year;
     	}
+
 		return $current;
     }
 
-    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies){
-    		if($column == 'campaign_sales_office'){
+    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year){
+    		
+            if($column == 'campaign_sales_office'){
     			
     			$rtr =  array(false,'campaign_sales_office_id');
 
@@ -234,7 +290,17 @@ class chain extends excel{
     				}
     			}
     			
-    		}elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
+    		}elseif($column == 'package'){
+                
+                if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
+                    $bool = 1;
+                }else{
+                    $bool = 0;
+                }
+
+                $rtr =  array($bool,'package');
+
+            }elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
     			
     			$rtr =  array(false,'campaign_sales_office_id');
 
@@ -261,7 +327,7 @@ class chain extends excel{
             	$rtr =  array(false,'brand_id');
             	
             	for ($b=0; $b < sizeof($brands); $b++) { 
-    				if($current == $brands[$b]['brandUnit']){	
+    				if( strtoupper( $current ) == $brands[$b]['brandUnit']){	
     					$rtr =  array( $brands[$b]['brandID'],'brand_id');
     				}
     			}
@@ -312,10 +378,14 @@ class chain extends excel{
     	}
     }
 
-    public function insertToNextTable($con,$table,$columns,$current,$into){
+    public function insertToNextTable($con,$table,$columns,$current,$into,$nextColumns){
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
+    		if($nextColumns && $table == 'cmaps'){
+                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
+            }else{
+                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
+            }
     		if($bool[$c]){
     			$count++;
     		}
@@ -340,7 +410,9 @@ class chain extends excel{
 
     public function fix($column,$toFix){
     	if( $column == 'gross_revenue' ||
+            $column == 'gross' ||
 		    $column == 'net_revenue' ||						
+            $column == 'net' ||
 		    $column == 'net_net_revenue' ||						
 		    $column == 'gross_revenue_prate' ||
 		    $column == 'net_revenue_prate' ||						
@@ -384,8 +456,9 @@ class chain extends excel{
 		}
 	}
 
-	public function assembler($spreadSheet,$columns,$base){
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+	public function assembler($spreadSheet,$columns,$base,$table = false){
+		
+        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			for ($c=0; $c < sizeof($columns); $c++) { 
 				$bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
 				if($bool){
@@ -411,8 +484,14 @@ class chain extends excel{
 					}else{
 						if($columns[$c] == 'campaign_option_start_date'){
 							$spreadSheetV2[$s][$columns[$c]] = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
-						}elseif($columns[$c] == 'month'){
-							$spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
+						}if($columns[$c] == 'obs'){
+                            $spreadSheetV2[$s][$columns[$c]] = "OBS";
+                        }elseif($columns[$c] == 'month'){
+							if($table){
+                                $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
+                            }else{
+                                $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
+                            }
 						}else{	
 							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
 						}
@@ -438,29 +517,33 @@ class chain extends excel{
 		return $into;
 	}
 
-	public function values($spreadSheet,$columns){
+	public function values($spreadSheet,$columns,$nextColumns = false){
 		
-
-
 		$values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
-			$values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$columns[$c]] )."\"";
-			if($c != (sizeof($columns) - 1) ){
+    		
+            if($nextColumns){   
+                if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
+                    $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
+                }else{
+                    $values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$nextColumns[$c]] )."\"";
+                }
+            }else{
+                if($columns[$c] == "gross" || $columns[$c] == "net" || $columns[$c] == "discount"){
+                    $values .= "\"".round($spreadSheet[$columns[$c]],5)."\"";
+                }else{
+                    $values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$columns[$c]] )."\"";
+                }
+            }
+			
+            if($c != (sizeof($columns) - 1) ){
 				$values .= ", ";
 			}
 		}
 		return $values;
 	}
 
-	public function cmaps($con,$table,$spreadSheet){
-		$columns = $this->cmapsColumns;
-		$spreadSheet = $this->assembler($spreadSheet,$columns);
-		$into = $this->into($columns);		
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			//$bool[$s] = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-		}			
-		return $bool;
-	}
+	
 
 	public function defineColumns($table,$recurrency){
 
@@ -522,9 +605,112 @@ class chain extends excel{
     }
 
 
-	public $planByBrandColumns = array('sales_office_id','currency_id','brand_id','source','year','month','type_of_revenue','revenue');
 
-	public $ytdColumnsF = array(
+    public $cmapsColumnsF = array('decode',
+                                  'month',
+                                  'map_number',
+                                  'sales_rep',
+                                  'package',
+                                  'client',
+                                  'product',
+                                  'segment',
+                                  'agency',
+                                  'brand',
+                                  'pi_number',
+                                  'gross',                                  
+                                  'net',
+                                  'market',
+                                  'discount',
+                                  'client_cnpj',
+                                  'agency_cnpj',
+                                  'media_type',
+                                  'log',
+                                  'ad_sales_support',
+                                  'obs',
+                                  'sector',
+                                  'category'
+                              );
+
+    public $cmapsColumnsS = array('decode',
+                                  'year',
+                                  'month',
+                                  'map_number',                                  
+                                  'sales_rep_id',
+                                  'package',                                  
+                                  'client',
+                                  'product',
+                                  'segment',
+                                  'agency',
+                                  'brand_id',
+                                  'pi_number',
+                                  'gross',                                  
+                                  'net',
+                                  'market',
+                                  'discount',
+                                  'client_cnpj',
+                                  'agency_cnpj',
+                                  'media_type',
+                                  'log',
+                                  'ad_sales_support',
+                                  'obs',
+                                  'sector',
+                                  'category'
+                              );
+
+    public $cmapsColumnsT = array('decode',
+                                  'year',
+                                  'month',
+                                  'map_number',
+                                  'sales_rep_id',
+                                  'package',                                  
+                                  'client_id',
+                                  'product',
+                                  'segment',
+                                  'agency_id',
+                                  'brand_id',                                  
+                                  'pi_number',
+                                  'gross',                                  
+                                  'net',
+                                  'market',
+                                  'discount',
+                                  'client_cnpj',
+                                  'agency_cnpj',
+                                  'media_type',
+                                  'log',
+                                  'ad_sales_support',
+                                  'obs',
+                                  'sector',
+                                  'category'
+                              );
+
+
+    public $cmapsColumns = array('sales_rep_id',
+                                  'client_id',
+                                  'agency_id',
+                                  'brand_id',                                  
+                                  'decode',
+                                  'year',
+                                  'month',
+                                  'map_number',
+                                  'package',                                  
+                                  'product',
+                                  'segment',
+                                  'pi_number',
+                                  'gross',                                  
+                                  'net',
+                                  'market',
+                                  'discount',
+                                  'client_cnpj',
+                                  'agency_cnpj',
+                                  'media_type',
+                                  'log',
+                                  'ad_sales_support',
+                                  'obs',
+                                  'sector',
+                                  'category'
+                              );
+
+    public $ytdColumnsF = array(
 		 					'campaign_sales_office', 
 		 					'sales_representant_office',
 		 					'year',
@@ -692,9 +878,11 @@ class chain extends excel{
 
 	public $miniHeaderColumns = array('campaign_sales_office_id','sales_rep_sales_office_id','brand_id','sales_rep_id','client_id','agency_id','campaign_currency_id','sales_group_id','year','month','brand_feed','sales_rep_role','order_reference','campaign_reference','campaign_status_id','campaign_option_desc','campaign_class_id','campaign_option_start_date','campaign_option_target_spot','campaign_option_spend','gross_revenue');
 
-	public $cmapsColumns = array('sales_group_id','sales_rep_id','client_id','agency_id','brand_id','decode','year','month','map_number','package','product','segment','pi_number','gross','net','market','discount','client_cnpj','agency_cnpj','media_type','log','ad_sales_support','obs','sector','category');
+	
 
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
 	
+    public $planByBrandColumns = array('sales_office_id','currency_id','brand_id','source','year','month','type_of_revenue','revenue');
+
 }

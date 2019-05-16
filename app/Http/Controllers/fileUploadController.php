@@ -30,6 +30,7 @@ class fileUploadController extends Controller{
 							array( 'table' => 'rolling_forecast', 'show' => 'Rolling Forecast'),
 							array( 'table' => 'sales_rep', 'show' => 'Sales Rep'),
 							array( 'table' => 'sales_rep_unit', 'show' => 'Sales Rep Unit'),
+							array( 'table' => 'sales_rep_status', 'show' => 'Sales Rep Status'),
 							array( 'table' => 'brand', 'show' => 'Brand'),
 							array( 'table' => 'brand_unit', 'show' => 'Brand Unit')
 

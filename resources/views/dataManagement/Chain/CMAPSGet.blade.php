@@ -79,7 +79,18 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="cmaps">                
+								    	</div>
+								    </div>
+								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											<select name="year" class="form-control">
+												<option value="2019" selected="true"> 2019</option>
+												<option value="2018"> 2018</option>
+											</select>
 								    	</div>
 								    </div>
 								</div>
@@ -116,7 +127,7 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="cmaps">                
 								    	</div>
 								    </div>
 								</div>
@@ -152,7 +163,7 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="mini_header">                
+											<input type="hidden" name="table" value="cmaps">                
 								    	</div>
 								    </div>
 								</div>

@@ -7,18 +7,18 @@ use App\dataBase;
 
 class base extends Model{
 
-    protected $month = array( array("Jan",1, "January"),
-                              array("Feb",2, "February"),
-                              array("Mar",3, "March"),
-                              array("Apr",4, "April"),
-                              array("May",5, "May"),
-                              array("Jun",6, "June"),
-                              array("Jul",7, "July"),
-                              array("Aug",8, "August"),
-                              array("Sep",9, "September"),
-                              array("Oct",10, "October"),
-                              array("Nov",11, "November"),
-                              array("Dec",12, "December")
+    protected $month = array( array("Jan",1, "January","JAN"),
+                              array("Feb",2, "February","FEV"),
+                              array("Mar",3, "March","MAR"),
+                              array("Apr",4, "April","ABR"),
+                              array("May",5, "May","MAI"),
+                              array("Jun",6, "June","JUN"),
+                              array("Jul",7, "July","JUL"),
+                              array("Aug",8, "August","AGO"),
+                              array("Sep",9, "September","SET"),
+                              array("Oct",10, "October","OUT"),
+                              array("Nov",11, "November","NOV"),
+                              array("Dec",12, "December","DEZ")
 
                             );
 
@@ -27,6 +27,17 @@ class base extends Model{
         $newMonth = trim($tmp[0]);
         for ($m=0; $m < sizeof($this->month); $m++) { 
             if($newMonth == $this->month[$m][2]){
+                $intMonth = $this->month[$m][1];
+            }
+        }
+        return $intMonth;
+    }
+
+    public function monthToIntCMAPS($month){
+        $tmp = explode(" ",$month);
+        $newMonth = trim($tmp[0]);
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            if($newMonth == $this->month[$m][3] ){
                 $intMonth = $this->month[$m][1];
             }
         }
