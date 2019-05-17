@@ -45,7 +45,7 @@
 			<div class="col">				
 				<table class="table table-bordered" style="width: 100%;">
 					<tr>
-						<th class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume ({{$currencyS}}/{{$valueS}}) - {{$cYear}} </span> </th>
+						<th class="darkBlue center" colspan="11"><span style="font-size:18px;"> Resume - {{$salesShow}} ({{$currencyS}}/{{$valueS}}) - {{$cYear}} </span> </th>
 					</tr>
 					<tr>
 						<th class="darkBlue"> Month </th>
