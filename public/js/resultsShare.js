@@ -132,5 +132,20 @@
       }
 
     });
+
+    $('#source').change(function(){
+      var source = $(this).val();
+      $.ajax({
+        url:"/ajaxResults/valueBySource",
+        method:"POST",
+        data:{source},
+          success: function(output){
+            $('#value').html(output);
+          },
+          error: function(xhr, ajaxOptions,thrownError){
+            alert(xhr.status+" "+thrownError);
+        }
+      }); 
+    });
   });
 

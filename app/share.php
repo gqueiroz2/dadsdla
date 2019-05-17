@@ -66,7 +66,7 @@ class share extends results
 
         for ($m=0; $m <sizeof($month) ; $m++) {
             for ($b=0; $b <sizeof($brand); $b++) {
-                if ($m > $actualMonth-1) {
+                if ($m > $actualMonth-1 && ($source == "CMAPS" ||$source == "Header")) {
                     if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($region == "1") {
@@ -81,6 +81,8 @@ class share extends results
                         $sourceBrand[$m][$b] = "IBMS";
                     }elseif($brand[$b][1] == "FN" && $region == "1"){
                         $sourceBrand[$m][$b] = "CMAPS";
+                    }elseif ($brand[$b][1] == "FN" && $region != "1"){
+                        $sourceBrand[$m][$b] = "IBMS";
                     }else{
                         $sourceBrand[$m][$b] = $source;
                     }
@@ -309,17 +311,19 @@ class share extends results
         }
 
         $brandColor = array();
+        $brandTextColor = array();
 
         $mtx["brand"] = $brand;
         $mtx["salesRep"] = $salesRep;
         $mtx["values"] = $tmp;
 
-
         for ($b=0; $b <sizeof($brand) ; $b++) { 
             $brandColor[$b] = $base->getBrandColor($brand[$b]);
+            $brandTextColor[$b] = $base->getBrandTextColor($brand[$b]);
         }
 
-        $mtx["brandColor"] = $brandColor;        
+        $mtx["brandColor"] = $brandColor;    
+        $mtx["brandTextColor"] = $brandTextColor;
 
         $dn = array();
         for ($s=0; $s <sizeof($salesRep) ; $s++) { 

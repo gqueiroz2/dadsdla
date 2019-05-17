@@ -35,6 +35,20 @@ $(document).ready(function(){
                         alert(xhr.status+" "+thrownError);
                     }
                   });
+
+                  var source = $('#thirdPos').val();
+                  $.ajax({
+                    url:"/ajaxResults/valueBySource",
+                    method:"POST",
+                    data:{source},
+                      success: function(output){
+                        $('#value').html(output);
+                      },
+                      error: function(xhr, ajaxOptions,thrownError){
+                        alert(xhr.status+" "+thrownError);
+                    }
+                  });                  
+
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                   alert(xhr.status+" "+thrownError);
@@ -78,9 +92,25 @@ $(document).ready(function(){
       $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
+      $('#value').empty().append("<option>Select Source</option>");
     }
 
 	});
+
+  $('#thirdPos').change(function(){
+    var source = $('#thirdPos').val();
+    $.ajax({
+      url:"/ajaxResults/valueBySource",
+      method:"POST",
+      data:{source},
+        success: function(output){
+          $('#value').html(output);
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+      }
+    }); 
+  });
 
 	$('#year').click(function(){
 		var year = $(this).val();
