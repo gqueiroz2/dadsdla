@@ -208,4 +208,16 @@ class ajaxController extends Controller{
             echo "<option value='Header'> Header </option>";
         }
     }
+
+    public function valueBySource(){
+        $source = Request::get('source');
+        var_dump($source);
+
+        if ($source == "mini_header" || $source == "Header") {
+            echo "<option value='gross'> Gross </option>";
+        }else{
+            echo "<option value='gross'> Gross </option>";
+            echo "<option value='net'> Net </option>";
+        }    
+    }
 }

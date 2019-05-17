@@ -103,8 +103,7 @@ class Render extends Model{
 
     public function value(){
     	echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
-    		echo "<option value='gross'> Gross </option>";
-    		echo "<option value='net'> Net </option>";
+            echo "<option value=''> Select Source </option>";            
     	echo "</select>";
     }
 
