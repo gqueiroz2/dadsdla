@@ -10,25 +10,45 @@ class results extends Model{
     
     public function generateVector($con,$table,$region,$year,$month,$brand,$currency,$value,$join,$where,$souce = false){
         $sql = new sql();
+        $as = "sum";
+        $currentMonth = intval(date('m'));
+        $cYear = date('Y');
+
         if($table == "cmaps"){
-            if($value == "gross"){
+            if($year == $cYear){
                 $sum = $value;
             }else{
-                $sum = $value;
+                $sum = $value."_revenue";
             }
         }elseif($table == "plan_by_brand"){
             $sum = "revenue";
+        }elseif($table == 'mini_header'){
+            $sum = 'campaign_option_spend';
+        }elseif($table = 'ytd'){
+            $sum = $value."_revenue";
         }else{
-            if($value == "gross"){
-                $sum = $value."_value";
-            }else{
-                $sum = $value."_value";
-            }
+            $sum = $value."_value";
         }
-        $as = "sum";
+        
+
         for ($m=0; $m < sizeof($month); $m++) { 
-            $res[$m] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m]);
-            $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];
+            if($table == 'mini_header'){
+
+                if( ($year != $cYear) || ($m < $currentMonth) ){
+                    $sum = $value."_revenue";
+                    $cTable = 'ytd';
+                }else{
+                    $sum = 'campaign_option_spend';
+                    $cTable = 'mini_header';
+                }
+                $res[$m] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m]);
+                $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];                
+
+            }else{
+
+                $res[$m] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m]);
+                $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];
+            }
         }
         return $vector;
     }

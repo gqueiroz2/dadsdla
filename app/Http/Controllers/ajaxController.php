@@ -146,8 +146,10 @@ class ajaxController extends Controller{
         }else{
             $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
         }
-        $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+        var_dump($salesRep);
 
+        $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+        var_dump($salesRep);
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
             $check = false;            

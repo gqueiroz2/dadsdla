@@ -59,7 +59,6 @@ class sql extends Model{
         }else{
             $info = false;
         }
-
         return $info;
 
     }
