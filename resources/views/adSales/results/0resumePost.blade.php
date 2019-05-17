@@ -29,7 +29,7 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Value: </span></label>
-							{{$render->value()}}
+							{{$render->value2()}}
 						</div>
 						<div class="col">
 							<label> &nbsp; </label>
