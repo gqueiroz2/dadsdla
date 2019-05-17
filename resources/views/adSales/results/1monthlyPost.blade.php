@@ -65,9 +65,18 @@
 		</div>
 	</div>
 
+	<br>
+		
+	<div class="row no-gutters">
+		<div class="col-9"></div>
+		<div class="col-3" style="color: #0070c0;font-size: 25px">
+			Monthly ({{$form}}) {{$year}}
+		</div>
+	</div>
+
 	<div class="row mt-2">
 		<div class="col table-responsive">
-			{{ $render->assemble($mtx,$currencyS,$value,$year) }}
+			{{ $render->assemble($mtx,$currencyS,$value,$year,$form) }}
 		</div>
 	</div>
 </div>

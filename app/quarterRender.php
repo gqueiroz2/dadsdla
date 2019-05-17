@@ -7,14 +7,14 @@ use App\Render;
 
 class quarterRender extends Render
 {
-    public function assemble($mtx, $currency, $value, $year){
+    public function assemble($mtx, $currency, $value, $year, $form){
     	
 		//var_dump($mtx);
 		
     	echo "<table style='width: 100%; zoom:80%;'>";
     		
     		echo "<tr>";
-				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> Monthly (".$currency[0]['name']."/".strtoupper($value).") - ".$year." </span></center></th>";
+				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> Quarter :(".$form.") ".$year." (".$currency[0]['name']."/".strtoupper($value).") </span></center></th>";
 			echo "</tr>";
 
 			echo "<tr><td>&nbsp;</td></tr>";

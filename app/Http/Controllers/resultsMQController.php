@@ -79,9 +79,12 @@ class resultsMQController extends Controller{
                 $mq = new resultsMQ();
                 $lines = $mq->lines($con,$tmp,$month,$secondPos,$brandID,$year,$regionID,$value,$firstPos);
 
-                $mtx = $mq->assembler($con,$brandID,$lines,$month,$year);
+                $mtx = $mq->assembler($con,$brandID,$lines,$month,$year,$firstPos);
                 $render = new renderMQ();
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx'));
+
+                $form = $mq->TruncateName($secondPos);
+
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form'));
         }
 
 
@@ -146,14 +149,16 @@ class resultsMQController extends Controller{
                 $source = strtoupper(Request::get("secondPos"));
 
                 $mq = new resultsMQ();
-                $lines = $mq->lines($con,$tmp,$base->getMonth(),$form,$brands,$year,$region,$value,$source);
+                $lines = $mq->lines($con,$pRate,$base->getMonth(),$form,$brands,$year,$region,$value,$source);
                 //var_dump($quarter);
-                $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year);
+                $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year,$source);
                 
                 $render = new Render();
                 $qRender = new quarterRender();
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year'));
+                $form = $mq->TruncateName($form);
+
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form'));
 
 	} 
 

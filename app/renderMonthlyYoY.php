@@ -10,13 +10,13 @@ class renderMonthlyYoY extends Model{
 	*$mtx = matriz dos meses
 	*$quarters = quarters
 	*/
-	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands){
+	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source){
 		
 		echo "<table style='width: 100%; zoom:80%;'>";
 
 			echo "<th class='dc center' colspan='13'>";
 				echo "<span style='font-size:24px;''>";
-					echo "$form to Monthly Year Over Year : (".strtoupper($pRate[0]['name'])."/".strtoupper($value).")";
+					echo "Monthly Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")";
 				echo "</span>";
 			echo "</th>";
 
@@ -28,7 +28,7 @@ class renderMonthlyYoY extends Model{
                 $this->renderHead($months, $i, $j, "dc", "vix", "darkBlue");
             echo "</tr>";
            	echo "<tr>";
-           		$this->renderHead2($year, "dc", "vix", "darkBlue");
+           		$this->renderHead2($year, "dc", "vix", "darkBlue", $source);
            	echo "</tr>";
             for($b = 0; $b < sizeof($brands); $b++){
             	echo "<tr>";
@@ -79,7 +79,10 @@ class renderMonthlyYoY extends Model{
 	*renderiza o segundo cabeçalho (actual passado, target, actual atual)
 	*as cores são sempre essas 3 e são determinadas pelo numero da coluna
 	*/
-    public function renderHead2($year, $firstColor, $secondColor, $thirdColor){
+    public function renderHead2($year, $firstColor, $secondColor, $thirdColor, $source){
+
+    	$source = strtolower($source);
+        $source = ucfirst($source);
 
     	$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
@@ -99,9 +102,9 @@ class renderMonthlyYoY extends Model{
 				$class = $thirdClass;
 			}
 
-			echo "<td $class>Real".($year-1)."</td>";
-			echo "<td $class>Target".$year."</td>";
-			echo "<td $class>Real".$year."</td>";
+			echo "<td $class>Actual ".($year-1)."</td>";
+			echo "<td $class>$source ".$year."</td>";
+			echo "<td $class>Actual ".$year."</td>";
 		}
 
     }
@@ -154,14 +157,18 @@ class renderMonthlyYoY extends Model{
 
 
     //aqui começa a renderização do modal, os parametros passados ja foram explicados nas funções da tabela principal
-    public function assembleModal($brands, $quarters, $year){
+    public function assembleModal($brands, $quarters, $year, $source){
+
+    	$source = strtolower($source);
+        $source = ucfirst($source);
+    	
     	echo "<table style='width: 100%; zoom:80%;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");
 			echo "</tr>";
 	        
 	        echo "<tr>";
-	        	$this->renderModalHeader2($year, "dc", "darkBlue");
+	        	$this->renderModalHeader2($year, "dc", "darkBlue", $source);
 	    	echo "</tr>";
 
 			for($i = 0; $i < sizeof($brands); $i++){
@@ -188,7 +195,7 @@ class renderMonthlyYoY extends Model{
     	echo "<td $secondClass $style colspan='3'>TOTAL</td>";
     }
 
-    public function renderModalHeader2($year, $firstcolor, $secondColor){
+    public function renderModalHeader2($year, $firstcolor, $secondColor, $source){
     	
     	$firstClass = "class='center ".$firstcolor."'";
     	$secondClass = "class='center ".$secondColor."'";
@@ -203,9 +210,9 @@ class renderMonthlyYoY extends Model{
     			$class = $firstClass;
     		}
 
-    		echo "<td $class $style colspan='1'>Real ".($year-1)."</td>";
-			echo "<td $class $style colspan='1'>Target ".$year."</td>";
-			echo "<td $class $style colspan='1'>Real ".$year."</td>";
+    		echo "<td $class $style colspan='1'>Actual ".($year-1)."</td>";
+			echo "<td $class $style colspan='1'>$source ".$year."</td>";
+			echo "<td $class $style colspan='1'>Actual ".$year."</td>";
     	}
     }
 

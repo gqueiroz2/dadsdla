@@ -109,7 +109,7 @@
         			</button>
 				</div>
 				<div class="modal-body">
-					{{ $renderMonthlyYoY->assembleModal($brands, $matrix[1], $year) }}
+					{{ $renderMonthlyYoY->assembleModal($brands, $matrix[1], $year, $source) }}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -125,7 +125,7 @@
 			<div class="col">
 
 				<tr><td>&nbsp;</td></tr>
-				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands)}}	
+				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands, $source)}}	
 			</div>
 		</div>
 	</div>
