@@ -35,23 +35,26 @@ class resultsYoY extends results {
         return $lines;
     }
 
-    public function assemblers($brands, $lines, $months, $year){        
+    public function assemblers($brands, $lines, $months, $year, $source){        
+
+        $source = strtolower($source);
+        $source = ucfirst($source);
 
         for ($i = 0; $i < sizeof($brands); $i++) {
 
             $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
-                                                $months, $year, $brands[$i]);
+                                                $months, $year, $brands[$i], $source);
         }
 
         if (sizeof($brands) > 1) {
-            $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $months, $year);
+            $matrix[sizeof($brands)] = $this->assemblerDN($matrix, sizeof($brands), $months, $year, $source);
         }
         
         return $matrix;
 
     }
 
-    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year, $brand){
+    public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year, $brand, $source){
 
         $valueCurrentYearSum = 0;
         $targetSum = 0;
@@ -59,7 +62,7 @@ class resultsYoY extends results {
 
         $matrix[0][0] = $brand[1];
         $matrix[1][0] = "Actual ".($year-1);
-        $matrix[2][0] = "Target $year";
+        $matrix[2][0] = "$source $year";
         $matrix[3][0] = "Actual $year";
         $matrix[4][0] = "Dif. 3° - 2°";
         $matrix[5][0] = "Dif. YoY";
@@ -94,11 +97,11 @@ class resultsYoY extends results {
         return $matrix;
     }
 
-    public function assemblerDN($matrix, $pos, $months, $year){
+    public function assemblerDN($matrix, $pos, $months, $year, $source){
 
         $currentMatrix[0][0] = "DN";
         $currentMatrix[1][0] = "Actual ".($year-1);
-        $currentMatrix[2][0] = "Target $year";
+        $currentMatrix[2][0] = "$source $year";
         $currentMatrix[3][0] = "Actual $year";
         $currentMatrix[4][0] = "Dif. 3° - 2°";
         $currentMatrix[5][0] = "Dif. YoY";

@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderYoY extends Model {
     
-    public function source($region, $year){
+    public function source($region){
     	echo "<select name='source' style='width:100%;'>";
-            echo "<option value='ytd'> IBMS - $year </option>";
+            echo "<option value='ytd'> IBMS </option>";
             
             if ($region == 'Brazil') {
-                echo "<option value='cmaps'> CMAPS - $year </option>";
+                echo "<option value='cmaps'> CMAPS </option>";
             }else{
-                echo "<option value='mini_header'> Header - $year </option>";//somente se for brasil a região selecionada
+                echo "<option value='mini_header'> Header </option>";//somente se for brasil a região selecionada
             }
     		
     	echo "</select>";	

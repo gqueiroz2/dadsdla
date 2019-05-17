@@ -81,9 +81,9 @@ class resultsMonthlyYoYController extends Controller{
     	$monthlyYoY = new resultsMonthlyYoY();
 
     	//pegando valores das colunas das tabelas
-        $lines = $monthlyYoY->lines($con, $pRate[0]['name'], $base->getMonth(), $form, $brands, $year, $region, $value, $source);
+        $lines = $monthlyYoY->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $region, $value, $source);
         
-        $matrix = $monthlyYoY->assemblers($brands, $lines, $base->getMonth(), $year);
+        $matrix = $monthlyYoY->assemblers($brands, $lines, $base->getMonth(), $year, $source);
         
         //var_dump($matrix[0]);
 
@@ -97,7 +97,7 @@ class resultsMonthlyYoYController extends Controller{
 
         $form = $monthlyYoY->TruncateName($form);
         
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value'));
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source'));
 	}
 
 }

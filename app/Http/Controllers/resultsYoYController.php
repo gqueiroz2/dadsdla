@@ -79,10 +79,10 @@ class resultsYoYController extends Controller{
 
         //pegando valores das linhas das tabelas
         //pegando do banco as informações (nenhuma conta)
-        $lines = $yoy->lines($con, $pRate[0]['name'], $base->getMonth(), $form, $brands, $year, $region, $value, $source);
+        $lines = $yoy->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $region, $value, $source);
         
-        //criando matriz que será renderizada        
-    	$matrix = $yoy->assemblers($brands, $lines, $base->getMonth(), $year);
+        //criando matriz que será renderizada     
+    	$matrix = $yoy->assemblers($brands, $lines, $base->getMonth(), $year, $source);
         //var_dump($matrix);
 
     	$render = new Render();
@@ -95,9 +95,6 @@ class resultsYoYController extends Controller{
         }
 
         $form = $yoy->TruncateName($form);
-
-        //var_dump($brands);
-        //var_dump($matrix);
 
 	   	  return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region'));
     }

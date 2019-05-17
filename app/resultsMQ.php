@@ -27,25 +27,32 @@ class resultsMQ extends results{
 
     }
 
-    public function assembler($con,$brandID, $lines, $month, $year){
+    public function assembler($con,$brandID, $lines, $month, $year,$source){
+
+        $source = strtolower($source);
+        $source = ucfirst($source);
+
     	for ($i = 0; $i < sizeof($brandID); $i++) {
     		$brandName[$i] = $brandID[$i];
-            $matrix[$i] = $this->handler($brandName[$i],$lines[0][$i],$lines[1][$i],$month,$year);
+            $matrix[$i] = $this->handler($brandName[$i],$lines[0][$i],$lines[1][$i],$month,$year,$source);
             
         }
 
-        $matrix[sizeof($brandID)] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year);
+        if (sizeof($brandID) > 1) {
+            $matrix[sizeof($brandID)] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year,$source);
+        }
+        
 
         return $matrix;
     }
 
-    public function handler($brand, $valueCurrentYear, $target, $month, $year){
+    public function handler($brand, $valueCurrentYear, $target, $month, $year, $source){
 
         $valueCurrentYearSum = 0;
         $targetSum = 0;
-     
+
         $matrix[0][0] = $brand[1];
-        $matrix[1][0] = "Target $year";
+        $matrix[1][0] = "$source $year";
         $matrix[2][0] = "Actual $year";
         $matrix[3][0] = "Var(%)";
         $matrix[4][0] = "Absolut Var.";
@@ -86,10 +93,12 @@ class resultsMQ extends results{
 
     }
 
-    public function assemblerQuarters($con,$brandID, $lines, $month, $year){
+    public function assemblerQuarters($con,$brandID, $lines, $month, $year, $source){
         
-        $matrix = $this->assembler($con,$brandID, $lines, $month, $year);
-        //var_dump($matrix);
+        $matrix = $this->assembler($con,$brandID, $lines, $month, $year, $source);
+        
+        $source = strtolower($source);
+        $source = ucfirst($source);
 
         for ($i=0; $i < sizeof($matrix); $i++) { 
             for ($j=0; $j < sizeof($matrix[$i]); $j++) { 
@@ -110,7 +119,7 @@ class resultsMQ extends results{
             $quarter[$b][0][6] = "S2";
             $quarter[$b][0][7] = "Total";
 
-            $quarter[$b][1][0] = "Target $year";
+            $quarter[$b][1][0] = "$source $year";
             $quarter[$b][2][0] = "Actual $year";
             $quarter[$b][3][0] = "Var(%)";
             $quarter[$b][4][0] = "Absolut Var.";
@@ -173,10 +182,10 @@ class resultsMQ extends results{
 
     }
 
-    public function assemblerDN($matrix, $pos, $month, $year){
+    public function assemblerDN($matrix, $pos, $month, $year, $source){
         
         $currentMatrix[0][0] = "DN";
-        $currentMatrix[1][0] = "Target $year";
+        $currentMatrix[1][0] = "$source $year";
         $currentMatrix[2][0] = "Actual $year";
         $currentMatrix[3][0] = "Var(%)";
         $currentMatrix[4][0] = "Absolut Var.";

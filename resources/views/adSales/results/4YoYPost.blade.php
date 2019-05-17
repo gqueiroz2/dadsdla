@@ -91,8 +91,6 @@
 			</div>
 		</div>
 
-		<br>
-
 	</div>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">

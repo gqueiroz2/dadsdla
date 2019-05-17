@@ -80,10 +80,19 @@
 		</div>
 	</form>
 
+	<br>
+		
+	<div class="row no-gutters">
+		<div class="col-9"></div>
+		<div class="col-3" style="color: #0070c0;font-size: 25px">
+			Quarter ({{$form}}) {{$year}}
+		</div>
+	</div>
+
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{$qRender->assemble($matrix, $pRate, $value, $year)}}
+				{{$qRender->assemble($matrix, $pRate, $value, $year, $form)}}
 			</div>
 		</div>
 	</div>

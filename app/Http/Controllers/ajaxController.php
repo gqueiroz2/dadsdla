@@ -9,6 +9,7 @@ use App\region;
 use App\dataBase;
 use App\salesRep;
 use App\pRate;
+use App\sql;
 
 class ajaxController extends Controller{
 
@@ -33,21 +34,7 @@ class ajaxController extends Controller{
 
     }
 
-    public function firstPosMonthly(){
-        $year = Request::get("year");
-        echo "<option value='target'> Target ".$year." </option>";
-    }
-
-    public function secondPosMonthly(){
-        $year = Request::get("year");
-        echo "<option value='ibms'> IBMS ".$year." </option>";
-        echo "<option value='cmaps'> CMAPS/Header ".$year." </option>";
-    }
-
     public function firstPosByRegion(){
-
-        $year = Request::get("year");
-        $year -= 1;
 
         $form = Request::get("form");
 
@@ -64,16 +51,29 @@ class ajaxController extends Controller{
         
 
         echo "<select name='font' style='width:100%;'>";
-            echo "<option value='$form'> $showForm - $year </option>";
+            echo "<option value='$form'> $showForm </option>";
         echo "</select>";   
     }
 
     public function secondPosByRegion(){
 
-        $year = Request::get("year");
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
 
+        $sql = new sql();
+
+        $source = $sql->select($con, "DISTINCT source", "plan_by_brand");
+        $valueSource = $sql->fetch($source, array("source"), array("source"));
+        
         echo "<select id='firstPos' value='firstPos' style='width:100%;'>";
-            echo "<option value='target'> Target ".$year." </option>";
+        for ($i=0; $i < sizeof($valueSource); $i++) {
+            if ($valueSource[$i]['source'] != 'ACTUAL') {
+                $showSource = strtolower($valueSource[$i]['source']);
+                $showSource = ucfirst($showSource);
+
+                echo "<option value='".$valueSource[$i]['source']."'> ".$showSource." </option>";   
+            }
+        }
         echo "</select>";  
     }
 
@@ -87,13 +87,9 @@ class ajaxController extends Controller{
         $regions = new region();
         $region = $regions->getRegion($con, array($regionID));
 
-        $year = Request::get("year");
-
         $renderYoY = new renderYoY();
 
-        //var_dump("AKI");
-
-        $renderYoY->source($region[0]['name'], $year);
+        $renderYoY->source($region[0]['name']);
     }
 
 
