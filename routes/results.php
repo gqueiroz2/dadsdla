@@ -53,4 +53,5 @@ Route::group(['prefix' => 'ajaxResults'], function(){
 	Route::post('salesRepGroupByRegion','ajaxController@salesRepGroupByRegion');
 	Route::post('salesRepBySalesRepGroup','ajaxController@salesRepBySalesRepGroup');
 	Route::post('sourceByRegion','ajaxController@sourceByRegion');
+	Route::post('valueBySource','ajaxController@valueBySource');
 });

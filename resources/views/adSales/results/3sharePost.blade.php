@@ -147,15 +147,14 @@
 				legend:'none',
 				pieSliceText: 'label',
 				pieSliceTextStyle: {
-					fontSize:'13',
-					color:'black'
+					fontSize:'13'
 				},
 				slices:{
 					@for($b = 0; $b<sizeof($mtx["brandColor"]); $b++)
 						@if ($b == sizeof($mtx["brandColor"]) -1 ) 
-							{{$b}}: {color: '{{$mtx["brandColor"][$b]}}' }
+							{{$b}}: {textStyle: {color: '{{$mtx["brandTextColor"][$b]}}' },color: '{{$mtx["brandColor"][$b]}}'  }
 						@else
-							{{$b}}: {color: '{{$mtx["brandColor"][$b]}}' },
+							{{$b}}: {textStyle: {color: '{{$mtx["brandTextColor"][$b]}}' },color: '{{$mtx["brandColor"][$b]}}'  },
 						@endif
 					@endfor
 				}
