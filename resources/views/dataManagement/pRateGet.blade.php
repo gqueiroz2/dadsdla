@@ -2,8 +2,12 @@
 
 @section('title', '@')
 
+@section('head')
+    <?php include(resource_path('views/auth.php')); ?>
+@endsection
 @section('content')
 
+@if($userLevel == 'SU')
 	<div class="container-fluid">
 		<div class="row justify-content-center">
 			<div class="col-sm-6">
@@ -182,7 +186,7 @@
 
 									<div class="col">
 										<label> Value: </label>
-										<input class="form-control" type="number" name="value" min="0" max="4000" step="0.00001">
+										<input class="form-control" type="number" name="value" min="0" step="0.00001">
 									</div>									
 								</div>
 
@@ -211,4 +215,6 @@
 
 	</script>
 	-->
+@else
+@endif
 @endsection

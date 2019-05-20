@@ -57,7 +57,7 @@ class share extends results
         
         $brandName = array();
         
-        for ($b=0; $b <sizeof($brand) ; $b++) { 
+        for ($b=0; $b <sizeof($brand) ; $b++) {
             array_push($brandName, $brand[$b][1]);
         }
 

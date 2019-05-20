@@ -11,12 +11,13 @@
 		}
 
 	</style>
+    <?php include(resource_path('views/auth.php')); ?>
 
 @endsection
 
-
 @section('content')
 
+@if($userLevel == 'SU')
 	<div class="container-fluid">
 		<div class="row justify-content-center">
 			<div class="col-sm-6">
@@ -42,4 +43,6 @@
 			</div>
 		</div>
 	</div>
+@else
+@endif
 @endsection
