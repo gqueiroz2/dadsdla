@@ -19,26 +19,12 @@
 
 							<div class="row justify-content-center">
 								<div class="col">
-									<h5> Add a Excel File </h5>
+									<h6> Add a Excel File </h6>
 								</div>
 							</div>
 
-							<div class="row justify-content-center">
-								<div class="col">
-									@if(session('error'))
-										<div class="alert alert-danger">
-  											{{ session('error') }}
-										</div>
-									@endif
-
-									@if(session('response'))
-										<div class="alert alert-info">
-  											{{ session('response') }}
-										</div>
-									@endif
-								</div>
-							</div>
-							<form action="{{ route('fileUploadytdPost') }}" method="POST" enctype="multipart/form-data">
+							
+							<form action="{{ route('ytdFirstChain') }}" method="POST" enctype="multipart/form-data">
 							@csrf
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -48,18 +34,35 @@
 								    </div>
 								</div>
 
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('firstChainError'))
+											<div class="alert alert-danger">
+	  											{{ session('firstChainError') }}
+											</div>
+										@endif
+
+										@if(session('firstChainComplete'))
+											<div class="alert alert-info">
+	  											{{ session('firstChainComplete') }}
+											</div>
+										@endif
+									</div>
+								</div>
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-
-											@if(session('firstChainResponse'))
-												<div class="alert alert-danger">
-		  											{{ session('firstChainResponse') }}
-												</div>
-											@endif
-
+											{{$rC->year()}}					
 										</div>
 									</div>
+								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											<input type="hidden" name="table" value="ytd">
+								    	</div>
+								    </div>
 								</div>
 
 								<div class="row justify-content-end">          
@@ -85,17 +88,19 @@
 								    </div>
 								</div>
 
-								<div class="row justify-content-center">          
-							 		<div class="col">		
-										<div class="form-group">
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('checkElementsError'))
+											<div class="alert alert-danger">
+													{{ session('checkElementsError') }}
+											</div>
+										@endif
 
-											@if(session('secondChainResponse'))
-												<div class="alert alert-danger">
-		  											{{ session('secondChainResponse') }}
-												</div>
-											@endif
-
-										</div>
+										@if(session('checkElementsComplete'))
+											<div class="alert alert-info">
+													{{ session('checkElementsComplete') }}
+											</div>
+										@endif
 									</div>
 								</div>
 
@@ -118,22 +123,24 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="ytd">                
+											<input type="hidden" name="table" value="ytd">
 								    	</div>
 								    </div>
 								</div>
 
-								<div class="row justify-content-center">          
-							 		<div class="col">		
-										<div class="form-group">
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('secondChainError'))
+											<div class="alert alert-danger">
+													{{ session('secondChainError') }}
+											</div>
+										@endif
 
-											@if(session('secondChainResponse'))
-												<div class="alert alert-danger">
-		  											{{ session('secondChainResponse') }}
-												</div>
-											@endif
-
-										</div>
+										@if(session('secondChainComplete'))
+											<div class="alert alert-info">
+													{{ session('secondChainComplete') }}
+											</div>
+										@endif
 									</div>
 								</div>
 
@@ -152,26 +159,29 @@
 							</div>
 							<form action="{{ route('ytdThirdChain') }}" method="POST">
 							@csrf
+
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('thirdChainError'))
+											<div class="alert alert-danger">
+	  											{{ session('thirdChainError') }}
+											</div>
+										@endif
+
+										@if(session('thirdChainComplete'))
+											<div class="alert alert-info">
+	  											{{ session('thirdChainComplete') }}
+											</div>
+										@endif
+									</div>
+								</div>
+
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
 											<input type="hidden" name="table" value="ytd">                
 								    	</div>
 								    </div>
-								</div>
-
-								<div class="row justify-content-center">          
-							 		<div class="col">		
-										<div class="form-group">
-
-											@if(session('secondChainResponse'))
-												<div class="alert alert-danger">
-		  											{{ session('secondChainResponse') }}
-												</div>
-											@endif
-
-										</div>
-									</div>
 								</div>
 
 								<div class="row justify-content-end">          
@@ -188,6 +198,22 @@
 							</div>
 							<form action="{{ route('ytdThirdToDLA') }}" method="POST">
 							@csrf
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('lastChainError'))
+											<div class="alert alert-danger">
+	  											{{ session('lastChainError') }}
+											</div>
+										@endif
+
+										@if(session('lastChainComplete'))
+											<div class="alert alert-info">
+	  											{{ session('lastChainComplete') }}
+											</div>
+										@endif
+									</div>
+								</div>
+
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">

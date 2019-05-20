@@ -182,7 +182,7 @@
 
 									<div class="col">
 										<label> Value: </label>
-										<input class="form-control" type="number" name="value" min="0" max="4000" step="0.00001">
+										<input class="form-control" type="number" name="value" min="0" step="0.00001">
 									</div>									
 								</div>
 
