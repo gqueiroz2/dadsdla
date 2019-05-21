@@ -77,6 +77,18 @@
           data:{regionID},
           success: function(output){
             $('#source').html(output);                   
+            var source = $('#source').val();
+            $.ajax({
+              url:"/ajaxResults/valueBySource",
+              method:"POST",
+              data:{source},
+                success: function(output){
+                  $('#value').html(output);
+                },
+                error: function(xhr, ajaxOptions,thrownError){
+                  alert(xhr.status+" "+thrownError);
+              }
+            });
           },
           error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);
@@ -125,6 +137,7 @@
       var salesRepGroupID = $('#salesRepGroup').val();
       var year = $("#year").val();
       var source = $("#source").val();
+      
       if(regionID != "" && salesRepGroupID != ""){              
         ajaxSetup();
         $.ajax({
@@ -142,6 +155,20 @@
         var option = "<option> Select Sales Group </option>";
         $('#salesRep').html(option);
       }
+
+      var source = $(this).val();
+      $.ajax({
+        url:"/ajaxResults/valueBySource",
+        method:"POST",
+        data:{source},
+          success: function(output){
+            $('#value').html(output);
+          },
+          error: function(xhr, ajaxOptions,thrownError){
+            alert(xhr.status+" "+thrownError);
+        }
+      });
+
 
     });
 
