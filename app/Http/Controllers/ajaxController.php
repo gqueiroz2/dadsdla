@@ -67,11 +67,14 @@ class ajaxController extends Controller{
         
         echo "<select id='firstPos' value='firstPos' style='width:100%;'>";
         for ($i=0; $i < sizeof($valueSource); $i++) {
+            $showSource = strtolower($valueSource[$i]['source']);
+            $showSource = ucfirst($showSource);
             if ($valueSource[$i]['source'] != 'ACTUAL') {
-                $showSource = strtolower($valueSource[$i]['source']);
-                $showSource = ucfirst($showSource);
-
-                echo "<option value='".$valueSource[$i]['source']."'> ".$showSource." </option>";   
+                if($valueSource[$i]['source'] == "TARGET"){
+                    echo "<option value='".$valueSource[$i]['source']."' selected='true'> ".$showSource." </option>";
+                }else{
+                    echo "<option value='".$valueSource[$i]['source']."'> ".$showSource." </option>";
+                } 
             }
         }
         echo "</select>";  

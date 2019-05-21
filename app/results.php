@@ -5,14 +5,26 @@ namespace App;
 use App\sql;
 use App\pRate;
 use Illuminate\Database\Eloquent\Model;
+use App\base;
 
 class results extends Model{    
     
     public function generateVector($con,$table,$region,$year,$month,$brand,$currency,$value,$join,$where,$souce = false){
+        
+        $base = new base();
         $sql = new sql();
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
         $as = "sum";
         $currentMonth = intval(date('m'));
         $cYear = date('Y');
+        $pRate = new pRate();
+
+        var_dump($region);
+
+        $div = $base->generateDiv($con,$pRate,$region,array($year),$currency);
+
+        var_dump($div);
 
         if($table == "cmaps"){
             if($year == $cYear){
@@ -22,6 +34,7 @@ class results extends Model{
             }
         }elseif($table == "plan_by_brand"){
             $sum = "revenue";
+            $div = 1.0;
         }elseif($table == 'mini_header'){
             $sum = 'campaign_option_spend';
         }elseif($table = 'ytd'){
@@ -29,11 +42,9 @@ class results extends Model{
         }else{
             $sum = $value."_value";
         }
-        
 
         for ($m=0; $m < sizeof($month); $m++) { 
             if($table == 'mini_header'){
-
                 if( ($year != $cYear) || ($m < $currentMonth) ){
                     $sum = $value."_revenue";
                     $cTable = 'ytd';
@@ -42,13 +53,11 @@ class results extends Model{
                     $cTable = 'mini_header';
                 }
                 $res[$m] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m]);
-                $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];                
-
             }else{
-
                 $res[$m] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m]);
-                $vector[$m] = $sql->fetchSum($res[$m],$as)["sum"];
             }
+            $vector[$m] = ($sql->fetchSum($res[$m],$as)["sum"])/$div;                              
+
         }
         return $vector;
     }

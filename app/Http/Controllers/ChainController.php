@@ -7,81 +7,80 @@ use App\dataBase;
 use App\import;
 use App\chain;
 use App\sql;
+use App\RenderChain;
 
 class ChainController extends Controller{
     public function ytdGet(){
-    	return view('dataManagement.Chain.ytdGet');
+    	$rC = new RenderChain();
+    	return view('dataManagement.Chain.ytdGet',compact('rC'));
     }
-
-    public function ytdPost(){
-    	$db = new dataBase();
-		$chain = new chain();		
-		$i = new import();
-
-		$con = $db->openConnection('firstMatch');	
-		$spreadSheet = $i->base();
-		unset($spreadSheet[0]);
-		unset($spreadSheet[1]);		
-		unset($spreadSheet[2]);		
-		$spreadSheet = array_values($spreadSheet);
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
-				$pivot = $s;
-			}
-		}
-		unset($spreadSheet[$pivot]);
-		$spreadSheet = array_values($spreadSheet);
-				
-		$table = 'ytd';
-
-		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
-	}
 
     public function CMAPSGet(){
-    	return view('dataManagement.Chain.CMAPSGet');
+    	$rC = new RenderChain();
+    	return view('dataManagement.Chain.CMAPSGet',compact('rC'));
     }
-
-    public function CMAPSPost(){
-    	$db = new dataBase();
-		$chain = new chain();		
-		$i = new import();
-		$con = $db->openConnection('firstMatch');			
-		$spreadSheet = $i->base();
-		unset($spreadSheet[0]);
-		$spreadSheet = array_values($spreadSheet);				
-		$table = 'cmaps';		
-		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);		
-    }
-
 
     public function miniHeaderGet(){
-    	return view('dataManagement.Chain.miniHeaderGet');
+    	$rC = new RenderChain();
+    	return view('dataManagement.Chain.miniHeaderGet',compact('rC'));
     }
 
-    public function miniHeaderPost(){
+    public function firstChain(){
     	$db = new dataBase();
 		$chain = new chain();		
 		$i = new import();
-
 		$con = $db->openConnection('firstMatch');	
-		$spreadSheet = $i->base();
-		unset($spreadSheet[0]);
-		unset($spreadSheet[1]);		
-		unset($spreadSheet[2]);		
-		$spreadSheet = array_values($spreadSheet);
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
-				$pivot = $s;
-			}
-		}
-		unset($spreadSheet[$pivot]);
-		$spreadSheet = array_values($spreadSheet);
-				
-		$table = 'mini_header';		
-		$miniHeaderBool = $chain->handler($con,$table,$spreadSheet);
+		$table = Request::get('table');
+		$year = Request::get('year');
+		$truncate = (bool)intval(Request::get('truncate'));
+		var_dump($truncate);
 
+		$spreadSheet = $i->base();
+
+		switch ($table) {
+			case 'ytd':
+				unset($spreadSheet[0]);
+				unset($spreadSheet[1]);		
+				unset($spreadSheet[2]);		
+				$spreadSheet = array_values($spreadSheet);
+				for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+					if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
+						$pivot = $s;
+					}
+				}
+				unset($spreadSheet[$pivot]);
+				$spreadSheet = array_values($spreadSheet);
+				break;
+			case 'cmaps':
+				unset($spreadSheet[0]);
+				$spreadSheet = array_values($spreadSheet);
+				break;
+			case 'mini_header':
+				unset($spreadSheet[0]);
+				unset($spreadSheet[1]);		
+				unset($spreadSheet[2]);		
+				$spreadSheet = array_values($spreadSheet);
+				for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+					if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
+						$pivot = $s;
+					}
+				}
+				unset($spreadSheet[$pivot]);
+				$spreadSheet = array_values($spreadSheet);
+				break;			
+		}
+
+		$complete = $chain->handler($con,$table,$spreadSheet,$year,$truncate);
 		
+
+		if($complete){
+            return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
+        }else{
+            return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
+        }
+
     }
+
 
     public function secondChain(){
 		$db = new dataBase();
@@ -99,8 +98,13 @@ class ChainController extends Controller{
     		$year = false;
     	}
 
-    	$bool = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
+    	$complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
 
+    	if($complete){
+            return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
+        }else{
+            return back()->with('secondChainError',"There was and error on the insertion of the Excel Data :( ");
+        }
     }
 
     public function thirdChain(){

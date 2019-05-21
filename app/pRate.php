@@ -30,7 +30,7 @@ class pRate extends Management{
 		$from = array('id','year','value','currency','region');	
 		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
 				 LEFT JOIN region r ON c.region_id = r.ID";
-		$order = "2,5,4";
+		$order = " 1,2,5,4";
 		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 		$pRate = $sql->fetch($result,$from,$from);		
 		return $pRate;
@@ -41,8 +41,8 @@ class pRate extends Management{
 
 		if($region && $year){
 			$ids = implode($region);
-			$year = implode($year);
-			$where .= "WHERE r.ID IN ($ids) AND p.year = ($year)";
+			$years = implode($year);
+			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($years)";
 		}
 
 		$sql = new sql();

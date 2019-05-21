@@ -62,6 +62,23 @@
 									</div>
 								</div>
 
+								<div class="row justify-content-end">
+									<div class="col col-sm-6">
+										<div class="form-inline" style="float:right;width:100%;">
+											<div class="container">
+												<div class="row">
+													<div class="col">
+														<input type="radio" name="truncate" value="1"> Yes <br>
+													</div>
+													<div class="col">
+														<input type="radio" name="truncate" value="0" checked> No 
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">

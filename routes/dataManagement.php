@@ -50,22 +50,27 @@ Route::group(['middleware' => ['auth']],function(){
 			
 			Route::post('ytdCheckElements','CheckElementsController@base')
 							->name('ytdCheckElementsPost');
-							/*
-			Route::post('ytdCheckElements','CheckElementsController@basePost')
-							->name('ytdCheckElementsPost');
-*/
+
+			Route::post('miniHeaderFirst','ChainController@firstChain')
+							->name('miniHeaderFirstChain');
 			Route::post('miniHeaderSecond','ChainController@secondChain')
 							->name('miniHeaderSecondChain');
 			Route::post('miniHeaderThird','ChainController@thirdChain')
 							->name('miniHeaderThirdChain');
 			Route::post('miniHeaderThirdToDLA','ChainController@thirdToDLA')
 							->name('miniHeaderThirdToDLA');
+
+			Route::post('CMAPSFirst','ChainController@firstChain')
+							->name('CMAPSFirstChain');			
 			Route::post('CMAPSSecond','ChainController@secondChain')
 							->name('CMAPSSecondChain');
 			Route::post('CMAPSThird','ChainController@thirdChain')
 							->name('CMAPSThirdChain');
 			Route::post('CMAPSThirdToDLA','ChainController@thirdToDLA')
 							->name('CMAPSThirdToDLA');
+			
+			Route::post('ytdFirst','ChainController@firstChain')
+							->name('ytdFirstChain');
 			Route::post('ytdSecond','ChainController@secondChain')
 							->name('ytdSecondChain');
 			Route::post('ytdThird','ChainController@thirdChain')
@@ -78,19 +83,10 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::group(['prefix' => 'file'],function(){
 			Route::get('ytd','ChainController@ytdGet')
 							->name('fileUploadytdGet');
-			Route::post('ytd','ChainController@ytdPost')
-							->name('fileUploadytdPost');
 			Route::get('CMAPS','ChainController@CMAPSGet')
 							->name('fileUploadCMAPSGet');
-			Route::post('CMAPS','ChainController@CMAPSPost')
-							->name('fileUploadCMAPSPost');
 			Route::get('miniHeader','ChainController@miniHeaderGet')
 							->name('fileUploadMiniHeaderGet');
-			Route::post('miniHeader','ChainController@miniHeaderPost')
-							->name('fileUploadMiniHeaderPost');
-			
-
-
 			Route::get('excel','fileUploadController@excelGet')
 							->name('fileUploadExcelGet');
 			Route::post('excel','fileUploadController@excelPost')

@@ -11,156 +11,88 @@ use App\salesRep;
 use App\pRate;
 
 class chain extends excel{
-    
-    public function handler($con,$table,$spreadSheet){
+   
+    public function handler($con,$table,$spreadSheet,$year,$truncate){
 		$base = new base();
-		switch ($table) {
-			case 'cmaps':
-				$bool = $this->cmaps($con,$table,$spreadSheet,$base);		
-				break;			
-			case 'mini_header':
-				$bool = $this->miniHeader($con,$table,$spreadSheet,$base);
-				break;
-			case 'ytd':
-				$bool = $this->ytd($con,$table,$spreadSheet,$base);
-				break;
-			default:
-				# code...
-				break;
-		}
-		return $bool;
-	}
-
-	public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-
-		if($nextColumns && $table = 'cmaps'){
-            $values = $this->values($spreadSheet,$columns,$nextColumns);
-        }else{
-            $values = $this->values($spreadSheet,$columns);
+		
+        if($truncate){
+            //TRUNCATE
+            var_dump("TRUNCOU");
+            $truncateStatement = "TRUNCATE TABLE $table";
+            if($sCon->query($truncateStatement) === TRUE){
+                $truncated = true;
+            }else{
+                $truncated = false;
+            }
         }
-		$ins = " INSERT INTO $table ($into) VALUES ($values)";
-		//echo($ins)."<br>";		
-		
-		if($con->query($ins) === TRUE ){
-            $error = false;
 
-		}else{
-			if($table == 'cmaps'){
-				$error = $spreadSheet['decode'];
-                echo($ins)."<br>";      
-                var_dump($ins);
-                var_dump(mysqli_error($con));
-			}elseif($table == 'mini_header'){
-				//var_dump($ins);
-				echo($ins)."<br>";		
-				var_dump(mysqli_error($con));
-				$error = array($spreadSheet['campaign_reference'],$spreadSheet['order_reference']);
-			}elseif($table = 'plan_by_brand'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}elseif($table = 'ytd'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}elseif($table = 'sales_rep' || $table = 'sales_rep_unity'){
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}else{
-				var_dump($ins);
-				var_dump(mysqli_error($con));
-				$error = true;
-			}
-		}
+        $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);		
 		
-        return $error;
+
+        return $bool;
+	}
+
+    public function firstChain($con,$table,$spreadSheet,$base,$year){
         
-	}
+        $truncateStatement = "TRUNCATE TABLE $table";
+        if($tCon->query($truncateStatement) === TRUE){
+            $truncated = true;
+        }else{
+            $truncated = false;
+        }
 
-	public function miniHeader($con,$table,$spreadSheet,$base){
-		$columns = $this->miniHeaderColumnsF;
-		$spreadSheet = $this->assembler($spreadSheet,$columns,$base);
-		$into = $this->into($columns);		
-		$check = 0;
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-			if($bool){
-				$check++;
-			}
-		}			
-		$rtr = false;
-		if($check == sizeof($spreadSheet)){
-			$rtr = true;
-		}
-
-		return $rtr;
-	}
-
-	public function ytd($con,$table,$spreadSheet,$base){
-		$columns = $this->ytdColumnsF;		
-		$spreadSheet = $this->assembler($spreadSheet,$columns,$base);
-		$into = $this->into($columns);		
-		
-		
-		$check = 0;
-		for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			$bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);			
-			if($bool){
-				$check++;
-			}
-		}			
-		$rtr = false;
-		if($check == sizeof($spreadSheet)){
-			$rtr = true;
-		}
-
-		return $rtr;
-		
-	}
-
-    public function cmaps($con,$table,$spreadSheet,$base){
-        $columns = $this->cmapsColumnsF;
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$table);
-        $into = $this->into($columns);       
         
-              
+
+
+        $columns = $this->defineColumns($table,'first');
+        $spreadSheet = $this->assembler($spreadSheet,$columns,$base);
+        $into = $this->into($columns);      
         $check = 0;
+        
+
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-            $bool = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
-            if($bool){
+            $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
+            if(!$error){
                 $check++;
             }
         }           
         $rtr = false;
         if($check == sizeof($spreadSheet)){
-            $rtr = true;
+            $complete = true;
         }
-
-        return $rtr;
-        
-    }
+        return $complete;
+    }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
         $base = new base();
-    	$columns = $this->defineColumns($table,'first');
+    	$truncateStatement = "TRUNCATE TABLE $table";
+        if($sCon->query($truncateStatement) === TRUE){
+            $truncated = true;
+        }else{
+            $truncated = false;
+        }
+        $columns = $this->defineColumns($table,'first');
     	$columnsS = $this->defineColumns($table,'second');
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
-    	$into = $this->into($columnsS);		
+        $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
-        $bool = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-   		return $bool;
+        $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
+   		return $complete;
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
     	$base = new base();    	
-
-		$columnsS = $this->defineColumns($table,'second');
+		$truncateStatement = "TRUNCATE TABLE $table";
+        if($tCon->query($truncateStatement) === TRUE){
+            $truncated = true;
+        }else{
+            $truncated = false;
+        }
+        $columnsS = $this->defineColumns($table,'second');
     	$columnsT = $this->defineColumns($table,'third');
-
     	$into = $this->into($columnsT);		
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$sCon,$table,$columnsS),$columnsS);
-
     	if($table == 'mini_header'){
     		$orderReference = $this->getOrderReferences($current);
     		$cleanedValues = $this->cleanValues($current,$orderReference);
@@ -175,43 +107,49 @@ class chain extends excel{
      public function thirdToDLA($sql,$con,$tCon,$table){
     	$base = new base(); 
     	
+
+        /*
     	if($table == 'ytd' || $table = 'cmaps'){
-
     		$delete = "DELETE FROM $table WHERE(year = '2019')";
-
     		$con->query($delete);
-
     	}elseif($table == 'mini_header'){
-
     	}else{
-
     	}
+        for ($y=0; $y < sizeof($year); $y++) { 
+            $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";
+            var_dump($delete[$y]);
+            if($con->query($delete[$y])){
 
+            }
+        }
+
+        */
     	$columns = $this->defineColumns($table,'third');
-    	
     	$into = $this->into($columns);
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
     	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
-    }
+    }   
 
-    public function cleanValues($current,$orderReference){
-    	for ($o=0; $o < sizeof($orderReference); $o++) { 
-    		for ($c=0; $c < sizeof($current); $c++) {     		
-    			
-    			if($orderReference[$o] == $current[$c]['order_reference']){
-    				if($current[$c]['sales_rep_role'] == 'Sales Representitive'){
-    					$current[$c]['campaign_option_spend'] = (doubleval($current[$c]['campaign_option_spend'])/2);
-    				}
-    				if($current[$c]['sales_rep_role'] == 'Primary Sales Rep'){
-    					$current[$c]['campaign_option_spend'] = (doubleval($current[$c]['campaign_option_spend'])/2);
-    				}
+    public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
+        if($nextColumns && $table = 'cmaps'){
+            $values = $this->values($spreadSheet,$columns,$nextColumns);
+        }else{
+            $values = $this->values($spreadSheet,$columns);
+        }
+        
+        $ins = " INSERT INTO $table ($into) VALUES ($values)";      
+        echo "<pre>".($ins)."</pre>";
 
-
-    			}
-
-    		}	
-    	}
-    	return $current;
+        
+        if($con->query($ins) === TRUE ){
+            $error = false;
+        }else{
+            echo "<pre>".($ins)."</pre>";
+            var_dump($con->error);
+            $error = true;
+        }       
+        return $error;        
+        
     }
 
     public function getOrderReferences($current){
@@ -262,89 +200,100 @@ class chain extends excel{
     	$brands = $b->getBrandUnit($con);
     	$salesReps = $sr->getSalesRepUnit($con);
     	$currencies = $pr->getCurrency($con);
-    	
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
-    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year);
+    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
     			$current[$c][$tmp[1]] = $tmp[0];
     			if($columns[$cc] != $tmp[1]){
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
-
-            $current[$c]['year'] = $year;
+            if($table == 'cmaps'){
+                $current[$c]['year'] = $year;
+            }
     	}
-
 		return $current;
     }
 
-    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year){
-    		
-            if($column == 'campaign_sales_office'){
-    			
-    			$rtr =  array(false,'campaign_sales_office_id');
-
-    			for ($r=0; $r < sizeof($regions); $r++) { 
-    				if($current == $regions[$r]['name']){	
-    					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
-    				}
-    			}
-    			
-    		}elseif($column == 'package'){
-                
-                if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
-                    $bool = 1;
-                }else{
-                    $bool = 0;
-                }
-
-                $rtr =  array($bool,'package');
-
-            }elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
-    			
-    			$rtr =  array(false,'campaign_sales_office_id');
-
-    			for ($r=0; $r < sizeof($regions); $r++) { 
-    				if($current == $regions[$r]['name']){	
-    					if($table == 'mini_header'){
-    						$rtr =  array( $regions[$r]['id'],'sales_representant_sales_office_id');
-    					}else{
-    						$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
-    					}
-    				}
-    			}
-    			
-            }elseif($column == 'campaign_currency'){
-            	$rtr =  array(false,'campaign_currency_id');
-
-            	for ($c=0; $c < sizeof($currencies); $c++) { 
-    				if($current == $currencies[$c]['name']){	
-    					$rtr =  array( $currencies[$c]['id'],'campaign_currency_id');
-    				}
-    			}
-            }elseif($column == 'brand'){
-            	
-            	$rtr =  array(false,'brand_id');
-            	
-            	for ($b=0; $b < sizeof($brands); $b++) { 
-    				if( strtoupper( $current ) == $brands[$b]['brandUnit']){	
-    					$rtr =  array( $brands[$b]['brandID'],'brand_id');
-    				}
-    			}
-    			
-            }elseif($column == 'sales_rep'){
-            	
-            	$rtr =  array(false,'sales_rep_id');
-
-            	for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
-    				if($current == $salesReps[$sr]['salesRepUnit']){	
-    					$rtr =  array( $salesReps[$sr]['salesRepID'],'sales_rep_id');
-    				}
-    			}
+    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
+        if($column == 'campaign_sales_office'){
+			$rtr =  array(false,'campaign_sales_office_id');
+			for ($r=0; $r < sizeof($regions); $r++) { 
+				if($current == $regions[$r]['name']){	
+					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
+				}
+			}
+		}elseif($column == 'package'){
+            if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
+                $bool = 1;
             }else{
-            	$rtr = array($current,$column);
+                $bool = 0;
             }
-            return $rtr;
+
+            $rtr =  array($bool,'package');
+        }elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
+			$rtr =  array(false,'campaign_sales_office_id');
+			for ($r=0; $r < sizeof($regions); $r++) { 
+				if($current == $regions[$r]['name']){	
+					if($table == 'mini_header'){
+						$rtr =  array( $regions[$r]['id'],'sales_representant_sales_office_id');
+					}else{
+						$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
+					}
+				}
+			}
+        }elseif($column == 'campaign_currency'){
+        	$rtr =  array(false,'campaign_currency_id');
+
+        	for ($c=0; $c < sizeof($currencies); $c++) { 
+				if($current == $currencies[$c]['name']){	
+					$rtr =  array( $currencies[$c]['id'],'campaign_currency_id');
+				}elseif($current == 'VES'){
+                    $rtr =  array( 9,'campaign_currency_id');
+                }
+			}
+        }elseif($column == 'brand'){
+        	
+        	$rtr =  array(false,'brand_id');
+            if($table == "cmaps"){
+                $temp = strtoupper($current);
+            }else{
+                $temp = $current;
+            }
+
+        	for ($b=0; $b < sizeof($brands); $b++) { 
+				if( $temp  == $brands[$b]['brandUnit']){	
+					$rtr =  array( $brands[$b]['brandID'],'brand_id');
+				}
+			}
+			
+        }elseif($column == 'sales_rep'){
+        	$rtr =  array(false,'sales_rep_id');
+        	$check = -1;
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+				if($current == $salesReps[$sr]['salesRepUnit']){	
+					$rtr =  array( $salesReps[$sr]['salesRepID'],'sales_rep_id');
+
+                    $check++;
+				}
+
+                if($check > 0){
+                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                        if($current == $salesReps[$srr]['salesRepUnit'] &&
+                            $currentC['campaign_sales_office_id'] == $salesReps[$srr]['regionID']){
+                            $rtr =  array( $salesReps[$srr]['salesRepID'],'sales_rep_id');   
+                        }                        
+                    }
+                }
+			}
+        }else{
+        	$rtr = array($current,$column);
+        }
+        return $rtr;
     }
 
     public function insertToDLA($con,$table,$columns,$current,$into){
@@ -382,11 +331,11 @@ class chain extends excel{
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		if($nextColumns && $table == 'cmaps'){
-                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
+                $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
-                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
+                $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
             }
-    		if($bool[$c]){
+    		if(!$error[$c]){
     			$count++;
     		}
     	}
@@ -398,7 +347,8 @@ class chain extends excel{
     }
 
     public function fixToInput($array,$columns){
-    	$sizeA = sizeof($array);
+    	/*
+        $sizeA = sizeof($array);
     	$sizeC = sizeof($columns);
     	for ($a=0; $a < $sizeA; $a++) { 
     		for ($c=0; $c < $sizeC; $c++) { 
@@ -457,13 +407,14 @@ class chain extends excel{
 	}
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
-		
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			for ($c=0; $c < sizeof($columns); $c++) { 
 				$bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
+                       $columns[$c] == 'gross' ||
 					   $columns[$c] == 'net_revenue' ||						
+                       $columns[$c] == 'net' ||                     
 					   $columns[$c] == 'net_net_revenue' ||						
 					   $columns[$c] == 'gross_revenue_prate' ||
 					   $columns[$c] == 'net_revenue_prate' ||						
@@ -499,9 +450,7 @@ class chain extends excel{
 				}
 			}
 		}
-
 		$spreadSheetV2 = array_values($spreadSheetV2);
-
 		return $spreadSheetV2;
 	}
 
@@ -518,10 +467,8 @@ class chain extends excel{
 	}
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
-		
 		$values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
-    		
             if($nextColumns){   
                 if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
@@ -535,7 +482,6 @@ class chain extends excel{
                     $values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$columns[$c]] )."\"";
                 }
             }
-			
             if($c != (sizeof($columns) - 1) ){
 				$values .= ", ";
 			}
@@ -543,7 +489,21 @@ class chain extends excel{
 		return $values;
 	}
 
-	
+	public function cleanValues($current,$orderReference){
+        for ($o=0; $o < sizeof($orderReference); $o++) { 
+            for ($c=0; $c < sizeof($current); $c++) {           
+                if($orderReference[$o] == $current[$c]['order_reference']){
+                    if($current[$c]['sales_rep_role'] == 'Sales Representitive'){
+                        $current[$c]['campaign_option_spend'] = (doubleval($current[$c]['campaign_option_spend'])/2);
+                    }
+                    if($current[$c]['sales_rep_role'] == 'Primary Sales Rep'){
+                        $current[$c]['campaign_option_spend'] = (doubleval($current[$c]['campaign_option_spend'])/2);
+                    }
+                }
+            }   
+        }
+        return $current;
+    }
 
 	public function defineColumns($table,$recurrency){
 

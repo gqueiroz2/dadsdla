@@ -322,7 +322,8 @@ class salesRep extends Management{
 				    sru.name AS 'salesRepUnit',
 				    sr.name AS 'salesRep',
 				    sr.ID AS 'salesRepID',
-				    o.name AS 'origin'";
+				    o.name AS 'origin',
+				    srg.region_id AS 'regionID'";
 		$where = "";
 
 		if($salesRepID){
@@ -330,12 +331,12 @@ class salesRep extends Management{
 			$where .= "WHERE sr.ID IN ('$salesRepIDS')";
 		}
 
-		$join = "lEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
-				LEFT JOIN origin o ON o.ID = sru.origin_id";
+		$join = "LEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
+				 LEFT JOIN origin o ON o.ID = sru.origin_id
+				 LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id";
 
 		$res = $sql->select($con,$columns,$table,$join,$where);
-
-		$from = array('id','salesRepUnit','salesRep','salesRepID','origin');
+		$from = array('id','salesRepUnit','salesRep','salesRepID','origin','regionID');
 
 		$salesRepUnit = $sql->fetch($res,$from,$from);
 
