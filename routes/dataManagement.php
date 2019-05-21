@@ -47,36 +47,18 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('dataManagementClientGetFromExcel');
 
 		Route::group(['prefix' => 'chain'],function(){
-			
-			Route::post('ytdCheckElements','CheckElementsController@base')
-							->name('ytdCheckElementsPost');
-
-			Route::post('miniHeaderFirst','ChainController@firstChain')
-							->name('miniHeaderFirstChain');
-			Route::post('miniHeaderSecond','ChainController@secondChain')
-							->name('miniHeaderSecondChain');
-			Route::post('miniHeaderThird','ChainController@thirdChain')
-							->name('miniHeaderThirdChain');
-			Route::post('miniHeaderThirdToDLA','ChainController@thirdToDLA')
-							->name('miniHeaderThirdToDLA');
-
-			Route::post('CMAPSFirst','ChainController@firstChain')
-							->name('CMAPSFirstChain');			
-			Route::post('CMAPSSecond','ChainController@secondChain')
-							->name('CMAPSSecondChain');
-			Route::post('CMAPSThird','ChainController@thirdChain')
-							->name('CMAPSThirdChain');
-			Route::post('CMAPSThirdToDLA','ChainController@thirdToDLA')
-							->name('CMAPSThirdToDLA');
-			
-			Route::post('ytdFirst','ChainController@firstChain')
-							->name('ytdFirstChain');
-			Route::post('ytdSecond','ChainController@secondChain')
-							->name('ytdSecondChain');
-			Route::post('ytdThird','ChainController@thirdChain')
-							->name('ytdThirdChain');
-			Route::post('ytdThirdToDLA','ChainController@thirdToDLA')
-							->name('ytdThirdToDLA');
+			Route::get('root','ChainController@chainGet')
+							->name('chain');
+			Route::post('checkElements','checkElementsController@base')
+							->name('checkElementsPost');
+			Route::post('first','ChainController@firstChain')
+							->name('firstChain');
+			Route::post('second','ChainController@secondChain')
+							->name('secondChain');
+			Route::post('third','ChainController@thirdChain')
+							->name('thirdChain');
+			Route::post('thirdToDLA','ChainController@thirdToDLA')
+							->name('thirdToDLA');
 
 		});
 

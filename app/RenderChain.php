@@ -17,4 +17,16 @@ class RenderChain extends Render{
 		echo "</select>";
     	
     }
+
+    public function report(){
+
+    	echo "<select class='selectpicker' data-selected-text-format='count' name='report' data-width='100%'>";
+			echo "<option value='ytd'> YTD </option>";
+			echo "<option value='mini_header'> Mini-Header </option>";
+			echo "<option value='digital'> Digital </option>";
+		echo "</select>";
+
+    }
+
+
 }

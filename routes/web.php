@@ -21,14 +21,11 @@ Route::get('home','adSalesController@home');
 Route::group(['prefix' => 'adsales'],function(){
 	Route::get('/','adSalesController@home')
 						->name('adSalesHome');
-
 	Route::group(['prefix' => 'results'],function(){
-
 		Route::get('monthly','resultsController@monthlyGet')
 						->name('monthlyResultsGet');
 		Route::post('monthly','resultsController@monthlyPost')
 						->name('monthlyResultsPost');
-
 	});
 
 });

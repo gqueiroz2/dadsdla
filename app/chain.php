@@ -14,42 +14,25 @@ class chain extends excel{
    
     public function handler($con,$table,$spreadSheet,$year,$truncate){
 		$base = new base();
-		
         if($truncate){
-            //TRUNCATE
-            var_dump("TRUNCOU");
             $truncateStatement = "TRUNCATE TABLE $table";
-            if($sCon->query($truncateStatement) === TRUE){
+            if($Con->query($truncateStatement) === TRUE){
                 $truncated = true;
             }else{
                 $truncated = false;
             }
         }
-
-        $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);		
-		
-
+        $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);			
         return $bool;
 	}
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
-        
-        $truncateStatement = "TRUNCATE TABLE $table";
-        if($tCon->query($truncateStatement) === TRUE){
-            $truncated = true;
-        }else{
-            $truncated = false;
-        }
-
-        
-
-
         $columns = $this->defineColumns($table,'first');
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base);
+        /*
         $into = $this->into($columns);      
-        $check = 0;
-        
 
+        $check = 0;
 
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -61,7 +44,7 @@ class chain extends excel{
         if($check == sizeof($spreadSheet)){
             $complete = true;
         }
-        return $complete;
+        return $complete;*/
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -347,7 +330,7 @@ class chain extends excel{
     }
 
     public function fixToInput($array,$columns){
-    	/*
+    	
         $sizeA = sizeof($array);
     	$sizeC = sizeof($columns);
     	for ($a=0; $a < $sizeA; $a++) { 
@@ -407,6 +390,9 @@ class chain extends excel{
 	}
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
+        var_dump($spreadSheet);
+        var_dump($columns);
+        /*
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			for ($c=0; $c < sizeof($columns); $c++) { 
 				$bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
@@ -452,6 +438,7 @@ class chain extends excel{
 		}
 		$spreadSheetV2 = array_values($spreadSheetV2);
 		return $spreadSheetV2;
+        */
 	}
 
 	public function into($columns){

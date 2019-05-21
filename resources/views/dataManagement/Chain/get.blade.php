@@ -11,7 +11,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Chain YTD </b> </h4></center>
+						<center><h4> Data Management - <b> Chain ALL </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -29,7 +29,7 @@
 							</div>
 
 							
-							<form action="{{ route('ytdFirstChain') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('firstChain') }}" method="POST" enctype="multipart/form-data">
 							@csrf
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -58,9 +58,9 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="ytd">
-								    	</div>
-								    </div>
+											{{$rC->report()}}					
+										</div>
+									</div>
 								</div>
 
 								<div class="row justify-content-end">          
@@ -76,7 +76,7 @@
 									<center><span style="font-size: 18px;"> CHECK NEW ELEMENTS </span></center>
 								</div>
 							</div>
-							<form action="{{ route('ytdCheckElementsPost') }}" method="POST">
+							<form action="{{ route('checkElementsPost') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -116,7 +116,7 @@
 									<center><span style="font-size: 18px;"> SECOND CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('ytdSecondChain') }}" method="POST">
+							<form action="{{ route('secondChain') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -142,6 +142,14 @@
 									</div>
 								</div>
 
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+
 								<div class="row justify-content-end">          
 							 		<div class="col">		
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
@@ -155,7 +163,7 @@
 									<center><span style="font-size: 18px;"> THIRD CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('ytdThirdChain') }}" method="POST">
+							<form action="{{ route('thirdChain') }}" method="POST">
 							@csrf
 
 								<div class="row justify-content-center">
@@ -182,6 +190,14 @@
 								    </div>
 								</div>
 
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+
 								<div class="row justify-content-end">          
 							 		<div class="col">		
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
@@ -194,7 +210,7 @@
 									<center><span style="font-size: 18px;"> THIRD TO DLA </span></center>
 								</div>
 							</div>
-							<form action="{{ route('ytdThirdToDLA') }}" method="POST">
+							<form action="{{ route('thirdToDLA') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -219,6 +235,16 @@
 										</div>
 									</div>
 								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+
+
 
 								<div class="row justify-content-end">
 									<div class="col col-sm-6">

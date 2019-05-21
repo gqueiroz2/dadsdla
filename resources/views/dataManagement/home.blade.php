@@ -128,28 +128,8 @@
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('fileUploadMiniHeaderGet') }}" style="color: white">
-											Mini-Header Chain
-										</a>
-									</button>
-								</div>
-							</div>
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('fileUploadCMAPSGet') }}" style="color: white">
-											CMAPS Chain
-										</a>
-									</button>
-								</div>
-							</div>
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('fileUploadytdGet') }}" style="color: white">
-											YTD Chain
+										<a href="{{ route('chain') }}" style="color: white">
+											Chain
 										</a>
 									</button>
 								</div>

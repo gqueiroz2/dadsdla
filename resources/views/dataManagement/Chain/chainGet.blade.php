@@ -11,7 +11,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Chain YTD </b> </h4></center>
+						<center><h4> Data Management - <b> Chain </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -58,9 +58,9 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="hidden" name="table" value="ytd">
-								    	</div>
-								    </div>
+											{{$rC->report()}}					
+										</div>
+									</div>
 								</div>
 
 								<div class="row justify-content-end">          

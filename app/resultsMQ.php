@@ -22,7 +22,6 @@ class resultsMQ extends results{
             }
         }
 
-        //var_dump($lines);
         return $lines;
 
     }

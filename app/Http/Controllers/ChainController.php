@@ -10,20 +10,10 @@ use App\sql;
 use App\RenderChain;
 
 class ChainController extends Controller{
-    public function ytdGet(){
+    public function chainGet(){
     	$rC = new RenderChain();
-    	return view('dataManagement.Chain.ytdGet',compact('rC'));
-    }
-
-    public function CMAPSGet(){
-    	$rC = new RenderChain();
-    	return view('dataManagement.Chain.CMAPSGet',compact('rC'));
-    }
-
-    public function miniHeaderGet(){
-    	$rC = new RenderChain();
-    	return view('dataManagement.Chain.miniHeaderGet',compact('rC'));
-    }
+    	return view('dataManagement.Chain.get',compact('rC'));
+    }    
 
     public function firstChain(){
     	$db = new dataBase();
@@ -33,7 +23,6 @@ class ChainController extends Controller{
 		$table = Request::get('table');
 		$year = Request::get('year');
 		$truncate = (bool)intval(Request::get('truncate'));
-		var_dump($truncate);
 
 		$spreadSheet = $i->base();
 
@@ -71,16 +60,14 @@ class ChainController extends Controller{
 		}
 
 		$complete = $chain->handler($con,$table,$spreadSheet,$year,$truncate);
-		
-
+		/*
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
         }
-
+		*/
     }
-
 
     public function secondChain(){
 		$db = new dataBase();
