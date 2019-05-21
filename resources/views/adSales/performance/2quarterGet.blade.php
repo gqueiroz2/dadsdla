@@ -1,17 +1,16 @@
 @extends('layouts.mirror')
-@section('title', 'YoY Results')
+@section('title', 'quarter')
 @section('head')	
-	<script src="/js/resultsYoY.js"></script>
-	<script src="/js/results.js"></script>
+	<script src="/js/performance.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
-@section('content')
 
+@section('content')
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form class="form-inline" role="form" method="POST" action="{{ route('resultsYoYPost') }}">
-				@csrf
+				<form class="form-inline" role="form" method="POST" action="{{ route('quarterPerformancePost') }}">
+					@csrf
 					<div class="col-12 col-lg">
 						<div class="form-inline">
 							<label>Region:</label>
@@ -19,9 +18,9 @@
 								<label style="color: red;">* Required</label>
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
-								{{$render->region($salesRegion)}}							
+								{{ $render->region($salesRegion) }}
 							@else
-								{{$render->regionFiltered($salesRegion, $regionID)}}
+								{{ $render->regionFiltered($salesRegion, $regionID) }}
 							@endif
 						</div>
 					</div>
@@ -38,43 +37,41 @@
 
 					<div class="col-12 col-lg">
 						<div class="form-inline">
-							<label>Brand:</label>
+							<label>Tiers:</label>
+							@if($errors->has('tier'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{ $render->tiers() }}
+						</div>
+					</div>					
+
+					<div class="col-12 col-lg">
+						<div class="form-inline">
+							<label>Brands:</label>
 							@if($errors->has('brand'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{ $render->brand($brandsValue) }}
+							{{ $render->brandPerformance() }}
 						</div>
 					</div>	
 
 					<div class="col-12 col-lg">
 						<div class="form-inline">
-							<label> 1st Pos: </label>
-							@if($errors->has('firstPos'))
+							<label>Sales Rep Group:</label>
+							@if($errors->has('salesRepGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->position("first")}}
+							{{ $render->salesRepGroup($salesRepGroup) }}
 						</div>
-					</div>	
+					</div>
 
 					<div class="col-12 col-lg">
-						<div class="form-inline">
-							<label> 2st Pos: </label>
-							@if($errors->has('secondPos'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->position("second")}}
-						</div>
-					</div>	
-
-					<div class="col-12 col-lg">
-						<div class="form-inline">
-							<label> 3rd Pos: </label>
-							@if($errors->has('thirdPos'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->position("third")}}
-						</div>
-					</div>	
+						<label style="float: left;">Sales Rep:</label>
+						@if($errors->has('salesRep'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->salesRep($salesRep)}}
+					</div>
 
 					<div class="col-12 col-lg">
 						<div class="form-inline">
@@ -82,9 +79,9 @@
 							@if($errors->has('currency'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->currency()}}
+							{{ $render->currency() }}
 						</div>
-					</div>	
+					</div>
 
 					<div class="col-12 col-lg">
 						<div class="form-inline">
@@ -107,9 +104,4 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="vlau"></div>
-
-
-
 @endsection

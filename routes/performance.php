@@ -13,10 +13,16 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'performance'],function(){
+		
 		Route::get('core','corePerformanceController@get')
 									->name('corePerformanceGet');
 		Route::post('core','corePerformanceController@post')
 									->name('corePerformancePost');
+
+		Route::get('quarter','quarterPerformanceController@get')
+									->name('quarterPerformanceGet');
+		Route::post('quarter','quarterPerformanceController@post')
+									->name('quarterPerformancePost');			
 	});
 });
 

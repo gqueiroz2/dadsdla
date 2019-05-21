@@ -12,7 +12,6 @@
 				@csrf
 				<div class="container-fluid">
 					<div class="row">
-
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> Region: </span></label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')

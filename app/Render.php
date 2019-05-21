@@ -10,7 +10,7 @@ class Render extends Model{
 
     public function region($region){
 
-    	echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
+    	echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
             for ($i = 0; $i < sizeof($region); $i++) { 
     			if($region[$i]['name'] != "LATAM" ){
@@ -52,6 +52,12 @@ class Render extends Model{
     		}
     		
     	echo "</select>";
+    }
+
+    public function brandPerformance(){
+        
+        echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
+        echo "</select>";   
     }
 
     public function position($pos){

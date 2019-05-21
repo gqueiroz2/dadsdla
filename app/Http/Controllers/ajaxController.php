@@ -221,4 +221,8 @@ class ajaxController extends Controller{
             echo "<option value='net'> Net </option>";
         }    
     }
+
+    public function tierByRegion(){
+        
+    }
 }
