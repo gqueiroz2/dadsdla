@@ -62,36 +62,33 @@ class share extends results
         }
 
         //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
-        $actualMonth = date("m");
 
-        for ($m=0; $m <sizeof($month) ; $m++) {
-            for ($b=0; $b <sizeof($brand); $b++) {
-                if ($m > $actualMonth-1 && ($source == "CMAPS" ||$source == "Header")) {
-                    if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
-                        $sourceBrand[$m][$b] = "Digital";
-                    }elseif ($region == "1") {
-                        $sourceBrand[$m][$b] = "CMAPS";
-                    }else{
-                        $sourceBrand[$m][$b] = "Header";
-                    }
+
+        $actualMonth = date("m");
+        for ($b=0; $b <sizeof($brand); $b++) {
+            for ($m=0; $m <sizeof($month) ; $m++) {
+                if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    $sourceBrand[$m][$b] = "Digital";
+                }elseif($brand[$b][1] == "FN" && $region == "1"){
+                    $sourceBrand[$m][$b] = "CMAPS";
                 }else{
-                    if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
-                        $sourceBrand[$m][$b] = "Digital";
-                    }elseif ($brand[$b][1] == "OTH") {
-                        $sourceBrand[$m][$b] = "IBMS";
-                    }elseif($brand[$b][1] == "FN" && $region == "1"){
-                        $sourceBrand[$m][$b] = "CMAPS";
-                    }elseif ($brand[$b][1] == "FN" && $region != "1"){
-                        $sourceBrand[$m][$b] = "IBMS";
+                    if ($yearView == date('Y')) {
+                        if($source == "Header"){
+                            if($m > $actualMonth-1){
+                                $sourceBrand[$m][$b] = "Header";
+                            }else{
+                                $sourceBrand[$m][$b] = "IBMS";
+                            }    
+                        }else{
+                            $sourceBrand[$m][$b] = $source;
+                        }
                     }else{
-                        $sourceBrand[$m][$b] = $source;
+                        $sourceBrand[$m][$b] = "IBMS";
                     }
                 }
             }
         }
 
-
-        
         $tmp = $base->getMonth();
         $monthName = array();
         for ($m=0; $m <sizeof($month) ; $m++) { 
