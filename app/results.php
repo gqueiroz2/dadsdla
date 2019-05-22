@@ -20,11 +20,7 @@ class results extends Model{
         $cYear = date('Y');
         $pRate = new pRate();
 
-        var_dump($region);
-
         $div = $base->generateDiv($con,$pRate,$region,array($year),$currency);
-
-        var_dump($div);
 
         if($table == "cmaps"){
             if($year == $cYear){

@@ -18,6 +18,47 @@
 							
 							<div class="row">
 								<div class="col">
+									<center><span style="font-size: 18px;"> TRUNCATE </span></center>
+								</div>
+							</div>
+
+							<form action="{{ route('truncateChain') }}" method="POST" enctype="multipart/form-data">
+							@csrf
+								<div class="row justify-content-center">
+									<div class="col">
+										@if(session('truncateChainError'))
+											<div class="alert alert-danger">
+	  											{{ session('truncateChainError') }}
+											</div>
+										@endif
+
+										@if(session('truncateChainComplete'))
+											<div class="alert alert-info">
+	  											{{ session('truncateChainComplete') }}
+											</div>
+										@endif
+									</div>
+								</div>
+								
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+
+								<div class="row justify-content-end">          
+							 		<div class="col">		
+								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+									</div>
+								</div>
+							</form>
+
+							<br><hr>
+
+							<div class="row">
+								<div class="col">
 									<center><span style="font-size: 18px;"> FIRST CHAIN </span></center>
 								</div>
 							</div>
@@ -102,6 +143,14 @@
 									</div>
 								</div>
 
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+								
 								<div class="row justify-content-end">          
 							 		<div class="col">		
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
@@ -146,6 +195,14 @@
 							 		<div class="col">		
 										<div class="form-group">
 											{{$rC->report()}}					
+										</div>
+									</div>
+								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->year()}}					
 										</div>
 									</div>
 								</div>
@@ -198,6 +255,14 @@
 									</div>
 								</div>
 
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->year()}}					
+										</div>
+									</div>
+								</div>
+
 								<div class="row justify-content-end">          
 							 		<div class="col">		
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
@@ -226,15 +291,7 @@
 											</div>
 										@endif
 									</div>
-								</div>
-
-								<div class="row justify-content-center">          
-							 		<div class="col">		
-										<div class="form-group">
-											{{$rC->year()}}					
-										</div>
-									</div>
-								</div>
+								</div>						
 
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -244,7 +301,13 @@
 									</div>
 								</div>
 
-
+								<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											{{$rC->year()}}					
+										</div>
+									</div>
+								</div>
 
 								<div class="row justify-content-end">
 									<div class="col col-sm-6">

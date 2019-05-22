@@ -20,7 +20,7 @@ class CheckElementsController extends Controller{
 		$con = $db->openConnection('firstMatch');	
 
 		$table = Request::get('table');
-
+		var_dump($table);
 		$newValues = $cE->newValues($conDLA,$con,$table);
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
