@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Validator;
+
 use App\dataBase;
 use App\import;
 use App\chain;
@@ -16,8 +18,15 @@ class ChainController extends Controller{
     }    
 
     public function truncateChain(){
-    	var_dump(Request::all());
-    	$table = Request::get('table');
+    	$validator = Validator::make(Request::all(),[
+            'tableTruncate' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+        	return back()->withErrors($validator)->withInput();
+        }
+
+    	$table = Request::get('tableTruncate');   	
 
     	$db = new dataBase();
 		
@@ -46,13 +55,22 @@ class ChainController extends Controller{
     }
 
     public function firstChain(){
+    	
+    	$validator = Validator::make(Request::all(),[
+    		'file' => 'required',
+            'tableFirstChain' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+        	return back()->withErrors($validator)->withInput();
+        }
+
     	$db = new dataBase();
 		$chain = new chain();		
 		$i = new import();
 		$con = $db->openConnection('firstMatch');	
-		$table = Request::get('table');
+		$table = Request::get('tableFirstChain');
 		$year = Request::get('year');
-		$truncate = (bool)intval(Request::get('truncate'));
 
 		$spreadSheet = $i->base();
 
@@ -89,7 +107,7 @@ class ChainController extends Controller{
 				break;			
 		}
 
-		$complete = $chain->handler($con,$table,$spreadSheet,$year,$truncate);
+		$complete = $chain->handler($con,$table,$spreadSheet,$year);
 		
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
@@ -100,6 +118,14 @@ class ChainController extends Controller{
     }
 
     public function secondChain(){
+		$validator = Validator::make(Request::all(),[
+            'tableSecondChain' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+        	return back()->withErrors($validator)->withInput();
+        }
+
 		$db = new dataBase();
 		$chain = new chain();
 		$sql = new sql();
@@ -107,20 +133,28 @@ class ChainController extends Controller{
 		$con = $db->openConnection('DLA');	
 		$fCon = $db->openConnection('firstMatch');	
 		$sCon = $db->openConnection('secondMatch');	
-    	$table = Request::get('table');
+    	$table = Request::get('tableSecondChain');
 
     	$year = Request::get('year');
     	$complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
-/*
+
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('secondChainError',"There was and error on the insertion of the Excel Data :( ");
         }
-*/
+
     }
 
     public function thirdChain(){
+    	$validator = Validator::make(Request::all(),[
+            'tableThirdChain' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+        	return back()->withErrors($validator)->withInput();
+        }
+
     	$db = new dataBase();
 		$chain = new chain();
 		$sql = new sql();
@@ -128,7 +162,7 @@ class ChainController extends Controller{
 		$con = $db->openConnection('DLA');			
 		$sCon = $db->openConnection('secondMatch');	
 		$tCon = $db->openConnection('thirdMatch');	
-    	$table = Request::get('table');
+    	$table = Request::get('tableThirdChain');
     	$year = Request::get('year');
     	$complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
 
@@ -137,20 +171,35 @@ class ChainController extends Controller{
         }else{
             return back()->with('thirdChainError',"There was and error on the insertion of the Excel Data :( ");
         }
+
     }
 
     public function thirdToDLA(){
+    	$validator = Validator::make(Request::all(),[
+            'tableToDLAChain' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+        	return back()->withErrors($validator)->withInput();
+        }
+
     	$db = new dataBase();
 		$chain = new chain();
 		$sql = new sql();
 
 		$con = $db->openConnection('DLA');			
 		$tCon = $db->openConnection('thirdMatch');	
-    	$table = Request::get('table');
+    	$table = Request::get('tableToDLAChain');
     	$year = Request::get('year');
 		$truncate = (bool)intval(Request::get('truncate'));
 
-    	$bool = $chain->thirdToDLA($sql,$con,$tCon,$table,$year,$truncate);
+    	$complete = $chain->thirdToDLA($sql,$con,$tCon,$table,$year,$truncate);
+
+    	if($complete){
+            return back()->with('lastChainComplete',"The Excel Data Was Succesfully Inserted :)");
+        }else{
+            return back()->with('lastChainError',"There was and error on the insertion of the Excel Data :( ");
+        }
 
     }
 
