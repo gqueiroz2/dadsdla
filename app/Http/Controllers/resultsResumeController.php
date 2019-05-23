@@ -169,7 +169,9 @@ class resultsResumeController extends Controller{
 		$previousYear = $resume->generateVector($con,$tableSales,$regionID,$pYear,$month,$brandID,$currencyID,$value,$joinSales,$whereSalesPYear);
 		$matrix = $resume->assembler($month,$salesCYear,$actual,$target,$corporate/*$pAndR,$finance*/,$previousYear);
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow'));
+		//ßvar_dump($salesRegion);
+
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion'));
 
 	}
 

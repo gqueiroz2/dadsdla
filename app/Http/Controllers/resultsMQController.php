@@ -42,7 +42,6 @@ class resultsMQController extends Controller{
                 $b = new brand();
                 $pr = new pRate();
                 $render = new Render();
-                $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);                
                 $validator = Validator::make(Request::all(),[
@@ -84,7 +83,11 @@ class resultsMQController extends Controller{
 
                 $form = $mq->TruncateName($secondPos);
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form'));
+                $salesRegion = $r->getRegion($con, array($regionID));
+
+                $salesRegion = $salesRegion[0]['name'];
+
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion'));
         }
 
 
@@ -133,7 +136,7 @@ class resultsMQController extends Controller{
                 $b = new brand();
                 $brand = $b->getBrand($con);
 
-                $region = Request::get("region");
+                $regionID = Request::get("region");
                 $r = new region();
                 $salesRegion = $r->getRegion($con);
 
@@ -149,7 +152,7 @@ class resultsMQController extends Controller{
                 $source = strtoupper(Request::get("secondPos"));
 
                 $mq = new resultsMQ();
-                $lines = $mq->lines($con,$pRate,$base->getMonth(),$form,$brands,$year,$region,$value,$source);
+                $lines = $mq->lines($con,$pRate,$base->getMonth(),$form,$brands,$year,$regionID,$value,$source);
                 //var_dump($quarter);
                 $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year,$source);
                 
@@ -158,7 +161,11 @@ class resultsMQController extends Controller{
 
                 $form = $mq->TruncateName($form);
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form'));
+                $region = $r->getRegion($con, array($regionID));
+
+                $region = $region[0]['name'];
+
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region'));
 
 	} 
 

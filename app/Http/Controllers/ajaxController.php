@@ -10,8 +10,52 @@ use App\dataBase;
 use App\salesRep;
 use App\pRate;
 use App\sql;
+use App\brand;
 
 class ajaxController extends Controller{
+
+    public function tierByRegion(){
+
+        echo "<option selected='true' value='1'>T1</option>";
+        echo "<option selected='true' value='2'>T2</option>";
+        echo "<option selected='true' value='3'>OTH</option>";
+    }
+
+    public function brandsByTier(){
+        
+        $tiers = Request::get('tiers');
+
+        if (is_null($tiers)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+
+            $b = new brand();
+            $brands = $b->getBrand($con);
+            for ($t=0; $t < sizeof($tiers); $t++) {
+                for ($b=0; $b < sizeof($brands); $b++) { 
+                    $value[$b] = base64_encode(json_encode(array($brands[$b]['id'],$brands[$b]['name'])));
+                    if ($tiers[$t] == '1') {
+                        if ($brands[$b]['name'] == 'DC' || $brands[$b]['name'] == 'HH' || $brands[$b]['name'] == 'DK'){
+                            echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";            
+                        }
+                    }elseif ($tiers[$t] == '2') {
+                        if ($brands[$b]['name'] == 'AP' || $brands[$b]['name'] == 'TLC' || $brands[$b]['name'] == 'ID' || $brands[$b]['name'] == 'DT' || $brands[$b]['name'] == 'FN' || $brands[$b]['name'] == 'ONL' || $brands[$b]['name'] == 'VIX' || $brands[$b]['name'] == 'HGTV'){
+                                echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";               
+                        }
+                    }else{
+                        if ($brands[$b]['name'] == "OTH") {
+                            echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";    
+                        }
+                        
+                    }
+                }  
+
+            }    
+        }
+        
+    }
 
     public function yearByRegion(){
         
@@ -102,19 +146,16 @@ class ajaxController extends Controller{
         $regionID = array(Request::get('regionID'));
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
-
         $userLevel = Request::session()->get('userLevel');
 
         if ($userLevel == "L3" || $userLevel == "L4") {
             $groupID = Request::session()->get('userSalesRepGroupID');
             $groupName = Request::session()->get('userSalesRepGroup');
-            echo "<option value='".$groupID."'>".$groupName."</option>";
-
+            echo "<option value='".$groupID."' selected='true'>".$groupName."</option>";
         }else{
             if($salesRepGroup){
-                echo "<option value='all'> All </option>";
                 for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
-                    echo "<option value='".$salesRepGroup[$s]["id"]."'>"
+                    echo "<option value='".$salesRepGroup[$s]["id"]."' selected='true'>"
                         .$salesRepGroup[$s]["name"].
                     "</option>";
                 }
@@ -132,29 +173,20 @@ class ajaxController extends Controller{
         $sr = new salesRep();
         $regionID = Request::get('regionID');
 
-        $salesRepGroupID = array( Request::get('salesRepGroupID') );         
+        $salesRepGroupID = Request::get('salesRepGroupID');         
         $year = Request::get('year');        
         $source = Request::get('source');
         $userLevel = Request::session()->get('userLevel');
-        
 
-
-        if($salesRepGroupID[0] == "all"){        
-            $regionInArray = array($regionID);
-            $salesRep = $sr->getSalesRepByRegion($con,$regionInArray);
-        }else{
-            $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
-        }
-        var_dump($salesRep);
+        $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
 
         $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
-        var_dump($salesRep);
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
             $check = false;            
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                 if($salesRep[$s]["salesRep"] == $userName){
-                    echo "<option value='".$salesRep[$s]["id"]."'> ".$salesRep[$s]["salesRep"]." </option>";
+                    echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
                     $check = true;
                 }
             }
@@ -164,9 +196,8 @@ class ajaxController extends Controller{
         }else{
 
             if($salesRep){
-                echo "<option value='all'> All </option>";
                 for ($s=0; $s < sizeof($salesRep); $s++) { 
-                    echo "<option value='".$salesRep[$s]["id"]."'>"
+                    echo "<option value='".$salesRep[$s]["id"]."' selected='true'>"
                         .$salesRep[$s]["salesRep"].
                     "</option>";
                 }
@@ -212,7 +243,7 @@ class ajaxController extends Controller{
 
     public function valueBySource(){
         $source = Request::get('source');
-        var_dump($source);
+        //var_dump($source);
 
         if ($source == "mini_header" || $source == "Header") {
             echo "<option value='gross'> Gross </option>";
@@ -220,9 +251,5 @@ class ajaxController extends Controller{
             echo "<option value='gross'> Gross </option>";
             echo "<option value='net'> Net </option>";
         }    
-    }
-
-    public function tierByRegion(){
-        
     }
 }

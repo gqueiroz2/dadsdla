@@ -44,44 +44,6 @@ class base extends Model{
         return $intMonth;
     }
 
-    public function brandToTier($brand){
-        $tiers = array();
-        for ($b=0; $b <sizeof($brand); $b++) { 
-            if($brand[$b][1] == 'DC' || $brand[$b][1] == 'HH' || $brand[$b][1] == 'DK') {
-                array_push($tiers,"T1");
-            }elseif($brand[$b][1] == 'OTH'){
-                array_push($tiers,"T3");
-            }else{
-                array_push($tiers,"T2");
-            }
-        }
-        $tiers = array_unique($tiers);
-        $tiers = array_values($tiers);
-
-        return $tiers;
-    }
-
-    public function monthToQuarter($month){
-        $quarter = array();
-
-        for ($m=0; $m <sizeof($month) ; $m++) { 
-            if ($month[$m] == 1 || $month[$m] == 2 || $month[$m] == 3) {
-                array_push($quarter, "Q1");
-            }elseif ($month[$m] == 4 || $month[$m] == 5 || $month[$m] == 6) {
-                array_push($quarter, "Q2");
-            }elseif ($month[$m] == 7 || $month[$m] == 8 || $month[$m] == 9) {
-                array_push($quarter, "Q3");
-            }else{
-                array_push($quarter, "Q4");
-            }
-        }
-        
-        $quarter = array_unique($quarter);
-        $quarter = array_values($quarter);
-
-        return $quarter;
-    }
-
     public function formatData($from,$to,$string){
         switch ($from) {
             case 'dd/mm/aaaa':                
@@ -160,7 +122,7 @@ class base extends Model{
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");
-    protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX", "OTH");
+    protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX", "OTH", "HGTV");
     protected $brandsColor = array("#0070c0","#ff3300","#ffff00","#009933","#ff0000","#000000","#000066","#ff0000","#6600ff","#004b84",'#ffffff');
     protected $brandTextColor = array("#000000","#000000","#000000","#000000","#000000","#ffffff","#ffffff","#000000","#000000","#000000","#000000");
     protected $brandTarget = array(  "Discovery",

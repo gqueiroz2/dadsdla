@@ -24,20 +24,45 @@ class quarterPerformanceController extends Controller {
         $region = new region();
         $salesRegion = $region->getRegion($con);
 
-        $b = new brand();
-        $brands = $b->getBrand($con);
-
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con, null);
         $salesRep = $sr->getSalesRep($con, null);
 
-        //var_dump($salesRepGroup);
-        return view("adSales.performance.2quarterGet", compact('render', 'salesRegion', 'brands', 'salesRepGroup', 'salesRep'));
+        return view("adSales.performance.2quarterGet", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep'));
     	
     }
 
     public function post(){
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'tier' => 'required',            
+            'brand' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $region = Request::get('region');
+        $year = Request::get('year');
     	
-    	var_dump("expression");
+        $tmp = Request::get("brand");
+        $base = new base();
+        $brands = $base->handleBrand($tmp);
+
+        $currency = Request::get("currency");
+        $p = new pRate();
+        $pRate = $p->getCurrency($con, array($currency));
+
+        $value = Request::get("value");
+
+        var_dump($brands);
     }
 }

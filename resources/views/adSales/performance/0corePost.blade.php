@@ -1,20 +1,16 @@
 @extends('layouts.mirror')
 @section('title', 'Share')
 @section('head')	
-	<script src="/js/performance.js"></script>
-    <?php include(resource_path('views/auth.php')); ?>
-    <style type="text/css">
-    	th, td{
-			text-align: center;
-			font-size: 12px;
-			padding: 3px;
-		}
-    </style>
+<script src="/js/performance.js"></script>
+    <?php include(resource_path('views/auth.php')); 
+    ?>
 @endsection
 @section('content')
-	<div class="container-fluid">	
+	<div class="container-fluid">		
 		<div class="row">
 			<div class="col">
+				
+
 				<form method="POST" action="{{ route('corePerformancePost') }}">
 					@csrf
 					<div class="row justify-content-center">
@@ -44,15 +40,22 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
+							<label class='labelLeft'><span class="bold">Source:</span></label>
+							@if($errors->has('source'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->source()}}
+						</div>
+						
+					</div>
+					<div class="row justify-content-center">
+						<div class="col">
 							<label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
 							@if($errors->has('salesRepGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->salesRepGroup($salesRepGroup)}}
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Currency:</span></label>
 							@if($errors->has('currency'))
@@ -88,7 +91,7 @@
 			</div>
 		</div>
 		<div class="row mt-2">
-			<div class="col" style="width: 100%;">
+			<div class="col">
 				<div class="container-fluid">
 					<div class="form-group">
 						<div class="form-inline">

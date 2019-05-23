@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Render;
 
 class renderMQ extends Render{
-    public function assemble($mtx,$currency,$value,$year,$form){
+    public function assemble($mtx,$currency,$value,$year,$form,$region){
     	echo "<table style='width: 100%; zoom:80%;'>";
+    		
 			echo "<tr>";
-				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> Monthly :(".$form.") ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
+				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly :(".$form.") ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 
 			echo "<tr><td>&nbsp;</td></tr>";

@@ -10,13 +10,13 @@ class renderMonthlyYoY extends Model{
 	*$mtx = matriz dos meses
 	*$quarters = quarters
 	*/
-	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source){
+	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source, $region){
 		
 		echo "<table style='width: 100%; zoom:80%;'>";
 
 			echo "<th class='dc center' colspan='13'>";
 				echo "<span style='font-size:24px;''>";
-					echo "Monthly Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")";
+					echo "$region - Monthly Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")";
 				echo "</span>";
 			echo "</th>";
 
