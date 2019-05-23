@@ -35,7 +35,7 @@ class renderMonthlyYoY extends Model{
 	        		echo "</tr>";
 	        	}else{
 	        		echo "<tr>";
-	            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "darkBlue", "smBlue", "smBlue", "smBlue");
+	            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "darkBlue", "smBlue", "smBlue", "smBlue", true);
 	        		echo "</tr>";
 	        	}
             }
@@ -116,7 +116,7 @@ class renderMonthlyYoY extends Model{
 	*renderiza o corpo cabeçalho (valores de cada coluna)
 	*as cores são sempre essas 4 e são determinadas pelo numero da coluna
 	*/
-    public function renderData($brand, $matrix, $quarter, $month, $brandPos, $firstColor, $secondColor, $thirdColor, $fourthColor){
+    public function renderData($brand, $matrix, $quarter, $month, $brandPos, $firstColor, $secondColor, $thirdColor, $fourthColor, $ok=false){
     	
     	$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
@@ -153,7 +153,12 @@ class renderMonthlyYoY extends Model{
 			}
 
 			//é feita (pos + 1) no ultimo indice, pois as marcas começam no indice 1, sendo que o indice 0 é o nome da coluna
-			echo "<td $class>".number_format($quarter[$i][$brandPos+1])."</td>";
+			if (!$ok) { //verifca se é DN
+				echo "<td $class>".number_format($quarter[$i][$brandPos+1])."</td>";	
+			}else{
+				echo "<td $firstClass>".number_format($quarter[$i][$brandPos+1])."</td>";	
+			}
+			
 		}
 
     }

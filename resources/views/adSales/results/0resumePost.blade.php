@@ -39,13 +39,29 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col" style="color: #0070c0;font-size: 22px">
+				{{$salesRegion}} - Resume : {{$salesShow}} - {{$cYear}}
+			</div>
+
+			<div class="col">
+				<button type="button" class="btn btn-primary" style="width: 100%">
+					Generate Excel
+				</button>				
+			</div>
+		</div>
+
 	</div>
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row mt-2	">
+		<div class="row mt-2">
 			<div class="col">				
 				<table class="table table-bordered" style="width: 100%;">
 					<tr>
-						<th class="darkBlue center" colspan="11"><span style="font-size:18px;">{{$salesRegion}} - Resume :({{$salesShow}}) {{$cYear}} ({{$currencyS}}/{{$valueS}}) </span> </th>
+						<th class="darkBlue center" colspan="11"><span style="font-size:18px;">{{$salesRegion}} - Resume : {{$salesShow}} - {{$cYear}} ({{$currencyS}}/{{$valueS}}) </span> </th>
 					</tr>
 					<tr>
 						<th class="darkBlue"> Month </th>

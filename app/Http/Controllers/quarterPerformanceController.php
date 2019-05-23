@@ -50,7 +50,7 @@ class quarterPerformanceController extends Controller {
             return back()->withErrors($validator)->withInput();
         }
 
-        $region = Request::get('region');
+        $regionID = Request::get('region');
         $year = Request::get('year');
     	
         $tmp = Request::get("brand");
@@ -63,6 +63,6 @@ class quarterPerformanceController extends Controller {
 
         $value = Request::get("value");
 
-        var_dump($brands);
+        
     }
 }
