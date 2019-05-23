@@ -9,8 +9,7 @@ class quarterPerformanceRender extends Render {
     
     public function tiers(){
     	
-    	echo "<select id='tier' name='tier' style='width: 100%' class='form-control'>";
-    		echo "<option value=''> Select Region</option>";
+    	echo "<select id='tier' class='selectpicker' data-selected-text-format='count' multiple='true' name='tier[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
     	echo "</select>";
     }
 }
