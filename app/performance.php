@@ -63,7 +63,7 @@ class performance extends Model{
         //define de onde vai se tirar as informações do banco, sendo as opções ytd(IBMS), cmaps, header ou digital.
         $actualMonth = date("m");
         for ($b=0; $b <sizeof($brand); $b++) {
-            for ($m=0; $m <sizeof($month) ; $m++) {
+            for ($m=0; $m <sizeof($month); $m++) {
                 if ($m > $actualMonth-1) {
                     if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                         $sourceBrand[$b][$m] = "Digital";
@@ -299,15 +299,13 @@ class performance extends Model{
     }
 
     public function defineTable($source){
-        $table = false;
-        if ($source == "CMAPS") {
-            $table = "cmaps";
-        }elseif($source == "IBMS"){
+        
+        if($source == "IBMS"){
             $table = "ytd";
-        }elseif($source == "Header"){
-            $table = "mini_header";
         }elseif($source == "Digital"){
             $table = "digital";
+        }else{
+            $table = false;
         }
 
         return $table;
@@ -323,15 +321,8 @@ class performance extends Model{
     }
 
     public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
-        if ($source == "CMAPS") {
-            $columns = array("year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($year,$brand,$salesRep,$month);
-            $where = $sql->where($columns,$arrayWhere);
-        }elseif ($source == "IBMS") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
-            $where = $sql->where($columns,$arrayWhere);
-        }elseif ($source == "Header") {
+        
+        if ($source == "IBMS") {
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep,$month);
             $where = $sql->where($columns,$arrayWhere);
