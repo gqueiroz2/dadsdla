@@ -90,7 +90,7 @@ class CheckElements extends Model{
 		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
 
 		$new = $this->checkDifferences($distinctDLA,$distinctFM);
-
+		
 		return $new;
 	}
 
