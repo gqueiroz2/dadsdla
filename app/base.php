@@ -144,8 +144,8 @@ class base extends Model{
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");
     protected $brands = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL", "VIX", "OTH", "HGTV");
-    protected $brandsColor = array("#0070c0","#ff3300","#ffff00","#009933","#ff0000","#000000","#000066","#ff0000","#6600ff","#004b84",'#ffffff');
-    protected $brandTextColor = array("#000000","#000000","#000000","#000000","#000000","#ffffff","#ffffff","#000000","#000000","#000000","#000000");
+    protected $brandsColor = array("#0070c0","#ff3300","#ffff00","#009933","#ff0000","#000000","#000066","#ff0000","#6600ff","#004b84",'#ffffff',"#88cc00");
+    protected $brandTextColor = array("#000000","#000000","#000000","#000000","#000000","#ffffff","#ffffff","#000000","#000000","#000000","#000000","#000000");
     protected $brandTarget = array(  "Discovery",
                                      "Discovery Home and Health",
                                      "Discovery Kids",

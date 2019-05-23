@@ -16,9 +16,9 @@ class ajaxController extends Controller{
 
     public function tierByRegion(){
 
-        echo "<option selected='true' value='1'>T1</option>";
-        echo "<option selected='true' value='2'>T2</option>";
-        echo "<option selected='true' value='3'>OTH</option>";
+        echo "<option selected='true' value='T1'>T1</option>";
+        echo "<option selected='true' value='T2'>T2</option>";
+        echo "<option selected='true' value='OTH'>OTH</option>";
     }
 
     public function brandsByTier(){
@@ -36,11 +36,11 @@ class ajaxController extends Controller{
             for ($t=0; $t < sizeof($tiers); $t++) {
                 for ($b=0; $b < sizeof($brands); $b++) { 
                     $value[$b] = base64_encode(json_encode(array($brands[$b]['id'],$brands[$b]['name'])));
-                    if ($tiers[$t] == '1') {
+                    if ($tiers[$t] == 'T1') {
                         if ($brands[$b]['name'] == 'DC' || $brands[$b]['name'] == 'HH' || $brands[$b]['name'] == 'DK'){
                             echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";            
                         }
-                    }elseif ($tiers[$t] == '2') {
+                    }elseif ($tiers[$t] == 'T2') {
                         if ($brands[$b]['name'] == 'AP' || $brands[$b]['name'] == 'TLC' || $brands[$b]['name'] == 'ID' || $brands[$b]['name'] == 'DT' || $brands[$b]['name'] == 'FN' || $brands[$b]['name'] == 'ONL' || $brands[$b]['name'] == 'VIX' || $brands[$b]['name'] == 'HGTV'){
                                 echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";               
                         }

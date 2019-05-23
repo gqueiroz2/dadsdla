@@ -13,7 +13,7 @@
   			  method:"POST",
   			  data:{regionID},
       		success: function(output){
-        		$('#salesRepGroup').html(output);
+        		$('#salesRepGroup').html(output).selectpicker('refresh');
             setTimeout(function(){
               var regionID = $("#region").val();  
               var salesRepGroupID = $('#salesRepGroup').val();
@@ -26,7 +26,7 @@
                   method:"POST",
                   data:{regionID,salesRepGroupID,year,source},
                   success: function(output){
-                    $('#salesRep').html(output);                    
+                    $('#salesRep').html(output).selectpicker('refresh');                    
                   },
                   error: function(xhr, ajaxOptions,thrownError){
                     alert(xhr.status+" "+thrownError);
@@ -75,10 +75,10 @@
 
       }else{
         var option = "<option> Select Region </option>";
-        $('#salesRepGroup').html(option);
+        $('#salesRepGroup').html(option).selectpicker('refresh');
         $('#currency').html(option);
         $('#source').html(option);
-        $('#salesRep').html(option);
+        $('#salesRep').html(option).selectpicker('refresh');
 
       }
     });
@@ -95,7 +95,7 @@
   		  	method:"POST",
   			  data:{regionID,salesRepGroupID,year,source},
         	success: function(output){
-        		$('#salesRep').html(output);                		
+        		$('#salesRep').html(output).selectpicker('refresh');                		
         	},
         	error: function(xhr, ajaxOptions,thrownError){
         		alert(xhr.status+" "+thrownError);
@@ -103,7 +103,7 @@
     		});
       }else{
         var option = "<option> Select Sales Group </option>";
-        $('#salesRep').html(option);
+        $('#salesRep').html(option).selectpicker('refresh');
       }
       
     });
