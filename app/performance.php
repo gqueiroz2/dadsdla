@@ -94,8 +94,6 @@ class performance extends Model{
                 $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales");
             }
         }
-        var_dump($salesRep);
-        
 
         $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier);
 
@@ -339,5 +337,4 @@ class performance extends Model{
     
         return $where;
     }
-
 }

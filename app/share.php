@@ -48,6 +48,7 @@ class share extends results
             $valueView = "Net";
         }
 
+
         $yearView = $year[0];
 
         $tmp = array($region);
@@ -102,10 +103,41 @@ class share extends results
         }
         
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
+
+        $salesRepGroupTmp = $sr->getSalesRepGroup($con,array($region));
+        //MEXER AINDA PELA VIEW DOS SALES REPS
+        $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
+        $salesRep = $sr->getSalesRepById($con,$salesRep);
+
+
+
+        if(sizeof($salesGroup) == sizeof($salesRepGroupTmp)){
+            $salesRepGroupView = "All";
+        }else{
+            $salesRepGroupView = "";
+            for ($sg=0; $sg <sizeof($salesGroup) ; $sg++) { 
+                if ($sg == 0) {
+                    $salesRepGroupView .= $salesGroup[$sg]["name"];
+                }else{
+                    $salesRepGroupView .= ", ".$salesGroup[$sg]["name"];
+                }
+            }    
+        }
+
+
         $salesRepName = array();
+        $salesRepView = "";
+        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+            array_push($salesRepName, $salesRep[$s]["salesRep"]);
+            if ($s == 0) {
+                $salesRepView .= $salesRep[$s]["salesRep"];
+            }else{
+                $salesRepView .= ", ".$salesRep[$s]["salesRep"];
+            }
+        }
 
 
-        if ($salesRepGroup == 'all') {
+        /*if ($salesRepGroup == 'all') {
                 
             $tmp = array($region);
         
@@ -163,7 +195,7 @@ class share extends results
                     }
                 }
             }
-        }
+        }*/
 
 
 
@@ -253,19 +285,19 @@ class share extends results
     public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
         if ($source == "CMAPS") {
             $columns = array("year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($year,$brand,$salesRep,$month);
+            $arrayWhere = array($year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "IBMS") {
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Header") {
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Digital"){
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep,$month);
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }else{
             $where = false;

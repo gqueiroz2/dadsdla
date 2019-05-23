@@ -33,6 +33,13 @@
 							{{$render->year()}}
 						</div>
 						<div class="col">
+							<label class='labelLeft'><span class="bold">Tiers:</span></label>
+							@if($errors->has('brand'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->tiers()}}
+						</div>
+						<div class="col">
 							<label class='labelLeft'><span class="bold">Brands:</span></label>
 							@if($errors->has('brand'))
 								<label style="color: red;">* Required</label>
@@ -40,13 +47,12 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'><span class="bold">Source:</span></label>
-							@if($errors->has('source'))
+							<label class='labelLeft'><span class="bold">Currency:</span></label>
+							@if($errors->has('currency'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->source()}}
+							{{$render->currency($currency)}}
 						</div>
-						
 					</div>
 					<div class="row justify-content-center">
 						<div class="col">
@@ -57,11 +63,11 @@
 							{{$render->salesRepGroup($salesRepGroup)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'><span class="bold">Currency:</span></label>
-							@if($errors->has('currency'))
+							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
+							@if($errors->has('salesRep'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->currency($currency)}}
+							{{$render->salesRep()}}
 						</div>
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Months:</span></label>
