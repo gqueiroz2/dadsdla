@@ -98,9 +98,7 @@ class chain extends excel{
         }else{
             for ($y=0; $y < sizeof($year); $y++) { 
                 $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";     
-                var_dump($delete[$y]);
                 if($con->query($delete[$y])){
-
                 }
             }
         }        

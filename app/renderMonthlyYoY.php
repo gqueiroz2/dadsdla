@@ -12,33 +12,36 @@ class renderMonthlyYoY extends Model{
 	*/
 	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source, $region){
 		
-		echo "<table style='width: 100%; zoom:80%;'>";
+		echo "<table style='width: 100%; zoom:90%;'>";
 
 			echo "<th class='dc center' colspan='13'>";
 				echo "<span style='font-size:24px;''>";
-					echo "$region - Monthly Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")";
+					echo "$region - Monthly Year Over Year : ".$form." - ".$year." (".$pRate[0]['name']."/".strtoupper($value).")";
 				echo "</span>";
 			echo "</th>";
-
-		echo "<tr><td>&nbsp;</td></tr>";
+			echo "<tr height='10'><td>&nbsp;</td></tr>";
 		for($i = 0, $j = 0; $i < sizeof($months); $i+=3, $j++){
-			echo "<tr>";
 
-			echo "<tr>";
+			echo "<tr style='border-collapse:separate; border-spacing:0 15px;'>";
                 $this->renderHead($months, $i, $j, "dc", "vix", "darkBlue");
             echo "</tr>";
            	echo "<tr>";
            		$this->renderHead2($year, "dc", "vix", "darkBlue", $source);
            	echo "</tr>";
             for($b = 0; $b < sizeof($brands); $b++){
-            	echo "<tr>";
-            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "dc", "rcBlue", "month", "medBlue");
-        		echo "</tr>";
+	            if($b != (sizeof($brands) - 1) ){
+	            	echo "<tr>";
+	            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "dc", "rcBlue", "month", "medBlue");
+	        		echo "</tr>";
+	        	}else{
+	        		echo "<tr>";
+	            		$this->renderData($brands[$b], $mtx, $quarters[$j], $i, $b, "darkBlue", "smBlue", "smBlue", "smBlue");
+	        		echo "</tr>";
+	        	}
             }
-            echo "</tr>";
 
 			if($i != (sizeof($months)-1)){
-				echo "<tr><td>&nbsp;</td></tr>";
+				echo "<tr height='10'><td>&nbsp;</td></tr>";
 			}
 		}
 
@@ -162,7 +165,7 @@ class renderMonthlyYoY extends Model{
     	$source = strtolower($source);
         $source = ucfirst($source);
     	
-    	echo "<table style='width: 100%; zoom:80%;'>";
+    	echo "<table style='width: 100%; zoom:90%;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");
 			echo "</tr>";
