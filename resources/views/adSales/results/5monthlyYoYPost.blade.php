@@ -125,7 +125,7 @@
 			<div class="col">
 
 				<tr><td>&nbsp;</td></tr>
-				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands, $source)}}	
+				{{$renderMonthlyYoY->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands, $source, $region)}}	
 			</div>
 		</div>
 	</div>

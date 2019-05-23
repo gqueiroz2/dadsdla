@@ -6,9 +6,6 @@ $(document).ready(function(){
 	  if(regionID != ""){        			
 
       ajaxSetup();
-		  
-      var option = "<option> Select Sales Group </option>";
-      $('#salesRep').html(option).selectpicker('refresh');
 
       $.ajax({
   			url:"/ajaxResults/salesRepGroupByRegion",
@@ -29,15 +26,13 @@ $(document).ready(function(){
                 data:{regionID,salesRepGroupID,year,source},
                 success: function(output){
                   $('#salesRep').html(output).selectpicker('refresh');
-                  $('#vlau').html(output);
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                   alert(xhr.status+" "+thrownError);
                 }
               });
             }else{
-              var option = "<option> Select Sales Group </option>";
-              $('#salesRep').html(option);
+              $('#salesRep').selectpicker('deselectAll').selectpicker('refresh');
             }
           },60);
           
@@ -76,7 +71,6 @@ $(document).ready(function(){
             data:{tiers},
             success: function(output){
               $('#brand').html(output).selectpicker('refresh');
-              //$('#vlau').html(output);
             },
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
@@ -128,10 +122,12 @@ $(document).ready(function(){
 
     }else{
       var option = "<option> Select Region </option>";
-      $('#salesRepGroup').html(option);
+      $('#year').html(option);
+      $('#tier').selectpicker('deselectAll').selectpicker('refresh');
+      $('#salesRepGroup').selectpicker('deselectAll').selectpicker('refresh');
       $('#currency').html(option);
       $('#source').html(option);
-      $('#salesRep').html(option);
+      $('#salesRep').selectpicker('deselectAll').selectpicker('refresh');
 
     }
   });
@@ -155,8 +151,7 @@ $(document).ready(function(){
   			}
   		});
     }else{
-      var option = "<option> Select Sales Group </option>";
-      $('#salesRep').html(option);
+      $('#salesRep').selectpicker('deselectAll').selectpicker('refresh');
     }
     
   });
@@ -174,15 +169,14 @@ $(document).ready(function(){
         method:"POST",
         data:{regionID,salesRepGroupID,year,source},
         success: function(output){
-          $('#salesRep').html(output);                    
+          $('#salesRep').html(output).selectpicker('refresh');                    
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
       });
     }else{
-      var option = "<option> Select Sales Group </option>";
-      $('#salesRep').html(option);
+      $('#salesRep').selectpicker('deselectAll').selectpicker('refresh');
     }
 
     var source = $(this).val();
@@ -213,15 +207,14 @@ $(document).ready(function(){
         method:"POST",
         data:{regionID,salesRepGroupID,year,source},
         success: function(output){
-          $('#salesRep').html(output);                    
+          $('#salesRep').html(output).selectpicker('refresh');                    
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
       });
     }else{
-      var option = "<option> Select Sales Group </option>";
-      $('#salesRep').html(option);
+      $('#salesRep').selectpicker('deselectAll').selectpicker('refresh');
     }
 
   });

@@ -28,7 +28,6 @@ class quarterPerformanceController extends Controller {
         $salesRepGroup = $sr->getSalesRepGroup($con, null);
         $salesRep = $sr->getSalesRep($con, null);
 
-        //var_dump($salesRepGroup);
         return view("adSales.performance.2quarterGet", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep'));
     	
     }
@@ -40,8 +39,9 @@ class quarterPerformanceController extends Controller {
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
-            'brand' => 'required',
             'year' => 'required',
+            'tier' => 'required',            
+            'brand' => 'required',
             'currency' => 'required',
             'value' => 'required',
         ]);
@@ -62,5 +62,7 @@ class quarterPerformanceController extends Controller {
         $pRate = $p->getCurrency($con, array($currency));
 
         $value = Request::get("value");
+
+        var_dump($brands);
     }
 }

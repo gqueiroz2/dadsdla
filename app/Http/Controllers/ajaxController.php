@@ -243,7 +243,7 @@ class ajaxController extends Controller{
 
     public function valueBySource(){
         $source = Request::get('source');
-        var_dump($source);
+        //var_dump($source);
 
         if ($source == "mini_header" || $source == "Header") {
             echo "<option value='gross'> Gross </option>";

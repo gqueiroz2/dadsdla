@@ -23,7 +23,7 @@ class renderYoY extends Model {
 
         echo "<table style='width: 100%; zoom:80%;'>";
             echo "<tr>";
-                echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
+                echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> $region - Year Over Year :(".$form.") ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
             echo "</tr>";
 
             echo "<tr><td> &nbsp; </td></tr>";

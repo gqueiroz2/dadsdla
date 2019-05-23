@@ -63,7 +63,7 @@ class resultsMonthlyYoYController extends Controller{
         $b = new brand();
         $brand = $b->getBrand($con);
         
-        $region = Request::get("region");
+        $regionID = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
 
@@ -81,7 +81,7 @@ class resultsMonthlyYoYController extends Controller{
     	$monthlyYoY = new resultsMonthlyYoY();
 
     	//pegando valores das colunas das tabelas
-        $lines = $monthlyYoY->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $region, $value, $source);
+        $lines = $monthlyYoY->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $regionID, $value, $source);
         
         $matrix = $monthlyYoY->assemblers($brands, $lines, $base->getMonth(), $year, $source);
         
@@ -97,7 +97,9 @@ class resultsMonthlyYoYController extends Controller{
 
         $form = $monthlyYoY->TruncateName($form);
         
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source'));
+        $region = $r->getRegion($con, array($regionID))[0]['name'];
+
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region'));
 	}
 
 }

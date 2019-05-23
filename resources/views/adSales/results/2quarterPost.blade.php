@@ -92,7 +92,7 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{$qRender->assemble($matrix, $pRate, $value, $year, $form)}}
+				{{$qRender->assemble($matrix, $pRate, $value, $year, $form, $region)}}
 			</div>
 		</div>
 	</div>

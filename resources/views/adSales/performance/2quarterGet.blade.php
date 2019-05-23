@@ -105,5 +105,5 @@
 		</div>
 	</div>
 
-	<div id="vlau">XXX</div>
+	<div id="vlau"></div>
 @endsection
