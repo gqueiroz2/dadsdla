@@ -82,43 +82,23 @@
 				</form>
 			</div>
 		</div>
-	</div>
-	
-	<br>
+		<div class="row no-gutters justify-content-end mt-2">
 		
-	<div class="row no-gutters">
-		<div class="col-9"></div>
-		<div class="col-3" style="color: #0070c0;font-size: 25px">
-			Monthly Year Over Year ({{$form}}) {{$year}}
+			<div class="col-4" style="color: #0070c0;font-size: 22px">
+				{{$region}} - Monthly Year Over Year : {{$form}} - {{$year}}
+			</div>
+			<div class="col-2">
+				<button id="buttonModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#SemestresTotal" style="width: 99%">
+					Semestre e Total
+				</button>
+			</div>
+			<div class="col-2">
+				<button type="button" class="btn btn-primary" style="width: 99%">
+					Generate Excel
+				</button>				
+			</div>
 		</div>
 	</div>
-
-	<div class="col-sm-2" style="float: right">
-		<button id="buttonModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#SemestresTotal" style="width: 90%">
-			Semestre e Total
-		</button>
-	</div>
-
-	<div class="modal" id="SemestresTotal" role="dialog" style="display: hidden;">
-		<div id="myModal" class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{strtoupper($value)}})</h4>
-					<button type="button" class="close" data-dismiss="modal">
-          				<span aria-hidden="true">&times;</span>
-        			</button>
-				</div>
-				<div class="modal-body">
-					{{ $renderMonthlyYoY->assembleModal($brands, $matrix[1], $year, $source) }}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>	
-	</div>
-
-	<br><br>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
@@ -130,4 +110,26 @@
 		</div>
 	</div>
 
+
+
+	<div class="modal" id="SemestresTotal" role="dialog" style="display: hidden;">
+		<div id="myModal" class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Monthly Year Over Year - ({{$pRate[0]['name']}}/{{strtoupper($value)}})</h4>
+					<button type="button" class="close" data-dismiss="modal">
+          				<span aria-hidden="true">&times;</span>
+        			</button>
+				</div>
+				<div class="modal-body">
+					<div class="table-responsive">
+						{{ $renderMonthlyYoY->assembleModal($brands, $matrix[1], $year, $source) }}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>	
+	</div>
 @endsection
