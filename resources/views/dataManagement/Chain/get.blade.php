@@ -43,7 +43,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->report()}}					
+											<label><b> Table: </b></label> 
+											@if($errors->has('tableTruncate'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->table("tableTruncate")}}					
 										</div>
 									</div>
 								</div>
@@ -65,7 +69,12 @@
 
 							<div class="row justify-content-center">
 								<div class="col">
-									<h6> Add a Excel File </h6>
+									<span style="font-size: 16px;">
+										<b> Add a Excel File </b>
+									</span>
+									@if($errors->has('file'))
+										<span style="color: red;">* Required</span>
+									@endif									
 								</div>
 							</div>
 
@@ -75,7 +84,8 @@
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="file" name="file">                
+											<input type="file" name="file">               
+
 								    	</div>
 								    </div>
 								</div>
@@ -96,10 +106,17 @@
 									</div>
 								</div>
 								
+
+
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->report()}}					
+											<label><b> Table: </b></label> 
+											@if($errors->has('tableFirstChain'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->table('tableFirstChain')}}					
+											
 										</div>
 									</div>
 								</div>
@@ -145,12 +162,16 @@
 
 								<div class="row justify-content-center">          
 							 		<div class="col">		
+										<label><b> Table: </b></label> 
+											@if($errors->has('table'))
+												<label style="color: red;">* Required</label>
+											@endif
 										<div class="form-group">
 											{{$rC->report()}}					
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="row justify-content-end">          
 							 		<div class="col">		
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
@@ -194,7 +215,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->report()}}					
+											<label><b> Table: </b></label> 
+											@if($errors->has('tableSecondChain'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->table('tableSecondChain')}}					
 										</div>
 									</div>
 								</div>
@@ -202,6 +227,10 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
+											<label><b> Year: </b></label> 
+											@if($errors->has('year'))
+												<label style="color: red;">* Required</label>
+											@endif
 											{{$rC->year()}}					
 										</div>
 									</div>
@@ -250,7 +279,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->report()}}					
+											<label><b> Table: </b></label> 
+											@if($errors->has('tableThirdChain'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->table('tableThirdChain')}}					
 										</div>
 									</div>
 								</div>
@@ -258,6 +291,10 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
+											<label><b> Year: </b></label> 
+											@if($errors->has('year'))
+												<label style="color: red;">* Required</label>
+											@endif
 											{{$rC->year()}}					
 										</div>
 									</div>
@@ -296,7 +333,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->report()}}					
+											<label><b> Table: </b></label> 
+											@if($errors->has('tableToDLAChain'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->table('tableToDLAChain')}}					
 										</div>
 									</div>
 								</div>
@@ -304,7 +345,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											{{$rC->year()}}					
+											<label><b> Year(s): </b></label> 
+											@if($errors->has('year'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rC->yearMultiple()}}					
 										</div>
 									</div>
 								</div>
@@ -314,6 +359,7 @@
 										<div class="form-inline" style="float:right;width:100%;">
 											<div class="container">
 												<div class="row">
+													<label><b> Truncate? </b></label> 
 													<div class="col">
 														<input type="radio" name="truncate" value="1"> Yes <br>
 													</div>

@@ -71,7 +71,7 @@ class share extends results
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($region == "1") {
                         $sourceBrand[$m][$b] = "CMAPS";
-                    }else{
+                     }else{
                         $sourceBrand[$m][$b] = "Header";
                     }
                 }else{
@@ -85,11 +85,10 @@ class share extends results
                         $sourceBrand[$m][$b] = "IBMS";
                     }else{
                         $sourceBrand[$m][$b] = $source;
-                    }
-                }
-            }
-        }
-
+                     }
+                 }
+             }
+         }
 
         
         $tmp = $base->getMonth();

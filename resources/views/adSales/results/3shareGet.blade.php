@@ -62,7 +62,7 @@
 							@if($errors->has('salesRep'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->salesRep($salesRep)}}
+							{{$render->salesRep()}}
 						</div>
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Currency:</span></label>

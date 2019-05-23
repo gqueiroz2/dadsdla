@@ -110,9 +110,17 @@ class salesRep extends Management{
 		$where = "";
 
 		if($id){
-			$ids = implode(",", $id);
-			$where .= "WHERE srg.ID IN ('$ids')";
+			$ids = "";
+			for ($i=0; $i <sizeof($id) ; $i++) { 
+				if ($i == 0) {
+					$ids .= "'".$id[$i]."'";
+				}else{
+					$ids .= ",'".$id[$i]."'";
+				}
+			}
+			$where .= "WHERE srg.ID IN ($ids)";
 		}
+
 
 		$join = "LEFT JOIN region r ON srg.region_id = r.ID";
 
@@ -120,10 +128,47 @@ class salesRep extends Management{
 
 		$from = array('id','name','region');
 
-		$salesRepGroup = $sql->fetch($res,$from,$from)[0];
+		$salesRepGroup = $sql->fetch($res,$from,$from);
 
     	return $salesRepGroup;
 	}
+
+	public function getSalesRepById($con,$id){
+		$sql = new sql();
+
+		$table = "sales_rep sr";
+		$columns = "sr.ID AS 'id',
+				sr.name AS 'salesRep',	
+				srg.name AS 'salesRepGroup',
+				srg.ID AS 'salesRepGroupID',
+				r.name AS 'region'";
+
+		$where = "";
+
+		if($id){
+			$ids = "";
+			for ($i=0; $i <sizeof($id) ; $i++) { 
+				if ($i == 0) {
+					$ids .= "'".$id[$i]."'";
+				}else{
+					$ids .= ",'".$id[$i]."'";
+				}
+			}
+			$where .= "WHERE sr.ID IN ($ids)";
+		}
+
+		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				 LEFT JOIN region r ON r.ID = srg.region_id";
+
+		$order = "srg.ID,sr.name";
+
+		$res = $sql->select($con,$columns,$table,$join,$where,$order);
+		$from = array('id','salesRep','salesRepGroup','region');
+
+		$salesRep = $sql->fetch($res,$from,$from);
+    	return $salesRep;
+	}
+
 
 	public function getSalesRepGroup($con,$region){
 		$sql = new sql();

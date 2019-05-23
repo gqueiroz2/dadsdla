@@ -12,7 +12,7 @@ use App\pRate;
 
 class chain extends excel{
    
-    public function handler($con,$table,$spreadSheet,$year,$truncate){
+    public function handler($con,$table,$spreadSheet,$year){
 		$base = new base();
         $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);			
         return $bool;
@@ -43,33 +43,21 @@ class chain extends excel{
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
         /*
-
             FAZER NOVA VERIFICAÇÃO COM CMAPS
-
         */
 
         $base = new base();
         $columns = $this->defineColumns($table,'first');
     	$columnsS = $this->defineColumns($table,'second');
-        
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
-
-        for ($c=0; $c < sizeof($current); $c++) { 
-            var_dump($current[$c]);
-        }
-
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
-        for ($n=0; $n < sizeof($next); $n++) { 
-            var_dump($next[$n]);
-        }
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-
    		return $complete;
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
-    	
+
         /*
 
             FAZER NOVA VERIFICAÇÃO COM CMAPS
@@ -89,12 +77,17 @@ class chain extends excel{
     	}
     	
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
-    	$bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
+    	if($table== 'cmaps'){
+           $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into,$columnsS);
+        }else{
+            $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
+        }
         return $bool;
     }
 
      public function thirdToDLA($sql,$con,$tCon,$table,$year,$truncate){
-    	$base = new base(); 
+    	
+        $base = new base(); 
         if($truncate){
             $truncateStatement = "TRUNCATE TABLE $table";
             if($con->query($truncateStatement) === TRUE){
@@ -116,27 +109,30 @@ class chain extends excel{
     	$into = $this->into($columns);
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
     	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
+
+        return $bool;
     }   
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-        if($nextColumns && ( $table == 'cmaps' || $table == 'mini_header') ){
+        if($nextColumns && ( $table == 'cmaps')){
             $values = $this->values($spreadSheet,$columns,$nextColumns);
         }else{
             $values = $this->values($spreadSheet,$columns);
         }
         
-        $ins = " INSERT INTO $table ($into) VALUES ($values)";      
-                
+        $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
+        //echo "<pre>".($ins)."</pre>";
+
         if($con->query($ins) === TRUE ){
             $error = false;
-
         }else{
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
-        }       
+        }     
+
         return $error;        
-        
+   
     }
 
     public function getOrderReferences($current){
@@ -218,15 +214,11 @@ class chain extends excel{
             }
 
             $rtr =  array($bool,'package');
-        }elseif($column == 'sales_representant_sales_office' || $column == 'sales_representant_office'){
+        }elseif($column == 'sales_representant_office'){
 			$rtr =  array(false,'campaign_sales_office_id');
 			for ($r=0; $r < sizeof($regions); $r++) { 
 				if($current == $regions[$r]['name']){	
-					if($table == 'mini_header'){
-						$rtr =  array( $regions[$r]['id'],'sales_representant_sales_office_id');
-					}else{
-						$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
-					}
+					$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
 				}
 			}
         }elseif($column == 'campaign_currency'){
@@ -287,7 +279,7 @@ class chain extends excel{
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
-    		if($bool[$c]){
+    		if(!$bool[$c]){
     			$count++;
     		}
     	}
@@ -299,14 +291,20 @@ class chain extends excel{
     	}
     }
 
-    public function insertToLastTable($con,$table,$columns,$current,$into){
+    public function insertToLastTable($con,$table,$columns,$current,$into,$nextColumns = false){
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		$bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
-    		if($bool[$c]){
+    		  
+            if($table == 'cmaps'){
+                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
+            }else{
+                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
+            }
+    		if(!$bool[$c]){
     			$count++;
     		}
     	}
+
     	if($count == sizeof($current)){
     		return true;
     	}else{
@@ -319,7 +317,7 @@ class chain extends excel{
         var_dump($table);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		if($nextColumns && ($table == 'cmaps' || $table == 'mini_header')){
+    		if($nextColumns && ($table == 'cmaps')){
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -328,10 +326,6 @@ class chain extends excel{
     			$count++;
     		}
     	}
-
-
-        var_dump($count);
-        var_dump(sizeof($current));
 
     	if($count == sizeof($current)){
     		return true;
@@ -463,6 +457,7 @@ class chain extends excel{
 	}
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
+
         $values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   
@@ -483,6 +478,7 @@ class chain extends excel{
 			}
 		}
 		return $values;
+        
 	}
 
 	public function cleanValues($current,$orderReference){
@@ -789,7 +785,7 @@ class chain extends excel{
 		                              );
 
 	public $miniHeaderColumnsS = array('campaign_sales_office_id',
-		                               'sales_representant_sales_office_id',
+		                               'sales_representant_office_id',
 		                               'brand_id',
 		                               'sales_rep_id',
 		                               'client',
@@ -831,8 +827,28 @@ class chain extends excel{
 		                               'campaign_option_spend', // DOUBLE
 		                               'gross_revenue' // DOUBLE
 		                              );
+    public $miniHeaderColumns = array('campaign_sales_office_id',
+                                       'sales_representant_office_id',
+                                       'brand_id',
+                                       'sales_rep_id',
+                                       'client_id',
+                                       'agency_id',
+                                       'campaign_currency_id',
+                                       'year',
+                                       'month',                                    
+                                       'brand_feed',
+                                       'sales_rep_role',
+                                       'order_reference',
+                                       'campaign_reference',
+                                       'campaign_status',
+                                       'campaign_option_desc',
+                                       'campaign_class',
+                                       'campaign_option_start_date', //DATE
+                                       'campaign_option_target_spot', // INT
+                                       'campaign_option_spend', // DOUBLE
+                                       'gross_revenue' // DOUBLE
+                                      );
 
-	public $miniHeaderColumns = array('campaign_sales_office_id','sales_rep_sales_office_id','brand_id','sales_rep_id','client_id','agency_id','campaign_currency_id','sales_group_id','year','month','brand_feed','sales_rep_role','order_reference','campaign_reference','campaign_status_id','campaign_option_desc','campaign_class_id','campaign_option_start_date','campaign_option_target_spot','campaign_option_spend','gross_revenue');
 
 	
 
