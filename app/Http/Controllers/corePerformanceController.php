@@ -10,7 +10,7 @@ use App\monthly;
 use App\region;
 use App\salesRep;
 use App\share;
-use App\renderPerformance;
+use App\corePerformanceRender;
 use App\brand;
 use App\pRate;
 use App\performance;
@@ -25,7 +25,7 @@ class corePerformanceController extends Controller{
                 $con = $db->openConnection("DLA");
                 $r = new region();
                 $sr = new salesRep();
-                $render = new renderPerformance();
+                $render = new corePerformanceRender();
                 $b = new brand();
                 $pr = new pRate();
 
@@ -45,7 +45,7 @@ class corePerformanceController extends Controller{
                 $con = $db->openConnection("DLA");
                 $r = new region();
                 $sr = new salesRep();
-                $render = new renderPerformance();
+                $render = new corePerformanceRender();
                 $b = new brand();
                 $pr = new pRate();
                 $p = new performance();
@@ -53,16 +53,17 @@ class corePerformanceController extends Controller{
                 $validator = Validator::make(Request::all(),[
                     'region' => 'required',
                     'year' => 'required',
+                    'tier' => 'required',
                     'brand' => 'required',
-                    'source' => 'required',
                     'salesRepGroup' => 'required',
+                    'salesRep' => 'required',
                     'currency' => 'required',
                     'value' => 'required',
                     'month' => 'required',
                 ]);
 
                 if ($validator->fails()) {
-                        return back()->withErrors($validator)->withInput();
+                    return back()->withErrors($validator)->withInput();
                 }
 
 

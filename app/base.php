@@ -119,6 +119,27 @@ class base extends Model{
         return $rtr;
     }
 
+    public function monthToQuarter($month){
+        $quarter = array();
+
+        for ($m=0; $m <sizeof($month) ; $m++) { 
+            if ($month[$m] == 1 || $month[$m] == 2 || $month[$m] == 3) {
+                array_push($quarter, "Q1");
+            }elseif ($month[$m] == 4 || $month[$m] == 5 || $month[$m] == 6) {
+                array_push($quarter, "Q2");
+            }elseif ($month[$m] == 7 || $month[$m] == 8 || $month[$m] == 9) {
+                array_push($quarter, "Q3");
+            }else{
+                array_push($quarter, "Q4");
+            }
+        }
+        
+        $quarter = array_unique($quarter);
+        $quarter = array_values($quarter);
+
+        return $quarter;
+    }
+
     protected $salesRegion = array("Argentina","Brazil","Colômbia","México","Pan-Regional");
 
     protected $brand = array("DC","HH","DK","AP","TLC","ID","DT","FN","ONL");

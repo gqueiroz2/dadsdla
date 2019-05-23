@@ -8,6 +8,13 @@ class Render extends Model{
     
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
+
+    public function tiers(){
+        
+        echo "<select id='tier' class='selectpicker' data-selected-text-format='count' multiple='true' name='tier[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
+        echo "</select>";
+    }
+
     public function region($region){
 
     	echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
@@ -81,7 +88,7 @@ class Render extends Model{
 
     }
 
-    public function salesRep($salesRep){
+    public function salesRep(){
     	echo "<select id='salesRep'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
     		//echo "<option value=''> Select Region </option>";
 
