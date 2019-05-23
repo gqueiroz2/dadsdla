@@ -49,7 +49,9 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::group(['prefix' => 'chain'],function(){
 			Route::get('root','ChainController@chainGet')
 							->name('chain');
-			Route::post('checkElements','checkElementsController@base')
+			Route::post('truncateChain','ChainController@truncateChain')
+							->name('truncateChain');
+			Route::post('checkElements','CheckElementsController@base')
 							->name('checkElementsPost');
 			Route::post('first','ChainController@firstChain')
 							->name('firstChain');

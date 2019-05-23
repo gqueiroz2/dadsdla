@@ -15,6 +15,36 @@ class ChainController extends Controller{
     	return view('dataManagement.Chain.get',compact('rC'));
     }    
 
+    public function truncateChain(){
+    	var_dump(Request::all());
+    	$table = Request::get('table');
+
+    	$db = new dataBase();
+		
+		$connections = array('firstMatch','secondMatch','thirdMatch');
+		
+		$truncateStatement = "TRUNCATE TABLE $table";
+
+		$check = 0;
+
+		for ($c=0; $c < sizeof($connections); $c++) { 
+			$con[$c] = $db->openConnection($connections[$c]);
+
+			if($con[$c]->query($truncateStatement) === TRUE){
+				$something[$c] = "Tabela $table na dataBase ".$connections[$c]." foi Truncada ";
+
+				$check++;
+			}
+
+		}
+
+		if($check == sizeof($connections)){
+			return back()->with('truncateChainComplete',"The table $table was succesfully truncated on all data bases :)");
+		}else{
+			return back()->with('truncateChainError',"There was and error on truncating the $table table on all data bases :( ");
+		}
+    }
+
     public function firstChain(){
     	$db = new dataBase();
 		$chain = new chain();		
@@ -60,13 +90,13 @@ class ChainController extends Controller{
 		}
 
 		$complete = $chain->handler($con,$table,$spreadSheet,$year,$truncate);
-		/*
+		
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
         }
-		*/
+		
     }
 
     public function secondChain(){
@@ -79,19 +109,15 @@ class ChainController extends Controller{
 		$sCon = $db->openConnection('secondMatch');	
     	$table = Request::get('table');
 
-    	if($table == 'cmaps'){
-    		$year = Request::get('year');
-    	}else{
-    		$year = false;
-    	}
-
+    	$year = Request::get('year');
     	$complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
-
+/*
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('secondChainError',"There was and error on the insertion of the Excel Data :( ");
         }
+*/
     }
 
     public function thirdChain(){
@@ -103,8 +129,14 @@ class ChainController extends Controller{
 		$sCon = $db->openConnection('secondMatch');	
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('table');
+    	$year = Request::get('year');
+    	$complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
 
-    	$bool = $chain->thirdChain($sql,$con,$sCon,$tCon,$table);
+    	if($complete){
+            return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");
+        }else{
+            return back()->with('thirdChainError',"There was and error on the insertion of the Excel Data :( ");
+        }
     }
 
     public function thirdToDLA(){
@@ -115,8 +147,10 @@ class ChainController extends Controller{
 		$con = $db->openConnection('DLA');			
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('table');
+    	$year = Request::get('year');
+		$truncate = (bool)intval(Request::get('truncate'));
 
-    	$bool = $chain->thirdToDLA($sql,$con,$tCon,$table);
+    	$bool = $chain->thirdToDLA($sql,$con,$tCon,$table,$year,$truncate);
 
     }
 

@@ -16,7 +16,7 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        //echo "$sql<br>";
+        echo "$sql<br>";
         $res = $con->query($sql);
         return $res;
     }

@@ -98,8 +98,21 @@ tr{
     color: white;
 }
 
+.oth{
+    background-color: #808080;
+    font-weight: bold;
+    color: white;
+}
+
+.hgtv{
+    background-color: #88cc00;
+    font-weight: bold;
+    color: white;
+}
+
 .dn {
-    background-color: #999999;
+    background-color: #000066;
+    color: white;
     font-weight: bold;
 }
 

@@ -107,7 +107,7 @@ class resultsResumeController extends Controller{
 	                              ";
 	            $whereSalesPYear[$m] = "WHERE (ytd.month IN (".$month[$m][1].") ) 
 	                                    AND ( ytd.year IN ($pYear))
-
+	                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
 	                                   ";
 	        }else{/* FAZER SE FOR HEADER */
 	        	if($m < $currentMonth){

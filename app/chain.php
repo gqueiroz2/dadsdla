@@ -14,14 +14,6 @@ class chain extends excel{
    
     public function handler($con,$table,$spreadSheet,$year,$truncate){
 		$base = new base();
-        if($truncate){
-            $truncateStatement = "TRUNCATE TABLE $table";
-            if($Con->query($truncateStatement) === TRUE){
-                $truncated = true;
-            }else{
-                $truncated = false;
-            }
-        }
         $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);			
         return $bool;
 	}
@@ -29,7 +21,6 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base);
-        /*
         $into = $this->into($columns);      
 
         $check = 0;
@@ -39,39 +30,53 @@ class chain extends excel{
             if(!$error){
                 $check++;
             }
-        }           
-        $rtr = false;
+        } 
+
         if($check == sizeof($spreadSheet)){
             $complete = true;
+        }else{
+            $complete = false;
         }
-        return $complete;*/
+
+        return $complete;
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
+        /*
+
+            FAZER NOVA VERIFICAÇÃO COM CMAPS
+
+        */
+
         $base = new base();
-    	$truncateStatement = "TRUNCATE TABLE $table";
-        if($sCon->query($truncateStatement) === TRUE){
-            $truncated = true;
-        }else{
-            $truncated = false;
-        }
         $columns = $this->defineColumns($table,'first');
     	$columnsS = $this->defineColumns($table,'second');
+        
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
+
+        for ($c=0; $c < sizeof($current); $c++) { 
+            var_dump($current[$c]);
+        }
+
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
+        for ($n=0; $n < sizeof($next); $n++) { 
+            var_dump($next[$n]);
+        }
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
+
    		return $complete;
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
-    	$base = new base();    	
-		$truncateStatement = "TRUNCATE TABLE $table";
-        if($tCon->query($truncateStatement) === TRUE){
-            $truncated = true;
-        }else{
-            $truncated = false;
-        }
+    	
+        /*
+
+            FAZER NOVA VERIFICAÇÃO COM CMAPS
+
+        */
+
+        $base = new base();    	
         $columnsS = $this->defineColumns($table,'second');
     	$columnsT = $this->defineColumns($table,'third');
     	$into = $this->into($columnsT);		
@@ -85,28 +90,28 @@ class chain extends excel{
     	
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
     	$bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
+        return $bool;
     }
 
-     public function thirdToDLA($sql,$con,$tCon,$table){
+     public function thirdToDLA($sql,$con,$tCon,$table,$year,$truncate){
     	$base = new base(); 
-    	
-
-        /*
-    	if($table == 'ytd' || $table = 'cmaps'){
-    		$delete = "DELETE FROM $table WHERE(year = '2019')";
-    		$con->query($delete);
-    	}elseif($table == 'mini_header'){
-    	}else{
-    	}
-        for ($y=0; $y < sizeof($year); $y++) { 
-            $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";
-            var_dump($delete[$y]);
-            if($con->query($delete[$y])){
-
+        if($truncate){
+            $truncateStatement = "TRUNCATE TABLE $table";
+            if($con->query($truncateStatement) === TRUE){
+                $truncated = true;
+            }else{
+                $truncated = false;
             }
-        }
+        }else{
+            for ($y=0; $y < sizeof($year); $y++) { 
+                $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";     
+                var_dump($delete[$y]);
+                if($con->query($delete[$y])){
 
-        */
+                }
+            }
+        }        
+
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
@@ -114,18 +119,17 @@ class chain extends excel{
     }   
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-        if($nextColumns && $table = 'cmaps'){
+        if($nextColumns && ( $table == 'cmaps' || $table == 'mini_header') ){
             $values = $this->values($spreadSheet,$columns,$nextColumns);
         }else{
             $values = $this->values($spreadSheet,$columns);
         }
         
         $ins = " INSERT INTO $table ($into) VALUES ($values)";      
-        echo "<pre>".($ins)."</pre>";
-
-        
+                
         if($con->query($ins) === TRUE ){
             $error = false;
+
         }else{
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
@@ -311,9 +315,11 @@ class chain extends excel{
     }
 
     public function insertToNextTable($con,$table,$columns,$current,$into,$nextColumns){
+
+        var_dump($table);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		if($nextColumns && $table == 'cmaps'){
+    		if($nextColumns && ($table == 'cmaps' || $table == 'mini_header')){
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -322,6 +328,11 @@ class chain extends excel{
     			$count++;
     		}
     	}
+
+
+        var_dump($count);
+        var_dump(sizeof($current));
+
     	if($count == sizeof($current)){
     		return true;
     	}else{
@@ -390,12 +401,9 @@ class chain extends excel{
 	}
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
-        var_dump($spreadSheet);
-        var_dump($columns);
-        /*
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
 			for ($c=0; $c < sizeof($columns); $c++) { 
-				$bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
+                $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
                        $columns[$c] == 'gross' ||
@@ -411,6 +419,7 @@ class chain extends excel{
 				       $columns[$c] == 'impression_duration' ||
                        $columns[$c] == 'num_spot'
 				      ){
+
 						if( is_null($spreadSheet[$s][$c])){
 							$columnValue = $c + 1;
 							//$c++;
@@ -420,8 +429,9 @@ class chain extends excel{
 						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
 					}else{
 						if($columns[$c] == 'campaign_option_start_date'){
-							$spreadSheetV2[$s][$columns[$c]] = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
-						}if($columns[$c] == 'obs'){
+                            $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                            $spreadSheetV2[$s][$columns[$c]] = $temp;
+						}elseif($columns[$c] == 'obs'){
                             $spreadSheetV2[$s][$columns[$c]] = "OBS";
                         }elseif($columns[$c] == 'month'){
 							if($table){
@@ -438,7 +448,6 @@ class chain extends excel{
 		}
 		$spreadSheetV2 = array_values($spreadSheetV2);
 		return $spreadSheetV2;
-        */
 	}
 
 	public function into($columns){
@@ -454,7 +463,7 @@ class chain extends excel{
 	}
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
-		$values = "";
+        $values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   
                 if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
@@ -780,7 +789,7 @@ class chain extends excel{
 		                              );
 
 	public $miniHeaderColumnsS = array('campaign_sales_office_id',
-		                               'sales_representant_office_id',
+		                               'sales_representant_sales_office_id',
 		                               'brand_id',
 		                               'sales_rep_id',
 		                               'client',
