@@ -78,20 +78,14 @@
 					</div>
 				</form>
 				<div class="row justify-content-end">
-					<div class="col col-3" style="text-align: center; margin-top: 2%; ">
-						<h1 class="reportsTitle" >Share ({{$mtx["region"]}} / {{$mtx["year"]}})</h1>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col" style="color: #0070c0;font-size: 22px;">
+						{{$rName}} - Share : {{$mtx["source"]}} - {{$mtx["year"]}}
 					</div>
 				</div>
-				
-				<!--<div class="row justify-content-end no-gutters">
-					<div class="col-3" style="color: #0070c0;font-size: 25px">
-						<form class="form-inline" method="POST" action="#">
-							@csrf
-							 <button class="btn btn-primary" style="width: 100%">Generate Excel</button>
-						</form>
-					</div>
-				</div>-->
-
 			</div>
 		</div>
 		<div class="row mt-2">

@@ -66,7 +66,7 @@ class resultsResumeController extends Controller{
 
 		$tmp = $r->getRegion($con,array($regionID));
 
-		if( is_array($tmp) ){
+		if( is_array($tmp)  ){
 			$salesRegion = $tmp[0]['name'];
 		}else{
 			$salesRegion = $tmp['name'];
@@ -169,9 +169,9 @@ class resultsResumeController extends Controller{
 		$previousYear = $resume->generateVector($con,$tableSales,$regionID,$pYear,$month,$brandID,$currencyID,$value,$joinSales,$whereSalesPYear);
 		$matrix = $resume->assembler($month,$salesCYear,$actual,$target,$corporate/*$pAndR,$finance*/,$previousYear);
 
-		//ßvar_dump($salesRegion);
+		$rName = $resume->TruncateRegion($salesRegion);
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName'));
 
 	}
 

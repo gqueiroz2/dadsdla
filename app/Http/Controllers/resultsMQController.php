@@ -87,7 +87,9 @@ class resultsMQController extends Controller{
 
                 $salesRegion = $salesRegion[0]['name'];
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion'));
+                $rName = $mq->TruncateRegion($salesRegion);
+
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName'));
         }
 
 
@@ -101,11 +103,14 @@ class resultsMQController extends Controller{
                 $brand = new brand();
                 $brands = $brand->getBrand($con);
 
+                $pr = new pRate();
+                $currency = $pr->getCurrency($con,false);
+
                 $render = new Render();
 
                 $qRender = new quarterRender();
 
-                return view("adSales.results.2quarterGet", compact('salesRegion', 'brands', 'render', 'qRender'));
+                return view("adSales.results.2quarterGet", compact('salesRegion', 'brands', 'render', 'qRender', 'currency'));
 	}
 
 	public function postQuarter(){
@@ -165,7 +170,9 @@ class resultsMQController extends Controller{
 
                 $region = $region[0]['name'];
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region'));
+                $rName = $mq->TruncateRegion($region);
+
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName'));
 
 	} 
 

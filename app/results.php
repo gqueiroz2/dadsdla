@@ -197,4 +197,39 @@ class results extends Model{
 
         return $newForm;
     }
+
+    public function TruncateRegion($region){
+
+        if ($region == "Brazil") {
+            $name = "BR";            
+        }elseif ($region == "Argentina") {
+            $name = "AR";
+        }elseif ($region == "Colombia") {
+            $name = "COL";
+        }elseif ($region == "Miami") {
+            $name = "MIA";
+        }elseif ($region == "Mexico") {
+            $name = "MEX";
+        }elseif ($region == "Chile") {
+            $name = "CL";
+        }elseif ($region == "Peru") {
+            $name = "PE";
+        }elseif ($region == "Venezuela") {
+            $name = "VE";
+        }elseif ($region == "Panama") {
+            $name = "PA";
+        }elseif ($region == "New York International") {
+            $name = "NY";
+        }elseif ($region == "Dominican Republic") {
+            $name = "DR";
+        }elseif ($region == "Ecuador") {
+            $name = "EC";
+        }elseif ($region == "Bolivia") {
+            $name = "BO";
+        }else {
+            $name = false;;
+        }
+
+        return $name;
+    }
 }
