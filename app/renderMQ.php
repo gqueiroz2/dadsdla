@@ -13,8 +13,6 @@ class renderMQ extends Render{
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 
-			//echo "<tr><td>&nbsp;</td></tr>";
-
 			for ($m=0; $m < sizeof($mtx); $m++) { 
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					echo "<tr>";

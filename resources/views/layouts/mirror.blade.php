@@ -102,15 +102,14 @@
                             <a class="nav-link" href="#"> Header / CMAPS <span class="sr-only">(current)</span></a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('getTest') }}"> Teste <span class="sr-only">(current)</span></a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a>
+                                <!--<a class="dropdown-item" href="#"> Market </a>-->
+                            </div>
                         </li>
-                        @if($userLevel == "SU")
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
-                            </li>
-                        @else
-                        @endif
+
                     </ul>    
 
                     <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
@@ -118,7 +117,9 @@
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"> Logout </a>
-                                <a class="dropdown-item" href="#"> DB Panel </a>
+                                @if($userLevel == "SU")
+                                    <a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
+                                @endif
                             </div>
                         </li>
                     </ul>    
