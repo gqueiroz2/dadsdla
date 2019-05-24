@@ -285,6 +285,56 @@ class performance extends Model{
             }
         }
 
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalSG"][$sg][$q] = 0;
+                $mtx["totalPlanSG"][$sg][$q] = 0;
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($t=0; $t <sizeof($mtx["value"][$sg]); $t++) { 
+                for ($q=0; $q <sizeof($mtx["value"][$sg][$t]); $q++) { 
+                    $mtx["totalSG"][$sg][$q] += $mtx["value"][$sg][$t][$q];
+                    $mtx["totalPlanSG"][$sg][$q] += $mtx["planValue"][$sg][$t][$q];                   
+                }
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalSGVarAbs"][$sg][$q] = $mtx["totalSG"][$sg][$q] - $mtx["totalPlanSG"][$sg][$q];
+                if ($mtx["totalPlanSG"][$sg][$q] != 0) {
+                    $mtx["totalSGVarPrc"][$sg][$q] = $mtx["totalSG"][$sg][$q] - $mtx["totalPlanSG"][$sg][$q];
+                }else{
+                    $mtx["totalSGVarPrc"][$sg][$q] = 0;
+                }
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            $mtx["totalTotalSG"][$sg] = 0;
+            $mtx["totalPlanTotalSG"][$sg] = 0;
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalTotalSG"][$sg] += $mtx["totalSG"][$sg][$q];
+                $mtx["totalPlanTotalSG"][$sg] += $mtx["totalPlanSG"][$sg][$q];
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            $mtx["totalTotalSGVarAbs"][$sg] = $mtx["totalTotalSG"][$sg] - $mtx["totalPlanTotalSG"][$sg];
+
+            if ($mtx["totalPlanTotalSG"][$sg] != 0) {
+                $mtx["totalTotalSGVarPrc"][$sg] = $mtx["totalTotalSG"][$sg] / $mtx["totalPlanTotalSG"][$sg];
+            }else{
+                $mtx["totalTotalSGVarPrc"][$sg] = 0;
+            }
+        }
+
+
         return $mtx;
     }
 

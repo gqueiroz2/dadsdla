@@ -4,6 +4,12 @@
 <script src="/js/performance.js"></script>
     <?php include(resource_path('views/auth.php')); 
     ?>
+
+<style>
+	table{
+		text-align: center;
+	}
+</style>
 @endsection
 @section('content')
 	<div class="container-fluid">		
@@ -115,5 +121,10 @@
 
 	<div id="vlau"></div>
 
+	<script>
+		$(document).ready(function(){   
+		
+		});
+	</script>
 
 @endsection

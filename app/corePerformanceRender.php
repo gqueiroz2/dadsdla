@@ -16,10 +16,10 @@ class corePerformanceRender extends renderPerformance
 	    	for ($t=0; $t < sizeof($mtx["value"][$sg]); $t++) { 
 		    	echo "<table border='1' style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
-		    			echo "<td rowspan='5' style='width:3%;'>".$mtx["tier"][$t]."</td>";
-		    			echo "<td style='width:7%;'></td>";
-		    			for ($m=0; $m <sizeof($mtx["quarters"]); $m++) { 
-		    				echo "<td style='width:18%;' >".$mtx["quarters"][$m]."</td>";
+		    			echo "<td rowspan='5' style='width:5%;'>".$mtx["tier"][$t]."</td>";
+		    			echo "<td style='width:10%;'></td>";
+		    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+		    				echo "<td style='width:16%;'>".$mtx["quarters"][$q]."</td>";
 		    			}
 		    			echo "<td style='width:18%;' >Total</td>";
 		    		echo "</tr>";
@@ -47,17 +47,58 @@ class corePerformanceRender extends renderPerformance
 		    		echo "<tr>";
 		    			echo "<td>Var %</td>";
 		    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-		    				echo "<td>".number_format($mtx["varPrc"][$sg][$t][$q],0)."</td>";
+		    				echo "<td>".number_format($mtx["varPrc"][$sg][$t][$q],0)."%</td>";
 		    			}
 		    			echo "<td>".number_format($mtx["totalVarPrc"][$sg][$t],0)."%</td>";
 		    		echo "</tr>";
 		    	echo "</table>";
+
 	    	}
+	    	echo "<table border='1' style='width: 100%;' class='mt-3'>";
+	    		echo "<tr>";
+	    			echo "<td rowspan='5' style='width:5%;'>Total</td>";
+	    			echo "<td style='width:10%;'></td>";
+	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+	    				echo "<td style='width:16%;'>".$mtx["quarters"][$q]."</td>";
+	    			}
+	    			echo "<td style='width:18%;' >Total</td>";
+	    		echo "</tr>";
+	    		echo "<tr>";
+	    			echo "<td style='width:10%;'>Meta</td>";
+	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+	    				echo "<td>".number_format($mtx["totalPlanSG"][$sg][$q],0)."</td>";
+	    			}
+    				echo "<td style='width:18%;' >".number_format($mtx["totalPlanTotalSG"][$sg],0)."</td>";
+	    		echo "</tr>";
+	    		echo "<tr>";
+		    		echo "<td>Real</td>";
+	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+	    				echo "<td>".number_format($mtx["totalSG"][$sg][$q],0)."</td>";
+	    			}
+    				echo "<td style='width:18%;'>".number_format($mtx["totalTotalSG"][$sg],0)."</td>";
+	    		echo "</tr>";
+	    		echo "<tr>";
+		    		echo "<td>Var Abs</td>";
+	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+	    				echo "<td>".number_format($mtx["totalSGVarAbs"][$sg][$q],0)."</td>";
+	    			}
+    				echo "<td style='width:18%;' >".number_format($mtx["totalTotalSGVarAbs"][$sg],0)."</td>";
+	    		echo "</tr>";
+	    		echo "<tr>";
+		    		echo "<td>Var %</td>";
+	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+	    				echo "<td>".number_format($mtx["totalSGVarPrc"][$sg][$q],0)."%</td>";
+	    			}
+    				echo "<td style='width:18%;' >".number_format($mtx["totalTotalSGVarPrc"][$sg],0)."%</td>";
+	    		echo "</tr>";
+		   	echo "</table>";
+
 	    	echo "</div>";
 
 	    	if ($sg%2 == 1) {
 	    		echo "</div>";
 	    	}
+
 	    }
     }
 }
