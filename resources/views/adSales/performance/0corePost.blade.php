@@ -108,8 +108,24 @@
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col" style=" width: 100%; margin-top: 5%;">
-									{{$render->coreMatrix($mtx)}}
+								<div class="col" id="type1" style=" width: 100%; margin-top: 5%; display: block;">
+									{{$render->case1($mtx)}}
+								</div>
+							</div>
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col" id="type2" style=" width: 100%; margin-top: 5%; display: none;">
+									{{$render->case2($mtx)}}
+
+								</div>
+							</div>
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col" id="type3" style=" width: 100%; margin-top: 5%; display: none;">
+									{{$render->case3($mtx)}}
+								</div>
+							</div>
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col" id="type4" style=" width: 100%; margin-top: 5%; display: none;">
+									{{$render->case4($mtx)}}
 								</div>
 							</div>
 						</div>
@@ -122,9 +138,47 @@
 	<div id="vlau"></div>
 
 	<script>
-		$(document).ready(function(){   
+		var matrix = [true,true];
 		
-		});
-	</script>
+		$(document).ready(function(){   
 
+			$(".tierClick").click(function(){
+				if (matrix[0]) {
+					matrix[0] = false;
+				}else{
+					matrix[0] = true;
+				}
+				loadMatrix(matrix);
+			});
+			
+			$(".quarterClick").click(function(){
+				if (matrix[1]) {
+					matrix[1] = false;
+				}else{
+					matrix[1] = true;
+				}
+				loadMatrix(matrix);
+			});
+
+		});
+
+
+		function loadMatrix(matrix){
+			$("#type1").css("display","hidden");
+			for (var i = 1; i < 5; i++) {
+				$("#type"+i).css("display","none");
+			}
+
+			if(matrix[0] && matrix[1]){
+				$("#type1").css("display","block");
+			}else if(!matrix[0] && matrix[1]){
+				$("#type2").css("display","block");
+			}else if(matrix[0] && !matrix[1]){
+				$("#type3").css("display","block");
+			}else{
+				$("#type4").css("display","block");
+			}
+		}
+
+	</script>
 @endsection

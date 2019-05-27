@@ -25,12 +25,25 @@ class base extends Model{
     public function monthToInt($month){
         $tmp = explode(" ",$month);
         $newMonth = trim($tmp[0]);
+        
         for ($m=0; $m < sizeof($this->month); $m++) { 
             if($newMonth == $this->month[$m][2]){
                 $intMonth = $this->month[$m][1];
             }
         }
         return $intMonth;
+    }
+
+    public function intToMonth($month){
+        $monthNames = array();
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            for ($m2=0; $m2 <sizeof($month) ; $m2++) { 
+                if($month[$m2] == $this->month[$m][1]){
+                    array_push($monthNames, $this->month[$m][0]);
+                }
+            }
+        }
+        return $monthNames;   
     }
 
     public function monthToIntCMAPS($month){
