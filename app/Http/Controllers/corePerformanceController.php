@@ -13,7 +13,7 @@ use App\share;
 use App\corePerformanceRender;
 use App\brand;
 use App\pRate;
-use App\performance;
+use App\performanceCore;
 
 
 class corePerformanceController extends Controller{
@@ -48,7 +48,7 @@ class corePerformanceController extends Controller{
                 $render = new corePerformanceRender();
                 $b = new brand();
                 $pr = new pRate();
-                $p = new performance();
+                $p = new performanceCore();
 
                 $validator = Validator::make(Request::all(),[
                     'region' => 'required',
