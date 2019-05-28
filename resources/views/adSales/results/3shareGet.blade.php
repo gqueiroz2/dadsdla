@@ -91,13 +91,19 @@
 						</div>
 					</div>
 				</form>
-				<div class="row justify-content-end">
-					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
-						<span class="reportsTitle">Share Report</span>
-					</div>
-				</div>
 			</div>
 		</div>
+
+		<div class="row justify-content-end">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col" style="color: #0070c0;font-size: 22px;">
+				<span class="reportsTitle">Share</span>
+			</div>
+		</div>
+
 	</div>
 
 	<div id="vlau"></div>

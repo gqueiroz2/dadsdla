@@ -98,8 +98,9 @@ class resultsMonthlyYoYController extends Controller{
         $form = $monthlyYoY->TruncateName($form);
         
         $region = $r->getRegion($con, array($regionID))[0]['name'];
+        $rName = $monthlyYoY->TRuncateRegion($region);
 
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region'));
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName'));
 	}
 
 }

@@ -7,55 +7,56 @@
 @section('content')
 <div class="container-fluid">
 	<div class="row">
-		<form class="form-inline" role="form" method="POST" action="{{ route('resultsMonthlyPost') }}">
-		@csrf
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> Region: </span></label>
-				@if($userLevel == 'L0' || $userLevel == 'SU')
-					{{$render->region($region)}}							
-				@else
-					{{$render->regionFiltered($region, $regionID )}}
-				@endif
-			</div>
+		<div class="col">
+			<form method="POST" action="{{ route('resultsMonthlyPost') }}">
+				@csrf
+				<div class="row">
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> Region: </span></label>
+						@if($userLevel == 'L0' || $userLevel == 'SU')
+							{{$render->region($region)}}							
+						@else
+							{{$render->regionFiltered($region, $regionID )}}
+						@endif
+					</div>
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> Year: </span></label>
-				{{$render->year($regionID)}}					
-			</div>	
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> Year: </span></label>
+						{{$render->year($regionID)}}					
+					</div>	
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> Brand: </span></label>
-				{{$render->brand($brand)}}
-			</div>	
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> Brand: </span></label>
+						{{$render->brand($brand)}}
+					</div>	
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> 1st Pos </span></label>
-				{{$render->position("second")}}
-			</div>				
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> 1st Pos </span></label>
+						{{$render->position("second")}}
+					</div>				
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> 2st Pos </span></label>
-				{{$render->position("third")}}
-			</div>				
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> 2st Pos </span></label>
+						{{$render->position("third")}}
+					</div>				
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> Currency: </span></label>
-				{{$render->currency($currency)}}
-			</div>
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> Currency: </span></label>
+						{{$render->currency($currency)}}
+					</div>
 
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> Value: </span></label>
-				{{$render->value()}}
-			</div>
+					<div class="col">
+						<label class="labelLeft"><span class="bold"> Value: </span></label>
+						{{$render->value()}}
+					</div>
 
-			<div class="col">
-				<div class="form-inline">
-					<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-					<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">						
+					<div class="col-2">
+						<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">
+					</div>
 				</div>
-			</div>
-
-		</form>
+			</form>	
+		</div>
 	</div>
 
 	<div class="row justify-content-end mt-2">
@@ -65,16 +66,16 @@
 		<div class="col"></div>
 		<div class="col"></div>
 		<div class="col"></div>
-		<div class="col" style="color: #0070c0;font-size: 25px">
-			{{$salesRegion}} - Monthly : {{$form}} - {{$year}}
+		<div class="col-2" style="color: #0070c0;font-size: 22px;">
+			{{$rName}} - Monthly : {{$form}} - {{$year}}
 		</div>
-
-		<div class="col">
+		<div class="col-2">
 			<button type="button" class="btn btn-primary" style="width: 100%">
 				Generate Excel
 			</button>				
 		</div>
-	</div>
+	</div>	
+	
 </div>
 
 <div class="container-fluid">

@@ -97,7 +97,8 @@ class resultsYoYController extends Controller{
         $form = $yoy->TruncateName($form);
 
         $region = $region[0]['name'];
+        $rName = $yoy->TRuncateRegion($region);
 
-   	    return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region'));
+   	    return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName'));
     }
 }

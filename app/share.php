@@ -105,11 +105,12 @@ class share extends results
         //verificar Executivos, se todos os executivos são selecionados, pesquisa todos do salesGroup, se seleciona todos os SalesGroup, seleciona todos os executivos da regiao
 
         $salesRepGroupTmp = $sr->getSalesRepGroup($con,array($region));
+        $tmp = $sr->getSalesRep($con,$salesRepGroup);
+        $salesRepTmp = $sr->getSalesRepStatus($con,$tmp,$year[0]);
+
         //MEXER AINDA PELA VIEW DOS SALES REPS
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
-
-
 
         if(sizeof($salesGroup) == sizeof($salesRepGroupTmp)){
             $salesRepGroupView = "All";
@@ -126,78 +127,22 @@ class share extends results
 
 
         $salesRepName = array();
-        $salesRepView = "";
-        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-            array_push($salesRepName, $salesRep[$s]["salesRep"]);
-            if ($s == 0) {
-                $salesRepView .= $salesRep[$s]["salesRep"];
-            }else{
-                $salesRepView .= ", ".$salesRep[$s]["salesRep"];
-            }
-        }
-
-
-        /*if ($salesRepGroup == 'all') {
-                
-            $tmp = array($region);
-        
-            $salesRepGroup = $sr->getSalesRepGroup($con,$tmp);
-        
-            $tmp = array();
-            
-            for ($i=0; $i <sizeof($salesRepGroup) ; $i++) { 
-                array_push($tmp, $salesRepGroup[$i]["id"]);
-            }
-
-            $salesRepGroup = $tmp;
-        
-            $salesRepGroupView = "All";   
-        }else{
-
-            $salesRepGroup = array($salesRepGroup);
-
-            $salesRepGroupView = $sr->getSalesRepGroupById($con,$salesRepGroup)["name"];
-
-        }
-        
-        if ($salesRep == 'all') {
-            
-            $tempYear = $year[0];
-            
-            $tmp = $sr->getSalesRep($con,$salesRepGroup);
-
-            $tmp = $sr->getSalesRepStatus($con,$tmp,$tempYear);
-
-            $salesRep = array();
-
+        if (sizeof($salesRepTmp) == sizeof($salesRep)) {
             $salesRepView = "All";
-
-            for ($i=0; $i <sizeof($tmp) ; $i++) { 
-                array_push($salesRep, $tmp[$i]["id"]);
-                array_push($salesRepName, $tmp[$i]["salesRep"]);
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                array_push($salesRepName, $salesRep[$s]["salesRep"]);
             }
-
         }else{
-            $salesRep = array($salesRep);
-            
-            $salesRepGroup = array($salesRepGroup);
-            
-            $tmp = $sr->getSalesRep($con,null);
-
-
-            for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                if(is_array($salesRep)){
-                    for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                        if ($tmp[$t]["id"] == $salesRep[$s]) {
-                            array_push($salesRepName, $tmp[$t]["salesRep"]);
-                            $salesRepView = $tmp[$t]["salesRep"];
-                        }
-                    }
+            $salesRepView = "";
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                array_push($salesRepName, $salesRep[$s]["salesRep"]);
+                if ($s == 0) {
+                    $salesRepView .= $salesRep[$s]["salesRep"];
+                }else{
+                    $salesRepView .= ", ".$salesRep[$s]["salesRep"];
                 }
             }
-        }*/
-
-
+        }
 
         for ($m=0; $m <sizeof($sourceBrand); $m++) { 
             for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) { 

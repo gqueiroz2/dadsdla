@@ -108,8 +108,6 @@ class performance extends Model{
         $tmp2["values"] = array();
         $tmp2["planValues"] = array();
 
-        
-
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep); $s++) { 
@@ -139,7 +137,7 @@ class performance extends Model{
         $mtx["brand"] = $brand;
         $mtx["tier"] = $tier;
         $mtx["quarters"] = $base->monthToQuarter($month);
-
+        $mtx["month"] = $base->intToMonth($month);
 
         for ($s=0; $s <sizeof($values);  $s++) { 
             for ($b=0; $b <sizeof($values[$s]) ; $b++) { 
@@ -189,6 +187,8 @@ class performance extends Model{
             }
         }
         //Termina de Agrupar
+
+        $mtx["case4"] = $tmp1;
         
         //Começou a agrupar por tier
         for ($sg=0; $sg <sizeof($salesGroup); $sg++) { 
@@ -227,6 +227,9 @@ class performance extends Model{
             }
         }
         //terminou
+
+        $mtx["case2"] = $tmp2;
+
         //Começou a agrupar mes
         for ($sg=0; $sg <sizeof($salesGroup) ; $sg++) { 
             for ($t=0; $t <sizeof($mtx["tier"]) ; $t++) { 
@@ -284,6 +287,57 @@ class performance extends Model{
                 }
             }
         }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalSG"][$sg][$q] = 0;
+                $mtx["totalPlanSG"][$sg][$q] = 0;
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($t=0; $t <sizeof($mtx["value"][$sg]); $t++) { 
+                for ($q=0; $q <sizeof($mtx["value"][$sg][$t]); $q++) { 
+                    $mtx["totalSG"][$sg][$q] += $mtx["value"][$sg][$t][$q];
+                    $mtx["totalPlanSG"][$sg][$q] += $mtx["planValue"][$sg][$t][$q];                   
+                }
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalSGVarAbs"][$sg][$q] = $mtx["totalSG"][$sg][$q] - $mtx["totalPlanSG"][$sg][$q];
+                if ($mtx["totalPlanSG"][$sg][$q] != 0) {
+                    $mtx["totalSGVarPrc"][$sg][$q] = $mtx["totalSG"][$sg][$q] - $mtx["totalPlanSG"][$sg][$q];
+                }else{
+                    $mtx["totalSGVarPrc"][$sg][$q] = 0;
+                }
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            $mtx["totalTotalSG"][$sg] = 0;
+            $mtx["totalPlanTotalSG"][$sg] = 0;
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+                $mtx["totalTotalSG"][$sg] += $mtx["totalSG"][$sg][$q];
+                $mtx["totalPlanTotalSG"][$sg] += $mtx["totalPlanSG"][$sg][$q];
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["value"]) ; $sg++) { 
+            $mtx["totalTotalSGVarAbs"][$sg] = $mtx["totalTotalSG"][$sg] - $mtx["totalPlanTotalSG"][$sg];
+
+            if ($mtx["totalPlanTotalSG"][$sg] != 0) {
+                $mtx["totalTotalSGVarPrc"][$sg] = $mtx["totalTotalSG"][$sg] / $mtx["totalPlanTotalSG"][$sg];
+            }else{
+                $mtx["totalTotalSGVarPrc"][$sg] = 0;
+            }
+        }
+
+
 
         return $mtx;
     }

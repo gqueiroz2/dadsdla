@@ -6,82 +6,99 @@
 @endsection
 @section('content')
 
-	<form class="form-inline" role="form" method="POST" action="{{ route('resultsQuarterPost') }}">
-		
-		@csrf
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<form method="POST" action="{{ route('resultsMonthlyPost') }}">
+					@csrf
+					<div class="row">
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Region: </span></label>
+							@if($errors->has('region'))
+								<label style="color: red;">* Required</label>
+							@endif
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($salesRegion)}}							
+							@else
+								{{$render->regionFiltered($salesRegion, $regionID )}}
+							@endif
+						</div>
 
-		<div class="container-fluid">
-			<div class="row">
-				
-				<!-- Region Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Sales Region</label>
-						@if($userLevel == 'L0' || $userLevel == 'SU')
-							{{$render->region($salesRegion)}}							
-						@else
-							{{$render->regionFiltered($salesRegion, $regionID )}}
-						@endif
-					</div>
-				</div>
-				
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Year</label>
-						{{$render->year()}}
-					</div>
-				</div>
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Year: </span></label>
+							@if($errors->has('year'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->year($regionID)}}					
+						</div>	
 
-				<!-- Brand Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label>Brand</label>
-						{{$render->brand($brands)}}
-					</div>
-				</div>				
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Brand: </span></label>
+							@if($errors->has('brand'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->brand($brands)}}
+						</div>	
 
-				<!-- 1st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 1st Pos </label>
-						{{$render->position("second")}}
-					</div>
-				</div>				
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> 1st Pos </span></label>
+							@if($errors->has('secondPos'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->position("second")}}
+						</div>				
 
-				<!-- 2st Pos Area -->
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> 2st Pos </label>
-						{{$render->position("third")}}
-					</div>
-				</div>				
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> 2st Pos </span></label>
+							@if($errors->has('thirdPos'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->position("third")}}
+						</div>				
 
-				
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> Currency </label>
-						{{$render->currency()}}
-						
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Currency: </span></label>
+							@if($errors->has('currency'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->currency($currency)}}
+						</div>
+
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Value: </span></label>
+							@if($errors->has('value'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->value()}}
+						</div>
+
+						<div class="col">
+							<div class="form-inline">
+								<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+								<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">						
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> Value </label>
-						{{$render->value()}}
-						
-					</div>
-				</div>
-				
-				<div class="col-12 col-lg">
-					<div class="form-inline">
-						<label> &nbsp; </label>
-						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
-					</div>
-				</div>
+				</form>	
 			</div>
 		</div>
 
-	</form>
+		<div class="row justify-content-end mt-2">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col" style="color: #0070c0;font-size: 22px;">
+				Quarter
+			</div>
+		</div>	
+	
+	</div>
+
+
 
 	<script type="text/javascript">
 		ajaxSetup();

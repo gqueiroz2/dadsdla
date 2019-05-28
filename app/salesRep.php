@@ -261,8 +261,15 @@ class salesRep extends Management{
 		$where = "";
 
 		if($salesRepGroupID){
-			$salesRepGroupIDS = implode(",", $salesRepGroupID);
-			$where .= "WHERE srg.ID IN ($salesRepGroupIDS)";
+			$ids = "";
+			for ($i=0; $i <sizeof($salesRepGroupID) ; $i++) { 
+				if ($i == 0) {
+					$ids .= "'".$salesRepGroupID[$i]."'";
+				}else{
+					$ids .= ",'".$salesRepGroupID[$i]."'";
+				}
+			}
+			$where .= "WHERE srg.ID IN ($ids)";
 		}
 
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id

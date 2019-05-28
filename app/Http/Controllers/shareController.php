@@ -71,6 +71,8 @@ class shareController extends Controller{
         $salesRep = $sr->getSalesRep($con,null);
         $currency = $pr->getCurrency($con,null);
 
-        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx'));
+        $rName = $s->TruncateRegion($mtx["region"]);
+
+        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx','rName'));
     }
 }

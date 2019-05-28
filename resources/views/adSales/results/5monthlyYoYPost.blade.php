@@ -10,11 +10,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form class="form-inline" role="form" method="POST" action="{{ route("resultsMonthlyYoYPost") }}">
+				<form method="POST" action="{{ route("resultsMonthlyYoYPost") }}">
 					@csrf
-
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+					<div class="row">
+						<div class="col">
 							<label>Sales Region</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($salesRegion)}}							
@@ -22,78 +21,67 @@
 								{{$render->regionFiltered($salesRegion, $regionID )}}
 							@endif
 						</div>
-					</div>
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label>Year</label>
 							{{ $render->year() }}
 						</div>
-					</div>
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label>Brand</label>
 							{{ $render->brand($brand) }}
-						</div>
-					</div>	
+						</div>	
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label> 1st Pos </label>
 							{{$render->position("first")}}
-						</div>
-					</div>	
+						</div>	
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label> 2st Pos </label>
 							{{$render->position("second")}}
-						</div>
-					</div>	
+						</div>	
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label> 3rd Pos </label>
 							{{$render->position("third")}}
-						</div>
-					</div>	
+						</div>	
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col">
 							<label> Currency </label>
 							{{$render->currency()}}
-						</div>
-					</div>	
+						</div>	
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col-2">
 							<label> Value </label>
 							{{ $render->value() }}
 						</div>
-					</div>
 
-					<div class="col-12 col-lg">
-						<div class="form-inline">
+						<div class="col-2">
 							<label> &nbsp; </label>
 							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
-						</div>
+						</div>	
 					</div>
+					
 				</form>
 			</div>
 		</div>
-		<div class="row no-gutters justify-content-end mt-2">
-		
-			<div class="col-4" style="color: #0070c0;font-size: 22px">
-				{{$region}} - Monthly Year Over Year : {{$form}} - {{$year}}
+
+		<div class="row justify-content-end mt-2">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col-3" style="color: #0070c0;font-size: 22px;">
+				{{$rName}} - Monthly Year Over Year : {{$form}} - {{$year}}
 			</div>
 			<div class="col-2">
-				<button id="buttonModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#SemestresTotal" style="width: 99%">
+				<button id="buttonModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#SemestresTotal" style="width: 100%">
 					Semestre e Total
 				</button>
 			</div>
 			<div class="col-2">
-				<button type="button" class="btn btn-primary" style="width: 99%">
+				<button type="button" class="btn btn-primary" style="width: 100%">
 					Generate Excel
 				</button>				
 			</div>
