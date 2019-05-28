@@ -22,6 +22,19 @@ class base extends Model{
 
                             );
 
+    public function TruncateName($form){
+        
+        if ($form == 'mini_header') {
+            $newForm = "Header";
+        }elseif ($form == 'cmaps') {
+            $newForm = "CMAPS";
+        }else{
+            $newForm = "IBMS";
+        }
+
+        return $newForm;
+    }
+
     public function monthToInt($month){
         $tmp = explode(" ",$month);
         $newMonth = trim($tmp[0]);

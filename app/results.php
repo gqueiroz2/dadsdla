@@ -7,7 +7,7 @@ use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 use App\base;
 
-class results extends Model{    
+class results extends base{    
     
     public function generateVector($con,$table,$region,$year,$month,$brand,$currency,$value,$join,$where,$souce = false){
         
@@ -185,16 +185,5 @@ class results extends Model{
         return $rtr;
     }
 
-    public function TruncateName($form){
-        
-        if ($form == 'mini_header') {
-            $newForm = "Header";
-        }elseif ($form == 'cmaps') {
-            $newForm = "CMAPS";
-        }else{
-            $newForm = "IBMS";
-        }
-
-        return $newForm;
-    }
+    
 }
