@@ -57,14 +57,7 @@ class performance extends Model{
     	$tmp = array($region);
         $regionView = $r->getRegion($con,$tmp)[0]["name"];
 
-        //definindo nome dos brands
-        $brandName = array();
-        for ($b=0; $b <sizeof($brand) ; $b++) { 
-            array_push($brandName, $brand[$b][1]);
-        }
-
         //define de onde vai se tirar as informações do banco, sendo as opções ytd(IBMS), cmaps, header ou digital.
-        $actualMonth = date("m");
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -344,20 +337,12 @@ class performance extends Model{
 
 
 
-    public function generateColumns($source,$value){
-        $columns = false;
-        if($source == "ytd"){
-            if ($value == "gross") {
-                $columns = "gross_revenue";
-            }else{
-                $columns = "net_revenue";
-            }
-        }elseif ($source == "digital") {
-            if ($value == "gross") {
-                $columns = "gross_revenue";
-            }else{
-                $columns = "net_revenue";
-            }
+    public function generateColumns($value){
+
+        if($value){
+            $columns = $value."_revenue";
+        }else{
+            $columns = false;
         }
 
         return $columns;
