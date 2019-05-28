@@ -46,6 +46,17 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::get('client','dataManagementController@clientGetFromExcel')
 							->name('dataManagementClientGetFromExcel');
 
+		Route::group(['prefix' => 'ClientAgency'],function(){
+
+			Route::get('clientAgencyExcelGet','ClientAgencyController@rootExcel')
+							->name('clientAgencyExcel');
+
+			Route::post('clientAgencyExcelHandler','ClientAgencyController@excelHandler')
+							->name('clientAgencyExcelHandler');
+
+
+		});			
+
 		Route::group(['prefix' => 'chain'],function(){
 			Route::get('root','ChainController@chainGet')
 							->name('chain');

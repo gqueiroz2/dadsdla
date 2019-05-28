@@ -63,23 +63,7 @@
 
 							
 
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-
-										<a href="{{ route('dataManagementAgencyGetFromExcel') }}" style="color: white">
-											Agency from Excel
-										</a>
-									</button>	
-								</div>
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="client">
-										<a href="#" style="color: white">
-										 	Client from Excel
-										</a>
-									</button>	
-								</div>
-							</div>
+							
 
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
@@ -100,28 +84,11 @@
 
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
-										<a style="color: white;" href="{{ route('dataManagementYtdLatamGet') }}">
-											YTD LATAM
-										</a>
-									</button>	
-								</div>
-								{{--<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
-										<a style="color: white;" href="{{ route('dataManagementBrandGet') }}">
-											Brand 
-										</a>
-									</button>	
-								</div>								--}}
-							</div>
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('fileUploadExcelGet') }}" style="color: white">
-											Excel
+										<a href="{{ route('clientAgencyExcel') }}" style="color: white">
+											Agency/Client From Excel
 										</a>
-									</button>
+									</button>	
 								</div>
 							</div>
 
