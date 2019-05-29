@@ -284,14 +284,17 @@ class salesRep extends Management{
     	return $salesRep;
 	}
 
-	public function getSalesRepByRegion($con,$region){
+	public function getSalesRepByRegion($con,$region=false,$notIN = false, $year){
+
 		$sql = new sql();
 
 		$table = "sales_rep sr";
 		$columns = "sr.ID AS 'id',
 				sr.name AS 'salesRep',	
 				srg.name AS 'salesRepGroup',
-				r.name AS 'region'";
+				r.name AS 'region',
+				srs.status AS 'status'";
+
 
 		$where = "";
 
@@ -300,8 +303,22 @@ class salesRep extends Management{
 			$where .= "WHERE r.ID IN ('$ids')";
 		}
 
+
+		if($notIN){
+			if(!$region){
+				$where .= " WHERE";
+			}else{
+				$where .= " AND";
+			}
+
+			$where .= " ( srs.status != '0') AND (srs.year = '$year')";
+
+		}
+
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
-				LEFT JOIN region r ON r.ID = srg.region_id";
+				LEFT JOIN region r ON r.ID = srg.region_id
+				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
+				";
 
 		$res = $sql->select($con,$columns,$table,$join,$where);
 

@@ -14,70 +14,52 @@
 					@csrf
 					<div class="row">
 						<div class="col">
-							<div class="form-inline">
-								<label>Sales Region</label>
-								@if($userLevel == 'L0' || $userLevel == 'SU')
-									{{$render->region($salesRegion)}}							
-								@else
-									{{$render->regionFiltered($salesRegion, $regionID )}}
-								@endif
-							</div>
+							<label>Sales Region</label>
+							@if($userLevel == 'L0' || $userLevel == 'SU')
+								{{$render->region($salesRegion)}}							
+							@else
+								{{$render->regionFiltered($salesRegion, $regionID )}}
+							@endif
 						</div>
 
 						<div class="col">
-							<div class="form-inline">
-								<label>Year</label>
-								{{ $render->year() }}
-							</div>
+							<label>Year</label>
+							{{ $render->year() }}
 						</div>
 
 						<div class="col">
-							<div class="form-inline">
-								<label>Brand</label>
-								{{ $render->brand($brand) }}
-							</div>
+							<label>Brand</label>
+							{{ $render->brand($brand) }}
 						</div>	
 
 						<div class="col">
-							<div class="form-inline">
-								<label> 1st Pos </label>
-								{{$render->position("first")}}
-							</div>
+							<label> 1st Pos </label>
+							{{$render->position("first")}}
 						</div>	
 
 						<div class="col">
-							<div class="form-inline">
-								<label> 2st Pos </label>
-								{{$render->position("second")}}
-							</div>
+							<label> 2st Pos </label>
+							{{$render->position("second")}}
 						</div>	
 
 						<div class="col">
-							<div class="form-inline">
-								<label> 3rd Pos </label>
-								{{$render->position("third")}}
-							</div>
+							<label> 3rd Pos </label>
+							{{$render->position("third")}}
 						</div>	
 
 						<div class="col">
-							<div class="form-inline">
-								<label> Currency </label>
-								{{$render->currency()}}
-							</div>
+							<label> Currency </label>
+							{{$render->currency()}}
 						</div>	
 
 						<div class="col">
-							<div class="form-inline">
-								<label> Value </label>
-								{{ $render->value() }}
-							</div>
+							<label> Value </label>
+							{{ $render->value() }}
 						</div>
 
 						<div class="col-2">
-							<div class="form-inline">
-								<label> &nbsp; </label>
-								<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">
-							</div>
+							<label> &nbsp; </label>
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">
 						</div>
 					</div>
 				</form>
@@ -102,7 +84,6 @@
 				</button>				
 			</div>
 		</div>	
-		
 
 	</div>
 

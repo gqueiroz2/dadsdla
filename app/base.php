@@ -181,9 +181,8 @@ class base extends Model{
     }
 
     public function monthToQuarter($month){
-        $quarter = array();
 
-        var_dump($month[0]);
+        $quarter = array();
 
         for ($m=0; $m <sizeof($month) ; $m++) { 
             if ($month[$m] == 1 || $month[$m] == 2 || $month[$m] == 3) {
@@ -197,8 +196,8 @@ class base extends Model{
             }
         }
         
-        /*$quarter = array_unique($quarter);
-        $quarter = array_values($quarter);*/
+        $quarter = array_unique($quarter);
+        $quarter = array_values($quarter);
 
         return $quarter;
     }

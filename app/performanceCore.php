@@ -140,7 +140,7 @@ class performanceCore extends performance
             }
         }
 
-        for ($s=0; $s <sizeof($values) ; $s++) { 
+        for ($s=0; $s <sizeof($values); $s++) { 
             for ($b=0; $b <sizeof($values[$s]) ; $b++) { 
                 for ($m=0; $m <sizeof($values[$s][$b]) ; $m++) { 
                     $oldVarAbs[$s][$b][$m] = $values[$s][$b][$m] - $planValues[$s][$b][$m];
