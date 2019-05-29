@@ -8,11 +8,12 @@ use App\import;
 use App\chain;
 use App\sql;
 use App\CheckElements;
+use App\RenderStuff;
 
 class CheckElementsController extends Controller{
     
 	public function base(){
-
+		$rS = new RenderStuff();
 		$db = new dataBase();
 		$cE = new CheckElements();
 
@@ -20,34 +21,13 @@ class CheckElementsController extends Controller{
 		$con = $db->openConnection('firstMatch');	
 
 		$table = Request::get('table');
-		var_dump($table);
 		$newValues = $cE->newValues($conDLA,$con,$table);
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
 
-		echo "<table class='table' style='width:100%;'>";
-		for ($d=0; $d < sizeof($dependencies); $d++) { 
 		
-			if($newValues[$dependencies[$d]]){
-				for ($n=0; $n < sizeof($newValues[$dependencies[$d]]); $n++) { 
-					echo "<tr>";
-						echo "<td> Create the value <span style='color:red'>".$newValues[$dependencies[$d]][$n]."</span> for the table ".$dependencies[$d]."</td>";
-					echo "</tr>";
-				}
-				
-			}else{
-				echo "<tr><td><span style='color:green'> There are values of ".$dependencies[$d]." to be Created </span></td></tr>";
-			}
 
-			
-		}
-		echo "</table>";
-
+		return view('dataManagement.Chain.pendingStuff',compact('rS','newValues','dependencies','table'));
 
 	}
-/*
-	public function basicPost(){
-
-	}
-*/
 }

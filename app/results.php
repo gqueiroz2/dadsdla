@@ -7,7 +7,7 @@ use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 use App\base;
 
-class results extends Model{    
+class results extends base{    
     
     public function generateVector($con,$table,$region,$year,$month,$brand,$currency,$value,$join,$where,$souce = false){
         
@@ -185,6 +185,9 @@ class results extends Model{
         return $rtr;
     }
 
+<<<<<<< HEAD
+    
+=======
     public function TruncateName($form){
         
         if ($form == 'mini_header') {
@@ -232,4 +235,5 @@ class results extends Model{
 
         return $name;
     }
+>>>>>>> d115f1b676053ba2c807a997e9516b91d4dfccfd
 }

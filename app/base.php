@@ -22,6 +22,54 @@ class base extends Model{
 
                             );
 
+    public function TruncateName($form){
+        
+        if ($form == 'mini_header') {
+            $newForm = "Header";
+        }elseif ($form == 'cmaps') {
+            $newForm = "CMAPS";
+        }else{
+            $newForm = "IBMS";
+        }
+
+        return $newForm;
+    }
+
+    public function TruncateRegion($region){
+
+        if ($region == "Brazil") {
+            $name = "BR";            
+        }elseif ($region == "Argentina") {
+            $name = "AR";
+        }elseif ($region == "Colombia") {
+            $name = "COL";
+        }elseif ($region == "Miami") {
+            $name = "MIA";
+        }elseif ($region == "Mexico") {
+            $name = "MEX";
+        }elseif ($region == "Chile") {
+            $name = "CL";
+        }elseif ($region == "Peru") {
+            $name = "PE";
+        }elseif ($region == "Venezuela") {
+            $name = "VE";
+        }elseif ($region == "Panama") {
+            $name = "PA";
+        }elseif ($region == "New York International") {
+            $name = "NY";
+        }elseif ($region == "Dominican Republic") {
+            $name = "DR";
+        }elseif ($region == "Ecuador") {
+            $name = "EC";
+        }elseif ($region == "Bolivia") {
+            $name = "BO";
+        }else {
+            $name = false;;
+        }
+
+        return $name;
+    }
+
     public function monthToInt($month){
         $tmp = explode(" ",$month);
         $newMonth = trim($tmp[0]);
@@ -135,6 +183,8 @@ class base extends Model{
     public function monthToQuarter($month){
         $quarter = array();
 
+        var_dump($month[0]);
+
         for ($m=0; $m <sizeof($month) ; $m++) { 
             if ($month[$m] == 1 || $month[$m] == 2 || $month[$m] == 3) {
                 array_push($quarter, "Q1");
@@ -147,8 +197,8 @@ class base extends Model{
             }
         }
         
-        $quarter = array_unique($quarter);
-        $quarter = array_values($quarter);
+        /*$quarter = array_unique($quarter);
+        $quarter = array_values($quarter);*/
 
         return $quarter;
     }
