@@ -73,8 +73,8 @@ class quarterPerformanceController extends Controller {
 
         $render = new quarterPerformanceRender();
 
-        $region = new region();
-        $salesRegion = $region->getRegion($con);
+        $r = new region();
+        $salesRegion = $r->getRegion($con);
 
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con, null);
@@ -85,10 +85,12 @@ class quarterPerformanceController extends Controller {
             $sr->getSalesRepByRegion($con, array($regionID),true,$year)
         );
 
+        $region = $r->getRegion($con, array($regionID))[0]['name'];
+        $rName = $qp->TRuncateRegion($region);
         /*var_dump($mtx);
         var_dump($sales);*/
 
-        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx'));
+        //return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year'));
         
     }
 }

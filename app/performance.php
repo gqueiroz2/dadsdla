@@ -12,7 +12,7 @@ use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
-class performance extends Model{
+class performance extends base{
     
     public function generateColumns($value){
 

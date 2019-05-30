@@ -43,10 +43,90 @@ class quarterPerformance extends performance {
 
 	public function assembler($values, $planValues, $salesRep, $months, $brands, $salesRepGroup, $tiers, $year, $salesRepGroupN, $salesRepN){
 
-		$mtx["salesRepGroup"] = $salesRepGroupN;
-		$mtx["salesRep"] = $salesRep;
+		//$mtx["salesRepGroup"] = $salesRepGroupN;
+		//$mtx["salesRep"] = $salesRep;
 
-		$mtx["tiers"] = $tiers;
+		var_dump($values);
+		$T1 = array();
+		$T2 = array();
+		$OTH = array();
+
+		$brandsTiers = array(0, 1, 2);
+
+		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
+			$brandsTiers[$b] = array();
+		}
+
+		for ($b=0; $b < sizeof($brands); $b++) { 
+			if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK") {
+				array_push($brandsTiers[0], $brands[$b][1]);
+			}elseif ($brands[$b][1] == "AP" 
+					|| $brands[$b][1] == "TLC"
+					|| $brands[$b][1] == "ID"
+					|| $brands[$b][1] == "DT"
+					|| $brands[$b][1] == "FN"
+					|| $brands[$b][1] == "ONL"
+					|| $brands[$b][1] == "VIX"
+					|| $brands[$b][1] == "HGTV") {
+				array_push($brandsTiers[1], $brands[$b][1]);
+			}else{
+				array_push($brandsTiers[2], $brands[$b][1]);
+			}
+		}
+
+		
+		for ($t=0; $t < sizeof($brandsTiers); $t++) { 
+			for ($b=0; $b < sizeof($brandsTiers[$t]); $b++) { 
+				$mtx[$t][$b][0][0] = $brandsTiers[$t][$b];
+				$mtx[$t][$b][1][0] = " ";
+				$mtx[$t][$b][1][1] = "Target ".$year;
+				$mtx[$t][$b][1][2] = "Actual ".$year;
+				$mtx[$t][$b][1][3] = "Var.Abs";
+				$mtx[$t][$b][1][4] = "Var(%)";
+				$mtx[$t][$b][2][0] = "Q1";
+				$mtx[$t][$b][3][0] = "Q2";
+				$mtx[$t][$b][4][0] = "S1";
+				$mtx[$t][$b][5][0] = "Q3";
+				$mtx[$t][$b][6][0] = "Q4";
+				$mtx[$t][$b][7][0] = "S2";
+				$mtx[$t][$b][8][0] = "Total";
+			}
+
+		}
+
+		for ($t=0; $t < sizeof($mtx); $t++) { 
+			for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
+				for ($v=0; $v < sizeof($mtx[$t][$b]); $v++) { 
+					for ($v2=1; $v2 < 5; $v2++) {
+						$mtx[$t][$b][$v][$v2] = 0;	
+					}
+				}	
+			}
+			var_dump($mtx[$t]);
+		}
+		
+		
+
+		for ($b=0; $b < sizeof($brands); $b++) { 
+			for ($m=0; $m < sizeof($months); $m++) { 
+				for ($s=0; $s < sizeof($salesRep); $s++) { 
+					if ($m == 0 || $m == 1 || $m == 2) {
+						$v = 0;
+						$planArray[$b][$v] += $planValues[$b][$m][$s];
+						$valuesArray[$b][$v] += $values[$b][$m][$s];
+					}elseif ($m == 3 || $m == 4 || $m == 5) {
+						
+					}elseif ($m == 6 || $m == 7 || $m == 8) {
+						# code...
+					}else{
+
+					}
+				}
+			}
+		}
+				
+
+		/*$mtx["tiers"] = $tiers;
         $mtx["brands"] = $brands;
 
 		$semester = 1;
@@ -135,14 +215,14 @@ class quarterPerformance extends performance {
 
 
 		$mtx["varAbs"] = $varAbs;
-		$mtx["var"] = $var;
+		$mtx["var"] = $var;*/
 		
 		/*Matrix Final*/
 		
-		$mtxFinal["salesRepGroup"] = "";
+		/*$mtxFinal["salesRepGroup"] = "";
 
 		if (sizeof($mtx["salesRepGroup"]) == sizeof($salesRepGroupN)) {
-			$mtxFinal["salesRepGroup"] .= "Todos";
+			$mtxFinal["salesRepGroup"] .= "All";
 		}else{
 			for ($srg=0; $srg < sizeof($mtx["salesRepGroup"]); $srg++) { 
 				$mtxFinal["salesRepGroup"] .= $mtx["salesRepGroup"][$srg]['name'];
@@ -156,7 +236,7 @@ class quarterPerformance extends performance {
 		$mtxFinal["salesRep"] = "";
 		
 		if (sizeof($mtx["salesRep"]) == sizeof($salesRepN)) {
-			$mtxFinal["salesRep"] .= "Todos";
+			$mtxFinal["salesRep"] .= "All";
 		}else{
 			for ($sr=0; $sr < sizeof($mtx["salesRep"]); $sr++) { 
 				$mtxFinal["salesRep"] .= $mtx["salesRep"][$sr]['salesRep'];
@@ -193,10 +273,10 @@ class quarterPerformance extends performance {
 		$mtxFinal["planValues"] = $totalPlanValues;
 		$mtxFinal["values"] = $totalValues;
 
-        var_dump($mtxFinal);
+        //var_dump($mtxFinal);
         //var_dump($salesRep);
 		//var_dump($mtxFinal);
 
-		return $mtx;
+		return $mtxFinal;*/
 	}
 }
