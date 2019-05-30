@@ -124,7 +124,7 @@ class agency extends Management{
         return (" FIM AGÊNCIA  !!! ");
     }
 
-    public function getAgencyGroup($con,$agencyID){
+    public function getAgencyGroup($con,$agencyID=false){
 
         $sql = new sql();
 
@@ -155,7 +155,7 @@ class agency extends Management{
 
     }
 
-    public function getAgency($con,$agencyID){
+    public function getAgency($con,$agencyID=false){
 
         $sql = new sql();
 
@@ -189,7 +189,7 @@ class agency extends Management{
 
     }
 
-    public function getAgencyUnit($con,$agencyID){
+    public function getAgencyUnit($con,$agencyID=false){
 
         $sql = new sql();
 

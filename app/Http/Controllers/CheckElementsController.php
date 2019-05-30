@@ -9,6 +9,7 @@ use App\chain;
 use App\sql;
 use App\CheckElements;
 use App\RenderStuff;
+use App\base;
 
 class CheckElementsController extends Controller{
     
@@ -16,7 +17,7 @@ class CheckElementsController extends Controller{
 		$rS = new RenderStuff();
 		$db = new dataBase();
 		$cE = new CheckElements();
-
+		$base = new base();
 		$conDLA = $db->openConnection('DLA');	
 		$con = $db->openConnection('firstMatch');	
 
@@ -25,9 +26,7 @@ class CheckElementsController extends Controller{
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
 
-		
-
-		return view('dataManagement.Chain.pendingStuff',compact('rS','newValues','dependencies','table'));
+		return view('dataManagement.Chain.pendingStuff',compact('base','rS','conDLA','newValues','dependencies','table'));
 
 	}
 }
