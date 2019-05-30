@@ -14,21 +14,12 @@ use Illuminate\Support\Facades\Request;
 
 class performance extends Model{
     
+    public function generateColumns($value){
 
-    public function generateColumns($source,$value){
-        $columns = false;
-        if($source == "ytd"){
-            if ($value == "gross") {
-                $columns = "gross_revenue";
-            }else{
-                $columns = "net_revenue";
-            }
-        }elseif ($source == "digital") {
-            if ($value == "gross") {
-                $columns = "gross_revenue";
-            }else{
-                $columns = "net_revenue";
-            }
+        if($value){
+            $columns = $value."_revenue";
+        }else{
+            $columns = false;
         }
 
         return $columns;

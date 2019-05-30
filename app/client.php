@@ -119,7 +119,7 @@ class client extends Management{
         echo $bool['msg']."<br>";
     }
 
-    public function getClientGroup($con,$clientID){
+    public function getClientGroup($con,$clientID = false){
         $sql = new sql();
 
         $table = "client_group cg";
@@ -147,7 +147,7 @@ class client extends Management{
         return $client;
     }
 
-    public function getClient($con,$clientID){
+    public function getClient($con,$clientID = false){
         $sql = new sql();
 
         $table = "client c";
@@ -178,7 +178,7 @@ class client extends Management{
         return $client;
     }
 
-    public function getClientUnit($con,$clientID){
+    public function getClientUnit($con,$clientID=false){
 
         $sql = new sql();
 
