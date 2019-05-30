@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col">
-			<form class="form-inline" role="form" method="POST" action="{{ route('resultsMonthlyPost') }}">
+			<form method="POST" action="{{ route('resultsMonthlyPost') }}">
 				@csrf
 				<div class="row">
 					<div class="col">

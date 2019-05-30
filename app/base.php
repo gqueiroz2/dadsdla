@@ -185,6 +185,7 @@ class base extends Model{
     }
 
     public function monthToQuarter($month){
+
         $quarter = array();
 
         for ($m=0; $m <sizeof($month) ; $m++) { 
