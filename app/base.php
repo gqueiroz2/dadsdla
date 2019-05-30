@@ -35,6 +35,10 @@ class base extends Model{
         return $newForm;
     }
 
+    public function TruncateTableName($table){
+        return (strtoupper($table));
+    }
+
     public function TruncateRegion($region){
 
         if ($region == "Brazil") {

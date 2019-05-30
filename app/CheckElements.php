@@ -55,7 +55,7 @@ class CheckElements extends Model{
 		$new = $this->checkDifferences($distinctDLA,$distinctFM);
 
 		return $new;
-		
+
 	}
 
 	public function checkNewBrands($conDLA,$con,$table,$sql){
@@ -95,7 +95,21 @@ class CheckElements extends Model{
 	}
 
 	public function checkNewClients($conDLA,$con,$table,$sql){
-		return false;
+		var_dump($table);
+		$tableDLA = 'client_unit';
+
+		$somethingDLA = "name";
+		$something = "client,campaign_sales_office";
+
+		$fromDLA = array("name");
+		$from = array("client","campaign_sales_office");
+
+		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
+
+		$new = $this->checkDifferences($distinctDLA,$distinctFM);
+		
+		return $new;
 	}
 
 	public function checkNewAgencies($conDLA,$con,$table,$sql){
@@ -116,21 +130,24 @@ class CheckElements extends Model{
 
 		$new = $this->checkDifferences($distinctDLA,$distinctFM);
 		return $new;
+
+		return false;
 	}
 
 	public function getDistinct($con,$something,$table,$sql,$from){
 
 		$select = "SELECT DISTINCT $something FROM $table ORDER BY $something";
+		var_dump($select);
 		$res = $con->query($select);
+		var_dump($res);
 		$tmp = $sql->fetch($res,$from,$from);
-		
+		var_dump($tmp);
 		for ($t=0; $t < sizeof($tmp); $t++) { 
 			for ($f=0; $f < sizeof($from); $f++) { 
 				$distinct[$t] = $tmp[$t][$from[$f]];
 			}
 		}
-		
-		return $distinct;
+		return $distinct;	
 	}
 
 	public function checkDifferences($dla,$fm){

@@ -124,41 +124,41 @@ class corePerformanceRender extends renderPerformance
 			    		echo "<tr>";
 			    			echo "<td>Meta</td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case2"]["planValue"][$sg][$b][$q],0)."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case2"]["totalPlanValueBrand"][$sg][$b],0)."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Actual</td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case2"]["value"][$sg][$b][$q],0)."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case2"]["totalValueBrand"][$sg][$b],0)."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var Abs</td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case2"]["varAbs"][$sg][$b][$q],0)."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case2"]["totalVarAbs"][$sg][$b],0)."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var %</td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case2"]["varPrc"][$sg][$b][$q],0)."%</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case2"]["totalVarPrc"][$sg][$b],0)."</td>";
 		    			echo "</tr>";
 		    		echo "</table>";
 		    	}
 			    echo "<table border='1' style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
 			    			echo "<td rowspan='5' class='tierClick' style='width:5%;'>DN</td>";
-			    			echo "<td style='width:5%;'></td>";
+			    			echo "<td style='width:10%;'></td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td class='quarterClick'>".$mtx["quarters"][$q]."</td>";
+			    				echo "<td class='quarterClick' style='width:16%'>".$mtx["quarters"][$q]."</td>";
 			    			}
-			    			echo "<td >Total</td>";
+			    			echo "<td style='width:18%' >Total</td>";
 		    			echo "</tr>";
 			    		echo "<tr>";
 			    			echo "<td>Meta</td>";
@@ -212,37 +212,37 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick' style='width:5%;'>".$mtx["tier"][$b]."</td>";
 			    			echo "<td style='width:5%;'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick' style='width:7%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td >Total</td>";
 		    			echo "</tr>";
 			    		echo "<tr>";
 			    			echo "<td>Meta</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case3"]["planValues"][$sg][$b][$q])."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case3"]["totalPlanValueTier"][$sg][$b])."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Actual</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case3"]["values"][$sg][$b][$q])."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case3"]["totalValueTier"][$sg][$b])."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var Abs</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case3"]["varAbs"][$sg][$b][$q])."</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case3"]["totalVarAbs"][$sg][$b])."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var %</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case3"]["varPrc"][$sg][$b][$q])."%</td>";
 			    			}
-			    			echo "<td></td>";
+			    			echo "<td>".number_format($mtx["case3"]["totalVarPrc"][$sg][$b])."</td>";
 		    			echo "</tr>";
 		    		echo "</table>";
 		    	}
@@ -251,7 +251,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick' style='width:5%;'>DN</td>";
 			    			echo "<td style='width:5%;'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick' style='width:7%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td >Total</td>";
 		    			echo "</tr>";
@@ -306,35 +306,35 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick' style='width:5%;'>".$mtx["brand"][$b][1]."</td>";
 			    			echo "<td style='width:5%;'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick' style='width:7%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td >Total</td>";
 		    			echo "</tr>";
 			    		echo "<tr>";
 			    			echo "<td>Meta</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case4"]["planValues"][$sg][$b][$q],0)."</td>";
 			    			}
 			    			echo "<td></td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Actual</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case4"]["values"][$sg][$b][$q],0)."</td>";
 			    			}
 			    			echo "<td></td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var Abs</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case4"]["varAbs"][$sg][$b][$q],0)."</td>";
 			    			}
 			    			echo "<td></td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
 			    			echo "<td>Var %</td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td></td>";
+			    				echo "<td>".number_format($mtx["case4"]["varPrc"][$sg][$b][$q],0)."%</td>";
 			    			}
 			    			echo "<td></td>";
 		    			echo "</tr>";

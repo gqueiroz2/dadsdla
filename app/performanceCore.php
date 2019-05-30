@@ -25,7 +25,6 @@ class performanceCore extends performance
         $sr = new salesRep();
         $pr = new pRate();
 
-
  		$region = Request::get('region');
  		$year = Request::get('year');
  		$brand = $base->handleBrand(Request::get('brand'));
@@ -221,7 +220,7 @@ class performanceCore extends performance
         }
         //terminou
 
-        $mtx["case2"] = $tmp2;
+        $mtx["case3"] = $tmp2;
 
         //Começou a agrupar mes
         for ($sg=0; $sg <sizeof($salesGroup) ; $sg++) { 
@@ -363,7 +362,84 @@ class performanceCore extends performance
             }
         }
 
-        var_dump($tmp3["value"]);
+        $mtx["case2"] = $tmp3;
+        // Agrupamentos Case 2
+        
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
+                for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                	$mtx["case2"]["varAbs"][$sg][$b][$q] = $mtx["case2"]["value"][$sg][$b][$q] - $mtx["case2"]["planValue"][$sg][$b][$q];
+                	if ($mtx["case2"]["planValue"][$sg][$b][$q] != 0) {
+	                	$mtx["case2"]["varPrc"][$sg][$b][$q] = $mtx["case2"]["value"][$sg][$b][$q] / $mtx["case2"]["planValue"][$sg][$b][$q];
+                	}else{
+                		$mtx["case2"]["varPrc"][$sg][$b][$q] = 0;
+                	}
+        		}
+        	}
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
+                $mtx["case2"]["totalPlanValueBrand"][$sg][$b] = 0;
+                $mtx["case2"]["totalValueBrand"][$sg][$b] = 0;
+                $mtx["case2"]["totalVarAbs"][$sg][$b] = 0;
+                $mtx["case2"]["totalVarPrc"][$sg][$b] = 0;
+                for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                	$mtx["case2"]["totalPlanValueBrand"][$sg][$b] += $mtx["case2"]["planValue"][$sg][$b][$q];
+                	$mtx["case2"]["totalValueBrand"][$sg][$b] += $mtx["case2"]["value"][$sg][$b][$q];
+        			$mtx["case2"]["totalVarPrc"][$sg][$b] += $mtx["case2"]["varPrc"][$sg][$b][$q];
+        			$mtx["case2"]["totalVarAbs"][$sg][$b] += $mtx["case2"]["varAbs"][$sg][$b][$q];
+        		}
+        	}
+        }
+
+        //Agrupamentos Case 3
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	for ($t=0; $t <sizeof($mtx["tier"]) ; $t++) { 
+        		for ($m=0; $m <sizeof($mtx["month"]); $m++) { 
+        			$mtx["case3"]["varAbs"][$sg][$t][$m] = $mtx["case3"]["values"][$sg][$t][$m] - $mtx["case3"]["planValues"][$sg][$t][$m];
+        			if ($mtx["case3"]["planValues"][$sg][$t][$m] != 0) {
+	        			$mtx["case3"]["varPrc"][$sg][$t][$m] = $mtx["case3"]["values"][$sg][$t][$m] / $mtx["case3"]["planValues"][$sg][$t][$m];
+        			}else{
+        				$mtx["case3"]["varPrc"][$sg][$t][$m] = 0;
+        			}
+        		}
+        	}
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	for ($t=0; $t <sizeof($mtx["tier"]) ; $t++) { 
+        		$mtx["case3"]["totalValueTier"][$sg][$t] = 0;
+    			$mtx["case3"]["totalPlanValueTier"][$sg][$t] = 0;
+    			$mtx["case3"]["totalVarAbs"][$sg][$t] = 0;
+    			$mtx["case3"]["totalVarPrc"][$sg][$t] = 0;
+        		for ($m=0; $m <sizeof($mtx["month"]); $m++) { 
+        			$mtx["case3"]["totalValueTier"][$sg][$t] += $mtx["case3"]["values"][$sg][$t][$m];
+        			$mtx["case3"]["totalPlanValueTier"][$sg][$t] += $mtx["case3"]["planValues"][$sg][$t][$m];
+        			$mtx["case3"]["totalVarAbs"][$sg][$t] += $mtx["case3"]["varAbs"][$sg][$t][$m];
+        			$mtx["case3"]["totalVarPrc"][$sg][$t] += $mtx["case3"]["varPrc"][$sg][$t][$m];
+        		}
+        	}
+        }
+
+
+        //Agrupamento caso 4
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
+        		for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+        			$mtx["case4"]["varAbs"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$t][$m] - $mtx["case4"]["planValues"][$sg][$t][$m];
+        			if ($mtx["case4"]["planValues"][$sg][$t][$m] != 0) {
+        				$mtx["case4"]["varPrc"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$t][$m] / $mtx["case4"]["planValues"][$sg][$t][$m];
+        			}else{
+        				$mtx["case4"]["varPrc"][$sg][$b][$m] = 0;
+        			}
+        		}
+        	}
+        }
+
 
         return $mtx;
     }
