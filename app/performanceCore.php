@@ -68,7 +68,7 @@ class performanceCore extends performance
                     $table[$b][$m] = "ytd";
                 }
                 //pega colunas
-                $sum[$b][$m] = $this->generateColumns($table[$b][$m],$value);
+                $sum[$b][$m] = $this->generateColumns($value);
             }
         }
 
@@ -78,8 +78,8 @@ class performanceCore extends performance
 
 
 
-        for ($b=0; $b < sizeof($table); $b++) { 
-            for ($m=0; $m <sizeof($table[$b]) ; $m++) {
+        for ($b=0; $b < sizeof($table); $b++){ 
+            for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
                 $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales");
             }
@@ -208,7 +208,7 @@ class performanceCore extends performance
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$sg][$t] += $tmp1["planValues"][$sg][$b][$m];
-                        }elseif($mtx["tier"][$t] == "T2"){
+                        }elseif($mtx["tier"][$t] == "T2" && ($brand[$b][1] == 'AP' || $brand[$b][1] == 'TLC' || $brand[$b][1] == 'ID' || $brand[$b][1] == 'DT' || $brand[$b][1] == 'FN' || $brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX' || $brand[$b][1] == 'HGTV')){
                             $tmp2["values"][$sg][$t][$m] += $tmp1["values"][$sg][$b][$m];
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];
@@ -440,6 +440,93 @@ class performanceCore extends performance
         	}
         }
 
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
+        		$mtx["case4"]["totalValueTier"][$sg][$b] = 0;
+        		$mtx["case4"]["totalPlanValueTier"][$sg][$b] = 0;
+        		$mtx["case4"]["totalVarAbs"][$sg][$b] = 0;
+        		$mtx["case4"]["totalVarPrc"][$sg][$b] = 0;
+        		for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+        			$mtx["case4"]["totalValueTier"][$sg][$b] += $mtx["case4"]["values"][$sg][$b][$m];
+        			$mtx["case4"]["totalPlanValueTier"][$sg][$b] += $mtx["case4"]["planValues"][$sg][$b][$m];
+        			$mtx["case4"]["totalVarAbs"][$sg][$b] += $mtx["case4"]["varAbs"][$sg][$b][$m];
+        			$mtx["case4"]["totalVarPrc"][$sg][$b] += $mtx["case4"]["varPrc"][$sg][$b][$m];
+        		}
+        	}
+        }
+
+        // Começou DN case2
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+   			for ($m=0; $m <sizeof($mtx["quarters"]) ; $m++) { 
+   				$mtx["case2"]["dnPlanValue"][$sg][$m] = 0;
+   				$mtx["case2"]["dnValue"][$sg][$m] = 0;
+   				$mtx["case2"]["dnVarAbs"][$sg][$m] = 0;
+   				$mtx["case2"]["dnVarPrc"][$sg][$m] = 0;
+   				for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
+   					$mtx["case2"]["dnPlanValue"][$sg][$m] += $mtx["case2"]["planValue"][$sg][$b][$m]; 
+   					$mtx["case2"]["dnValue"][$sg][$m] += $mtx["case2"]["value"][$sg][$b][$m]; 
+   					$mtx["case2"]["dnVarAbs"][$sg][$m] += $mtx["case2"]["varAbs"][$sg][$b][$m]; 
+   					$mtx["case2"]["dnVarPrc"][$sg][$m] += $mtx["case2"]["varPrc"][$sg][$b][$m]; 
+   				}
+   			}
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	$mtx["case2"]["dnTotalPlanValue"][$sg] = 0;
+        	$mtx["case2"]["dnTotalValue"][$sg] = 0;
+        	$mtx["case2"]["dnTotalVarAbs"][$sg] = 0;
+        	$mtx["case2"]["dnTotalVarPrc"][$sg] = 0;
+        	for ($m=0; $m <sizeof($mtx["quarters"]) ; $m++) { 
+        		$mtx["case2"]["dnTotalPlanValue"][$sg] += $mtx["case2"]["dnPlanValue"][$sg][$m];
+        		$mtx["case2"]["dnTotalValue"][$sg] += $mtx["case2"]["dnValue"][$sg][$m];
+        		$mtx["case2"]["dnTotalVarAbs"][$sg] += $mtx["case2"]["dnVarAbs"][$sg][$m];
+        		$mtx["case2"]["dnTotalVarPrc"][$sg] += $mtx["case2"]["dnVarPrc"][$sg][$m];
+        	}
+        }
+
+
+        // Começou DN case3
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["case3"]["dnPlanValue"][$sg][$m] = 0;
+                $mtx["case3"]["dnValue"][$sg][$m] = 0;
+                $mtx["case3"]["dnVarAbs"][$sg][$m] = 0;
+                $mtx["case3"]["dnVarPrc"][$sg][$m] = 0;
+                for ($t=0; $t <sizeof($mtx["tier"]) ; $t++) { 
+                    $mtx["case3"]["dnPlanValue"][$sg][$m] += $mtx["case3"]["planValues"][$sg][$t][$m]; 
+                    $mtx["case3"]["dnValue"][$sg][$m] += $mtx["case3"]["values"][$sg][$t][$m]; 
+                    $mtx["case3"]["dnVarAbs"][$sg][$m] += $mtx["case3"]["varAbs"][$sg][$t][$m]; 
+                    $mtx["case3"]["dnVarPrc"][$sg][$m] += $mtx["case3"]["varPrc"][$sg][$t][$m]; 
+                }
+            }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            $mtx["case3"]["dnTotalPlanValue"][$sg] = 0;
+            $mtx["case3"]["dnTotalValue"][$sg] = 0;
+            $mtx["case3"]["dnTotalVarAbs"][$sg] = 0;
+            $mtx["case3"]["dnTotalVarPrc"][$sg] = 0;
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["case3"]["dnTotalPlanValue"][$sg] += $mtx["case3"]["dnPlanValue"][$sg][$m];
+                $mtx["case3"]["dnTotalValue"][$sg] += $mtx["case3"]["dnValue"][$sg][$m];
+                $mtx["case3"]["dnTotalVarAbs"][$sg] += $mtx["case3"]["dnVarAbs"][$sg][$m];
+                $mtx["case3"]["dnTotalVarPrc"][$sg] += $mtx["case3"]["dnVarPrc"][$sg][$m];
+            }
+        }
+
+
+        // Começou DN case4
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["case4"]["dnPlanValue"][$sg][$m] = 0;
+                $mtx["case4"]["dnValue"][$sg][$m] = 0;
+                $mtx["case4"]["dnVarAbs"][$sg][$m] = 0;
+                $mtx["case4"]["dnVarPrc"][$sg][$m] = 0;
+            }
+        }
 
         return $mtx;
     }
