@@ -87,8 +87,8 @@ class quarterPerformanceController extends Controller {
 
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $qp->TRuncateRegion($region);
-        /*var_dump($mtx);
-        var_dump($sales);*/
+        //var_dump($mtx[1]);
+        //var_dump($sales);
 
         //return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year'));
         
