@@ -16,7 +16,6 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        //echo "$sql<br>";
         $res = $con->query($sql);
         return $res;
     }
@@ -35,8 +34,6 @@ class sql extends Model{
     }
 
     public function fetch($result,$from,$to){
-        var_dump($from);
-        var_dump($to);
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
@@ -61,6 +58,7 @@ class sql extends Model{
         }else{
             $info = false;
         }
+
         return $info;
 
     }

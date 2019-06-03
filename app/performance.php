@@ -29,7 +29,7 @@ class performance extends Model{
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
             $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
-            $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
+            $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
         }
         return $values;
     }
