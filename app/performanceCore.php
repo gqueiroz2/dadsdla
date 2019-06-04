@@ -120,7 +120,6 @@ class performanceCore extends performance
         $values = $tmp;
         $planValues = $tmp_2;
 
-
         $mtx["oldValues"] = $values;
         $mtx["oldPlanValues"] = $planValues;
         $mtx["salesRep"] = $salesRep;
@@ -430,9 +429,9 @@ class performanceCore extends performance
         for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
         	for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
         		for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
-        			$mtx["case4"]["varAbs"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$t][$m] - $mtx["case4"]["planValues"][$sg][$t][$m];
-        			if ($mtx["case4"]["planValues"][$sg][$t][$m] != 0) {
-        				$mtx["case4"]["varPrc"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$t][$m] / $mtx["case4"]["planValues"][$sg][$t][$m];
+        			$mtx["case4"]["varAbs"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$b][$m] - $mtx["case4"]["planValues"][$sg][$b][$m];
+        			if ($mtx["case4"]["planValues"][$sg][$b][$m] != 0) {
+        				$mtx["case4"]["varPrc"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$b][$m] / $mtx["case4"]["planValues"][$sg][$b][$m];
         			}else{
         				$mtx["case4"]["varPrc"][$sg][$b][$m] = 0;
         			}
@@ -525,7 +524,27 @@ class performanceCore extends performance
                 $mtx["case4"]["dnValue"][$sg][$m] = 0;
                 $mtx["case4"]["dnVarAbs"][$sg][$m] = 0;
                 $mtx["case4"]["dnVarPrc"][$sg][$m] = 0;
+                for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
+                	$mtx["case4"]["dnPlanValue"][$sg][$m] += $mtx["case4"]["planValues"][$sg][$b][$m];
+                	$mtx["case4"]["dnValue"][$sg][$m] += $mtx["case4"]["values"][$sg][$b][$m];
+                	$mtx["case4"]["dnVarAbs"][$sg][$m] += $mtx["case4"]["varAbs"][$sg][$b][$m];
+                	$mtx["case4"]["dnVarPrc"][$sg][$m] += $mtx["case4"]["varPrc"][$sg][$b][$m];
+
+                }
             }
+        }
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+        	$mtx["case4"]["dnTotalPlanValue"][$sg] = 0;
+        	$mtx["case4"]["dnTotalValue"][$sg] = 0;
+        	$mtx["case4"]["dnTotalVarAbs"][$sg] = 0;
+        	$mtx["case4"]["dnTotalVarPrc"][$sg] = 0;
+        	for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+        		$mtx["case4"]["dnTotalPlanValue"][$sg] += $mtx["case4"]["dnPlanValue"][$sg][$m]; 
+        		$mtx["case4"]["dnTotalValue"][$sg] += $mtx["case4"]["dnValue"][$sg][$m]; 
+        		$mtx["case4"]["dnTotalVarAbs"][$sg] += $mtx["case4"]["dnVarAbs"][$sg][$m]; 
+        		$mtx["case4"]["dnTotalVarPrc"][$sg] += $mtx["case4"]["dnVarPrc"][$sg][$m]; 
+        	}
         }
 
         return $mtx;

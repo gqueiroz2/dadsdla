@@ -39,6 +39,19 @@ tr{
     
 }
 
+.t1{
+    background-color: #0070c0;
+    font-weight: bold;
+    color: white;
+}
+
+.t2{
+    background-color: #004b84;
+    font-weight: bold;
+    color: white;
+}
+
+
 .dc{
 	background-color: #0070c0;
     font-weight: bold;
@@ -107,7 +120,7 @@ tr{
 .hgtv{
     background-color: #88cc00;
     font-weight: bold;
-    color: white;
+    color: black;
 }
 
 .dn {
