@@ -35,8 +35,6 @@ class sql extends Model{
     }
 
     public function fetch($result,$from,$to){
-        var_dump($from);
-        var_dump($to);
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
