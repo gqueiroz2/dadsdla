@@ -52,7 +52,11 @@ class quarterRender extends Render
 						}else{
 							if($l == 0 ){
 								if ($v == 0) {
-									echo "<td class='lightBlue center'>".$mtx[$b][$l][$v]."</td>";		
+									if ($mtx[$b][$l][$v] == "DN") {
+										echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+									}else{
+										echo "<td class='lightBlue center'>".$mtx[$b][$l][$v]."</td>";		
+									}
 								}elseif (($v >= 1 && $v <= 2) || ($v >= 4 && $v <= 5)) {
 									echo "<td class='lightGrey center'>".$mtx[$b][$l][$v]."</td>";		
 								}elseif ($v == 3 || $v == 6) {
@@ -61,11 +65,23 @@ class quarterRender extends Render
 									echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
 								}
 							}elseif ($l == 1) {
-								echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";	
+								if ($b == (sizeof($mtx)-1)) {
+									echo "<td class='smBlue center'>".$mtx[$b][$l][$v]."</td>";
+								}else{
+									echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";
+								}
 							}elseif ($l == 2 || $l == 3) {
-								echo "<td class='rcBlue center'>".$mtx[$b][$l][$v]."</td>";	
+								if ($b == (sizeof($mtx)-1)) {
+									echo "<td class='smBlue center'>".$mtx[$b][$l][$v]."</td>";
+								}else{
+									echo "<td class='rcBlue center'>".$mtx[$b][$l][$v]."</td>";	
+								}
 							}else{
-								echo "<td class='medBlue center'>".$mtx[$b][$l][$v]."</td>";	
+								if ($b == (sizeof($mtx)-1)) {
+									echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+								}else{
+									echo "<td class='medBlue center'>".$mtx[$b][$l][$v]."</td>";	
+								}
 							}
 						}
 						

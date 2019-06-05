@@ -15,17 +15,17 @@ class shareRender extends Render{
 			echo "<tr class='lightBlue'>";
 				echo "<th colspan='".(sizeof($mtx["brand"]) + 4)."'> Sales Representative: ".$mtx["salesRepView"]." </th>";
 			echo "</tr>";
-			echo "<tr class='lightBlue'>";
-				echo "<th style='width:15%;'>Sales Rep</th>";
-				for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
-    	 			echo "<th style='width:5%;'>";
-    	 				echo $mtx["brand"][$b];
-	    			echo "</th>";
+			echo "<tr>";
+				echo "<th style='width:15%;' class='lightBlue'>Sales Rep</th>";
+				for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) {
+					echo "<th style='width:5%;' class='lightBlue'>";
+	 					echo $mtx["brand"][$b];
+    				echo "</th>"; 	
 		    	}
 	    		if ($mtx["dn"]) {
-		    		echo "<th style='width:5%'>DN</th>";
+		    		echo "<th style='width:5%' class='darkBlue'>DN</th>";
 		    	}
-				echo "<th style='width:5%'>Share</th>";
+				echo "<th style='width:5%' class='lightBlue'>Share</th>";
 	    	echo "</tr>";
 	    	///Começa o Corpo do Codigo
 	    	for ($s=0; $s <sizeof($mtx["salesRep"]); $s++) { 
@@ -35,12 +35,12 @@ class shareRender extends Render{
 		    		$string = "rcBlue";
 		    	}
 	    		echo "<tr class='".$string."'>";
-    				echo "<td  >".$mtx["salesRep"][$s]."</td>";
+    				echo "<td>".$mtx["salesRep"][$s]."</td>";
 	    			for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 	    				echo "<td>".(number_format($mtx["values"][$b][$s]))."</td>";
 	    			}
 	    			if ($mtx["dn"]) {
-		    			echo "<td>".(number_format($mtx["dn"][$s]))."</td>";
+		    			echo "<td class='smBlue'>".(number_format($mtx["dn"][$s]))."</td>";
 	    			}
 		    		echo "<td>".(number_format($mtx["share"][$s]))."%</td>";
 	    		echo "</tr>";

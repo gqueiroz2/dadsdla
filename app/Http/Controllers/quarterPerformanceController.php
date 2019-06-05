@@ -80,17 +80,20 @@ class quarterPerformanceController extends Controller {
         $salesRepGroup = $sr->getSalesRepGroup($con, null);
         $salesRep = $sr->getSalesRep($con, null);
 
-        $mtx = $qp->makeQuarter($con, $regionID, $year, $brands, $currency, $value, $base->getMonth(), $salesRepGroupID, $salesRepID, $tiers, 
-            $sr->getSalesRepGroup($con, array($regionID)), 
-            $sr->getSalesRepByRegion($con, array($regionID),true,$year)
-        );
+        $mtx = $qp->makeQuarter($con, $regionID, $year, $brands, $currency, $value, $base->getMonth(), $tiers, $salesRepID);
+
+        $sales = $qp->createLabels($con, $salesRepGroupID, $salesRepID, $regionID, $year);
 
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $qp->TRuncateRegion($region);
-        //var_dump($mtx[1]);
+        //var_dump($mtx[0]);
         //var_dump($sales);
 
-        //return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year'));
+        if (sizeof($tiers) > 1) {
+            array_push($tiers, "TT");
+        }
+
+        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers'));
         
     }
 }

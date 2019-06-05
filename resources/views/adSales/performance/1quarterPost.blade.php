@@ -93,7 +93,7 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{ $render->assemble($mtx, $region, $pRate, $value, $year) }}
+				{{ $render->assemble($mtx, $region, $pRate, $value, $year, $sales, $tiers) }}
 			</div>
 		</div>
 	</div>

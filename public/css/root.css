@@ -51,6 +51,11 @@ tr{
     color: white;
 }
 
+.tt{
+    background-color: black;
+    font-weight: bold;
+    color: white;   
+}
 
 .dc{
 	background-color: #0070c0;
