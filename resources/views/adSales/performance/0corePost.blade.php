@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Share')
+@section('title', 'Core')
 @section('head')	
 <script src="/js/performance.js"></script>
     <?php include(resource_path('views/auth.php')); 

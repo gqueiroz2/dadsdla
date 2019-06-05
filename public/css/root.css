@@ -28,8 +28,8 @@ table{
     font-size:14px;
 }
 
-tr{
-
+th{
+    font-weight: normal;
 }
 
 .reportsTitle{
@@ -37,6 +37,24 @@ tr{
     color: #0070c0;
     font-size: 30px;
     
+}
+
+.t1{
+    background-color: #0070c0;
+    font-weight: bold;
+    color: white;
+}
+
+.t2{
+    background-color: #004b84;
+    font-weight: bold;
+    color: white;
+}
+
+.tt{
+    background-color: black;
+    font-weight: bold;
+    color: white;   
 }
 
 .dc{
@@ -75,7 +93,7 @@ tr{
 }
 
 .dt{
-    background-color: #000066;
+    background-color: #002060;
     font-weight: bold;
     color: white;
 }
@@ -107,11 +125,11 @@ tr{
 .hgtv{
     background-color: #88cc00;
     font-weight: bold;
-    color: white;
+    color: black;
 }
 
 .dn {
-    background-color: #000066;
+    background-color: #002060;
     color: white;
     font-weight: bold;
 }
@@ -141,7 +159,7 @@ tr{
 
 .lightBlue{
 	background-color: #0070c0;
-	color:white;	
+	color: white;	
 }
 
 .medBlue{

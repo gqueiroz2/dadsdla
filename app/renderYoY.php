@@ -21,41 +21,69 @@ class renderYoY extends Model {
 
     public function assemble($mtx,$form,$pRate,$value,$year,$region){
 
-        echo "<table style='width: 100%; zoom:80%;'>";
+        echo "<table style='width: 100%; zoom:100%;'>";
             echo "<tr>";
                 echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> $region - Year Over Year : ".$form." - ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
             echo "</tr>";
 
+            echo "<tr><td> &nbsp; </td></tr>";
+
         for ($b=0; $b < sizeof($mtx); $b++) { 
-            echo "<tr><td class='".strtolower($mtx[$b][0][0])." center' rowspan='7'>".$mtx[$b][0][0]."</td></tr>";
+            if ($mtx[$b][0][0] == "DN") {
+                echo "<tr><td class='darkBlue center' rowspan='7' style='width: 2.5%'>".$mtx[$b][0][0]."</td></tr>";
+            }else{
+                echo "<tr><td class='".strtolower($mtx[$b][0][0])." center' rowspan='7' style='width: 2.5%'>".$mtx[$b][0][0]."</td></tr>";
+            }
             for ($l=0; $l < sizeof($mtx[$b]); $l++) { 
                 echo "<tr>";
                 for ($v=0; $v < sizeof($mtx[$b][$l]); $v++) { 
                     if (is_numeric($mtx[$b][$l][$v])) {
                         if ($v == 13) {
-                            echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                            if ($l == 5) {
+                               echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>"; 
+                            }else{
+                                echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+                            }
                         }elseif ($l == 1 || $l == 2) {
-                            echo "<td class='center'>".number_format($mtx[$b][$l][$v])."</td>";
+                            echo "<td class='center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
                         }elseif ($l == 3) {
-                            echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                            echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
                         }else{
-                            echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+                            echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
                         }
                     }else{
                         if ($l == 0) {
                             if ($v == 0) {
-                                echo "<td class='lightGrey center'>&nbsp;</td>";
+                                if ($b == (sizeof($mtx)-1)) {
+                                   echo "<td class='darkBlue center'>&nbsp;</td>"; 
+                                }else{
+                                    echo "<td class='lightGrey center'>&nbsp;</td>";
+                                }
                             }elseif ($v != 13) {
                                 echo "<td class='lightGrey center'>".$mtx[$b][$l][$v]."</td>";
                             }else{
                                 echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
                             }
                         }elseif ($l == 1) {
-                            echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            if ($b == (sizeof($mtx)-1)) {
+                                echo "<td class='smBlue center'>".$mtx[$b][$l][$v]."</td>";    
+                            }else{
+                                echo "<td class='coralBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }
                         }elseif ($l == 2 || $l == 3) {
-                            echo "<td class='rcBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            if ($b == (sizeof($mtx)-1)) {
+                                echo "<td class='smBlue center'>".$mtx[$b][$l][$v]."</td>";    
+                            }else{
+                                echo "<td class='rcBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }
                         }else{
-                            echo "<td class='medBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            if ($b == (sizeof($mtx)-1) && ($l == 5)) {
+                                echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }elseif ($b == (sizeof($mtx)-1)) {
+                                echo "<td class='smBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }else{
+                                echo "<td class='medBlue center'>".$mtx[$b][$l][$v]."</td>";
+                            }
                         }
                     }
                 }

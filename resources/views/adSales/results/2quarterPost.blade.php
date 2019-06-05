@@ -14,60 +14,44 @@
 						<div class="row">
 							<!-- Region Area -->
 							<div class="col">
-								<div class="form-inline">
-									<label>Sales Region</label>
-									@if($userLevel == 'L0' || $userLevel == 'SU')
-										{{$render->region($salesRegion)}}							
-									@else
-										{{$render->regionFiltered($salesRegion, $regionID )}}
-									@endif
-								</div>
+								<label>Sales Region</label>
+								@if($userLevel == 'L0' || $userLevel == 'SU')
+									{{$render->region($salesRegion)}}							
+								@else
+									{{$render->regionFiltered($salesRegion, $regionID )}}
+								@endif
 							</div>
 							
 							<div class="col">
-								<div class="form-inline">
-									<label>Year</label>
-									{{$render->year()}}
-								</div>
+								<label>Year</label>
+								{{$render->year()}}
 							</div>
 
 							<!-- Brand Area -->
 							<div class="col">
-								<div class="form-inline">
-									<label>Brand</label>
-									{{$render->brand($brand)}}
-								</div>
+								<label>Brand</label>
+								{{$render->brand($brand)}}
 							</div>				
 
 							<!-- 1st Pos Area -->
 							<div class="col">
-								<div class="form-inline">
-									<label> 1st Pos </label>
-									{{$render->position("second")}}
-								</div>
+								<label> 1st Pos </label>
+								{{$render->position("second")}}
 							</div>				
 
 							<!-- 2st Pos Area -->
 							<div class="col">
-								<div class="form-inline">
-									<label> 2st Pos </label>
-									{{$render->position("third")}}
-								</div>
+								<label> 2st Pos </label>
+								{{$render->position("third")}}
 							</div>
 							
 							<div class="col">
-								<div class="form-inline">
-									<label> Currency </label>
-									{{$render->currency()}}
-									
-								</div>
+								<label> Currency </label>
+								{{$render->currency()}}
 							</div>
 							<div class="col-2">
-								<div class="form-inline">
-									<label> Value </label>
-									{{$render->value()}}
-									
-								</div>
+								<label> Value </label>
+								{{$render->value()}}									
 							</div>
 							<div class="col-2">
 								<label> &nbsp; </label>

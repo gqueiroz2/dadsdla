@@ -88,6 +88,21 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col" style="color: #0070c0;font-size: 22px;">
+				Quarter
+			</div>
+		</div>
+
 	</div>
 
 	<div id="vlau"></div>

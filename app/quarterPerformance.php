@@ -9,13 +9,53 @@ use App\salesRep;
 
 class quarterPerformance extends performance {
     
-	public function makeQuarter($con, $regionID, $year, $brands, $currencyID, $value, $months, $salesRepGroupID, $salesRepID, $tiers, $salesRepGroup, $salesRep){
+	public function createLabels($con, $salesRepGroupID, $salesRepID, $regionID, $year){
+		
+		$sr = new salesRep();
+
+		$salesRepGroup = $sr->getSalesRepGroupById($con, $salesRepGroupID);
+        $salesRep = $sr->getSalesRepById($con, $salesRepID);
+
+        $salesRepGroupN = $sr->getSalesRepGroup($con, array($regionID));
+        $salesRepN = $sr->getSalesRepByRegion($con, array($regionID),true,$year);
+
+        $sales["salesRepGroup"] = "";
+
+		if (sizeof($salesRepGroup) == sizeof($salesRepGroupN)) {
+			$sales["salesRepGroup"] .= "All";
+		}else{
+			for ($srg=0; $srg < sizeof($salesRepGroup); $srg++) { 
+				$sales["salesRepGroup"] .= $salesRepGroup[$srg]['name'];
+
+				if ($srg != sizeof($salesRepGroup)-1) {
+					$sales["salesRepGroup"] .= ",";
+				}
+			}	
+		}
+		
+		$sales["salesRep"] = "";
+		
+		if (sizeof($salesRep) == sizeof($salesRepN)) {
+			$sales["salesRep"] .= "All";
+		}else{
+			for ($sr=0; $sr < sizeof($salesRep); $sr++) { 
+				$sales["salesRep"] .= $salesRep[$sr]['salesRep'];
+
+				if ($sr != sizeof($salesRep)-1) {
+					$sales["salesRep"] .= ",";
+				}
+			}	
+		}
+
+        return $sales;
+
+	}
+
+	public function makeQuarter($con, $regionID, $year, $brands, $currencyID, $value, $months, $tiers, $salesRepID){
 
 		$sql = new sql();
 
 		$sr = new salesRep();
-
-		$salesRepGroup = $sr->getSalesRepGroupById($con, $salesRepGroupID);
         $salesRep = $sr->getSalesRepById($con, $salesRepID);
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
@@ -35,31 +75,56 @@ class quarterPerformance extends performance {
 		}
 
 		//var_dump($salesRepGroup);
-		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $salesRepGroup, $tiers, $year, $salesRepGroup, $salesRep);
+		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year);
+
+		if (sizeof($brands) > 1) {
+			array_push($mtx, $this->assemblerDN($mtx, $year));
+		}
 
 		return $mtx;
 
 	}
 
-	public function assembler($values, $planValues, $salesRep, $months, $brands, $salesRepGroup, $tiers, $year, $salesRepGroupN, $salesRepN){
+	public function remakeArray($brandsTiers){
+		
+		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
+			if (($b == (sizeof($brandsTiers)-1)) && empty($brandsTiers[$b])) {
+				array_pop($brandsTiers);
+			}elseif (empty($brandsTiers[$b])) {
+				for ($b2=$b; $b2 < (sizeof($brandsTiers)-1); $b2++) { 
+					//var_dump($b2);
+					$brandsTiers[$b2] = $brandsTiers[$b2+1];	
+				}
+				array_pop($brandsTiers);
+			}else{
+
+			}
+		}
+
+		return $brandsTiers;
+	}
+
+	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year){
 
 		//$mtx["salesRepGroup"] = $salesRepGroupN;
 		//$mtx["salesRep"] = $salesRep;
 
-		var_dump($values);
-		$T1 = array();
-		$T2 = array();
-		$OTH = array();
-
+		//separando as marcas por tiers
 		$brandsTiers = array(0, 1, 2);
+		$newPlanValues = array(0, 1, 2);
+		$newValues = array(0, 1, 2);
 
 		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
 			$brandsTiers[$b] = array();
+			$newPlanValues[$b] = array();
+			$newValues[$b] = array();
 		}
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK") {
 				array_push($brandsTiers[0], $brands[$b][1]);
+				array_push($newPlanValues[0], $planValues[$b]);
+				array_push($newValues[0], $values[$b]);
 			}elseif ($brands[$b][1] == "AP" 
 					|| $brands[$b][1] == "TLC"
 					|| $brands[$b][1] == "ID"
@@ -69,214 +134,218 @@ class quarterPerformance extends performance {
 					|| $brands[$b][1] == "VIX"
 					|| $brands[$b][1] == "HGTV") {
 				array_push($brandsTiers[1], $brands[$b][1]);
+				array_push($newPlanValues[1], $planValues[$b]);
+				array_push($newValues[1], $values[$b]);
 			}else{
 				array_push($brandsTiers[2], $brands[$b][1]);
+				array_push($newPlanValues[2], $planValues[$b]);
+				array_push($newValues[2], $values[$b]);
 			}
 		}
 
+		//arrumando vetor, caso haja tiers em branco
+		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
+			$brandsTiers = $this->remakeArray($brandsTiers);
+			$newPlanValues = $this->remakeArray($newPlanValues);
+			$newValues = $this->remakeArray($newValues);
+		}
+
+		/*for ($i=0; $i < sizeof($newValues); $i++) { 
+			var_dump($brandsTiers[$i]);
+		}*/
 		
+		//criando valores texto da matriz
 		for ($t=0; $t < sizeof($brandsTiers); $t++) { 
 			for ($b=0; $b < sizeof($brandsTiers[$t]); $b++) { 
 				$mtx[$t][$b][0][0] = $brandsTiers[$t][$b];
 				$mtx[$t][$b][1][0] = " ";
-				$mtx[$t][$b][1][1] = "Target ".$year;
-				$mtx[$t][$b][1][2] = "Actual ".$year;
-				$mtx[$t][$b][1][3] = "Var.Abs";
-				$mtx[$t][$b][1][4] = "Var(%)";
-				$mtx[$t][$b][2][0] = "Q1";
-				$mtx[$t][$b][3][0] = "Q2";
-				$mtx[$t][$b][4][0] = "S1";
-				$mtx[$t][$b][5][0] = "Q3";
-				$mtx[$t][$b][6][0] = "Q4";
-				$mtx[$t][$b][7][0] = "S2";
-				$mtx[$t][$b][8][0] = "Total";
+				$mtx[$t][$b][1][1] = "Q1";
+				$mtx[$t][$b][1][2] = "Q2";
+				$mtx[$t][$b][1][3] = "S1";
+				$mtx[$t][$b][1][4] = "Q3";
+				$mtx[$t][$b][1][5] = "Q4";
+				$mtx[$t][$b][1][6] = "S2";
+				$mtx[$t][$b][1][7] = "Total";
+				$mtx[$t][$b][2][0] = "Target ".$year;
+				$mtx[$t][$b][3][0] = "Actual ".$year;
+				$mtx[$t][$b][4][0] = "Var Abs";
+				$mtx[$t][$b][5][0] = "Var(%)";
 			}
 
 		}
+		//var_dump($mtx[0]);
 
 		for ($t=0; $t < sizeof($mtx); $t++) { 
 			for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
-				for ($v=0; $v < sizeof($mtx[$t][$b]); $v++) { 
-					for ($v2=1; $v2 < 5; $v2++) {
+				for ($v=2; $v < sizeof($mtx[$t][$b]); $v++) { 
+					for ($v2=1; $v2 < 8; $v2++) {
 						$mtx[$t][$b][$v][$v2] = 0;	
 					}
 				}	
 			}
-			var_dump($mtx[$t]);
+			//var_dump($mtx[$t]);
 		}
 		
-		
+		//var_dump($values);
+		//var_dump($tiers);
+		//pegando valores das linhas 1 e 2, da matriz, menos do total
+		for ($t=0; $t < sizeof($newValues); $t++) { 
+			for ($b=0; $b < sizeof($newValues[$t]); $b++) { 
+				for ($m=0; $m < sizeof($newValues[$t][$b]); $m++) { 
+					for ($s=0; $s < sizeof($newValues[$t][$b][$m]); $s++) {
+						if ($m == 0 || $m == 1 || $m == 2) {
+							$v = 1;
+							
+							if (is_null($newPlanValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][2][$v] += 0;
+							}else{
+								$mtx[$t][$b][2][$v] += $newPlanValues[$t][$b][$m][$s];
+							}
 
-		for ($b=0; $b < sizeof($brands); $b++) { 
-			for ($m=0; $m < sizeof($months); $m++) { 
-				for ($s=0; $s < sizeof($salesRep); $s++) { 
-					if ($m == 0 || $m == 1 || $m == 2) {
-						$v = 0;
-						$planArray[$b][$v] += $planValues[$b][$m][$s];
-						$valuesArray[$b][$v] += $values[$b][$m][$s];
-					}elseif ($m == 3 || $m == 4 || $m == 5) {
-						
-					}elseif ($m == 6 || $m == 7 || $m == 8) {
-						# code...
-					}else{
+							if (is_null($newValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][3][$v] += 0;
+							}else{
+								$mtx[$t][$b][3][$v] += $newValues[$t][$b][$m][$s];	
+							}
+						}elseif ($m == 3 || $m == 4 || $m == 5) {
+							$v = 2;
 
+							if (is_null($newPlanValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][2][$v] += 0;
+							}else{
+								$mtx[$t][$b][2][$v] += $newPlanValues[$t][$b][$m][$s];
+							}
+
+							if (is_null($newValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][3][$v] += 0;
+							}else{
+								$mtx[$t][$b][3][$v] += $newValues[$t][$b][$m][$s];	
+							}
+
+							$v = 3;
+
+							$mtx[$t][$b][2][$v] += $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
+							$mtx[$t][$b][3][$v] += $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
+
+						}elseif ($m == 6 || $m == 7 || $m == 8) {
+							$v = 4;
+
+							if (is_null($newPlanValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][2][$v] += 0;
+							}else{
+								$mtx[$t][$b][2][$v] += $newPlanValues[$t][$b][$m][$s];
+							}
+
+							if (is_null($newValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][3][$v] += 0;
+							}else{
+								$mtx[$t][$b][3][$v] += $newValues[$t][$b][$m][$s];	
+							}
+						}else{
+							$v = 5;
+
+							if (is_null($newPlanValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][2][$v] += 0;
+							}else{
+								$mtx[$t][$b][2][$v] += $newPlanValues[$t][$b][$m][$s];
+							}
+
+							if (is_null($newValues[$t][$b][$m][$s])) {
+								$mtx[$t][$b][3][$v] += 0;
+							}else{
+								$mtx[$t][$b][3][$v] += $newValues[$t][$b][$m][$s];	
+							}
+
+							$v = 6;
+
+							$mtx[$t][$b][2][$v] += $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
+							$mtx[$t][$b][3][$v] += $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
+						}
 					}
 				}
 			}
-		}
-				
 
-		/*$mtx["tiers"] = $tiers;
-        $mtx["brands"] = $brands;
-
-		$semester = 1;
-		$quarter = 1;
-		for ($t=0; $t < 8; $t++) { 
-			
-			if ($t == 0) {
-				$mtx["title"][$t] = " ";	
-			}elseif ($t == 3 || $t == 6) {
-				$mtx["title"][$t] = "S".$semester;
-				$semester++;
-			}elseif ($t == 7) {
-				$mtx["title"][$t] = "Total";
-			}else{
-				$mtx["title"][$t] = "Q".$quarter;
-				$quarter++;
-			}
+			//var_dump($mtx[$t]);
 		}
 
-		for ($b=0; $b < sizeof($brands); $b++) { 
-			for ($m=1; $m < 8; $m++) { 
-				for ($s=0; $s < sizeof($salesRep); $s++) { 
-					$tmpPlanValues[$s][$b][0] = "Target ".$year;
-					$tmpPlanValues[$s][$b][$m] = 0;
-					$tmpValues[$s][$b][0] = "Actual ".$year;
-					$tmpValues[$s][$b][$m] = 0;
-				}
-			}
-		}
-
-		for ($b=0; $b < sizeof($brands); $b++) {
-			for ($m=0; $m < sizeof($months); $m++) { 
-				for ($s=0; $s < sizeof($salesRep); $s++) {
-					if ($m == 0 || $m == 1 || $m == 2) {
-						$q = 1;
-						$tmpPlanValues[$s][$b][$q] += $planValues[$b][$m][$s];
-						$tmpValues[$s][$b][$q] += $values[$b][$m][$s];
-					}elseif ($m == 3 || $m == 4 || $m == 5) {
-						$q = 2;
-						$tmpPlanValues[$s][$b][$q] += $planValues[$b][$m][$s];
-						$tmpValues[$s][$b][$q] += $values[$b][$m][$s];
-
-						$q++;
-						$tmpPlanValues[$s][$b][$q] = $tmpPlanValues[$s][$b][$q-1] + $tmpPlanValues[$s][$b][$q-2];
-						$tmpValues[$s][$b][$q] = $tmpValues[$s][$b][$q-1] + $tmpValues[$s][$b][$q-2];
-					}elseif ($m == 6 || $m == 7 || $m == 8) {
-						$q = 4;
-						$tmpPlanValues[$s][$b][$q] += $planValues[$b][$m][$s];
-						$tmpValues[$s][$b][$q] += $values[$b][$m][$s];
-					}elseif ($m == 9 || $m == 10 || $m == 11) {
-						$q = 5;
-						$tmpPlanValues[$s][$b][$q] += $planValues[$b][$m][$s];
-						$tmpValues[$s][$b][$q] += $values[$b][$m][$s];
-
-						$q++;
-						$tmpPlanValues[$s][$b][$q] = $tmpPlanValues[$s][$b][$q-1] + $tmpPlanValues[$s][$b][$q-2];
-						$tmpValues[$s][$b][$q] = $tmpValues[$s][$b][$q-1] + $tmpValues[$s][$b][$q-2];
+		//var_dump($mtx[1]);
+		for ($t=0; $t < sizeof($mtx); $t++) { 
+			for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
+				for ($c=2; $c < sizeof($mtx[$t][$b]); $c++) { 
+					for ($v=1; $v < sizeof($mtx[$t][$b][$c]); $v++) {
+						if ($c == 4) {
+							$mtx[$t][$b][$c][$v] = $mtx[$t][$b][$c-1][$v] - $mtx[$t][$b][$c-2][$v];
+						}elseif ($c == 5) {
+							if ($mtx[$t][$b][$c-3][$v] != 0) {
+								$mtx[$t][$b][$c][$v] = $mtx[$t][$b][$c-2][$v] / $mtx[$t][$b][$c-3][$v];
+							}else{
+								$mtx[$t][$b][$c][$v] = 0;
+							}
+						}elseif ($v == 7 && ($c == 2 || $c == 3)) {
+							$mtx[$t][$b][$c][$v] = $mtx[$t][$b][$c][$v-1] + $mtx[$t][$b][$c][$v-4];
+						}else {
+							
+						}
 					}
-					
-					$tmpPlanValues[$s][$b][7] += $tmpPlanValues[$s][$b][$q];
-					$tmpValues[$s][$b][7] += $tmpValues[$s][$b][$q];
-
-				}
+				}	
 			}
+
+			//var_dump($mtx[$t]);
 		}
 
-		$mtx["planValues"] = $tmpPlanValues;
-		$mtx["values"] = $tmpValues;
-        
-		for ($s=0; $s < sizeof($mtx["values"]); $s++) { 
-			for ($b=0; $b < sizeof($mtx["values"][$s]); $b++) { 
-				for ($v=1; $v < sizeof($mtx["values"][$s][$b]); $v++) { 
-					$varAbs[$s][$b][0] = "Var. Abs";
-					$varAbs[$s][$b][$v] = $tmpValues[$s][$b][$v] - $tmpPlanValues[$s][$b][$v];
-
-					$var[$s][$b][0] = "Var(%)";
-
-					if ($tmpPlanValues[$s][$b][$v] != 0) {
-						$var[$s][$b][$v] = $tmpValues[$s][$b][$v] / $tmpPlanValues[$s][$b][$v];
-					}else{
-						$var[$s][$b][$v] = 0;
-					}
-				}
-			}
-		}
-
-
-		$mtx["varAbs"] = $varAbs;
-		$mtx["var"] = $var;*/
-		
-		/*Matrix Final*/
-		
-		/*$mtxFinal["salesRepGroup"] = "";
-
-		if (sizeof($mtx["salesRepGroup"]) == sizeof($salesRepGroupN)) {
-			$mtxFinal["salesRepGroup"] .= "All";
-		}else{
-			for ($srg=0; $srg < sizeof($mtx["salesRepGroup"]); $srg++) { 
-				$mtxFinal["salesRepGroup"] .= $mtx["salesRepGroup"][$srg]['name'];
-
-				if ($srg != sizeof($mtx["salesRepGroup"])-1) {
-					$mtxFinal["salesRepGroup"] .= ",";
-				}
-			}	
-		}
-		
-		$mtxFinal["salesRep"] = "";
-		
-		if (sizeof($mtx["salesRep"]) == sizeof($salesRepN)) {
-			$mtxFinal["salesRep"] .= "All";
-		}else{
-			for ($sr=0; $sr < sizeof($mtx["salesRep"]); $sr++) { 
-				$mtxFinal["salesRep"] .= $mtx["salesRep"][$sr]['salesRep'];
-
-				if ($sr != sizeof($mtx["salesRep"])-1) {
-					$mtxFinal["salesRep"] .= ",";
-				}
-			}	
-		}
-
-		$mtxFinal["tiers"] = $mtx["tiers"];
-		$mtxFinal["brands"] = $mtx["brands"];
-		$mtxFinal["title"] = $mtx["title"];
-
-		for ($b=0; $b < sizeof($brands); $b++) { 
-			for ($v=1; $v < 8; $v++) { 
-				$totalPlanValues[$b][0] = "Target ".$year;
-				$totalPlanValues[$b][$v] = 0;
-
-				$totalValues[$b][0] = "Actual ".$year;
-				$totalValues[$b][$v] = 0;
-			}
-		}
-
-		for ($s=0; $s < sizeof($mtx["values"]); $s++) { 
-			for ($b=0; $b < sizeof($mtx["values"][$s]); $b++) { 
-				for ($v=1; $v < sizeof($mtx["values"][$s][$b]); $v++) { 
-					$totalPlanValues[$b][$v] += $mtx["planValues"][$s][$b][$v];
-					$totalValues[$b][$v] += $mtx["values"][$s][$b][$v];
-				}
-			}
-		}
-
-		$mtxFinal["planValues"] = $totalPlanValues;
-		$mtxFinal["values"] = $totalValues;
-
-        //var_dump($mtxFinal);
-        //var_dump($salesRep);
-		//var_dump($mtxFinal);
-
-		return $mtxFinal;*/
+		return $mtx;
 	}
+
+	public function assemblerDN($mtx, $year){
+		
+		//var_dump($mtx[0]);
+
+		$mtxFinal[0][0][0] = "DN";
+		$mtxFinal[0][1][0] = " ";
+		$mtxFinal[0][1][1] = "Q1";
+		$mtxFinal[0][1][2] = "Q2";
+		$mtxFinal[0][1][3] = "S1";
+		$mtxFinal[0][1][4] = "Q3";
+		$mtxFinal[0][1][5] = "Q4";
+		$mtxFinal[0][1][6] = "S2";
+		$mtxFinal[0][1][7] = "Total";
+		$mtxFinal[0][2][0] = "Target ".$year;
+		$mtxFinal[0][3][0] = "Actual ".$year;
+		$mtxFinal[0][4][0] = "Var Abs";
+		$mtxFinal[0][5][0] = "Var(%)";
+
+		for ($c=2; $c < sizeof($mtxFinal[0]); $c++) { 
+			for ($v=1; $v < 8; $v++) { 
+				$mtxFinal[0][$c][$v] = 0;
+			}
+		}
+
+		for ($t=0; $t < sizeof($mtx); $t++) { 
+			for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
+				for ($c=2; $c < (sizeof($mtx[$t][$b])-2); $c++) { 
+					for ($v=1; $v < sizeof($mtx[$t][$b][$c]); $v++) { 
+						$mtxFinal[0][$c][$v] += $mtx[$t][$b][$c][$v];
+					}
+				}
+			}
+		}
+
+		for ($c=4; $c < sizeof($mtxFinal[0]); $c++) { 
+			for ($v=1; $v < sizeof($mtxFinal[0][$c]); $v++) { 
+				if ($c == 5) {
+					if ($mtxFinal[0][$c-3][$v] != 0) {
+						$mtxFinal[0][$c][$v] = $mtxFinal[0][$c-2][$v] / $mtxFinal[0][$c-3][$v];
+					}else{
+						$mtxFinal[0][$c][$v] = 0;
+					}
+				}else{
+					$mtxFinal[0][$c][$v] = $mtxFinal[0][$c-1][$v] - $mtxFinal[0][$c-2][$v];
+				}
+			}
+		}
+
+		return $mtxFinal;
+
+	}
+
 }

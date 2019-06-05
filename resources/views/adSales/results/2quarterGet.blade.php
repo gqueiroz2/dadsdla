@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('resultsMonthlyPost') }}">
+				<form method="POST" action="{{ route('resultsQuarterPost') }}">
 					@csrf
 					<div class="row">
 						<div class="col">
@@ -73,10 +73,8 @@
 						</div>
 
 						<div class="col">
-							<div class="form-inline">
-								<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-								<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">						
-							</div>
+							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">						
 						</div>
 					</div>
 				</form>	
