@@ -11,10 +11,10 @@ class quarterPerformanceRender extends Render {
 
 		echo "<table style='width: 100%; zoom: 80%;'>";
 			echo "<tr>";
-				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 24px;'>$region - Quarter $year (".$currency[0]['name']."/".strtoupper($value).")</span></center></th>";
+				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>$region - Quarter $year (".$currency[0]['name']."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 			echo "<tr>";
-				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 24px;'>Sales Group: ".$sales["salesRepGroup"]."; Sales Representative: ".$sales["salesRep"]."</span></center></th>";
+				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>Sales Group: ".$sales["salesRepGroup"]."; Sales Representative: ".$sales["salesRep"]."</span></center></th>";
 			echo "</tr>";
 
 			echo "<tr><td>&nbsp;</td></tr>";
@@ -29,7 +29,7 @@ class quarterPerformanceRender extends Render {
 
 				for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
 					echo "<tr>";
-						echo "<td rowspan='6' class='".strtolower($mtx[$t][$b][0][0])." center' style='width: 4%;'>";
+						echo "<td rowspan='6' class='".strtolower($mtx[$t][$b][0][0])." center' style='width: 2.5%;'>";
 							echo $mtx[$t][$b][0][0];
 						echo "</td>";
 					for ($c=1; $c < sizeof($mtx[$t][$b]); $c++) { 
@@ -55,7 +55,7 @@ class quarterPerformanceRender extends Render {
 								if ($c == 2 || $c == 3) {
 									echo "<td class='center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
 								}elseif ($c == 4) {
-									echo "<td class='rcBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";	
+									echo "<td class='rcBlue center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
 								}elseif ($c == 5) {
 									echo "<td class='medBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
 								}else{
@@ -65,7 +65,7 @@ class quarterPerformanceRender extends Render {
 								if ($c == 1) {
 									echo "<td class='darkBlue center'>".$mtx[$t][$b][$c][$v]."</td>";
 								}elseif ($c >= 2 && $c <= 4) {
-									echo "<td class='smBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$t][$b][$c][$v])."</td>";
 								}else{
 									echo "<td class='darkBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
 								}

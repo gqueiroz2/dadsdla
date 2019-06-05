@@ -28,8 +28,8 @@ table{
     font-size:14px;
 }
 
-tr{
-
+th{
+    font-weight: normal;
 }
 
 .reportsTitle{
@@ -93,7 +93,7 @@ tr{
 }
 
 .dt{
-    background-color: #000066;
+    background-color: #002060;
     font-weight: bold;
     color: white;
 }
@@ -129,7 +129,7 @@ tr{
 }
 
 .dn {
-    background-color: #000066;
+    background-color: #002060;
     color: white;
     font-weight: bold;
 }
@@ -159,7 +159,7 @@ tr{
 
 .lightBlue{
 	background-color: #0070c0;
-	color:white;	
+	color: white;	
 }
 
 .medBlue{

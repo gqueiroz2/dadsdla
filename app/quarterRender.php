@@ -11,7 +11,7 @@ class quarterRender extends Render
     	
 		//var_dump($mtx);
 		
-    	echo "<table style='width: 100%; zoom:80%;'>";
+    	echo "<table style='width: 100%; zoom:100%;'>";
 
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'>$region - Quarter :(".$form.") ".$year." (".$currency[0]['name']."/".strtoupper($value).") </span></center></th>";
@@ -26,28 +26,28 @@ class quarterRender extends Render
 						if (is_numeric($mtx[$b][$l][$v])) {
 							if ($v == 3 || $v == 6) {
 								if ($l == 3) {
-									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])." %</td>";	
+									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";	
 								}elseif ($l == 4) {
-									echo "<td class='quarter center'>".number_format($mtx[$b][$l][$v])."</td>";	
+									echo "<td class='quarter center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";	
 								}else{
-									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 								}
 							}elseif($v == 7){
 								if ($l == 3) {
-									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])." %</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";
 								}elseif ($l == 4) {
-									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 								}
 								else{
-									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 								}
 								
 							}elseif ($l == 1 || $l == 2) {
-								echo "<td class='center'>".number_format($mtx[$b][$l][$v])."</td>";
+								echo "<td class='center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 							}elseif ($l == 3) {
-								echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v])." %</td>";
+								echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";
 							}else{
-								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v])."</td>";
+								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 							}
 						}else{
 							if($l == 0 ){

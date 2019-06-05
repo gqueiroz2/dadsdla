@@ -7,12 +7,14 @@ use App\Render;
 
 class renderMQ extends Render{
     public function assemble($mtx,$currency,$value,$year,$form,$region){
-    	echo "<table style='width: 100%; zoom:80%;'>";
+    	echo "<table style='width: 100%; zoom:100%;'>";
     		
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 
+			echo "<tr><td> &nbsp; </td></tr>";
+			
 			for ($m=0; $m < sizeof($mtx); $m++) { 
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					echo "<tr>";
@@ -20,21 +22,21 @@ class renderMQ extends Render{
 						if(is_numeric($mtx[$m][$n][$o])){
 							if($n == 3){
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o])."%</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."%</td>";
 								}else{
-									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o])."%</td>";
+									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."%</td>";
 								}
 							}elseif($n == 4){
 								if($o == 13){
-									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o])."</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}else{
-									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o])."</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}
 							}else{
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o])."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}else{
-									echo "<td class='center'>".number_format($mtx[$m][$n][$o])."</td>";
+									echo "<td class='center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}
 							}
 						}else{

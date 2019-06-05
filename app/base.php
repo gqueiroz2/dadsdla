@@ -7,18 +7,18 @@ use App\dataBase;
 
 class base extends Model{
 
-    protected $month = array( array("Jan",1, "January","JAN"),
-                              array("Feb",2, "February","FEV"),
-                              array("Mar",3, "March","MAR"),
-                              array("Apr",4, "April","ABR"),
-                              array("May",5, "May","MAI"),
-                              array("Jun",6, "June","JUN"),
-                              array("Jul",7, "July","JUL"),
-                              array("Aug",8, "August","AGO"),
-                              array("Sep",9, "September","SET"),
-                              array("Oct",10, "October","OUT"),
-                              array("Nov",11, "November","NOV"),
-                              array("Dec",12, "December","DEZ")
+    protected $month = array( array("JAN",1, "January","JAN"),
+                              array("FEB",2, "February","FEV"),
+                              array("MAR",3, "March","MAR"),
+                              array("APR",4, "April","ABR"),
+                              array("MAY",5, "May","MAI"),
+                              array("JUN",6, "June","JUN"),
+                              array("JUL",7, "July","JUL"),
+                              array("AUG",8, "August","AGO"),
+                              array("SEP",9, "September","SET"),
+                              array("OCT",10, "October","OUT"),
+                              array("NOV",11, "November","NOV"),
+                              array("DEC",12, "December","DEZ")
 
                             );
 
