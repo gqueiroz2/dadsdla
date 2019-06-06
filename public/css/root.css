@@ -129,7 +129,7 @@ th{
 }
 
 .dn {
-    background-color: #002060;
+    background-color: #0f243e;
     color: white;
     font-weight: bold;
 }
@@ -150,11 +150,6 @@ th{
     background-color: #143052;
     color: white;
     font-weight: bold;
-}
-
-.darkBlue{
-	background-color: #002060;
-    color: white;
 }
 
 .lightBlue{

@@ -7,6 +7,200 @@ use App\results;
 
 class resultsResume extends results{
     
+	public function divideBrands($brands){
+		
+		$brandsTV = array();
+		$brandsDigital = array();
+
+		for ($b=0; $b < sizeof($brands); $b++) { 
+			
+			if ($brands[$b][1] == "ONL" || $brands[$b][1] == "VIX") {
+				array_push($brandsDigital, $brands[$b]);
+			}else{
+				array_push($brandsTV, $brands[$b]);
+			}
+
+		}
+
+		return array($brandsTV, $brandsDigital);
+	}
+
+	public function generateVectorsTV($con, $brands, $months, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion){
+		
+		$joinSales = false;
+		$joinTarget = false;
+		$joinActual = false;
+		$joinCorporate = false;
+
+		$tableSales = $this->salesTable($regionID,$cYear);
+		$tableTarget = "plan_by_brand";
+		$tableActual = $tableTarget;
+		$tableCorporate = $tableActual;
+
+		for ($m=0; $m < sizeof($months); $m++) { 
+			for ($b=0; $b < sizeof($brands); $b++) { 
+				// SE FOR CMAPS 
+	            if($salesRegion == 'Brazil'){
+		            $whereSales[$m][$b] = "WHERE (cmaps.month IN (".$months[$m][1].") ) 
+		                               AND (cmaps.year IN ($cYear) )
+		                               AND (cmaps.brand_id IN (".$brands[$b][0].") )
+		                              ";
+		            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+		                                    AND ( ytd.year IN ($pYear) )
+		                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
+		                                   ";
+		        }else{// FAZER SE FOR HEADER 
+		        	if($m < $currentMonth){
+			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			        	                   AND (ytd.year IN ($cYear) )
+			        	                   AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+
+			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			                                    AND ( ytd.year IN ($pYear) )
+			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        }else{
+			        	$whereSales[$m][$b] = "WHERE (mini_header.month IN (".$months[$m][1].") ) 
+			        	                   AND (mini_header.year IN ($cYear) )
+			        	                   AND (mini_header.campaign_sales_office_id IN (".$regionID.") )
+			        	                   AND (mini_header.brand_id IN (".$brands[$b][0].") )";
+
+			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			                                    AND ( ytd.year IN ($pYear) )
+			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        }
+		        }	
+			}
+		}
+
+		$tr = strtoupper($value);
+
+		for ($m=0; $m < sizeof($months); $m++) { 
+        	for ($b=0; $b < sizeof($brands); $b++) { 
+        		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
+            					   AND (source  = \"TARGET\")
+                                   AND (type_of_revenue = \"".$tr."\")
+                                   AND (sales_office_id = \"".$regionID."\")
+                                   AND (currency_id = \"".$currencyID."\" )
+                                   AND (brand_id = \"".$brands[$b][0]."\" )
+                               ";
+
+	            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+	            					   AND ( source  = \"ACTUAL\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )
+	                               ";
+
+	            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+	            					   AND ( source  = \"CORPORATE\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")  
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
+	                                   ";
+        	}
+        }
+
+        $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
+		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
+		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);	
+		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
+		
+		if($tableSales == "cmaps"){
+			$tableSales = 'ytd';
+		}
+
+		$previousYear = $this->generateVector($con,$tableSales,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereSalesPYear);
+
+		$mtx["salesCYear"] = $salesCYear;
+		$mtx["target"] = $target;
+		$mtx["actual"] = $actual;
+		$mtx["corporate"] = $corporate;
+		$mtx["previousYear"] = $previousYear;
+
+		return $mtx;
+	}
+	
+	public function generateVectorDigital($con, $brands, $months, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion){
+		
+		$joinSales = false;
+		$joinTarget = false;
+		$joinActual = false;
+		$joinCorporate = false;
+
+		$tableSales = "digital";
+		$tableTarget = "plan_by_brand";
+		$tableActual = $tableTarget;
+		$tableCorporate = $tableActual;
+
+		for ($m=0; $m < sizeof($months); $m++) { 
+			for ($b=0; $b < sizeof($brands); $b++) { 
+				
+				$whereSales[$m][$b] = "WHERE (digital.month IN (".$months[$m][1]."))
+										  AND (digital.year IN ($cYear))
+										  AND (digital.brand_id IN (".$brands[$b][0]."))";
+
+				$whereSalesPYear[$m][$b] = "WHERE (digital.month IN (".$months[$m][1]."))
+												AND (digital.year IN ($cYear))
+												AND (digital.brand_id IN (".$brands[$b][0]."))";
+			}
+		}
+
+		$tr = strtoupper($value);
+
+		for ($m=0; $m < sizeof($months); $m++) { 
+        	for ($b=0; $b < sizeof($brands); $b++) { 
+        		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
+            					   AND (source  = \"TARGET\")
+                                   AND (type_of_revenue = \"".$tr."\")
+                                   AND (sales_office_id = \"".$regionID."\")
+                                   AND (currency_id = \"".$currencyID."\" )
+                                   AND (brand_id = \"".$brands[$b][0]."\" )
+                               ";
+
+	            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+	            					   AND ( source  = \"ACTUAL\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )
+	                               ";
+
+	            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+	            					   AND ( source  = \"CORPORATE\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")  
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
+	                                   ";
+        	}
+        }
+
+        $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
+		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
+		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);	
+		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
+		
+		if($tableSales == "cmaps"){
+			$tableSales = 'ytd';
+		}
+
+		$previousYear = $this->generateVector($con,$tableSales,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereSalesPYear);
+
+		$mtx["salesCYear"] = $salesCYear;
+		$mtx["target"] = $target;
+		$mtx["actual"] = $actual;
+		$mtx["corporate"] = $corporate;
+		$mtx["previousYear"] = $previousYear;
+
+		return $mtx;
+	}
+
 	public function assembler($month,$sales,$actual,$target,$corporate/*$pAndR,$finance*/,$pYear){
 		$matrix = array();
 		$salesSum = 0.0;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Support\Facades\Request;
-use App\Render;
+use App\renderResume;
 use App\dataBase;
 use App\base;
 use App\monthly;
@@ -44,8 +44,8 @@ class resultsResumeController extends Controller{
         $sr = new salesRep();
         $b = new brand();
         $pr = new pRate();
-		$render = new Render();
-		$cYear = intval( date('Y') );
+		$render = new renderResume();
+		$cYear = intval(date('Y') );
 		$pYear = $cYear - 1;
 		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
@@ -66,7 +66,7 @@ class resultsResumeController extends Controller{
 
 		$tmp = $r->getRegion($con,array($regionID));
 
-		if( is_array($tmp)  ){
+		if(is_array($tmp)){
 			$salesRegion = $tmp[0]['name'];
 		}else{
 			$salesRegion = $tmp['name'];
@@ -87,89 +87,22 @@ class resultsResumeController extends Controller{
 		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
-		$tableSales = $resume->salesTable($regionID,$cYear);
-		$tableTarget = "plan_by_brand";
-		$tableActual = $tableTarget;
-		$tableCorporate = $tableActual;
-		$joinSales = false;
-		$joinTarget = false;
-		$joinActual = false;
-		$joinCorporate = false;
 
 		$currentMonth = intval(date('m'));
 
-		for ($m=0; $m < sizeof($month); $m++) { 
-            /* SE FOR CMAPS */
-            if($salesRegion == 'Brazil'){
-	            $whereSales[$m] = "WHERE (cmaps.month IN (".$month[$m][1].") ) 
-	                               AND ( cmaps.year IN ($cYear))
+		$brands = $resume->divideBrands($brandID);
 
-	                              ";
-	            $whereSalesPYear[$m] = "WHERE (ytd.month IN (".$month[$m][1].") ) 
-	                                    AND ( ytd.year IN ($pYear))
-	                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-	                                   ";
-	        }else{/* FAZER SE FOR HEADER */
-	        	if($m < $currentMonth){
-		        	$whereSales[$m] = "WHERE (ytd.month IN (".$month[$m][1].")) 
-		        	                   AND (ytd.year IN ($cYear))
-		        	                   AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-		        	                  ";
-		            $whereSalesPYear[$m] = "WHERE (ytd.month IN (".$month[$m][1].")) 
-		                                    AND ( ytd.year IN ($pYear) )
-		                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-		                                   ";
-		        }else{
-		        	$whereSales[$m] = "WHERE (mini_header.month IN (".$month[$m][1].")) 
-		        	                   AND (mini_header.year IN ($cYear))
-		        	                   AND (mini_header.campaign_sales_office_id IN (".$regionID.") )
-		        	                  ";
-		            $whereSalesPYear[$m] = "WHERE (ytd.month IN (".$month[$m][1].")) 
-		                                    AND ( ytd.year IN ($pYear) )
-		                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-		                                   ";
-		        }
-	        }
-        }
+		$TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
-        if($value == "gross"){$tr = "GROSS";}else{$tr = "NET";}
-
-        for ($m=0; $m < sizeof($month); $m++) { 
-            $whereTarget[$m] = "WHERE (plan_by_brand.month IN (".$month[$m][1].")) 
-            					   AND (source  = \"TARGET\")
-                                   AND (type_of_revenue = \"".$tr."\")
-                                   AND (sales_office_id = \"".$regionID."\")
-                                   AND (currency_id = \"".$currencyID."\" )
-                               ";
-
-            $whereActual[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
-            					   AND ( source  = \"ACTUAL\" )
-                                   AND ( type_of_revenue = \"".$tr."\" )
-                                   AND (sales_office_id = \"".$regionID."\")
-                                   AND (currency_id = \"".$currencyID."\" )
-                               ";
-
-            $whereCorporate[$m] = "WHERE ( plan_by_brand.month IN (".$month[$m][1].") ) 
-            					   AND ( source  = \"CORPORATE\" )
-                                   AND ( type_of_revenue = \"".$tr."\" )
-                                   AND (sales_office_id = \"".$regionID."\")  
-                                   AND (currency_id = \"".$currencyID."\" )  
-                                   ";
-        }
-
-		$salesCYear = $resume->generateVector($con,$tableSales,$regionID,$cYear,$month,$brandID,$currencyID,$value,$joinSales,$whereSales);
-		$target = $resume->generateVector($con,$tableTarget,$regionID,$cYear,$month,$brandID,$currencyID,$value,$joinTarget,$whereTarget);
-		$actual = $resume->generateVector($con,$tableActual,$regionID,$cYear,$month,$brandID,$currencyID,$value,$joinActual,$whereActual);	
-		$corporate = $resume->generateVector($con,$tableCorporate,$regionID,$cYear,$month,$brandID,$currencyID,$value,$joinCorporate,$whereCorporate);;
+		$matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);
 		
-		if($tableSales == "cmaps"){
-			$tableSales = 'ytd';
-		}
+		$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
-		$previousYear = $resume->generateVector($con,$tableSales,$regionID,$pYear,$month,$brandID,$currencyID,$value,$joinSales,$whereSalesPYear);
-		$matrix = $resume->assembler($month,$salesCYear,$actual,$target,$corporate/*$pAndR,$finance*/,$previousYear);
+		$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
 
 		$rName = $resume->TruncateRegion($salesRegion);
+
+		$matrix = array($matrixTV, $matrixDigital);
 
 		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName'));
 

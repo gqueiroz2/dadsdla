@@ -22,7 +22,10 @@ class results extends base{
 
         $div = $base->generateDiv($con,$pRate,$region,array($year),$currency);
 
-        if($table == "cmaps"){
+        if ($table == "digital") {
+            
+        }
+        elseif($table == "cmaps"){
             if($year == $cYear){
                 $sum = $value;
             }else{
@@ -40,19 +43,26 @@ class results extends base{
         }
 
         for ($m=0; $m < sizeof($month); $m++) { 
-            if($table == 'mini_header'){
-                if( ($year != $cYear) || ($m < $currentMonth) ){
-                    $sum = $value."_revenue";
-                    $cTable = 'ytd';
+            $vector[$m] = 0;
+        }
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            for ($b=0; $b < sizeof($brand); $b++) { 
+                if($table == 'mini_header'){
+                    if( ($year != $cYear) || ($m < $currentMonth) ){
+                        $sum = $value."_revenue";
+                        $cTable = 'ytd';
+                    }else{
+                        $sum = 'campaign_option_spend';
+                        $cTable = 'mini_header';
+                    }
+                    $res[$m][$b] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m][$b]);
                 }else{
-                    $sum = 'campaign_option_spend';
-                    $cTable = 'mini_header';
+                    $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
                 }
-                $res[$m] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m]);
-            }else{
-                $res[$m] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m]);
+                    
+                $vector[$m] += ($sql->fetchSum($res[$m][$b],$as)["sum"])/$div;   
             }
-            $vector[$m] = ($sql->fetchSum($res[$m],$as)["sum"])/$div;                              
 
         }
         return $vector;

@@ -54,67 +54,21 @@
 				</button>				
 			</div>
 		</div>
-
 	</div>
+	
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
 		<div class="row mt-2">
 			<div class="col">				
-				<table class="table table-bordered" style="width: 100%;">
-					<tr>
-						<th class="darkBlue center" colspan="11"><span style="font-size:18px; font-weight: normal !important; ">{{$salesRegion}} - Summary : {{$salesShow}} - {{$cYear}} ({{$currencyS}}/{{$valueS}}) </span> </th>
-					</tr>
-					<tr>
-						<th class="darkBlue center"> MONTH </th>
-						<th class="lightBlue center"> {{strtoupper($salesShow)}} </th>
-						<th class="lightBlue center"> ACTUAL </th>
-						<th class="darkBlue center"> TARGET </th>
-						<th class="darkBlue center"> CORPORATE </th>
-						<!--
-						<th class="darkBlue"> P&R FCST </th>
-						<th class="darkBlue"> Finance FCST </th>
-						-->
-						<th class="darkBlue center"> {{$pYear}} </th>
-						<th class="grey center"> {{strtoupper($salesShow)}}/TARGET </th>
-						<th class="grey center"> {{strtoupper($salesShow)}}/CORPORATE </th>
-						{{--
-						<th class="grey"> Sales/P&R </th>
-						<th class="grey"> Sales/Finance </th>
-						--}}
-						<th class="grey center"> {{$salesShow}}/{{$pYear}} </th>
-					</tr>
-					@for($m = 0;$m < sizeof($matrix);$m++)
-						@if($matrix[$m]['month'] == "Total")
-							<?php $bck = "darkBlue";?>
-							<?php $matrix[$m]['month'] = strtoupper($matrix[$m]['month']);?>
-						@else
-							@if($m%2 == 0) <?php $bck = 'odd'; ?> @else <?php $bck = 'even'; ?> @endif
-						@endif
-							<tr>
-								<?php $bck .= " center"; ?>
-								<td class="{{$bck}}">  {{ $matrix[$m]['month'] }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['sales'], 2, ",", ".") }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['actual'], 2, ",", ".") }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['target'], 2, ",", ".") }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['corporate'], 2, ",", ".") }} </td>
-								{{--
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['pAndR']) }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['finance']) }} </td>
-								--}}
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['pYear'], 2, ",", ".") }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverTarget']) }}% </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverCorporate']) }}% </td>
-								{{--
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverPAndR']) }} </td>
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverFinance']) }} </td>
-								--}}
-								<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesYoY']) }}% </td>
-							</tr>
-						
-					@endfor
-				</table>
-
-
+				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[0], "TV") }}
 			</div>
 		</div>
+	</div>
+
+	<div class="container-fluid"  style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
+		<div class="row mt-2">
+			<div class="col">
+				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[1], "Digital") }}	
+			</div>
+		</div>		
 	</div>
 @endsection
