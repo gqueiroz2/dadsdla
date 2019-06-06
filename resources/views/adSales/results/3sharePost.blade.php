@@ -93,7 +93,7 @@
 				<div class="container-fluid">
 					<div class="form-group">
 						<div class="form-inline">
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%; ">
 								<div class="col col-3" style="zoom:125%; display: block; margin-top: 8%;">
 									<div id="chart_div"></div>
 								</div>

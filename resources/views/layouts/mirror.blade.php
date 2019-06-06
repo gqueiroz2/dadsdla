@@ -80,7 +80,7 @@
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('corePerformanceGet') }}"> Core </a>
-                                <a class="dropdown-item" href="#"> Executive </a>                                
+                                <a class="dropdown-item" href="{{ route('executivePerformanceGet') }}"> Executive </a>                                
                                 <a class="dropdown-item" href="{{ route('quarterPerformanceGet') }}"> Quarter </a>
                             </div>
                         </li>
@@ -116,7 +116,10 @@
                         <li class="nav-item dropdown dropleft">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"> Logout </a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <input type="submit" class="dropdown-item" value="Logout">
+                                </form>
                                 @if($userLevel == "SU")
                                     <a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
                                 @endif
