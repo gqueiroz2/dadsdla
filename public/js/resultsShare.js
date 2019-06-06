@@ -147,5 +147,11 @@
         }
       }); 
     });
+
+    $(window).resize(function(){
+      drawChart();
+    });
+
+
   });
 

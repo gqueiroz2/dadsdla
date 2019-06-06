@@ -22,7 +22,12 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::get('quarter','quarterPerformanceController@get')
 									->name('quarterPerformanceGet');
 		Route::post('quarter','quarterPerformanceController@post')
-									->name('quarterPerformancePost');			
+									->name('quarterPerformancePost');
+
+		Route::get('executive','executivePerformanceController@get')
+									->name('executivePerformanceGet');
+		Route::post('executive','executivePerformanceController@post')
+									->name('executivePerformancePost');
 	});
 });
 
