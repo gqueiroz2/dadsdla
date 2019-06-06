@@ -83,12 +83,12 @@ class performanceExecutive extends performance
             }
         }
 
-        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier);
+        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
 
         return $mtx;
     }
 
-    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier){
+    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div){
         $base = new base();
 
         $tmp1["values"] = array();
@@ -108,8 +108,8 @@ class performanceExecutive extends performance
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                    $tmp[$s][$b][$m] = $values[$b][$m][$s]; 
-                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]; 
+                    $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
+                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]/$div; 
                 }
             }
         }
@@ -117,6 +117,10 @@ class performanceExecutive extends performance
         $values = $tmp;
         $planValues = $tmp_2;
 
+        $mtx["valueView"] = $valueView;
+        $mtx["currency"] = $currency;
+        $mtx["region"] = $region;
+        $mtx["year"] = $year;
         $mtx["case4"]["values"] = $values;
         $mtx["case4"]["planValues"] = $planValues;
         $mtx["salesRep"] = $salesRep;
