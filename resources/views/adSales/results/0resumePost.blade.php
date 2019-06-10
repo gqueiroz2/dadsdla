@@ -71,4 +71,12 @@
 			</div>
 		</div>		
 	</div>
+
+	<div class="container-fluid"  style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
+		<div class="row mt-2">
+			<div class="col">
+				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[2], "DN") }}	
+			</div>
+		</div>		
+	</div>
 @endsection

@@ -25,7 +25,7 @@ class resultsResumeController extends Controller{
         $r = new region();
         $b = new brand();
         $pr = new pRate();
-		$render = new Render();
+		$render = new renderResume();
 
 		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
@@ -100,9 +100,13 @@ class resultsResumeController extends Controller{
 
 		$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
 
+		$DN = $resume->grouper($TV,$Digital);
+
+		$matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+
 		$rName = $resume->TruncateRegion($salesRegion);
 
-		$matrix = array($matrixTV, $matrixDigital);
+		$matrix = array($matrixTV, $matrixDigital, $matrixDN);
 
 		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName'));
 

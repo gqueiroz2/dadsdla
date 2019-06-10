@@ -20,7 +20,7 @@ class results extends base{
         $cYear = date('Y');
         $pRate = new pRate();
 
-        $div = $base->generateDiv($con,$pRate,$region,array($year),$currency);
+        $div = $base->generateDiv($con,$pRate,$region,$year,$currency);
 
         if ($table == "digital") {
             
@@ -124,7 +124,7 @@ class results extends base{
             $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+                $pRate = $p->getPRateByRegionAndYear($con, array($region),$year);
             }else{
                 $pRate = 1.0;
             }    
