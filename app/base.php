@@ -7,6 +7,10 @@ use App\dataBase;
 
 class base extends Model{
 
+
+    public $region = array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","New York International","Dominican Republic","Ecuador","Bolivia","Puerto Rico");
+
+
     protected $month = array( array("JAN",1, "January","JAN"),
                               array("FEB",2, "February","FEV"),
                               array("MAR",3, "March","MAR"),

@@ -20,7 +20,6 @@ class CheckElementsController extends Controller{
 		$base = new base();
 		$conDLA = $db->openConnection('DLA');	
 		$con = $db->openConnection('firstMatch');	
-
 		$table = Request::get('table');
 		$newValues = $cE->newValues($conDLA,$con,$table);
 

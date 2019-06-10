@@ -14,6 +14,26 @@ Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
+		Route::get('relationships','dataManagementController@relationships')
+							->name('relationships');
+
+		Route::get('agencySomething','dataManagementController@agencyGet')
+							->name('dataManagementAgencyGet');
+		Route::get('clientSomething','dataManagementController@clientGet')
+							->name('dataManagementClientGet');
+
+		Route::post('insertClientGroup','dataManagementController@insertGroup')
+							->name('insertClientGroup');
+		Route::post('insertOneClient','dataManagementController@insertOne')
+							->name('insertOneClient');
+
+		Route::post('insertAgencyGroup','dataManagementController@insertGroup')
+							->name('insertAgencyGroup');
+		Route::post('insertOneAgency','dataManagementController@insertOne')
+							->name('insertOneAgency');
+
+
+
 		Route::get('/','dataManagementController@home')
 							->name('dataManagementHomeGet');
 		Route::get('region','dataManagementController@regionGet')
@@ -24,10 +44,7 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('dataManagementPRateGet');
 		Route::get('salesRep','dataManagementController@salesRepGet')
 							->name('dataManagementSalesRepGet');
-		Route::get('agency','dataManagementController@agencyGet')
-							->name('dataManagementAgencyGet');
-		Route::get('client','dataManagementController@clientGet')
-							->name('dataManagementClientGet');
+		
 		Route::get('origin','dataManagementController@originGet')
 							->name('dataManagementOriginGet');
 		Route::get('brand','dataManagementController@brandGet')

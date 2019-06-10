@@ -21,162 +21,15 @@ use App\pRate;
 
 class dataManagementController extends Controller{
     public function home(){
-        /*
-        $sql = new sql(); 
-        $db = new dataBase();
-        $con = $db->openConnection('DLA');
-
-
-        $qr = "SELECT 
-                    cu.ID AS 'clientUnityID',
-                    cu.name AS 'clientUnity',
-                    c.name AS 'client',
-                    cg.name AS 'clientGroup',
-                    r.name AS 'region',
-                    o.name AS 'origin'
-                FROM client_unit cu
-                LEFT JOIN client c ON c.ID = cu.client_id
-                LEFT JOIN client_group cg ON cg.ID = c.client_group_id                
-                LEFT JOIN region r ON r.ID = cg.region_id
-                LEFT JOIN origin o ON o.ID = cu.origin_id 
-
-              ";
-
-        echo($qr)."<br>";
-        $res = $con->query($qr);
-
-        $from = array('clientUnityID','clientUnity','client','clientGroup','region','origin');
-
-        $agencies = $sql->fetch($res,$from,$from);
-
-        var_dump($res);
-        var_dump($agencies);
-        */
-
-        /*
-        $sql = new sql(); 
-        $db = new dataBase();
-        $con = $db->openConnection('DLA');
-
-
-        $qr = "SELECT 
-                    au.ID AS 'agencyUnityID',
-                    au.name AS 'agencyUnity',
-                    au.status AS 'status',
-                    a.name AS 'agency',
-                    ag.name AS 'agencyGroup',
-                    r.name AS 'region',
-                    o.name AS 'origin'
-                FROM agency_unit au
-                LEFT JOIN agency a ON a.ID = au.agency_id
-                LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id                
-                LEFT JOIN region r ON r.ID = ag.region_id
-                LEFT JOIN origin o ON o.ID = au.origin_id 
-
-              ";
-
-        $res = $con->query($qr);
-
-        $from = array('agencyUnityID','agencyUnity','status','agency','agencyGroup','region','origin');
-
-        $agencies = $sql->fetch($res,$from,$from);
-
-        var_dump($res);
-        var_dump($agencies);
-*/
     	return view('dataManagement.home');
     }
     
-    
+    public function relationships(){
+        
+    }    
 
     public function ytdLatamGet(){
-        /*
-        $sql = new sql(); 
-        $db = new dataBase();
-        $con = $db->openConnection('DLA');
-        $con->set_charset('utf8');
-
-        $qr = "SELECT * FROM agency_unit ORDER BY name";
-
-        $from = array('ID','name');
-
-        $res = $con->query($qr);
-
-        var_dump($res);
-/*
-
-        $qr = "SELECT 
-                    y.year AS 'year',
-                    y.month AS 'month',
-                    y.brand_feed AS 'brandFeed',
-
-                    y.client_product AS 'clientProduct',
-                    y.order_reference AS 'orderReference',
-                    y.campaign_reference AS 'campaignReference',
-
-                    y.spot_duration AS 'spotDuration',
-                    y.impression_duration AS 'impressionDuration',
-                    y.num_spot AS 'numSpot',
-
-                    y.gross_revenue AS 'grossRevenue',
-                    y.net_revenue AS 'netRevenue',
-                    y.net_net_revenue AS 'netNetRevenue',
-
-                    y.gross_revenue_prate AS 'grossRevenuePrate',
-                    y.net_revenue_prate AS 'netPrate',
-                    y.net_net_revenue_prate AS 'netNetPrate',
-
-                    r.name AS 'region',
-                    b.name AS 'brand',
-                    sr.name AS 'salesRep',
-                    c.name AS 'client',
-                    a.name AS 'agency',
-                    cr.name AS 'currency'
-                    
-
-                FROM ytd y
-                LEFT JOIN region r ON r.ID = y.campaign_sales_office_id
-                LEFT JOIN brand b ON b.ID = y.brand_id
-                LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
-                LEFT JOIN client c ON c.ID = y.client_id
-                LEFT JOIN agency a ON a.ID = y.agency_id
-                LEFT JOIN currency cr ON cr.ID = y.campaign_currency_id
-
-                ORDER BY orderReference
-              ";
-
-
-        $res = $con->query($qr);
-        $from = array('year',
-                    'month',
-                    'brandFeed',
-
-                    'clientProduct',
-                    'orderReference',
-                    'campaignReference',
-
-                    'spotDuration',
-                    'impressionDuration',
-                    'numSpot',
-
-                    'grossRevenue',
-                    'netRevenue',
-                    'netNetRevenue',
-
-                    'grossRevenuePrate',
-                    'netPrate',
-                    'netNetPrate',
-
-                    'region',
-                    'brand',
-                    'salesRep',
-                    'client',
-                    'agency',
-                    'currency');
-*/
-        //$ytd = $sql->fetch($res,$from,$from);
-
-        return view('dataManagement.ytdLatamGet'/*,compact('ytd')*/);
+        return view('dataManagement.ytdLatamGet');
     }
 
     /*START OF REGIONS FUNCTIONS*/
@@ -660,22 +513,21 @@ class dataManagementController extends Controller{
 
     public function agencyGet(){
 
-        return view('dataManagement.agencyGet');
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $r = new region();
+        $region = $r->getRegion($con);
+        $ag = new agency();
+
+        $agencyGroup = $ag->getAgencyGroup($con);
+
+        return view('dataManagement.agencyGet',compact('region','agencyGroup'));
 
     }
-
-
-
 
     /*END OF SALES AGENCY FUNCTIONS*/
 
-
     /*START OF CLIENT FUNCTIONS*/
-
-    public function clientAdd(){
-
-
-    }
 
     public function clientGetFromExcel(){
 
@@ -683,9 +535,52 @@ class dataManagementController extends Controller{
 
     }
 
+    public function insertGroup(){
+        $db = new dataBase();
+        $con = $db->openCOnnection("DLA");
+        $type = Request::get('type');
+        $region = Request::get('region');
+        $name = Request::get('groupName');
+
+        $table = $type."_group";
+
+        $insert = "INSERT INTO $table (region_id,name) VALUES ( \"".$region."\" , \"".$name."\" )";
+
+        if($con->query($insert) === TRUE){
+            return back()->with('insertedGroup',"The register was succesfully created on the table !!!"); 
+        }else{
+            return back()->with('failedGroup',"The register was not created on the table !!!");
+        }
+    }
+
+    public function insertOne(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $type = Request::get('type');
+        $groupName = Request::get('groupName');
+        $name = Request::get('name');
+        $table = $type;
+        $insert = "INSERT INTO $table (".$type."_group_id,name) VALUES ( \"".$groupName."\" , \"".$name."\" )";
+
+        if($con->query($insert) === TRUE){
+            return back()->with('insertedTable',"The register was succesfully created on the table !!!"); 
+        }else{
+            return back()->with('failedTable',"The register was not created on the table !!!");
+        }
+    }
+
+
     public function clientGet(){
 
-        return view('dataManagement.clientGet');
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $r = new region();
+        $region = $r->getRegion($con);
+        $cli = new client();
+
+        $clientGroup = $cli->getClientGroup($con);
+
+        return view('dataManagement.clientGet',compact('region','clientGroup'));
 
     }
 

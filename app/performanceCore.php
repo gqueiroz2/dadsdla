@@ -86,7 +86,7 @@ class performanceCore extends performance
                 $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$currencyId,$value);
             }
         }
-
+        var_dump($planValues);
         $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
 
         return $mtx;
