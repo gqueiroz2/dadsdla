@@ -21,7 +21,7 @@ class renderYoY extends Model {
 
     public function assemble($mtx,$form,$pRate,$value,$year,$region){
 
-        echo "<table style='width: 100%; zoom:100%;'>";
+        echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
                 echo "<th colspan='15' class='lightBlue'><center><span style='font-size:24px;'> $region - Year Over Year : ".$form." - ".$year." (".$pRate[0]['name']."/".strtoupper($value).")</span></center></th>";
             echo "</tr>";

@@ -9,7 +9,7 @@ class quarterPerformanceRender extends Render {
     
     public function assemble($mtx, $region, $currency, $value, $year, $sales, $tiers){
 
-		echo "<table style='width: 100%; zoom: 80%;'>";
+		echo "<table style='width: 100%; zoom: 100%; font-size: 16px;'>";
 			echo "<tr>";
 				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>$region - Quarter $year (".$currency[0]['name']."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
@@ -22,7 +22,7 @@ class quarterPerformanceRender extends Render {
 			for ($t=0; $t < sizeof($mtx); $t++) { 
 
 				echo "<tr>";
-					echo "<td rowspan='".(sizeof($mtx[$t])*7)."' class='".strtolower($tiers[$t])." center'  style='width: 3%;'>";
+					echo "<td rowspan='".(sizeof($mtx[$t])*7)."' class='".strtolower($tiers[$t])." center'  style='width: 2%;'>";
 						echo $tiers[$t];
 					echo "</td>";
 					echo "<td rowspan='".(sizeof($mtx[$t])*7)."'>&nbsp;</td>";
@@ -52,6 +52,7 @@ class quarterPerformanceRender extends Render {
 									echo "<td class='medBlue center'>".$mtx[$t][$b][$c][$v]."</td>";	
 								}
 							}elseif ($v >= 1 && $v <= 6) {
+								$style = "style='width: 10%'";
 								if ($c == 2 || $c == 3) {
 									echo "<td class='center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
 								}elseif ($c == 4) {
@@ -59,7 +60,7 @@ class quarterPerformanceRender extends Render {
 								}elseif ($c == 5) {
 									echo "<td class='medBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
 								}else{
-									echo "<td class='lightGrey center'>".$mtx[$t][$b][$c][$v]."</td>";
+									echo "<td class='lightGrey center' $style>".$mtx[$t][$b][$c][$v]."</td>";
 								}
 							}else{
 								if ($c == 1) {
