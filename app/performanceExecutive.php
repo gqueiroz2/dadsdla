@@ -37,6 +37,8 @@ class performanceExecutive extends performance
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
+        $currencyId = $currency;
+
         //nome da moeda pra view
         $tmp = array($currency);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -44,8 +46,10 @@ class performanceExecutive extends performance
         //valor para view
         if ($value == "gross") {
             $valueView = "Gross";
+            $value = "GROSS";
         }else{
             $valueView = "Net";
+            $value = "NET";
         }
 
         //year view
@@ -79,16 +83,16 @@ class performanceExecutive extends performance
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
-                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales");
+                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$currencyId,$value);
             }
         }
 
-        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier);
+        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
 
         return $mtx;
     }
 
-    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier){
+    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div){
         $base = new base();
 
         $tmp1["values"] = array();
@@ -108,8 +112,8 @@ class performanceExecutive extends performance
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                    $tmp[$s][$b][$m] = $values[$b][$m][$s]; 
-                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]; 
+                    $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
+                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]/$div; 
                 }
             }
         }
@@ -117,6 +121,10 @@ class performanceExecutive extends performance
         $values = $tmp;
         $planValues = $tmp_2;
 
+        $mtx["valueView"] = $valueView;
+        $mtx["currency"] = $currency;
+        $mtx["region"] = $region;
+        $mtx["year"] = $year;
         $mtx["case4"]["values"] = $values;
         $mtx["case4"]["planValues"] = $planValues;
         $mtx["salesRep"] = $salesRep;
@@ -177,7 +185,7 @@ class performanceExecutive extends performance
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$s][$t] += $mtx["case4"]["planValues"][$s][$b][$m];
-                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "T3"){
+                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "OTH"){
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];
@@ -235,7 +243,7 @@ class performanceExecutive extends performance
                 for ($q=0; $q <sizeof($mtx["case1"]["value"][$s][$t]); $q++) { 
                     $mtx["case1"]["varAbs"][$s][$t][$q] = $mtx["case1"]["value"][$s][$t][$q] - $mtx["case1"]["planValue"][$s][$t][$q]; 
                     if ($mtx["case1"]["planValue"][$s][$t][$q] != 0) {
-                        $mtx["case1"]["varPrc"][$s][$t][$q] = $mtx["case1"]["value"][$s][$t][$q] / $mtx["case1"]["planValue"][$s][$t][$q];
+                        $mtx["case1"]["varPrc"][$s][$t][$q] = ($mtx["case1"]["value"][$s][$t][$q]/$mtx["case1"]["planValue"][$s][$t][$q])*100;
                     }else{
                         $mtx["case1"]["varPrc"][$s][$t][$q] = 0 ;
                     }
@@ -345,7 +353,7 @@ class performanceExecutive extends performance
                 for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
                 	$mtx["case2"]["varAbs"][$s][$b][$q] = $mtx["case2"]["value"][$s][$b][$q] - $mtx["case2"]["planValue"][$s][$b][$q];
                 	if ($mtx["case2"]["planValue"][$s][$b][$q] != 0) {
-	                	$mtx["case2"]["varPrc"][$s][$b][$q] = $mtx["case2"]["value"][$s][$b][$q] / $mtx["case2"]["planValue"][$s][$b][$q];
+	                	$mtx["case2"]["varPrc"][$s][$b][$q] = ($mtx["case2"]["value"][$s][$b][$q] / $mtx["case2"]["planValue"][$s][$b][$q])*100;
                 	}else{
                 		$mtx["case2"]["varPrc"][$s][$b][$q] = 0;
                 	}
@@ -362,9 +370,13 @@ class performanceExecutive extends performance
                 for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
                 	$mtx["case2"]["totalPlanValueBrand"][$s][$b] += $mtx["case2"]["planValue"][$s][$b][$q];
                 	$mtx["case2"]["totalValueBrand"][$s][$b] += $mtx["case2"]["value"][$s][$b][$q];
-        			$mtx["case2"]["totalVarPrc"][$s][$b] += $mtx["case2"]["varPrc"][$s][$b][$q];
         			$mtx["case2"]["totalVarAbs"][$s][$b] += $mtx["case2"]["varAbs"][$s][$b][$q];
         		}
+                if ($mtx["case2"]["totalPlanValueBrand"][$s][$b] != 0) {
+                    $mtx["case2"]["totalVarPrc"][$s][$b] = ($mtx["case2"]["totalValueBrand"][$s][$b]/$mtx["case2"]["totalPlanValueBrand"][$s][$b]) * 100;
+                }else{
+                    $mtx["case2"]["totalVarPrc"][$s][$b] = 0;
+                }
         	}
         }
 
@@ -375,7 +387,7 @@ class performanceExecutive extends performance
         		for ($m=0; $m <sizeof($mtx["month"]); $m++) { 
         			$mtx["case3"]["varAbs"][$s][$t][$m] = $mtx["case3"]["values"][$s][$t][$m] - $mtx["case3"]["planValues"][$s][$t][$m];
         			if ($mtx["case3"]["planValues"][$s][$t][$m] != 0) {
-	        			$mtx["case3"]["varPrc"][$s][$t][$m] = $mtx["case3"]["values"][$s][$t][$m] / $mtx["case3"]["planValues"][$s][$t][$m];
+	        			$mtx["case3"]["varPrc"][$s][$t][$m] = ($mtx["case3"]["values"][$s][$t][$m] / $mtx["case3"]["planValues"][$s][$t][$m])*100;
         			}else{
         				$mtx["case3"]["varPrc"][$s][$t][$m] = 0;
         			}
@@ -393,8 +405,12 @@ class performanceExecutive extends performance
         			$mtx["case3"]["totalValueTier"][$s][$t] += $mtx["case3"]["values"][$s][$t][$m];
         			$mtx["case3"]["totalPlanValueTier"][$s][$t] += $mtx["case3"]["planValues"][$s][$t][$m];
         			$mtx["case3"]["totalVarAbs"][$s][$t] += $mtx["case3"]["varAbs"][$s][$t][$m];
-        			$mtx["case3"]["totalVarPrc"][$s][$t] += $mtx["case3"]["varPrc"][$s][$t][$m];
         		}
+                if ($mtx["case3"]["totalPlanValueTier"][$s][$t] != 0) {
+                    $mtx["case3"]["totalVarPrc"][$s][$t] = ($mtx["case3"]["totalValueTier"][$s][$t] / $mtx["case3"]["totalPlanValueTier"][$s][$t])*100;
+                }else{
+                    $mtx["case3"]["totalVarPrc"][$s][$t] = 0;
+                }
         	}
         }
 
@@ -406,7 +422,7 @@ class performanceExecutive extends performance
         		for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
         			$mtx["case4"]["varAbs"][$s][$b][$m] = $mtx["case4"]["values"][$s][$b][$m] - $mtx["case4"]["planValues"][$s][$b][$m];
         			if ($mtx["case4"]["planValues"][$s][$b][$m] != 0) {
-        				$mtx["case4"]["varPrc"][$s][$b][$m] = $mtx["case4"]["values"][$s][$b][$m] / $mtx["case4"]["planValues"][$s][$b][$m];
+        				$mtx["case4"]["varPrc"][$s][$b][$m] = ($mtx["case4"]["values"][$s][$b][$m] / $mtx["case4"]["planValues"][$s][$b][$m])*100;
         			}else{
         				$mtx["case4"]["varPrc"][$s][$b][$m] = 0;
         			}
@@ -424,8 +440,12 @@ class performanceExecutive extends performance
         			$mtx["case4"]["totalValueTier"][$s][$b] += $mtx["case4"]["values"][$s][$b][$m];
         			$mtx["case4"]["totalPlanValueTier"][$s][$b] += $mtx["case4"]["planValues"][$s][$b][$m];
         			$mtx["case4"]["totalVarAbs"][$s][$b] += $mtx["case4"]["varAbs"][$s][$b][$m];
-        			$mtx["case4"]["totalVarPrc"][$s][$b] += $mtx["case4"]["varPrc"][$s][$b][$m];
         		}
+                if ($mtx["case4"]["totalPlanValueTier"][$s][$b] != 0) {
+                    $mtx["case4"]["totalVarPrc"][$s][$b] = ($mtx["case4"]["totalValueTier"][$s][$b]/$mtx["case4"]["totalPlanValueTier"][$s][$b]) * 100;
+                }else{
+                    $mtx["case4"]["totalVarPrc"][$s][$b] = 0;
+                }
         	}
         }
 

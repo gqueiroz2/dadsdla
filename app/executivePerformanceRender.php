@@ -7,12 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class executivePerformanceRender extends renderPerformance
 {
     public function case1($mtx){
+    	echo "<div class='row' >";
+	    	echo "<div class='col' style='width:100%;'>";
+	    		echo "<center>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		echo "</center>";
+	    	echo "</div>";
+    	echo "</div>";
+
 	    for ($s=0; $s < sizeof($mtx["case1"]["value"]); $s++) {
 	    	if ($s%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
 	    	echo "<div class='col'>";
-	    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
+	    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";
 	    	for ($t=0; $t < sizeof($mtx["case1"]["value"][$s]); $t++) { 
 		    	echo "<table style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
@@ -103,13 +111,22 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case2($mtx){
+    	echo "<div class='row' >";
+	    	echo "<div class='col' style='width:100%;'>";
+	    		echo "<center>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		echo "</center>";
+	    	echo "</div>";
+    	echo "</div>";
+
+
     	for ($s=0; $s < sizeof($mtx["salesRep"]); $s++) {
 	    	if ($s%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
 	    	echo "<div class='col'>";
 
-		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
+		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";
 
 		    	for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";
@@ -199,12 +216,21 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case3($mtx){
+
+    	echo "<div class='row' >";
+	    	echo "<div class='col' style='width:100%;'>";
+	    		echo "<center>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		echo "</center>";
+	    	echo "</div>";
+    	echo "</div>";
+
     	for ($s=0; $s < sizeof($mtx["salesRep"]); $s++) {
 	    	echo "<div class='row'>";
 	    	
 	    	echo "<div class='col'>";
 
-		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
+		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";
 
 		    	for ($b=0; $b <sizeof($mtx["tier"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";
@@ -293,12 +319,21 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case4($mtx){
+
+    	echo "<div class='row' >";
+	    	echo "<div class='col' style='width:100%;'>";
+	    		echo "<center>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		echo "</center>";
+	    	echo "</div>";
+    	echo "</div>";
+
 	    for ($s=0; $s < sizeof($mtx["salesRep"]); $s++) {
 	    	echo "<div class='row'>";
 	    	
 	    	echo "<div class='col'>";
 
-		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
+		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";
 
 		    	for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";

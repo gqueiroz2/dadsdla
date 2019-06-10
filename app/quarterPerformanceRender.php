@@ -14,7 +14,7 @@ class quarterPerformanceRender extends Render {
 				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>$region - Quarter $year (".$currency[0]['name']."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 			echo "<tr>";
-				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>Sales Group: ".$sales["salesRepGroup"]."; Sales Representative: ".$sales["salesRep"]."</span></center></th>";
+				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>Sales Group: ".$sales["salesRepGroup"]." / Sales Representative: ".$sales["salesRep"]."</span></center></th>";
 			echo "</tr>";
 
 			echo "<tr><td>&nbsp;</td></tr>";

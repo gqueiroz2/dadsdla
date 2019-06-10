@@ -48,7 +48,7 @@
 							{{ $render->brandPerformance() }}
 						</div>	
 
-						<div class="col">
+						<div class="col-2">
 							<label>Sales Rep Group:</label>
 							@if($errors->has('salesRepGroup'))
 								<label style="color: red;">* Required</label>
@@ -94,7 +94,7 @@
 			<div class="col"></div>
 			<div class="col"></div>
 			<div class="col"></div>
-			<div class="col"></div>
+			<div class="col-2"></div>
 			<div class="col"></div>
 			<div class="col"></div>
 			<div class="col"></div>

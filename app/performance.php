@@ -25,16 +25,16 @@ class performance extends base{
         return $columns;
     }
 
-    public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table){
+    public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$currency=null,$value=null){
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
-            $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month);
+            $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$currency,$value);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
             $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
         }
         return $values;
     }
 
-    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
+    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month,$currency=null,$value=null){
         if ($source == "ytd") {
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
@@ -44,8 +44,8 @@ class performance extends base{
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif($source == "plan_by_sales"){
-            $columns = array("region_id","year","month","sales_rep_id","brand_id");
-            $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand);
+            $columns = array("region_id","year","month","sales_rep_id","brand_id","currency_id","type_of_revenue");
+            $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand,$currency,$value);
             $where = $sql->where($columns,$arrayWhere);
         }else{
             $where = false;

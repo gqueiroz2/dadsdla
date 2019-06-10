@@ -72,7 +72,7 @@ class base extends Model{
         }elseif ($region == "Bolivia") {
             $name = "BO";
         }else {
-            $name = false;;
+            $name = false;
         }
 
         return $name;
