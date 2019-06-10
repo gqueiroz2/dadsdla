@@ -24,7 +24,13 @@ class executivePerformanceRender extends renderPerformance
 	    	for ($t=0; $t < sizeof($mtx["case1"]["value"][$s]); $t++) { 
 		    	echo "<table style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
-		    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:5%;'>".$mtx["tier"][$t]."</td>";
+		    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:5%;'>";
+		    			if ($mtx["tier"][$t] == "TOTH") {
+		    				echo "OTH";
+		    			}else{
+		    				echo $mtx["tier"][$t];
+		    			}
+		    			echo "</td>";
 		    			echo "<td style='width:10%;' class='lightGrey'></td>";
 		    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 		    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
@@ -235,7 +241,13 @@ class executivePerformanceRender extends renderPerformance
 		    	for ($b=0; $b <sizeof($mtx["tier"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";
 			    		echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$b])."' style='width:5%;'>".$mtx["tier"][$b]."</td>";
+			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$b])."' style='width:5%;'>";
+			    			if ($mtx["tier"][$b] == "TOTH") {
+			    				echo "OTH";
+			    			}else{
+			    				echo $mtx["tier"][$b];
+			    			}
+			    			echo "</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
@@ -410,7 +422,7 @@ class executivePerformanceRender extends renderPerformance
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case4"]["dnVarPrc"][$s][$q])."%</td>";
 			    			}
-			    			echo "<td class='darkBlue'>".number_format($mtx["case4"]["dnTotalVarPrc"][$s][$q])."%</td>";
+			    			echo "<td class='darkBlue'>".number_format($mtx["case4"]["dnTotalVarPrc"][$s])."%</td>";
 		    			echo "</tr>";
 		    		
 		    	echo "</table>";

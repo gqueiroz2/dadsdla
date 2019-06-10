@@ -266,7 +266,7 @@ class performanceCore extends performance
                 for ($q=0; $q <sizeof($mtx["case1"]["value"][$sg][$t]); $q++) { 
                     $mtx["case1"]["varAbs"][$sg][$t][$q] = $mtx["case1"]["value"][$sg][$t][$q] - $mtx["case1"]["planValue"][$sg][$t][$q]; 
                     if ($mtx["case1"]["planValue"][$sg][$t][$q] != 0) {
-                        $mtx["case1"]["varPrc"][$sg][$t][$q] = $mtx["case1"]["value"][$sg][$t][$q] / $mtx["case1"]["planValue"][$sg][$t][$q];
+                        $mtx["case1"]["varPrc"][$sg][$t][$q] = ($mtx["case1"]["value"][$sg][$t][$q] / $mtx["case1"]["planValue"][$sg][$t][$q])*100;
                     }else{
                         $mtx["case1"]["varPrc"][$sg][$t][$q] = 0 ;
                     }
@@ -278,7 +278,7 @@ class performanceCore extends performance
             for ($t=0; $t <sizeof($mtx["case1"]["value"][$sg]); $t++) { 
                 $mtx["case1"]["totalVarAbs"][$sg][$t] = $mtx["case1"]["totalValueTier"][$sg][$t] - $mtx["case1"]["totalPlanValueTier"][$sg][$t];
                 if ($mtx["case1"]["totalPlanValueTier"][$sg][$t] != 0) {
-                    $mtx["case1"]["totalVarPrc"][$sg][$t] = $mtx["case1"]["totalValueTier"][$sg][$t] / $mtx["case1"]["totalPlanValueTier"][$sg][$t];
+                    $mtx["case1"]["totalVarPrc"][$sg][$t] = ($mtx["case1"]["totalValueTier"][$sg][$t] / $mtx["case1"]["totalPlanValueTier"][$sg][$t])*100;
                 }else{
                     $mtx["case1"]["totalVarPrc"][$sg][$t] = 0;
                 }
@@ -305,7 +305,7 @@ class performanceCore extends performance
             for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
                 $mtx["case1"]["totalSGVarAbs"][$sg][$q] = $mtx["case1"]["totalSG"][$sg][$q] - $mtx["case1"]["totalPlanSG"][$sg][$q];
                 if ($mtx["case1"]["totalPlanSG"][$sg][$q] != 0) {
-                    $mtx["case1"]["totalSGVarPrc"][$sg][$q] = $mtx["case1"]["totalSG"][$sg][$q] - $mtx["case1"]["totalPlanSG"][$sg][$q];
+                    $mtx["case1"]["totalSGVarPrc"][$sg][$q] = ($mtx["case1"]["totalSG"][$sg][$q] / $mtx["case1"]["totalPlanSG"][$sg][$q])*100;
                 }else{
                     $mtx["case1"]["totalSGVarPrc"][$sg][$q] = 0;
                 }
@@ -328,7 +328,7 @@ class performanceCore extends performance
             $mtx["case1"]["totalTotalSGVarAbs"][$sg] = $mtx["case1"]["totalTotalSG"][$sg] - $mtx["case1"]["totalPlanTotalSG"][$sg];
 
             if ($mtx["case1"]["totalPlanTotalSG"][$sg] != 0) {
-                $mtx["case1"]["totalTotalSGVarPrc"][$sg] = $mtx["case1"]["totalTotalSG"][$sg] / $mtx["case1"]["totalPlanTotalSG"][$sg];
+                $mtx["case1"]["totalTotalSGVarPrc"][$sg] = ($mtx["case1"]["totalTotalSG"][$sg] / $mtx["case1"]["totalPlanTotalSG"][$sg])*100;
             }else{
                 $mtx["case1"]["totalTotalSGVarPrc"][$sg] = 0;
             }
@@ -376,7 +376,7 @@ class performanceCore extends performance
                 for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
                 	$mtx["case2"]["varAbs"][$sg][$b][$q] = $mtx["case2"]["value"][$sg][$b][$q] - $mtx["case2"]["planValue"][$sg][$b][$q];
                 	if ($mtx["case2"]["planValue"][$sg][$b][$q] != 0) {
-	                	$mtx["case2"]["varPrc"][$sg][$b][$q] = $mtx["case2"]["value"][$sg][$b][$q] / $mtx["case2"]["planValue"][$sg][$b][$q];
+	                	$mtx["case2"]["varPrc"][$sg][$b][$q] = ($mtx["case2"]["value"][$sg][$b][$q] / $mtx["case2"]["planValue"][$sg][$b][$q]) * 100;
                 	}else{
                 		$mtx["case2"]["varPrc"][$sg][$b][$q] = 0;
                 	}
@@ -393,9 +393,13 @@ class performanceCore extends performance
                 for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
                 	$mtx["case2"]["totalPlanValueBrand"][$sg][$b] += $mtx["case2"]["planValue"][$sg][$b][$q];
                 	$mtx["case2"]["totalValueBrand"][$sg][$b] += $mtx["case2"]["value"][$sg][$b][$q];
-        			$mtx["case2"]["totalVarPrc"][$sg][$b] += $mtx["case2"]["varPrc"][$sg][$b][$q];
         			$mtx["case2"]["totalVarAbs"][$sg][$b] += $mtx["case2"]["varAbs"][$sg][$b][$q];
         		}
+                if($mtx["case2"]["totalPlanValueBrand"][$sg][$b] != 0){
+                    $mtx["case2"]["totalVarPrc"][$sg][$b]  = ($mtx["case2"]["totalValueBrand"][$sg][$b]/$mtx["case2"]["totalPlanValueBrand"][$sg][$b])*100;
+                }else{
+                    $mtx["case2"]["totalVarPrc"][$sg][$b] = 0;
+                }
         	}
         }
 
@@ -406,7 +410,7 @@ class performanceCore extends performance
         		for ($m=0; $m <sizeof($mtx["month"]); $m++) { 
         			$mtx["case3"]["varAbs"][$sg][$t][$m] = $mtx["case3"]["values"][$sg][$t][$m] - $mtx["case3"]["planValues"][$sg][$t][$m];
         			if ($mtx["case3"]["planValues"][$sg][$t][$m] != 0) {
-	        			$mtx["case3"]["varPrc"][$sg][$t][$m] = $mtx["case3"]["values"][$sg][$t][$m] / $mtx["case3"]["planValues"][$sg][$t][$m];
+	        			$mtx["case3"]["varPrc"][$sg][$t][$m] = ($mtx["case3"]["values"][$sg][$t][$m] / $mtx["case3"]["planValues"][$sg][$t][$m])*100;
         			}else{
         				$mtx["case3"]["varPrc"][$sg][$t][$m] = 0;
         			}
@@ -424,8 +428,12 @@ class performanceCore extends performance
         			$mtx["case3"]["totalValueTier"][$sg][$t] += $mtx["case3"]["values"][$sg][$t][$m];
         			$mtx["case3"]["totalPlanValueTier"][$sg][$t] += $mtx["case3"]["planValues"][$sg][$t][$m];
         			$mtx["case3"]["totalVarAbs"][$sg][$t] += $mtx["case3"]["varAbs"][$sg][$t][$m];
-        			$mtx["case3"]["totalVarPrc"][$sg][$t] += $mtx["case3"]["varPrc"][$sg][$t][$m];
         		}
+                if($mtx["case3"]["totalPlanValueTier"][$sg][$t] != 0){
+                    $mtx["case3"]["totalVarPrc"][$sg][$t] = ($mtx["case3"]["totalValueTier"][$sg][$t]/$mtx["case3"]["totalPlanValueTier"][$sg][$t])*100;
+                }else{
+                    $mtx["case3"]["totalVarPrc"][$sg][$t] = 0;
+                }
         	}
         }
 
@@ -437,7 +445,7 @@ class performanceCore extends performance
         		for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
         			$mtx["case4"]["varAbs"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$b][$m] - $mtx["case4"]["planValues"][$sg][$b][$m];
         			if ($mtx["case4"]["planValues"][$sg][$b][$m] != 0) {
-        				$mtx["case4"]["varPrc"][$sg][$b][$m] = $mtx["case4"]["values"][$sg][$b][$m] / $mtx["case4"]["planValues"][$sg][$b][$m];
+        				$mtx["case4"]["varPrc"][$sg][$b][$m] = ($mtx["case4"]["values"][$sg][$b][$m] / $mtx["case4"]["planValues"][$sg][$b][$m])*100;
         			}else{
         				$mtx["case4"]["varPrc"][$sg][$b][$m] = 0;
         			}
@@ -455,8 +463,12 @@ class performanceCore extends performance
         			$mtx["case4"]["totalValueTier"][$sg][$b] += $mtx["case4"]["values"][$sg][$b][$m];
         			$mtx["case4"]["totalPlanValueTier"][$sg][$b] += $mtx["case4"]["planValues"][$sg][$b][$m];
         			$mtx["case4"]["totalVarAbs"][$sg][$b] += $mtx["case4"]["varAbs"][$sg][$b][$m];
-        			$mtx["case4"]["totalVarPrc"][$sg][$b] += $mtx["case4"]["varPrc"][$sg][$b][$m];
         		}
+                if ($mtx["case4"]["totalPlanValueTier"][$sg][$b]) {
+                    $mtx["case4"]["totalVarPrc"][$sg][$b] = ($mtx["case4"]["totalValueTier"][$sg][$b]/$mtx["case4"]["totalPlanValueTier"][$sg][$b])*100;
+                }else{
+                    $mtx["case4"]["totalVarPrc"][$sg][$b] = 0;
+                }
         	}
         }
 
@@ -472,8 +484,12 @@ class performanceCore extends performance
    					$mtx["case2"]["dnPlanValue"][$sg][$m] += $mtx["case2"]["planValue"][$sg][$b][$m]; 
    					$mtx["case2"]["dnValue"][$sg][$m] += $mtx["case2"]["value"][$sg][$b][$m]; 
    					$mtx["case2"]["dnVarAbs"][$sg][$m] += $mtx["case2"]["varAbs"][$sg][$b][$m]; 
-   					$mtx["case2"]["dnVarPrc"][$sg][$m] += $mtx["case2"]["varPrc"][$sg][$b][$m]; 
    				}
+                if($mtx["case2"]["dnPlanValue"][$sg][$m]){
+                    $mtx["case2"]["dnVarPrc"][$sg][$m] = ($mtx["case2"]["dnValue"][$sg][$m]/$mtx["case2"]["dnPlanValue"][$sg][$m])*100; 
+                }else{
+                    $mtx["case2"]["dnVarPrc"][$sg][$m] = 0;
+                }
    			}
         }
 
@@ -486,8 +502,12 @@ class performanceCore extends performance
         		$mtx["case2"]["dnTotalPlanValue"][$sg] += $mtx["case2"]["dnPlanValue"][$sg][$m];
         		$mtx["case2"]["dnTotalValue"][$sg] += $mtx["case2"]["dnValue"][$sg][$m];
         		$mtx["case2"]["dnTotalVarAbs"][$sg] += $mtx["case2"]["dnVarAbs"][$sg][$m];
-        		$mtx["case2"]["dnTotalVarPrc"][$sg] += $mtx["case2"]["dnVarPrc"][$sg][$m];
         	}
+            if ($mtx["case2"]["dnTotalPlanValue"][$sg] != 0) {
+                $mtx["case2"]["dnTotalVarPrc"][$sg] = ($mtx["case2"]["dnTotalValue"][$sg]/$mtx["case2"]["dnTotalPlanValue"][$sg])*100;
+            }else{
+                $mtx["case2"]["dnTotalVarPrc"][$sg] = 0;
+            }
         }
 
 
@@ -503,7 +523,11 @@ class performanceCore extends performance
                     $mtx["case3"]["dnPlanValue"][$sg][$m] += $mtx["case3"]["planValues"][$sg][$t][$m]; 
                     $mtx["case3"]["dnValue"][$sg][$m] += $mtx["case3"]["values"][$sg][$t][$m]; 
                     $mtx["case3"]["dnVarAbs"][$sg][$m] += $mtx["case3"]["varAbs"][$sg][$t][$m]; 
-                    $mtx["case3"]["dnVarPrc"][$sg][$m] += $mtx["case3"]["varPrc"][$sg][$t][$m]; 
+                }
+                if ($mtx["case3"]["dnPlanValue"][$sg][$m]) {
+                    $mtx["case3"]["dnVarPrc"][$sg][$m] = ($mtx["case3"]["dnValue"][$sg][$m]/$mtx["case3"]["dnPlanValue"][$sg][$m])*100;
+                }else{
+                    $mtx["case3"]["dnVarPrc"][$sg][$m] = 0;
                 }
             }
         }
@@ -517,7 +541,11 @@ class performanceCore extends performance
                 $mtx["case3"]["dnTotalPlanValue"][$sg] += $mtx["case3"]["dnPlanValue"][$sg][$m];
                 $mtx["case3"]["dnTotalValue"][$sg] += $mtx["case3"]["dnValue"][$sg][$m];
                 $mtx["case3"]["dnTotalVarAbs"][$sg] += $mtx["case3"]["dnVarAbs"][$sg][$m];
-                $mtx["case3"]["dnTotalVarPrc"][$sg] += $mtx["case3"]["dnVarPrc"][$sg][$m];
+            }
+            if ($mtx["case3"]["dnTotalPlanValue"][$sg]) {
+                $mtx["case3"]["dnTotalVarPrc"][$sg] = ($mtx["case3"]["dnTotalValue"][$sg]/$mtx["case3"]["dnTotalPlanValue"][$sg])*100;
+            }else{
+                $mtx["case3"]["dnTotalVarPrc"][$sg] = 0;
             }
         }
 
@@ -534,8 +562,11 @@ class performanceCore extends performance
                 	$mtx["case4"]["dnPlanValue"][$sg][$m] += $mtx["case4"]["planValues"][$sg][$b][$m];
                 	$mtx["case4"]["dnValue"][$sg][$m] += $mtx["case4"]["values"][$sg][$b][$m];
                 	$mtx["case4"]["dnVarAbs"][$sg][$m] += $mtx["case4"]["varAbs"][$sg][$b][$m];
-                	$mtx["case4"]["dnVarPrc"][$sg][$m] += $mtx["case4"]["varPrc"][$sg][$b][$m];
-
+                }
+                if ($mtx["case4"]["dnPlanValue"][$sg][$m] != 0) {
+                    $mtx["case4"]["dnVarPrc"][$sg][$m] = ($mtx["case4"]["dnValue"][$sg][$m]/$mtx["case4"]["dnPlanValue"][$sg][$m])*100;
+                }else{
+                    $mtx["case4"]["dnVarPrc"][$sg][$m] = 0;
                 }
             }
         }
@@ -549,8 +580,12 @@ class performanceCore extends performance
         		$mtx["case4"]["dnTotalPlanValue"][$sg] += $mtx["case4"]["dnPlanValue"][$sg][$m]; 
         		$mtx["case4"]["dnTotalValue"][$sg] += $mtx["case4"]["dnValue"][$sg][$m]; 
         		$mtx["case4"]["dnTotalVarAbs"][$sg] += $mtx["case4"]["dnVarAbs"][$sg][$m]; 
-        		$mtx["case4"]["dnTotalVarPrc"][$sg] += $mtx["case4"]["dnVarPrc"][$sg][$m]; 
         	}
+            if ($mtx["case4"]["dnTotalPlanValue"][$sg] != 0) {
+                $mtx["case4"]["dnTotalVarPrc"][$sg] = ($mtx["case4"]["dnTotalValue"][$sg]/$mtx["case4"]["dnTotalPlanValue"][$sg])*100; 
+            }else{
+                $mtx["case4"]["dnTotalVarPrc"][$sg] = 0; 
+            }
         }
 
         return $mtx;
