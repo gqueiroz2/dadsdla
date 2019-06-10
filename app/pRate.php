@@ -41,8 +41,7 @@ class pRate extends Management{
 
 		if($region && $year){
 			$ids = implode($region);
-			$years = implode($year);
-			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($years)";
+			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($year)";
 		}
 
 		$sql = new sql();
@@ -61,9 +60,10 @@ class pRate extends Management{
 		$limit = "LIMIT 1";
 		$result = $sql->select($con,$columns,$table,$join,$where,$order,$limit);
 		$pRate = doubleval($sql->fetch($result,$from,$from)[0]['value']);
+
 		if ($pRate == 0) {
 			$pRate = 1;
-		}	
+		}
 		return $pRate;
 	}
 

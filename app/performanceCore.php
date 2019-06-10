@@ -39,6 +39,8 @@ class performanceCore extends performance
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
+        $currencyId = $currency;
+
         //nome da moeda pra view
         $tmp = array($currency);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -46,8 +48,10 @@ class performanceCore extends performance
         //valor para view
         if ($value == "gross") {
             $valueView = "Gross";
+            $value = "GROSS";
         }else{
             $valueView = "Net";
+            $value = "NET";
         }
 
         //year view
@@ -76,22 +80,20 @@ class performanceCore extends performance
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
 
-
-
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
-                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales");
+                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$currencyId,$value);
             }
         }
 
-        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier);
+        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
 
         return $mtx;
     }
 
 
-	public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier){
+	public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div){
         $base = new base();
 
         $tmp1["values"] = array();
@@ -111,7 +113,7 @@ class performanceCore extends performance
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                    $tmp[$s][$b][$m] = $values[$b][$m][$s]; 
+                    $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
                     $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]; 
                 }
             }
@@ -120,6 +122,10 @@ class performanceCore extends performance
         $values = $tmp;
         $planValues = $tmp_2;
 
+        $mtx["region"] = $region;
+        $mtx["year"] = $year;
+        $mtx["currency"] = $currency;
+        $mtx["valueView"] = $valueView;
         $mtx["oldValues"] = $values;
         $mtx["oldPlanValues"] = $planValues;
         $mtx["salesRep"] = $salesRep;
@@ -202,7 +208,7 @@ class performanceCore extends performance
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$sg][$t] += $tmp1["planValues"][$sg][$b][$m];
-                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "T3"){
+                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "OTH"){
                             $tmp2["values"][$sg][$t][$m] += $tmp1["values"][$sg][$b][$m];
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];

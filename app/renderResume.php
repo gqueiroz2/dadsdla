@@ -11,23 +11,23 @@ class renderResume extends Render {
     	
     	echo "<table class='table table-bordered' style='width: 100%;'>";
     		echo "<tr>";
-    			echo "<th class='darkBlue center' colspan='11'><span style='font-size:18px; font-weight: normal !important; '>$salesRegion - $type Summary : $salesShow - $cYear (currencyS/$valueS) </span> </th>";
+    			echo "<th class='darkBlue center' colspan='11'><span style='font-size:18px; font-weight: normal !important; '>$salesRegion - $type Summary : $salesShow - $cYear (currency/$valueS) </span> </th>";
     		echo "</tr>";
 
     		echo "<tr>";
-    			echo "<th class='darkBlue center'> MONTH </th>";
-    			echo "<th class='lightBlue center' style='font-weight: bold !important;'>". strtoupper($salesShow)."</th>";
-    			echo "<th class='lightBlue center' style='font-weight: bold !important;'> ACTUAL </th>";
-    			echo "<th class='darkBlue center'> TARGET </th>";
-    			echo "<th class='darkBlue center'> CORPORATE </th>";
+    			echo "<th class='darkBlue center' style='width:5%'> MONTH </th>";
+    			echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>". strtoupper($salesShow)."</th>";
+    			echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'> ACTUAL </th>";
+    			echo "<th class='darkBlue center' style='width:10%'> TARGET </th>";
+    			echo "<th class='darkBlue center' style='width:10%'> CORPORATE </th>";
     			//<th class="darkBlue"> P&R FCST </th>
 				//<th class="darkBlue"> Finance FCST </th>
-				echo "<th class='darkBlue center'> $pYear </th>";	
-				echo "<th class='grey center' style='font-weight: bold !important;'>".strtoupper($salesShow)."/TARGET </th>";
-				echo "<th class='grey center' style='font-weight: bold !important;'>".strtoupper($salesShow)."/CORPORATE </th>";
+				echo "<th class='darkBlue center' style='width:10%'> $pYear </th>";	
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>".strtoupper($salesShow)."/TARGET </th>";
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>".strtoupper($salesShow)."/CORPORATE </th>";
 				//<th class="grey"> Sales/P&R </th>
 				//<th class="grey"> Sales/Finance </th>
-				echo "<th class='grey center' style='font-weight: bold !important;'> $salesShow/$pYear </th>";
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'> $salesShow/$pYear </th>";
     		echo "</tr>";
 
     		for ($m=0; $m < sizeof($matrix); $m++) { 

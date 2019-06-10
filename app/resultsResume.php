@@ -37,6 +37,8 @@ class resultsResume extends results{
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
 
+		var_dump($tableTarget);
+
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
 				// SE FOR CMAPS 
@@ -78,6 +80,8 @@ class resultsResume extends results{
 
 		$tr = strtoupper($value);
 
+		var_dump($currencyID);
+
 		for ($m=0; $m < sizeof($months); $m++) { 
         	for ($b=0; $b < sizeof($brands); $b++) { 
         		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
@@ -108,7 +112,8 @@ class resultsResume extends results{
 
         $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
 		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
-		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);	
+		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);
+		var_dump($actual);	
 		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
 		
 		if($tableSales == "cmaps"){
@@ -181,9 +186,10 @@ class resultsResume extends results{
         	}
         }
 
+
         $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
 		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
-		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);	
+		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);
 		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
 		
 		if($tableSales == "cmaps"){
@@ -199,6 +205,33 @@ class resultsResume extends results{
 		$mtx["previousYear"] = $previousYear;
 
 		return $mtx;
+	}
+
+	public function grouper($tv,$digital){
+
+		$DN = array();
+
+		for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
+			$DN["salesCYear"][$i] = $digital["salesCYear"][$i] + $tv["salesCYear"][$i];
+		}
+
+		for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
+			$DN["actual"][$i] = $digital["actual"][$i] + $tv["actual"][$i];
+		}
+
+		for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
+			$DN["target"][$i] = $digital["target"][$i] + $tv["target"][$i];
+		}
+
+		for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
+			$DN["corporate"][$i] = $digital["corporate"][$i] + $tv["corporate"][$i];
+		}
+
+		for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
+			$DN["previousYear"][$i] = $digital["previousYear"][$i] + $tv["previousYear"][$i];
+		}
+
+		return $DN;
 	}
 
 	public function assembler($month,$sales,$actual,$target,$corporate/*$pAndR,$finance*/,$pYear){
