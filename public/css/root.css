@@ -40,19 +40,25 @@ th{
 }
 
 .t1{
-    background-color: #0070c0;
+    background-color: #1E90FF;
     font-weight: bold;
     color: white;
 }
 
 .t2{
+    background-color: #0070c0;
+    font-weight: bold;
+    color: white;
+}
+
+.toth{
     background-color: #004b84;
     font-weight: bold;
     color: white;
 }
 
 .tt{
-    background-color: black;
+    background-color: #000080;
     font-weight: bold;
     color: white;   
 }

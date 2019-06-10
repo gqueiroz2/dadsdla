@@ -26,7 +26,7 @@ class ajaxController extends Controller{
 
         echo "<option selected='true' value='T1'>T1</option>";
         echo "<option selected='true' value='T2'>T2</option>";
-        echo "<option selected='true' value='OTH'>OTH</option>";
+        echo "<option selected='true' value='TOTH'>OTH</option>";
     }
 
     public function brandsByTier(){

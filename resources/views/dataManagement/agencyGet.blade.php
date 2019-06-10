@@ -16,64 +16,115 @@
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
-							<div class="row justify-content-center">
-								<div class="col">
-									<h5> Add a Excel File </h5>
-								</div>
-							</div>
-
-							<div class="row justify-content-center">
-								<div class="col">
-									@if(session('error'))
-										<div class="alert alert-danger">
-  											{{ session('error') }}
-										</div>
-									@endif
-
-									@if(session('response'))
-										<div class="alert alert-info">
-  											{{ session('response') }}
-										</div>
-									@endif
-								</div>
-							</div>
-							<form action="{{ route('fileUploadAgency') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('insertAgencyGroup') }}" method="POST">
 							@csrf
-							 	<div class="row justify-content-center">          
-							 		<div class="col">		
-										<div class="form-group">
-								        	<label for="exampleInputFile">File Upload</label>
-								        	<div class="custom-file">                
-												<input type="file" class="input-control-file" id="file" name="file"0>                
-												<label class="custom-file-label" for="file">Choose file</label>              
-											</div>  
-								    	</div>
-								    </div>
+								<div class="row">
+									<div class="col">
+										<span style="font-size: 18px;"> Create Agency Group </span>
+									</div>
 								</div>
-								<div class="row justify-content-end">          
-							 		<div class="col col-sm-6">		
-								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
-									</form>
 
+								<div class="row justify-content-center mt-1">
+									<div class="col">
+										@if(session('failedGroup'))
+											<div class="alert alert-danger">
+	  											{{ session('failedGroup') }}
+											</div>
+										@endif
+
+										@if(session('insertedGroup'))
+											<div class="alert alert-info">
+	  											{{ session('insertedGroup') }}
+											</div>
+										@endif
+									</div>
 								</div>
-							</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<label> Region: </label>
+										<select name="region" class="form-control">
+											<option value=""> Select a Region </option>
+											@for($r=0;$r<sizeof($region);$r++)
+												<option value="{{ $region[$r]['id'] }}"> {{ $region[$r]['name'] }}  </option>
+											@endfor
+										</select>
+									</div>
+								</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<label> Name: </label>
+										<input type="text" name="groupName" class="form-control">				
+										<input type="hidden" name="type" value="agency">						
+									</div>
+								</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>										
+									</div>
+								</div>
+							</form>
+
+							<hr><hr><hr>
+
+							<form action="{{ route('insertOneAgency') }}" method="POST">
+							@csrf							
+								<div class="row">
+									<div class="col">
+										<span style="font-size: 18px;"> Create Agency </span>
+									</div>
+								</div>
+
+								<div class="row justify-content-center mt-1">
+									<div class="col">
+										@if(session('failedTable'))
+											<div class="alert alert-danger">
+	  											{{ session('failedTable') }}
+											</div>
+										@endif
+
+										@if(session('insertedTable'))
+											<div class="alert alert-info">
+	  											{{ session('insertedTable') }}
+											</div>
+										@endif
+									</div>
+								</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<label> Agency Group: </label>
+										<select name="groupName" class='selectpicker' data-live-search='true' data-width='100%'>
+											<option value=""> Select the respective agency Group </option>
+											@for($r=0;$r<sizeof($agencyGroup);$r++)
+												<option value="{{ $agencyGroup[$r]['id'] }}"> {{ $agencyGroup[$r]['agencyGroup'] }} - {{ $agencyGroup[$r]['region'] }}  </option>
+											@endfor
+										</select>
+									</div>
+								</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<label> Name: </label>
+										<input type="text" name="name" class="form-control">				
+										<input type="hidden" name="type" value="agency">								
+									</div>
+								</div>
+
+								<div class="row mt-1">
+									<div class="col">
+										<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>										
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div id="teste"></div>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('#planilha').change(function(){
-				var planilha = $(this).val().split('\\').pop();
-				$('#file').html(planilha);
-			});
-		});
-	</script>
 @else
 @endif
 @endsection

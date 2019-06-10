@@ -12,7 +12,7 @@ class renderMonthlyYoY extends Model{
 	*/
 	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source, $region){
 		
-		echo "<table style='width: 100%; zoom:100%;'>";
+		echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
 
 			echo "<th class='lightBlue center' colspan='13'>";
 				echo "<span style='font-size:24px;''>";
@@ -61,7 +61,7 @@ class renderMonthlyYoY extends Model{
 		$secondClass = "class='center ".$secondColor."'";
 		$thirdClass = "class='center ".$thirdColor."'";
 
-		echo "<td $firstClass>&nbsp;</td>";
+		echo "<td $firstClass style='width: 3%;'>&nbsp;</td>";
 
 		for ($i = $size, $j=0; $i < ($size+3); $i++, $j++) {
 			
@@ -170,7 +170,7 @@ class renderMonthlyYoY extends Model{
     	$source = strtolower($source);
         $source = ucfirst($source);
     	
-    	echo "<table style='width: 100%; zoom:90%;'>";
+    	echo "<table style='width: 100%; zoom:90%; font-size: 16px;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");
 			echo "</tr>";

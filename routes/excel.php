@@ -12,18 +12,12 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-	Route::group(['prefix'=>'checkElements'],function(){
+	Route::group(['prefix'=>'generate'],function(){
+		Route::group(['prefix'=>'excel'],function(){
 
-		Route::post('insertClient','insertPendingController@insertClientUnit')
-									->name('insertClient');
-
-		Route::post('insertAgency','insertPendingController@insertAgencyUnit')
-									->name('insertAgency');
-
-		
-
-
-
+		Route::any('test','excelController@test')
+									->name('testExcel');
+		});
 	});
 });
 

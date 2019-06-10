@@ -20,24 +20,28 @@ class chain extends excel{
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base);
+
+        if($table == "cmaps"){
+            $parametter = true;
+        }else{
+            $parametter = false;
+        }
+
+        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         $into = $this->into($columns);      
-
         $check = 0;
-
+        
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
             if(!$error){
                 $check++;
             }
         } 
-
         if($check == sizeof($spreadSheet)){
             $complete = true;
         }else{
             $complete = false;
         }
-
         return $complete;
     }    
 
@@ -57,13 +61,11 @@ class chain extends excel{
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
-
         /*
 
             FAZER NOVA VERIFICAÇÃO COM CMAPS
 
         */
-
         $base = new base();    	
         $columnsS = $this->defineColumns($table,'second');
     	$columnsT = $this->defineColumns($table,'third');
@@ -77,7 +79,8 @@ class chain extends excel{
     	}
     	
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
-    	if($table== 'cmaps'){
+
+        if($table== 'cmaps'){
            $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into,$columnsS);
         }else{
             $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
@@ -112,14 +115,13 @@ class chain extends excel{
     }   
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-        if($nextColumns && ( $table == 'cmaps')){
-            $values = $this->values($spreadSheet,$columns,$nextColumns);
-        }else{
+        //if($nextColumns && ( $table == 'cmaps')){
+        //    $values = $this->values($spreadSheet,$columns,$nextColumns);
+        //}else{
             $values = $this->values($spreadSheet,$columns);
-        }
+        //}
         
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
-        //echo "<pre>".($ins)."</pre>";
 
         if($con->query($ins) === TRUE ){
             $error = false;
@@ -156,6 +158,8 @@ class chain extends excel{
     	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
     	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
     	*/
+
+            var_dump($table);
 
         if($table == 'cmaps'){
         	for ($c=0; $c < sizeof($current); $c++) { 
@@ -311,8 +315,6 @@ class chain extends excel{
     }
 
     public function insertToNextTable($con,$table,$columns,$current,$into,$nextColumns){
-
-        var_dump($table);
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
     		if($nextColumns && ($table == 'cmaps')){
@@ -426,7 +428,7 @@ class chain extends excel{
 						}elseif($columns[$c] == 'obs'){
                             $spreadSheetV2[$s][$columns[$c]] = "OBS";
                         }elseif($columns[$c] == 'month'){
-							if($table){
+                            if($table == "cmaps"){
                                 $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                             }else{
                                 $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
@@ -455,7 +457,6 @@ class chain extends excel{
 	}
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
-
         $values = "";
 		for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   

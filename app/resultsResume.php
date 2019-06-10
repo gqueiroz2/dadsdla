@@ -37,8 +37,6 @@ class resultsResume extends results{
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
 
-		var_dump($tableTarget);
-
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
 				// SE FOR CMAPS 
@@ -80,8 +78,6 @@ class resultsResume extends results{
 
 		$tr = strtoupper($value);
 
-		var_dump($currencyID);
-
 		for ($m=0; $m < sizeof($months); $m++) { 
         	for ($b=0; $b < sizeof($brands); $b++) { 
         		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
@@ -113,7 +109,6 @@ class resultsResume extends results{
         $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
 		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
 		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);
-		var_dump($actual);	
 		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
 		
 		if($tableSales == "cmaps"){

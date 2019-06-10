@@ -7,7 +7,7 @@ use App\Render;
 
 class renderMQ extends Render{
     public function assemble($mtx,$currency,$value,$year,$form,$region){
-    	echo "<table style='width: 100%; zoom:100%;'>";
+    	echo "<table style='width: 100%; zoom: 100%;font-size: 16px;'>";
     		
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
@@ -22,9 +22,9 @@ class renderMQ extends Render{
 						if(is_numeric($mtx[$m][$n][$o])){
 							if($n == 3){
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."%</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
 								}else{
-									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."%</td>";
+									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
 								}
 							}elseif($n == 4){
 								if($o == 13){

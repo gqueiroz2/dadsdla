@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Monthly Results')
+@section('title', 'Share Results')
 @section('head')	
 	<script src="/js/resultsShare.js"></script>
 	<script src="/js/results.js"></script>
@@ -15,7 +15,7 @@
 		}
 		th, td{
 			text-align: center;
-			font-size: 12px;
+			/*font-size: 12px;*/
 			padding: 3px;
 		}
 

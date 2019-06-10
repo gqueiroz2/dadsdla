@@ -11,7 +11,7 @@ class quarterRender extends Render
     	
 		//var_dump($mtx);
 		
-    	echo "<table style='width: 100%; zoom:100%;'>";
+    	echo "<table style='width: 100%; zoom:100%; font-size: 16px'>";
 
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'>$region - Quarter :(".$form.") ".$year." (".$currency[0]['name']."/".strtoupper($value).") </span></center></th>";
@@ -50,19 +50,19 @@ class quarterRender extends Render
 								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
 							}
 						}else{
-							if($l == 0 ){
+							if($l == 0){
 								if ($v == 0) {
 									if ($mtx[$b][$l][$v] == "DN") {
-										echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+										echo "<td class='darkBlue center' style='width: 10%;'>".$mtx[$b][$l][$v]."</td>";
 									}else{
-										echo "<td class='lightBlue center'>".$mtx[$b][$l][$v]."</td>";		
+										echo "<td class='lightBlue center' style='width: 10%;'>".$mtx[$b][$l][$v]."</td>";		
 									}
 								}elseif (($v >= 1 && $v <= 2) || ($v >= 4 && $v <= 5)) {
-									echo "<td class='lightGrey center'>".$mtx[$b][$l][$v]."</td>";		
+									echo "<td class='lightGrey center' style='width: 9%;'>".$mtx[$b][$l][$v]."</td>";
 								}elseif ($v == 3 || $v == 6) {
-									echo "<td class='quarter center'>".$mtx[$b][$l][$v]."</td>";
+									echo "<td class='quarter center' style='width: 8%;'>".$mtx[$b][$l][$v]."</td>";
 								}else{
-									echo "<td class='darkBlue center'>".$mtx[$b][$l][$v]."</td>";
+									echo "<td class='darkBlue center' style='width: 9%;'>".$mtx[$b][$l][$v]."</td>";
 								}
 							}elseif ($l == 1) {
 								if ($b == (sizeof($mtx)-1)) {
