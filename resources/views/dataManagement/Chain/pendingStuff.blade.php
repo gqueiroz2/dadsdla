@@ -1,23 +1,19 @@
 @extends('layouts.mirror')
 @section('title', '@')
+
 @section('head')
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
+
 @section('content')
-	<?php
 
-		var_dump($newValues);
-
-	?>
 	@if($userLevel == 'SU')
 		<div class="container-fluid">
 			
 			{{ $rS->base($conDLA,$base,$table,$newValues,$dependencies) }}
 
-
 		</div>
 	@endif
-
 
 	<div id='vlau'></div>
 	
@@ -50,6 +46,5 @@
 			</script>
 		@endfor
 	@endif
-
 @endsection
 

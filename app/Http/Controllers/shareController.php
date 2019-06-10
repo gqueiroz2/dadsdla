@@ -28,6 +28,17 @@ class shareController extends Controller{
 
         $region = $r->getRegion($con,null);
         $brand = $b->getBrand($con);
+
+        $sb = sizeof($brand);
+
+        for ($b=0; $b <$sb ; $b++) { 
+            if ($brand[$b]['name'] == "OTH") {
+                unset($brand[$b]);
+            }
+        }
+
+        $brand = array_values($brand);        
+
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $salesRep = $sr->getSalesRep($con,null);
         $currency = $pr->getCurrency($con,null);
@@ -70,6 +81,16 @@ class shareController extends Controller{
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $salesRep = $sr->getSalesRep($con,null);
         $currency = $pr->getCurrency($con,null);
+
+        $sb = sizeof($brand);
+
+        for ($b=0; $b <$sb ; $b++) { 
+            if ($brand[$b]['name'] == "OTH") {
+                unset($brand[$b]);
+            }
+        }
+
+        $brand = array_values($brand);
 
         $rName = $s->TruncateRegion($mtx["region"]);
 

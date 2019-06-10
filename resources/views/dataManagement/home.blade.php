@@ -60,10 +60,7 @@
 									</button>	
 								</div>
 							</div>
-
-							
-
-							
+				
 
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
@@ -80,6 +77,33 @@
 										</a>
 									</button>	
 								</div>								
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
+										<a style="color: white;" href="{{ route('dataManagementClientGet') }}">
+											Client Group / Client
+										</a>
+									</button>	
+								</div>
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
+										<a style="color: white;" href="{{ route('dataManagementAgencyGet') }}">
+											Agency Group / Agency
+										</a>
+									</button>	
+								</div>								
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('relationships') }}" style="color: white">
+											RelationShips
+										</a>
+									</button>	
+								</div>
 							</div>
 
 							<div class="row mt-2 justify-content-center">
@@ -101,6 +125,38 @@
 									</button>
 								</div>
 							</div>
+
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insertPlanByBrandGet') }}" style="color: white">
+											Plan By Brand Table
+										</a>
+									</button>	
+								</div>
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insertPlanBySalesGet') }}" style="color: white">
+											Plan By Sales
+										</a>
+									</button>	
+								</div>
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('testExcel') }}" style="color: white">
+											Teste
+										</a>
+									</button>	
+								</div>
+							</div>
+
 							{{--
 							<div class="row mt-2 justify-content-start">
 								<div class="col">

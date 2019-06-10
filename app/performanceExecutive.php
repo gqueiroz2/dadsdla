@@ -255,7 +255,7 @@ class performanceExecutive extends performance
             for ($t=0; $t <sizeof($mtx["case1"]["value"][$s]); $t++) { 
                 $mtx["case1"]["totalVarAbs"][$s][$t] = $mtx["case1"]["totalValueTier"][$s][$t] - $mtx["case1"]["totalPlanValueTier"][$s][$t];
                 if ($mtx["case1"]["totalPlanValueTier"][$s][$t] != 0) {
-                    $mtx["case1"]["totalVarPrc"][$s][$t] = $mtx["case1"]["totalValueTier"][$s][$t] / $mtx["case1"]["totalPlanValueTier"][$s][$t];
+                    $mtx["case1"]["totalVarPrc"][$s][$t] = ($mtx["case1"]["totalValueTier"][$s][$t] / $mtx["case1"]["totalPlanValueTier"][$s][$t])*100;
                 }else{
                     $mtx["case1"]["totalVarPrc"][$s][$t] = 0;
                 }
@@ -282,7 +282,7 @@ class performanceExecutive extends performance
             for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
                 $mtx["case1"]["totalSGVarAbs"][$s][$q] = $mtx["case1"]["totalSG"][$s][$q] - $mtx["case1"]["totalPlanSG"][$s][$q];
                 if ($mtx["case1"]["totalPlanSG"][$s][$q] != 0) {
-                    $mtx["case1"]["totalSGVarPrc"][$s][$q] = $mtx["case1"]["totalSG"][$s][$q] - $mtx["case1"]["totalPlanSG"][$s][$q];
+                    $mtx["case1"]["totalSGVarPrc"][$s][$q] = ($mtx["case1"]["totalSG"][$s][$q] / $mtx["case1"]["totalPlanSG"][$s][$q])*100;
                 }else{
                     $mtx["case1"]["totalSGVarPrc"][$s][$q] = 0;
                 }
@@ -305,7 +305,7 @@ class performanceExecutive extends performance
             $mtx["case1"]["totalTotalSGVarAbs"][$s] = $mtx["case1"]["totalTotalSG"][$s] - $mtx["case1"]["totalPlanTotalSG"][$s];
 
             if ($mtx["case1"]["totalPlanTotalSG"][$s] != 0) {
-                $mtx["case1"]["totalTotalSGVarPrc"][$s] = $mtx["case1"]["totalTotalSG"][$s] / $mtx["case1"]["totalPlanTotalSG"][$s];
+                $mtx["case1"]["totalTotalSGVarPrc"][$s] = ($mtx["case1"]["totalTotalSG"][$s] / $mtx["case1"]["totalPlanTotalSG"][$s])*100;
             }else{
                 $mtx["case1"]["totalTotalSGVarPrc"][$s] = 0;
             }
@@ -461,8 +461,12 @@ class performanceExecutive extends performance
    					$mtx["case2"]["dnPlanValue"][$s][$m] += $mtx["case2"]["planValue"][$s][$b][$m]; 
    					$mtx["case2"]["dnValue"][$s][$m] += $mtx["case2"]["value"][$s][$b][$m]; 
    					$mtx["case2"]["dnVarAbs"][$s][$m] += $mtx["case2"]["varAbs"][$s][$b][$m]; 
-   					$mtx["case2"]["dnVarPrc"][$s][$m] += $mtx["case2"]["varPrc"][$s][$b][$m]; 
    				}
+                if ($mtx["case2"]["dnPlanValue"][$s][$m] != 0) {
+                    $mtx["case2"]["dnVarPrc"][$s][$m] = ($mtx["case2"]["dnValue"][$s][$m]/$mtx["case2"]["dnPlanValue"][$s][$m])*100; 
+                }else{
+                    $mtx["case2"]["dnVarPrc"][$s][$m] = 0;
+                }
    			}
         }
 
@@ -475,8 +479,11 @@ class performanceExecutive extends performance
         		$mtx["case2"]["dnTotalPlanValue"][$s] += $mtx["case2"]["dnPlanValue"][$s][$m];
         		$mtx["case2"]["dnTotalValue"][$s] += $mtx["case2"]["dnValue"][$s][$m];
         		$mtx["case2"]["dnTotalVarAbs"][$s] += $mtx["case2"]["dnVarAbs"][$s][$m];
-        		$mtx["case2"]["dnTotalVarPrc"][$s] += $mtx["case2"]["dnVarPrc"][$s][$m];
         	}
+            if ($mtx["case2"]["dnTotalPlanValue"][$s] != 0) {
+                $mtx["case2"]["dnTotalVarPrc"][$s] = ($mtx["case2"]["dnTotalValue"][$s]/$mtx["case2"]["dnTotalPlanValue"][$s])*100;
+            }
+
         }
 
 
@@ -492,7 +499,11 @@ class performanceExecutive extends performance
                     $mtx["case3"]["dnPlanValue"][$s][$m] += $mtx["case3"]["planValues"][$s][$t][$m]; 
                     $mtx["case3"]["dnValue"][$s][$m] += $mtx["case3"]["values"][$s][$t][$m]; 
                     $mtx["case3"]["dnVarAbs"][$s][$m] += $mtx["case3"]["varAbs"][$s][$t][$m]; 
-                    $mtx["case3"]["dnVarPrc"][$s][$m] += $mtx["case3"]["varPrc"][$s][$t][$m]; 
+                }
+                if ($mtx["case3"]["dnPlanValue"][$s][$m]) {
+                    $mtx["case3"]["dnVarPrc"][$s][$m] = ($mtx["case3"]["dnValue"][$s][$m]/$mtx["case3"]["dnPlanValue"][$s][$m])*100; 
+                }else{
+                    $mtx["case3"]["dnVarPrc"][$s][$m] = 0;
                 }
             }
         }
@@ -506,7 +517,11 @@ class performanceExecutive extends performance
                 $mtx["case3"]["dnTotalPlanValue"][$s] += $mtx["case3"]["dnPlanValue"][$s][$m];
                 $mtx["case3"]["dnTotalValue"][$s] += $mtx["case3"]["dnValue"][$s][$m];
                 $mtx["case3"]["dnTotalVarAbs"][$s] += $mtx["case3"]["dnVarAbs"][$s][$m];
-                $mtx["case3"]["dnTotalVarPrc"][$s] += $mtx["case3"]["dnVarPrc"][$s][$m];
+            }
+            if ($mtx["case3"]["dnTotalPlanValue"][$s]) {
+                $mtx["case3"]["dnTotalVarPrc"][$s] = ($mtx["case3"]["dnTotalValue"][$s]/$mtx["case3"]["dnTotalPlanValue"][$s])*100;
+            }else{
+                $mtx["case3"]["dnTotalVarPrc"][$s] = 0;
             }
         }
 
@@ -523,8 +538,11 @@ class performanceExecutive extends performance
                 	$mtx["case4"]["dnPlanValue"][$s][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                 	$mtx["case4"]["dnValue"][$s][$m] += $mtx["case4"]["values"][$s][$b][$m];
                 	$mtx["case4"]["dnVarAbs"][$s][$m] += $mtx["case4"]["varAbs"][$s][$b][$m];
-                	$mtx["case4"]["dnVarPrc"][$s][$m] += $mtx["case4"]["varPrc"][$s][$b][$m];
-
+                }
+                if ($mtx["case4"]["dnPlanValue"][$s][$m] != 0) {
+                    $mtx["case4"]["dnVarPrc"][$s][$m] = ($mtx["case4"]["dnValue"][$s][$m]/$mtx["case4"]["dnPlanValue"][$s][$m])*100;
+                }else{
+                    $mtx["case4"]["dnVarPrc"][$s][$m] = 0;
                 }
             }
         }
@@ -538,8 +556,12 @@ class performanceExecutive extends performance
         		$mtx["case4"]["dnTotalPlanValue"][$s] += $mtx["case4"]["dnPlanValue"][$s][$m]; 
         		$mtx["case4"]["dnTotalValue"][$s] += $mtx["case4"]["dnValue"][$s][$m]; 
         		$mtx["case4"]["dnTotalVarAbs"][$s] += $mtx["case4"]["dnVarAbs"][$s][$m]; 
-        		$mtx["case4"]["dnTotalVarPrc"][$s] += $mtx["case4"]["dnVarPrc"][$s][$m]; 
         	}
+            if($mtx["case4"]["dnTotalPlanValue"][$s] != 0){
+                $mtx["case4"]["dnTotalVarPrc"][$s] = ($mtx["case4"]["dnTotalValue"][$s]/$mtx["case4"]["dnTotalPlanValue"][$s])*100; 
+            }else{
+                $mtx["case4"]["dnTotalVarPrc"][$s] = 0;
+            }
         }
 
         return $mtx;
