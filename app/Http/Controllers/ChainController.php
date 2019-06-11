@@ -55,7 +55,7 @@ class ChainController extends Controller{
     }
 
     public function firstChain(){
-    	
+
     	$validator = Validator::make(Request::all(),[
     		'file' => 'required',
             'tableFirstChain' => 'required',
@@ -115,6 +115,7 @@ class ChainController extends Controller{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
         }
 		
+
     }
 
     public function secondChain(){
