@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\User;
 use App\password;
-
+use Session;
 class AuthController extends Controller
 {
     public function loginGet(){
@@ -110,7 +110,8 @@ class AuthController extends Controller
             return redirect('/');
             //return back()->with('response',$resp['msg']);
         }else{
-            return view('auth.passwords.password', compact('permission'))->with('error',$resp['msg']);
+            \Session::flash('error', $resp['msg']);
+            return view('auth.passwords.password', compact('permission'));//->with('error',$resp['msg']);
         }
     }
 }

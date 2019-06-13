@@ -46,15 +46,9 @@
                         
                         <div class="row justify-content-center">
                             <div class="col">
-                                @if(session('error'))
+                                @if (Session::has('error'))
                                     <div class="alert alert-danger">
                                         {{ session('error') }}
-                                    </div>
-                                @endif
-
-                                @if(session('response'))
-                                    <div class="alert alert-info">
-                                        {{ session('response') }}
                                     </div>
                                 @endif
                             </div>

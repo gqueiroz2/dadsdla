@@ -104,7 +104,7 @@ class password extends Model{
         $email = Request::get('email');
 
         $bool = $this->checkPassword($password);
-
+        
         if ($bool['bool']) {
             $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
 
@@ -120,6 +120,8 @@ class password extends Model{
             $where = "WHERE email='$email'";
 
             $resp = $sql->updateValues($con, 'user', $set, $where);
+        }else{
+            
         }
 
         return $bool;
