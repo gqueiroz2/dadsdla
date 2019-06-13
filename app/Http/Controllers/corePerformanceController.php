@@ -34,7 +34,6 @@ class corePerformanceController extends Controller{
                 $salesRepGroup = $sr->getSalesRepGroup($con,null);
                 $currency = $pr->getCurrency($con,null);
 
-
                 return view("adSales.performance.0coreGet",compact('region','salesRepGroup','render','brand','currency'));
 	}
 
