@@ -54,7 +54,7 @@ class password extends Model{
 
 		$headers[] = 'MIME-Version: 1.0';
 		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-		$headers[] = 'From: TesteChangePassword <TesteChangePassword@teste.com>';
+		$headers[] = 'From: TesteChangePassword <no-reply@dads.com>';
 		
 		mail($email, "Request to change password", $message, implode("\r\n", $headers));
 

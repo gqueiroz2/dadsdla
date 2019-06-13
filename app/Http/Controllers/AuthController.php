@@ -27,7 +27,6 @@ class AuthController extends Controller
 		$usr = new User();
 		$resp = $usr->login($con);
 
-
 		if (!$resp['bool']) {
             return back()->with('error',$resp['msg']);
         }else{

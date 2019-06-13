@@ -26,28 +26,28 @@ class quarterRender extends Render
 						if (is_numeric($mtx[$b][$l][$v])) {
 							if ($v == 3 || $v == 6) {
 								if ($l == 3) {
-									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";	
+									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")." %</td>";	
 								}elseif ($l == 4) {
-									echo "<td class='quarter center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";	
+									echo "<td class='quarter center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";	
 								}else{
-									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
 								}
 							}elseif($v == 7){
 								if ($l == 3) {
-									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")." %</td>";
 								}elseif ($l == 4) {
-									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
 								}
 								else{
-									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
 								}
 								
 							}elseif ($l == 1 || $l == 2) {
-								echo "<td class='center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+								echo "<td class='center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
 							}elseif ($l == 3) {
-								echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")." %</td>";
+								echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")." %</td>";
 							}else{
-								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+								echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
 							}
 						}else{
 							if($l == 0){
