@@ -138,7 +138,7 @@ class renderMonthlyYoY extends Model{
 				}
 
 				//é feita (pos + 1) no ultimo indice, pois as marcas começam no indice 1, sendo que o indice 0 é o nome da coluna
-				echo "<td $class>".number_format($matrix[$brandPos][$j][$i+1], 2, ",", ".")."</td>";
+				echo "<td $class>".number_format($matrix[$brandPos][$j][$i+1], 0, ",", ".")."</td>";
 			}
 		}
 		//var_dump($quarter);
@@ -154,9 +154,9 @@ class renderMonthlyYoY extends Model{
 
 			//é feita (pos + 1) no ultimo indice, pois as marcas começam no indice 1, sendo que o indice 0 é o nome da coluna
 			if (!$ok) { //verifca se é DN
-				echo "<td $class>".number_format($quarter[$i][$brandPos+1], 2, ",", ".")."</td>";	
+				echo "<td $class>".number_format($quarter[$i][$brandPos+1], 0, ",", ".")."</td>";	
 			}else{
-				echo "<td $firstClass>".number_format($quarter[$i][$brandPos+1], 2, ",", ".")."</td>";	
+				echo "<td $firstClass>".number_format($quarter[$i][$brandPos+1], 0, ",", ".")."</td>";	
 			}
 			
 		}
@@ -255,9 +255,9 @@ class renderMonthlyYoY extends Model{
 
 			//feito calculo dos quarters 1 e 2 para formar o primeiro semestre
 			if ($ok) {
-				echo "<td $class colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]), 2, ",", ".")."</td>";
+				echo "<td $class colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]), 0, ",", ".")."</td>";
 			}else{
-				echo "<td class='center darkBlue' colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]), 2, ",", ".")."</td>";
+				echo "<td class='center darkBlue' colspan='1'>".number_format(($quarter[0][$j][$brandPos+1]+$quarter[1][$j][$brandPos+1]), 0, ",", ".")."</td>";
 			}
 			
 		}
@@ -274,9 +274,9 @@ class renderMonthlyYoY extends Model{
 
 			//feito calculo dos quarters 3 e 4 para formar o segundo semestre
 			if ($ok) {
-				echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]), 2, ",", ".")."</td>";
+				echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]), 0, ",", ".")."</td>";
 			}else{
-				echo "<td class='center darkBlue' colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]), 2, ",", ".")."</td>";
+				echo "<td class='center darkBlue' colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]), 0, ",", ".")."</td>";
 			}
 		}
 
@@ -296,7 +296,7 @@ class renderMonthlyYoY extends Model{
 				(
 					$quarter[0][$i][$brandPos+1]+$quarter[1][$i][$brandPos+1]+
 					$quarter[2][$i][$brandPos+1]+$quarter[3][$i][$brandPos+1]
-				), 2, ",", "."
+				), 0, ",", "."
 				).
 				"</td>";
 			}else{
@@ -304,7 +304,7 @@ class renderMonthlyYoY extends Model{
 				(
 					$quarter[0][$i][$brandPos+1]+$quarter[1][$i][$brandPos+1]+
 					$quarter[2][$i][$brandPos+1]+$quarter[3][$i][$brandPos+1]
-				), 2, ",", "."
+				), 0, ",", "."
 				).
 				"</td>";
 			}

@@ -87,7 +87,7 @@ class resultsResumeController extends Controller{
 		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
-
+		
 		$currentMonth = intval(date('m'));
 
 		$brands = $resume->divideBrands($brandID);

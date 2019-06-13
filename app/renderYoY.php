@@ -40,16 +40,16 @@ class renderYoY extends Model {
                     if (is_numeric($mtx[$b][$l][$v])) {
                         if ($v == 13) {
                             if ($l == 5) {
-                               echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>"; 
+                               echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>"; 
                             }else{
-                                echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+                                echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
                             }
                         }elseif ($l == 1 || $l == 2) {
-                            echo "<td class='center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+                            echo "<td class='center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
                         }elseif ($l == 3) {
-                            echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+                            echo "<td class='rcBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
                         }else{
-                            echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 2, ",", ".")."</td>";
+                            echo "<td class='medBlue center'>".number_format($mtx[$b][$l][$v], 0, ",", ".")."</td>";
                         }
                     }else{
                         if ($l == 0) {

@@ -80,7 +80,7 @@
 
 <div class="container-fluid">
 	<div class="row mt-2">
-		<div class="col table-responsive">
+		<div class="col table-responsive-sm">
 			{{ $render->assemble($mtx,$currencyS,$value,$year,$form, $salesRegion) }}
 		</div>
 	</div>	

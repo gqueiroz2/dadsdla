@@ -249,20 +249,21 @@ class base extends Model{
         return $brands;
     }
 
-    public function generateDiv($con,$pr,$region,$year,$currency){
+    public function generateDiv($con,$pr,$region,$year,$currencyID){
         
         $region = array($region);
 
-        $currency = array($currency);
-
+        $currency = array($currencyID);
+        
         $currency = $pr->getCurrency($con,$currency)[0];
+
 
         if ($currency["name"] == 'USD') {
             $div = $pr->getPRateByRegionAndYear($con,$region,$year);
         }else{
             $div = 1;
         }
-
+        
         return $div; 
 
     }

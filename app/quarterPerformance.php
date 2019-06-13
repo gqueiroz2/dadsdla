@@ -28,7 +28,7 @@ class quarterPerformance extends performance {
 				$sales["salesRepGroup"] .= $salesRepGroup[$srg]['name'];
 
 				if ($srg != sizeof($salesRepGroup)-1) {
-					$sales["salesRepGroup"] .= ",";
+					$sales["salesRepGroup"] .= ";";
 				}
 			}	
 		}
@@ -42,7 +42,7 @@ class quarterPerformance extends performance {
 				$sales["salesRep"] .= $salesRep[$sr]['salesRep'];
 
 				if ($sr != sizeof($salesRep)-1) {
-					$sales["salesRep"] .= ",";
+					$sales["salesRep"] .= ";";
 				}
 			}	
 		}
@@ -58,6 +58,8 @@ class quarterPerformance extends performance {
 		$sr = new salesRep();
         $salesRep = $sr->getSalesRepById($con, $salesRepID);
 
+        $value = strtoupper($value);
+
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			for ($m=0; $m < sizeof($months); $m++) { 
 				if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
@@ -69,9 +71,11 @@ class quarterPerformance extends performance {
 				$where[$b][$m] = $this->generateColumns($value);
 
 				$values[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], $where[$b][$m], $table[$b][$m]);
-				$planValues[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m], "value", "plan_by_sales");
+				$planValues[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], "value", "plan_by_sales", $currencyID, $value);
 
 			}
+
+			var_dump($value);
 		}
 
 		//var_dump($salesRepGroup);
@@ -106,9 +110,6 @@ class quarterPerformance extends performance {
 
 	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year){
 
-		//$mtx["salesRepGroup"] = $salesRepGroupN;
-		//$mtx["salesRep"] = $salesRep;
-
 		//separando as marcas por tiers
 		$brandsTiers = array(0, 1, 2);
 		$newPlanValues = array(0, 1, 2);
@@ -142,7 +143,7 @@ class quarterPerformance extends performance {
 				array_push($newValues[2], $values[$b]);
 			}
 		}
-
+		//var_dump($planValues);
 		//arrumando vetor, caso haja tiers em branco
 		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
 			$brandsTiers = $this->remakeArray($brandsTiers);
@@ -224,8 +225,8 @@ class quarterPerformance extends performance {
 
 							$v = 3;
 
-							$mtx[$t][$b][2][$v] += $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
-							$mtx[$t][$b][3][$v] += $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
+							$mtx[$t][$b][2][$v] = $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
+							$mtx[$t][$b][3][$v] = $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
 
 						}elseif ($m == 6 || $m == 7 || $m == 8) {
 							$v = 4;
@@ -258,8 +259,8 @@ class quarterPerformance extends performance {
 
 							$v = 6;
 
-							$mtx[$t][$b][2][$v] += $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
-							$mtx[$t][$b][3][$v] += $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
+							$mtx[$t][$b][2][$v] = $mtx[$t][$b][2][$v-1] + $mtx[$t][$b][2][$v-2];
+							$mtx[$t][$b][3][$v] = $mtx[$t][$b][3][$v-1] + $mtx[$t][$b][3][$v-2];
 						}
 					}
 				}
