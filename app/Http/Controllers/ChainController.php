@@ -56,7 +56,9 @@ class ChainController extends Controller{
 
     public function firstChain(){
 
-    	$validator = Validator::make(Request::all(),[
+        var_dump(Request::all());
+
+    	/*$validator = Validator::make(Request::all(),[
     		'file' => 'required',
             'tableFirstChain' => 'required',
         ]);
@@ -113,7 +115,7 @@ class ChainController extends Controller{
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
-        }
+        }*/
 		
 
     }

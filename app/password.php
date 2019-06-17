@@ -54,18 +54,16 @@ class password extends Model{
 
 		$headers[] = 'MIME-Version: 1.0';
 		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-		$headers[] = 'From: TesteChangePassword <no-reply@dads.com>';
+		$headers[] = 'From: TesteChangePassword <d_ads@discovery.com>';
 		
 		mail($email, "Request to change password", $message, implode("\r\n", $headers));
 
 		return true;
 	}
 
-    public function requestToEmail($con){
+    public function requestToEmail($con, $email){
     	
     	date_default_timezone_set('America/Sao_Paulo');
-
-    	$email = Request::get('email');
 
     	$usr = new User();
     	$user = $usr->getUserByEmail($con, $email);
@@ -104,7 +102,7 @@ class password extends Model{
         $email = Request::get('email');
 
         $bool = $this->checkPassword($password);
-        
+    
         if ($bool['bool']) {
             $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
 
@@ -113,16 +111,18 @@ class password extends Model{
             $time = mktime(0, 0, 0, 1, 1, 1970);
             $time = date("Y-m-d h:i:s", $time);
 
-            $columns = array('password', 'token', 'token_start_date', 'token_end_date');
-            $values = array($password, 'inicial', $time, $time);
+            $columns = array('password', 'token', 'token_start_date', 'token_end_date', 'status');
+            $values = array($password, 'inicial', $time, $time, 1);
+
 
             $set = $sql->setUpdate($columns, $values);
-            $where = "WHERE email='$email'";
+            $where = "WHERE email=\"$email\"";
 
             $resp = $sql->updateValues($con, 'user', $set, $where);
         }else{
             
         }
+        
 
         return $bool;
 
