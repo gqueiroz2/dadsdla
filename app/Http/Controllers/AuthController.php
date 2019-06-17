@@ -49,6 +49,7 @@ class AuthController extends Controller
     }
 
     public function forgotPasswordGet(){
+
     	return view('auth.passwords.email');
     }
 
@@ -57,8 +58,10 @@ class AuthController extends Controller
     	$db = new dataBase();
         $con = $db->openConnection('DLA');
 
+        $email = Request::get('email');
+
 		$pwd = new password();
-		$bool = $pwd->requestToEmail($con);
+		$bool = $pwd->requestToEmail($con, $email);
 
 		if ($bool) {
 			return back()->with('response',"E-mail envied with success");
@@ -76,10 +79,12 @@ class AuthController extends Controller
         $con = $db->openConnection('DLA');
 
         $email = Request::get('x_email');
-        $token = Request::get('x_token');        
+        $token = Request::get('x_token');      
 
         $usr = new User();
         $user = $usr->getUserByEmail($con, $email);
+
+        $status = $user["status"];
 
         $permission = false;
 
@@ -94,24 +99,24 @@ class AuthController extends Controller
             }
         }
 
-        return view('auth.passwords.password', compact('permission'));
+        return view('auth.passwords.password', compact('permission', 'email'));
     }
 
     public function resetPassword(){
 
     	$db = new dataBase();
         $con = $db->openConnection('DLA');
-
+        
+        $permission = Request::get('permission');
+        
         $pwd = new password();
         $resp = $pwd->choosePassword($con);
-        $permission = Request::get('permission');
-
+        
         if ($resp['bool']) {
             return redirect('/');
-            //return back()->with('response',$resp['msg']);
         }else{
             \Session::flash('error', $resp['msg']);
-            return view('auth.passwords.password', compact('permission'));//->with('error',$resp['msg']);
+            return view('auth.passwords.password', compact('permission', 'status'));//->with('error',$resp['msg']);
         }
     }
 }

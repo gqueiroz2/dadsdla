@@ -241,6 +241,11 @@ class User extends Management{
             $resp['msg'] = "Your E-Mail Address or Password is incorrect";
         }
 
+        if ($resp['status'] == 0) {
+            $resp['bool'] = false;
+            $resp['msg'] = "Your user isn't active";   
+        }
+
         return $resp;
     }
 

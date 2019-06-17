@@ -81,16 +81,15 @@ class sql extends Model{
 
         $sql = "UPDATE DLA.$tableName $set $where";
 
-
-        if($con->affected_rows == 0){
-            $rtr["bool"] = false;
-            $rtr["msg"] = "Error: Update failed, no data matching encountered";
-        }else if($con->query($sql) === true){
+        if ($con->query($sql) === TRUE) {
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
-        }else{
+
+        } else {
+            echo "Error updating record: " . $con->error;
             $rtr["bool"] = false;
-            $rtr["msg"] = "Error: ".$sql."<br>".$con->error;
+            $rtr["msg"] = "Error: Update failed, no data matching encountered";
+
         }
 
         return $rtr;

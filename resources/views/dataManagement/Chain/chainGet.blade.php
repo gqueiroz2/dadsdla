@@ -34,7 +34,7 @@
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<input type="file" name="file">                
+											<input type="file" name="file">        
 								    	</div>
 								    </div>
 								</div>
