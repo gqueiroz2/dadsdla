@@ -49,8 +49,8 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <!-- Image and text -->
             <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="{{ url('/')}}">
-                    <img src="/logo.jpg" width="225" height="60">
+                <a class="navbar-brand" href="{{ route('home')}}">
+                    <img src="/logo.png" width="225" height="60">
                     <!--<span class="navbar-text"> |ADS - DLA </span>-->
                 </a>
             </nav>
