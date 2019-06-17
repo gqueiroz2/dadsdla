@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\salesRep;
 class dataBase extends Model{
     
     public function __construct(){
@@ -14,10 +14,9 @@ class dataBase extends Model{
             $this->user = "rdsroot";
         }else{
             $this->ip = "127.0.0.1";    
-            $this->pass = "";
             $this->user = "root";
+            $this->pass = "";
         }
-
     }
 
     public function openConnection($base){
