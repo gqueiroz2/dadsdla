@@ -13,7 +13,7 @@
                         <div class="card-header">{{ __('Login') }}</div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('loginPost') }}">
+                            <form method="POST" action="{{ route('loginPost') }}" runat="server"  onsubmit="ShowLoading()">
                                 @csrf
 
                                 <div class="form-group row">

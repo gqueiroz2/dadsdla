@@ -15,7 +15,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('resetPassword') }}">
+                    <form method="POST" action="{{ route('resetPassword') }}" runat="server"  onsubmit="ShowLoading()">
                         @csrf
 
                         <input type="hidden" name="text" value="{{ $permission }}">
@@ -24,6 +24,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('New Password') }}</label>
 
                             <div class="col-md-6">
+                                <input type="hidden" name="email" value="{{ $email }}">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required autocomplete="new-password">
 
                                 @if ($errors->has('password'))
@@ -41,8 +42,6 @@
                                 </button>
                             </div>
                         </div>
-
-                        <br>
                         
                         <div class="row justify-content-center">
                             <div class="col">

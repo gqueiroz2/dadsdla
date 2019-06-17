@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col">
-			<form method="POST" action="{{ route('resultsMonthlyPost') }}">
+			<form method="POST" action="{{ route('resultsMonthlyPost') }}" runat="server"  onsubmit="ShowLoading()">
 				@csrf
 				<div class="row">
 					<div class="col">
