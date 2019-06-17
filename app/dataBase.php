@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\salesRep;
 class dataBase extends Model{
     
     public function __construct(){
@@ -22,7 +22,6 @@ class dataBase extends Model{
             $this->user = "root";
             $this->pass = "";
         }
-
     }
 
     public function openConnection($base){
