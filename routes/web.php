@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('test','RootController@getTest')
-						->name('getTest');
+Route::get('test','HomeController@test')
+						->name('test');
 Route::post('test','RootController@postTest')
 						->name('postTest');
 

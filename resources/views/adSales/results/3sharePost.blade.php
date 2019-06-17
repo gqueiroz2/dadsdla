@@ -41,6 +41,10 @@
 							{{$render->year()}}
 						</div>
 						<div class="col">
+							<label class='labelLeft'>Months:</label>
+							{{$render->months()}}
+						</div>
+						<div class="col">
 							<label class='labelLeft'>Brands:</label>
 							{{$render->brand($brand)}}
 						</div>
@@ -48,13 +52,17 @@
 							<label class='labelLeft'>Source:</label>
 							{{$render->source()}}
 						</div>
-						<div class="col">
-							<label class='labelLeft'>Sales Rep Group:</label>
-							{{$render->salesRepGroup($salesRepGroup)}}
-						</div>
-
 					</div>
 					<div class="row justify-content-center">
+					
+						<div class="col">
+                                                        <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
+                                                        @if($errors->has('salesRepGroup'))
+                                                                <label style="color: red;">* Required</label>
+                                                        @endif
+                                                        {{$render->salesRepGroup($salesRepGroup)}}
+                                                </div>
+						
 						<div class="col">
 							<label class='labelLeft'>Sales Rep:</label>
 							{{$render->salesRep($salesRep)}}
@@ -62,10 +70,6 @@
 						<div class="col">
 							<label class='labelLeft'>Currency:</label>
 							{{$render->currency($currency)}}
-						</div>
-						<div class="col">
-							<label class='labelLeft'>Months:</label>
-							{{$render->months()}}
 						</div>
 						<div class="col">
 							<label class='labelLeft'>Value:</label>
@@ -97,8 +101,11 @@
 								<div class="col col-3" style="zoom:125%; display: block; margin-top: 8%;">
 									<div id="chart_div"></div>
 								</div>
-								<div class="col col-9" style=" width: 100%; margin-top: 5%;">
+								<div class="col col-7" style=" width: 100%; margin-top: 5%;">
 									{{$render->mtx($mtx)}}
+								</div>
+								<div class="col col-2" style=" width: 100%; margin-top: 5%;">
+									{{$render->mtxShare($mtx)}}
 								</div>
 							</div>	
 						</div>

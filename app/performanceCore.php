@@ -79,7 +79,7 @@ class performanceCore extends performance
 		//olha quais nucleos serão selecionados
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
-
+        var_dump($value);
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);

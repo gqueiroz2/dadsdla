@@ -34,6 +34,13 @@
 							{{$render->year()}}
 						</div>
 						<div class="col">
+							<label class='labelLeft'><span class="bold">Months:</span></label>
+							@if($errors->has('month'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->months()}}
+						</div>
+						<div class="col">
 							<label class='labelLeft'><span class="bold">Brands:</span></label>
 							@if($errors->has('brand'))
 								<label style="color: red;">* Required</label>
@@ -47,16 +54,17 @@
 							@endif
 							{{$render->source()}}
 						</div>
-						<div class="col">
-							<label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
-							@if($errors->has('salesRepGroup'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->salesRepGroup($salesRepGroup)}}
-						</div>
-
 					</div>
 					<div class="row justify-content-center">
+					
+						<div class="col">
+                                                        <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
+                                                        @if($errors->has('salesRepGroup'))
+                                                                <label style="color: red;">* Required</label>
+                                                        @endif
+                                                        {{$render->salesRepGroup($salesRepGroup)}}
+                                                </div>
+
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 							@if($errors->has('salesRep'))
@@ -71,13 +79,7 @@
 							@endif
 							{{$render->currency($currency)}}
 						</div>
-						<div class="col">
-							<label class='labelLeft'><span class="bold">Months:</span></label>
-							@if($errors->has('month'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->months()}}
-						</div>
+						
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Value:</span></label>
 							@if($errors->has('value'))

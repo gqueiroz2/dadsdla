@@ -7,6 +7,7 @@ use App\Render;
 
 class renderMQ extends Render{
     public function assemble($mtx,$currency,$value,$year,$form,$region){
+
     	echo "<table style='width: 100%; zoom: 90%;font-size: 16px;'>";
     		
 			echo "<tr>";
@@ -22,21 +23,21 @@ class renderMQ extends Render{
 						if(is_numeric($mtx[$m][$n][$o])){
 							if($n == 3){
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")." %</td>";
 								}else{
-									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
+									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")." %</td>";
 								}
 							}elseif($n == 4){
 								if($o == 13){
-									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
 								}else{
-									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
 								}
 							}else{
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
 								}else{
-									echo "<td class='center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
+									echo "<td class='center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
 								}
 							}
 						}else{
@@ -51,7 +52,7 @@ class renderMQ extends Render{
 								if($o == 13){
 									echo "<td class='darkBlue center' style='width:10%;'>".$mtx[$m][$n][$o]."</td>";
 								}else{
-									echo "<td class='lightGrey center' style='width:6.5%;'>".$mtx[$m][$n][$o]."</td>";
+									echo "<td class='lightGrey center' style='width:6.66%;'>".$mtx[$m][$n][$o]."</td>";
 								}
 							}elseif($n == 1 && $o == 0){
 								if ($m == (sizeof($mtx)-1)) {
