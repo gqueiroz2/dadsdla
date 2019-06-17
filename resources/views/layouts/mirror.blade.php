@@ -79,9 +79,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#"> Core </a>
-                                <a class="dropdown-item" href="#"> Executive </a>                                
-                                <a class="dropdown-item" href="#"> Quarter </a>
+                                <a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
+                                <a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Executive </a>
+                                <a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Quarter </a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -138,6 +138,23 @@
         @else
             @yield('contentLogout')
         @endif
+
+        <script type="text/javascript">
+            function ShowLoading(e) {
+                var div = document.createElement('div');
+                var img = document.createElement('img');
+                img.src = '/loading.gif';
+                div.innerHTML = "Loading...<br/>";
+                div.style.cssText = 'position: absolute; left: 0px; top:0px; margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 9999997;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 25%';
+                div.appendChild(img);
+                document.body.appendChild(div);
+                return true;
+                // These 2 lines cancel form submission, so only use if needed.
+                //window.event.cancelBubble = true;
+                //e.stopPropagation();
+            }
+        </script>
+
     </body>
 
 </html>

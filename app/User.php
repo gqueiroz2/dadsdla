@@ -234,6 +234,7 @@ class User extends Management{
             $resp['salesRepGroup'] = $usr['salesRepGroup'];
             $resp['salesRepGroupID'] = $usr['salesRepGroupID'];
             $resp['subLevelBool'] = $usr['subLevelBool'];
+            $resp['status'] = $usr['status'];
             $resp['msg'] = "Login Successfull";
         }else{
             $resp['bool'] = false;

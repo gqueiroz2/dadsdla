@@ -25,7 +25,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('resultsSharePost') }}">
+				<form method="POST" action="{{ route('resultsSharePost') }}" runat="server"  onsubmit="ShowLoading()">
 					@csrf
 					<div class="row justify-content-center">
 						<div class="col">

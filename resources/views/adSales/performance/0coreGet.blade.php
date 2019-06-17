@@ -2,8 +2,8 @@
 @section('title', 'Core')
 @section('head')	
 <script src="/js/performance.js"></script>
-    <?php include(resource_path('views/auth.php')); 
-    ?>
+<?php include(resource_path('views/auth.php'));?>
+
 @endsection
 @section('content')
 	<div class="container-fluid">		
@@ -11,7 +11,7 @@
 			<div class="col">
 				
 
-				<form method="POST" action="{{ route('corePerformancePost') }}">
+				<form method="POST" action="{{ route('corePerformancePost') }}" runat="server"  onsubmit="ShowLoading()">
 					@csrf
 					<div class="row justify-content-center">
 						<div class="col">	
@@ -85,7 +85,7 @@
 						</div>
 						<div class="col">
 							<label class='labelLeft'> &nbsp; </label>
-							<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
+							<input style="width: 100%;" id="submit" type="submit" value="Generate" class="btn btn-primary">		
 						</div>
 					</div>
 				</form>

@@ -55,16 +55,6 @@ class ChainController extends Controller{
     }
 
     public function firstChain(){
-
-    	$validator = Validator::make(Request::all(),[
-    		'file' => 'required',
-            'tableFirstChain' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-        	return back()->withErrors($validator)->withInput();
-        }
-
     	$db = new dataBase();
 		$chain = new chain();		
 		$i = new import();

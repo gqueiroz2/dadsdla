@@ -15,7 +15,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('resetPassword') }}">
+                    <form method="POST" action="{{ route('resetPassword') }}" runat="server"  onsubmit="ShowLoading()">
                         @csrf
 
                         <input type="hidden" name="text" value="{{ $permission }}">
