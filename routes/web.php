@@ -17,6 +17,7 @@ Route::post('test','RootController@postTest')
 						->name('postTest');
 
 Route::get('home','adSalesController@home');
+Route::get('/','adSalesController@home');
 
 Route::group(['prefix' => 'adsales'],function(){
 	Route::get('/','adSalesController@home')
