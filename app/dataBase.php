@@ -19,8 +19,8 @@ class dataBase extends Model{
 
 	}else{
             $this->ip = "127.0.0.1";    
-            $this->pass = "";
             $this->user = "root";
+            $this->pass = "";
         }
 
     }
