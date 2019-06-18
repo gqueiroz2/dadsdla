@@ -12,6 +12,7 @@
 */
 
 Route::get('home','adSalesController@home')->name('home');
+
 Route::get('/','adSalesController@home');
 
 //echo route('home',['/']);
