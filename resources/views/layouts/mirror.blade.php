@@ -128,7 +128,11 @@
                     </ul>    
                 </div>
             @else
-
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Login </a>                            
+                    </ul>
+                </div>
             @endif
         </nav>
         <div id="app"></div>
