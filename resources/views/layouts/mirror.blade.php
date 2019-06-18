@@ -144,8 +144,8 @@
                 var div = document.createElement('div');
                 var img = document.createElement('img');
                 img.src = '/loading.gif';
-                div.innerHTML = "Loading...<br/>";
-                div.style.cssText = 'position: absolute; left: 0px; top:0px; margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 9999997;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 25%';
+                div.innerHTML = "Processing Request...<br/>";
+                div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
                 div.appendChild(img);
                 document.body.appendChild(div);
                 return true;
