@@ -64,19 +64,19 @@ class password extends Model{
 		return true;
 	}*/
 
-    public function sendEmail($email, $token){
+    /*public function sendEmail($email, $token){
         
         $mail = new PHPMailer;
 
         $mail->isSMTP();
 
-        $mail->setFrom('d_ads@discovery.com', 'd_ads');
+        $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
         $mail->addAddress($email);
 
-        $mail->Username = 'vballabe-admin';
-        $mail->Password = '?c_KK*^~%rzTjU}+5';
+        $mail->Username = 'lucior.jr@gmail.com';
+        $mail->Password = '@Scudetto2809';
 
-        $mail->Host = 'email-smtp.us-west-2.amazonaws.com';
+        $mail->Host = 'smtp.gmail.com';
 
         $mail->Subject = 'Request to change password';
 
@@ -85,13 +85,49 @@ class password extends Model{
 
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->POrt = 587;
+        $mail->Port = 587;
 
         $mail->isHTML(true);
 
         if(!$mail->send()) {
+             echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
             return false;
         } else {
+            echo "FOI";
+            return true;
+        }
+    }*/
+
+    public function sendEmail($email, $token){
+        
+        $mail = new PHPMailer;
+
+        $mail->isSMTP();
+
+        $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
+        $mail->addAddress($email);
+
+        $mail->Username = 'lucior_cruz@discoverybrasil.com';
+        $mail->Password = '#082016Disc';
+
+        $mail->Host = 'smtp.office365.com';
+
+        $mail->Subject = 'Request to change password';
+
+        $url = route('requestToChangePassword');
+        $mail->Body = $this->createEmail($url, $email, $token);
+
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->isHTML(true);
+
+        if(!$mail->send()) {
+             echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
+            return false;
+        } else {
+            echo "Email sent";
             return true;
         }
     }
