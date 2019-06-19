@@ -9,11 +9,10 @@ use App\salesRep;
 use App\pRate;
 use App\dataBase;
 
-class pacingReportController extends Controller{
-    
-	public function get(){
-		
-		$db = new dataBase();
+class AEController extends Controller
+{
+    public function get(){
+    	$db = new dataBase();
         $con = $db->openConnection("DLA");
         $r = new region();
         $sr = new salesRep();
@@ -22,12 +21,12 @@ class pacingReportController extends Controller{
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
-		
-		return view('pAndR.pacingReport.get',compact('render','region','currency'));
-	}
 
-	public function post(){
+		return view('pAndR.AEView.get',compact('render','region','currency'));
+    }
 
-	}
+    public function post(){
+    	
+    }
 
 }

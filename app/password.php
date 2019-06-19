@@ -148,11 +148,8 @@ class password extends Model{
         $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
         $mail->addAddress($email);
 
-<<<<<<< HEAD
         $mail->Username = 'lucior_cruz@discoverybrasil.com';
-=======
-        $mail->Username = 'lucio_cruz@discoverybrasil.com';
->>>>>>> 2979d99ce92e532323e3276b2e5735d23a061b5f
+
         $mail->Password = '#082016Disc';
 
         $mail->Host = 'smtp.office365.com';
@@ -171,17 +168,10 @@ class password extends Model{
         var_dump($mail->send());
 
         if(!$mail->send()) {
-<<<<<<< HEAD
-             echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
-            return false;
-        } else {
-            echo "Email sent";
-=======
             echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
             return false;
         } else {
             echo "FOI";
->>>>>>> 2979d99ce92e532323e3276b2e5735d23a061b5f
             return true;
         }
 

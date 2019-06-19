@@ -11,6 +11,8 @@ use App\salesRep;
 use App\pRate;
 use App\sql;
 use App\brand;
+use App\agency;
+use app\client;
 
 class ajaxController extends Controller{
 
@@ -259,5 +261,100 @@ class ajaxController extends Controller{
             echo "<option value='gross'> Gross </option>";
             echo "<option value='net'> Net </option>";
         }    
+    }
+
+    public function typeByRegion(){
+        echo "<option value=''> Select </option>";
+        echo "<option value='agency'> Agency </option>";
+        echo "<option value='agencyGroup'> Agency Group </option>";
+        echo "<option value='client'> Client </option>";
+        echo "<option value='clientGroup'> Client Group </option>";
+    }
+
+    public function firstPosYear(){
+        
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1, $cYear-2);
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            echo "<option value='".$years[$y]."'>".$years[$y]. "</option>";
+        }
+    }
+
+    public function secondPosYear(){
+        
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1, $cYear-2);
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if ($y == 1) {
+                echo "<option value='".$years[$y]."' selected='true'>".$years[$y]. "</option>";    
+            }else{
+                echo "<option value='".$years[$y]."'>".$years[$y]. "</option>";
+            }
+        }
+
+        echo "<option value='0'> void </option>";
+
+    }
+
+    public function thirdPosYear(){
+        
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1, $cYear-2);
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if ($y == 2) {
+                echo "<option value='".$years[$y]."' selected='true'>".$years[$y]. "</option>";    
+            }else{
+                echo "<option value='".$years[$y]."'>".$years[$y]. "</option>";
+            }
+        }
+
+        echo "<option value='0'> void </option>";
+
+    }
+
+
+    public function typeNameByType(){
+        
+        $type = Request::get("type");
+
+        if ($type == "agencyGroup") {
+            $resp = substr($type, 0, 6);
+            $resp .= " ".substr($type, 6, 5);
+        }elseif ($type == "clientGroup") {
+            $resp = substr($type, 0, 6);
+            $resp .= " ".substr($type, 6, 5);
+        }else{
+            $resp = $type;
+        }
+
+        $resp = ucfirst($resp);
+
+        echo "$resp";
+    }
+
+    public function type2ByType(){
+        
+        $name = Request::get("type");
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        if (substr($name, 0, 6) == "agency") {
+            $obj = new agency();
+        }else{
+            $obj = new client();
+        }
+
+        if (strlen($name) > 6) {
+            $fun = "get".ucfirst(substr($name, 0, 6))."Group";
+        }else{
+            $fun = "get".ucfirst(substr($name, 0, 6));
+        }
+        $classname = substr($name, 0, 6);
+        $resp = call_user_func($classname,'$fun');
+        var_dump($resp);
     }
 }
