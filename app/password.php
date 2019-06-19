@@ -3,6 +3,7 @@
 namespace App;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\User;
@@ -99,7 +100,47 @@ class password extends Model{
     }*/
 
     public function sendEmail($email, $token){
-        
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->SMTPDebug = 2;                                       // Enable verbose debug output
+            $mail->isSMTP();                                            // Set mailer to use SMTP
+            $mail->Host       = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+            $mail->Username   = 'lucior.jr@gmail.com';                     // SMTP username
+            $mail->Password   = '@Scudetto2809';                               // SMTP password
+            $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+            $mail->Port       = 587;                                    // TCP port to connect to
+
+            //Recipients
+            $mail->setFrom('lucior.jr@gmail.com', 'D|ADS DLA Portal');
+            $mail->addAddress($email);
+            //$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
+            //$mail->addAddress('ellen@example.com');               // Name is optional
+            //$mail->addReplyTo('info@example.com', 'Information');
+            //$mail->addCC('cc@example.com');
+            //$mail->addBCC('bcc@example.com');
+
+            // Attachments
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = 'No-Reply Request to Change Password';
+            $url = route('requestToChangePassword');
+            $mail->Body    = $this->createEmail($url, $email, $token);
+            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+
+
+        /*
         $mail = new PHPMailer;
 
         $mail->isSMTP();
@@ -107,7 +148,11 @@ class password extends Model{
         $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
         $mail->addAddress($email);
 
+<<<<<<< HEAD
         $mail->Username = 'lucior_cruz@discoverybrasil.com';
+=======
+        $mail->Username = 'lucio_cruz@discoverybrasil.com';
+>>>>>>> 2979d99ce92e532323e3276b2e5735d23a061b5f
         $mail->Password = '#082016Disc';
 
         $mail->Host = 'smtp.office365.com';
@@ -123,13 +168,24 @@ class password extends Model{
 
         $mail->isHTML(true);
 
+        var_dump($mail->send());
+
         if(!$mail->send()) {
+<<<<<<< HEAD
              echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
             return false;
         } else {
             echo "Email sent";
+=======
+            echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
+            return false;
+        } else {
+            echo "FOI";
+>>>>>>> 2979d99ce92e532323e3276b2e5735d23a061b5f
             return true;
         }
+
+        */
     }
 
     public function requestToEmail($con, $email){
