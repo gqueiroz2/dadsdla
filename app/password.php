@@ -2,10 +2,13 @@
 
 namespace App;
 
+use PHPMailer\PHPMailer\PHPMailer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\User;
 use App\sql;
+
+require __DIR__.'/../vendor/autoload.php';
 
 class password extends Model{
     public function checkPassword($password){
@@ -46,7 +49,7 @@ class password extends Model{
 
 	}
 
-    public function sendEmail($email, $token){
+    /*public function sendEmail($email, $token){
 		
 		$url = route('requestToChangePassword');
 		
@@ -59,7 +62,39 @@ class password extends Model{
 		mail($email, "Request to change password", $message, implode("\r\n", $headers));
 
 		return true;
-	}
+	}*/
+
+    public function sendEmail($email, $token){
+        
+        $mail = new PHPMailer;
+
+        $mail->isSMTP();
+
+        $mail->setFrom('d_ads@discovery.com', 'd_ads');
+        $mail->addAddress($email);
+
+        $mail->Username = 'vballabe-admin';
+        $mail->Password = '?c_KK*^~%rzTjU}+5';
+
+        $mail->Host = 'email-smtp.us-west-2.amazonaws.com';
+
+        $mail->Subject = 'Request to change password';
+
+        $url = route('requestToChangePassword');
+        $mail->Body = $this->createEmail($url, $email, $token);
+
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->POrt = 587;
+
+        $mail->isHTML(true);
+
+        if(!$mail->send()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public function requestToEmail($con, $email){
     	

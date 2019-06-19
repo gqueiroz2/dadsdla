@@ -64,9 +64,9 @@ class AuthController extends Controller
 		$bool = $pwd->requestToEmail($con, $email);
 
 		if ($bool) {
-			return back()->with('response',"E-mail envied with success");
+			return back()->with('response',"E-mail send with success");
 		}else{
-			return back()->with('error', "E-mail doesn't envied");
+			return back()->with('error', "E-mail doesn't send");
 		}
 
     }
