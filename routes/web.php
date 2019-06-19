@@ -16,6 +16,8 @@ Route::get('home','adSalesController@home')->name('home');
 Route::get('home','adSalesController@home')
 						->name('home');
 
+//echo route('home',['/']);
+
 Route::group(['prefix' => 'adsales'],function(){
 	Route::get('/','adSalesController@home')
 						->name('adSalesHome');
