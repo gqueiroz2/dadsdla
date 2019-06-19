@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'P&R Pacing Report')
+@section('title', 'AE Report')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -8,7 +8,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Pacing Report
+				Account Executive Report
 			</div>
 		</div>
 	</div>
@@ -25,6 +25,13 @@
 				@else
 					{{$render->regionFiltered($region, $regionID )}}
 				@endif
+			</div>
+			<div class="col">
+				<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
+				@if($errors->has('salesRep'))
+					<label style="color: red;">* Required</label>
+				@endif
+				{{$render->salesRep()}}
 			</div>
 			<div class="col">
 				<label class='labelLeft'><span class="bold">Currency:</span></label>
