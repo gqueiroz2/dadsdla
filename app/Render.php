@@ -159,7 +159,7 @@ class Render extends Model{
     }
 
     public function nPos(){
-        echo "<select id='type' name='type' style='width:100%;' class='form-control'>";
+        echo "<select id='nPos' name='nPos' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select type </option>";
         echo "</select>";
     }
