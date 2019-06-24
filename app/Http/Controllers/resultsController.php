@@ -21,7 +21,6 @@ class resultsController extends Controller{
 
     public function monthlyGet(){
         
-        $base = new base();
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 

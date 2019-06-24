@@ -65,6 +65,40 @@ class password extends Model{
 		return true;
 	}*/
 
+    /*public function sendEmail($email, $token){
+        
+        $mail = new PHPMailer;
+
+        $mail->isSMTP();
+
+        $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
+        $mail->addAddress($email);
+
+        $mail->Username = 'lucior.jr@gmail.com';
+        $mail->Password = '@Scudetto2809';
+
+        $mail->Host = 'smtp.gmail.com';
+
+        $mail->Subject = 'Request to change password';
+
+        $url = route('requestToChangePassword');
+        $mail->Body = $this->createEmail($url, $email, $token);
+
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->isHTML(true);
+
+        if(!$mail->send()) {
+             echo "Email not sent. " , $mail->ErrorInfo , PHP_EOL;
+            return false;
+        } else {
+            echo "FOI";
+            return true;
+        }
+    }*/
+
     public function sendEmail($email, $token){
         $mail = new PHPMailer(true);
 
@@ -116,7 +150,8 @@ class password extends Model{
         $mail->setFrom('d_ads@discovery.com', 'D|ADS DLA Portal');
         $mail->addAddress($email);
 
-        $mail->Username = 'lucio_cruz@discoverybrasil.com';
+        $mail->Username = 'lucior_cruz@discoverybrasil.com';
+
         $mail->Password = '#082016Disc';
 
         $mail->Host = 'smtp.office365.com';

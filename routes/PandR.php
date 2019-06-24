@@ -19,6 +19,23 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('/','pacingReportController@post')
 									->name('pacingReportPost');
 	});
+
+	Route::group(['prefix'=>'VPReport'],function(){
+		
+		Route::get('/','VPController@get')
+									->name('VPGet');
+		Route::post('/','VPController@post')
+									->name('VPPost');
+	});
+
+	Route::group(['prefix'=>'AccountExecutiveReport'],function(){
+		
+		Route::get('/','AEController@get')
+									->name('AEGet');
+		Route::post('/','AEController@post')
+									->name('AEPost');
+	});
+
 });
 
 

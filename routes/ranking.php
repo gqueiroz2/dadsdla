@@ -13,9 +13,18 @@
 
 Route::group(['middleware' => 'auth'],function(){
 
-	
+
 	Route::get('ranking','rankingController@get')
 					->name('rankingGet');				
-	//Route::post('ranking','')
-	//				->name('rankingPost');	
+	Route::post('ranking','rankingController@post')
+					->name('rankingPost');
+});
+
+Route::group(['prefix' => 'ajaxRanking'], function(){
+	Route::post('typeByRegion', 'ajaxController@typeByRegion');
+	Route::post('firstPosYear', 'ajaxController@firstPosYear');
+	Route::post('secondPosYear', 'ajaxController@secondPosYear');
+	Route::post('thirdPosYear', 'ajaxController@thirdPosYear');
+	Route::post('typeNameByType', 'ajaxController@typeNameByType');
+	Route::post('type2ByType', 'ajaxController@type2ByType');
 });
