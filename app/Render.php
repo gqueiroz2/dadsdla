@@ -94,6 +94,12 @@ class Render extends Model{
 
     }
 
+    public function salesRep2(){
+        echo "<select id='salesRep' name='salesRep' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
     public function salesRep(){
     	echo "<select id='salesRep'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
     		//echo "<option value=''> Select Region </option>";

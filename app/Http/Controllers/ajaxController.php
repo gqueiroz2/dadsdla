@@ -67,6 +67,29 @@ class ajaxController extends Controller{
         
     }
 
+    public function getSalesRepByRegion(){
+        $regionID = Request::get('regionID');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+
+            echo "<option selected='true'>Select Sales Rep.</option>";
+
+            for ($s=0; $s <sizeof($resp) ; $s++) { 
+                echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
     public function yearByRegion(){
         
         $regionID = Request::get('regionID');
