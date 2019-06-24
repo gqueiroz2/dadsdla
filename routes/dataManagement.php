@@ -14,8 +14,14 @@ Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
-		Route::get('relationships','dataManagementController@relationships')
-							->name('relationships');
+		Route::get('relationshipClient','relationshipController@relationshipClientGet')
+							->name('relationshipClientGet');
+		Route::post('relationshipClient','relationshipController@relationshipClientPost')
+							->name('relationshipClientPost');
+		Route::get('relationshipAgency','relationshipController@relationshipAgencyGet')
+							->name('relationshipAgencyGet');
+		Route::post('relationshipAgency','relationshipController@relationshipAgencyPost')
+							->name('relationshipAgencyPost');
 
 		Route::get('agencySomething','dataManagementController@agencyGet')
 							->name('dataManagementAgencyGet');
