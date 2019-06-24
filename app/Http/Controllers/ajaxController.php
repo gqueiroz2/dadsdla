@@ -12,7 +12,7 @@ use App\pRate;
 use App\sql;
 use App\brand;
 use App\agency;
-use app\client;
+use App\client;
 
 class ajaxController extends Controller{
 
@@ -335,26 +335,67 @@ class ajaxController extends Controller{
         echo "$resp";
     }
 
+    function typeHandler($con, $name, $group, $region){
+
+        if ($name == "agency") {
+            $a = new agency();
+
+            if ($group == 1) {
+                $resp = $a->getAgencyGroupBYRegion($con, array($region));
+                $var = "agencyGroup";
+            }else{
+                $resp = $a->getAgencyByRegion($con, array($region));
+                $var = "agency";
+            }
+
+        }else{
+            $c = new client();
+
+            if ($group == 1) {
+                $resp = $c->getClientGroup($con);
+                $var = "clientGroup";
+            }else{
+                $resp = $c->getClient($con);
+                $var = "client";
+            }
+        }
+        
+        for ($n=0; $n < sizeof($resp); $n++) { 
+            $rtr[$n] = $resp[$n][$var];
+        }
+
+        $rtrF = array_unique($rtr);
+        
+        return $rtrF;
+        
+    }
+
     public function type2ByType(){
         
         $name = Request::get("type");
-
+        $region = Request::get("region");
+        
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
-        if (substr($name, 0, 6) == "agency") {
-            $obj = new agency();
-        }else{
-            $obj = new client();
-        }
+        $fun = substr($name, 0, 6);
 
         if (strlen($name) > 6) {
-            $fun = "get".ucfirst(substr($name, 0, 6))."Group";
+            $resp = $this->typeHandler($con, $fun, 1, $region);
         }else{
-            $fun = "get".ucfirst(substr($name, 0, 6));
+            $resp = $this->typeHandler($con, $fun, 0, $region);
         }
-        $classname = substr($name, 0, 6);
-        $resp = call_user_func($classname,'$fun');
-        var_dump($resp);
+        
+        foreach ($resp as $val) {
+            echo "<option selected='true' value='$val'>$val</option>";
+        }
+    }
+
+    public function topsByType2(){
+        
+        echo "<option selected='true' value='All'>All</option>";
+        echo "<option value='10'>10</option>";
+        echo "<option value='15'>15</option>";
+        echo "<option value='25'>25</option>";
     }
 }

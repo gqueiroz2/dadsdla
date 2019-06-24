@@ -156,6 +156,38 @@ class agency extends Management{
 
     }
 
+    public function getAllAgencies($con){
+        
+        $sql = new sql();
+
+        $table = "agency a";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    au.name AS 'agencyUnit',
+                    au.ID AS 'agencyUnitID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        $join = "LEFT JOIN agency_unit au ON a.ID = au.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+
+        $res = $sql->select($con,$columns,$table,$join,$where,"2,4,6");//"7,2,4,6"
+
+        $from = array('id','agency','agencyGroup','agencyGroupID','agencyUnit','agencyUnitID','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+    }
+
     public function getAgencyGroupByRegion($con,$agencyRegion=false){
 
         $sql = new sql();
@@ -164,10 +196,13 @@ class agency extends Management{
 
         $columns = "ag.name AS 'agencyGroup',
                     ag.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
                     r.name AS 'region'
                    ";
 
         $where = "";
+
 
         if($agencyRegion){
             $agencyRegions = implode(",", $agencyRegion);
@@ -312,8 +347,3 @@ class agency extends Management{
 
 
 }
-/*<div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-right" style="margin-left: 92.5%;">
-                        <a class="nav-link" href="{{ route('loginGet') }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Login </a>                            
-                    </ul>
-                </div>*/
