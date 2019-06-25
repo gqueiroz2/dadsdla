@@ -31,7 +31,8 @@ class rankingController extends Controller {
     }
 
     public function post(){
-    	# code...
+    	
+    	var_dump(Request::all());
     }
 }
 

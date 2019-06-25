@@ -91,7 +91,7 @@ $(document).ready(function(){
             method:"POST",
             data:{type, region},
             success: function(output){
-              $('#type2').html(output).selectpicker('refresh');
+              $('#vlau').html(output).selectpicker('refresh');
 
               var type2 = $('#type2').val();
 
