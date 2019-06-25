@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\region;
 use App\PAndRRender;
 use App\salesRep;
@@ -35,6 +35,8 @@ class AEController extends Controller
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
+
+        
 
         return view('pAndR.AEView.post',compact('render','region','currency'));
     }
