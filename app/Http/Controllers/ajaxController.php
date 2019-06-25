@@ -378,7 +378,14 @@ class ajaxController extends Controller{
             
         }
 
-        return $resp;
+        for ($n=0; $n < sizeof($resp); $n++) { 
+            
+            $names[$n] = $resp[$n][$var];
+        }
+        
+        $rtr = array_unique($names);
+
+        return $rtr;
         
     }
 
@@ -398,10 +405,10 @@ class ajaxController extends Controller{
             $resp = $this->typeHandler($con, $fun, 0, $region);
         }
         
-        var_dump($resp);
-        /*foreach ($resp as $val) {
-            echo "<option selected='true' value=''>".$val[][]."</option>";
-        }*/
+        foreach ($resp as $val) {
+            $auxVal = base64_encode($val);
+            echo "<option selected='true' value='$auxVal'>".$val."</option>";
+        }
     }
 
     public function topsByType2(){
@@ -410,11 +417,11 @@ class ajaxController extends Controller{
 
         echo "<option selected='true' value='All'>All</option>";
 
-        /*if (sizeof($num) > 10) {
+        if (sizeof($num) > 10) {
             
             echo "<option value='10'>10</option>";
             echo "<option value='15'>15</option>";
             echo "<option value='25'>25</option>";   
-        }*/
+        }
     }
 }
