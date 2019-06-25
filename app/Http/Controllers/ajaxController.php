@@ -268,7 +268,6 @@ class ajaxController extends Controller{
         echo "<option value='agency'> Agency </option>";
         echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='client'> Client </option>";
-        echo "<option value='clientGroup'> Client Group </option>";
     }
 
     public function firstPosYear(){
@@ -341,7 +340,7 @@ class ajaxController extends Controller{
             $a = new agency();
 
             if ($group == 1) {
-                $resp = $a->getAgencyGroupBYRegion($con, array($region));
+                $resp = $a->getAgencyGroupByRegion($con, array($region));
                 $var = "agencyGroup";
             }else{
                 $resp = $a->getAgencyByRegion($con, array($region));
@@ -351,22 +350,12 @@ class ajaxController extends Controller{
         }else{
             $c = new client();
 
-            if ($group == 1) {
-                $resp = $c->getClientGroup($con);
-                $var = "clientGroup";
-            }else{
-                $resp = $c->getClient($con);
-                $var = "client";
-            }
-        }
-        
-        for ($n=0; $n < sizeof($resp); $n++) { 
-            $rtr[$n] = $resp[$n][$var];
+            $resp = $c->getClientByRegion($con, array($region));
+            $var = "client";
+            
         }
 
-        $rtrF = array_unique($rtr);
-        
-        return $rtrF;
+        return $resp;
         
     }
 
@@ -386,16 +375,23 @@ class ajaxController extends Controller{
             $resp = $this->typeHandler($con, $fun, 0, $region);
         }
         
-        foreach ($resp as $val) {
-            echo "<option selected='true' value='$val'>$val</option>";
-        }
+        var_dump($resp);
+        /*foreach ($resp as $val) {
+            echo "<option selected='true' value=''>".$val[][]."</option>";
+        }*/
     }
 
     public function topsByType2(){
         
+        $num = Request::get("type2");
+
         echo "<option selected='true' value='All'>All</option>";
-        echo "<option value='10'>10</option>";
-        echo "<option value='15'>15</option>";
-        echo "<option value='25'>25</option>";
+
+        /*if (sizeof($num) > 10) {
+            
+            echo "<option value='10'>10</option>";
+            echo "<option value='15'>15</option>";
+            echo "<option value='25'>25</option>";   
+        }*/
     }
 }

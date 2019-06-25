@@ -74,7 +74,7 @@ class Render extends Model{
     }
 
     public function positionYear($pos){
-        echo "<select id='".$pos."Pos' name='".$pos."Pos[]' class='form-control' style='width: 100%;'>";
+        echo "<select id='".$pos."Pos' name='".$pos."Pos' class='form-control' style='width: 100%;'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }    
