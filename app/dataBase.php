@@ -13,10 +13,9 @@ class dataBase extends Model{
             $this->pass = "DT3WDDhmcx63D7HF";
             $this->user = "rdsroot";
         }elseif($_SERVER['SERVER_ADDR'] == '10.34.69.207'){
-	    $this->ip = "dads-prod-mysql.csrl1r5zexxy.us-east-1.rds.amazonaws.com";
+	        $this->ip = "dads-prod-mysql.csrl1r5zexxy.us-east-1.rds.amazonaws.com";
             $this->pass = "DgpbFnJKeSEzTe8e";
             $this->user = "rdsroot";
-
 	}else{
             $this->ip = "127.0.0.1";    
             $this->user = "root";

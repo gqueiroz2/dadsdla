@@ -49,8 +49,15 @@
 			</div>
 		</div>
 	</form>
-	<div id="vlau">
-		
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" style="width: 100%; border: 1px">
+				{{$render->relatorio()}}
+			</div>
+		</div>
 	</div>
+
+	<div id="vlau"></div>
 
 @endsection
