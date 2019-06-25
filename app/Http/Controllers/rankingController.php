@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use App\base;
 use App\dataBase;
 use App\region;
 use App\pRate;
 use App\brand;
 use App\renderRanking;
+use App\rankings;
+use Validator;
 
 class rankingController extends Controller {
     
@@ -31,7 +34,71 @@ class rankingController extends Controller {
     }
 
     public function post(){
-    	# code...
+    	
+    	$base = new base();
+
+    	$db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'type' => 'required',
+            'type2' => 'required',
+            'nPos' => 'required',
+            'month' => 'required',
+            'brand' => 'required',
+            'firstPos' => 'required',
+            'secondPos' => 'required',
+            'thirdPos' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $region = Request::get("region");
+    	$r = new region();
+    	$salesRegion = $r->getRegion($con);
+
+    	$type = Request::get("type");
+    	$type2 = Request::get("type2");
+    	
+    	for ($t=0; $t < sizeof($type2); $t++) { 
+    		$type2[$t] = base64_decode($type2[$t]);
+    	}
+    	
+    	$nPos = Request::get("nPos");
+
+    	$months = Request::get("month");
+
+    	$tmp = Request::get("brand");
+        $base = new base();
+        $brands = $base->handleBrand($tmp);
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $firstForm = Request::get("firstPos");
+        $secondForm = Request::get("secondPos");
+        $thirdForm = Request::get("thirdPos");
+
+    	$currency = Request::get("currency");
+        $p = new pRate();
+        $pRate = $p->getCurrency($con, array($currency));
+
+    	$value = Request::get("value");
+
+    	$r = new rankings();
+
+    	$vars = $r->getVars($con, $type, $type2, $region);
+
+    	//var_dump($vars);
+    	$values = $r->getValues($con, $brands, $type, $vars, $region, $value, $pRate, $months, $firstForm, $secondForm, $thirdForm);
+    	//var_dump(Request::all());
+
     }
 }
 

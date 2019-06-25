@@ -28,7 +28,7 @@ class agency extends Management{
         $table = "agency";
         $columns = "ID";
         $join = false;
-        $where = "WHERE name = '$parent'";
+        $where = "WHERE name = '".$parent."'";
         $limit = "LIMIT 1";
         $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
         $from = array("ID");
@@ -149,6 +149,40 @@ class agency extends Management{
         $res = $sql->select($con,$columns,$table,$join,$where);
 
         $from = array('id','agencyGroup','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyByGroup($con, $AgencyGroupID=false){
+        
+        $sql = new sql();
+
+        $table = "agency a";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
+                    ";
+
+        $where = "";            
+
+        if($AgencyGroupID){
+            $AgencyGroupIDS = implode(",", $AgencyGroupID);
+            $where .= "WHERE ag.ID IN ('$AgencyGroupIDS')";
+        }
+
+        $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','agency','agencyGroup','agencyGroupID','region');
 
         $agency = $sql->fetch($res,$from,$from);
 

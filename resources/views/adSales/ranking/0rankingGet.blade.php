@@ -48,7 +48,7 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Months:</label>
-							@if($errors->has('months'))
+							@if($errors->has('month'))
 								<label style="color: red">* Required</label>
 							@else
 								{{$render->months()}}
