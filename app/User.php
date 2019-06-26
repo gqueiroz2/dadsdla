@@ -137,7 +137,7 @@ class User extends Management{
                  LEFT JOIN sales_rep_group srg ON srg.ID = u.sub_level_group 
                 ";
 
-        $where = "WHERE email='$email'";
+        $where = "WHERE email like '%$email%'";
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
@@ -214,6 +214,30 @@ class User extends Management{
         $bool = $sql->insert($con,$table,$columns,$values);
 
         return $bool;
+
+    }
+
+    public function autenticate($con,$as){
+        $attributes = $as->getAttributes();
+        $tmp = $attributes["Email"][0];
+        $email = strtolower(explode("@",$tmp)[0]);
+	$user = $this->getUserByEmail($con,$email);
+        
+	if(!is_null($user)){
+            Request::session()->put('userName',$user['name']);
+            Request::session()->put('userRegion',$user['region']);
+            Request::session()->put('userRegionID',$user['regionID']);
+            Request::session()->put('userEmail',$user['email']);
+            Request::session()->put('userLevel',$user['level']);
+
+            if($user['subLevelBool']){
+                Request::session()->put('userSalesRepGroup',$user['salesRepGroup']);
+                Request::session()->put('userSalesRepGroupID',$user['salesRepGroupID']);
+            }else{
+                Request::session()->put('userSalesRepGroup',false);
+                Request::session()->put('userSalesRepGroupID',false);
+            }
+        }
 
     }
 

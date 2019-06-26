@@ -14,9 +14,14 @@ class AuthController extends Controller
     }
 
     public function logout(){
-        Request::session()->flush();
-        
-        return redirect('');
+   	Request::session()->flush();
+
+        require_once('/var/simplesamlphp/lib/_autoload.php');
+
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        $as->logout('/');
+
     }
 
     public function loginPost(){
