@@ -12,7 +12,7 @@ use App\pRate;
 use App\sql;
 use App\brand;
 use App\agency;
-use app\client;
+use App\client;
 
 class ajaxController extends Controller{
 
@@ -65,6 +65,29 @@ class ajaxController extends Controller{
             }    
         }
         
+    }
+
+    public function getSalesRepByRegion(){
+        $regionID = Request::get('regionID');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+
+            echo "<option selected='true'>Select Sales Rep.</option>";
+
+            for ($s=0; $s <sizeof($resp) ; $s++) { 
+                echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
     }
 
     public function yearByRegion(){
@@ -268,7 +291,6 @@ class ajaxController extends Controller{
         echo "<option value='agency'> Agency </option>";
         echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='client'> Client </option>";
-        echo "<option value='clientGroup'> Client Group </option>";
     }
 
     public function firstPosYear(){
@@ -335,26 +357,71 @@ class ajaxController extends Controller{
         echo "$resp";
     }
 
+    function typeHandler($con, $name, $group, $region){
+
+        if ($name == "agency") {
+            $a = new agency();
+
+            if ($group == 1) {
+                $resp = $a->getAgencyGroupByRegion($con, array($region));
+                $var = "agencyGroup";
+            }else{
+                $resp = $a->getAgencyByRegion($con, array($region));
+                $var = "agency";
+            }
+
+        }else{
+            $c = new client();
+
+            $resp = $c->getClientByRegion($con, array($region));
+            $var = "client";
+            
+        }
+
+        for ($n=0; $n < sizeof($resp); $n++) { 
+            
+            $names[$n] = $resp[$n][$var];
+        }
+        
+        $rtr = array_unique($names);
+
+        return $rtr;
+        
+    }
+
     public function type2ByType(){
         
         $name = Request::get("type");
-
+        $region = Request::get("region");
+        
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
-        if (substr($name, 0, 6) == "agency") {
-            $obj = new agency();
-        }else{
-            $obj = new client();
-        }
+        $fun = substr($name, 0, 6);
 
         if (strlen($name) > 6) {
-            $fun = "get".ucfirst(substr($name, 0, 6))."Group";
+            $resp = $this->typeHandler($con, $fun, 1, $region);
         }else{
-            $fun = "get".ucfirst(substr($name, 0, 6));
+            $resp = $this->typeHandler($con, $fun, 0, $region);
         }
-        $classname = substr($name, 0, 6);
-        $resp = call_user_func($classname,'$fun');
-        var_dump($resp);
+        
+        foreach ($resp as $val) {
+            $auxVal = base64_encode($val);
+            echo "<option selected='true' value='$auxVal'>".$val."</option>";
+        }
+    }
+
+    public function topsByType2(){
+        
+        $num = Request::get("type2");
+
+        echo "<option selected='true' value='All'>All</option>";
+
+        if (sizeof($num) > 10) {
+            
+            echo "<option value='10'>10</option>";
+            echo "<option value='15'>15</option>";
+            echo "<option value='25'>25</option>";   
+        }
     }
 }

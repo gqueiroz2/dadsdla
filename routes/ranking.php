@@ -27,4 +27,5 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('thirdPosYear', 'ajaxController@thirdPosYear');
 	Route::post('typeNameByType', 'ajaxController@typeNameByType');
 	Route::post('type2ByType', 'ajaxController@type2ByType');
+	Route::post('topsByType2', 'ajaxController@topsByType2');
 });

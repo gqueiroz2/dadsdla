@@ -178,6 +178,38 @@ class client extends Management{
         return $client;
     }
 
+    public function getClientByRegion($con,$clientRegion = false){
+     
+        $sql = new sql();
+
+        $table = "client c";
+        $columns = "c.name AS 'client',
+                    c.ID AS 'id',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($clientRegion){
+            $clientRegions = implode(",",$clientRegion);
+            $where .= "WHERE region_id IN ('$clientRegions')";
+        }
+
+        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON r.ID = cg.region_id
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','client','clientGroupID','clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
     public function getClientUnit($con,$clientID=false){
 
         $sql = new sql();

@@ -74,7 +74,7 @@ class Render extends Model{
     }
 
     public function positionYear($pos){
-        echo "<select id='".$pos."Pos' name='".$pos."Pos[]' class='form-control' style='width: 100%;'>";
+        echo "<select id='".$pos."Pos' name='".$pos."Pos' class='form-control' style='width: 100%;'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }    
@@ -92,6 +92,12 @@ class Render extends Model{
 
     	echo "</select>";	
 
+    }
+
+    public function salesRep2(){
+        echo "<select id='salesRep' name='salesRep' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
     }
 
     public function salesRep(){
@@ -153,7 +159,7 @@ class Render extends Model{
     }
 
     public function nPos(){
-        echo "<select id='type' name='type' style='width:100%;' class='form-control'>";
+        echo "<select id='nPos' name='nPos' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select type </option>";
         echo "</select>";
     }

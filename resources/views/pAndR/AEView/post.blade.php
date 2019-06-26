@@ -49,8 +49,30 @@
 			</div>
 		</div>
 	</form>
-	<div id="vlau">
-		
+	<br>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" style="width: 100%;">
+				<center>
+					{{$render->AE1()}}
+				</center>
+			</div>
+		</div>
 	</div>
+
+	<div id="vlau"></div>
+
+	<script>
+		$(document).ready(function(){   
+			@for($m=0;$m<17;$m++)
+				@for($c=0;$c<10;$c++)
+					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
+						alert($(this).val());
+					});
+
+				@endfor
+			@endfor
+		});
+	</script>
 
 @endsection

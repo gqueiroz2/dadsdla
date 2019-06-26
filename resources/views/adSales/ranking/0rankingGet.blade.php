@@ -33,7 +33,7 @@
 						<div class="col">
 							<label class="labelLeft bold" style="color: red" id="typeName"> Select the previous field: </label>
 							@if($errors->has('type'))
-								<label style="color: red;" id="typeName">* Previous field Required</label>
+								<label style="color: red;">* Previous field Required</label>
 							@else
 								{{$render->type2()}}
 							@endif
@@ -48,7 +48,7 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Months:</label>
-							@if($errors->has('months'))
+							@if($errors->has('month'))
 								<label style="color: red">* Required</label>
 							@else
 								{{$render->months()}}
