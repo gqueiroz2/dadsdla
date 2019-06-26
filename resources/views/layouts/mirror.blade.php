@@ -118,8 +118,7 @@
 						<li class="nav-item dropdown dropleft">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<form method="POST" action="{{ route('logout') }}">
-									@csrf
+								<form method="GET" action="{{ route('logoutGet') }}">
 									<input type="submit" class="dropdown-item" value="Logout">
 								</form>
 								@if($userLevel == "SU")
