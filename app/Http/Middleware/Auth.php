@@ -16,7 +16,7 @@ class Auth
      */
     public function handle($request, Closure $next){
         if (is_null( Request::session()->get('userName')) ) {
-            return redirect('');
+            return redirect(route('logoutGet'));
         }else{
             return $next($request);
         }

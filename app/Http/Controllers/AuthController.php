@@ -20,9 +20,9 @@ class AuthController extends Controller
     }
 
     public function logoutGet(){
-        //Request::session()->flush();
+        Request::session()->flush();
         
-        return view('auth.logout');
+        return view('auth.permission');
     }
 
     public function loginPost(){
