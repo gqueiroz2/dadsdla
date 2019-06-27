@@ -14,20 +14,48 @@ class AuthController extends Controller
     }
 
     public function logout(){
-   	Request::session()->flush();
-
+	
         require_once('/var/simplesamlphp/lib/_autoload.php');
 
         $as = new \SimpleSAML\Auth\Simple('default-sp');
 
-        $as->logout('/');
+        $as->logout(route('logoutGet'));
+
 
     }
 
+    public function autenticate(){
+	$user = new User();
+	$db = new dataBase();
+
+	$con = $db->openConnection('DLA');
+	require_once('/var/simplesamlphp/lib/_autoload.php');
+	$as = new \SimpleSAML\Auth\Simple('default-sp');
+	
+	$as->requireAuth();
+	
+	$bool=$user->autenticate($con,$as);
+	
+	if($bool){
+    		return redirect('home');
+	}else{
+		var_dump("in production, but you don't have the permission");
+	}
+    }
+
+
     public function logoutGet(){
-        //Request::session()->flush();
-        
-        return view('auth.logout');
+	Request::session()->flush();       
+
+	$cookie_name = 'SimpleSAML';
+	unset($_COOKIE[$cookie_name]);
+	$res = setcookie($cookie_name, '', time() - 72000);
+
+	$cookie_name = 'SimpleSAMLAuthToken';
+	unset($_COOKIE[$cookie_name]);
+	$res = setcookie($cookie_name, '', time() - 72000);
+
+	return view('auth.logout');
     }
 
     public function loginPost(){

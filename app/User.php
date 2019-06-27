@@ -237,12 +237,15 @@ class User extends Management{
                 Request::session()->put('userSalesRepGroup',false);
                 Request::session()->put('userSalesRepGroupID',false);
             }
-        }
+	    return true;
+        }else{
+	    return false;
+	}
 
     }
 
     public function login($con){
-
+	
         $email = Request::get('email');
         $password = Request::get('password');
 

@@ -11,10 +11,10 @@
 |
 */
 
-Route::get('home','adSalesController@home')->name('home');
 
-Route::get('home','adSalesController@home')
-						->name('home');
+Route::group(['middleware'=>'auth'],function(){
+	Route::get('home','adSalesController@home')->name('home');
+});
 
 //echo route('home',['/']);
 

@@ -17,6 +17,8 @@ Route::group(['middleware' => ['auth']],function(){
 
 Route::get('/logout','AuthController@logoutGet')->name('logoutGet');
 
+Route::get('/autenticate','AuthController@autenticate')->name('autenticate');
+
 Route::post('/', 'AuthController@loginPost')->name('loginPost');
 
 Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');
