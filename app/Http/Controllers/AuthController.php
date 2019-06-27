@@ -78,13 +78,11 @@ class AuthController extends Controller
     	$db = new dataBase();
         $con = $db->openConnection('DLA');
 
-        $email = Request::get('x_email');
-        $token = Request::get('x_token');      
+        $email = Request::get('email');
+        $token = Request::get('_token');
 
         $usr = new User();
         $user = $usr->getUserByEmail($con, $email);
-
-        $status = $user["status"];
 
         $permission = false;
 
@@ -98,7 +96,7 @@ class AuthController extends Controller
                 }
             }
         }
-
+        
         return view('auth.passwords.password', compact('permission', 'email'));
     }
 
@@ -108,15 +106,16 @@ class AuthController extends Controller
         $con = $db->openConnection('DLA');
         
         $permission = Request::get('permission');
+        $email = Request::get("email");
         
         $pwd = new password();
-        $resp = $pwd->choosePassword($con);
+        $resp = $pwd->choosePassword($con, $email);
         
         if ($resp['bool']) {
             return redirect('/');
         }else{
             \Session::flash('error', $resp['msg']);
-            return view('auth.passwords.password', compact('permission', 'status'));//->with('error',$resp['msg']);
+            return view('auth.passwords.password', compact('permission', 'email'));//->with('error',$resp['msg']);
         }
     }
 }
