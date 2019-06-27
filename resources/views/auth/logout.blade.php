@@ -1,18 +1,19 @@
 @extends('layouts.logout')
 
-@section('content')
+@section('contentLogout')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header" style="text-align: center;">You have logged out</div>
+                <div class="card-header" style="text-align: center; font-weight: bold; font-size: 20px;">You are logged off</div>
 
                 <div class="card-body">
-                    <form method="Get" action="{{ route('loginGet') }}">
-                        <center>
+                    <center>
+                        <p style="width: 50%;">Discovery Communications, LLC uses your network username and password to login to D|ADS. Continue to login to D|ADS through your network.</p>
+                        <form method="Get" action="{{ route('loginGet') }}">
                             <input type="submit" style="width: 50%;" class="btn btn-primary" value="Continue">
-                        </center>
-                    </form>
+                        </form>
+                    </center>
                 </div>
             </div>
         </div>
