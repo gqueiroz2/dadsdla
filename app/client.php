@@ -22,6 +22,19 @@ class client extends Management{
         return $clientGroupID[0]['id'];
     }
 
+    public function getClientIDbyClientUnit($con,$sql,$parent){
+        $table = "client c";
+        $columns = "c.ID";
+        $join = "LEFT JOIN client_unit cu ON cu.client_id = c.ID";
+        $where = "WHERE cu.name = \"".addslashes($parent)."\"";
+        $limit = "LIMIT 1";
+        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $from = array("ID");
+        $to = array('id');
+        $clientGroupID = $sql->fetch($res,$from,$to);
+        return $clientGroupID[0]['id'];        
+    }
+
     public function getClientID($con,$sql,$parent){
         $table = "client";
         $columns = "ID";
