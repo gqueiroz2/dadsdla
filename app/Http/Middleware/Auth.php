@@ -10,14 +10,10 @@ use App\User;
 class Auth
 {
     public function handle($request, Closure $next){
-
-	$userName = Request::session()->get('userName');
-	
-        if(is_null($userName)){
-		return redirect(route('logoutGet'));
-	}
-
-        return $next($request);
-	    
-    }	
+        if (is_null( Request::session()->get('userName')) ) {
+            return redirect(route('logoutGet'));
+        }else{
+            return $next($request);
+        }
+    }
 }
