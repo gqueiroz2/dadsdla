@@ -22,7 +22,7 @@ class sql extends Model{
 
     public function selectWithGroup($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1){     
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by GROUP BY $group_by";
-        //echo "$sql<br>";
+        echo "<pre> $sql </pre>";
         //$res = $con->query($sql);
         //return $res;
     }
