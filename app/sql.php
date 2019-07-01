@@ -15,8 +15,16 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
+        //echo "$sql<br>";
         $res = $con->query($sql);
         return $res;
+    }
+
+    public function selectWithGroup($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1){     
+        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by GROUP BY $group_by";
+        //echo "$sql<br>";
+        //$res = $con->query($sql);
+        //return $res;
     }
 
     public function insert($con,$table,$columns,$values){
@@ -33,6 +41,7 @@ class sql extends Model{
     }
 
     public function fetch($result,$from,$to){
+        
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
