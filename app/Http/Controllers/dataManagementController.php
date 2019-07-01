@@ -81,11 +81,8 @@ class dataManagementController extends Controller{
             return back()->with('error',$bool['msg']);
         }
     }
-
     /*END OF REGIONS FUNCTIONS*/
-
     /*START OF USER FUNCTIONS*/
-
     public function userAdd(){
         $usr = new User();
         $db = new dataBase();
