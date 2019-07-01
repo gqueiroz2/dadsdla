@@ -14,9 +14,10 @@ require __DIR__.'/../vendor/autoload.php';
 class password extends Model{
     public function checkPassword($password){
         
-        $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
+        $pattern = "#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#";
 
         if (preg_match($pattern, $password)) {
+            
             $resp['msg'] = "Password accepted";
             $resp['bool'] = true;
         }else{
@@ -213,12 +214,11 @@ class password extends Model{
     	return $bool;
     }    
 
-    public function choosePassword($con){
+    public function choosePassword($con, $email){
         
         date_default_timezone_set('America/Sao_Paulo');
 
         $password = Request::get('password');
-        $email = Request::get('email');
 
         $bool = $this->checkPassword($password);
     

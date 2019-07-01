@@ -38,6 +38,7 @@ class RenderStuff extends Model{
 							echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
 					    }else{
 					    	echo "<form method='POST' action='".route('insertAgency')."'>";
+					    	echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
 					    }
 					}else{
 						echo "<div class='row'>
@@ -123,9 +124,9 @@ class RenderStuff extends Model{
 										echo "</select>";
 									echo "</div>";
 									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['client']."'></div>";
-/*
+
 									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
-*/
+
 								echo "</div>";
 							}
 						}

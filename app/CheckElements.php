@@ -105,28 +105,19 @@ class CheckElements extends Model{
 		$fromDLA = array("name");
 		$from = array("client");
 
-		$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
+		$selectDistinctFM = "SELECT DISTINCT client,campaign_sales_office FROM $table ORDER BY client";		
 		$res = $con->query($selectDistinctFM);
 		$sql = new sql();
 
-		$resultsFM = $sql->fetch($res,array("client"),array("client"));
+		$resultsFM = $sql->fetch($res,array("client","campaign_sales_office"),array("client","region"));
 
 		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-
 		$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 
 		$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
 
 		return $new;
-	}
-
-	public function makeDistinct($array){
-
-		$unique = array_map("unserialize", array_unique(array_map("serialize", $array)));
-
-		return $unique;
-
-	}
+	}	
 
 	public function checkNewAgencies($conDLA,$con,$table,$sql){
 		$tableDLA = 'agency_unit';
@@ -151,24 +142,7 @@ class CheckElements extends Model{
 		return $new;
 	}
 
-	public function checkNewCurrencies($conDLA,$con,$table,$sql){
-		$tableDLA = "currency";
-		
-		$somethingDLA = "name";
-		$something = "campaign_currency";
-
-		$fromDLA = array("name");
-		$from = array($something);
-
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
-
-		$new = $this->checkDifferences($distinctDLA,$distinctFM);
-		return $new;
-
-		return false;
-	}
-
+	
 	public function getDistinct($con,$something,$table,$sql,$from){
 
 		$select = "SELECT $something FROM $table ORDER BY $something";
@@ -189,13 +163,6 @@ class CheckElements extends Model{
 		for ($f=0; $f < sizeof($fm); $f++) { 
 			$check = false;
 			for ($d=0; $d < sizeof($dla); $d++) { 
-				/*
-				var_dump($fm[$f][$type]);
-				var_dump(" == ? == ");
-				var_dump($dla[$d]);
-				var_dump("                       ");
-				var_dump("                       ");
-				*/
 
 				if( trim( $fm[$f][$type] ) == trim( $dla[$d] ) ){
 					$check = true;
@@ -246,6 +213,33 @@ class CheckElements extends Model{
 
 
 	}
+
+	public function makeDistinct($array){
+
+		$unique = array_map("unserialize", array_unique(array_map("serialize", $array)));
+
+		return $unique;
+
+	}
+
+	public function checkNewCurrencies($conDLA,$con,$table,$sql){
+		$tableDLA = "currency";
+		
+		$somethingDLA = "name";
+		$something = "campaign_currency";
+
+		$fromDLA = array("name");
+		$from = array($something);
+
+		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
+
+		$new = $this->checkDifferences($distinctDLA,$distinctFM);
+		return $new;
+
+		return false;
+	}
+
 
 	/*
 

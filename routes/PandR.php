@@ -36,6 +36,13 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('AEPost');
 	});
 
+	Route::group(['prefix'=>'ajax'],function(){
+
+		Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion')
+									->name('salesRepByRegion');
+
+	});
+
 });
 
 

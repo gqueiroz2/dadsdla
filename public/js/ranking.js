@@ -84,12 +84,28 @@ $(document).ready(function(){
             }
           });
 
+          var region = $('#region').val();
+
           $.ajax({
             url:"/ajaxRanking/type2ByType",
             method:"POST",
-            data:{type},
+            data:{type, region},
             success: function(output){
-              $('#vlau').html(output);
+              $('#type2').html(output).selectpicker('refresh');
+
+              var type2 = $('#type2').val();
+
+              $.ajax({
+                url:"/ajaxRanking/topsByType2",
+                method:"POST",
+                data:{type2},
+                success: function(output){
+                  $('#nPos').html(output);
+                },
+                error: function(xhr, ajaxOptions,thrownError){
+                  alert(xhr.status+" "+thrownError);
+                }
+              });
             },
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
@@ -97,13 +113,19 @@ $(document).ready(function(){
           });
 
         }else{
+          var option = "<option> Select Type </option>";    
           $('#typeName').html("Select the previous field:").css("color", "red");
+          $('#type2').empty().selectpicker('refresh');
+          $('#nPos').empty().append(option);
         }
       });
 		}else{
       var option = "<option> Select Region </option>";
+      var option2 = "<option> Select Type </option>";
       $('#type').empty().append(option);
       $('#typeName').html("Select the previous field:").css("color", "red");
+      $('#type2').empty().selectpicker('refresh');
+      $('#nPos').empty().append(option2);
       $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);

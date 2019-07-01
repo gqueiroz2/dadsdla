@@ -23,19 +23,19 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::post('relationshipAgency','relationshipController@relationshipAgencyPost')
 							->name('relationshipAgencyPost');
 
-		Route::get('agencySomething','dataManagementController@agencyGet')
+		Route::get('agencySomething','ClientAgencyController@agencyGet')
 							->name('dataManagementAgencyGet');
-		Route::get('clientSomething','dataManagementController@clientGet')
+		Route::get('clientSomething','ClientAgencyController@clientGet')
 							->name('dataManagementClientGet');
 
-		Route::post('insertClientGroup','dataManagementController@insertGroup')
+		Route::post('insertClientGroup','ClientAgencyController@insertGroup')
 							->name('insertClientGroup');
-		Route::post('insertOneClient','dataManagementController@insertOne')
+		Route::post('insertOneClient','ClientAgencyController@insertOne')
 							->name('insertOneClient');
 
-		Route::post('insertAgencyGroup','dataManagementController@insertGroup')
+		Route::post('insertAgencyGroup','ClientAgencyController@insertGroup')
 							->name('insertAgencyGroup');
-		Route::post('insertOneAgency','dataManagementController@insertOne')
+		Route::post('insertOneAgency','ClientAgencyController@insertOne')
 							->name('insertOneAgency');
 
 
@@ -95,7 +95,6 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('thirdChain');
 			Route::post('thirdToDLA','ChainController@thirdToDLA')
 							->name('thirdToDLA');
-
 		});
 
 		Route::group(['prefix' => 'file'],function(){

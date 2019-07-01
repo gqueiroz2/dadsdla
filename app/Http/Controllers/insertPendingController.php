@@ -21,21 +21,43 @@ class insertPendingController extends Controller{
 				$client[$c]['unit'] = Request::get("clients-unit-$c");
 			}
 		}
-		$bool = $this->insert($con,$table,$client);
-		var_dump($bool); 
+		$type = "client";
+		$bool = $this->insert($con,$table,$type,$client);
+		return back()->with('inserted',"DONE !!!");
 	}
 
-	public function insert($con,$table,$client){
 
-		var_dump($table);
+	public function insertAgencyUnit(){
+		$db = new dataBase;
+		$con = $db->openConnection('DLA');
+		$table = 'agency_unit';
+		$sizeC = Request::get('size');
+		var_dump(Request::all());
+		
+		for ($c=0; $c < $sizeC; $c++) { 
+			
+			if( !is_null( Request::get("agencies-group-$c") ) || !is_null( json_decode(base64_decode(Request::get("agencies-$c"))) ) ){
+				$agencies[$c]['group'] = Request::get("agencies-group-$c");
+				$agencies[$c]['base'] = json_decode(base64_decode(Request::get("agencies-$c")));
+				$agencies[$c]['unit'] = Request::get("agencies-unit-$c");
+			}
+		}
+		$type = "agency";
+		$bool = $this->insert($con,$table,$type,$agencies);
+		return back()->with('inserted',"DONE !!!");
+	}
 
+	public function insert($con,$table,$type,$array){
+		
+			
+
+		$keys = array_keys($array);
 		$check = 0;
 
-		for ($c=0; $c < sizeof($client); $c++) { 	
-
-			$insert[$c] = "INSERT INTO $table (client_id,origin_id,name) VALUES( \"".$client[$c]["base"]->ID."\" ,\"1\", \"".$client[$c]['unit']."\")";	
+		for ($c=0; $c < sizeof($array); $c++) { 	
+			$insert[$c] = "INSERT INTO $table (".$type."_id,origin_id,name) VALUES( \"".$array[$keys[$c]]["base"]->ID."\" ,\"1\", \"".$array[$keys[$c]]['unit']."\")";	
 			var_dump($insert[$c]);
-			
+
 			if ($con->query($insert[$c]) === TRUE) {
 				$check ++;
 			}else{
@@ -43,7 +65,7 @@ class insertPendingController extends Controller{
 			}
 		}
 
-		if($check == sizeof($client)){
+		if($check == sizeof($array)){
 			$rtr = true;
 		}else{
 			$rtr = false;
