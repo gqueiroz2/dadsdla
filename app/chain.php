@@ -23,7 +23,6 @@ class chain extends excel{
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
-
         if($table == "cmaps"){
             $parametter = true;
         }else{
@@ -417,7 +416,7 @@ class chain extends excel{
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			for ($c=0; $c < sizeof($columns); $c++) { 
+            for ($c=0; $c < sizeof($columns); $c++) { 
                 $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||

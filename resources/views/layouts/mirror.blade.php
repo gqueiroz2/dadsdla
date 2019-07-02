@@ -90,7 +90,7 @@
 								<a class="dropdown-item" href="#"> Brand </a>
 								<a class="dropdown-item" href="#"> Market </a>                                
 								<a class="dropdown-item" href="#"> Churn </a>                                
-								<a class="dropdown-item" href="#"> Overview </a>
+								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
 							</div>
 						</li>
 
@@ -108,22 +108,22 @@
 								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
 								<a class="dropdown-item" href="{{ route('VPGet') }}"> VP View </a>
 								<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a>
-								<!--<a class="dropdown-item" href="#"> Market </a>-->
 							</div>
 						</li>
 
 					</ul>    
 
-					<ul class="navbar-nav mr-right" style="margin-right: 2.5%;">
+					<ul class="navbar-nav mr-right" style="margin-right: 3%;">
 						<li class="nav-item dropdown dropleft">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true"> {{$userName}} </a>
+							<div class="dropdown-menu dropleft" aria-labelledby="navbarDropdown">
 								<form method="GET" action="{{ route('logoutGet') }}">
 									<input type="submit" class="dropdown-item" value="Logout">
 								</form>
 								@if($userLevel == "SU")
 									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
 								@endif
+								<a class="dropdown-item" href="{{ route('dataCurrentThrough') }}"> Data Current Through </a>
 							</div>
 						</li>
 					</ul>    

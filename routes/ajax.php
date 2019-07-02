@@ -13,10 +13,11 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'ajax'],function(){
+		Route::group(['prefix'=>'dashboards'],function(){
+			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
+		});
+
 		Route::group(['prefix'=>'checkElements'],function(){
-			
-			
-			
 			Route::post('clientGroupByClient','ajaxController@clientGroupByClient')
 									->name('pacingReportPost');
 
