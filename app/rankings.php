@@ -7,8 +7,9 @@ use App\agency;
 use App\client;
 use App\sql;
 use App\pRate;
+use App\rank;
 
-class rankings extends Model {
+class rankings extends rank{
 
     public function cmpTotal($element1, $element2){
         
@@ -22,81 +23,7 @@ class rankings extends Model {
         return ($v1 < $v2) ? 1 : -1;
     }
 
-    public function createPositions($first, $second, $third){
-        
-        if ($second == 0 && $third == 0) {
-            $years = array($first);
-        }elseif ($second == 0) {
-            $years = array($first, $third);
-        }elseif ($third == 0) {
-            $years = array($fisrt, $second);
-        }else{
-            $years = array($first, $second, $third);
-        }
-
-        return $years;
-    }
-
-    public function verifyQuantity($con, $type, $type2, $region){
-        
-        if ($type == "agency") {
-            $a = new agency();
-            $resp = $a->getAgencyByRegion($con, array($region));
-            $var = "agency";
-        }else{
-            $c = new client();
-            $resp = $c->getClientByRegion($con, array($region));
-            $var = "client";
-        }
-
-        for ($n=0; $n < sizeof($resp); $n++) { 
-            
-            $names[$n] = $resp[$n][$var];
-        }
-
-        $auxResp = array_unique($names);
-
-        if (sizeof($type2) == sizeof($auxResp)) {
-            $all = true;
-        }else{
-            $all = false;
-        }
-
-        return $all;
-
-    }
-
-    public function createSearch($name, $table, $tableNickName){
-
-        if ($table == "ytd") {
-        
-            switch ($name) {
-                case 'agency':
-                    $columns = "y.agency_id AS 'agencyID', a.name AS 'agency'";
-                    $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
-                    $name = "agency_id";
-                    $names = array("agencyID", "agency", "total");
-                    break;
-                
-                case 'client':
-                    # code...
-                    break;
-
-                case 'agencyGroup':
-                    # code...
-                    break;
-
-                default:
-                    # code...
-                    break;
-            }
-
-        }
-        
-
-
-
-    }
+    
 
     public function getResultAll($con, $brands, $type, $type2, $region, $value, $currency, $months, $years){
 
@@ -130,11 +57,6 @@ class rankings extends Model {
             }
 
         }else{
-
-            $table = "$ytd y";
-
-            $value .= "_revenue";
-            $as = "total";
 
             if ($type == "agency") {
                 $columns = "y.agency_id AS 'agencyID', a.name AS 'agency'";
