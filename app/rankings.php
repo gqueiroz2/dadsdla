@@ -11,137 +11,16 @@ use App\rank;
 
 class rankings extends rank{
 
-    public function cmpTotal($element1, $element2){
+    public function getAllResults($con, $brands, $type, $region, $value, $currency, $months, $years){
+
+        if ($type == "agencyGroup") {
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "agency");            
+        }
+        else{
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency);    
+        }
         
-        $v1 = $element1['total'];
-        $v2 = $element2['total'];
-
-        if ($v1 == $v2) {
-            return 0;
-        }
-
-        return ($v1 < $v2) ? 1 : -1;
-    }
-
-    
-
-    public function getResultAll($con, $brands, $type, $type2, $region, $value, $currency, $months, $years){
-
-        for ($b=0; $b < sizeof($brands); $b++) { 
-            $brands_id[$b] = $brands[$b][0];
-        }
-
-        $sql = new sql();
-        
-        if (strlen($type) > 6) {
-            $a = new agency();
-
-            $group = $a->getAgencyGroupByRegion($con, array($region));
-
-            for ($g=0; $g < sizeof($group); $g++) { 
-                
-                $resp[$g] = $a->getAgencyByGroup($con, array($group[$g]['id']));
-            }
-
-            for ($i=0; $i < sizeof($resp); $i++) { 
-                for ($y=0; $y < sizeof($years); $y++) { 
-                    $res[$y][$i]['agencyID'] = $resp[$i][0]['agencyGroupID'];
-                    $res[$y][$i]['agency'] = $resp[$i][0]['agencyGroup'];
-                    $res[$y][$i]['total'] = 0;
-                    for ($j=0; $j < sizeof($resp[$i]); $j++) { 
-                        $res[$y][$i]['total'] += $this->calculateValue($con, $brands_id, $type, $res[$y][$i]['agencyID'], $region, $value, $currency, $months, $years[$y]);
-                    }
-
-                    usort($res[$y], array($this, "cmpTotal"));
-                }
-            }
-
-        }else{
-
-            if ($type == "agency") {
-                $columns = "y.agency_id AS 'agencyID', a.name AS 'agency'";
-                $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
-                $name = "agency_id";
-                $names = array("agencyID", "agency", "total");
-            }else{
-                $columns = "y.client_id AS 'clientID', c.name AS 'client'";
-                $join = "LEFT JOIN client c ON c.ID = y.client_id";
-                $name = "client_id";
-                $names = array("clientID", "client", "total");
-            }
-
-            $columns .= ", SUM($value) AS $as";
-            $cols = array("campaign_sales_office_id", "year", "brand_id", "month");
-
-            for ($y=0; $y < sizeof($years); $y++) { 
-     
-                $colsValue = array($region, $years[$y], $brands_id, $months);
-                $where = $sql->where($cols, $colsValue);
-                $values[$y] = $sql->selectWithGroup($con, $columns, $table, $join, $where, "total", $name, "DESC");
-
-                $from = $names;
-
-                $res[$y] = $sql->fetch($values[$y], $from, $from);
-
-            }
-
-            for ($y=0; $y < sizeof($years); $y++) {
-                if (is_array($res[$y])) {
-                    for ($r=0; $r < sizeof($res[$y]); $r++) { 
-
-                        $p = new pRate();
-
-                        if ($currency[0]['name'] == "USD") {
-                            $pRate = $p->getPRateByRegionAndYear($con, array($region), $years[$y]);
-                        }else{
-                            $pRate = 1.0;
-                        }
-
-                        $res[$y][$r]['total'] /= $pRate;
-                    }   
-                }else{
-
-                }
-            }
-        }
-
-        //var_dump($res);
         return $res;
-    }
-
-    public function calculateValue($con, $brands_id, $type, $var, $region, $value, $currency, $months, $year){
-    	//var_dump($var);
-
-        if (strlen($type) > 6 || $type == "agency") {
-            $name = "agency_id";
-        }else{
-            $name = "client_id";
-        }
-
-    	$sql = new sql();
-
-    	$as = "sum";
-
-    	$colsName = array("campaign_sales_office_id", "brand_id", "year", "month", $name);
-        $colsValue = array($region, $brands_id, $year, $months, $var);
-    	$value .= "_revenue";
-
-    	$p = new pRate();
-
-        if ($currency[0]['name'] == "USD") {
-            $pRate = $p->getPRateByRegionAndYear($con, array($region),$year);
-        }else{
-            $pRate = 1.0;
-        }    
-
-        $where = $sql->where($colsName, $colsValue);
-
-        $selectSum = $sql->selectSum($con, $value, $as, "ytd", null, $where);
-
-        $rtr = $sql->fetchSum($selectSum, $as)["sum"]/$pRate;
-
-        return $rtr;    	
-
     }
 
     public function checkOtherYearsPosition($name, $values, $year, $type){
@@ -281,5 +160,4 @@ class rankings extends rank{
         var_dump($mtx);
 
     }
-
 }
