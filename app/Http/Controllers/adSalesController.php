@@ -10,6 +10,8 @@ use Excel;
 
 class adSalesController extends Controller{
     public function home(){
+        
+
         return view("adSales.home");
     }
 

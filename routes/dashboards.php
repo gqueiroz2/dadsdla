@@ -12,15 +12,12 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-	Route::group(['prefix'=>'ajax'],function(){
-		Route::group(['prefix'=>'dashboards'],function(){
-			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
-		});
-
-		Route::group(['prefix'=>'checkElements'],function(){
-			Route::post('clientGroupByClient','ajaxController@clientGroupByClient')
-									->name('pacingReportPost');
-
+	Route::group(['prefix'=>'dashboards'],function(){
+		Route::group(['prefix'=>'overview'],function(){
+			Route::get('/','dashboardsController@overviewGet')
+							->name('overviewGet');
+			Route::post('/','dashboardsController@overviewPost')
+								->name('overviewPost');
 		});
 	});
 });

@@ -24,11 +24,24 @@ class agency extends Management{
         return $agencyGroupID[0]['id'];
     }
 
+    public function getAgencyIDbyAgencyUnit($con,$sql,$parent){
+        $table = "agency a";
+        $columns = "a.ID";
+        $join = "LEFT JOIN agency_unit au ON au.agency_id = a.ID";
+        $where = "WHERE au.name = \"".addslashes($parent)."\"";
+        $limit = "LIMIT 1";
+        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $from = array("ID");
+        $to = array('id');
+        $agencyGroupID = $sql->fetch($res,$from,$to);
+        return $agencyGroupID[0]['id'];        
+    }
+
     public function getAgencyID($con,$sql,$parent){
         $table = "agency";
         $columns = "ID";
         $join = false;
-        $where = "WHERE name = '".$parent."'";
+        $where = "WHERE name = \"".addslashes($parent)."\"";
         $limit = "LIMIT 1";
         $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
         $from = array("ID");
@@ -213,7 +226,7 @@ class agency extends Management{
                  ";
 
 
-        $res = $sql->select($con,$columns,$table,$join,$where,"2,4,6");//"7,2,4,6"
+        $res = $sql->select($con,$columns,$table,$join,$where,"7,2,4,6");//"7,2,4,6"
 
         $from = array('id','agency','agencyGroup','agencyGroupID','agencyUnit','agencyUnitID','region');
 
@@ -378,6 +391,8 @@ class agency extends Management{
             return false;
         }
     }
+
+
 
 
 }

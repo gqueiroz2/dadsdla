@@ -15,4 +15,15 @@ class RenderAgencyClient extends Model
 		echo "</select>";
 
     }
+
+    public function somekind(){
+
+    	echo "<select class='form-control' name='table_end' data-width='100%'>";
+    		echo "<option value=''> Select a Table </option>";
+    		echo "<option value='base'> Base </option>";
+    		echo "<option value='group'> Group </option>";
+    		echo "<option value='unit'> Unit </option>";
+		echo "</select>";
+
+    }
 }

@@ -81,11 +81,8 @@ class dataManagementController extends Controller{
             return back()->with('error',$bool['msg']);
         }
     }
-
     /*END OF REGIONS FUNCTIONS*/
-
     /*START OF USER FUNCTIONS*/
-
     public function userAdd(){
         $usr = new User();
         $db = new dataBase();
@@ -511,19 +508,7 @@ class dataManagementController extends Controller{
 
     }
 
-    public function agencyGet(){
-
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $r = new region();
-        $region = $r->getRegion($con);
-        $ag = new agency();
-
-        $agencyGroup = $ag->getAgencyGroup($con);
-
-        return view('dataManagement.agencyGet',compact('region','agencyGroup'));
-
-    }
+    
 
     /*END OF SALES AGENCY FUNCTIONS*/
 
@@ -535,54 +520,10 @@ class dataManagementController extends Controller{
 
     }
 
-    public function insertGroup(){
-        $db = new dataBase();
-        $con = $db->openCOnnection("DLA");
-        $type = Request::get('type');
-        $region = Request::get('region');
-        $name = Request::get('groupName');
-
-        $table = $type."_group";
-
-        $insert = "INSERT INTO $table (region_id,name) VALUES ( \"".$region."\" , \"".$name."\" )";
-
-        if($con->query($insert) === TRUE){
-            return back()->with('insertedGroup',"The register was succesfully created on the table !!!"); 
-        }else{
-            return back()->with('failedGroup',"The register was not created on the table !!!");
-        }
-    }
-
-    public function insertOne(){
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $type = Request::get('type');
-        $groupName = Request::get('groupName');
-        $name = Request::get('name');
-        $table = $type;
-        $insert = "INSERT INTO $table (".$type."_group_id,name) VALUES ( \"".$groupName."\" , \"".$name."\" )";
-
-        if($con->query($insert) === TRUE){
-            return back()->with('insertedTable',"The register was succesfully created on the table !!!"); 
-        }else{
-            return back()->with('failedTable',"The register was not created on the table !!!");
-        }
-    }
+    
 
 
-    public function clientGet(){
-
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $r = new region();
-        $region = $r->getRegion($con);
-        $cli = new client();
-
-        $clientGroup = $cli->getClientGroup($con);
-
-        return view('dataManagement.clientGet',compact('region','clientGroup'));
-
-    }
+    
 
     public function newClientAdd(){
         var_dump("New Client Add");

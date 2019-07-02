@@ -93,24 +93,22 @@ class rankingController extends Controller {
 
     	$r = new rankings();
 
+        $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
+
         $all = $r->verifyQuantity($con, $type, $type2, $region);
         
-        if ($all && strlen($type) <= 6) {
-            $values = $r->getResultAll($con, $brands, $type, $type2, $region, $value, $pRate, $months, $firstForm, $secondForm, $thirdForm);
-        }else{
-            $vars = $r->getVars($con, $type, $type2, $region, $all);
+        
+        $values = $r->getResultAll($con, $brands, $type, $type2, $region, $value, $pRate, $months, $years);
+        
 
-            $values = $r->getValues($con, $brands, $type, $vars, $region, $value, $pRate, $months, $firstForm, $secondForm, $thirdForm);
-        }
+        $mtx = $r->assembler($values, $years, $type);
 
         /*for ($i=0; $i < sizeof($values); $i++) { 
             var_dump($values[$i][0]);
         }*/
 
         //var_dump($values);
-
-    	//var_dump(Request::all());
-
+        //var_dump(Request::all());
     }
 }
 

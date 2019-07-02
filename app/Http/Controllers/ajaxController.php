@@ -16,6 +16,38 @@ use App\client;
 
 class ajaxController extends Controller{
 
+    public function baseFilter(){
+        var_dump(Request::all());
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get('type');
+        $regionID = Request::get('region');
+        switch ($type) {
+
+            case 'client':
+                $clss  = new client();
+
+                $base = $clss->getClient($con);
+                break;
+            
+            default:
+                $clss = new agency();
+
+                if($type == "agency"){
+                    $base = $clss->getAgencyByRegion($con,array($regionID));
+                }else{
+                    $base = $clss->getAgencyGroupByRegion($con,array($regionID));
+                }
+
+                break;
+            
+        }
+
+        var_dump($type);
+        var_dump($base);
+    }
+
     public function clientGroupByClient(){
         $clients = json_decode(base64_decode(Request::get('clients')));
 

@@ -59,12 +59,13 @@ class RouteServiceProvider extends ServiceProvider
                             require base_path('routes/dataManagement.php');
                             require base_path('routes/auth.php');
                             require base_path('routes/performance.php');
-                            require base_path('routes/PandR.php');
+                            require base_path('routes/pAndR.php');
                             require base_path('routes/ajax.php');
                             require base_path('routes/checkElements.php');
                             require base_path('routes/insert.php');
                             require base_path('routes/excel.php');
                             require base_path('routes/ranking.php');
+                            require base_path('routes/dashboards.php');
                      });
 /*
         Route::middleware('web')

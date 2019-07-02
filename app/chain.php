@@ -9,6 +9,9 @@ use App\region;
 use App\brand;
 use App\salesRep;
 use App\pRate;
+use App\agency;
+use App\client;
+use App\sql;
 
 class chain extends excel{
    
@@ -20,7 +23,6 @@ class chain extends excel{
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
-
         if($table == "cmaps"){
             $parametter = true;
         }else{
@@ -126,6 +128,7 @@ class chain extends excel{
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
+            var_dump($spreadSheet);
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
@@ -154,10 +157,15 @@ class chain extends excel{
     }
 
     public function handleForLastTable($con,$table,$current,$columns){
-    	/*
+    	        
+        for ($c=0; $c < sizeof($current); $c++) { 
+            $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['agency']);
+            $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['client']);
+        }  
+        /*
     	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
     	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
-    	*/
+    	
 
             var_dump($table);
 
@@ -167,12 +175,24 @@ class chain extends excel{
                 $current[$c]['client_id'] = 1;
             }
         }else{
-            for ($c=0; $c < sizeof($current); $c++) { 
-                $current[$c]['agency_id'] = $current[$c]['campaign_sales_office_id'];
-                $current[$c]['client_id'] = $current[$c]['campaign_sales_office_id'];
-            }            
-        }
+                      
+        }*/
 		return $current;
+    }
+
+    public function seekAgencyID($con,$region,$agency){
+        $ag = new agency();
+        $sql = new sql();
+
+        $agencyID = $ag->getAgencyIDbyAgencyUnit($con,$sql,$agency);
+        return($agencyID);
+    }
+
+    public function seekClientID($con,$region,$client){
+        $cli = new client();
+        $sql = new sql();
+        $clientID = $cli->getClientIDbyClientUnit($con,$sql,$client);
+        return($clientID);
     }
 
 
@@ -296,7 +316,7 @@ class chain extends excel{
     public function insertToLastTable($con,$table,$columns,$current,$into,$nextColumns = false){
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		  
+    		  //var_dump($current[$c]);
             if($table == 'cmaps'){
                 $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
@@ -396,7 +416,7 @@ class chain extends excel{
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-			for ($c=0; $c < sizeof($columns); $c++) { 
+            for ($c=0; $c < sizeof($columns); $c++) { 
                 $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
 				if($bool){
 					if($columns[$c] == 'gross_revenue' ||
