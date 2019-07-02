@@ -113,6 +113,36 @@ class base extends Model{
         return $intMonth;
     }
 
+    public function breakTimeStamp($timestamp){
+
+        if(isset($timestamp)){
+            $tmp = $this->breakInTwo($timestamp);
+            $date = $this->formatData("aaaa-mm-dd","dd/mm/aaaa",$tmp["date"]);
+            $time = $this->fixTime($tmp["time"]);
+            $rtr = array("date" => $date, "time" => $time);    
+        }else{
+            return false;
+        }
+        
+        return $rtr;
+    }
+
+    public function breakInTwo($timestamp){
+
+        $tmp = explode(" ", $timestamp);
+        
+        $rtr = array("date" => $tmp[0],"time" => $tmp[1]);
+
+        return $rtr;
+
+    }
+
+    public function fixTime($time){
+        $newTime = substr($time,0,5);
+        return $newTime;
+
+    }
+
     public function formatData($from,$to,$string){
         switch ($from) {
             case 'dd/mm/aaaa':                
@@ -133,9 +163,27 @@ class base extends Model{
                         $newString = false;
                         break;
                 }
+            break;
 
+            case 'aaaa-mm-dd':                
+                switch ($to) {
+                    case 'dd/mm/aaaa':
 
-                break;
+                        $tmp = explode("-", $string);
+
+                        $dd = $tmp[2];
+                        $mm = $tmp[1];
+                        $aaaa = $tmp[0];
+
+                        $newString = $dd."/".$mm."/".$aaaa;
+
+                        break;
+                    
+                    default:
+                        $newString = false;
+                        break;
+                }
+            break;
             
             default:
                 $newString = false;
