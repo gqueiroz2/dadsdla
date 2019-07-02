@@ -81,6 +81,10 @@
 						$("#rf-15").val(value);
 					}
 				
+					var Temp = parseFloat($("#rf-3").val()) + parseFloat($("#rf-7").val()) + parseFloat($("#rf-11").val()) + parseFloat($("#rf-15").val());
+
+					$("#total-total").val(Temp);
+
 
 					@for($c=0;$c<10;$c++)
 						var temp = $(this).val()*(parseFloat($("#oldCY-"+{{$c}}+"-"+{{$m}}).val())/parseFloat($("#oldY-"+{{$m}}).val()));
