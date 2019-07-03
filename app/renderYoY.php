@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Render;
 
-class renderYoY extends Model {
+class renderYoY extends Render {
     
-    public function source($region){
+    public function sourceYoY($region){
     	echo "<select name='source' style='width:100%;'>";
             echo "<option value='ytd'> IBMS </option>";
             

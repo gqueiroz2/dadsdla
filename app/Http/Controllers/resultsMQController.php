@@ -41,7 +41,6 @@ class resultsMQController extends Controller{
                 $r = new region();
                 $b = new brand();
                 $pr = new pRate();
-                $render = new Render();
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);                
                 $validator = Validator::make(Request::all(),[
@@ -106,11 +105,9 @@ class resultsMQController extends Controller{
                 $pr = new pRate();
                 $currency = $pr->getCurrency($con,false);
 
-                $render = new Render();
-
                 $qRender = new quarterRender();
 
-                return view("adSales.results.2quarterGet", compact('salesRegion', 'brands', 'render', 'qRender', 'currency'));
+                return view("adSales.results.2quarterGet", compact('salesRegion', 'brands', 'qRender', 'currency'));
 	}
 
 	public function postQuarter(){
@@ -160,8 +157,7 @@ class resultsMQController extends Controller{
                 $lines = $mq->lines($con,$pRate,$base->getMonth(),$form,$brands,$year,$regionID,$value,$source);
                 //var_dump($quarter);
                 $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year,$source);
-                
-                $render = new Render();
+
                 $qRender = new quarterRender();
 
                 $form = $mq->TruncateName($form);
@@ -172,7 +168,7 @@ class resultsMQController extends Controller{
 
                 $rName = $mq->TruncateRegion($region);
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'render', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName'));
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName'));
 
 	} 
 

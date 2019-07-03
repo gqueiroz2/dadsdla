@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;				
+use App\Render;
 
-class renderMonthlyYoY extends Model{
+class renderMonthlyYoY extends Render{
 
 	/*
 	*$mtx = matriz dos meses

@@ -16,42 +16,42 @@
 							<div class="col">
 								<label>Sales Region</label>
 								@if($userLevel == 'L0' || $userLevel == 'SU')
-									{{$render->region($salesRegion)}}							
+									{{$qRender->region($salesRegion)}}							
 								@else
-									{{$render->regionFiltered($salesRegion, $regionID )}}
+									{{$qRender->regionFiltered($salesRegion, $regionID )}}
 								@endif
 							</div>
 							
 							<div class="col">
 								<label>Year</label>
-								{{$render->year()}}
+								{{$qRender->year()}}
 							</div>
 
 							<!-- Brand Area -->
 							<div class="col">
 								<label>Brand</label>
-								{{$render->brand($brand)}}
+								{{$qRender->brand($brand)}}
 							</div>				
 
 							<!-- 1st Pos Area -->
 							<div class="col">
 								<label> 1st Pos </label>
-								{{$render->position("second")}}
+								{{$qRender->position("second")}}
 							</div>				
 
 							<!-- 2st Pos Area -->
 							<div class="col">
 								<label> 2st Pos </label>
-								{{$render->position("third")}}
+								{{$qRender->position("third")}}
 							</div>
 							
 							<div class="col">
 								<label> Currency </label>
-								{{$render->currency()}}
+								{{$qRender->currency()}}
 							</div>
 							<div class="col-2">
 								<label> Value </label>
-								{{$render->value()}}									
+								{{$qRender->value()}}									
 							</div>
 							<div class="col-2">
 								<label> &nbsp; </label>

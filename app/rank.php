@@ -12,8 +12,8 @@ class rank extends Model{
             $years = array($first);
         }elseif ($second == 0) {
             $years = array($first, $third);
-        }elseif ($third == 0) {$res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency);
-            $years = array($fisrt, $second);
+        }elseif ($third == 0) {
+            $years = array($first, $second);
         }else{
             $years = array($first, $second, $third);
         }

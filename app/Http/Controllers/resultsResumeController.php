@@ -9,8 +9,6 @@ use App\base;
 use App\monthly;
 use App\region;
 use App\salesRep;
-use App\share;
-use App\shareRender;
 use App\brand;
 use App\pRate;
 use App\sql;

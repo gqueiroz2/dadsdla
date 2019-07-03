@@ -85,8 +85,7 @@ class resultsYoYController extends Controller{
     	$matrix = $yoy->assemblers($brands, $lines, $base->getMonth(), $year, $source);
         //var_dump($matrix);
 
-    	$render = new Render();
-    	$renderYoY = new renderYoY();
+    	$render = new RenderYoY();
 
         $region = $r->getRegion($con, array($region));
 
@@ -99,6 +98,6 @@ class resultsYoYController extends Controller{
         $region = $region[0]['name'];
         $rName = $yoy->TRuncateRegion($region);
 
-   	    return view("adSales.results.4YoYPost", compact('render', 'renderYoY', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName'));
+   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName'));
     }
 }

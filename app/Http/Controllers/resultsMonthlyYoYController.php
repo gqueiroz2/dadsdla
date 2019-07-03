@@ -22,7 +22,6 @@ class resultsMonthlyYoYController extends Controller{
 		$con = $db->openConnection("DLA");
 
 		$render = new Render();
-		$renderYoY = new renderYoY();
 
 		$region = new region();
 		$salesRegion = $region->getRegion($con);
@@ -30,7 +29,7 @@ class resultsMonthlyYoYController extends Controller{
         $brands = new brand();
         $brandsValue = $brands->getBrand($con);
 
-        return view("adSales.results.5monthlyYoYGet", compact('render', 'renderYoY', 'salesRegion', 'brandsValue'));
+        return view("adSales.results.5monthlyYoYGet", compact('render', 'salesRegion', 'brandsValue'));
 	}
 
 	public function post(){
@@ -87,9 +86,7 @@ class resultsMonthlyYoYController extends Controller{
         
         //var_dump($matrix[0]);
 
-        $render = new Render();
-        $renderYoY = new renderYoY();
-        $renderMonthlyYoY = new renderMonthlyYoY();
+        $render = new renderMonthlyYoY();
 
     	if (sizeof($brands) > 1) {
             array_push($brands, array('12', 'DN'));
@@ -100,7 +97,7 @@ class resultsMonthlyYoYController extends Controller{
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $monthlyYoY->TRuncateRegion($region);
 
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'renderYoY', 'renderMonthlyYoY', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName'));
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName'));
 	}
 
 }

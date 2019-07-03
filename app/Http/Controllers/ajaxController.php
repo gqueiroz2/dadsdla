@@ -201,7 +201,7 @@ class ajaxController extends Controller{
 
         $renderYoY = new renderYoY();
 
-        $renderYoY->source($region[0]['name']);
+        $renderYoY->sourceYoY($region[0]['name']);
     }
 
 

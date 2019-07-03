@@ -85,7 +85,7 @@ class rankings extends rank{
         return $rtr;
     }
 
-    public function checkColumn($mtx, $m, $v, $values, $name, $val, $type){
+    public function checkColumn($mtx, $m, $v, $values, $name, $val, $type, $years){
         
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
@@ -96,12 +96,12 @@ class rankings extends rank{
 
             $res = $this->getValueByYear($name, $values, $var, $type);
         }elseif ($mtx[$m][0] == "VAR ABS.") {
-            $res = $mtx[1][$v] - $mtx[2][$v];
+            $res = $mtx[$m-sizeof($years)][$v] - $mtx[$m-sizeof($years)+1][$v];
         }elseif ($mtx[$m][0] == "VAR %") {
-            if ($mtx[2][$v] == 0) {
+            if ($mtx[$m-sizeof($years)][$v] == 0) {
                 $res = 0.0;
             }else{
-                $res = ($mtx[1][$v] / $mtx[2][$v])*100;
+                $res = ($mtx[$m-sizeof($years)-1][$v] / $mtx[$m-sizeof($years)][$v])*100;
             }
         }else{
             $res = $name;
@@ -148,7 +148,7 @@ class rankings extends rank{
             if (is_array($values[$y])) {
                 for ($v=0; $v < sizeof($values[$y]); $v++) { 
                     for ($m=0; $m < sizeof($mtx); $m++) {
-                        $mtx[$m][$v+1] = $this->checkColumn($mtx, $m, ($v+1), $values, $values[$y][$v][$aux], $values[$y][$v]['total'], $aux);
+                        $mtx[$m][$v+1] = $this->checkColumn($mtx, $m, ($v+1), $values, $values[$y][$v][$aux], $values[$y][$v]['total'], $aux, $years);
                     }
                 }    
             }else{
