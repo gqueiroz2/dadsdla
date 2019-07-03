@@ -92,23 +92,50 @@ class resultsResumeController extends Controller{
 
 		$brands = $resume->divideBrands($brandID);
 
-		$TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+		if (empty($brands[0])) {
+			$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
-		$matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);
-		
-		$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+			$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
 
-		$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
+			$DN = $resume->grouper(null,$Digital);
 
-		$DN = $resume->grouper($TV,$Digital);
+			$matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+		}elseif (empty($brands[1])) {
+			$TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
-		$matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+			$matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);	
+
+			$DN = $resume->grouper($TV,null);
+
+			$matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+		}else{
+			$TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+
+			$matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);
+			
+			$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+
+			$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);	
+
+			$DN = $resume->grouper($TV,$Digital);
+
+			$matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+		}
 
 		$rName = $resume->TruncateRegion($salesRegion);
 
-		$matrix = array($matrixTV, $matrixDigital, $matrixDN);
+		if (!isset($matrixTV)) {
+			$matrix = array($matrixDigital, $matrixDN);
+			$names = array("Digital", "DN");
+		}elseif (!isset($matrixDigital)) {
+			$matrix = array($matrixTV, $matrixDN);	
+			$names = array("TV", "DN");
+		}else{
+			$matrix = array($matrixTV, $matrixDigital, $matrixDN);
+			$names = array("TV", "Digital", "DN");
+		}
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names'));
 
 	}
 
