@@ -158,7 +158,6 @@ class resultsMQController extends Controller{
 
                 $mq = new resultsMQ();
                 $lines = $mq->lines($con,$pRate,$base->getMonth(),$form,$brands,$year,$regionID,$value,$source);
-                //var_dump($quarter);
                 $matrix = $mq->assemblerQuarters($con,$brands,$lines,$base->getMonth(),$year,$source);
                 
                 $render = new Render();
