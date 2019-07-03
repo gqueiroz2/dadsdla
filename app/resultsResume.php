@@ -204,28 +204,70 @@ class resultsResume extends results{
 		return $mtx;
 	}
 
-	public function grouper($tv,$digital){
+	public function grouper($tv, $digital){
 
 		$DN = array();
+		
+		if (is_null($tv)) {
+			for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $digital["salesCYear"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
-			$DN["salesCYear"][$i] = $digital["salesCYear"][$i] + $tv["salesCYear"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $digital["actual"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
-			$DN["actual"][$i] = $digital["actual"][$i] + $tv["actual"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
+				$DN["target"][$i] = $digital["target"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
-			$DN["target"][$i] = $digital["target"][$i] + $tv["target"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $digital["corporate"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
-			$DN["corporate"][$i] = $digital["corporate"][$i] + $tv["corporate"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $digital["previousYear"][$i];
+			}
+		}elseif (is_null($digital)) {
+			for ($i=0; $i <sizeof($tv["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $tv["salesCYear"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
-			$DN["previousYear"][$i] = $digital["previousYear"][$i] + $tv["previousYear"][$i];
+			for ($i=0; $i <sizeof($tv["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $tv["actual"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["target"]) ; $i++) { 
+				$DN["target"][$i] = $tv["target"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $tv["corporate"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $tv["previousYear"][$i];
+			}
+		}else{
+			for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $digital["salesCYear"][$i] + $tv["salesCYear"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $digital["actual"][$i] + $tv["actual"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
+				$DN["target"][$i] = $digital["target"][$i] + $tv["target"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $digital["corporate"][$i] + $tv["corporate"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $digital["previousYear"][$i] + $tv["previousYear"][$i];
+			}
 		}
 
 		return $DN;

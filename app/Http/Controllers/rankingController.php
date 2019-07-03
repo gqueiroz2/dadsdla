@@ -95,11 +95,9 @@ class rankingController extends Controller {
 
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
+        $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
+
         $all = $r->verifyQuantity($con, $type, $type2, $region);
-        
-        
-        $values = $r->getResultAll($con, $brands, $type, $type2, $region, $value, $pRate, $months, $years);
-        
 
         $mtx = $r->assembler($values, $years, $type);
 

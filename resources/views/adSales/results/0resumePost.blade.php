@@ -56,27 +56,13 @@
 		</div>
 	</div>
 	
-	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row mt-2">
-			<div class="col">				
-				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[0], "TV") }}
+	@for($t = 0; $t < sizeof($matrix); $t++)
+		<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
+			<div class="row mt-2">
+				<div class="col">				
+					{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[$t], $names[$t]) }}
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="container-fluid"  style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row mt-2">
-			<div class="col">
-				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[1], "Digital") }}	
-			</div>
-		</div>		
-	</div>
-
-	<div class="container-fluid"  style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
-		<div class="row mt-2">
-			<div class="col">
-				{{ $render->assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix[2], "DN") }}	
-			</div>
-		</div>		
-	</div>
+	@endfor
 @endsection
