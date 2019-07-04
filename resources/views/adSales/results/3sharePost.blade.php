@@ -95,11 +95,11 @@
 					<div class="form-group">
 						<div class="form-inline">
 							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col col-3" id="div1" style="zoom:125%; display: block; margin-top: 8%;">
+								<div class="col-sm-3" id="div1" style="zoom:125%; display: block; margin-top: 8%;">
 									<div id="chart_div" style="display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
 									<div id="chart_div2" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
 								</div>
-								<div class="col col-9" id="div2" style=" width: 100%; margin-top: 5%;">
+								<div class="col-sm-9" id="div2" style=" width: 100%; margin-top: 5%;">
 									{{$render->mtx($mtx)}}
 								</div>
 							</div>	
