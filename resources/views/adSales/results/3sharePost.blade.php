@@ -97,15 +97,13 @@
 				<div class="container-fluid">
 					<div class="form-group">
 						<div class="form-inline">
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%; ">
-								<div class="col col-3" style="zoom:125%; display: block; margin-top: 8%;">
-									<div id="chart_div"></div>
+							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
+								<div class="col col-3" id="div1" style="zoom:125%; display: block; margin-top: 8%;">
+									<div id="chart_div" style="display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+									<div id="chart_div2" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
 								</div>
-								<div class="col col-7" style=" width: 100%; margin-top: 5%;">
+								<div class="col col-9" id="div2" style=" width: 100%; margin-top: 5%;">
 									{{$render->mtx($mtx)}}
-								</div>
-								<div class="col col-2" style=" width: 100%; margin-top: 5%;">
-									{{$render->mtxShare($mtx)}}
 								</div>
 							</div>	
 						</div>
@@ -117,11 +115,13 @@
 
 	
 	<script type="text/javascript">
+
 		google.charts.load('current', {'packages':['corechart']});
 
-		google.charts.setOnLoadCallback(drawChart);
+		google.charts.setOnLoadCallback(drawChart1);
+		google.charts.setOnLoadCallback(drawChart2);
 
-		function drawChart(){
+		function drawChart1(){
 
 			var data = new google.visualization.DataTable();
 
@@ -165,6 +165,66 @@
         	chart.draw(data, options);
 		
 		}
+
+		function drawChart2(){
+
+			var data = new google.visualization.DataTable();
+
+			data.addColumn("string","brand");
+			data.addColumn("number","value");
+			data.addRows([
+				@for($i = 0; $i<sizeof($mtx["salesRep"]); $i++)
+					@if($i == (sizeof($mtx["salesRep"])-1))
+				    	['{{$mtx["salesRep"][$i]}}',{{$mtx["dn"][$i]}}]
+				    @else
+				    	['{{$mtx["salesRep"][$i]}}',{{$mtx["dn"][$i]}}],
+				    @endif
+				@endfor
+			]);
+
+			var options = {
+				chartArea:{
+					'width':'100%',
+					'height':'100%'
+				},
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend:'none',
+				pieSliceText: 'label',
+				pieSliceTextStyle: {
+					fontSize:'6'
+				}
+				
+				
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+        	chart.draw(data, options);
+		
+		}
+
+	    $(window).resize(function(){
+
+	    	google.charts.setOnLoadCallback(drawChart1);
+			google.charts.setOnLoadCallback(drawChart2);
+
+		});
+
+		$("#chart_div").click(function(){
+
+			$(this).css("display","none");
+			$("#chart_div2").css("display","block");
+			google.charts.setOnLoadCallback(drawChart2);
+
+		});
+
+		$("#chart_div2").click(function(){
+			$(this).css("display","none");
+			$("#chart_div").css("display","block");
+	    	google.charts.setOnLoadCallback(drawChart1);
+
+		});
+
 	</script>
 
 @endsection

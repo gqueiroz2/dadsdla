@@ -51,8 +51,18 @@ class share extends results
 
         $yearView = $year[0];
 
+
         $tmp = array($region);
         $regionView = $r->getRegion($con,$tmp)[0]["name"];
+
+        $vlau = $pr->getCurrency($con);
+
+        for ($p=0; $p <sizeof($vlau) ; $p++) {
+            if ($regionView == $vlau[$p]["region"]) {
+                $crack = $vlau[$p]["id"];
+                break;
+             } 
+        }
 
         //se for todos os canais, ele já pesquisa todos os canais atuais
         
@@ -167,7 +177,7 @@ class share extends results
 
         for ($m=0; $m <sizeof($sourceBrand) ; $m++) {
             for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
-                $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b]);
+                $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b],$crack);
             }
         }
 
@@ -176,9 +186,9 @@ class share extends results
         return $mtx;
     }
 
-    public function generateValue($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table){
+    public function generateValue($con,$sql,$sourceBrand,$region,$year,$brand,$salesRep,$month,$sum,$table,$currency){
         for ($s=0; $s <sizeof($salesRep) ; $s++) {
-            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand[0],$salesRep[$s],$month);
+            $where[$s] = $this->createWhere($sql,$sourceBrand,$region,$year,$brand[0],$salesRep[$s],$month,$currency);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
             $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; //Ele sempre retorna um array de um lado "sum", então coloquei uma atribuição ["sum"] para tirar do array
         }
@@ -227,18 +237,18 @@ class share extends results
         return $table;
     }
 
-    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month){
+    public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month,$currency){
         if ($source == "CMAPS") {
             $columns = array("year","brand_id","sales_rep_id","month");
             $arrayWhere = array($year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "IBMS") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month","campaign_currency_id");
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month,$currency);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Header") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
-            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
+            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month","campaign_currency_id");
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month,$currency);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Digital"){
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
