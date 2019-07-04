@@ -15,7 +15,7 @@
 				<form method="POST" action="{{ route('resultsSharePost') }}" runat="server"  onsubmit="ShowLoading()">
 					@csrf
 					<div class="row justify-content-center">
-						<div class="col">	
+						<div class="col-sm">	
 							<label class='labelLeft'><span class="bold">Region:</span></label>
 							@if($errors->has('region'))
 								<label style="color: red;">* Required</label>
@@ -26,28 +26,28 @@
 								{{$render->regionFiltered($region, $regionID )}}
 							@endif
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Year:</span></label>
 							@if($errors->has('year'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->year()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Months:</span></label>
 							@if($errors->has('month'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->months()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Brands:</span></label>
 							@if($errors->has('brand'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->brand($brand)}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Source:</span></label>
 							@if($errors->has('source'))
 								<label style="color: red;">* Required</label>
@@ -57,7 +57,7 @@
 					</div>
 					<div class="row justify-content-center">
 					
-						<div class="col">
+						<div class="col-sm">
                             <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
                             @if($errors->has('salesRepGroup'))
                                     <label style="color: red;">* Required</label>
@@ -65,14 +65,14 @@
                             {{$render->salesRepGroup($salesRepGroup)}}
                         </div>
 
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 							@if($errors->has('salesRep'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->salesRep()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Currency:</span></label>
 							@if($errors->has('currency'))
 								<label style="color: red;">* Required</label>
@@ -80,14 +80,14 @@
 							{{$render->currency($currency)}}
 						</div>
 						
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'><span class="bold">Value:</span></label>
 							@if($errors->has('value'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->value()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'> &nbsp; </label>
 							<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 						</div>
@@ -97,12 +97,8 @@
 		</div>
 
 		<div class="row justify-content-end">
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col" style="color: #0070c0;font-size: 22px;">
-				<span class="reportsTitle">Share</span>
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				<span class="reportsTitle" style="float: right;">Share</span>
 			</div>
 		</div>
 

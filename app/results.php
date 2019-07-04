@@ -20,7 +20,7 @@ class results extends base{
         $cYear = date('Y');
         $pRate = new pRate();
         
-        $div = $base->generateDiv($con,$pRate,$region,$cYear,$currency);
+        $div = $base->generateDiv($con,$pRate,$region,array($cYear),$currency);
         
         if ($table == "digital") {
             $sum = $value."_revenue";
@@ -61,11 +61,14 @@ class results extends base{
                     $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
                 }
                 
-                $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
 
-                $vector[$m] += $valueSum/$div;
+                $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
                 
+                $vector[$m] += $valueSum;
             }
+
+
+            $vector[$m] = $vector[$m]/$div;
 
         }
 
@@ -129,7 +132,7 @@ class results extends base{
             $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region),$keyYear);
+                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
             }else{
                 $pRate = 1.0;
             }    

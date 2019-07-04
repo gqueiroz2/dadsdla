@@ -55,22 +55,30 @@ class resultsResume extends results{
 			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			        	                   AND (ytd.year IN ($cYear) )
 			        	                   AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )
+			        	                   AND (ytd.campaign_currency_id IN (".$regionID."))
+			        	                   ";
 
 			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
 			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
+			                                    AND (ytd.campaign_currency_id IN (".$regionID."))
+			                                    ";
 			        }else{
 			        	$whereSales[$m][$b] = "WHERE (mini_header.month IN (".$months[$m][1].") ) 
 			        	                   AND (mini_header.year IN ($cYear) )
 			        	                   AND (mini_header.campaign_sales_office_id IN (".$regionID.") )
-			        	                   AND (mini_header.brand_id IN (".$brands[$b][0].") )";
+			        	                   AND (mini_header.brand_id IN (".$brands[$b][0].") )
+			        	                   AND (ytd.campaign_currency_id IN (".$regionID."))
+			        	                   ";
 
 			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
 			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
+			                                    AND (ytd.campaign_currency_id IN (".$regionID."))
+			                                    ";
 			        }
 		        }	
 			}
@@ -204,28 +212,70 @@ class resultsResume extends results{
 		return $mtx;
 	}
 
-	public function grouper($tv,$digital){
+	public function grouper($tv, $digital){
 
 		$DN = array();
+		
+		if (is_null($tv)) {
+			for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $digital["salesCYear"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
-			$DN["salesCYear"][$i] = $digital["salesCYear"][$i] + $tv["salesCYear"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $digital["actual"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
-			$DN["actual"][$i] = $digital["actual"][$i] + $tv["actual"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
+				$DN["target"][$i] = $digital["target"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
-			$DN["target"][$i] = $digital["target"][$i] + $tv["target"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $digital["corporate"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
-			$DN["corporate"][$i] = $digital["corporate"][$i] + $tv["corporate"][$i];
-		}
+			for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $digital["previousYear"][$i];
+			}
+		}elseif (is_null($digital)) {
+			for ($i=0; $i <sizeof($tv["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $tv["salesCYear"][$i];
+			}
 
-		for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
-			$DN["previousYear"][$i] = $digital["previousYear"][$i] + $tv["previousYear"][$i];
+			for ($i=0; $i <sizeof($tv["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $tv["actual"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["target"]) ; $i++) { 
+				$DN["target"][$i] = $tv["target"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $tv["corporate"][$i];
+			}
+
+			for ($i=0; $i <sizeof($tv["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $tv["previousYear"][$i];
+			}
+		}else{
+			for ($i=0; $i <sizeof($digital["salesCYear"]) ; $i++) { 
+				$DN["salesCYear"][$i] = $digital["salesCYear"][$i] + $tv["salesCYear"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["actual"]) ; $i++) { 
+				$DN["actual"][$i] = $digital["actual"][$i] + $tv["actual"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["target"]) ; $i++) { 
+				$DN["target"][$i] = $digital["target"][$i] + $tv["target"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["corporate"]) ; $i++) { 
+				$DN["corporate"][$i] = $digital["corporate"][$i] + $tv["corporate"][$i];
+			}
+
+			for ($i=0; $i <sizeof($digital["previousYear"]) ; $i++) { 
+				$DN["previousYear"][$i] = $digital["previousYear"][$i] + $tv["previousYear"][$i];
+			}
 		}
 
 		return $DN;

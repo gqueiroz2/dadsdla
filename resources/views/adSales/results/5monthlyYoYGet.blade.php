@@ -9,11 +9,11 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
+			<div class="col-sm">
 				<form method="POST" action="{{ route("resultsMonthlyYoYPost") }}" runat="server"  onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label>Sales Region</label>
 								@if($errors->has('region'))
@@ -27,7 +27,7 @@
 							</div>
 						</div>
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label>Year</label>
 								@if($errors->has('year'))
@@ -37,7 +37,7 @@
 							</div>
 						</div>
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label>Brand</label>
 								@if($errors->has('brand'))
@@ -47,7 +47,7 @@
 							</div>
 						</div>	
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> 1st Pos </label>
 								@if($errors->has('firstPos'))
@@ -57,7 +57,7 @@
 							</div>
 						</div>	
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> 2st Pos </label>
 								@if($errors->has('secondPos'))
@@ -67,7 +67,7 @@
 							</div>
 						</div>	
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> 3rd Pos </label>
 								@if($errors->has('thirdPos'))
@@ -77,7 +77,7 @@
 							</div>
 						</div>	
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> Currency </label>
 								@if($errors->has('currency'))
@@ -87,7 +87,7 @@
 							</div>
 						</div>	
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> Value </label>
 								@if($errors->has('value'))
@@ -97,7 +97,7 @@
 							</div>
 						</div>
 
-						<div class="col">
+						<div class="col-sm">
 							<div class="form-inline">
 								<label> &nbsp; </label>
 								<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">		
@@ -109,16 +109,8 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col text-nowrap" style="color: #0070c0;font-size: 22px;">
-				Monthly Year Over Year
+			<div class="col-sm text-nowrap" style="color: #0070c0;font-size: 22px;">
+				<span style="float: right;"> Monthly Year Over Year </span> 
 			</div>
 		</div>	
 

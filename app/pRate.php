@@ -40,8 +40,10 @@ class pRate extends Management{
 		$where = "";
 
 		if($region && $year){
+			
 			$ids = implode($region);
-			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($year)";
+			$years = implode($year);
+			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($years)";
 		}
 
 		$sql = new sql();

@@ -201,7 +201,7 @@ class ajaxController extends Controller{
 
         $renderYoY = new renderYoY();
 
-        $renderYoY->source($region[0]['name']);
+        $renderYoY->sourceYoY($region[0]['name']);
     }
 
 
@@ -409,13 +409,19 @@ class ajaxController extends Controller{
             $var = "client";
             
         }
-
+        
         for ($n=0; $n < sizeof($resp); $n++) { 
             
-            $names[$n] = $resp[$n][$var];
+            $names[$n]['id'] = $resp[$n]["id"];
+            $names[$n]['name'] = $resp[$n][$var];
+
+            if ($name == "agency") {
+                $names[$n]['agencyGroup'] = $resp[$n]['agencyGroup'];
+            }
+
         }
         
-        $rtr = array_unique($names);
+        $rtr = array_map("unserialize", array_unique(array_map("serialize", $names)));
 
         return $rtr;
         
@@ -436,11 +442,18 @@ class ajaxController extends Controller{
         }else{
             $resp = $this->typeHandler($con, $fun, 0, $region);
         }
-        
-        foreach ($resp as $val) {
-            $auxVal = base64_encode($val);
-            echo "<option selected='true' value='$auxVal'>".$val."</option>";
+
+
+        for ($r=0; $r < sizeof($resp); $r++) { 
+            $auxVal = base64_encode(json_encode($resp[$r]));
+            if ($name == "agency") {
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']." - ".$resp[$r]['agencyGroup']."</option>";    
+            }else{
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']."</option>";    
+            }
+            
         }
+        
     }
 
     public function topsByType2(){
@@ -450,7 +463,7 @@ class ajaxController extends Controller{
         echo "<option selected='true' value='All'>All</option>";
 
         if (sizeof($num) > 10) {
-            
+         
             echo "<option value='10'>10</option>";
             echo "<option value='15'>15</option>";
             echo "<option value='25'>25</option>";   

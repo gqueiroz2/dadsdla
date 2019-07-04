@@ -27,7 +27,7 @@ class renderResume extends Render {
 				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>".strtoupper($salesShow)."/CORPORATE </th>";
 				//<th class="grey"> Sales/P&R </th>
 				//<th class="grey"> Sales/Finance </th>
-				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'> $salesShow/$pYear </th>";
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>".strtoupper($salesShow)."/$pYear </th>";
     		echo "</tr>";
 
     		for ($m=0; $m < sizeof($matrix); $m++) { 

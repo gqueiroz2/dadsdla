@@ -25,4 +25,18 @@ class digital extends Management {
 
         return $res;
     }
+
+    public function excelToBase($sp){
+
+        //var_dump($sp);
+
+        unset($sp[0]);
+
+        $sp = array_values($sp);
+        var_dump($sp);
+        for ($s=0; $s < sizeof($sp); $s++) { 
+            
+        }
+
+    }
 }

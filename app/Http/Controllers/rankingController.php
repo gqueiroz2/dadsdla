@@ -35,6 +35,8 @@ class rankingController extends Controller {
 
     public function post(){
     	
+        //var_dump(Request::all());
+
     	$base = new base();
 
     	$db = new dataBase();
@@ -64,12 +66,18 @@ class rankingController extends Controller {
     	$salesRegion = $r->getRegion($con);
 
     	$type = Request::get("type");
-    	$type2 = Request::get("type2");
-    	
+    	$temp = Request::get("type2");
+
+        for ($t=0; $t < sizeof($temp); $t++) { 
+            $type2[$t] = json_decode(base64_decode($temp[$t]));
+        }
+
+        /*
     	for ($t=0; $t < sizeof($type2); $t++) { 
     		$type2[$t] = base64_decode($type2[$t]);
     	}
-    	
+    	*/
+
     	$nPos = Request::get("nPos");
 
     	$months = Request::get("month");
@@ -95,20 +103,30 @@ class rankingController extends Controller {
 
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
-        $all = $r->verifyQuantity($con, $type, $type2, $region);
-        
-        
-        $values = $r->getResultAll($con, $brands, $type, $type2, $region, $value, $pRate, $months, $years);
-        
+        $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
+       
+        $filterValues = $r->filterValues($values, $type2, $type);
 
-        $mtx = $r->assembler($values, $years, $type);
+        /*$somao = 0;
+        for ($f=0; $f < sizeof($filterValues); $f++) { 
+            if($filterValues[$f] == 1){
+                $somao++;
+            }
+        }
 
-        /*for ($i=0; $i < sizeof($values); $i++) { 
-            var_dump($values[$i][0]);
-        }*/
+        var_dump($somao);*/
+        //var_dump($type);
+        //$all = $r->verifyQuantity($con, $type, $type2, $region);
+        
+        if ($nPos == 'All') {
+            $size = sizeof($type2);
+        }else{
+            $size = $nPos;
+        }
 
-        //var_dump($values);
-        //var_dump(Request::all());
+        $mtx = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
+        var_dump($mtx);
+
     }
 }
 

@@ -10,7 +10,7 @@ use App\import;
 use App\chain;
 use App\sql;
 use App\RenderChain;
-
+use App\digital;
 class ChainController extends Controller{
     public function chainGet(){
     	$rC = new RenderChain();
@@ -104,7 +104,17 @@ class ChainController extends Controller{
 				}
 				unset($spreadSheet[$pivot]);
 				$spreadSheet = array_values($spreadSheet);
-				break;			
+				break;	
+            case 'digital':
+                
+                $dg = new digital();
+
+                $spreadSheet = $dg->excelToBase($spreadSheet);
+
+                var_dump($spreadSheet);
+
+
+                break;		
 		}
 
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);

@@ -67,6 +67,10 @@
 			@for($m=0;$m<16;$m++)
 				$("#rf-"+{{$m}}).change(function(){
 
+					if ($(this).val() == '') {
+						$(this).val(parseFloat(0));
+					}
+
 					if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
 						var value = parseFloat($("#rf-0").val())+parseFloat($("#rf-1").val())+parseFloat($("#rf-2").val());
 						$("#rf-3").val(value);
@@ -116,6 +120,11 @@
 
 				@for($c=0;$c<10;$c++)
 					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
+
+						if ($(this).val() == '') {
+							$(this).val(parseFloat(0));
+						}
+
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
 							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
 							$("#clientRF-"+{{$c}}+"-3").val(value);

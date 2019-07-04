@@ -148,10 +148,5 @@
       }); 
     });
 
-    $(window).resize(function(){
-      drawChart();
-    });
-
-
   });
 
