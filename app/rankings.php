@@ -23,21 +23,19 @@ class rankings extends rank{
         return $res;
     }
 
-    public function checkOtherYearsPosition($name, $values, $year, $type){
+    public function checkOtherYearsPosition($name, $values, $year, $years, $type){
         
-        if ($year == "2019") {
-            $y = 0;
-        }elseif ($year == "2018") {
-            $y = 1;
-        }else{
-            $y = 2;
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if ($year == $years[$y]) {
+                $p = $y;       
+            }
         }
 
         $ok = 0;
 
-        if (is_array($values[$y])) {
-            for ($v=0; $v < sizeof($values[$y]); $v++) { 
-                if ($values[$y][$v][$type] == $name) {
+        if (is_array($values[$p])) {
+            for ($v=0; $v < sizeof($values[$p]); $v++) { 
+                if ($values[$p][$v][$type] == $name) {
                     $pos = $v+1;
                     $ok = 1;
                 }
@@ -47,30 +45,28 @@ class rankings extends rank{
         }
 
         if ($ok == 0) {
-            $pos = 0;
+            $pos = -1;
         }
 
         return $pos;
 
     }
 
-    public function getValueByYear($name, $values, $year, $type){
+    public function getValueByYear($name, $values, $year, $years, $type){
         
-        if ($year == "2019") {
-            $y = 0;
-        }elseif ($year == "2018") {
-            $y = 1;
-        }else{
-            $y = 2;
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if ($year == $years[$y]) {
+                $p = $y;       
+            }
         }
 
         $ok = 0;
 
-        if (is_array($values[$y])) {
-            for ($v=0; $v < sizeof($values[$y]); $v++) { 
+        if (is_array($values[$p])) {
+            for ($v=0; $v < sizeof($values[$p]); $v++) { 
             
-                if ($values[$y][$v][$type] == $name) {
-                    $rtr = $values[$y][$v]['total'];
+                if ($values[$p][$v][$type] == $name) {
+                    $rtr = $values[$p][$v]['total'];
                     $ok = 1;
                 }
             }
@@ -85,33 +81,33 @@ class rankings extends rank{
         return $rtr;
     }
 
-    public function checkColumn($mtx, $m, $v, $values, $name, $val, $type, $years){
+    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
         
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
 
-            $res = $this->checkOtherYearsPosition($name, $values, $var, $type);
+            $res = $this->checkOtherYearsPosition($type2[$t]->name, $values, $var, $years, $type);
         }elseif (substr($mtx[$m][0], 0, 3) == "Rev") {
             $var = substr($mtx[$m][0], 5);
 
-            $res = $this->getValueByYear($name, $values, $var, $type);
+            $res = $this->getValueByYear($type2[$t]->name, $values, $var, $years, $type);
         }elseif ($mtx[$m][0] == "VAR ABS.") {
-            $res = $mtx[$m-sizeof($years)][$v] - $mtx[$m-sizeof($years)+1][$v];
+            $res = $mtx[$m-sizeof($years)][$p] - $mtx[$m-sizeof($years)+1][$p];
         }elseif ($mtx[$m][0] == "VAR %") {
-            if ($mtx[$m-sizeof($years)][$v] == 0) {
+            if ($mtx[$m-sizeof($years)][$p] == 0) {
                 $res = 0.0;
             }else{
-                $res = ($mtx[$m-sizeof($years)-1][$v] / $mtx[$m-sizeof($years)][$v])*100;
+                $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
         }else{
-            $res = $name;
+            $res = $type2[$t]->name;
         }
 
         return $res;
 
     }
 
-    public function assembler($values, $years, $type){
+    public function assembler($values, $type2, $years, $type, $filterValues, $size){
         //var_dump($values);
 
         if (strlen($type) > 6) {
@@ -144,20 +140,21 @@ class rankings extends rank{
             $mtx[$last+1][0] = "VAR %";    
         }
 
-        for ($y=0; $y < sizeof($years); $y++) {
-            if (is_array($values[$y])) {
-                for ($v=0; $v < sizeof($values[$y]); $v++) { 
-                    for ($m=0; $m < sizeof($mtx); $m++) {
-                        $mtx[$m][$v+1] = $this->checkColumn($mtx, $m, ($v+1), $values, $values[$y][$v][$aux], $values[$y][$v]['total'], $aux, $years);
-                    }
-                }    
-            }else{
-                $mtx[$m][$v+1] = false;
-            }
-            
-        }
+        $p = 1;
 
-        var_dump($mtx);
+        for ($t=0; $t < $size; $t++) { 
+            
+            if ($filterValues[$type2[$t]->id] == 1) {
+                
+                for ($m=0; $m < sizeof($mtx); $m++) { 
+                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
+
+                }
+            }
+        }
+        
+        //var_dump($mtx);
+        return $mtx;
 
     }
 }

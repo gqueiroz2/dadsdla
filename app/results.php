@@ -61,11 +61,12 @@ class results extends base{
                     $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
                 }
                 
+
                 $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
                 
                 $vector[$m] += $valueSum;
-                
             }
+
 
             $vector[$m] = $vector[$m]/$div;
 

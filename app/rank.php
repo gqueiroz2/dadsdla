@@ -23,23 +23,20 @@ class rank extends Model{
 
     public function verifyQuantity($con, $type, $type2, $region){
         
-        if (strlen($type) > 6) {
+        if ($type == "agencyGroup") {
         	$a = new agency();
         	$resp = $a->getAgencyGroupByRegion($con, array($region));
-        	$var = "agencyGroup";
         }elseif ($type == "agency") {
             $a = new agency();
             $resp = $a->getAgencyByRegion($con, array($region));
-            $var = "agency";
         }else{
             $c = new client();
             $resp = $c->getClientByRegion($con, array($region));
-            $var = "client";
         }
 
         for ($n=0; $n < sizeof($resp); $n++) { 
             
-            $names[$n] = $resp[$n][$var];
+            $names[$n] = $resp[$n][$type];
         }
 
         $auxResp = array_unique($names);
@@ -164,5 +161,31 @@ class rank extends Model{
         
         return $res;
 
+    }
+
+    public function searchValue($name, $values, $type){
+
+        for ($v=0; $v < sizeof($values); $v++) {
+            $something = $type."ID";
+            /*var_dump("name:".$name->id);
+            var_dump("values:".$values[$v][$something]);*/
+            if ($name->id == $values[$v][$something]) {
+                //var_dump($name->id);
+                return 1;
+            }
+        }
+
+        return 0;
+
+    }
+
+    public function filterValues($values, $type2, $type){
+        //var_dump($type2);
+        for ($t=0; $t < sizeof($type2); $t++) {
+            $res[$type2[$t]->id] = $this->searchValue($type2[$t], $values[0], $type);
+        }
+
+        return $res;
+        
     }
 }

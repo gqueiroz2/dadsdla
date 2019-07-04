@@ -244,15 +244,17 @@ class chain extends excel{
 				}
 			}
         }elseif($column == 'campaign_currency'){
-        	$rtr =  array(false,'campaign_currency_id');
-
+            $rtr =  array(false,'campaign_currency_id');
         	for ($c=0; $c < sizeof($currencies); $c++) { 
 				if($current == $currencies[$c]['name']){	
 					$rtr =  array( $currencies[$c]['id'],'campaign_currency_id');
+                    break;
 				}elseif($current == 'VES'){
                     $rtr =  array( 9,'campaign_currency_id');
+                    break;
                 }
 			}
+
         }elseif($column == 'brand'){
         	
         	$rtr =  array(false,'brand_id');
