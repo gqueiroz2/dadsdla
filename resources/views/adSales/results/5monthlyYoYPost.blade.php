@@ -77,7 +77,7 @@
 			</div>
 			<div class="col-2">
 				<button id="buttonModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#SemestresTotal" style="width: 100%">
-					Semestre e Total
+					Semester and Totals
 				</button>
 			</div>
 			<div class="col-2">
