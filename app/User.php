@@ -244,7 +244,7 @@ class User extends Management{
         return $bool;
 
     }
-
+/*
     public function autenticate($con,$as){
         $attributes = $as->getAttributes();
         $tmp = $attributes["Email"][0];
@@ -271,7 +271,7 @@ class User extends Management{
 	}
 
     }
-
+*/
     public function login($con){
 	
         $email = Request::get('email');
