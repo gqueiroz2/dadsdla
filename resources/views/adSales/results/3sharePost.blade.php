@@ -28,7 +28,7 @@
 				<form method="POST" action="{{ route('resultsSharePost') }}" runat="server"  onsubmit="ShowLoading()">
 					@csrf
 					<div class="row justify-content-center">
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Region:</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($region)}}							
@@ -36,26 +36,26 @@
 								{{$render->regionFiltered($region, $regionID )}}
 							@endif
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Year:</label>
 							{{$render->year()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Months:</label>
 							{{$render->months()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Brands:</label>
 							{{$render->brand($brand)}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Source:</label>
 							{{$render->source()}}
 						</div>
 					</div>
 					<div class="row justify-content-center">
 					
-						<div class="col">
+						<div class="col-sm">
                                                         <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
                                                         @if($errors->has('salesRepGroup'))
                                                                 <label style="color: red;">* Required</label>
@@ -63,31 +63,28 @@
                                                         {{$render->salesRepGroup($salesRepGroup)}}
                                                 </div>
 						
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Sales Rep:</label>
 							{{$render->salesRep($salesRep)}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Currency:</label>
 							{{$render->currency($currency)}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'>Value:</label>
 							{{$render->value()}}
 						</div>
-						<div class="col">
+						<div class="col-sm">
 							<label class='labelLeft'> &nbsp; </label>
 							<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 						</div>
 					</div>
 				</form>
 				<div class="row justify-content-end">
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col" style="color: #0070c0;font-size: 22px;">
-						{{$rName}} - Share : {{$mtx["source"]}} - {{$mtx["year"]}}
+
+					<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+						<span style="float: right;"> {{$rName}} - Share : {{$mtx["source"]}} - {{$mtx["year"]}} </span>
 					</div>
 				</div>
 			</div>
@@ -206,7 +203,9 @@
 	    $(window).resize(function(){
 
 	    	google.charts.setOnLoadCallback(drawChart1);
-			google.charts.setOnLoadCallback(drawChart2);
+			google.charts.setOnLoadCallback(drawChart2);	
+
+			$("#table-share").css("width","100%");
 
 		});
 
