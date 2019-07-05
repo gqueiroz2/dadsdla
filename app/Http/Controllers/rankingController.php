@@ -116,8 +116,11 @@ class rankingController extends Controller {
 
         $mtx = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
         //var_dump($type2);
+        $names = $r->createNames($type, $months, $years);
 
+        $render = new renderRanking();
 
+        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value'));
 
     }
 }

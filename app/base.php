@@ -90,6 +90,18 @@ class base extends Model{
         return $intMonth;
     }
 
+    public function intToMonth2($month){
+        $monthNames = array();
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            for ($m2=0; $m2 <sizeof($month) ; $m2++) { 
+                if($month[$m2] == $this->month[$m][1]){
+                    array_push($monthNames, $this->month[$m][2]);
+                }
+            }
+        }
+        return $monthNames;   
+    }
+
     public function intToMonth($month){
         $monthNames = array();
         for ($m=0; $m < sizeof($this->month); $m++) { 

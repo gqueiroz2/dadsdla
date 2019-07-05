@@ -8,6 +8,7 @@ use App\client;
 use App\sql;
 use App\pRate;
 use App\rank;
+use App\base;
 
 class rankings extends rank{
 
@@ -45,7 +46,7 @@ class rankings extends rank{
         }
 
         if ($ok == 0) {
-            $pos = -1;
+            $pos = "-";
         }
 
         return $pos;
@@ -81,7 +82,7 @@ class rankings extends rank{
         return $rtr;
     }
 
-    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
+    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p, $typeF){
         
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
@@ -100,7 +101,12 @@ class rankings extends rank{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
         }else{
-            $res = $type2[$t]->name;
+            if ($typeF = "agencyGroup") {
+                $res = $type2[$t]->name." - ".$type2[$t]->agencyGroup;    
+            }else{
+                $res = $type2[$t]->name;    
+            }
+            
         }
 
         return $res;
@@ -140,20 +146,66 @@ class rankings extends rank{
             $mtx[$last+1][0] = "VAR %";    
         }
 
-        $p = 1;
-
         for ($t=0; $t < $size; $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
                 
                 for ($m=0; $m < sizeof($mtx); $m++) { 
-                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
+                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m]), $type));
                 }
             }
         }
         
+        $fun = "array_multisort(";
+
+        for ($m=0; $m < sizeof($mtx); $m++) { 
+            $fun .= "\$mtx[".$m."], SORT_ASC";
+
+            if ($m != sizeof($mtx)-1) {
+                $fun .= ", ";
+            }
+        }
+
+        $fun .= ");";
+        eval($fun);
         //var_dump($mtx);
         return $mtx;
+    }
 
+    public function createNames($type, $months, $years){
+        
+        if ($type == "agencyGroup") {
+            $res['name'] = "Agency groups";
+        }else{
+            $res['name'] = ucfirst($type)."s";
+        }
+
+
+        $b = new base();
+
+        $month = $b->intToMonth2($months);
+
+        $res['months'] = "";
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            
+            $res['months'] .= $month[$m];
+
+            if ($m == sizeof($month)-2) {
+                $res['months'] .= " and ";
+            }elseif (($m != sizeof($month)-2) && ($m != sizeof($month)-1)) {
+                $res['months'] .= ", ";
+            }
+            
+        }
+
+        if (sizeof($years) >= 2) {
+            $res['years'] = $years[0]." and ".$years[1];
+        }else{
+            $res['years'] = $years[0];
+        }
+        
+
+        return $res;
     }
 }
