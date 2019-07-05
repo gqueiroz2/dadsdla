@@ -28,5 +28,16 @@ class VPController extends Controller
 
     public function post(){
 
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $r = new region();
+        $sr = new salesRep();
+        $render = new Render();
+        $pr = new pRate();
+
+        $region = $r->getRegion($con,null);
+        $currency = $pr->getCurrency($con,null);
+
+        return view('pAndR.VPView.get',compact('render','region','currency'));
     }
 }
