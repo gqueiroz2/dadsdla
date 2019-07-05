@@ -72,11 +72,9 @@ class rankingController extends Controller {
             $type2[$t] = json_decode(base64_decode($temp[$t]));
         }
 
-        /*
-    	for ($t=0; $t < sizeof($type2); $t++) { 
+        /*for ($t=0; $t < sizeof($type2); $t++) { 
     		$type2[$t] = base64_decode($type2[$t]);
-    	}
-    	*/
+    	}*/
 
     	$nPos = Request::get("nPos");
 
@@ -96,6 +94,7 @@ class rankingController extends Controller {
     	$currency = Request::get("currency");
         $p = new pRate();
         $pRate = $p->getCurrency($con, array($currency));
+        $currencies = $p->getCurrency($con);
 
     	$value = Request::get("value");
 
@@ -107,15 +106,6 @@ class rankingController extends Controller {
        
         $filterValues = $r->filterValues($values, $type2, $type);
 
-        /*$somao = 0;
-        for ($f=0; $f < sizeof($filterValues); $f++) { 
-            if($filterValues[$f] == 1){
-                $somao++;
-            }
-        }
-
-        var_dump($somao);*/
-        //var_dump($type);
         //$all = $r->verifyQuantity($con, $type, $type2, $region);
         
         if ($nPos == 'All') {
@@ -125,7 +115,9 @@ class rankingController extends Controller {
         }
 
         $mtx = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
-        var_dump($mtx);
+        //var_dump($type2);
+
+
 
     }
 }
