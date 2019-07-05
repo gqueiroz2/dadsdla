@@ -148,7 +148,6 @@ class rankings extends rank{
                 
                 for ($m=0; $m < sizeof($mtx); $m++) { 
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
-
                 }
             }
         }
