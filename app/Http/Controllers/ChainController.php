@@ -177,6 +177,7 @@ class ChainController extends Controller{
     	$year = Request::get('year');
     	$complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
 
+
     	if($complete){
             return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{

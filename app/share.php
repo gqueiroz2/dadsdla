@@ -38,6 +38,8 @@ class share extends results
 
         $div = $base->generateDiv($con,$pr,$region,$year,$currency);
 
+        $div = 1/$div;
+
         $tmp = array($currency);
         
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -77,13 +79,13 @@ class share extends results
 
         for ($m=0; $m <sizeof($month) ; $m++) {
             for ($b=0; $b <sizeof($brand); $b++) {
-                if ($m > $actualMonth-1 && ($source == "CMAPS" ||$source == "Header")) {
+                if ($m > $actualMonth-1 && ($source == "CMAPS")) {
                     if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($region == "1") {
                         $sourceBrand[$m][$b] = "CMAPS";
-                     }else{
-                        $sourceBrand[$m][$b] = "Header";
+                    }else{
+    
                     }
                 }else{
                     if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -91,12 +93,12 @@ class share extends results
                     }elseif ($brand[$b][1] == "OTH") {
                         $sourceBrand[$m][$b] = "IBMS";
                     }elseif($brand[$b][1] == "FN" && $region == "1"){
-                        $sourceBrand[$m][$b] = "CMAPS";
+                        $sourceBrand[$m][$b] = "IBMS";
                     }elseif ($brand[$b][1] == "FN" && $region != "1"){
                         $sourceBrand[$m][$b] = "IBMS";
                     }else{
                         $sourceBrand[$m][$b] = $source;
-                     }
+                    }
                  }
              }
          }
@@ -205,9 +207,9 @@ class share extends results
             }
         }elseif($source == "IBMS"){
             if ($value == "gross") {
-                $columns = "gross_revenue";
+                $columns = "gross_revenue_prate";
             }else{
-                $columns = "net_revenue";
+                $columns = "net_revenue_prate";
             }
         }elseif($source == "Header"){
             $columns = "campaign_option_spend";
@@ -243,12 +245,12 @@ class share extends results
             $arrayWhere = array($year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "IBMS") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month","campaign_currency_id");
-            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month,$currency);
+            $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Header") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month","campaign_currency_id");
-            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month,$currency);
+            $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Digital"){
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");

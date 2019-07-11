@@ -88,6 +88,7 @@ class chain extends excel{
             $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
         }
         return $bool;
+
     }
 
      public function thirdToDLA($sql,$con,$tCon,$table,$year,$truncate){
@@ -157,11 +158,16 @@ class chain extends excel{
     }
 
     public function handleForLastTable($con,$table,$current,$columns){
-    	        
-        for ($c=0; $c < sizeof($current); $c++) { 
-            $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['agency']);
-            $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['client']);
-        }  
+    	for ($c=0; $c < sizeof($current); $c++) { 
+            if($table == "cmaps"){
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,"Brazil",$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,"Brazil",$current[$c]['client']);
+            }else{                
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['client']);                
+            }
+        }
+              
         /*
     	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
     	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
@@ -485,13 +491,13 @@ class chain extends excel{
                 if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
                 }else{
-                    $values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$nextColumns[$c]] )."\"";
+                    $values .= "\"".  addslashes($spreadSheet[$nextColumns[$c]])."\"";
                 }
             }else{
                 if($columns[$c] == "gross" || $columns[$c] == "net" || $columns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$columns[$c]],5)."\"";
                 }else{
-                    $values .= "\"".  str_replace("\\", "\\\\", $spreadSheet[$columns[$c]] )."\"";
+                    $values .= "\"".  addslashes($spreadSheet[$columns[$c]])."\"";
                 }
             }
             if($c != (sizeof($columns) - 1) ){

@@ -20,16 +20,16 @@
 
 @section('content')
 @if($userLevel == 'SU')
-	<div class="container-fluid" style="margin-top: 5%;">
+	<div class="container-fluid">
 		<div class="row justify-content-center">
-			<div class="col-sm-10">
+			<div class="col-sm">
 				<div class="card">
 
 					<div class="card-header">
 						<center>
 							<span style="font-size:22px;"><b> RelationShip Agency - Select a Region </b></span>	
 						</center>
-						<form method="POST" action="{{route('relationshipAgencyPost')}}" runat="server"  onsubmit="ShowLoading()">
+							<form method="POST" action="{{route('relationshipAgencyPost')}}" runat="server"  onsubmit="ShowLoading()">
 							@csrf
 								<div class="row">
 									<div class="col-sm">
@@ -54,13 +54,19 @@
 								</div>
 							</form>	
 					</div>
-<!--
+
 					<div class="card-body">
 						<div class="container-fluid">
-													
+								
+
+							<form method="POST" action="{{route('relationshipUpdateAgency')}}" runat="server"  onsubmit="ShowLoading()">
+							@csrf
+								{{$render->base($agencies,$agency)}}
+							</form>
+							
 						</div>							
 					</div>
--->
+
 				</div>
 			</div>
 		</div>

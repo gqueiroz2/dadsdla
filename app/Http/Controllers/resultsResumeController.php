@@ -79,10 +79,12 @@ class resultsResumeController extends Controller{
 		$tmp = Request::get("brand");
 		$brandID = $base->handleBrand($tmp);
 		$currencyID = Request::get('currency');
+
 		$value = Request::get('value');		
 		$month = $base->getMonth();
 		$tmp = $pr->getCurrency($con,array($currencyID));
 		if($tmp){$currencyS = $tmp[0]['name'];}else{$currencyS = "ND";}
+
 		$valueS = strtoupper($value);
 		$resume = new resultsResume();
 		

@@ -90,7 +90,7 @@ class rank extends Model{
 
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
-                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "ASC");
                 array_pop($colsValue);
 
                 $from = $names;

@@ -59,7 +59,7 @@
 							@if($errors->has('brands'))
 								<label style="color: red">* Required</label>
 							@else
-								{{$render->brand($brands)}}
+								{{$render->brand($brand)}}
 							@endif
 						</div>
 						<div class="col">
@@ -113,7 +113,7 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				
+				{{$render->assemble($mtx, $names, $pRate, $value)}}
 			</div>
 		</div>
 	</div>

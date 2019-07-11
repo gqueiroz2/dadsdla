@@ -302,7 +302,6 @@ class ajaxController extends Controller{
             echo "<option value='CMAPS'> CMAPS </option>";
         }else{
             echo "<option value='IBMS'> IBMS </option>";
-            echo "<option value='Header'> Header </option>";
         }
     }
 

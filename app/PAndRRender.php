@@ -8,6 +8,8 @@ class PAndRRender extends Render
 {
     protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
+    protected $channel = array('DC','HH','DK','AP','TLC','ID','DT','FN','ONL','VIX','OTH');
+
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
     public function AE1($total2018,$totaltotal2018,$totalClient2018,$client2018){
@@ -138,7 +140,15 @@ class PAndRRender extends Render
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:4.5%;  border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
                         }else{
-                            echo "<td class='odd' style='width:4.5%'><input type='text' id='clientRF-$c-$m' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
+                            echo "<td class='odd' style='width:4.5%'>
+                                <input type='text' id='clientRF-$c-$m' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+
+                                for ($ch=0; $ch <sizeof($this->channel); $ch++) {
+                                    echo "<div style='display:none;'>".$this->channel[$ch]."</div>" ;
+                                    echo "<input type='hidden'>";
+                                }
+
+                            echo "</td>";
                         }
                     }
                     echo "<td class='smBlue' style='width:4.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalClient-$c' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'></td>";
@@ -192,6 +202,7 @@ class PAndRRender extends Render
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         echo "<td>&nbsp</td>";
                     }
+
                     echo "<td>&nbsp</td>";
                 echo "</tr>";
             }
