@@ -141,7 +141,8 @@ class salesRep extends Management{
 				sr.name AS 'salesRep',	
 				srg.name AS 'salesRepGroup',
 				srg.ID AS 'salesRepGroupID',
-				r.name AS 'region'";
+				r.name AS 'region',
+				sr.ab_name AS abName";
 
 		$where = "";
 
@@ -163,7 +164,7 @@ class salesRep extends Management{
 		$order = "srg.ID,sr.name";
 
 		$res = $sql->select($con,$columns,$table,$join,$where,$order);
-		$from = array('id','salesRep','salesRepGroup','region');
+		$from = array('id','salesRep','salesRepGroup','region','abName');
 
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;
