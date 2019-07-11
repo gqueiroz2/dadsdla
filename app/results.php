@@ -21,7 +21,7 @@ class results extends base{
         $pRate = new pRate();
         
         $div = $base->generateDiv($con,$pRate,$region,array($cYear),$currency);
-        
+
         if ($table == "digital") {
             $sum = $value."_revenue";
         }
@@ -149,7 +149,7 @@ class results extends base{
             }else{
                 $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
             }    
-        }else{
+        }else{            
             $pRate = 1.0;
         }
 
