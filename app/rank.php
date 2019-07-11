@@ -3,9 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\agency;
 
 class rank extends Model{
     
+    public function getName($value){
+        
+        $newValue = "";
+        $ok = false;
+        for ($v=0; $v < strlen($value); $v++) { 
+            
+            if ($value[$v] != "-" && !$ok) {
+                $newValue .= $value[$v];
+            }else{
+                $ok = true;
+            }
+        }
+        //var_dump(substr($newValue, 0, (strlen($newValue)-1)));
+        return substr($newValue, 0, (strlen($newValue)-1));
+    }
+
     public function createPositions($first, $second, $third){
         
         if ($second == 0 && $third == 0) {
@@ -51,7 +68,81 @@ class rank extends Model{
 
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region,  $value, $years, $months, $currency, $leftName2=null){
+    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $mtx, $months, $currency, $y, $leftName2=null){
+        
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            $brands_id[$b] = $brands[$b][0];
+        }
+
+        $sql = new sql();
+
+        $as = "total";
+
+        $tableAbv = "a";
+        $leftAbv = "b";
+
+        if ($type == "agencyGroup") {
+            
+        }else{
+
+            $a = new agency();
+
+            if ($tableName == "ytd") {
+                $value .= "_revenue";
+                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year", "agency_id");
+                $colsValue = array($region, $currency[0]['id'], $brands_id, $months, $year, "");
+            }else{
+                $columns = array("brand_id", "month", "year", "agency_id");
+                $colsValue = array($brands_id, $months, $year, "");
+            }
+
+            $table = "$tableName $tableAbv";
+
+            $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."name AS '".$type."', SUM($value) AS $as";
+
+            $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id";
+
+            $name = $type."_id";
+            $names = array($type."ID", $type, $as);
+
+            for ($m=1; $m < sizeof($mtx); $m++) { 
+                
+                $nameMtx = $this->getName($mtx[$m]);
+                $agency = $a->getAgencyID($con, $sql, $nameMtx);
+                $colsValue[(sizeof($colsValue)-1)] = $agency;
+                $where = $sql->where($columns, $colsValue);
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name);
+
+                $from = $names;
+
+                $res[$y] = $sql->fetch($values[$y], $from, $from);
+
+            }
+        }
+        var_dump($values);
+        /*for ($y=0; $y < sizeof($years); $y++) {
+            if (is_array($res[$y])) {
+                for ($r=0; $r < sizeof($res[$y]); $r++) { 
+
+                    $p = new pRate();
+
+                    if ($currency[0]['name'] == "USD") {
+                        $pRate = 1.0;
+                    }else{
+                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                    }
+
+                    $res[$y][$r]['total'] /= $pRate;
+                }   
+            }else{
+
+            }
+        }*/
+
+        return $res;
+    }
+
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -66,10 +157,10 @@ class rank extends Model{
             $leftAbv = "b";
             $leftAbv2 = "c";
 
-            if ($tableName == "ytd" || $tableName == "mini_header") {
+            if ($tableName == "ytd") {
                 $value .= "_revenue";
-                $columns = array("campaign_sales_office_id", "brand_id", "month", "year");
-                $colsValue = array($region, $brands_id, $months);
+                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year");
+                $colsValue = array($region, $currency[0]['id'], $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
@@ -106,10 +197,10 @@ class rank extends Model{
 
             $as = "total";
 
-            if ($tableName == "ytd" || $tableName == "mini_header") {
+            if ($tableName == "ytd") {
                 $value .= "_revenue";
-                $columns = array("campaign_sales_office_id", "brand_id", "month", "year");
-                $colsValue = array($region, $brands_id, $months);
+                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year");
+                $colsValue = array($region, $currency[0]['id'], $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
@@ -147,9 +238,9 @@ class rank extends Model{
                     $p = new pRate();
 
                     if ($currency[0]['name'] == "USD") {
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), $years[$y]);
-                    }else{
                         $pRate = 1.0;
+                    }else{
+                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
                     }
 
                     $res[$y][$r]['total'] /= $pRate;

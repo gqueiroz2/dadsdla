@@ -18,6 +18,7 @@ use App\origin;
 use App\matchingClientAgency;
 use App\sql;
 use App\pRate;
+use App\emailDivulgacao;
 
 class dataManagementController extends Controller{
     public function home(){
@@ -608,6 +609,23 @@ class dataManagementController extends Controller{
         }else{
             return back()->with('error',$bool['msg']);
         }
+    }
+
+    public function emailDivulgacaoGet(){
+        
+        $email = new emailDivulgacao();
+
+        $to = "guilherme_costa@discoverybrasil.com";
+        $subject = "teste";
+        $message = $email->getMessage();
+        
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: TesteChangePassword <d_ads@discovery.com>';
+
+        $res = mail($to, $subject, $message, implode("\r\n", $headers));
+
+        var_dump($res);
     }
 
     /*END OF BRAND FUNCTIONS*/

@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('email','adSalesController@email')->name('email');
 Route::get('home','adSalesController@home')->name('home');
 
 Route::get('home','adSalesController@home')

@@ -113,7 +113,7 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{$render->assemble($mtx, $names, $pRate, $value)}}
+				{{$render->assemble($mtx, $names, $pRate, $value, $total)}}
 			</div>
 		</div>
 	</div>

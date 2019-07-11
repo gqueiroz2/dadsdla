@@ -103,7 +103,7 @@ class rankingController extends Controller {
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
-       
+        
         $filterValues = $r->filterValues($values, $type2, $type);
 
         //$all = $r->verifyQuantity($con, $type, $type2, $region);
@@ -113,14 +113,17 @@ class rankingController extends Controller {
         }else{
             $size = $nPos;
         }
-
-        $mtx = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
-        //var_dump($type2);
+        
+        $matrix = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+        //var_dump($mtx);
+        $subMtx = $r->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
 
-        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value'));
+        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total'));
 
     }
 }

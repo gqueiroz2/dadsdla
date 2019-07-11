@@ -71,7 +71,9 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('dataManagementAgencyGetFromExcel');
 		Route::get('client','dataManagementController@clientGetFromExcel')
 							->name('dataManagementClientGetFromExcel');
-
+		Route::get('email', 'dataManagementController@emailDivulgacaoGet')
+							->name('dataManagementEmailDivulgacaoGet');
+							
 		Route::group(['prefix' => 'ClientAgency'],function(){
 
 			Route::get('clientAgencyExcelGet','ClientAgencyController@rootExcel')
