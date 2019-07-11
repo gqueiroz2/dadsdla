@@ -35,7 +35,7 @@ class resultsMQController extends Controller{
         }
 
         public function postMonthly(){
-                var_dump("POST");
+                
                 $base = new base();
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
