@@ -26,7 +26,6 @@ class resultsResume extends results{
 	}
 
 	public function generateVectorsTV($con, $brands, $months, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion){
-		
 		$joinSales = false;
 		$joinTarget = false;
 		$joinActual = false;
@@ -47,39 +46,37 @@ class resultsResume extends results{
 		                              ";
 		            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 		                                    AND ( ytd.year IN ($pYear) )
-		                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+		                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
 		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
 		                                   ";
 		        }else{// FAZER SE FOR HEADER 
-		        	if($m < $currentMonth){
+		        	//if($m < $currentMonth){
 			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			        	                   AND (ytd.year IN ($cYear) )
-			        	                   AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )
-			        	                   AND (ytd.campaign_currency_id IN (".$regionID."))
-			        	                   ";
+			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
+			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
 
 			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
-			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
-			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
-			                                    AND (ytd.campaign_currency_id IN (".$regionID."))
-			                                    ";
-			        }else{
+			                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
+//			                                    AND (ytd.campaign_currency_id IN (".$regionID."))";
+			        /*}else{
 			        	$whereSales[$m][$b] = "WHERE (mini_header.month IN (".$months[$m][1].") ) 
 			        	                   AND (mini_header.year IN ($cYear) )
-			        	                   AND (mini_header.campaign_sales_office_id IN (".$regionID.") )
+			        	                   AND (mini_header.sales_representant_office_id IN (".$regionID.") )
 			        	                   AND (mini_header.brand_id IN (".$brands[$b][0].") )
 			        	                   AND (ytd.campaign_currency_id IN (".$regionID."))
 			        	                   ";
 
 			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
-			                                    AND (ytd.campaign_sales_office_id IN (".$regionID.") )
+			                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
 			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
 			                                    AND (ytd.campaign_currency_id IN (".$regionID."))
 			                                    ";
-			        }
+			        }*/
 		        }	
 			}
 		}

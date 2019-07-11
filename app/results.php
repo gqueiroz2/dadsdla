@@ -34,12 +34,12 @@ class results extends base{
         }elseif($table == "plan_by_brand"){
             $sum = "revenue";
             $div = 1.0;
-        }elseif($table == 'mini_header'){
+        }/*elseif($table == 'mini_header'){
             $sum = 'campaign_option_spend';
-        }elseif($table = 'ytd'){
-            $sum = $value."_revenue";
+        }*/elseif($table = 'ytd'){
+            $sum = $value."_revenue_prate";
         }else{
-            $sum = $value."_value";
+            $sum = $value."_value_prate";
         }
 
         for ($m=0; $m < sizeof($month); $m++) { 
@@ -48,7 +48,7 @@ class results extends base{
 
         for ($m=0; $m < sizeof($month); $m++) { 
             for ($b=0; $b < sizeof($brand); $b++) { 
-                if($table == 'mini_header'){
+                /*if($table == 'mini_header'){
                     if( ($year != $cYear) || ($m < $currentMonth) ){
                         $sum = $value."_revenue";
                         $cTable = 'ytd';
@@ -57,9 +57,9 @@ class results extends base{
                         $cTable = 'mini_header';
                     }
                     $res[$m][$b] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m][$b]);
-                }else{
+                }else{*/
                     $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
-                }
+                //}
                 
 
                 $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
@@ -67,8 +67,20 @@ class results extends base{
                 $vector[$m] += $valueSum;
             }
 
+            if($table == "cmaps"){
+                $coin = $pRate->getCurrency($con,array($currency))[0]['name'];
+                if($coin == "USD"){
+                    $pRateCMAPS = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
+                }else{
+                    $pRateCMAPS = 1;
+                }               
 
-            $vector[$m] = $vector[$m]/$div;
+                $vector[$m] = $vector[$m]/$pRateCMAPS;//
+            }else{
+                $vector[$m] = $vector[$m]*$div;
+            }
+
+                
 
         }
 
@@ -81,7 +93,8 @@ class results extends base{
             if($regionID == 1){ 
                 $table = "cmaps"; 
             }else{  
-                $table = "mini_header"; 
+                $table = "ytd"; 
+                //$table = "mini_header"; 
             }
         }else{
             $table = 'ytd';
@@ -96,9 +109,9 @@ class results extends base{
         for ($b=0; $b < sizeof($brands); $b++) { 
             for ($m=0; $m < sizeof($months); $m++) { 
                 if (!$source) {
-                    if ($brands[$b][1] == 'FN' && $region == 1) {
+                    /*if ($brands[$b][1] == 'FN' && $region == 1) {
                         $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                    }elseif ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
+                    }else*/if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                         if ($form == "mini_header") {
                             if (($year == $cYear) && ($months[$m][1] < $cMonth)) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
@@ -132,9 +145,9 @@ class results extends base{
             $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-            }else{
                 $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
             }    
         }else{
             $pRate = 1.0;
@@ -148,22 +161,22 @@ class results extends base{
                 break;
 
             case 'ytd':
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $columnsValue = array($region, $brand, $year, $month);
-                $value .= "_revenue";
+                $columns = array("sales_representant_office_id"/*,"campaign_currency_id"*/,"brand_id", "year", "month");
+                $columnsValue = array($region/*,$currency[0]['id']*/, $brand, $year, $month);
+                $value .= "_revenue_prate";
                 break;
 
             case 'mini_header':
                 $sql = new sql();
 
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
-                $columnsValue = array($region, $brand, $year, $month);
+                $columns = array("sales_representant_office_id","campaign_currency_id","brand_id", "year", "month");
+                $columnsValue = array($region, $currency[0]['id'], $brand, $year, $month);
 
                 $value .= "_revenue";
                 break;
 
             case 'digital':
-                $columns = array("campaign_sales_office_id", "brand_id", "year", "month");
+                $columns = array("sales_representant_office_id", "brand_id", "year", "month");
                 $columnsValue = array($region, $brand, $year, $month);
                 $value .= "_revenue";
                 break;
@@ -196,8 +209,9 @@ class results extends base{
             $where = $sql->where($columns, $columnsValue);
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
-            $rtr = $sql->fetchSum($selectSum, $as)["sum"]/$pRate;
-            //var_dump(number_format($rtr));
+            
+            $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+            $rtr = $tmp*$pRate;
         }
 
         return $rtr;

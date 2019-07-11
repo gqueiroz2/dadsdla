@@ -21,7 +21,6 @@ class resultsMQ extends results{
                 $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year, $source,);
             }
         }
-
         return $lines;
 
     }

@@ -14,7 +14,7 @@ class renderYoY extends Render {
             if ($region == 'Brazil') {
                 echo "<option value='cmaps'> CMAPS </option>";
             }else{
-                echo "<option value='mini_header'> Header </option>";//somente se for brasil a região selecionada
+                //echo "<option value='mini_header'> Header </option>";//somente se for brasil a região selecionada
             }
     		
     	echo "</select>";	

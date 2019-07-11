@@ -9,7 +9,6 @@ use App\region;
 use App\sql;
 
 class agency extends Management{
-    
 
     public function getAgencyGroupID($con,$sql,$group,$region){
         $table = "agency_group";
@@ -171,14 +170,13 @@ class agency extends Management{
 
     
 
-    public function getAllAgencies($con){
+    public function getAllAgencies($con,$id = false){
         
         $sql = new sql();
-
-        $table = "agency a";
+        $table = "agency_unit au";
 
         $columns = "a.name AS 'agency',
-                    a.ID AS 'id',
+                    a.ID AS 'agencyID',
                     ag.name AS 'agencyGroup',
                     ag.ID AS 'agencyGroupID',
                     au.name AS 'agencyUnit',
@@ -186,17 +184,52 @@ class agency extends Management{
                     r.name AS 'region'
                    ";
 
-        $where = "";
+        $where = "WHERE (r.ID = '$id')";
 
-        $join = "LEFT JOIN agency_unit au ON a.ID = au.agency_id
+        $join = "LEFT JOIN agency a ON a.ID = au.agency_id
                  LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
                  LEFT JOIN region r ON r.ID = ag.region_id
                  ";
 
 
-        $res = $sql->select($con,$columns,$table,$join,$where,"7,2,4,6");//"7,2,4,6"
+        $res = $sql->select($con,$columns,$table,$join,$where,"7,5,3,1");
 
-        $from = array('id','agency','agencyGroup','agencyGroupID','agencyUnit','agencyUnitID','region');
+        $from = array('agencyID','agency','agencyGroup','agencyGroupID','agencyUnit','agencyUnitID','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+    }
+
+    public function getAllAgenciesByFirstLetter($con,$id = false,$letter){
+        $sql = new sql();
+        $table = "agency_unit au";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'agencyID',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    au.name AS 'agencyUnit',
+                    au.ID AS 'agencyUnitID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "WHERE (r.ID = '$id')";
+
+        if($letter == "%"){
+            $where .= "AND ( au.name NOT RLIKE '^[A-Z]' )";
+        }else{
+            $where .= "AND ( (au.name LIKE '$letter%') OR  (au.name LIKE '".strtolower($letter)."%') )";
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = au.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where,"7,5,3,1");
+
+        $from = array('agencyID','agency','agencyGroup','agencyGroupID','agencyUnit','agencyUnitID','region');
 
         $agency = $sql->fetch($res,$from,$from);
 
