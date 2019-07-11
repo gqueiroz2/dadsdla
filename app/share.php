@@ -124,6 +124,7 @@ class share extends results
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
 
+
         if(sizeof($salesGroup) == sizeof($salesRepGroupTmp)){
             $salesRepGroupView = "All";
         }else{
@@ -139,10 +140,12 @@ class share extends results
 
 
         $salesRepName = array();
+        $salesRepAB = array();
         if (sizeof($salesRepTmp) == sizeof($salesRep)) {
             $salesRepView = "All";
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                 array_push($salesRepName, $salesRep[$s]["salesRep"]);
+                array_push($salesRepAB, $salesRep[$s]["abName"]);
             }
         }else{
             $salesRepView = "";
@@ -183,7 +186,7 @@ class share extends results
             }
         }
 
-        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView,$salesRepView,$regionView,$yearView,$source);
+        $mtx = $this->assembler($brandName,$salesRepName,$values,$div,$currency,$valueView,$salesRepGroupView,$salesRepView,$regionView,$yearView,$source,$salesRepAB);
 
         return $mtx;
     }
@@ -263,7 +266,7 @@ class share extends results
         return $where;
     }
 
-    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup,$salesRepView,$region,$year,$source){
+    public function assembler($brand,$salesRep,$values,$div,$currency,$value,$salesRepGroup,$salesRepView,$region,$year,$source,$salesRepAB){
 
         $base = new base();
 
@@ -274,7 +277,7 @@ class share extends results
         $mtx["region"] = $region;
         $mtx["year"] = $year;
         $mtx["source"] = $source;
-
+        $mtx["salesRepAB"] = $salesRepAB;
 
         for ($m=0; $m <sizeof($values) ; $m++) { 
             for ($b=0; $b <sizeof($values[$m]) ; $b++) { 

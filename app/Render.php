@@ -33,9 +33,15 @@ class Render extends Model{
         echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select </option>";
 
-            for ($i = 0; $i < sizeof($region); $i++) { 
-                if ( $region[$i]['id'] == $regionFiltered && ($region[$i]['name'] != "LATAM" )) {
-                    echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";                    
+            if ($regionFiltered == '2') {
+                echo "<option value='2'>Argentina</option>";      
+                echo "<option value='6'>Chile</option>";      
+                echo "<option value='7'>Peru</option>";      
+            }else{
+                for ($i = 0; $i < sizeof($region); $i++) { 
+                    if ( $region[$i]['id'] == $regionFiltered && ($region[$i]['name'] != "LATAM" )) {
+                        echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+                    }
                 }
             }
 
