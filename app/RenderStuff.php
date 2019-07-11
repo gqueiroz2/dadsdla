@@ -26,13 +26,15 @@ class RenderStuff extends Model{
 					      </div>";
 					
 					if($dependencies[$d] == 'clients' || $dependencies[$d] == 'agencies'){
-						echo "<div class='row'>
-							<div class='col-1'> <center> Register </center> </div>
-							<div class='col-2'> <center> ".ucfirst($dependencies[$d])." Group </center> </div>
-							<div class='col-3'> <center> ".ucfirst($dependencies[$d])." </div>
-							<div class='col-3'> <center> ".ucfirst($dependencies[$d])." Unit </center> </div>
-							<div class='col-3'> <center> Region </center> </div>
-					      </div>";
+						echo "<div class='row'>";
+						echo "<div class='col-1'> <center> Register </center> </div>";
+						echo "<div class='col-2'> <center> ".ucfirst($dependencies[$d])." Group </center> </div>";
+						echo "<div class='col'> <center> ".ucfirst($dependencies[$d])." </div>";
+						echo "<div class='col'> <center> ".ucfirst($dependencies[$d])." Unit </center> </div>";
+						if($table != "cmaps"){
+							echo "<div class='col'> <center> Region </center> </div>";
+						}
+					    echo "</div>";
 					    if($dependencies[$d] == 'clients'){
 							echo "<form method='POST' action='".route('insertClient')."'>";
 							echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
@@ -65,7 +67,7 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col-3'>";	
+									echo "<div class='col'>";	
 										echo "<select class='selectpicker' name='$dependencies[$d]-$n' id='$dependencies[$d]-$n' data-live-search='true' data-width='100%'>";
 											echo "<option value=''> Select </option>";
 											for ($a=0; $a < sizeof($agency); $a++) { 
@@ -85,9 +87,10 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['agency']."'></div>";
-
-									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
+									echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['agency']."'></div>";
+									if($table != "cmaps"){
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
+									}
 
 								echo "</div>";
 							}else{
@@ -103,7 +106,7 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col-3'>";	
+									echo "<div class='col'>";	
 										echo "<select class='selectpicker' name='$dependencies[$d]-$n' id='$dependencies[$d]-$n' data-live-search='true' data-width='100%'>";
 											echo "<option value=''> Select </option>";
 											for ($a=0; $a < sizeof($client); $a++) { 
@@ -123,12 +126,15 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['client']."'></div>";
-
-									echo "<div class='col-3'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
+									echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['client']."'></div>";
+									if($table != "cmaps"){
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
+									}
 
 								echo "</div>";
 							}
+						}else{
+							var_dump($newValues[$dependencies[$d]]);
 						}
 					}
 					echo "<div class='row mt-2'>
@@ -141,7 +147,7 @@ class RenderStuff extends Model{
 					echo "<br><hr><br>";
 					
 				}else{
-					echo "<div class='row'><div class='col'><center><span style='color:green'> There are values of ".$dependencies[$d]." to be Created </span></center></div></div>";
+					echo "<div class='row'><div class='col'><center><span style='color:green'> There are no values of ".$dependencies[$d]." to be Created </span></center></div></div>";
 				}			
 				echo "</div>";
 			}

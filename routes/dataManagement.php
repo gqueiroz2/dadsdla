@@ -23,6 +23,9 @@ Route::group(['middleware' => ['auth']],function(){
 		Route::post('relationshipAgency','relationshipController@relationshipAgencyPost')
 							->name('relationshipAgencyPost');
 
+		Route::post('relationshipUpdateAgency','relationshipController@relationshipUpdateAgency')
+							->name('relationshipUpdateAgency');
+
 		Route::get('agencySomething','ClientAgencyController@agencyGet')
 							->name('dataManagementAgencyGet');
 		Route::get('clientSomething','ClientAgencyController@clientGet')

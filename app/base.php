@@ -318,9 +318,9 @@ class base extends Model{
         $currency = $pr->getCurrency($con,$currency)[0];
 
         if ($currency["name"] == 'USD') {
-            $div = $pr->getPRateByRegionAndYear($con,$region,$year);
-        }else{
             $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,$region,$year);            
         }
         return $div; 
 
