@@ -10,6 +10,7 @@ use App\pRate;
 use App\brand;
 use App\renderRanking;
 use App\rankings;
+use App\subRankings;
 use Validator;
 
 class rankingController extends Controller {
@@ -106,8 +107,6 @@ class rankingController extends Controller {
         
         $filterValues = $r->filterValues($values, $type2, $type);
 
-        //$all = $r->verifyQuantity($con, $type, $type2, $region);
-        
         if ($nPos == 'All') {
             $size = sizeof($type2);
         }else{
@@ -118,7 +117,12 @@ class rankingController extends Controller {
         $mtx = $matrix[0];
         $total = $matrix[1];
         //var_dump($mtx);
-        $subMtx = $r->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
+        $sr = new subRankings();
+
+        $subValues = $sr->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
+
+        $subMatrix = $sr->assembler($subValues, $years, $type);
+
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();

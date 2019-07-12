@@ -8,6 +8,7 @@ use App\client;
 use App\sql;
 use App\pRate;
 use App\rank;
+use App\subRankings;
 use App\base;
 
 class rankings extends rank{
@@ -21,19 +22,6 @@ class rankings extends rank{
         }
         
         return $res;
-    }
-
-    public function getSubResults($con, $mtx, $brands, $type, $region, $value, $currency, $months, $years){
-        //var_dump($currency);
-        if ($type == "agencyGroup") {
-                
-        }else{
-            for ($y=0; $y < sizeof($years); $y++) { 
-                $res[$y] = $this->getSubValues($con, "ytd", "client", $type, $brands, $region, $value, $years[$y], $mtx, $months, $currency, $y);
-            }
-            
-        }
-
     }
 
     public function checkOtherYearsPosition($name, $values, $year, $years, $type){
@@ -144,7 +132,6 @@ class rankings extends rank{
         $last = $y;
         
         $mtx[$last][0] = ucfirst($var);
-        
 
         for ($l=0; $l < sizeof($years); $l++) { 
             
@@ -236,7 +223,6 @@ class rankings extends rank{
         }else{
             $res['name'] = ucfirst($type)."s";
         }
-
 
         $b = new base();
 

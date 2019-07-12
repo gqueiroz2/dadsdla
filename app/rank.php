@@ -68,8 +68,14 @@ class rank extends Model{
 
     }
 
-    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $mtx, $months, $currency, $y, $leftName2=null){
+    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $mtx, $months, $currency, $y){
         
+        if ($type == "agencyGroup") {
+            $filter = "agency_group_id";
+        }else{
+            $filter = "agency_id";
+        }
+
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
         }
@@ -81,64 +87,64 @@ class rank extends Model{
         $tableAbv = "a";
         $leftAbv = "b";
 
-        if ($type == "agencyGroup") {
-            
+        $a = new agency();
+
+        if ($tableName == "ytd") {
+            $value .= "_revenue";
+            $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year", $filter);
+            $colsValue = array($region, $currency[0]['id'], $brands_id, $months, $year, "");
         }else{
-
-            $a = new agency();
-
-            if ($tableName == "ytd") {
-                $value .= "_revenue";
-                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year", "agency_id");
-                $colsValue = array($region, $currency[0]['id'], $brands_id, $months, $year, "");
-            }else{
-                $columns = array("brand_id", "month", "year", "agency_id");
-                $colsValue = array($brands_id, $months, $year, "");
-            }
-
-            $table = "$tableName $tableAbv";
-
-            $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."name AS '".$type."', SUM($value) AS $as";
-
-            $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id";
-
-            $name = $type."_id";
-            $names = array($type."ID", $type, $as);
-
-            for ($m=1; $m < sizeof($mtx); $m++) { 
-                
-                $nameMtx = $this->getName($mtx[$m]);
-                $agency = $a->getAgencyID($con, $sql, $nameMtx);
-                $colsValue[(sizeof($colsValue)-1)] = $agency;
-                $where = $sql->where($columns, $colsValue);
-                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name);
-
-                $from = $names;
-
-                $res[$y] = $sql->fetch($values[$y], $from, $from);
-
-            }
+            $columns = array("brand_id", "month", "year", $filter);
+            $colsValue = array($brands_id, $months, $year, "");
         }
-        var_dump($values);
-        /*for ($y=0; $y < sizeof($years); $y++) {
-            if (is_array($res[$y])) {
-                for ($r=0; $r < sizeof($res[$y]); $r++) { 
 
+        $table = "$tableName $tableAbv";
+
+        $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
+
+        $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
+
+        $name = $leftName."_id";
+        $names = array($leftName."ID", $leftName, $as);
+        //var_dump("expression");
+        for ($m=1; $m < sizeof($mtx); $m++) { 
+            
+            if ($type == "agencyGroup") {
+                $agency = $a->getAgencyGroupID($con, $sql, $mtx[$m], $region);
+            }else{
+                $nameMtx = $this->getName($mtx[$m]);
+                $agency = $a->getAgencyID($con, $sql, $nameMtx);    
+            }
+            
+            $colsValue[(sizeof($colsValue)-1)] = $agency;
+            $where = $sql->where($columns, $colsValue);
+            $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name);
+
+            $from = $names;
+
+            $res[$m-1] = $sql->fetch($values[$y], $from, $from);
+        }
+    
+        
+        for ($r=0; $r < sizeof($res); $r++) { 
+            if (is_array($res[$r])) {
+                for ($r2=0; $r2 < sizeof($res[$r]); $r2++) {                     
                     $p = new pRate();
 
                     if ($currency[0]['name'] == "USD") {
                         $pRate = 1.0;
                     }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
                     }
 
-                    $res[$y][$r]['total'] /= $pRate;
+                    $res[$r][$r2]['total'] /= $pRate;   
                 }   
             }else{
 
             }
-        }*/
-
+        }   
+        
+        //var_dump($res);
         return $res;
     }
 
