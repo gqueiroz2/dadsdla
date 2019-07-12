@@ -15,11 +15,14 @@ class AuthController extends Controller
 
     public function logout(){
 	
-        require_once('/var/simplesamlphp/lib/_autoload.php');
+        return view('auth.login');
+
+
+        /*require_once('/var/simplesamlphp/lib/_autoload.php');
 
         $as = new \SimpleSAML\Auth\Simple('default-sp');
 
-        $as->logout(route('logoutGet'));
+        $as->logout(route('logoutGet'));*/
 
 
     }
@@ -30,22 +33,24 @@ class AuthController extends Controller
     }
 
     public function autenticate(){
-	$user = new User();
-	$db = new dataBase();
+    	/*$user = new User();
+    	$db = new dataBase();
 
-	$con = $db->openConnection('DLA');
-	require_once('/var/simplesamlphp/lib/_autoload.php');
-	$as = new \SimpleSAML\Auth\Simple('default-sp');
+    	$con = $db->openConnection('DLA');
+    	require_once('/var/simplesamlphp/lib/_autoload.php');
+    	$as = new \SimpleSAML\Auth\Simple('default-sp');
+    	
+    	$as->requireAuth();
+    	
+    	$bool=$user->autenticate($con,$as);
 	
-	$as->requireAuth();
-	
-	$bool=$user->autenticate($con,$as);
-	
-	if($bool){
-		return redirect('home');
-	}else{
-		return redirect('permission');
-	}
+    	if($bool){
+    		return redirect('home');
+    	}else{
+    		return redirect('permission');
+    	}*/
+        return view('auth.login');
+        
     }
 
 
