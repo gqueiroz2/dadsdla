@@ -110,6 +110,10 @@
 		</div>
 	</div>
 
+	<?php
+
+
+	?>
 	
 	<script type="text/javascript">
 
@@ -201,6 +205,7 @@
 			var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
         	chart.draw(data, options);
 		
+
 		}
 
 		function createCustomHTML(name,total,share){
