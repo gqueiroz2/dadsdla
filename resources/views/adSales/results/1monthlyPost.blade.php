@@ -67,7 +67,7 @@
 		<div class="col-sm"></div>
 		<div class="col-sm"></div>
 		<div class="col-sm-2" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> {{$rName}} - Monthly : {{$form}} - {{$year}} </span>
+			<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
 		</div>
 		<div class="col-sm-2">
 			<button type="button" class="btn btn-primary" style="width: 100%">

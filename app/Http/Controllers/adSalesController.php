@@ -14,6 +14,12 @@ class adSalesController extends Controller{
 
         return view("adSales.home");
     }
+ 
+ 	public function email(){
+        
+
+        return view("email");
+    }
 
     public function import(){
         

@@ -16,12 +16,24 @@ class rankings extends rank{
 
         if ($type == "agencyGroup") {
             $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "agency");            
-        }
-        else{
+        }else{
             $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency);    
         }
         
         return $res;
+    }
+
+    public function getSubResults($con, $mtx, $brands, $type, $region, $value, $currency, $months, $years){
+        //var_dump($currency);
+        if ($type == "agencyGroup") {
+                
+        }else{
+            for ($y=0; $y < sizeof($years); $y++) { 
+                $res[$y] = $this->getSubValues($con, "ytd", "client", $type, $brands, $region, $value, $years[$y], $mtx, $months, $currency, $y);
+            }
+            
+        }
+
     }
 
     public function checkOtherYearsPosition($name, $values, $year, $years, $type){
@@ -83,7 +95,7 @@ class rankings extends rank{
     }
 
     public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p, $typeF){
-        
+
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
 
@@ -101,7 +113,7 @@ class rankings extends rank{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
         }else{
-            if ($typeF = "agencyGroup") {
+            if ($typeF == "agency") {
                 $res = $type2[$t]->name." - ".$type2[$t]->agencyGroup;    
             }else{
                 $res = $type2[$t]->name;    
@@ -118,7 +130,7 @@ class rankings extends rank{
 
         if (strlen($type) > 6) {
             $var = "agency groups";
-            $aux = "agency";
+            $aux = "agencyGroup";
         }else{
             $var = $type;
             $var .= "s";
@@ -145,7 +157,7 @@ class rankings extends rank{
             $mtx[$last][0] = "VAR ABS.";
             $mtx[$last+1][0] = "VAR %";    
         }
-
+        
         for ($t=0; $t < $size; $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
@@ -168,8 +180,53 @@ class rankings extends rank{
 
         $fun .= ");";
         eval($fun);
+
+        $total = $this->assemblerTotal($mtx, $years);
+
         //var_dump($mtx);
-        return $mtx;
+        return array($mtx, $total);
+    }
+
+    public function assemblerTotal($mtx, $years){
+
+        for ($l=0; $l < sizeof($mtx); $l++) { 
+
+            if (substr($mtx[$l][0], 0, 3) == "Rev") {
+                $vec[$l] = 0;
+            }elseif (substr($mtx[$l][0], 0, 3) == "VAR") {
+                $vec[$l] = 0;
+                
+                if ($mtx[$l][0] == "VAR ABS.") {
+                    $varAbs = $l;
+                }else{
+                    $varP = $l;
+                }
+            }else{
+                $vec[$l] = "-";
+            }       
+
+            for ($c=0; $c < sizeof($mtx[$l]); $c++) { 
+                
+                if ($c != 0 && substr($mtx[$l][0], 0, 3) == "Rev") {
+                    $vec[$l] += $mtx[$l][$c];
+                }
+            }
+        }
+
+        $vec[0] = "Total";
+
+        if (isset($varAbs)) {
+            
+            $vec[$varAbs] = $vec[$varAbs-sizeof($years)] - $vec[$varAbs-sizeof($years)+1];
+
+            if ($vec[$varP-sizeof($years)] == 0) {
+                $vec[$varP] = 0.0;
+            }else{
+                $vec[$varP] = ($vec[$varP-sizeof($years)-1] / $vec[$varP-sizeof($years)])*100;
+            }
+        }
+
+        return $vec;
     }
 
     public function createNames($type, $months, $years){

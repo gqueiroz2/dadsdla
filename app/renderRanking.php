@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderRanking extends Render {
     
-    public function assemble($mtx, $names, $pRate, $value){
+    public function assemble($mtx, $names, $pRate, $value, $total){
     	
     	 echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
@@ -61,6 +61,22 @@ class renderRanking extends Render {
        		}
 
        		echo "</tr>";
+       }
+
+       echo "<tr>";
+
+       for ($t=0; $t < sizeof($total); $t++) { 
+        
+        if (is_numeric($total[$t])) {
+          echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>"; 
+        }else{
+          if ($total[$t] != "-") {
+            echo "<td class='darkBlue center'> ".$total[$t]." </td>"; 
+          }else{
+            echo "<td class='darkBlue center'> &nbsp; </td>"; 
+          }
+        }
+
        }
     }
 }
