@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 use App\sql;
 use App\salesRep;
+use App\pRate;
+use App\base;
 
 class quarterPerformance extends performance {
     
@@ -55,10 +57,18 @@ class quarterPerformance extends performance {
 
 		$sql = new sql();
 
+		$base = new base();
+
+		$pr = new pRate();
+
 		$sr = new salesRep();
         $salesRep = $sr->getSalesRepById($con, $salesRepID);
 
         $value = strtoupper($value);
+
+        $tmp = array($year);
+        $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
+        //$div = 1/$div;
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			for ($m=0; $m < sizeof($months); $m++) { 
@@ -68,18 +78,17 @@ class quarterPerformance extends performance {
 					$table[$b][$m] = "digital";
 				}
 
-				$where[$b][$m] = $this->generateColumns($value);
+				$where[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
 
 				$values[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], $where[$b][$m], $table[$b][$m]);
 				$planValues[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], "value", "plan_by_sales", $currencyID, $value);
 
 			}
 
-			var_dump($value);
 		}
 
 		//var_dump($salesRepGroup);
-		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year);
+		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div);
 
 		if (sizeof($brands) > 1) {
 			array_push($mtx, $this->assemblerDN($mtx, $year));
@@ -108,12 +117,20 @@ class quarterPerformance extends performance {
 		return $brandsTiers;
 	}
 
-	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year){
+	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div){
 
 		//separando as marcas por tiers
 		$brandsTiers = array(0, 1, 2);
 		$newPlanValues = array(0, 1, 2);
 		$newValues = array(0, 1, 2);
+
+		for ($b=0; $b <sizeof($values) ; $b++) { 
+			for ($m=0; $m <sizeof($values[$b]) ; $m++) { 
+				for ($s=0; $s <sizeof($values[$b][$m]) ; $s++) { 
+					$values[$b][$m][$s] = $values[$b][$m][$s]*$div;
+				}
+			}
+		}
 
 		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
 			$brandsTiers[$b] = array();
@@ -278,7 +295,7 @@ class quarterPerformance extends performance {
 							$mtx[$t][$b][$c][$v] = $mtx[$t][$b][$c-1][$v] - $mtx[$t][$b][$c-2][$v];
 						}elseif ($c == 5) {
 							if ($mtx[$t][$b][$c-3][$v] != 0) {
-								$mtx[$t][$b][$c][$v] = $mtx[$t][$b][$c-2][$v] / $mtx[$t][$b][$c-3][$v];
+								$mtx[$t][$b][$c][$v] = ($mtx[$t][$b][$c-2][$v] / $mtx[$t][$b][$c-3][$v])*100;
 							}else{
 								$mtx[$t][$b][$c][$v] = 0;
 							}
@@ -335,7 +352,7 @@ class quarterPerformance extends performance {
 			for ($v=1; $v < sizeof($mtxFinal[0][$c]); $v++) { 
 				if ($c == 5) {
 					if ($mtxFinal[0][$c-3][$v] != 0) {
-						$mtxFinal[0][$c][$v] = $mtxFinal[0][$c-2][$v] / $mtxFinal[0][$c-3][$v];
+						$mtxFinal[0][$c][$v] = ($mtxFinal[0][$c-2][$v] / $mtxFinal[0][$c-3][$v])*100;
 					}else{
 						$mtxFinal[0][$c][$v] = 0;
 					}

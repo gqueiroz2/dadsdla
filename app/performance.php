@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Request;
 
 class performance extends base{
     
-    public function generateColumns($value){
+    public function generateColumns($value,$source){
 
-        if($value){
+        if($value && $source == "ytd"){
+            $columns = $value."_revenue_prate";
+        }elseif($value){
             $columns = $value."_revenue";
         }else{
             $columns = false;
@@ -36,7 +38,7 @@ class performance extends base{
 
     public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month,$currency=null,$value=null){
         if ($source == "ytd") {
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "digital"){
@@ -50,7 +52,7 @@ class performance extends base{
         }else{
             $where = false;
         }
-    
+
         return $where;
     }
 }
