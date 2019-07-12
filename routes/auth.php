@@ -11,13 +11,17 @@
 |
 */
 Route::group(['middleware' => ['auth']],function(){
-	Route::post('/logout','AuthController@logout')->name('logout');
+	Route::post('logout','AuthController@logout')->name('logout');
+	Route::get('/','AuthController@loginGet')->name('loginGet');
 });
 
 
 Route::get('/logout','AuthController@logoutGet')->name('logoutGet');
 
-Route::get('/','AuthController@loginGet')->name('loginGet');
+Route::get('/autenticate','AuthController@autenticate')->name('autenticate');
+
+Route::get('/permission','AuthController@permission')->name('permission');
+
 Route::post('/', 'AuthController@loginPost')->name('loginPost');
 
 Route::get('forgotPassword', 'AuthController@forgotPasswordGet')->name('forgotPasswordGet');

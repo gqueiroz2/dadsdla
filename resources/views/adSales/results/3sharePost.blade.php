@@ -110,6 +110,10 @@
 		</div>
 	</div>
 
+	<?php
+
+
+	?>
 	
 	<script type="text/javascript">
 
@@ -169,12 +173,13 @@
 
 			data.addColumn("string","brand");
 			data.addColumn("number","value");
+			data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
 			data.addRows([
 				@for($i = 0; $i<sizeof($mtx["salesRep"]); $i++)
 					@if($i == (sizeof($mtx["salesRep"])-1))
-				    	['{{$mtx["salesRepAB"][$i]}}',{{$mtx["dn"][$i]}}]
+				    	['{{$mtx["salesRepAB"][$i]}}',{{$mtx["dn"][$i]}},createCustomHTML('{{$mtx["salesRep"][$i]}}','{{number_format($mtx["dn"][$i],3,",",".")}}','{{number_format($mtx["share"][$i],1,".",",")}}')]
 				    @else
-				    	['{{$mtx["salesRepAB"][$i]}}',{{$mtx["dn"][$i]}}],
+				    	['{{$mtx["salesRepAB"][$i]}}',{{$mtx["dn"][$i]}},createCustomHTML('{{$mtx["salesRep"][$i]}}','{{number_format($mtx["dn"][$i],3,",",".")}}','{{number_format($mtx["share"][$i],1,".",",")}}')],
 				    @endif
 				@endfor
 			]);
@@ -185,6 +190,8 @@
 					'height':'100%'
 				},
 				'width': '100%',
+				focusTarget: 'category',
+				tooltip: { isHtml: true },
 				'height': '100%',
 				backgroundColor:'transparent',
 				legend:'none',
@@ -198,6 +205,12 @@
 			var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
         	chart.draw(data, options);
 		
+
+		}
+
+		function createCustomHTML(name,total,share){
+			return "<div style='margin-left:5px;margin-right:5px;'>"+name+"</div>"+
+			"<div style='font-weight:bold; white-space:nowrap;margin-left:5px;margin-right:5px;margin-bottom:5px;'>"+total+" ("+share+"%)</div>";
 		}
 
 	    $(window).resize(function(){

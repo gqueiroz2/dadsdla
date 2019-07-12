@@ -115,9 +115,10 @@
 
 					<ul class="navbar-nav mr-right" style="margin-right: 3%;">
 						<li class="nav-item dropdown dropleft">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true"> {{$userName}} </a>
-							<div class="dropdown-menu dropleft" aria-labelledby="navbarDropdown">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<form method="GET" action="{{ route('logoutGet') }}">
+								@csrf
 									<input type="submit" class="dropdown-item" value="Logout">
 								</form>
 								@if($userLevel == "SU")
@@ -131,7 +132,7 @@
 			@else
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-right" style="margin-left: 92.5%;">
-						<a class="nav-link" href="{{ route('loginGet') }}" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"> Login </a>                            
+						<a class="nav-link" href="{{ route('autenticate') }}" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"> Login </a>                            
 					</ul>
 				</div>
 			@endif

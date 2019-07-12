@@ -34,8 +34,11 @@ class performanceExecutive extends performance
  		$value = Request::get('value');
         $tier = Request::get('tier');
 
+
+        $tmp = array($year);
  		//valor da moeda para divisões
-        $div = $base->generateDiv($con,$pr,$region,$year,$currency);
+        $div = $base->generateDiv($con,$pr,$region,$tmp,$currency);
+        $div = 1/$div;
 
         $currencyId = $currency;
 
@@ -70,7 +73,7 @@ class performanceExecutive extends performance
                     $table[$b][$m] = "ytd";
                 }
                 //pega colunas
-                $sum[$b][$m] = $this->generateColumns($value);
+                $sum[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
             }
         }
 
@@ -113,7 +116,7 @@ class performanceExecutive extends performance
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                     $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
-                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]/$div; 
+                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]; 
                 }
             }
         }

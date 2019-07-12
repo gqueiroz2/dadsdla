@@ -33,16 +33,21 @@
         height: 90%;
     }
 
+    .vcenter {
+        margin-top: 45%;
+        margin-bottom: 45%;
+    }
+
 </style>
 
 @endsection
 
 @section('content')
     
-    <div class="container-fluid fill px-4">
-        <div id="map">
+    <div class="container-fluid fill px-4 d-table">
+        <div id="map" class="aligh-middle" >
             <center>
-                <img src="\logo.png" style="width: 35%; margin-top: 15%;">
+                <img src="\logo.png" style="max-width: 100%; margin-top: 15%; height: auto;">
             </center>
         </div> <!-- This one wants to be 100% height -->
     </div>

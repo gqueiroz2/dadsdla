@@ -36,7 +36,7 @@
                 var option = "<option> Select Sales Group </option>";
                 $('#salesRep').html(option);
               }
-            },60);
+            },600);
             
             
       		},

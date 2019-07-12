@@ -14,15 +14,58 @@ class AuthController extends Controller
     }
 
     public function logout(){
-        Request::session()->flush();
-        
-        return redirect('');
+	
+        return view('auth.login');
+
+
+        /*require_once('/var/simplesamlphp/lib/_autoload.php');
+
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        $as->logout(route('logoutGet'));*/
+
+
+    }
+   
+    public function permission(){
+    	return view('auth.permission');
+
     }
 
-    public function logoutGet(){
-        Request::session()->flush();
+    public function autenticate(){
+    	/*$user = new User();
+    	$db = new dataBase();
+
+    	$con = $db->openConnection('DLA');
+    	require_once('/var/simplesamlphp/lib/_autoload.php');
+    	$as = new \SimpleSAML\Auth\Simple('default-sp');
+    	
+    	$as->requireAuth();
+    	
+    	$bool=$user->autenticate($con,$as);
+	
+    	if($bool){
+    		return redirect('home');
+    	}else{
+    		return redirect('permission');
+    	}*/
+        return view('auth.login');
         
-        return view('auth.permission');
+    }
+
+
+    public function logoutGet(){
+	Request::session()->flush();       
+
+	$cookie_name = 'SimpleSAML';
+	unset($_COOKIE[$cookie_name]);
+	$res = setcookie($cookie_name, '', time() - 72000);
+
+	$cookie_name = 'SimpleSAMLAuthToken';
+	unset($_COOKIE[$cookie_name]);
+	$res = setcookie($cookie_name, '', time() - 72000);
+
+	return view('auth.logout');
     }
 
     public function loginPost(){

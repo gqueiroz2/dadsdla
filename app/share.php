@@ -151,6 +151,7 @@ class share extends results
             $salesRepView = "";
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                 array_push($salesRepName, $salesRep[$s]["salesRep"]);
+                array_push($salesRepAB, $salesRep[$s]["abName"]);
                 if ($s == 0) {
                     $salesRepView .= $salesRep[$s]["salesRep"];
                 }else{

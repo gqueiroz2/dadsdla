@@ -8,7 +8,7 @@ use App\Render;
 class renderMQ extends Render{
     public function assemble($mtx,$currency,$value,$year,$form,$region){
 
-    	echo "<table style='width: 100%; zoom: 90%;font-size: 16px;'>";
+    	echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>";
     		
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
