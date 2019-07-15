@@ -104,7 +104,7 @@ class rankingController extends Controller {
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
-        
+        //var_dump($values);
         $filterValues = $r->filterValues($values, $type2, $type);
 
         if ($nPos == 'All') {
@@ -120,7 +120,6 @@ class rankingController extends Controller {
         $sr = new subRankings();
 
         //$subValues = $sr->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
-
         //$subMatrix = $sr->assembler($subValues, $years, $type);
 
         $names = $r->createNames($type, $months, $years);

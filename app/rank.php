@@ -152,6 +152,15 @@ class rank extends Model{
         }
 
         $sql = new sql();
+
+        $p = new pRate();
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+        }
+
         
         $as = "total";
 
@@ -228,30 +237,16 @@ class rank extends Model{
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-                
-            }
 
-        }
-
-        for ($y=0; $y < sizeof($years); $y++) {
-            if (is_array($res[$y])) {
-                for ($r=0; $r < sizeof($res[$y]); $r++) { 
-
-                    $p = new pRate();
-
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = 1.0;
-                    }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                if(is_array($res[$y])){
+                    for ($r=0; $r < sizeof($res[$y]); $r++) { 
+                        $res[$y][$r]['total'] *= $pRate;
                     }
-
-                    $res[$y][$r]['total'] /= $pRate;
-                }   
-            }else{
-
+                }
             }
+
         }
-        
+
         return $res;
 
     }

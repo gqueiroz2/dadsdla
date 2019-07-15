@@ -26,65 +26,58 @@
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))
 								<label style="color: red;">* Required</label>
-							@else
-								{{$render->type()}}
 							@endif
+							{{$render->type()}}
+							
 						</div>
 						<div class="col">
 							<label class="labelLeft bold" style="color: red" id="typeName"> Select the previous field: </label>
 							@if($errors->has('type'))
 								<label style="color: red;">* Previous field Required</label>
-							@else
-								{{$render->type2()}}
 							@endif
+							{{$render->type2()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Nº of pos: </label>
 							@if($errors->has('nPos'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->nPos()}}
 							@endif
+							{{$render->nPos()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Months:</label>
 							@if($errors->has('month'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->months()}}
 							@endif
+							{{$render->months()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold"> Brand: </label>
 							@if($errors->has('brands'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->brand($brands)}}
 							@endif
+							{{$render->brand($brands)}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">1º Pos:</label>
 							@if($errors->has('firstPos'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->positionYear("first")}}
 							@endif
+							{{$render->positionYear("first")}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">2º Pos:</label>
 							@if($errors->has('secondPos'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->positionYear("second")}}
 							@endif
+							{{$render->positionYear("second")}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">3º Pos:</label>
 							@if($errors->has('thirdPos'))
 								<label style="color: red">* Required</label>
-							@else
-								{{$render->positionYear("third")}}
 							@endif
+							{{$render->positionYear("third")}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold"> Currency: </label>
