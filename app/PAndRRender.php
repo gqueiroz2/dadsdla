@@ -8,7 +8,7 @@ class PAndRRender extends Render
 {
     protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
-    protected $channel = array('DC','HH','DK','AP','TLC','ID','DT','FN','ONL','VIX','OTH');
+    protected $channel = array('DC','HH','DK','AP','TLC','ID','DT','FN','ONL','VIX','OTH','HGTV');
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
@@ -43,7 +43,12 @@ class PAndRRender extends Render
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                         echo "<td class='medBlue' style='width:4.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='rf-$m' value='0' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
-                        echo "<td class='odd' style='width:4.5%'><input type='text' id='rf-$m' value='0' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'></td>";
+                        echo "<td class='odd' style='width:4.5%'><input type='text' id='rf-$m' value='0' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'>";
+                                echo "<div class='row'>";
+                                    echo "<div class='col' id='inputT-$m' style='display:none;width:100%;white-space:nowrap;'><input id='inputTNumber-$m' type='number' min='0' max='100' readonly='true' step='0.01' value='100' style='width:75%;'><spam style='width:25%;'>%</spam></div>";
+
+                                echo "</div>";
+                            echo "</td>";
                     }
                 }
                 echo "<td class='smBlue' style='width:4.5%'><input type='text' readonly='true' id='total-total' value='0' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'></td>";
@@ -121,14 +126,14 @@ class PAndRRender extends Render
 
 
         echo "<table style=' width:100%; margin-top:1,5%; text-align:center;' >";
-            for ($c=0; $c <10/*numero de clientes*/ ; $c++) { 
+            for ($c=0; $c <10/*numero de clientes*/; $c++) { 
                 echo "<tr>";
-                    echo "<td class='lightBlue' style='width:15%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' >Nome do Cliente-$c</td>";
+                    echo "<td class='lightBlue' id='client-$c' style='width:15%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' >Nome do Cliente-$c</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='quarter' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>".$this->month[$m]."</td>";
                         }else{
-                            echo "<td class='lightGrey' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
+                            echo "<td class='lightGrey' colspan='1' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
                         }
                     }
                     echo "<td class='darkBlue' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
@@ -143,11 +148,21 @@ class PAndRRender extends Render
                             echo "<td class='odd' style='width:4.5%'>
                                 <input type='text' id='clientRF-$c-$m' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
 
-                                for ($ch=0; $ch <sizeof($this->channel); $ch++) {
-                                    echo "<div style='display:none;'>".$this->channel[$ch]."</div>" ;
-                                    echo "<input type='hidden'>";
-                                }
+                                    echo "<div class='row'>";
+                                        echo "<div class='col' id='input-$c-$m' style='display:none;width:100%;white-space:nowrap;'><input id='inputNumber-$c-$m' type='number' min='0' max='100' step='0.01' value='10' style='width:75%;'><spam style='width:25%;'>%</spam></div>";
 
+                                    echo "</div>";
+                                    
+                            echo "</td>";
+                            echo "<td class='odd' rowspan='2' style='width:4.5%;display:none;' id='newCol-$c-$m'>";
+                                for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
+                                    echo"<center>";
+                                        echo "<div class='row' id='inputC-$c-$ch-$m' style='width:100%;white-space:nowrap;'>";
+                                            echo "<div class='col'>".$this->channel[$ch]."</div>";
+                                            echo "<div class='col' ><input id='inputCNumber-$c-$ch-$m' type='number' min='0' max='100' step='0.01' value='666' style='width:75%;'><spam style='width:25%;'>%</spam></div>";
+                                        echo "</div>";
+                                    echo"</center>";
+                                }
                             echo "</td>";
                         }
                     }
@@ -207,6 +222,7 @@ class PAndRRender extends Render
                 echo "</tr>";
             }
         echo "</table>";
+
 
     }
     public function AE2(){
