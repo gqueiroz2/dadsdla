@@ -19,7 +19,6 @@ class rank extends Model{
                 $ok = true;
             }
         }
-        //var_dump(substr($newValue, 0, (strlen($newValue)-1)));
         return substr($newValue, 0, (strlen($newValue)-1));
     }
 
@@ -143,8 +142,6 @@ class rank extends Model{
 
             }
         }   
-        
-        //var_dump($res);
         return $res;
     }
 
@@ -197,8 +194,6 @@ class rank extends Model{
             }
 
         }else{
-            var_dump("ELSE");
-            var_dump($tableName);
             $tableAbv = "a";
             $leftAbv = "b";
 
@@ -265,10 +260,7 @@ class rank extends Model{
 
         for ($v=0; $v < sizeof($values); $v++) {
             $something = $type."ID";
-            /*var_dump("name:".$name->id);
-            var_dump("values:".$values[$v][$something]);*/
             if ($name->id == $values[$v][$something]) {
-                //var_dump($name->id);
                 return 1;
             }
         }
