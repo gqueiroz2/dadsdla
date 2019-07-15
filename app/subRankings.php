@@ -23,6 +23,23 @@ class subRankings extends rank {
 
     }
 
+    public function checkColumn(){
+        
+        if (substr($mtx[$m][0], 0, 3) == "Pos") {
+            $var = substr($mtx[$m][0], 5);
+
+            
+        }elseif (substr($mtx[$m][0], 0, 3) == "Rev") {
+            $var = substr($mtx[$m][0], 5);
+        }elseif ($mtx[$m][0] == "VAR ABS.") {
+            # code...
+        }elseif ($mtx[$m][0] == "VAR %") {
+            # code...
+        }else{
+
+        }
+    }
+
     public function assembler($sub, $years, $type){
         
         if ($type == "agencyGroup") {
@@ -60,11 +77,20 @@ class subRankings extends rank {
         
         eval($fun);
                 
-        //var_dump($sub[0]);
-        //var_dump($sub[1]);
-        //var_dump($sub[2]);
+        var_dump($sub[0]);
+        var_dump($sub[1]);
+        var_dump($sub[2]);
         //var_dump($mtx);
-        for ($s=0; $s < sizeof($sub); $s++) { 
+
+        for ($s=0; $s < sizeof($sub[0]); $s++) { 
+            for ($s2=0; $s2 < sizeof($sub[0][$s]); $s2++) { 
+                for ($m=0; $m < sizeof($mtx); $m++) { 
+                    # code...
+                }
+            }
+        }
+
+        /*for ($s=0; $s < sizeof($sub); $s++) { 
             for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) { 
                 if (is_array($sub[$s][$s2])) {
                     for ($s3=0; $s3 < sizeof($sub[$s][$s2]); $s3++) { 
@@ -74,7 +100,7 @@ class subRankings extends rank {
                     }   
                 }
             }
-        }
+        }*/
 
         //var_dump($mtx);
         return $mtx;

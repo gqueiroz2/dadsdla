@@ -119,9 +119,9 @@ class rankingController extends Controller {
         //var_dump($mtx);
         $sr = new subRankings();
 
-        $subValues = $sr->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
+        //$subValues = $sr->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
 
-        $subMatrix = $sr->assembler($subValues, $years, $type);
+        //$subMatrix = $sr->assembler($subValues, $years, $type);
 
         $names = $r->createNames($type, $months, $years);
 

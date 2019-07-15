@@ -164,9 +164,9 @@ class rank extends Model{
             $leftAbv2 = "c";
 
             if ($tableName == "ytd") {
-                $value .= "_revenue";
-                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year");
-                $colsValue = array($region, $currency[0]['id'], $brands_id, $months);
+                $value .= "_revenue_prate";
+                $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+                $colsValue = array($region, $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
