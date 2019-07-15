@@ -155,6 +155,15 @@ class rank extends Model{
         }
 
         $sql = new sql();
+
+        $p = new pRate();
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+        }
+
         
         $as = "total";
 
@@ -204,9 +213,9 @@ class rank extends Model{
             $as = "total";
 
             if ($tableName == "ytd") {
-                $value .= "_revenue";
-                $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year");
-                $colsValue = array($region, $currency[0]['id'], $brands_id, $months);
+                $value .= "_revenue_prate";
+                $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+                $colsValue = array($region, $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
@@ -232,30 +241,16 @@ class rank extends Model{
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-                
-            }
 
-        }
-
-        for ($y=0; $y < sizeof($years); $y++) {
-            if (is_array($res[$y])) {
-                for ($r=0; $r < sizeof($res[$y]); $r++) { 
-
-                    $p = new pRate();
-
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = 1.0;
-                    }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                if(is_array($res[$y])){
+                    for ($r=0; $r < sizeof($res[$y]); $r++) { 
+                        $res[$y][$r]['total'] *= $pRate;
                     }
-
-                    $res[$y][$r]['total'] /= $pRate;
-                }   
-            }else{
-
+                }
             }
+
         }
-        
+
         return $res;
 
     }
