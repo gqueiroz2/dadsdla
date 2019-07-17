@@ -5,6 +5,7 @@
     $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');?>
 
     <script src="/js/pandr.js"></script>
+    
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -54,7 +55,7 @@
 	<br>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col table-responsive" style="width: 100%;">
+			<div class="col" style="width: 100%;">
 				<center>
 					{{$render->AE1($total2018,$totaltotal2018,$totalClient2018,$client2018)}}
 				</center>
@@ -194,10 +195,24 @@
 				$("#client-"+{{$c}}).click(function(){
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
+						var size = '3500px';
+						var width = '2.5%';
+						var width2 = '6.5%';
 					}else{
 						var display = 'none';
+						var size = '';
+						var width = '4.5%';
+						var width2 = '12%';
 					}
 
+					$("#quarter-"+{{$c}}+"-3").css("width",width);
+					$("#quarter-"+{{$c}}+"-7").css("width",width);
+					$("#quarter-"+{{$c}}+"-11").css("width",width);
+					$("#quarter-"+{{$c}}+"-15").css("width",width);
+					$("#totalC-"+{{$c}}).css("width",width);
+					$("#client-"+{{$c}}).css("width",width2);
+
+					$("#table-"+{{$c}}).css("min-width",size);
 
 					@for($m=0;$m<16;$m++)
 						$("#input-"+{{$c}}+"-"+{{$m}}).css("display",display);
@@ -220,12 +235,29 @@
 					@endfor
 
 					if ($("#newCol-"+{{$c}}+"-0").css("display") == 'none') {
-						var displayC = 'block';
+						var displayC = "";
+						var number = 2;
+						var border = "1px 1px 0px 1px";
+						var width3 = '6.5%';
 					}else{
 						var displayC = 'none';
+						var number = 1;
+						var border = "1px 0px 0px 0px";
+						var width3 = '4.5%';
 					}
+
+					$("#newLine-"+{{$c}}).css("display",displayC);
+					$("#client-"+{{$c}}).attr("rowspan",number);
+					$("#totalC-"+{{$c}}).attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-3").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-7").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-11").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-15").attr("rowspan",number);
 					@for($m=0;$m<16;$m++)
 						$("#newCol-"+{{$c}}+"-"+{{$m}}).css("display",displayC);
+						$("#month-"+{{$c}}+"-"+{{$m}}).attr("colspan",number);
+						$("#month-"+{{$c}}+"-"+{{$m}}).css("border-width",border);
+						$("#month-"+{{$c}}+"-"+{{$m}}).css("width",width3);
 					@endfor
 				});
 				@for($m=0;$m<16;$m++)
