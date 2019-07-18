@@ -113,10 +113,53 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col">
-				{{$render->assemble($mtx, $names, $pRate, $value, $total)}}
+				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type)}}
 			</div>
 		</div>
 	</div>
 
 	<div id="vlau"></div>
+
+	<?php
+
+	?>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			@for($n = 1; $n <= $size; $n++)
+				$("#"+"{{$type}}"+{{$n}}).click(function(){
+
+					var name = $(this).text();
+					var months = <?php echo json_encode($months); ?>;
+					var brands = <?php echo json_encode($brands); ?>;
+					var years  = <?php echo json_encode($years); ?>;
+					var type = "{{$type}}";
+					var value = "{{$value}}";
+					var currency = <?php echo json_encode($pRate); ?>;
+					var region = "{{$region}}";
+					//alert(months);
+					ajaxSetup();
+
+					$.ajax({
+						url: "/ajaxRanking/subRanking",
+						method: "POST",
+						data: {name, months, brands, years, type, value, currency, region},
+						success: function(output){
+
+							if ($("#sub"+"{{$type}}"+{{$n}}).css("display") == "none") {
+								$("#sub"+"{{$type}}"+{{$n}}).html(output);
+								$("#sub"+"{{$type}}"+{{$n}}).css("display", "");								
+							}else{
+								$("#sub"+"{{$type}}"+{{$n}}).css("display", "none");	
+							}
+						},
+		                error: function(xhr, ajaxOptions,thrownError){
+	                 		alert(xhr.status+" "+thrownError);
+	                	}
+					});
+				});
+			@endfor
+		});
+	</script>
+
 @endsection

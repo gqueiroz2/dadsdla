@@ -49,6 +49,18 @@ class agency extends Management{
         return $agencyGroupID[0]['id'];
     }
 
+    public function getAllAgenciesByName($con,$sql,$parent){
+        $table = "agency";
+        $columns = "ID";
+        $join = false;
+        $where = "WHERE name = \"".addslashes($parent)."\"";
+        $res = $sql->select($con,$columns,$table,$join,$where,1);
+        $from = array("ID");
+        $to = array('id');
+        $agencyGroupID = $sql->fetch($res,$from,$to);
+        return $agencyGroupID;
+    }
+
     public function handlerGroup($con,$spreadSheet){
         $sql = new sql();
         $r = new region();

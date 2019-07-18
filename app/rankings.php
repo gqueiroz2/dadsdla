@@ -76,7 +76,7 @@ class rankings extends rank{
         }
 
         if ($ok == 0) {
-            $rtr = 0;
+            $rtr = "-";
         }
 
         return $rtr;
@@ -93,9 +93,17 @@ class rankings extends rank{
 
             $res = $this->getValueByYear($type2[$t]->name, $values, $var, $years, $type);
         }elseif ($mtx[$m][0] == "VAR ABS.") {
-            $res = $mtx[$m-sizeof($years)][$p] - $mtx[$m-sizeof($years)+1][$p];
+            if ($mtx[$m-sizeof($years)][$p] == "-" && $mtx[$m-sizeof($years)+1][$p] == "-") {
+                $res = "-";
+            }elseif ($mtx[$m-sizeof($years)][$p] == "-") {
+                $res = ($mtx[$m-sizeof($years)+1][$p]*-1);
+            }elseif ($mtx[$m-sizeof($years)+1][$p] == "-") {
+                $res = $mtx[$m-sizeof($years)][$p];
+            }else{
+                $res = $mtx[$m-sizeof($years)][$p] - $mtx[$m-sizeof($years)+1][$p];
+            }
         }elseif ($mtx[$m][0] == "VAR %") {
-            if ($mtx[$m-sizeof($years)][$p] == 0) {
+            if ($mtx[$m-sizeof($years)][$p] == 0 || $mtx[$m-sizeof($years)][$p] == "-") {
                 $res = 0.0;
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
@@ -113,7 +121,7 @@ class rankings extends rank{
 
     }
 
-    public function assembler($values, $type2, $years, $type, $filterValues, $size){
+    public function assembler($values, $type2, $years, $type, $filterValues){
         //var_dump($values);
 
         if (strlen($type) > 6) {
@@ -144,11 +152,10 @@ class rankings extends rank{
             $mtx[$last][0] = "VAR ABS.";
             $mtx[$last+1][0] = "VAR %";    
         }
-        
-        for ($t=0; $t < $size; $t++) { 
+
+        for ($t=0; $t < sizeof($type2); $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
-                
                 for ($m=0; $m < sizeof($mtx); $m++) { 
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m]), $type));
                 }
@@ -172,48 +179,6 @@ class rankings extends rank{
 
         //var_dump($mtx);
         return array($mtx, $total);
-    }
-
-    public function assemblerTotal($mtx, $years){
-
-        for ($l=0; $l < sizeof($mtx); $l++) { 
-
-            if (substr($mtx[$l][0], 0, 3) == "Rev") {
-                $vec[$l] = 0;
-            }elseif (substr($mtx[$l][0], 0, 3) == "VAR") {
-                $vec[$l] = 0;
-                
-                if ($mtx[$l][0] == "VAR ABS.") {
-                    $varAbs = $l;
-                }else{
-                    $varP = $l;
-                }
-            }else{
-                $vec[$l] = "-";
-            }       
-
-            for ($c=0; $c < sizeof($mtx[$l]); $c++) { 
-                
-                if ($c != 0 && substr($mtx[$l][0], 0, 3) == "Rev") {
-                    $vec[$l] += $mtx[$l][$c];
-                }
-            }
-        }
-
-        $vec[0] = "Total";
-
-        if (isset($varAbs)) {
-            
-            $vec[$varAbs] = $vec[$varAbs-sizeof($years)] - $vec[$varAbs-sizeof($years)+1];
-
-            if ($vec[$varP-sizeof($years)] == 0) {
-                $vec[$varP] = 0.0;
-            }else{
-                $vec[$varP] = ($vec[$varP-sizeof($years)-1] / $vec[$varP-sizeof($years)])*100;
-            }
-        }
-
-        return $vec;
     }
 
     public function createNames($type, $months, $years){
