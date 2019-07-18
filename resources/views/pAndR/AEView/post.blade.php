@@ -66,7 +66,7 @@
 	<div id="vlau"></div>
 
 	<script>
-		$(document).ready(function(){   
+		$(document).ready(function(){
 			@for($m=0;$m<16;$m++)
 				$("#rf-"+{{$m}}).change(function(){
 
