@@ -40,17 +40,14 @@ class PAndRRender extends Render
                 echo "<td class='smBlue'>0</td>";
     		echo "</tr>";
     		echo "<tr>";
-                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Roling Fcast 2019</td>";
+                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Roling Fcast 2019</span><br>";
+                    echo "<div style='display:none;' id='totalTotalPP'><span >Total P.P. (%):   </span><input type='number' value='100' readonly='true' id='totalClients' style='display:;width:30%;text-align:right;'></div>";
+                echo"</td>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                         echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='rf-$m' value='0' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
-                        echo "<td class='odd'><input type='text' id='rf-$m' value='0' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'>";
-                                echo "<div class='row'>";
-                                    echo "<div class='col' id='inputT-$m' style='display:none;width:100%;white-space:nowrap;'><input id='inputTNumber-$m' type='number' min='0' max='100' readonly='true' step='0.01' value='100' style='width:75%;'><span style='width:25%;'>%</span></div>";
-
-                                echo "</div>";
-                            echo "</td>";
+                        echo "<td class='odd'><input type='text' id='rf-$m' value='0' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'></td>";
                     }
                 }
                 echo "<td class='smBlue' ><input type='text' readonly='true' id='total-total' value='0' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'></td>";
@@ -133,7 +130,10 @@ class PAndRRender extends Render
             echo "<table id='table-$c' style='width:100%; margin-top:1,5%; text-align:center; overflow:auto; min-width:;' >";
                 
                 echo "<tr>";
-                    echo "<td class='lightBlue' id='client-$c' rowspan='1' style='width:12%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:18px;' >Nome do Cliente-$c</td>";
+                    echo "<td class='lightBlue' id='client-$c' rowspan='1' style='width:12%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'>Nome do Cliente-$c</span>";
+
+                    
+                    echo "</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='quarter' id='quarter-$c-$m' rowspan='1' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>".$this->month[$m]."</td>";
@@ -141,7 +141,7 @@ class PAndRRender extends Render
                             echo "<td class='lightGrey' colspan='1' id='month-$c-$m' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
                         }
                     }
-                    echo "<td class='darkBlue' rowspan='1' id='totalC-$c' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
+                    echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' id='totalC-$c' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
 
                 echo "</tr>";
                 echo "<tr style='display:none;' id='newLine-$c'>";
@@ -150,7 +150,8 @@ class PAndRRender extends Render
                         }else{
                             echo "<td colspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;' class='lightGrey'>";
                                 echo "<div class='row'>";
-                                    echo "<div class='col' id='input-$c-$m' style='display:none;width:100%;'><span>P.P. (%):</span><input id='inputNumber-$c-$m' type='number' min='0' max='100' step='0.01' value='10' style='width:25%; background-color:transparent; text-align:right; border-style:solid; border-color: grey; border-width:0.1px;'></div>";
+                                    echo "<div class='col' id='input-$c-$m' style='display:none;width:100%;'><span>P.P. (%):</span><input id='inputNumber-$c-$m' type='number' min='0' max='100' step='0.5' value='0' style='width:25%; background-color:transparent; text-align:right; border-style:solid; border-color: grey; border-width:1px;'></div>";
+                                    echo "<input type='number' style='display:none;' id='inputNumber2-$c-$m' value='0'>";
 
                                 echo "</div>";
 
@@ -159,7 +160,9 @@ class PAndRRender extends Render
                     }
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Roling Fcast 2019</td>";
+                    echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Roling Fcast 2019";
+                        echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
+                    echo "</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
@@ -182,7 +185,7 @@ class PAndRRender extends Render
                             echo "</td>";
                         }
                     }
-                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalClient-$c' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'></td>";
+                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalClient-$c' value='0' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'><input type='text' readonly='true' id='totalTClient-$c' value='50000' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center;display:none;'></td>";
                 echo "</tr>";
 
                 echo "<tr>";
