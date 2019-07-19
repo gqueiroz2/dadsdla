@@ -33,6 +33,20 @@ class dataBase extends Model{
         return $this->con;
     }
 
+    public function openDevConnection($base){
+        $dev_ip = "dads-dev-mysql.c7wizdvhr2cq.us-east-1.rds.amazonaws.com";    
+        $dev_pass = "DT3WDDhmcx63D7HF";
+        $dev_user = "rdsroot";
+
+        $dev_con = new \Mysqli($dev_ip,$dev_user,$dev_pass,$base,3306);
+        $dev_con->set_charset("utf8");
+        if($dev_con->connect_error){
+            return FALSE;
+        }
+
+        return $dev_con;
+    }
+
     public function getLastUpdate($myBase,$table){       
 
         $fc = new functions();

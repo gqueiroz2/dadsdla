@@ -182,6 +182,7 @@ class Render extends Model{
 
     public function type2(){
         echo "<select class='selectpicker' id='type2' name='type2[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%'>";
+                echo "<option selected='true' value=''> Select the previous field </option>";    
         echo "</select>";
     }
 

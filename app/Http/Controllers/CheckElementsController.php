@@ -18,14 +18,16 @@ class CheckElementsController extends Controller{
 		$db = new dataBase();
 		$cE = new CheckElements();
 		$base = new base();
-		$conDLA = $db->openConnection('DLA');	
-		$con = $db->openConnection('firstMatch');	
+		$con = $db->openConnection('DLA');	
+		$conFM = $db->openConnection('firstMatch');	
 		$table = Request::get('table');
-		$newValues = $cE->newValues($conDLA,$con,$table);
+		$region = Request::get('region');
+
+		$newValues = $cE->newValues($con,$conFM,$region,$table);
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
 
-		return view('dataManagement.Chain.pendingStuff',compact('base','rS','conDLA','newValues','dependencies','table'));
+		return view('dataManagement.Chain.pendingStuff',compact('base','rS','con','newValues','dependencies','table','region'));
 
 	}
 }

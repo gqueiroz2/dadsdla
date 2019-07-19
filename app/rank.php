@@ -6,21 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\agency;
 
 class rank extends Model{
-    
-    public function getName($value){
-        
-        $newValue = "";
-        $ok = false;
-        for ($v=0; $v < strlen($value); $v++) { 
-            
-            if ($value[$v] != "-" && !$ok) {
-                $newValue .= $value[$v];
-            }else{
-                $ok = true;
-            }
-        }
-        return substr($newValue, 0, (strlen($newValue)-1));
-    }
 
     public function createPositions($first, $second, $third){
         
@@ -67,84 +52,6 @@ class rank extends Model{
 
     }
 
-    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $mtx, $months, $currency, $y){
-        
-        if ($type == "agencyGroup") {
-            $filter = "agency_group_id";
-        }else{
-            $filter = "agency_id";
-        }
-
-        for ($b=0; $b < sizeof($brands); $b++) { 
-            $brands_id[$b] = $brands[$b][0];
-        }
-
-        $sql = new sql();
-
-        $as = "total";
-
-        $tableAbv = "a";
-        $leftAbv = "b";
-
-        $a = new agency();
-
-        if ($tableName == "ytd") {
-            $value .= "_revenue";
-            $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year", $filter);
-            $colsValue = array($region, $currency[0]['id'], $brands_id, $months, $year, "");
-        }else{
-            $columns = array("brand_id", "month", "year", $filter);
-            $colsValue = array($brands_id, $months, $year, "");
-        }
-
-        $table = "$tableName $tableAbv";
-
-        $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
-
-        $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
-
-        $name = $leftName."_id";
-        $names = array($leftName."ID", $leftName, $as);
-        //var_dump("expression");
-        for ($m=1; $m < sizeof($mtx); $m++) { 
-            
-            if ($type == "agencyGroup") {
-                $agency = $a->getAgencyGroupID($con, $sql, $mtx[$m], $region);
-            }else{
-                $nameMtx = $this->getName($mtx[$m]);
-                $agency = $a->getAgencyID($con, $sql, $nameMtx);    
-            }
-            
-            $colsValue[(sizeof($colsValue)-1)] = $agency;
-            $where = $sql->where($columns, $colsValue);
-            $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name);
-
-            $from = $names;
-
-            $res[$m-1] = $sql->fetch($values[$y], $from, $from);
-        }
-    
-        
-        for ($r=0; $r < sizeof($res); $r++) { 
-            if (is_array($res[$r])) {
-                for ($r2=0; $r2 < sizeof($res[$r]); $r2++) {                     
-                    $p = new pRate();
-
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = 1.0;
-                    }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-                    }
-
-                    $res[$r][$r2]['total'] /= $pRate;   
-                }   
-            }else{
-
-            }
-        }   
-        return $res;
-    }
-
     public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
@@ -160,7 +67,6 @@ class rank extends Model{
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }
-
         
         $as = "total";
 
@@ -193,7 +99,7 @@ class rank extends Model{
 
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
-                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "ASC");
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
                 array_pop($colsValue);
 
                 $from = $names;
@@ -272,5 +178,51 @@ class rank extends Model{
 
         return $res;
         
+    }
+
+    public function assemblerTotal($mtx, $years){
+
+        for ($l=0; $l < sizeof($mtx); $l++) { 
+
+            if (substr($mtx[$l][0], 0, 3) == "Rev") {
+                $vec[$l] = 0;
+            }elseif (substr($mtx[$l][0], 0, 3) == "VAR") {
+                $vec[$l] = 0;
+                
+                if ($mtx[$l][0] == "VAR ABS.") {
+                    $varAbs = $l;
+                }else{
+                    $varP = $l;
+                }
+            }else{
+                $vec[$l] = "-";
+            }       
+
+            for ($c=0; $c < sizeof($mtx[$l]); $c++) { 
+                
+                if ($c != 0 && substr($mtx[$l][0], 0, 3) == "Rev") {
+                    if ($mtx[$l][$c] == "-") {
+                        $vec[$l] += 0;    
+                    }else{
+                        $vec[$l] += $mtx[$l][$c];
+                    }
+                }
+            }
+        }
+
+        $vec[0] = "Total";
+
+        if (isset($varAbs)) {
+            
+            $vec[$varAbs] = $vec[$varAbs-sizeof($years)] - $vec[$varAbs-sizeof($years)+1];
+
+            if ($vec[$varP-sizeof($years)] == 0) {
+                $vec[$varP] = 0.0;
+            }else{
+                $vec[$varP] = ($vec[$varP-sizeof($years)-1] / $vec[$varP-sizeof($years)])*100;
+            }
+        }
+
+        return $vec;
     }
 }

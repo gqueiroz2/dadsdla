@@ -5,13 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Request;
 
 use App\dataBase;
+use App\RenderStuff;
+use App\CheckElements;
+use App\base;
 
 class insertPendingController extends Controller{
     
 	public function insertClientUnit(){
-		$db = new dataBase;
+		
+		$db = new dataBase;		
+		$rS = new RenderStuff();
+		$cE = new CheckElements();
+		$base = new base();
+
 		$con = $db->openConnection('DLA');
-		$table = 'client_unit';
+		$conFM = $db->openConnection('firstMatch');	
+
+		$region = Request::get('region'); 
+		$table = Request::get('table');
+		
+
+		$tableCli = 'client_unit';
 		$sizeC = Request::get('size');
 		for ($c=0; $c < $sizeC; $c++) { 
 			
@@ -22,17 +36,32 @@ class insertPendingController extends Controller{
 			}
 		}
 		$type = "client";
-		$bool = $this->insert($con,$table,$type,$client);
-		return back()->with('inserted',"DONE !!!");
+		
+		$bool = $this->insert($con,$tableCli,$type,$client);
+
+		$newValues = $cE->newValues($con,$conFM,$region,$table);
+		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
+
+		return view('dataManagement.Chain.pendingStuff',compact('base','rS','con','newValues','dependencies','table','region'))->with('inserted',"DONE !!!");
+		
 	}
 
 
 	public function insertAgencyUnit(){
-		$db = new dataBase;
+		
+		$db = new dataBase;		
+		$rS = new RenderStuff();
+		$cE = new CheckElements();
+		$base = new base();
+
 		$con = $db->openConnection('DLA');
-		$table = 'agency_unit';
+		$conFM = $db->openConnection('firstMatch');	
+
+		$region = Request::get('region'); 
+		$table = Request::get('table');		
+
+		$tableAg = 'agency_unit';
 		$sizeC = Request::get('size');
-		var_dump(Request::all());
 		
 		for ($c=0; $c < $sizeC; $c++) { 
 			
@@ -42,9 +71,15 @@ class insertPendingController extends Controller{
 				$agencies[$c]['unit'] = Request::get("agencies-unit-$c");
 			}
 		}
+		
 		$type = "agency";
-		$bool = $this->insert($con,$table,$type,$agencies);
-		return back()->with('inserted',"DONE !!!");
+		$bool = $this->insert($con,$tableAg,$type,$agencies);
+
+
+		$newValues = $cE->newValues($con,$conFM,$region,$table);
+		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
+
+		return view('dataManagement.Chain.pendingStuff',compact('base','rS','con','newValues','dependencies','table','region'))->with('inserted',"DONE !!!");
 	}
 
 	public function insert($con,$table,$type,$array){
@@ -56,7 +91,6 @@ class insertPendingController extends Controller{
 
 		for ($c=0; $c < sizeof($array); $c++) { 	
 			$insert[$c] = "INSERT INTO $table (".$type."_id,origin_id,name) VALUES( \"".$array[$keys[$c]]["base"]->ID."\" ,\"1\", \"".$array[$keys[$c]]['unit']."\")";	
-			var_dump($insert[$c]);
 
 			if ($con->query($insert[$c]) === TRUE) {
 				$check ++;

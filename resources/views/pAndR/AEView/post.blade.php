@@ -66,7 +66,7 @@
 	<div id="vlau"></div>
 
 	<script>
-		$(document).ready(function(){   
+		$(document).ready(function(){
 			@for($m=0;$m<16;$m++)
 				$("#rf-"+{{$m}}).change(function(){
 
@@ -94,7 +94,7 @@
 
 
 					@for($c=0;$c<10;$c++)
-						var temp = $(this).val()*parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val()/100);
+						var temp = $(this).val()*parseFloat($("#totalPP2-"+{{$c}}).val()/100);
 
 						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(temp);
 						
@@ -111,13 +111,20 @@
 							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
 							$("#clientRF-"+{{$c}}+"-15").val(value);
 						}
-
+						
 						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
 
 						$("#totalClient-"+{{$c}}).val(Temp);
 
+						@for($m2=0;$m2<16;$m2++)
+							var temp2 = parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/parseFloat($("#totalClient-"+{{$c}}).val());
+							temp2 = temp2*100;
+							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
+						@endfor
+
 					@endfor
-									
+					
+							
 				});
 
 
@@ -145,6 +152,12 @@
 						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
 
 						$("#totalClient-"+{{$c}}).val(Temp);
+
+						@for($m2=0;$m2<16;$m2++)
+							var temp2 = parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/parseFloat($("#totalClient-"+{{$c}}).val());
+							temp2 = temp2*100;
+							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
+						@endfor
 
 						var month = parseFloat(0);
 
@@ -187,11 +200,43 @@
 
 						$("#total-total").val(total);
 
+						@for($c2=0;$c2<10;$c2++)
+							var temp = parseFloat($("#totalClient-"+{{$c2}}).val())/parseFloat($("#total-total").val());
+							temp = temp*100;
+							$("#totalPP2-"+{{$c2}}).val(temp);
+							$("#totalPP3-"+{{$c2}}).val(temp);
+						@endfor
+
 					});
 				@endfor
 			@endfor
-
 			@for($c=0;$c<10;$c++)
+				$("#totalPP2-"+{{$c}}).change(function(){
+					var top = 0;
+					@for($c2=0;$c2<10;$c2++)
+						top += parseFloat($("#totalPP2-"+{{$c2}}).val());
+					@endfor
+
+					$("#totalClients").val(top);
+
+					@for($m=0;$m<16;$m++)
+						if($("#totalPP3-"+{{$c}}).val() != 0){
+							var value = (parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($(this).val()))/parseFloat($("#totalPP3-"+{{$c}}).val());
+						}else{
+							var value = parseFloat($("#rf-"+{{$m}}).val())*parseFloat($(this).val()/100);
+						}
+						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(value);
+					@endfor
+
+					$("#totalPP3-"+{{$c}}).val($(this).val());
+
+					var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+
+					$("#totalClient-"+{{$c}}).val(Temp);
+
+					
+				});
+
 				$("#client-"+{{$c}}).click(function(){
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
@@ -218,21 +263,19 @@
 						$("#input-"+{{$c}}+"-"+{{$m}}).css("display",display);
 					@endfor
 
+
 					if ($("#inputT-0").css("display")=='none') {
-						var displayT = 'block';
+						var displayT = '';
 					}else{
 						var displayT = 'none';
 						for(var c2=0;c2<10;c2++){
-							if ($("#input-"+c2+"-0").css("display") == 'block') {
-								displayT = 'block';
+							if ($("#input-"+c2+"-0").css("display") != 'none') {
+								displayT = '';
 								break;
 							}
 						}
 					}
-
-					@for($m=0;$m<16;$m++)
-						$("#inputT-"+{{$m}}).css("display",displayT);
-					@endfor
+					$("#totalTotalPP").css("display",displayT);
 
 					if ($("#newCol-"+{{$c}}+"-0").css("display") == 'none') {
 						var displayC = "";
@@ -245,7 +288,7 @@
 						var border = "1px 0px 0px 0px";
 						var width3 = '4.5%';
 					}
-
+					$("#totalPP-"+{{$c}}).css("display",displayC);
 					$("#newLine-"+{{$c}}).css("display",displayC);
 					$("#client-"+{{$c}}).attr("rowspan",number);
 					$("#totalC-"+{{$c}}).attr("rowspan",number);
@@ -260,47 +303,40 @@
 						$("#month-"+{{$c}}+"-"+{{$m}}).css("width",width3);
 					@endfor
 				});
+
 				@for($m=0;$m<16;$m++)
 					$("#inputNumber-"+{{$c}}+"-"+{{$m}}).change(function(){
 						var temp = 0;
 
-						@for($c2=0;$c2<10;$c2++)
-							temp += parseFloat($("#inputNumber-"+{{$c2}}+"-"+{{$m}}).val());
+						var antigo = $(this).val();
+
+						@for($m2=0;$m2<16;$m2++)
+							if({{$m2}} != 3 && {{$m2}} != 7 && {{$m2}} != 11 && {{$m2}} != 15){
+								temp += parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
+							}
 						@endfor
 
 						temp = temp.toFixed(2);
 
 						if(temp != '100.00'){
-							alert("The sum of {{$month[$m]}} is "+temp);
+							alert("The sum of client is "+temp);
+							$("#client-"+{{$c}}).css("background-color","red");
+						}else{
+							$("#client-"+{{$c}}).css("background-color","");
 						}
 						
-						$("#inputTNumber-"+{{$m}}).val(temp);
-
-						var temp2 = $("#rf-"+{{$m}}).val()*parseFloat($(this).val()/100);
-
-						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(temp2);
-
-						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
-							$("#clientRF-"+{{$c}}+"-3").val(value);
-						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-4").val())+parseFloat($("#clientRF-"+{{$c}}+"-5").val())+parseFloat($("#clientRF-"+{{$c}}+"-6").val());
-							$("#clientRF-"+{{$c}}+"-7").val(value);
-						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-8").val())+parseFloat($("#clientRF-"+{{$c}}+"-9").val())+parseFloat($("#clientRF-"+{{$c}}+"-10").val());
-							$("#clientRF-"+{{$c}}+"-11").val(value);
-						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
-							$("#clientRF-"+{{$c}}+"-15").val(value);
-						}
-
-						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
-
-						$("#totalClient-"+{{$c}}).val(Temp);
-
 					});
 				@endfor
+				$("#TotalTitle-"+{{$c}}).click(function(){
+					@for($m=0;$m<16;$m++)
+						var vlau = parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100);
+						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
+					@endfor
+				});
+
 			@endfor
+
+
 		});
 	</script>
 

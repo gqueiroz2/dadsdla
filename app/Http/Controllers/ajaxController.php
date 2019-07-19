@@ -13,6 +13,7 @@ use App\sql;
 use App\brand;
 use App\agency;
 use App\client;
+use App\subRankings;
 
 class ajaxController extends Controller{
 
@@ -356,7 +357,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> void </option>";
+        echo "<option value='0'> empty </option>";
 
     }
 
@@ -373,7 +374,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> void </option>";
+        echo "<option value='0'> empty </option>";
 
     }
 
@@ -455,9 +456,9 @@ class ajaxController extends Controller{
         for ($r=0; $r < sizeof($resp); $r++) { 
             $auxVal = base64_encode(json_encode($resp[$r]));
             if ($name == "agency") {
-                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']." - ".$resp[$r]['agencyGroup']."</option>";    
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']." - ".$resp[$r]['agencyGroup']."</option>";
             }else{
-                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']."</option>";    
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']."</option>";
             }
             
         }
@@ -476,5 +477,32 @@ class ajaxController extends Controller{
             echo "<option value='15'>15</option>";
             echo "<option value='25'>25</option>";   
         }
+    }
+
+    public function subRanking(){
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $brands = Request::get("brands");
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $years = Request::get("years");
+        $name = Request::get("name");
+
+        $sr = new subRankings();
+
+        $subValues = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $name);
+        $matrix = $sr->assembler($subValues, $years, $type);
+
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+
+        $sr->renderSubRankings($mtx, $total);
+        //var_dump($mtx);
+        //var_dump(Request::all());
     }
 }

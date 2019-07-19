@@ -17,11 +17,19 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
 		});
 
+		Route::group(['prefix'=>'relationship'],function(){
+			Route::post('agencyGroupByNewAgency','ajaxRelationshipController@agencyGroupByNewAgency')
+									->name('agencyGroupByNewAgency');
+		});
+
 		Route::group(['prefix'=>'checkElements'],function(){
-			Route::post('clientGroupByClient','ajaxController@clientGroupByClient')
-									->name('pacingReportPost');
+			Route::post('clientGroupByClient','ajaxController@clientGroupByClient');									
+
+			Route::post('agencyGroupByAgency','ajaxController@agencyGroupByAgency');
+									
 
 		});
+
 	});
 });
 

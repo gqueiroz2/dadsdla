@@ -31,9 +31,9 @@
 							
 						</div>
 						<div class="col">
-							<label class="labelLeft bold" style="color: red" id="typeName"> Select the previous field: </label>
+							<label class="labelLeft bold" style="color: red" id="typeName">&nbsp;</label>
 							@if($errors->has('type'))
-								<label style="color: red;">* Previous field Required</label>
+								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->type2()}}
 						</div>
@@ -58,6 +58,8 @@
 							@endif
 							{{$render->brand($brands)}}
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<label class="labelLeft bold">1º Pos:</label>
 							@if($errors->has('firstPos'))
@@ -101,6 +103,13 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				<div style="float: right;"> Ranking </div>
+			</div>
+		</div>	
+
 	</div>
 
 	<div id="vlau"></div>

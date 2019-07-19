@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('test','RootController@test')->name('test');
+
 Route::group(['middleware'=>'auth'],function(){
 	Route::get('home','adSalesController@home')->name('home');
 	Route::get('email','adSalesController@email')->name('email');

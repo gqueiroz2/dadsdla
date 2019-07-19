@@ -4,28 +4,31 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\sql;
+use App\region;
 
 class CheckElements extends Model{
     
-	public function newValues($conDLA,$con,$table){
+	public function newValues($conDLA,$con,$region,$table){
 
 		$sql = new sql();
 
+		$currencies = false;
+
 		if($table == "cmaps"){			
 			$regions = false;
-			$currencies = false;
+			
 		}else{
-			$regions = $this->checkNewRegions($conDLA,$con,$table,$sql);	
-			$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);		
+			$regions = false;//$this->checkNewRegions($conDLA,$con,$table,$sql);	
+			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);		
 		}
 		
-		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
-		$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
+		$brands = false;//$this->checkNewBrands($conDLA,$con,$table,$sql);
+		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
 		
-		$clients = $this->checkNewClients($conDLA,$con,$table,$sql);
+		$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);
 		
-		$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql);
+		$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql,$region);
 		
 
 		$rtr = array(
@@ -111,7 +114,8 @@ class CheckElements extends Model{
 		return $new;
 	}
 
-	public function checkNewClients($conDLA,$con,$table,$sql){
+	public function checkNewClients($conDLA,$con,$table,$sql,$region){
+		$sql = new sql();
 		$tableDLA = 'client_unit';
 
 		$somethingDLA = "name";
@@ -120,31 +124,40 @@ class CheckElements extends Model{
 		$fromDLA = array("name");
 		$from = array("client");
 
+		$r = new region();
+
+		$seekRegion = $r->getRegion($conDLA,array($region))[0];
+
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
 		}else{
-			$selectDistinctFM = "SELECT DISTINCT client,campaign_sales_office FROM $table ORDER BY client";		
+			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table 
+												WHERE (sales_representant_office = '".$seekRegion['name']."')
+												ORDER BY sales_representant_office,client ";
 		}
 
 		$res = $con->query($selectDistinctFM);
-		$sql = new sql();
 
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
 		}else{
-			$resultsFM = $sql->fetch($res,array("client","campaign_sales_office"),array("client","region"));
+			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
 
+		if($resultsFM){
 
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-		$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 
-		$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
+			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
+		}else{
+			$new = false;
+		}
 
 		return $new;
 	}	
 
-	public function checkNewAgencies($conDLA,$con,$table,$sql){
+	public function checkNewAgencies($conDLA,$con,$table,$sql,$region){
 		$tableDLA = 'agency_unit';
 
 		$somethingDLA = "name";
@@ -153,10 +166,16 @@ class CheckElements extends Model{
 		$fromDLA = array("name");
 		$from = array("agency");
 
+		$r = new region();
+
+		$seekRegion = $r->getRegion($conDLA,array($region))[0];
+
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";		
 		}else{
-			$selectDistinctFM = "SELECT DISTINCT agency,campaign_sales_office FROM $table ORDER BY agency";		
+			$selectDistinctFM = "SELECT DISTINCT agency,sales_representant_office FROM $table 
+														WHERE (sales_representant_office = '".$seekRegion['name']."')
+														ORDER BY agency";		
 		}
 		
 
@@ -166,13 +185,19 @@ class CheckElements extends Model{
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
 		}else{
-			$resultsFM = $sql->fetch($res,array("agency","campaign_sales_office"),array("agency","region"));
+			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));
 		}
 
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-		$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
+		if($resultsFM){
 
-		$new = $this->checkDifferencesAC('agency',$distinctDLA,$distinctFM);
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
+
+			$new = $this->checkDifferencesAC('agency',$distinctDLA,$distinctFM);
+
+		}else{
+			$new = false;
+		}
 
 		return $new;
 	}

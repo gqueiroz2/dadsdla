@@ -51,10 +51,9 @@ class relationshipRender extends Model{
 				echo "</div>";
 
 				echo "<div class='col'>";// NEW AGENCY
-					echo "<select class='form-control' style='width:100% !important;'  name='newAgency'>";
-					
-					for ($aa=0; $aa < sizeof($agency); $aa++) { 
+					echo "<select class='form-control' style='width:100% !important;' id='newAgency-".$a."'  name='newAgency-".$a."'>";
 						echo "<option> Select </option>";
+					for ($aa=0; $aa < sizeof($agency); $aa++) { 						
 						echo "<option value='".$agency[$aa]['id']."'>".$agency[$aa]['agency']." - ".$agency[$aa]['agencyGroup']." </option>";
 					}
 					
@@ -69,11 +68,7 @@ class relationshipRender extends Model{
 					
 			echo "</div>";
 		}	
-		echo "<div class='row justify-content-center'>";
-			echo "<div class='col-sm-1'>"; // NUMER OF THE LINE
-				echo "<span>".($a+1)."</span>";
-			echo "</div>";
-		echo "</div>";
+		
 	}
 
 }

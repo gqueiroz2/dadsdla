@@ -106,27 +106,23 @@ class rankingController extends Controller {
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
         //var_dump($values);
         $filterValues = $r->filterValues($values, $type2, $type);
-
-        if ($nPos == 'All') {
-            $size = sizeof($type2);
-        }else{
-            $size = $nPos;
-        }
         
-        $matrix = $r->assembler($values, $type2, $years, $type, $filterValues, $size);
+        $matrix = $r->assembler($values, $type2, $years, $type, $filterValues);
         $mtx = $matrix[0];
         $total = $matrix[1];
-        //var_dump($mtx);
-        $sr = new subRankings();
 
-        //$subValues = $sr->getSubResults($con, $mtx[sizeof($years)], $brands, $type, $region, $value, $pRate, $months, $years);
-        //$subMatrix = $sr->assembler($subValues, $years, $type);
+        if ($nPos == 'All') {
+            $size = sizeof($mtx[0]);
+        }else{
+            $size = ($nPos+1);
+        }
 
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
-
-        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total'));
+        //var_dump("size",$size);
+        //var_dump("mtx",sizeof($mtx[0]));
+        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region'));
 
     }
 }

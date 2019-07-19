@@ -121,9 +121,9 @@ class ChainController extends Controller{
 		
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }else{
+        }/*else{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
-        }
+        }*/
 		
 
     }
@@ -151,9 +151,9 @@ class ChainController extends Controller{
 
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }else{
+        }/*else{
             return back()->with('secondChainError',"There was and error on the insertion of the Excel Data :( ");
-        }
+        }*/
 
     }
 
@@ -177,13 +177,12 @@ class ChainController extends Controller{
     	$year = Request::get('year');
     	$complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
 
-
     	if($complete){
             return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }else{
+        }/*else{
             return back()->with('thirdChainError',"There was and error on the insertion of the Excel Data :( ");
         }
-
+*/
     }
 
     public function thirdToDLA(){
@@ -209,9 +208,9 @@ class ChainController extends Controller{
 
     	if($complete){
             return back()->with('lastChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }else{
+        }/*else{
             return back()->with('lastChainError',"There was and error on the insertion of the Excel Data :( ");
-        }
+        }*/
 
     }
 
