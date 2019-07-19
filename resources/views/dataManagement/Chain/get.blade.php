@@ -162,6 +162,18 @@
 
 								<div class="row justify-content-center">          
 							 		<div class="col">		
+										<label><b> Region: </b></label> 
+											@if($errors->has('region'))
+												<label style="color: red;">* Required</label>
+											@endif
+										<div class="form-group">
+											{{$rC->regionWI()}}					
+										</div>
+									</div>
+								</div>
+
+								<div class="row justify-content-center">          
+							 		<div class="col">		
 										<label><b> Table: </b></label> 
 											@if($errors->has('table'))
 												<label style="color: red;">* Required</label>

@@ -20,7 +20,6 @@ class rankings extends rank{
         }else{
             $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency);    
         }
-        
         return $res;
     }
 

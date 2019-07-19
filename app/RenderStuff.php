@@ -7,12 +7,25 @@ use App\agency;
 use App\client;
 
 class RenderStuff extends Model{
-    public function base($con,$base,$table,$newValues,$dependencies){
+    public function base($con,$base,$table,$newValues,$dependencies,$region){
     	
     	$ag = new agency();
     	$cli = new client();
 
     	echo "<div class='container-fluid'>";
+
+
+	    	echo "<div class='row mt-2 justify-content-end'>
+					<div class='col-3'>
+						<button class='btn btn-primary' style='width: 100%;' id='agency'> 
+							<a href='".route('chain')."' style='color: white'>
+								Chain
+							</a>
+						</button>
+					</div>
+				</div>";
+
+
 			echo "<div class='row'> 
 					<div class='col'><center> Table : ".$base->truncateTableName($table)."</center></div>
 			      <div>";
@@ -37,11 +50,13 @@ class RenderStuff extends Model{
 					    echo "</div>";
 					    if($dependencies[$d] == 'clients'){
 							echo "<form method='POST' action='".route('insertClient')."'>";
-							echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
 					    }else{
 					    	echo "<form method='POST' action='".route('insertAgency')."'>";
-					    	echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
+					    	
 					    }
+					    echo "<input type='hidden' name='size' value='".sizeof($newValues[$dependencies[$d]])."'>";
+					    echo "<input type='hidden' name='table' value='".$table."'>";
+					    echo "<input type='hidden' name='region' value='".$region."'>";
 					}else{
 						echo "<div class='row'>
 							<div class='col-2'> <center> Register </center> </div>
@@ -58,7 +73,7 @@ class RenderStuff extends Model{
 								/*
 										AGÊNCIAS
 								*/
-								$agency = $ag->getAgency($con);
+								$agency = $ag->getAgencybyRegion($con,array($region));
 
 								echo "<div class='row mt-1'>";
 									echo "<div class='col-1'><center> ".($n+1)." </center></div>";
@@ -97,7 +112,7 @@ class RenderStuff extends Model{
 								/*
 										CLIENTES
 								*/
-								$client = $cli->getClient($con);
+								$client = $cli->getClientByRegion($con,array($region));
 
 								echo "<div class='row mt-1'>";
 									echo "<div class='col-1'><center> ".($n+1)." </center></div>";

@@ -36,6 +36,9 @@ class relationshipController extends Controller{
         $ag = new agency();
         $agencies = $ag->getAllAgenciesByFirstLetter($con,$regionID,$alphabetLetter);
         $agency = $ag->getAgencyByRegion($con,array($regionID));
+
+        var_dump($agency);
+
         $r = new region();
         $region = $r->getRegion($con);
 		return view('dataManagement.AgencyClient.relationshipAgencyPost',compact('agencies','agency','region','render'));

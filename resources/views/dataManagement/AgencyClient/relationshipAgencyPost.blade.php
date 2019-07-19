@@ -71,5 +71,35 @@
 			</div>
 		</div>
 	</div>
+
+	<div id="vlau"></div>
+
+	@for( $a=0; $a<sizeof($agencies); $a++)
+		<script type="text/javascript">
+	
+		$(document).ready(function(){
+			$("#newAgency-{{$a}}").change(function(){
+			    var newAgency = $('#newAgency-{{$a}}').val();
+			    
+			    ajaxSetup();
+
+			    $.ajax({
+			      	url:"/ajax/relationship/agencyGroupByNewAgency",
+			      	method:"POST",
+			      	data:{newAgency},
+			        success: function(output){
+			         	$('#vlau').html(output);
+			        },
+			        error: function(xhr, ajaxOptions,thrownError){
+			          	alert(xhr.status+" "+thrownError);
+			      	}
+			    }); 
+			    
+			});
+		});
+
+		</script>
+	@endfor
+
 @endif
 @endsection

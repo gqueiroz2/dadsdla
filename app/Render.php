@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\dataBase;
+use App\region;
 
 class Render extends Model{
     
@@ -13,6 +15,25 @@ class Render extends Model{
         
         echo "<select id='tier' class='selectpicker' data-selected-text-format='count' multiple='true' name='tier[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
         echo "</select>";
+    }
+
+    public function regionWI(){ // Without Input
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $r = new region();
+
+        $region = $r->getRegion($con);
+
+        echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select </option>";
+            for ($i = 0; $i < sizeof($region); $i++) { 
+                if($region[$i]['name'] != "LATAM" ){
+                    echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
+                }
+            }
+
+       echo "</select>";
+
     }
 
     public function region($region){

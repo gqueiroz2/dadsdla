@@ -43,7 +43,7 @@ class subRankings extends rank {
         }
         
         if ($tableName == "ytd") {
-            $value .= "_revenue";
+            $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year", $filter);
             $colsValue = array($region, $brands_id, $months, $year, $agency);
         }else{

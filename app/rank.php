@@ -109,7 +109,6 @@ class rank extends Model{
             }
 
         }else{
-
             $tableAbv = "a";
             $leftAbv = "b";
 
@@ -162,10 +161,7 @@ class rank extends Model{
 
         for ($v=0; $v < sizeof($values); $v++) {
             $something = $type."ID";
-            /*var_dump("name:".$name->id);
-            var_dump("values:".$values[$v][$something]);*/
             if ($name->id == $values[$v][$something]) {
-                //var_dump($name->id);
                 return 1;
             }
         }
