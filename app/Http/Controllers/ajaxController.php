@@ -51,7 +51,16 @@ class ajaxController extends Controller{
     public function clientGroupByClient(){
         $clients = json_decode(base64_decode(Request::get('clients')));
 
-        echo "Client Group ".$clients->clientGroup;
+        echo "Client Group - ".$clients->clientGroup;
+
+        //echo "<option value='".$clients->client_group_id."'> Clients Group ".$clients->clientGroup."</option>";
+    }
+
+
+    public function agencyGroupByAgency(){
+        $agency = json_decode(base64_decode(Request::get('agencies')));
+
+        echo "Agency Group - ".$agency->agencyGroup;
 
         //echo "<option value='".$clients->client_group_id."'> Clients Group ".$clients->clientGroup."</option>";
     }
