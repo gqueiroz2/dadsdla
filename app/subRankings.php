@@ -195,7 +195,7 @@ class subRankings extends rank {
     public function assembler($sub, $years, $type){
         
         if ($type == "agencyGroup") {
-            $var = "Agencys";
+            $var = "Agencies";
             $type2 = "agency";
         }else{
             $var = "Clients";
@@ -251,74 +251,70 @@ class subRankings extends rank {
 
     public function renderSubRankings($mtx, $total){
         
-        echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
+        echo "<div class='container-fluid' style='margin-top: 0.5%; margin-bottom: 0.5%; margin-left: 0.5%; margin-right: 0.5%;'>";
+            echo "<div class='row'>";
+                echo "<div class='col'>";
+                    echo "<center><table style='width: 90%; zoom:100%; font-size: 16px;'>";
 
-        for ($m=0; $m < sizeof($mtx[0]); $m++) {
-            echo "<tr>";
+                    for ($m=0; $m < sizeof($mtx[0]); $m++) {
+                        echo "<tr>";
 
-            for ($i=0; $i < sizeof($mtx); $i++) { 
-                if ($m == 0) {
-                    echo "<td class='lightBlue center'> ".$mtx[$i][$m]." </td>";
-                }elseif ($m%2 != 0) {
-                    if (!is_numeric($mtx[$i][$m])) {
-                if ($mtx[$i][$m] != "-") {
-                  echo "<td class='rcBlue center'> ".$mtx[$i][$m]." </td>";  
-                }else{
-                  echo "<td class='rcBlue center'> ".$mtx[$i][$m]." </td>";  
-                }
-                    }else{
-                        if (substr($mtx[$i][0], 0, 3) == "Pos") {
-                            if ($mtx[$i][$m] != '-') {
-                                echo "<td class='rcBlue center'> ".$mtx[$i][$m]."º </td>";      
-                            }else{
-                                echo "<td class='rcBlue center'> ".$mtx[$i][$m]." </td>";
-                            }
+                        if ($m == 0) {
+                            $color = "lightBlue";
+                        }elseif ($m%2 != 0) {
+                            $color = "rcBlue";
                         }else{
-                            echo "<td class='rcBlue center'> ".number_format($mtx[$i][$m])." </td>";    
+                            $color = "medBlue";
                         }
-                        
-                    }
-                }elseif ($m%2 == 0) {
-                    if (!is_numeric($mtx[$i][$m])) {
-                          if ($mtx[$i][$m] != "-") {
-                  echo "<td class='medBlue center'> ".$mtx[$i][$m]." </td>";  
-                }else{
-                  echo "<td class='medBlue center'> ".$mtx[$i][$m]." </td>";  
-                }
-                    }else{
-                        if (substr($mtx[$i][0], 0, 3) == "Pos") {
-                            if ($mtx[$i][$m] != '-') {
-                                echo "<td class='medBlue center'> ".$mtx[$i][$m]."º </td>";     
+
+                        for ($i=0; $i < sizeof($mtx); $i++) { 
+                            if ($m == 0) {
+                                echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                             }else{
-                                echo "<td class='medBlue center'> ".$mtx[$i][$m]." </td>";
+                                if (!is_numeric($mtx[$i][$m])) {
+                            if ($mtx[$i][$m] != "-") {
+                              echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
+                            }else{
+                              echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
                             }
-                        }else{
-                            echo "<td class='medBlue center'> ".number_format($mtx[$i][$m])." </td>";   
+                                }else{
+                                    if (substr($mtx[$i][0], 0, 3) == "Pos") {
+                                        if ($mtx[$i][$m] != '-') {
+                                            echo "<td class='$color center'> ".$mtx[$i][$m]."º </td>";      
+                                        }else{
+                                            echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
+                                        }
+                                    }else{
+                                        echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";    
+                                    }
+                                    
+                                }
+                            }
+                            
                         }
+
+                        echo "</tr>";
+                   }
+
+                   echo "<tr>";
+
+                  for ($t=0; $t < sizeof($total); $t++) { 
+                    
+                    if (is_numeric($total[$t])) {
+                      echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>"; 
+                    }else{
+                      if ($total[$t] != "-") {
+                        echo "<td class='darkBlue center'> ".$total[$t]." </td>"; 
+                      }else{
+                        echo "<td class='darkBlue center'> &nbsp; </td>"; 
+                      }
                     }
-                }
-                
-            }
 
-            echo "</tr>";
-       }
+                  }
 
-       echo "<tr>";
-
-      for ($t=0; $t < sizeof($total); $t++) { 
-        
-        if (is_numeric($total[$t])) {
-          echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>"; 
-        }else{
-          if ($total[$t] != "-") {
-            echo "<td class='darkBlue center'> ".$total[$t]." </td>"; 
-          }else{
-            echo "<td class='darkBlue center'> &nbsp; </td>"; 
-          }
-        }
-
-      }
-
-       echo "</table>";
+                   echo "</table></center>";
+               echo "</div>";
+           echo "</div>";
+       echo "</div>";
     }
 }
