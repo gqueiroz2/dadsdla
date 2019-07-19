@@ -31,8 +31,7 @@ class subRankings extends rank {
         if ($type == "agencyGroup") {
             $oldAgency = $a->getAgencyGroupID($con, $sql, $filterValue, $region);
         }else{
-            $nameMtx = $this->getName($filterValue);
-            $oldAgency = $a->getAllAgenciesByName($con, $sql, $nameMtx);    
+            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue);    
         }
 
         if (is_array($oldAgency)) {
@@ -45,8 +44,8 @@ class subRankings extends rank {
         
         if ($tableName == "ytd") {
             $value .= "_revenue";
-            $columns = array("campaign_sales_office_id", "campaign_currency_id", "brand_id", "month", "year", $filter);
-            $colsValue = array($region, $currency[0]['id'], $brands_id, $months, $year, $agency);
+            $columns = array("sales_representant_office_id", "brand_id", "month", "year", $filter);
+            $colsValue = array($region, $brands_id, $months, $year, $agency);
         }else{
             $columns = array("brand_id", "month", "year", $filter);
             $colsValue = array($brands_id, $months, $year, $agency);
@@ -60,7 +59,6 @@ class subRankings extends rank {
 
         $name = $leftName."_id";
         $names = array($leftName."ID", $leftName, $as);
-        //var_dump("expression");
 
         $where = $sql->where($columns, $colsValue);
         $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
@@ -69,34 +67,34 @@ class subRankings extends rank {
 
         $res = $sql->fetch($values[$y], $from, $from);
         
-        $p = new pRate();
-
-        if ($currency[0]['name'] == "USD") {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
-        }
-
-        if (is_array($res)) {
-            for ($r=0; $r < sizeof($res); $r++) { 
-                $res[$r]['total'] /= $pRate;      
-            }  
-        }
-        
         //var_dump($res);
         return $res;
     }
 
     public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
-        //var_dump($currency);
+        
         if ($type == "agencyGroup") {
             $name = "agency";
         }else{
             $name = "client";
         }
 
+        $p = new pRate();
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+        }
+
         for ($y=0; $y < sizeof($years); $y++) { 
             $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter);
+
+            if (is_array($res[$y])) {
+                for ($r=0; $r < sizeof($res[$y]); $r++) { 
+                    $res[$y][$r]['total'] *= $pRate;
+                }
+            }
         }
 
         return $res;

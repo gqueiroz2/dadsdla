@@ -82,7 +82,7 @@ class rankings extends rank{
         return $rtr;
     }
 
-    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p, $typeF){
+    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
 
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
@@ -108,13 +108,10 @@ class rankings extends rank{
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
+        }elseif ($mtx[$m][0] == "Group") {
+            $res = $type2[$t]->agencyGroup;
         }else{
-            if ($typeF == "agency") {
-                $res = $type2[$t]->name." - ".$type2[$t]->agencyGroup;    
-            }else{
-                $res = $type2[$t]->name;    
-            }
-            
+            $res = $type2[$t]->name;
         }
 
         return $res;
@@ -128,9 +125,15 @@ class rankings extends rank{
             $var = "agency groups";
             $aux = "agencyGroup";
         }else{
-            $var = $type;
-            $var .= "s";
-            $aux = $type;
+            if ($type == "client") {
+                $var = $type;
+                $var .= "s";
+                $aux = $type;    
+            }else{
+                $var = "agencies";
+                $aux = $type;
+            }
+            
         }
 
         for ($y=0; $y < sizeof($years); $y++) { 
@@ -141,13 +144,20 @@ class rankings extends rank{
         
         $mtx[$last][0] = ucfirst($var);
 
+        if ($type == "agency") {
+            $option = 2;
+            $mtx[$last+1][0] = "Group";
+        }else{
+            $option = 1;
+        }
+        
+
         for ($l=0; $l < sizeof($years); $l++) { 
-            
-            $mtx[(sizeof($years)+$l+1)][0] = "Rev. ".$years[$l];
+            $mtx[(sizeof($years)+$l+$option)][0] = "Rev. ".$years[$l];
         }
 
         if (sizeof($years) >= 2) {
-            $last = $l+sizeof($years)+1;
+            $last = $l+sizeof($years)+$option;
 
             $mtx[$last][0] = "VAR ABS.";
             $mtx[$last+1][0] = "VAR %";    
@@ -157,7 +167,7 @@ class rankings extends rank{
             
             if ($filterValues[$type2[$t]->id] == 1) {
                 for ($m=0; $m < sizeof($mtx); $m++) { 
-                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m]), $type));
+                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
                 }
             }
         }
@@ -177,7 +187,7 @@ class rankings extends rank{
 
         $total = $this->assemblerTotal($mtx, $years);
 
-        //var_dump($mtx);
+        //var_dump($total);
         return array($mtx, $total);
     }
 
@@ -186,7 +196,12 @@ class rankings extends rank{
         if ($type == "agencyGroup") {
             $res['name'] = "Agency groups";
         }else{
-            $res['name'] = ucfirst($type)."s";
+            if ($type == "client") {
+                $res['name'] = ucfirst($type)."s";    
+            }else{
+                $res['name'] = "Agencies";
+            }
+            
         }
 
         $b = new base();

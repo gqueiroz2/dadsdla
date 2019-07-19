@@ -348,7 +348,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> void </option>";
+        echo "<option value='0'> empty </option>";
 
     }
 
@@ -365,7 +365,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> void </option>";
+        echo "<option value='0'> empty </option>";
 
     }
 
@@ -447,9 +447,9 @@ class ajaxController extends Controller{
         for ($r=0; $r < sizeof($resp); $r++) { 
             $auxVal = base64_encode(json_encode($resp[$r]));
             if ($name == "agency") {
-                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']." - ".$resp[$r]['agencyGroup']."</option>";    
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']." - ".$resp[$r]['agencyGroup']."</option>";
             }else{
-                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']."</option>";    
+                echo "<option selected='true' value='".$auxVal."'>".$resp[$r]['name']."</option>";
             }
             
         }

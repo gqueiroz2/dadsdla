@@ -6,22 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\agency;
 
 class rank extends Model{
-    
-    public function getName($value){
-        
-        $newValue = "";
-        $ok = false;
-        for ($v=0; $v < strlen($value); $v++) { 
-            
-            if ($value[$v] != "-" && !$ok) {
-                $newValue .= $value[$v];
-            }else{
-                $ok = true;
-            }
-        }
-        //var_dump(substr($newValue, 0, (strlen($newValue)-1)));
-        return substr($newValue, 0, (strlen($newValue)-1));
-    }
 
     public function createPositions($first, $second, $third){
         
@@ -83,7 +67,6 @@ class rank extends Model{
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }
-
         
         $as = "total";
 

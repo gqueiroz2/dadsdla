@@ -117,8 +117,6 @@ class rankingController extends Controller {
             $size = ($nPos+1);
         }
 
-        //$subMatrix = $sr->assembler($subValues, $years, $type);
-
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
