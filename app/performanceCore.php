@@ -670,6 +670,38 @@ class performanceCore extends performance
             }
         }
 
+        for ($m=0; $m <sizeof($mtx["month"]) ; $m++) {         
+            $mtx["total"]["case4"]["dnPlanValue"][$m] = 0;
+            $mtx["total"]["case4"]["dnValue"][$m] = 0;
+            for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+                $mtx["total"]["case4"]["dnPlanValue"][$m] += $mtx["case4"]["dnPlanValue"][$sg][$m];
+                $mtx["total"]["case4"]["dnValue"][$m] += $mtx["case4"]["dnValue"][$sg][$m];
+            }
+        }
+        for ($m=0; $m <sizeof($mtx["month"]) ; $m++) {         
+            $mtx["total"]["case4"]["dnVarAbs"][$m] = $mtx["total"]["case4"]["dnValue"][$m] - $mtx["total"]["case4"]["dnPlanValue"][$m];
+            if ($mtx["total"]["case4"]["dnPlanValue"][$m] == 0) {
+                $mtx["total"]["case4"]["dnVarPrc"][$m] = 0;
+            }else{
+                $mtx["total"]["case4"]["dnVarPrc"][$m] = $mtx["total"]["case4"]["dnValue"][$m] / $mtx["total"]["case4"]["dnPlanValue"][$m];
+            }
+        }
+
+        //$mtx["case4"]["totalValueTier"][$sg][$b] = 0;
+        //$mtx["case4"]["totalPlanValueTier"][$sg][$b] = 0;
+        //$mtx["case4"]["totalVarAbs"][$sg][$b] = 0;
+        //$mtx["case4"]["totalVarPrc"][$sg][$b] = 0;
+
+        for ($b=0; $b <sizeof($mtx["brand"]) ; $b++) { 
+            $mtx["total"]["case4"]["totalValueTier"][$b] = 0;
+            $mtx["total"]["case4"]["totalPlanValueTier"][$b] = 0;
+            for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+                $mtx["total"]["case4"]["totalValueTier"][$b] += $mtx["case4"]["totalValueTier"][$sg][$b];
+                $mtx["total"]["case4"]["totalPlanValueTier"][$b] += $mtx["case4"]["totalPlanValueTier"][$sg][$b];
+            }
+        }
+
+
         return $mtx;
     }
 
