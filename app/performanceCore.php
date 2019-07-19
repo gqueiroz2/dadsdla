@@ -588,6 +588,88 @@ class performanceCore extends performance
             }
         }
 
+        for ($t=0; $t <sizeof($mtx["tier"]); $t++) { 
+            for ($m=0; $m <sizeof($mtx["month"]); $m++) { 
+                $mtx["total"]["case3"]["values"][$t][$m] = 0;
+                $mtx["total"]["case3"]["planValues"][$t][$m] = 0;
+            }
+            for ($m=0; $m <sizeof($mtx["quarters"]) ; $m++) { 
+                $mtx["total"]["case1"]["values"][$t][$m] = 0;
+                $mtx["total"]["case1"]["planValues"][$t][$m] = 0;
+            }
+        }
+
+        for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["total"]["case4"]["values"][$b][$m] = 0;
+                $mtx["total"]["case4"]["planValues"][$b][$m] = 0;
+            }
+            for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                $mtx["total"]["case2"]["values"][$b][$q] = 0;
+                $mtx["total"]["case2"]["planValues"][$b][$q] = 0;
+            }
+        }    
+
+        for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
+            for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
+                for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                    $mtx["total"]["case4"]["values"][$b][$m] += $mtx["case4"]["values"][$sg][$b][$m];
+                    $mtx["total"]["case4"]["planValues"][$b][$m] += $mtx["case4"]["planValues"][$sg][$b][$m];
+                }
+                for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                    $mtx["total"]["case2"]["values"][$b][$q]  +=  $mtx["case2"]["value"][$sg][$b][$q];
+                    $mtx["total"]["case2"]["planValues"][$b][$q] +=  $mtx["case2"]["planValue"][$sg][$b][$q] ;
+                }
+            }
+            for ($t=0; $t <sizeof($mtx["tier"]); $t++) { 
+                for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                    $mtx["total"]["case3"]["values"][$t][$m] += $mtx["case3"]["values"][$sg][$t][$m];
+                    $mtx["total"]["case3"]["planValues"][$t][$m] += $mtx["case3"]["planValues"][$sg][$t][$m];
+                }
+                for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                    $mtx["total"]["case1"]["values"][$t][$q] += $mtx["case1"]["value"][$sg][$t][$q];
+                    $mtx["total"]["case1"]["planValues"][$t][$q] += $mtx["case1"]["planValue"][$sg][$t][$q];
+                }
+            }
+        }
+
+        for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["total"]["case4"]["varAbs"][$b][$m] = $mtx["total"]["case4"]["values"][$b][$m] - $mtx["total"]["case4"]["planValues"][$b][$m];
+                if ($mtx["total"]["case4"]["planValues"][$b][$m] == 0) {
+                    $mtx["total"]["case4"]["varPrc"][$b][$m] = 0;
+                }else{
+                    $mtx["total"]["case4"]["varPrc"][$b][$m] = $mtx["total"]["case4"]["values"][$b][$m] / $mtx["total"]["case4"]["planValues"][$b][$m];;
+                }
+            }
+            for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                $mtx["total"]["case2"]["varAbs"][$b][$q] = $mtx["total"]["case2"]["values"][$b][$q] -  $mtx["total"]["case2"]["planValues"][$b][$q];
+                if( $mtx["total"]["case2"]["planValues"][$b][$q] == 0){
+                    $mtx["total"]["case2"]["varPrc"][$b][$q] = 0;
+                }else{
+                    $mtx["total"]["case2"]["varPrc"][$b][$q] = $mtx["total"]["case2"]["values"][$b][$q] / $mtx["total"]["case2"]["planValues"][$b][$q];
+                }
+            }
+        }
+        for ($t=0; $t <sizeof($mtx["tier"]); $t++) { 
+            for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
+                $mtx["total"]["case3"]["varAbs"][$t][$m] = $mtx["total"]["case3"]["values"][$t][$m] - $mtx["total"]["case3"]["planValues"][$t][$m];
+                if ($mtx["total"]["case3"]["planValues"][$t][$m]== 0) {
+                    $mtx["total"]["case3"]["varPrc"][$t][$m] = 0;
+                }else{
+                    $mtx["total"]["case3"]["varPrc"][$t][$m] = $mtx["total"]["case3"]["values"][$t][$m] / $mtx["total"]["case3"]["planValues"][$t][$m];
+                }
+            }
+            for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
+                $mtx["total"]["case1"]["varAbs"][$t][$q] = $mtx["total"]["case1"]["values"][$t][$q] - $mtx["total"]["case1"]["planValues"][$t][$q];
+                if (  $mtx["total"]["case1"]["planValues"][$t][$q] == 0) {
+                    $mtx["total"]["case1"]["varPrc"][$t][$q] = 0;
+                }else{
+                    $mtx["total"]["case1"]["varPrc"][$t][$q] = $mtx["total"]["case1"]["values"][$t][$q] / $mtx["total"]["case1"]["planValues"][$t][$q];
+                }
+            }
+        }
+
         return $mtx;
     }
 

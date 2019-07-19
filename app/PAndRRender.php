@@ -141,7 +141,7 @@ class PAndRRender extends Render
                             echo "<td class='lightGrey' colspan='1' id='month-$c-$m' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
                         }
                     }
-                    echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' id='totalC-$c' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
+                    echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:4.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
 
                 echo "</tr>";
                 echo "<tr style='display:none;' id='newLine-$c'>";

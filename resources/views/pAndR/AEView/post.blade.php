@@ -254,7 +254,7 @@
 					$("#quarter-"+{{$c}}+"-7").css("width",width);
 					$("#quarter-"+{{$c}}+"-11").css("width",width);
 					$("#quarter-"+{{$c}}+"-15").css("width",width);
-					$("#totalC-"+{{$c}}).css("width",width);
+					$("#TotalTitle-"+{{$c}}).css("width",width);
 					$("#client-"+{{$c}}).css("width",width2);
 
 					$("#table-"+{{$c}}).css("min-width",size);
@@ -291,7 +291,7 @@
 					$("#totalPP-"+{{$c}}).css("display",displayC);
 					$("#newLine-"+{{$c}}).css("display",displayC);
 					$("#client-"+{{$c}}).attr("rowspan",number);
-					$("#totalC-"+{{$c}}).attr("rowspan",number);
+					$("#TotalTitle-"+{{$c}}).attr("rowspan",number);
 					$("#quarter-"+{{$c}}+"-3").attr("rowspan",number);
 					$("#quarter-"+{{$c}}+"-7").attr("rowspan",number);
 					$("#quarter-"+{{$c}}+"-11").attr("rowspan",number);
@@ -329,8 +329,77 @@
 				@endfor
 				$("#TotalTitle-"+{{$c}}).click(function(){
 					@for($m=0;$m<16;$m++)
-						var vlau = parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100);
-						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
+						if({{$m}} != 3 && {{$m}} != 7 && {{$m}} != 11 && {{$m}} != 15){
+							var vlau = parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100);
+							$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
+						}
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
+							$("#clientRF-"+{{$c}}+"-3").val(value);
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var value = parseFloat($("#clientRF-"+{{$c}}+"-4").val())+parseFloat($("#clientRF-"+{{$c}}+"-5").val())+parseFloat($("#clientRF-"+{{$c}}+"-6").val());
+							$("#clientRF-"+{{$c}}+"-7").val(value);
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var value = parseFloat($("#clientRF-"+{{$c}}+"-8").val())+parseFloat($("#clientRF-"+{{$c}}+"-9").val())+parseFloat($("#clientRF-"+{{$c}}+"-10").val());
+							$("#clientRF-"+{{$c}}+"-11").val(value);
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
+							$("#clientRF-"+{{$c}}+"-15").val(value);
+						}
+
+						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+
+						$("#totalClient-"+{{$c}}).val(Temp);
+
+						var month = parseFloat(0);
+
+						@for($c2=0;$c2<10;$c2++)
+							month += parseFloat($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+						@endfor
+
+						$("#rf-"+{{$m}}).val(month);
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var month = parseFloat(0);
+							@for($c2=0;$c2<10;$c2++)
+								month += parseFloat($("#clientRF-"+{{$c2}}+"-3").val());
+							@endfor
+							$("#rf-3").val(month);
+						
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var month = parseFloat(0);
+							@for($c2=0;$c2<10;$c2++)
+								month += parseFloat($("#clientRF-"+{{$c2}}+"-7").val());
+							@endfor
+							$("#rf-7").val(month);
+						
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var month = parseFloat(0);
+							@for($c2=0;$c2<10;$c2++)
+								month += parseFloat($("#clientRF-"+{{$c2}}+"-11").val());
+							@endfor
+							$("#rf-11").val(month);
+						
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var month = parseFloat(0);
+							@for($c2=0;$c2<10;$c2++)
+								month += parseFloat($("#clientRF-"+{{$c2}}+"-15").val());
+							@endfor
+							$("#rf-15").val(month);
+						}
+
+						var total = parseFloat($("#rf-3").val()) + parseFloat($("#rf-7").val()) + parseFloat($("#rf-11").val()) + parseFloat($("#rf-15").val());
+
+						$("#total-total").val(total);
+
+						@for($c2=0;$c2<10;$c2++)
+							var temp = parseFloat($("#totalClient-"+{{$c2}}).val())/parseFloat($("#total-total").val());
+							temp = temp*100;
+							$("#totalPP2-"+{{$c2}}).val(temp);
+							$("#totalPP3-"+{{$c2}}).val(temp);
+						@endfor
+
 					@endfor
 				});
 
