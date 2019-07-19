@@ -125,38 +125,40 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			@for($n = 1; $n <= $size; $n++)
-				$("#"+"{{$type}}"+{{$n}}).click(function(){
+			@if ($type != "client") 
+				@for($n = 1; $n <= $size; $n++)
+					$("#"+"{{$type}}"+{{$n}}).click(function(){
 
-					var name = $(this).text();
-					var months = <?php echo json_encode($months); ?>;
-					var brands = <?php echo json_encode($brands); ?>;
-					var years  = <?php echo json_encode($years); ?>;
-					var type = "{{$type}}";
-					var value = "{{$value}}";
-					var currency = <?php echo json_encode($pRate); ?>;
-					var region = "{{$region}}";
-					
-					ajaxSetup();
+						var name = $(this).text();
+						var months = <?php echo json_encode($months); ?>;
+						var brands = <?php echo json_encode($brands); ?>;
+						var years  = <?php echo json_encode($years); ?>;
+						var type = "{{$type}}";
+						var value = "{{$value}}";
+						var currency = <?php echo json_encode($pRate); ?>;
+						var region = "{{$region}}";
+						
+						ajaxSetup();
 
-					$.ajax({
-						url: "/ajaxRanking/subRanking",
-						method: "POST",
-						data: {name, months, brands, years, type, value, currency, region},
-						success: function(output){
-							if ($("#sub"+"{{$type}}"+{{$n}}).css("display") == "none") {
-								$("#sub"+"{{$type}}"+{{$n}}).html(output);
-								$("#sub"+"{{$type}}"+{{$n}}).css("display", "");								
-							}else{
-								$("#sub"+"{{$type}}"+{{$n}}).css("display", "none");	
-							}
-						},
-		                error: function(xhr, ajaxOptions,thrownError){
-	                 		alert(xhr.status+" "+thrownError);
-	                	}
+						$.ajax({
+							url: "/ajaxRanking/subRanking",
+							method: "POST",
+							data: {name, months, brands, years, type, value, currency, region},
+							success: function(output){
+								if ($("#sub"+"{{$type}}"+{{$n}}).css("display") == "none") {
+									$("#sub"+"{{$type}}"+{{$n}}).html(output);
+									$("#sub"+"{{$type}}"+{{$n}}).css("display", "");								
+								}else{
+									$("#sub"+"{{$type}}"+{{$n}}).css("display", "none");	
+								}
+							},
+			                error: function(xhr, ajaxOptions,thrownError){
+		                 		alert(xhr.status+" "+thrownError);
+		                	}
+						});
 					});
-				});
-			@endfor
+				@endfor
+			@endif
 		});
 	</script>
 

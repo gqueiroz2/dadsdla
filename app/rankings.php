@@ -141,11 +141,11 @@ class rankings extends rank{
 
         $last = $y;
         
-        $mtx[$last][0] = ucfirst($var);
+        $mtx[$last][0] = "Group";
 
         if ($type == "agency") {
             $option = 2;
-            $mtx[$last+1][0] = "Group";
+            $mtx[$last+1][0] = ucfirst($var);
         }else{
             $option = 1;
         }

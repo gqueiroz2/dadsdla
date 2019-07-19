@@ -502,6 +502,7 @@ class ajaxController extends Controller{
         $total = $matrix[1];
 
         $sr->renderSubRankings($mtx, $total);
+
         //var_dump($mtx);
         //var_dump(Request::all());
     }

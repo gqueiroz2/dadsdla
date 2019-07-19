@@ -251,10 +251,10 @@ class subRankings extends rank {
 
     public function renderSubRankings($mtx, $total){
         
-        echo "<div class='container-fluid' style='margin-top: 0.5%; margin-bottom: 0.5%; margin-left: 0.5%; margin-right: 0.5%;'>";
+        echo "<div class='container-fluid' style='margin-top: 0.5%; margin-bottom: 0.5%;'>";
             echo "<div class='row'>";
                 echo "<div class='col'>";
-                    echo "<center><table style='width: 90%; zoom:100%; font-size: 16px;'>";
+                    echo "<center><table style='width: 90%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
 
                     for ($m=0; $m < sizeof($mtx[0]); $m++) {
                         echo "<tr>";

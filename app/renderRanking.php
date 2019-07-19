@@ -22,54 +22,53 @@ class renderRanking extends Render {
 
        for ($m=0; $m < $size; $m++) {
        		echo "<tr>";
+          
+          if ($m == 0) {
+            $color = "lightBlue";
+          }elseif ($m%2 != 0) {
+            $color = "rcBlue";
+          }else{
+            $color = "medBlue";
+          }
 
    			for ($i=0; $i < sizeof($mtx); $i++) {
        			if ($m == 0) {
-       				echo "<td class='lightBlue center'> ".$mtx[$i][$m]." </td>";
-       			}elseif ($m%2 != 0) {
+       				echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
+       			}else {
        				if (!is_numeric($mtx[$i][$m])) {
                 if ($mtx[$i][$m] != "-") {
-                  echo "<td id='".$type.$m."' class='rcBlue center'> ".$mtx[$i][$m]." </td>";  
+                  if ($type == "agency" && $mtx[$i][0] == "Agencies") {
+                    echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";  
+                  }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Group") {
+                    echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";  
+                  }else{
+                    echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
+                  }
+                  
                 }else{
-                  echo "<td class='rcBlue center'> ".$mtx[$i][$m]." </td>";
+                  echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                 }
 	       			}else{
 	       				if (substr($mtx[$i][0], 0, 3) == "Pos") {
        						if ($mtx[$i][$m] != '-') {
-       							echo "<td class='rcBlue center'> ".$mtx[$i][$m]."º </td>";		
+       							echo "<td class='$color center'> ".$mtx[$i][$m]."º </td>";		
        						}else{
-       							echo "<td class='rcBlue center'> ".$mtx[$i][$m]." </td>";
+       							echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
        						}
        					}else{
-       						echo "<td class='rcBlue center'> ".number_format($mtx[$i][$m])." </td>";	
+       						echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";	
        					}
 	       				
-	       			}
-       			}elseif ($m%2 == 0) {
-       				if (!is_numeric($mtx[$i][$m])) {
-	  					  if ($mtx[$i][$m] != "-") {
-                  echo "<td id='".$type.$m."' class='medBlue center'> ".$mtx[$i][$m]." </td>";  
-                }else{
-                  echo "<td class='medBlue center'> ".$mtx[$i][$m]." </td>";  
-                }
-	       			}else{
-	       				if (substr($mtx[$i][0], 0, 3) == "Pos") {
-       						if ($mtx[$i][$m] != '-') {
-       							echo "<td class='medBlue center'> ".$mtx[$i][$m]."º </td>";		
-       						}else{
-       							echo "<td class='medBlue center'> ".$mtx[$i][$m]." </td>";
-       						}
-       					}else{
-       						echo "<td class='medBlue center'> ".number_format($mtx[$i][$m])." </td>";	
-       					}
 	       			}
        			}
        			
        		}
 
        		echo "</tr>";
-          echo "<tr>";
-            echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>";
+          echo "<tr class='$color'>";
+          if ($type != "client") {
+            echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
+          }
 
           echo "</tr>";
        }
