@@ -107,11 +107,16 @@ class rankings extends rank{
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
-        }elseif ($mtx[$m][0] == "Group") {
-            $res = $type2[$t]->agencyGroup;
+        }elseif ($type == "agency" || $type == "agencyGroup") {
+            if ($mtx[$m][0] == "Group") {
+                $res = $type2[$t]->agencyGroup;
+            }else{
+                $res = $type2[$t]->name;    
+            }
         }else{
             $res = $type2[$t]->name;
-        }
+        }    
+        
 
         return $res;
 
@@ -150,6 +155,9 @@ class rankings extends rank{
             $option = 1;
         }
         
+        if ($type == "client") {
+            $mtx[$last][0] = ucfirst($var);
+        }
 
         for ($l=0; $l < sizeof($years); $l++) { 
             $mtx[(sizeof($years)+$l+$option)][0] = "Rev. ".$years[$l];

@@ -249,68 +249,14 @@ class subRankings extends rank {
         return array($mtx, $total);
     }
 
-    public function renderSubRankings($mtx, $total){
+    public function renderSubRankings($mtx, $total, $type, $size){
         
         echo "<div class='container-fluid' style='margin-top: 0.5%; margin-bottom: 0.5%;'>";
             echo "<div class='row'>";
                 echo "<div class='col'>";
                     echo "<center><table style='width: 90%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
 
-                    for ($m=0; $m < sizeof($mtx[0]); $m++) {
-                        echo "<tr>";
-
-                        if ($m == 0) {
-                            $color = "lightBlue";
-                        }elseif ($m%2 != 0) {
-                            $color = "rcBlue";
-                        }else{
-                            $color = "medBlue";
-                        }
-
-                        for ($i=0; $i < sizeof($mtx); $i++) { 
-                            if ($m == 0) {
-                                echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
-                            }else{
-                                if (!is_numeric($mtx[$i][$m])) {
-                            if ($mtx[$i][$m] != "-") {
-                              echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
-                            }else{
-                              echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
-                            }
-                                }else{
-                                    if (substr($mtx[$i][0], 0, 3) == "Pos") {
-                                        if ($mtx[$i][$m] != '-') {
-                                            echo "<td class='$color center'> ".$mtx[$i][$m]."º </td>";      
-                                        }else{
-                                            echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
-                                        }
-                                    }else{
-                                        echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";    
-                                    }
-                                    
-                                }
-                            }
-                            
-                        }
-
-                        echo "</tr>";
-                   }
-
-                   echo "<tr>";
-
-                  for ($t=0; $t < sizeof($total); $t++) { 
-                    
-                    if (is_numeric($total[$t])) {
-                      echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>"; 
-                    }else{
-                      if ($total[$t] != "-") {
-                        echo "<td class='darkBlue center'> ".$total[$t]." </td>"; 
-                      }else{
-                        echo "<td class='darkBlue center'> &nbsp; </td>"; 
-                      }
-                    }
-
-                  }
+                        $this->renderAssembler($mtx, $total, $type, $size);
 
                    echo "</table></center>";
                echo "</div>";

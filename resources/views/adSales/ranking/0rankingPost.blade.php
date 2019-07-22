@@ -125,10 +125,46 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			@if ($type != "client") 
-				@for($n = 1; $n <= $size; $n++)
-					$("#"+"{{$type}}"+{{$n}}).click(function(){
+			@if ($type != "client")
 
+				ajaxSetup();
+
+				@for($n = 1; $n <= $size; $n++)
+					$(document).on('click', "#"+"agency"+{{$n}}, function(){
+
+						var aux = "agency";
+						var name = $(this).text();
+						var months = <?php echo json_encode($months); ?>;
+						var brands = <?php echo json_encode($brands); ?>;
+						var years  = <?php echo json_encode($years); ?>;
+						var type = "{{$type}}";
+						var value = "{{$value}}";
+						var currency = <?php echo json_encode($pRate); ?>;
+						var region = "{{$region}}";
+
+						$.ajax({
+							url: "/ajaxRanking/subRanking",
+							method: "POST",
+							data: {name, months, brands, years, aux, value, currency, region},
+							success: function(output){
+								if ($("#sub"+aux+{{$n}}).css("display") == "none") {
+									$("#sub"+aux+{{$n}}).html(output);
+									$("#sub"+aux+{{$n}}).css("display", "");								
+								}else{
+									$("#sub"+aux+{{$n}}).css("display", "none");	
+								}
+							},
+			                error: function(xhr, ajaxOptions,thrownError){
+		                 		alert(xhr.status+" "+thrownError);
+		                	}
+						});
+					});
+				@endfor
+
+				@for($n = 1; $n <= $size; $n++)
+					$(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
+
+						var aux = "agencyGroup";
 						var name = $(this).text();
 						var months = <?php echo json_encode($months); ?>;
 						var brands = <?php echo json_encode($brands); ?>;
@@ -138,19 +174,18 @@
 						var currency = <?php echo json_encode($pRate); ?>;
 						var region = "{{$region}}";
 						
-						ajaxSetup();
-
 						$.ajax({
 							url: "/ajaxRanking/subRanking",
 							method: "POST",
-							data: {name, months, brands, years, type, value, currency, region},
+							data: {name, months, brands, years, aux, value, currency, region},
 							success: function(output){
-								if ($("#sub"+"{{$type}}"+{{$n}}).css("display") == "none") {
-									$("#sub"+"{{$type}}"+{{$n}}).html(output);
-									$("#sub"+"{{$type}}"+{{$n}}).css("display", "");								
+								if ($("#sub"+aux+{{$n}}).css("display") == "none") {
+									$("#sub"+aux+{{$n}}).html(output);
+									$("#sub"+aux+{{$n}}).css("display", "");
 								}else{
-									$("#sub"+"{{$type}}"+{{$n}}).css("display", "none");	
+									$("#sub"+aux+{{$n}}).css("display", "none");	
 								}
+
 							},
 			                error: function(xhr, ajaxOptions,thrownError){
 		                 		alert(xhr.status+" "+thrownError);
