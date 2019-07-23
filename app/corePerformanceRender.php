@@ -111,8 +111,100 @@ class corePerformanceRender extends renderPerformance
 	    	if ($sg%2 == 1) {
 	    		echo "</div>";
 	    	}
-
 	    }
+	    if (sizeof($mtx["salesGroup"])>1) {
+	    	echo "<div class='row'>";
+	    		echo "<div class='col'>";
+	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
+    				for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
+			    		echo "<table style='width: 100%;' class='mt-3'>";
+		    				echo "<tr>";
+				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:5%;'>";
+				    			if ($mtx["tier"][$t] == "TOTH") {
+				    				echo "OTH";
+				    			}else{
+				    				echo $mtx["tier"][$t];
+				    			}
+				    			echo "</td>";
+				    			echo "<td style='width:10%;' class='lightGrey'></td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+				    			}
+				    			echo "<td style='width:18%;' class='darkBlue'>Total</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Plan</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case1"]["planValues"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case1"]["totalPlanValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Actual</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["values"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case1"]["totalValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Var Abs</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case1"]["varAbs"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case1"]["totalVarAbs"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Var %</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["varPrc"][$t][$q],0)."%</td>";
+				    			}
+				    			echo "<td class='darkBlue'>".number_format($mtx["total"]["case1"]["totalVarPrc"][$t],0)."%</td>";
+				    		echo "</tr>";
+			   			echo "</table>";
+	   				}
+	    			echo "<table style='width: 100%;' class='mt-3'>";
+			   			echo "<tr>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
+			    			echo "<td style='width:10%;' class='lightGrey'></td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+			    			}
+			    			echo "<td style='width:18%;' class='darkBlue' >Total</td>";
+			    		echo "</tr>";
+		    			echo "<tr>";
+			    			echo "<td class='rcBlue'>Plan</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case1"]["dnPlanValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case1"]["dnTotalPlanValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Actual</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["dnValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue'>".number_format($mtx["total"]["case1"]["dnTotalValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='rcBlue'>Var Abs</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case1"]["dnVarAbs"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case1"]["dnTotalVarAbs"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Var %</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["dnVarPrc"][$q],0)."%</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='darkBlue' >".number_format($mtx["total"]["case1"]["dnTotalVarPrc"],0)."%</td>";
+			    		echo "</tr>";
+		   			echo "</table>";
+	    		echo "</div>";
+	    	echo "</div>";
+	    }
+
+
     }
     
     public function case2($mtx){
@@ -216,6 +308,92 @@ class corePerformanceRender extends renderPerformance
 	    		echo "</div>";
 	    	}
     	}
+    	if (sizeof($mtx["salesGroup"])>1) {
+	    	echo "<div class='row'>";
+	    		echo "<div class='col'>";
+	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
+    				for ($t=0; $t < sizeof($mtx["brand"]); $t++) { 
+			    		echo "<table style='width: 100%;' class='mt-3'>";
+		    				echo "<tr>";
+			    				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$t][1])."' style='width:5%;'>".$mtx["brand"][$t][1]."</td>";
+				    			echo "<td style='width:10%;' class='lightGrey'></td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+				    			}
+				    			echo "<td style='width:18%;' class='darkBlue'>Total</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Plan</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case2"]["planValues"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case2"]["totalPlanValueBrand"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Actual</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["values"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case2"]["totalValueBrand"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Var Abs</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case2"]["varAbs"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case2"]["totalVarAbs"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Var %</td>";
+				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["varPrc"][$t][$q],0)."%</td>";
+				    			}
+				    			echo "<td class='darkBlue'>".number_format($mtx["total"]["case2"]["totalVarPrc"][$t],0)."%</td>";
+				    		echo "</tr>";
+			   			echo "</table>";
+	   				}
+	    			echo "<table style='width: 100%;' class='mt-3'>";
+			   			echo "<tr>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
+			    			echo "<td style='width:10%;' class='lightGrey'></td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+			    			}
+			    			echo "<td style='width:18%;' class='darkBlue' >Total</td>";
+			    		echo "</tr>";
+		    			echo "<tr>";
+			    			echo "<td class='rcBlue'>Plan</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case2"]["dnPlanValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case2"]["dnTotalPlanValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Actual</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["dnValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue'>".number_format($mtx["total"]["case2"]["dnTotalValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='rcBlue'>Var Abs</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case2"]["dnVarAbs"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case2"]["dnTotalVarAbs"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Var %</td>";
+			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["dnVarPrc"][$q],0)."%</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='darkBlue' >".number_format($mtx["total"]["case2"]["dnTotalVarPrc"],0)."%</td>";
+			    		echo "</tr>";
+		   			echo "</table>";
+	    		echo "</div>";
+	    	echo "</div>";
+	    }
+
     }
     
     public function case3($mtx){
@@ -322,6 +500,97 @@ class corePerformanceRender extends renderPerformance
 	    	echo "</div>";
 	    	echo "</div>";
     	}
+    	if (sizeof($mtx["salesGroup"])>1) {
+	    	echo "<div class='row'>";
+	    		echo "<div class='col'>";
+	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
+    				for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
+			    		echo "<table style='width: 100%;' class='mt-3'>";
+		    				echo "<tr>";
+				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:5%;'>";
+				    			if ($mtx["tier"][$t] == "TOTH") {
+				    				echo "OTH";
+				    			}else{
+				    				echo $mtx["tier"][$t];
+				    			}
+				    			echo "</td>";
+				    			echo "<td style='width:5%;' class='lightGrey'></td>";
+					    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+					    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+					    			}
+				    			echo "<td class='darkBlue'>Total</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Plan</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case3"]["planValues"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case3"]["totalPlanValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Actual</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["values"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case3"]["totalValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Var Abs</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case3"]["varAbs"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case3"]["totalVarAbs"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Var %</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["varPrc"][$t][$q],0)."%</td>";
+				    			}
+				    			echo "<td class='darkBlue'>".number_format($mtx["total"]["case3"]["totalVarPrc"][$t],0)."%</td>";
+				    		echo "</tr>";
+			   			echo "</table>";
+	   				}
+	    			echo "<table style='width: 100%;' class='mt-3'>";
+			   			echo "<tr>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
+			    			echo "<td style='width:5%;' class='lightGrey'></td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
+			    			}
+			    			echo "<td  class='darkBlue' >Total</td>";
+			    		echo "</tr>";
+		    			echo "<tr>";
+			    			echo "<td class='rcBlue'>Plan</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case3"]["dnPlanValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case3"]["dnTotalPlanValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Actual</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["dnValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue'>".number_format($mtx["total"]["case3"]["dnTotalValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='rcBlue'>Var Abs</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case3"]["dnVarAbs"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case3"]["dnTotalVarAbs"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Var %</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["dnVarPrc"][$q],0)."%</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='darkBlue' >".number_format($mtx["total"]["case3"]["dnTotalVarPrc"],0)."%</td>";
+			    		echo "</tr>";
+		   			echo "</table>";
+	    		echo "</div>";
+	    	echo "</div>";
+	    }
     
     }
     
@@ -424,5 +693,92 @@ class corePerformanceRender extends renderPerformance
 	    	echo "</div>";
 	    	
     	}
+    	if (sizeof($mtx["salesGroup"])>1) {
+	    	echo "<div class='row'>";
+	    		echo "<div class='col'>";
+	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
+    				for ($t=0; $t < sizeof($mtx["brand"]); $t++) { 
+			    		echo "<table style='width: 100%;' class='mt-3'>";
+		    				echo "<tr>";
+				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$t][1])."' style='width:5%;'>";
+				    				echo $mtx["brand"][$t][1];
+				    			echo "</td>";
+				    			echo "<td style='width:5%;' class='lightGrey'></td>";
+					    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+					    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+					    			}
+				    			echo "<td class='darkBlue'>Total</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Plan</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case4"]["planValues"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case4"]["totalPlanValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Actual</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["values"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case4"]["totalValueTier"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='rcBlue'>Var Abs</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case4"]["varAbs"][$t][$q],0)."</td>";
+				    			}
+				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case4"]["totalVarAbs"][$t],0)."</td>";
+				    		echo "</tr>";
+				    		echo "<tr>";
+				    			echo "<td class='medBlue'>Var %</td>";
+				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["varPrc"][$t][$q],0)."%</td>";
+				    			}
+				    			echo "<td class='darkBlue'>".number_format($mtx["total"]["case4"]["totalVarPrc"][$t],0)."%</td>";
+				    		echo "</tr>";
+			   			echo "</table>";
+	   				}
+	    			echo "<table style='width: 100%;' class='mt-3'>";
+			   			echo "<tr>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
+			    			echo "<td style='width:5%;' class='lightGrey'></td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
+			    			}
+			    			echo "<td  class='darkBlue' >Total</td>";
+			    		echo "</tr>";
+		    			echo "<tr>";
+			    			echo "<td class='rcBlue'>Plan</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case4"]["dnPlanValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case4"]["dnTotalPlanValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Actual</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["dnValue"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue'>".number_format($mtx["total"]["case4"]["dnTotalValue"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='rcBlue'>Var Abs</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='rcBlue'>".number_format($mtx["total"]["case4"]["dnVarAbs"][$q],0)."</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["total"]["case4"]["dnTotalVarAbs"],0)."</td>";
+			    		echo "</tr>";
+			    		echo "<tr>";
+				    		echo "<td class='medBlue'>Var %</td>";
+			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
+			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["dnVarPrc"][$q],0)."%</td>";
+			    			}
+		    				echo "<td style='width:18%;' class='darkBlue' >".number_format($mtx["total"]["case4"]["dnTotalVarPrc"],0)."%</td>";
+			    		echo "</tr>";
+		   			echo "</table>";
+	    		echo "</div>";
+	    	echo "</div>";
+	    }
     }
 }
