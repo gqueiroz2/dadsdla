@@ -71,7 +71,7 @@ class insertPendingController extends Controller{
 				$agencies[$c]['unit'] = Request::get("agencies-unit-$c");
 			}
 		}
-		
+
 		$type = "agency";
 		$bool = $this->insert($con,$tableAg,$type,$agencies);
 
@@ -90,7 +90,11 @@ class insertPendingController extends Controller{
 		$check = 0;
 
 		for ($c=0; $c < sizeof($array); $c++) { 	
-			$insert[$c] = "INSERT INTO $table (".$type."_id,origin_id,name) VALUES( \"".$array[$keys[$c]]["base"]->ID."\" ,\"1\", \"".$array[$keys[$c]]['unit']."\")";	
+			$insert[$c] = "INSERT INTO $table (".$type."_id,origin_id,name) 
+				VALUES( \"".$array[$keys[$c]]["base"]->ID."\" ,
+				         \"1\", 
+				         \"".addslashes( $array[$keys[$c]]['unit'] )."\"
+				      )";	
 
 			if ($con->query($insert[$c]) === TRUE) {
 				$check ++;

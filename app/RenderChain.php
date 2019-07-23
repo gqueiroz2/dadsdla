@@ -31,7 +31,7 @@ class RenderChain extends Render{
 
     public function report(){
 
-    	echo "<select class='form-control' name='table' data-width='100%'>";
+    	echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
     		//echo "<option value=''> Select </option>";
     		//echo "<option value='cmaps'> CMAPS </option>";
 			echo "<option value='ytd'> YTD </option>";

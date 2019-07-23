@@ -134,6 +134,13 @@
 									<center><span style="font-size: 18px;"> CHECK NEW ELEMENTS </span></center>
 								</div>
 							</div>
+
+							<div class="row justify-content-end mt-2">          
+						 		<div class="col">		
+							    	<button id="PedingStuffByRegions" class="btn btn-primary" style="width: 100%;"> Check New Regions </button>
+								</div>
+							</div>
+							<div id="vlau"></div>
 							<form action="{{ route('checkElementsPost') }}" method="POST">
 							@csrf
 								<div class="row justify-content-center">          
@@ -406,4 +413,28 @@
 	</div>
 @else
 @endif
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#PedingStuffByRegions').click( function() {
+
+		    var tableToCheck = $('#tableToCheck').val();
+
+		    ajaxSetup();
+		    $.ajax({
+                url:"/checkElements/PedingStuffByRegions",
+                method:"POST",
+                data:{tableToCheck},
+                  success: function(output){
+                    $('#vlau').html(output);
+                  },
+                  error: function(xhr, ajaxOptions,thrownError){
+                    alert(xhr.status+" "+thrownError);
+                }
+            });
+		});
+	});
+</script>
+
 @endsection

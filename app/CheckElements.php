@@ -43,6 +43,114 @@ class CheckElements extends Model{
 		return($rtr);
 	}
 
+	public function newValuesNoRegion($conDLA,$con,$table){
+
+		$sql = new sql();
+
+		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
+		$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
+		$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
+
+		$rtr = array(
+				'salesReps' => $salesReps,
+				'clients' => $clients,
+				'agencies' => $agencies,
+			);
+
+		return($rtr);
+	}
+
+	public function checkNewClientsNoRegion($conDLA,$con,$table,$sql){
+		$sql = new sql();
+		$tableDLA = 'client_unit';
+
+		$somethingDLA = "name";
+		$something = "client";
+
+		$fromDLA = array("name");
+		$from = array("client");
+
+		if($table == "cmaps"){
+			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
+		}else{
+			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table";
+		}
+
+		$res = $con->query($selectDistinctFM);
+		if($table == "cmaps"){
+			$resultsFM = $sql->fetch($res,array("client"),array("client"));
+		}else{
+			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
+		}
+
+		if($resultsFM){
+
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
+
+			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
+
+			if($new){
+				$count = 0;
+				for ($nn=0; $nn < sizeof($new); $nn++) { 
+					$nova[$count] = $new[$nn]['region'];
+					$count++;
+				}
+				$new = array_values(array_unique($nova));
+			}
+		}else{
+			$new = false;
+		}
+
+		return $new;
+	}
+
+	public function checkNewAgenciesNoRegion($conDLA,$con,$table,$sql){
+		$tableDLA = 'agency_unit';
+
+		$somethingDLA = "name";
+		$something = "agency";
+
+		$fromDLA = array("name");
+		$from = array("agency");
+
+		$r = new region();
+
+		if($table == "cmaps"){
+			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";		
+		}else{
+			$selectDistinctFM = "SELECT DISTINCT agency,sales_representant_office FROM $table";		
+		}
+
+		$res = $con->query($selectDistinctFM);
+		$sql = new sql();
+
+		if($table == "cmaps"){
+			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
+		}else{
+			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));
+		}
+
+		if($resultsFM){
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
+
+			$new = $this->checkDifferencesAC('agency',$distinctDLA,$distinctFM);
+
+			if($new){
+				$count = 0;
+				for ($nn=0; $nn < sizeof($new); $nn++) { 
+					$nova[$count] = $new[$nn]['region'];
+					$count++;
+				}
+				$new = array_values(array_unique($nova));
+			}
+		}else{
+			$new = false;
+		}
+
+		return $new;
+	}
 
 	public function checkNewRegions($conDLA,$con,$table,$sql){
 
@@ -219,7 +327,7 @@ class CheckElements extends Model{
 
 	public function checkDifferencesAC($type,$dla,$fm){
 		$new = array();		
-
+		
 		for ($f=0; $f < sizeof($fm); $f++) { 
 			$check = false;
 			for ($d=0; $d < sizeof($dla); $d++) { 

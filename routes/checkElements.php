@@ -14,6 +14,9 @@
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'checkElements'],function(){
 
+		Route::post('PedingStuffByRegions','CheckElementsController@check')
+									->name('insertClient');
+
 		Route::post('insertClient','insertPendingController@insertClientUnit')
 									->name('insertClient');
 
