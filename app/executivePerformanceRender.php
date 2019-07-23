@@ -115,7 +115,9 @@ class executivePerformanceRender extends renderPerformance
 
 	    }
 	    if (sizeof($mtx["salesRep"])>1) {
-	    	echo "<div class='row'>";
+	    	if(sizeof($mtx["case1"]["value"])%2 == 0){
+		    	echo "<div class='row'>";
+	    	}
 	    		echo "<div class='col'>";
 	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
     				for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
@@ -311,7 +313,9 @@ class executivePerformanceRender extends renderPerformance
 	    	}
     	}
     	if (sizeof($mtx["salesRep"])>1) {
-	    	echo "<div class='row'>";
+	    	if(sizeof($mtx["case2"]["value"])%2 == 0){
+		    	echo "<div class='row'>";
+		    }
 	    		echo "<div class='col'>";
 	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
     				for ($t=0; $t < sizeof($mtx["brand"]); $t++) { 

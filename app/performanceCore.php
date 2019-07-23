@@ -81,12 +81,15 @@ class performanceCore extends performance
 		//olha quais nucleos serão selecionados
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
+
+
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
                 $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$currencyId,$value);
             }
         }
+
         $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
 
         return $mtx;
@@ -208,7 +211,7 @@ class performanceCore extends performance
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$sg][$t] += $tmp1["planValues"][$sg][$b][$m];
-                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "OTH"){
+                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "TOTH"){
                             $tmp2["values"][$sg][$t][$m] += $tmp1["values"][$sg][$b][$m];
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];

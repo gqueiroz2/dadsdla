@@ -166,6 +166,7 @@ class salesRep extends Management{
 		$res = $sql->select($con,$columns,$table,$join,$where,$order);
 		$from = array('id','salesRep','salesRepGroup','region','abName');
 
+
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;
 	}

@@ -188,7 +188,7 @@ class performanceExecutive extends performance
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$s][$t] += $mtx["case4"]["planValues"][$s][$b][$m];
-                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "OTH"){
+                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "TOTH"){
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];
