@@ -492,6 +492,7 @@ class ajaxController extends Controller{
         $months = Request::get("months");
         $years = Request::get("years");
         $name = Request::get("name");
+        $pos = Request::get("pos");
 
         $sr = new subRankings();
 
@@ -500,6 +501,7 @@ class ajaxController extends Controller{
 
         $mtx = $matrix[0];
         $total = $matrix[1];
+        $IDS = $matrix[2];
 
         if ($type == "agencyGroup") {
             $newType = "agency";
@@ -509,7 +511,7 @@ class ajaxController extends Controller{
             $newType = "client";
         }
 
-        $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
-        //var_dump(Request::all());
+        $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]), $IDS , $pos);
+        //var_dump($matrix[2]);
     }
 }

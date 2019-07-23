@@ -7,8 +7,8 @@ use App\rank;
 
 class renderRanking extends Render {
     
-    public function assemble($mtx, $names, $pRate, $value, $total, $size, $type){
-    
+    public function assemble($mtx, $names, $pRate, $value, $total, $size, $type, $IDS){
+        
     	 echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center><span style='font-size:18px;'> ".$names['name']." ranking - (".$pRate[0]['name']."/".strtoupper($value).") </span></center></th>";
@@ -21,9 +21,9 @@ class renderRanking extends Render {
             echo "</tr>";
             echo "<tr><td> &nbsp; </td></tr>";
 
-       $rank = new rank();
+           $rank = new rank();
 
-       $rank->renderAssembler($mtx, $total, $type, $size);
+           $rank->renderAssembler($mtx, $total, $type, $size, $IDS , false , false);
 
        echo "</table>";
     }

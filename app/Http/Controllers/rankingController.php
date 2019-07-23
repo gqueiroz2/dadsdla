@@ -35,8 +35,7 @@ class rankingController extends Controller {
     }
 
     public function post(){
-    	
-        //var_dump(Request::all());
+
 
     	$base = new base();
 
@@ -110,6 +109,7 @@ class rankingController extends Controller {
         $matrix = $r->assembler($values, $type2, $years, $type, $filterValues);
         $mtx = $matrix[0];
         $total = $matrix[1];
+        $IDS = $matrix[2];
 
         if ($nPos == 'All') {
             $size = sizeof($mtx[0]);
@@ -120,10 +120,55 @@ class rankingController extends Controller {
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
-        //var_dump("size",$size);
-        //var_dump("mtx",sizeof($mtx[0]));
-        return view('adSales.ranking.0rankingPost', compact('salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region'));
+        //var_dump($values);
+        //var_dump("mtx",$matrix[2]);
+
+        $subR = new subRankings();
+        return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'IDS'));
 
     }
 }
+
+/*{{--@for($n = 0; $n < $size; $n++)
+
+                    <?php
+                        $val = $mtx[sizeof($years)][$n];
+                        if(array_key_exists($val, $IDS)){
+                            $Id = $IDS[$val];   
+                        }else{
+                            $Id = -1;
+                        }
+
+                    ?>
+
+                    $(document).on('click', "#"+"agencyGroup"+{{$Id}}, function(){
+
+                        var aux = "agencyGroup";
+                        var name = $(this).text();
+                        var months = <?php echo json_encode($months); ?>;
+                        var brands = <?php echo json_encode($brands); ?>;
+                        var years  = <?php echo json_encode($years); ?>;
+                        var type = aux;
+                        var value = "{{$value}}";
+                        var currency = <?php echo json_encode($pRate); ?>;
+                        var region = "{{$region}}";
+                        
+                        if ($("#sub"+aux+{{$Id}}).css("display") == "none") {
+                            $.ajax({
+                                url: "/ajaxRanking/subRanking",
+                                method: "POST",
+                                data: {name, months, brands, years, aux, value, currency, region},
+                                success: function(output){
+                                    $("#sub"+aux+{{$Id}}).html(output);
+                                    $("#sub"+aux+{{$Id}}).css("display", "");
+                                },
+                                error: function(xhr, ajaxOptions,thrownError){
+                                    alert(xhr.status+" "+thrownError);
+                                }
+                            });
+                        }else{
+                            $("#sub"+aux+{{$Id}}).css("display", "none");   
+                        }
+                    });
+                @endfor}}*/
 

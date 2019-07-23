@@ -102,26 +102,27 @@
 				</form>
 			</div>
 		</div>
+		
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm-3" style="color: #0070c0;font-size: 22px;">
+				<span style="float: right;"> 
+					<?php $newType = ($type == "agencyGroup") ? "Agency group" : ucfirst($type) ?>
+					{{$newType}} Ranking 
+				</span>
+			</div>
+		</div>	
+
 	</div>
 
-	<div class="row justify-content-end mt-2">
-		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-			<div style="float: right;"> 
-				<?php $newType = ($type == "agencyGroup") ? "Agency group" : ucfirst($type) ?>
-				{{$newType}} Ranking 
-			</div>
-		</div>
-	</div>	
 
-	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
-		<div class="row mt-2">
+	<div class="container-fluid" {{--style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px"--}}>
+		<div class="row mt-2 justify-content-center">
 			<div class="col">
-				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type)}}
+				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type, $IDS)}}
 			</div>
 		</div>
 	</div>
 
-	<div id="vlau"></div>
 
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -129,10 +130,31 @@
 
 				ajaxSetup();
 
-				@for($n = 1; $n <= $size; $n++)
-					$(document).on('click', "#"+"agency"+{{$n}}, function(){
+				@for($n = 0; $n < $size; $n++)
 
-						var aux = "agency";
+					$.ajax({
+						url: "/ajaxRanking/subRanking",
+						method: "POST",
+						data: {name, months, brands, years, aux, value, currency, region},
+						success: function(output){
+							$("#sub"+aux+{{$n}}+babaganuch).html(output);
+							$("#sub"+aux+{{$n}}+babaganuch).css("display", "");
+						},
+		                error: function(xhr, ajaxOptions,thrownError){
+	                 		alert(xhr.status+" "+thrownError);
+	                	}
+					});
+
+
+					var babaganuch = 0;<?php echo $subR->xiforimpola($con, $brands, $type, $region, $value, $pRate, $months, $years, $mtx[3][$n]) ; ?>
+					console.log("{{$mtx[3][$n]}}");
+					console.log(babaganuch);
+					console.log("             ");
+
+					var aux = "agency";
+					$(document).on('click', "#"+"agency"+{{$n}}+babaganuch, function(){
+
+						var pos = $("#pos-"+aux+"{{$n}}").val();
 						var name = $(this).text();
 						var months = <?php echo json_encode($months); ?>;
 						var brands = <?php echo json_encode($brands); ?>;
@@ -142,59 +164,63 @@
 						var currency = <?php echo json_encode($pRate); ?>;
 						var region = "{{$region}}";
 
-						$.ajax({
-							url: "/ajaxRanking/subRanking",
-							method: "POST",
-							data: {name, months, brands, years, aux, value, currency, region},
-							success: function(output){
-								if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-									$("#sub"+aux+{{$n}}).html(output);
-									$("#sub"+aux+{{$n}}).css("display", "");								
-								}else{
-									$("#sub"+aux+{{$n}}).css("display", "none");	
-								}
-							},
-			                error: function(xhr, ajaxOptions,thrownError){
-		                 		alert(xhr.status+" "+thrownError);
-		                	}
-						});
+						if ($("#sub"+aux+{{$n}}).css("display") == "none") {
+
+							$.ajax({
+								url: "/ajaxRanking/subRanking",
+								method: "POST",
+								data: {name, months, brands, years, aux, value, currency, region},
+								success: function(output){
+									$("#sub"+aux+{{$n}}+babaganuch).html(output);
+									$("#sub"+aux+{{$n}}+babaganuch).css("display", "");
+								},
+				                error: function(xhr, ajaxOptions,thrownError){
+			                 		alert(xhr.status+" "+thrownError);
+			                	}
+							});
+						}else{
+							$("#sub"+aux+{{$n}}+babaganuch).css("display", "none");	
+						}
 					});
 				@endfor
 
-				@for($n = 1; $n <= $size; $n++)
-					$(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
+				@for($n = 0; $n < $size; $n++)
 
-						var aux = "agencyGroup";
-						var name = $(this).text();
-						var months = <?php echo json_encode($months); ?>;
-						var brands = <?php echo json_encode($brands); ?>;
-						var years  = <?php echo json_encode($years); ?>;
-						var type = "{{$type}}";
-						var value = "{{$value}}";
-						var currency = <?php echo json_encode($pRate); ?>;
-						var region = "{{$region}}";
-						
-						$.ajax({
-							url: "/ajaxRanking/subRanking",
-							method: "POST",
-							data: {name, months, brands, years, aux, value, currency, region},
-							success: function(output){
-								if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-									$("#sub"+aux+{{$n}}).html(output);
-									$("#sub"+aux+{{$n}}).css("display", "");
-								}else{
-									$("#sub"+aux+{{$n}}).css("display", "none");	
-								}
+					var aux = "agencyGroup";
+					
+                    $(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
 
-							},
-			                error: function(xhr, ajaxOptions,thrownError){
-		                 		alert(xhr.status+" "+thrownError);
-		                	}
-						});
-					});
-				@endfor
+                    	var pos = $("#pos-"+aux+"{{$n}}").val();    
+                        var name = $(this).text();
+                        var months = <?php echo json_encode($months); ?>;
+                        var brands = <?php echo json_encode($brands); ?>;
+                        var years  = <?php echo json_encode($years); ?>;
+                        var type = "{{$type}}";
+                        var value = "{{$value}}";
+                        var currency = <?php echo json_encode($pRate); ?>;
+                        var region = "{{$region}}";
+                        
+                        if ($("#sub"+aux+{{$n}}).css("display") == "none") {
+                            $.ajax({
+                                url: "/ajaxRanking/subRanking",
+                                method: "POST",
+                                data: {name, months, brands, years, aux, value, currency, region , pos},
+                                success: function(output){
+                                    $("#sub"+aux+{{$n}}).html(output);
+                                   	$("#sub"+aux+{{$n}}).css("display", "");
+                                },
+                                error: function(xhr, ajaxOptions,thrownError){
+                                    alert(xhr.status+" "+thrownError);
+                                }
+                            });
+                        }else{
+                            $("#sub"+aux+{{$n}}).css("display", "none");   
+                        }
+                    });
+                @endfor
 			@endif
 		});
 	</script>
 
 @endsection
+
