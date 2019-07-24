@@ -357,7 +357,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> empty </option>";
+        echo "<option value='0'> EMPTY </option>";
 
     }
 
@@ -374,7 +374,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> empty </option>";
+        echo "<option value='0'> EMPTY </option>";
 
     }
 

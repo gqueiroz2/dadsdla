@@ -53,7 +53,7 @@ class rankings extends rank{
     }
 
     public function getValueByYear($name, $values, $year, $years, $type){
-        
+
         for ($y=0; $y < sizeof($years); $y++) { 
             if ($year == $years[$y]) {
                 $p = $y;
@@ -64,7 +64,10 @@ class rankings extends rank{
 
         if (is_array($values[$p])) {
             for ($v=0; $v < sizeof($values[$p]); $v++) { 
-            
+                    if ($name == "Others") {
+                        //var_dump("name", $values[$p][$v][$type]);
+                        //var_dump("value", $values[$p][$v]["total"]);
+                    }
                 if ($values[$p][$v][$type] == $name) {
                     $rtr = $values[$p][$v]['total'];
                     $ok = 1;
@@ -108,7 +111,7 @@ class rankings extends rank{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
         }elseif ($type == "agency" || $type == "agencyGroup") {
-            if ($mtx[$m][0] == "Group") {
+            if ($mtx[$m][0] == "Agency Group") {
                 $res = $type2[$t]->agencyGroup;
             }else{
                 $res = $type2[$t]->name;    
@@ -130,11 +133,10 @@ class rankings extends rank{
             $aux = "agencyGroup";
         }else{
             if ($type == "client") {
-                $var = $type;
-                $var .= "s";
+                $var = "Client";
                 $aux = $type;    
             }else{
-                $var = "agencies";
+                $var = "Agency";
                 $aux = $type;
             }
             
@@ -146,7 +148,7 @@ class rankings extends rank{
 
         $last = $y;
         
-        $mtx[$last][0] = "Group";
+        $mtx[$last][0] = "Agency Group";
 
         if ($type == "agency") {
             $option = 2;
@@ -194,7 +196,7 @@ class rankings extends rank{
 
         $total = $this->assemblerTotal($mtx, $years);
 
-        //var_dump($total);
+        //var_dump($mtx);
 
         return array($mtx, $total);
     }
