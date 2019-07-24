@@ -15,6 +15,28 @@ use Validator;
 
 class rankingController extends Controller {
     
+    public function agencyNumberByAgencyGroup(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $brands = Request::get("brands");
+        $type = Request::get("aux");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $years = Request::get("years");
+        $filter = Request::get("name");
+
+        $subR = new subRankings();
+
+        //var_dump($type);
+
+        $x = $subR->myMiddleware($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
+
+        echo $x;
+
+    }
+
     public function get(){
     	
     	$db = new dataBase();

@@ -72,10 +72,13 @@ class subRankings extends rank {
     }
 
 
-    public function xiforimpola($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
+    public function myMiddleware($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
 
-
-        $vlauda = $this->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
+        if($filter != "Group"){
+            $vlauda = $this->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
+        }else{
+            return 0;
+        }
 
         if( is_array($vlauda[0]) ){
             $sizao = sizeof($vlauda[0]); 
@@ -118,10 +121,8 @@ class subRankings extends rank {
             }
         }
 
-        var_dump($res);
-
+        
         return $res;
-
     }
 
     public function checkOtherYearsPosition($name, $values, $year, $years, $type){
