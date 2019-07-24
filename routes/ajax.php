@@ -13,6 +13,9 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'ajax'],function(){
+		
+		Route::post("agencyNumberByAgencyGroup","rankingController@agencyNumberByAgencyGroup");
+
 		Route::group(['prefix'=>'dashboards'],function(){
 			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
 		});

@@ -128,8 +128,6 @@
 		$(document).ready(function(){
 			@if ($type != "client")
 
-				ajaxSetup();
-
 				var months = <?php echo json_encode($months); ?>;
                 var brands = <?php echo json_encode($brands); ?>;
                 var years  = <?php echo json_encode($years); ?>;
@@ -137,6 +135,8 @@
                 var value = "{{$value}}";
                 var currency = <?php echo json_encode($pRate); ?>;
                 var region = "{{$region}}";
+
+				ajaxSetup();
 
 				@for($n = 1; $n <= $size; $n++)
 					$(document).on('click', "#"+type+{{$n}}, function(){

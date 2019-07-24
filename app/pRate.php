@@ -37,6 +37,7 @@ class pRate extends Management{
 	}
 
 	public function getPRateByRegionAndYear($con,$region,$year){
+		
 		$where = "";
 
 		if($region && $year){

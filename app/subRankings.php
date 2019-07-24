@@ -71,6 +71,7 @@ class subRankings extends rank {
         return $res;
     }
 
+
     public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
         
         if ($type == "agencyGroup") {
@@ -97,10 +98,7 @@ class subRankings extends rank {
             }
         }
 
-        //var_dump($res);
-
         return $res;
-
     }
 
     public function checkYearValue($years, $year){
