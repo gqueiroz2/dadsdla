@@ -7,7 +7,7 @@ use App\rank;
 
 class renderRanking extends Render {
     
-    public function assemble($mtx, $names, $pRate, $value, $total, $size, $type, $IDS){
+    public function assemble($mtx, $names, $pRate, $value, $total, $size, $type){
         
     	 echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
@@ -23,7 +23,7 @@ class renderRanking extends Render {
 
            $rank = new rank();
 
-           $rank->renderAssembler($mtx, $total, $type, $size, $IDS , false , false);
+           $rank->renderAssembler($mtx, $total, $type, $size);
 
        echo "</table>";
     }

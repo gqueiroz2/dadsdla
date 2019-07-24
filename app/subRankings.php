@@ -71,27 +71,6 @@ class subRankings extends rank {
         return $res;
     }
 
-
-    public function xiforimpola($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
-
-
-        $vlauda = $this->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
-
-        if( is_array($vlauda[0]) ){
-            $sizao = sizeof($vlauda[0]); 
-        }else{
-            $sizao = 0;
-        }
-
-        return $sizao;
-/*
-        if( $n > 0 ){
-            $saizao = sizeof($vlauda[0]); 
-        }else{ 
-            $saizao = 0;
-        }*/
-    }
-
     public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
         
         if ($type == "agencyGroup") {
@@ -118,19 +97,26 @@ class subRankings extends rank {
             }
         }
 
-        var_dump($res);
+        //var_dump($res);
 
         return $res;
 
     }
 
-    public function checkOtherYearsPosition($name, $values, $year, $years, $type){
+    public function checkYearValue($years, $year){
         
         for ($y=0; $y < sizeof($years); $y++) { 
             if ($year == $years[$y]) {
                 $p = $y;       
             }
         }
+
+        return $p;
+    }
+
+    public function checkOtherYearsPosition($name, $values, $year, $years, $type){
+        
+        $p = $this->checkYearValue($years, $year);
 
         $ok = 0;
 
@@ -155,11 +141,7 @@ class subRankings extends rank {
 
     public function getValueByYear($name, $values, $year, $years, $type){
         
-        for ($y=0; $y < sizeof($years); $y++) { 
-            if ($year == $years[$y]) {
-                $p = $y;       
-            }
-        }
+        $p = $this->checkYearValue($years, $year);
 
         $ok = 0;
 
@@ -205,6 +187,8 @@ class subRankings extends rank {
         }elseif ($mtx[$m][0] == "VAR %") {
             if ($mtx[$m-sizeof($years)][$p] == 0 || $mtx[$m-sizeof($years)][$p] == "-") {
                 $res = 0.0;
+            }elseif ($mtx[$m-sizeof($years)-1][$p] == "-") {
+                $res = 0.0;
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
@@ -244,18 +228,24 @@ class subRankings extends rank {
             $mtx[$last][0] = "VAR ABS.";
             $mtx[$last+1][0] = "VAR %";    
         }
+        
+        $values = array();
 
-        $IDS = array();
-
-        for ($s=0; $s < sizeof($sub[0]); $s++) { 
-            for ($m=0; $m < sizeof($mtx); $m++) {
-                
-                array_push($mtx[$m], $this->checkColumn($mtx, $m, $sub[0][$s][$type2], $sub, $years, $type2, sizeof($mtx[$m]), $type));
-                
-                $IDS[$sub[0][$s][$type2]] = $sub[0][$s][$type2."ID"];
-            }    
+        for ($y=0; $y < sizeof($sub); $y++) { 
+            for ($n=0; $n < sizeof($sub[$y]); $n++) { 
+                if (!in_array($sub[$y][$n][$type2], $values)) {
+                    array_push($values, $sub[$y][$n][$type2]);
+                }
+            }
         }
 
+        
+        for ($v=0; $v < sizeof($values); $v++) { 
+            for ($m=0; $m < sizeof($mtx); $m++) {
+                array_push($mtx[$m], $this->checkColumn($mtx, $m, $values[$v], $sub, $years, $type2, sizeof($mtx[$m]), $type));
+            }    
+        }
+        
         $fun = "array_multisort(";
 
         for ($m=0; $m < sizeof($mtx); $m++) { 
@@ -267,84 +257,26 @@ class subRankings extends rank {
         }
 
         $fun .= ");";
-        eval($fun);
-
+        /*eval($fun);
+        var_dump($fun);*/
         $total = $this->assemblerTotal($mtx, $years);
         
-        return array($mtx, $total, $IDS);
+        return array($mtx, $total);
     }
 
-    public function renderSubRankings($mtx, $total, $type, $size, $IDS ,$pos){
+    public function renderSubRankings($mtx, $total, $type, $size){
         
         echo "<div class='container-fluid'>";
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
 
-                        $this->renderAssembler($mtx, $total, $type, $size, $IDS ,true , $pos);
+                        $this->renderAssembler($mtx, $total, $type, $size);
 
                    echo "</table>";
                echo "</div>";
            echo "</div>";
        echo "</div>";
-
-       /*echo "<script type='text/javascript'>";
-        echo "$(document).ready(function(){";
-            echo "@if ($type != 'client')";
-                echo "ajaxSetup();";
-                echo "@for($"."n = 0; $"."n < $size; $"."n++)";
-                echo "<?php";
-                    echo "
-                        if ($type == 'agency') {
-                            $"."num = 1;
-                        }else{
-                            $"."num  = 0;
-                        }
-                    ";
-                    echo "$"."val = "."$"."mtx["."sizeof($"."years)"."+"."$"."num]["."$"."n];";
-                    echo "if(array_key_exists($"."val, $"."IDS)){
-                            $"."Id = $"."IDS[$"."val];   
-                        }else{
-                            $"."Id = -1;
-                        }
-                    ";
-                    
-                echo "?>";
-                echo "var aux = $type;";
-                        echo "$(document).on('click', '#'+aux+$"."Id, function(){
-
-                        var name = $(this).text();
-                        var months = <?php echo json_encode($"."months); ?>;
-                        var brands = <?php echo json_encode($"."brands); ?>;
-                        var years  = <?php echo json_encode($"."years); ?>;
-                        var type = $type;
-                        var value = $"."value;
-                        var currency = <?php echo json_encode($"."pRate); ?>;
-                        var region = $"."region;
-
-                        if ($('#sub'+aux+$"."Id).css('display') == 'none') {
-
-                            $.ajax({
-                                url: '/ajaxRanking/subRanking',
-                                method: 'POST',
-                                data: {name, months, brands, years, aux, value, currency, region},
-                                success: function(output){
-                                    $('#sub'+aux+$"."Id).html(output);
-                                    $('#sub'+aux+$"."Id).css('display', '');
-                                },
-                                error: function(xhr, ajaxOptions,thrownError){
-                                    alert(xhr.status+' '+thrownError);
-                                }
-                            });
-                        }else{
-                            $('#sub'+aux+$"."Id).css('display', 'none');   
-                        }
-                    });
-                ";
-                echo "@endfor";
-            echo "@endif";
-          echo "});";
-        echo "</script>";*/
     }
 }
 

@@ -115,10 +115,10 @@
 	</div>
 
 
-	<div class="container-fluid" {{--style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px"--}}>
+	<div class="container-fluid">
 		<div class="row mt-2 justify-content-center">
 			<div class="col">
-				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type, $IDS)}}
+				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type)}}
 			</div>
 		</div>
 	</div>
@@ -130,91 +130,36 @@
 
 				ajaxSetup();
 
-				@for($n = 0; $n < $size; $n++)
+				var months = <?php echo json_encode($months); ?>;
+                var brands = <?php echo json_encode($brands); ?>;
+                var years  = <?php echo json_encode($years); ?>;
+                var type = "{{$type}}";
+                var value = "{{$value}}";
+                var currency = <?php echo json_encode($pRate); ?>;
+                var region = "{{$region}}";
 
-					$.ajax({
-						url: "/ajaxRanking/subRanking",
-						method: "POST",
-						data: {name, months, brands, years, aux, value, currency, region},
-						success: function(output){
-							$("#sub"+aux+{{$n}}+babaganuch).html(output);
-							$("#sub"+aux+{{$n}}+babaganuch).css("display", "");
-						},
-		                error: function(xhr, ajaxOptions,thrownError){
-	                 		alert(xhr.status+" "+thrownError);
-	                	}
-					});
+				@for($n = 1; $n <= $size; $n++)
+					$(document).on('click', "#"+type+{{$n}}, function(){
 
-
-					var babaganuch = 0;<?php echo $subR->xiforimpola($con, $brands, $type, $region, $value, $pRate, $months, $years, $mtx[3][$n]) ; ?>
-					console.log("{{$mtx[3][$n]}}");
-					console.log(babaganuch);
-					console.log("             ");
-
-					var aux = "agency";
-					$(document).on('click', "#"+"agency"+{{$n}}+babaganuch, function(){
-
-						var pos = $("#pos-"+aux+"{{$n}}").val();
-						var name = $(this).text();
-						var months = <?php echo json_encode($months); ?>;
-						var brands = <?php echo json_encode($brands); ?>;
-						var years  = <?php echo json_encode($years); ?>;
-						var type = "{{$type}}";
-						var value = "{{$value}}";
-						var currency = <?php echo json_encode($pRate); ?>;
-						var region = "{{$region}}";
-
-						if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-
-							$.ajax({
-								url: "/ajaxRanking/subRanking",
-								method: "POST",
-								data: {name, months, brands, years, aux, value, currency, region},
-								success: function(output){
-									$("#sub"+aux+{{$n}}+babaganuch).html(output);
-									$("#sub"+aux+{{$n}}+babaganuch).css("display", "");
-								},
-				                error: function(xhr, ajaxOptions,thrownError){
-			                 		alert(xhr.status+" "+thrownError);
-			                	}
-							});
-						}else{
-							$("#sub"+aux+{{$n}}+babaganuch).css("display", "none");	
-						}
-					});
-				@endfor
-
-				@for($n = 0; $n < $size; $n++)
-
-					var aux = "agencyGroup";
-					
-                    $(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
-
-                    	var pos = $("#pos-"+aux+"{{$n}}").val();    
                         var name = $(this).text();
-                        var months = <?php echo json_encode($months); ?>;
-                        var brands = <?php echo json_encode($brands); ?>;
-                        var years  = <?php echo json_encode($years); ?>;
-                        var type = "{{$type}}";
-                        var value = "{{$value}}";
-                        var currency = <?php echo json_encode($pRate); ?>;
-                        var region = "{{$region}}";
-                        
-                        if ($("#sub"+aux+{{$n}}).css("display") == "none") {
+
+                        if ($("#sub"+type+{{$n}}).css("display") == "none") {
+
                             $.ajax({
                                 url: "/ajaxRanking/subRanking",
                                 method: "POST",
-                                data: {name, months, brands, years, aux, value, currency, region , pos},
+                                data: {name, months, brands, years, type, value, currency, region},
                                 success: function(output){
-                                    $("#sub"+aux+{{$n}}).html(output);
-                                   	$("#sub"+aux+{{$n}}).css("display", "");
+                                    $("#sub"+type+{{$n}}).html(output);
+                                    $("#sub"+type+{{$n}}).css("display", "");
                                 },
                                 error: function(xhr, ajaxOptions,thrownError){
                                     alert(xhr.status+" "+thrownError);
                                 }
                             });
                         }else{
-                            $("#sub"+aux+{{$n}}).css("display", "none");   
+                        	$("#sub"+type+{{$n}}).html(" ");
+                            $("#sub"+type+{{$n}}).css("display", "none");
                         }
                     });
                 @endfor

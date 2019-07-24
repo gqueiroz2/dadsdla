@@ -56,7 +56,7 @@ class rankings extends rank{
         
         for ($y=0; $y < sizeof($years); $y++) { 
             if ($year == $years[$y]) {
-                $p = $y;       
+                $p = $y;
             }
         }
 
@@ -170,15 +170,11 @@ class rankings extends rank{
             $mtx[$last+1][0] = "VAR %";    
         }
 
-        $IDS = array();
-
         for ($t=0; $t < sizeof($type2); $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
                 for ($m=0; $m < sizeof($mtx); $m++) { 
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
-                    $IDS[$type2[$t]->name] = $type2[$t]->id;
-                    //array_push($IDS, $type2[$t]->id);
                 }
             }
         }
@@ -200,7 +196,7 @@ class rankings extends rank{
 
         //var_dump($total);
 
-        return array($mtx, $total, $IDS);
+        return array($mtx, $total);
     }
 
     public function createNames($type, $months, $years){
