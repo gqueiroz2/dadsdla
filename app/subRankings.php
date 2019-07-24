@@ -202,10 +202,10 @@ class subRankings extends rank {
     public function assembler($sub, $years, $type){
         
         if ($type == "agencyGroup") {
-            $var = "Agencies";
+            $var = "Agency";
             $type2 = "agency";
         }else{
-            $var = "Clients";
+            $var = "Client";
             $type2 = "client";
         }
 

@@ -74,10 +74,11 @@ class rank extends Model{
             $tableAbv = "a";
             $leftAbv = "b";
             $leftAbv2 = "c";
+            $leftAbv3 = "d";
 
             if ($tableName == "ytd") {
                 $value .= "_revenue_prate";
-                $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+                $columns = array("$leftAbv3.ID", "brand_id", "month", "year");
                 $colsValue = array($region, $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
@@ -90,7 +91,8 @@ class rank extends Model{
                    $leftAbv.".name AS '".$type."', SUM($value) AS $as";
 
            $join = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = ".     $tableAbv.".".$leftName2."_id
-                    LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id";
+                    LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
+                    LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
 
             $name = substr($type, 0, 6)."_group_id";
             $names = array($type."ID", $type, $as);
@@ -245,12 +247,16 @@ class rank extends Model{
                 }else {
                     if (!is_numeric($mtx[$i][$m])) {
                         if ($mtx[$i][$m] != "-") {
-                            if ($type == "agency" && $mtx[$i][0] == "Agencies") {
+                            if ($type == "agency" && $mtx[$i][0] == "Agency") {
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
-                            }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Group") {
+                            }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Agency Group") {
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
                             }else{
-                                echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
+                                if ($mtx[$i][$m] == "Others") {
+                                    echo "<td class='$color center'> - </td>";      
+                                }else{
+                                    echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
+                                }
                             }
                         }else{
                           echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";

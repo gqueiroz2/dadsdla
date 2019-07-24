@@ -120,7 +120,7 @@ class rankingController extends Controller {
 
         $render = new renderRanking();
         //var_dump($values);
-        //var_dump("mtx",$matrix[2]);
+        //var_dump("mtx",$values);
 
         $subR = new subRankings();
         return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region'));
