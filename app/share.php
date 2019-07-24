@@ -36,9 +36,15 @@ class share extends results
         $value = Request::get('value');
         $month = Request::get('month');
 
-        $div = $base->generateDiv($con,$pr,$region,$year,$currency);
+        if( strtolower( $source ) == "cmaps" ){
+            $div = $base->generateDivCMAPS($con,$pr,$region,$year,$currency);
+            $div = 1*$div;
+        }else{
+            $div = $base->generateDiv($con,$pr,$region,$year,$currency);            
+            $div = 1/$div;
+        }
+        
 
-        $div = 1/$div;
 
         $tmp = array($currency);
         
@@ -92,11 +98,11 @@ class share extends results
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($brand[$b][1] == "OTH") {
                         $sourceBrand[$m][$b] = "IBMS";
-                    }elseif($brand[$b][1] == "FN" && $region == "1"){
+                    }/*elseif($brand[$b][1] == "FN" && $region == "1"){
                         $sourceBrand[$m][$b] = "IBMS";
                     }elseif ($brand[$b][1] == "FN" && $region != "1"){
                         $sourceBrand[$m][$b] = "IBMS";
-                    }else{
+                    }*/else{
                         $sourceBrand[$m][$b] = $source;
                     }
                  }
@@ -180,7 +186,6 @@ class share extends results
 
         //gera o where, puxa do banco, gera o total por executivo, e gera DN se tiver mais de um canal
         
-
         for ($m=0; $m <sizeof($sourceBrand) ; $m++) {
             for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
                 $values[$m][$b] = $this->generateValue($con,$sql,$sourceBrand[$m][$b],$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$m][$b],$table[$m][$b],$crack);
@@ -282,7 +287,7 @@ class share extends results
 
         for ($m=0; $m <sizeof($values) ; $m++) { 
             for ($b=0; $b <sizeof($values[$m]) ; $b++) { 
-                for ($s=0; $s <sizeof($values[$m][$b]) ; $s++) { 
+                for ($s=0; $s <sizeof($values[$m][$b]) ; $s++) {                     
                     $values[$m][$b][$s] = $values[$m][$b][$s]/$div;
                 }
             }

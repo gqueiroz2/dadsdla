@@ -226,7 +226,7 @@ class rank extends Model{
         return $vec;
     }
 
-    public function renderAssembler($mtx, $total, $type, $size, $IDS,$bool , $pos){
+    public function renderAssembler($mtx, $total, $type, $size){
         
         for ($m=0; $m < $size; $m++) {
             echo "<tr>";
@@ -245,31 +245,20 @@ class rank extends Model{
                 }else {
                     if (!is_numeric($mtx[$i][$m])) {
                         if ($mtx[$i][$m] != "-") {
-                          if ($type == "agency" && $mtx[$i][0] == "Agencies") {
-                            if($bool){
-                                echo "<td id='".$type.$m."-$pos' class='$color center'> ".$mtx[$i][$m]." </td>";
-                            }else{
+                            if ($type == "agency" && $mtx[$i][0] == "Agencies") {
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
-                            }
-                          }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Group") {
-                            if($bool){   
-                                echo "<td id='".$type.$m."-$pos' class='$color center'> ".$mtx[$i][$m]." </td>";
-                            }else{
+                            }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Group") {
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
+                            }else{
+                                echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
                             }
-                          }else{
-                            echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";  
-                          }
                         }else{
                           echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                         }
                     }else{
                         if (substr($mtx[$i][0], 0, 3) == "Pos") {
                             if ($mtx[$i][$m] != '-') {
-                                echo "<td class='$color center'> ".$mtx[$i][$m]."º </td>";     
-                                if($i == 0){
-                                    echo "<input type='hidden' id='pos-".$type.$m."' value='".$mtx[$i][$m]."' >"; 
-                                }
+                                echo "<td class='$color center'> ".$mtx[$i][$m]."º </td>";
                             }else{
                                 echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                             }
@@ -285,16 +274,9 @@ class rank extends Model{
             echo "</tr>";
             
             if ($type != "client") {
-                if ($bool) {
-                    echo "<tr class='$color'>";
-                        echo "<td id='sub".$type.$m."-$pos' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
-                    echo "</tr>";    
-                }else{
-                    echo "<tr class='$color'>";
-                        echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
-                    echo "</tr>";    
-                }
-                
+                echo "<tr class='$color'>";
+                    echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
+                echo "</tr>";
             }
         }
 

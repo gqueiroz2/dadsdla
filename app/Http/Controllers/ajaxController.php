@@ -485,7 +485,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection("DLA");
 
         $brands = Request::get("brands");
-        $type = Request::get("aux");
+        $type = Request::get("type");
         $region = Request::get("region");
         $value = Request::get("value");
         $currency = Request::get("currency");
@@ -501,7 +501,6 @@ class ajaxController extends Controller{
 
         $mtx = $matrix[0];
         $total = $matrix[1];
-        $IDS = $matrix[2];
 
         if ($type == "agencyGroup") {
             $newType = "agency";
@@ -511,7 +510,6 @@ class ajaxController extends Controller{
             $newType = "client";
         }
 
-        $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]), $IDS , $pos);
-        //var_dump($matrix[2]);
+        $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
     }
 }

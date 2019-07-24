@@ -115,10 +115,10 @@
 	</div>
 
 
-	<div class="container-fluid" {{--style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px"--}}>
+	<div class="container-fluid">
 		<div class="row mt-2 justify-content-center">
 			<div class="col">
-				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type, $IDS)}}
+				{{$render->assemble($mtx, $names, $pRate, $value, $total, $size, $type)}}
 			</div>
 		</div>
 	</div>
@@ -138,101 +138,30 @@
 
 				ajaxSetup();
 
-				@for($n = 0; $n < $size; $n++)
-					var aux = "agency";
-		
-					$(document).on('click', "#"+aux+{{$n}}, function(){
-						alert("click");
-						var pos = $("#pos-"+aux+"{{$n}}").val();
-						
-						var name = $(this).text();
+				@for($n = 1; $n <= $size; $n++)
+					$(document).on('click', "#"+type+{{$n}}, function(){
 
-						if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-							
-							$.ajax({
-								url: "/ajaxRanking/subRanking",
-								method: "POST",
-								data: {name, months, brands, years, aux, value, currency, region},
-								success: function(output){
-									$("#sub"+aux+{{$n}}).html(output);
-									$("#sub"+aux+{{$n}}).css("display", "");
-								},
-				                error: function(xhr, ajaxOptions,thrownError){
-			                 		alert(xhr.status+" "+thrownError);
-			                	}
-							});
-						}else{
-							alert("else");
-							$("#sub"+aux+{{$n}}).css("display", "none");	
-						}
-					});
-				@endfor
+                        var name = $(this).text();
 
-				@for($n = 0; $n < $size; $n++)
+                        if ($("#sub"+type+{{$n}}).css("display") == "none") {
 
-					var aux = "agencyGroup";
-					
-					var name = "{{$mtx[3][$n]}}";
-
-					$.ajax({
-						url: "/ajax/agencyNumberByAgencyGroup",
-						method: "POST",
-						data: {name, months, brands, years, aux, value, currency, region},
-						success: function(output){	
-
-							$(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
-
-		                    	var pos = $("#pos-"+aux+"{{$n}}").val();    
-		                        var name = $(this).text();		                       
-		                        
-		                        if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-		                            $.ajax({
-		                                url: "/ajaxRanking/subRanking",
-		                                method: "POST",
-		                                data: {name, months, brands, years, aux, value, currency, region , pos},
-		                                success: function(output){
-		                                    $("#sub"+aux+{{$n}}).html(output);
-		                                   	$("#sub"+aux+{{$n}}).css("display", "");
-		                                },
-		                                error: function(xhr, ajaxOptions,thrownError){
-		                                    alert(xhr.status+" "+thrownError);
-		                                }
-		                            });
-		                        }else{
-		                            $("#sub"+aux+{{$n}}).css("display", "none");   
-		                        }
-
-		                        var newAux = "agency";
-		                        for(var o = 0; o < output;o++ ){
-			                        if ($("#sub"+newAux+{{$n}}+"-"+o).css("display") == "none") {
-			                            $.ajax({
-			                                url: "/ajaxRanking/subRanking",
-			                                method: "POST",
-			                                data: {name, months, brands, years, newAux, value, currency, region , pos},
-			                                success: function(output){
-			                                    $("#sub"+newAux+{{$n}}+"-"+o).html(output);
-			                                   	$("#sub"+newAux+{{$n}}+"-"+o).css("display", "");
-			                                },
-			                                error: function(xhr, ajaxOptions,thrownError){
-			                                    alert(xhr.status+" "+thrownError);
-			                                }
-			                            });
-			                        }else{
-			                            $("#sub"+newAux+{{$n}}+"-"+o).css("display", "none");   
-			                        }
-		                        }
-
-		                    });
-						},
-		                error: function(xhr, ajaxOptions,thrownError){
-	                 		alert(xhr.status+" "+thrownError);
-	                	}
-					});
-
-					
-
-
-                    
+                            $.ajax({
+                                url: "/ajaxRanking/subRanking",
+                                method: "POST",
+                                data: {name, months, brands, years, type, value, currency, region},
+                                success: function(output){
+                                    $("#sub"+type+{{$n}}).html(output);
+                                    $("#sub"+type+{{$n}}).css("display", "");
+                                },
+                                error: function(xhr, ajaxOptions,thrownError){
+                                    alert(xhr.status+" "+thrownError);
+                                }
+                            });
+                        }else{
+                        	$("#sub"+type+{{$n}}).html(" ");
+                            $("#sub"+type+{{$n}}).css("display", "none");
+                        }
+                    });
                 @endfor
 			@endif
 		});

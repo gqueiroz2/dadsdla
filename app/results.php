@@ -145,9 +145,17 @@ class results extends base{
             $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
+                if($table == "cmaps"){
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                }else{
+                    $pRate = 1.0;
+                }
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                if($table == "cmaps"){
+                    $pRate = 1.0;
+                }else{
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                }                
             }    
         }else{            
             $pRate = 1.0;
@@ -211,7 +219,14 @@ class results extends base{
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
-            $rtr = $tmp*$pRate;
+
+            if($table == "cmaps"){                          
+                $rtr = $tmp/$pRate;
+            }else{
+                $rtr = $tmp*$pRate;
+            }           
+
+
         }
 
         return $rtr;
