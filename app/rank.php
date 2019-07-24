@@ -78,8 +78,8 @@ class rank extends Model{
 
             if ($tableName == "ytd") {
                 $value .= "_revenue_prate";
-                $columns = array("$leftAbv3.ID", "brand_id", "month", "year");
-                $colsValue = array($region, $brands_id, $months);
+                $columns = array("$leftAbv3.ID", "sales_representant_office_id", "brand_id", "month", "year");
+                $colsValue = array($region, $region, $brands_id, $months);
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
