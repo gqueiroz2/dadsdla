@@ -80,7 +80,9 @@ class quarterPerformanceController extends Controller {
         $salesRepGroup = $sr->getSalesRepGroup($con, null);
         $salesRep = $sr->getSalesRep($con, null);
 
-        $mtx = $qp->makeQuarter($con, $regionID, $year, $brands, $currency, $value, $base->getMonth(), $tiers, $salesRepID);
+        $matrix = $qp->makeQuarter($con, $regionID, $year, $brands, $currency, $value, $base->getMonth(), $tiers, $salesRepID);
+        $mtx = $matrix[0];
+        $auxTiers = $matrix[1];
 
         $sales = $qp->createLabels($con, $salesRepGroupID, $salesRepID, $regionID, $year);
 
@@ -89,9 +91,20 @@ class quarterPerformanceController extends Controller {
         //var_dump($mtx[0]);
         //var_dump($sales);
 
-        if (sizeof($tiers) > 1) {
-            array_push($tiers, "TT");
+        $tiersFinal = array();
+
+        for ($i=0; $i < sizeof($auxTiers); $i++) { 
+            
+            if (empty(!$auxTiers[$i])) {
+                array_push($tiersFinal, $tiers[$i]);
+            }
         }
+
+        if (sizeof($brands) > 1) {
+            array_push($tiersFinal, "TT");
+        }
+
+        $tiers = $tiersFinal;
 
         return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers'));
         

@@ -68,7 +68,7 @@ class quarterPerformance extends performance {
 
         $tmp = array($year);
         $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
-        //$div = 1/$div;
+        //$div = 1/$div;tiers
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			for ($m=0; $m < sizeof($months); $m++) { 
@@ -91,7 +91,7 @@ class quarterPerformance extends performance {
 		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div);
 
 		if (sizeof($brands) > 1) {
-			array_push($mtx, $this->assemblerDN($mtx, $year));
+			array_push($mtx[0], $this->assemblerDN($mtx[0], $year));
 		}
 
 		return $mtx;
@@ -160,6 +160,7 @@ class quarterPerformance extends performance {
 				array_push($newValues[2], $values[$b]);
 			}
 		}
+		$auxTiers = $brandsTiers;
 		//var_dump($planValues);
 		//arrumando vetor, caso haja tiers em branco
 		for ($b=0; $b < sizeof($brandsTiers); $b++) { 
@@ -167,7 +168,7 @@ class quarterPerformance extends performance {
 			$newPlanValues = $this->remakeArray($newPlanValues);
 			$newValues = $this->remakeArray($newValues);
 		}
-
+		
 		/*for ($i=0; $i < sizeof($newValues); $i++) { 
 			var_dump($brandsTiers[$i]);
 		}*/
@@ -311,7 +312,7 @@ class quarterPerformance extends performance {
 			//var_dump($mtx[$t]);
 		}
 
-		return $mtx;
+		return array($mtx, $auxTiers);
 	}
 
 	public function assemblerDN($mtx, $year){
@@ -337,7 +338,7 @@ class quarterPerformance extends performance {
 				$mtxFinal[0][$c][$v] = 0;
 			}
 		}
-
+		//var_dump($mtx[1][0]);
 		for ($t=0; $t < sizeof($mtx); $t++) { 
 			for ($b=0; $b < sizeof($mtx[$t]); $b++) { 
 				for ($c=2; $c < (sizeof($mtx[$t][$b])-2); $c++) { 
