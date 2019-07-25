@@ -89,9 +89,10 @@ class quarterPerformanceController extends Controller {
         //var_dump($mtx[0]);
         //var_dump($sales);
 
-        if (sizeof($tiers) > 1) {
+        if (sizeof($brands) > 1) {
             array_push($tiers, "TT");
         }
+
 
         return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers'));
         
