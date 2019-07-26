@@ -80,7 +80,7 @@ class PAndRRender extends Render
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                         echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='oldY-$m' value='$total2018[$m]' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;' ></td>";
                     }else{
-                        echo "<td class='rcBlue' ><input type='text' readonly='true' id='oldY-$m' value='$total2018[$m]' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;' ></td>";
+                        echo "<td class='rcBlue'><input type='text' readonly='true' id='oldY-$m' value='$total2018[$m]' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;' ></td>";
                     }
                 }
                 echo "<td class='smBlue' ><input type='text' readonly='true' id='totalOldYear' value='$totaltotal2018' style='width:100%; border:none; color:white; font-weight:bold; text-align:center; background-color:transparent;' ></td>";
@@ -250,6 +250,139 @@ class PAndRRender extends Render
         }   
 
 
+    }
+
+    public function VP1(){
+        echo "<div class='table-responsive'>";
+            for ($b=0; $b <sizeof($this->channel) ; $b++) {
+                echo "<table style='width:100%; margin-top:1,5%; text-align:center;' >";
+                    echo "<tr>";
+                        echo "<td colspan='2' class='".strtolower($this->channel[$b])."' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; width:15%;'>&nbsp</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='quarter' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; width:4.5%;'>".$this->month[$m]."</td>";
+                            }else{
+                                echo "<td class='lightGrey' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:4.5%;'>".$this->month[$m]."</td>";
+                            }
+                        }
+                        echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; width:6%;'>Total</td>";
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td rowspan='9' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' class='".strtolower($this->channel[$b])."' >".$this->channel[$b]."</td>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;' class='rcBlue'>2018 Ad Sales</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>0</td>";
+                            
+                            }else{
+                                echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;' class='rcBlue'>0</td>";    
+                            }
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' 
+                         class='odd'>2018 SAP</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='odd'>0</td>";
+                            }    
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='rcBlue'>Target</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='rcBlue'>0</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";               
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='odd'>Fcast Ad Sales - Current</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='fa-$b-$m' value='0' style='width:100%; height:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
+                            }else{
+                                echo "<td class='odd'><input type='text' id='fa-$b-$m' value='0' style='width:100%; height:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
+                            }   
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='total-$b' value='0' style='width:100%; height:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'></td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='rcBlue'>Forecast Corporate</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='rcBlue'>0</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='odd'>2019 Ad Sales</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='odd'>0</td>";
+                            }   
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='rcBlue'>2019 SAP</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='rcBlue'>0</td>";
+                            }    
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;' class='odd'>Fcast 2019 - Fcast 2018 (%)</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='odd'>0</td>";
+                            }  
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                    echo "<tr>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>2019-Target (%)</td>";
+                        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>0</td>";
+                            }else{
+                                echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>0</td>";    
+                            }
+                        }
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>0</td>";    
+                    echo "</tr>";
+
+                echo "</table>";
+                echo "<br>";
+            }
+        echo "</div>";
     }
     
 }

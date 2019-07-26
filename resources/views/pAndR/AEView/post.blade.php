@@ -55,7 +55,7 @@
 	<br>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col" style="width: 100%;">
+			<div class="col-sm" style="width: 100%;">
 				<center>
 					{{$render->AE1($total2018,$totaltotal2018,$totalClient2018,$client2018)}}
 				</center>
@@ -404,9 +404,8 @@
 				});
 
 			@endfor
-
-
 		});
+		
 	</script>
 
 @endsection
