@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class corePerformanceRender extends renderPerformance
 {
     public function case1($mtx){
-    	echo "<div class='row' >";
+    	echo "<div class='row'  >";
 	    	echo "<div class='col' style='width:100%;'>";
 	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    		echo "</center>";
 	    	echo "</div>";
     	echo "</div>";
@@ -18,7 +18,12 @@ class corePerformanceRender extends renderPerformance
 	    	if ($sg%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
-	    	echo "<div class='col'>";
+	    	if (sizeof($mtx["salesGroup"]) == 1) {
+	    		echo "<center style='width:100%;'>";
+		    	echo "<div class='col-sm-8' style='width:100%;'>";
+	    	}else{
+		    	echo "<div class='col-sm' style='width:100%;'>";
+	    	}
 	    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >".$mtx["salesGroup"][$sg]["name"]."</th></table>";
 	    	for ($t=0; $t < sizeof($mtx["case1"]["value"][$sg]); $t++) { 
 		    	echo "<table style='width: 100%;' class='mt-3'>";
@@ -106,6 +111,9 @@ class corePerformanceRender extends renderPerformance
 	    		echo "</tr>";
 		   	echo "</table>";
 
+	    	if (sizeof($mtx["salesGroup"]) == 1) {
+	    		echo "</center>";
+	    	}
 	    	echo "</div>";
 
 	    	if ($sg%2 == 1) {
@@ -116,7 +124,7 @@ class corePerformanceRender extends renderPerformance
 	    	if(sizeof($mtx["case1"]["value"])%2 == 0){
 		    	echo "<div class='row'>";
 	    	}
-	    		echo "<div class='col'>";
+	    		echo "<div class='col-sm-6'>";
 	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
     				for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
 			    		echo "<table style='width: 100%;' class='mt-3'>";
@@ -213,7 +221,7 @@ class corePerformanceRender extends renderPerformance
     	echo "<div class='row' >";
 	    	echo "<div class='col' style='width:100%;'>";
 	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    		echo "</center>";
 	    	echo "</div>";
     	echo "</div>";
@@ -221,7 +229,12 @@ class corePerformanceRender extends renderPerformance
 	    	if ($sg%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
-	    	echo "<div class='col'>";
+	    	if (sizeof($mtx["salesGroup"]) == 1) {
+	    		echo "<center style='width:100%;'>";
+		    	echo "<div class='col-sm-8'>";
+	    	}else{
+		    	echo "<div class='col-sm'>";
+	    	}
 
 		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >".$mtx["salesGroup"][$sg]["name"]."</th></table>";
 
@@ -304,6 +317,10 @@ class corePerformanceRender extends renderPerformance
 		    			echo "</tr>";
 		    		
 		    	echo "</table>";
+	    		
+	    		if (sizeof($mtx["salesGroup"]) == 1) {
+	    			echo "</center>";
+	    		}
 	    	
 	    	echo "</div>";
 	    	if ($sg%2 == 1) {
@@ -404,7 +421,7 @@ class corePerformanceRender extends renderPerformance
     	echo "<div class='row' >";
 	    	echo "<div class='col' style='width:100%;'>";
 	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    		echo "</center>";
 	    	echo "</div>";
     	echo "</div>";
@@ -602,7 +619,7 @@ class corePerformanceRender extends renderPerformance
     	echo "<div class='row' >";
 	    	echo "<div class='col' style='width:100%;'>";
 	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    		echo "</center>";
 	    	echo "</div>";
     	echo "</div>";

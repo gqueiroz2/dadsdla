@@ -73,51 +73,54 @@
 					if ($(this).val() == '') {
 						$(this).val(parseFloat(0));
 					}
+					
+					$(this).val(Comma(handleNumber($(this).val())));
 
 					if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-						var value = parseFloat($("#rf-0").val())+parseFloat($("#rf-1").val())+parseFloat($("#rf-2").val());
+						var value = Comma(handleNumber($("#rf-0").val())+handleNumber($("#rf-1").val())+handleNumber($("#rf-2").val()));
 						$("#rf-3").val(value);
 					}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-						var value = parseFloat($("#rf-4").val())+parseFloat($("#rf-5").val())+parseFloat($("#rf-6").val());
+						var value = Comma(handleNumber($("#rf-4").val())+handleNumber($("#rf-5").val())+handleNumber($("#rf-6").val()));
 						$("#rf-7").val(value);
 					}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-						var value = parseFloat($("#rf-8").val())+parseFloat($("#rf-9").val())+parseFloat($("#rf-10").val());
+						var value = Comma(handleNumber($("#rf-8").val())+handleNumber($("#rf-9").val())+handleNumber($("#rf-10").val()));
 						$("#rf-11").val(value);
 					}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-						var value = parseFloat($("#rf-12").val())+parseFloat($("#rf-13").val())+parseFloat($("#rf-14").val());
+						var value = Comma(handleNumber($("#rf-12").val())+handleNumber($("#rf-13").val())+handleNumber($("#rf-14").val()));
 						$("#rf-15").val(value);
 					}
 				
-					var Temp = parseFloat($("#rf-3").val()) + parseFloat($("#rf-7").val()) + parseFloat($("#rf-11").val()) + parseFloat($("#rf-15").val());
+					var Temp = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
 
 					$("#total-total").val(Temp);
 
 
 					@for($c=0;$c<10;$c++)
-						var temp = $(this).val()*parseFloat($("#totalPP2-"+{{$c}}).val()/100);
+						var temp = Comma(handleNumber($(this).val())*parseFloat($("#totalPP2-"+{{$c}}).val()/100));
+
 
 						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(temp);
 						
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
 							$("#clientRF-"+{{$c}}+"-3").val(value);
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-4").val())+parseFloat($("#clientRF-"+{{$c}}+"-5").val())+parseFloat($("#clientRF-"+{{$c}}+"-6").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
 							$("#clientRF-"+{{$c}}+"-7").val(value);
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-8").val())+parseFloat($("#clientRF-"+{{$c}}+"-9").val())+parseFloat($("#clientRF-"+{{$c}}+"-10").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
 							$("#clientRF-"+{{$c}}+"-11").val(value);
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
 							$("#clientRF-"+{{$c}}+"-15").val(value);
 						}
 						
-						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
 						$("#totalClient-"+{{$c}}).val(Temp);
 
 						@for($m2=0;$m2<16;$m2++)
-							var temp2 = parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/parseFloat($("#totalClient-"+{{$c}}).val());
+							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
 							temp2 = temp2*100;
 							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
 						@endfor
@@ -132,77 +135,85 @@
 					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
 
 						if ($(this).val() == '') {
-							$(this).val(parseFloat(0));
+							$(this).val(0);
 						}
 
+						$(this).val(Comma(handleNumber($(this).val())));
+
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
 							$("#clientRF-"+{{$c}}+"-3").val(value);
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-4").val())+parseFloat($("#clientRF-"+{{$c}}+"-5").val())+parseFloat($("#clientRF-"+{{$c}}+"-6").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
 							$("#clientRF-"+{{$c}}+"-7").val(value);
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-8").val())+parseFloat($("#clientRF-"+{{$c}}+"-9").val())+parseFloat($("#clientRF-"+{{$c}}+"-10").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
 							$("#clientRF-"+{{$c}}+"-11").val(value);
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
 							$("#clientRF-"+{{$c}}+"-15").val(value);
 						}
 
-						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
 						$("#totalClient-"+{{$c}}).val(Temp);
 
 						@for($m2=0;$m2<16;$m2++)
-							var temp2 = parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/parseFloat($("#totalClient-"+{{$c}}).val());
-							temp2 = temp2*100;
+							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
+							temp2 = Comma(temp2*100);
 							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
 						@endfor
 
-						var month = parseFloat(0);
+						var month = 0;
 
 						@for($c2=0;$c2<10;$c2++)
-							month += parseFloat($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
 						@endfor
+
+						month = Comma(month);
 
 						$("#rf-"+{{$m}}).val(month);
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-3").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
 							@endfor
+							month = Comma(month);
 							$("#rf-3").val(month);
 						
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-7").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
 							@endfor
+							month = Comma(month);
 							$("#rf-7").val(month);
 						
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-11").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
 							@endfor
+							month = Comma(month);
 							$("#rf-11").val(month);
 						
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-15").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
 							@endfor
+							month = Comma(month);
 							$("#rf-15").val(month);
 						}
 
-						var total = parseFloat($("#rf-3").val()) + parseFloat($("#rf-7").val()) + parseFloat($("#rf-11").val()) + parseFloat($("#rf-15").val());
+						var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
 
 						$("#total-total").val(total);
 
 						@for($c2=0;$c2<10;$c2++)
-							var temp = parseFloat($("#totalClient-"+{{$c2}}).val())/parseFloat($("#total-total").val());
-							temp = temp*100;
+							var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
+							temp = Comma(temp*100);
 							$("#totalPP2-"+{{$c2}}).val(temp);
 							$("#totalPP3-"+{{$c2}}).val(temp);
 						@endfor
@@ -214,23 +225,25 @@
 				$("#totalPP2-"+{{$c}}).change(function(){
 					var top = 0;
 					@for($c2=0;$c2<10;$c2++)
-						top += parseFloat($("#totalPP2-"+{{$c2}}).val());
+						top += handleNumber($("#totalPP2-"+{{$c2}}).val());
 					@endfor
+
+					top = Comma(top);
 
 					$("#totalClients").val(top);
 
 					@for($m=0;$m<16;$m++)
 						if($("#totalPP3-"+{{$c}}).val() != 0){
-							var value = (parseFloat($("#clientRF-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($(this).val()))/parseFloat($("#totalPP3-"+{{$c}}).val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m}}).val())*handleNumber($(this).val())/handleNumber($("#totalPP3-"+{{$c}}).val()));
 						}else{
-							var value = parseFloat($("#rf-"+{{$m}}).val())*parseFloat($(this).val()/100);
+							var value = Comma(handleNumber($("#rf-"+{{$m}}).val())*parseFloat($(this).val()/100));
 						}
 						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(value);
 					@endfor
 
 					$("#totalPP3-"+{{$c}}).val($(this).val());
 
-					var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+					var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
 					$("#totalClient-"+{{$c}}).val(Temp);
 
@@ -312,7 +325,7 @@
 
 						@for($m2=0;$m2<16;$m2++)
 							if({{$m2}} != 3 && {{$m2}} != 7 && {{$m2}} != 11 && {{$m2}} != 15){
-								temp += parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
+								temp += handleNumber($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
 							}
 						@endfor
 
@@ -330,71 +343,85 @@
 				$("#TotalTitle-"+{{$c}}).click(function(){
 					@for($m=0;$m<16;$m++)
 						if({{$m}} != 3 && {{$m}} != 7 && {{$m}} != 11 && {{$m}} != 15){
-							var vlau = parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100);
+							var vlau = Comma(parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100));
 							$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
 						}
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-0").val())+parseFloat($("#clientRF-"+{{$c}}+"-1").val())+parseFloat($("#clientRF-"+{{$c}}+"-2").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
 							$("#clientRF-"+{{$c}}+"-3").val(value);
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-4").val())+parseFloat($("#clientRF-"+{{$c}}+"-5").val())+parseFloat($("#clientRF-"+{{$c}}+"-6").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
 							$("#clientRF-"+{{$c}}+"-7").val(value);
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-8").val())+parseFloat($("#clientRF-"+{{$c}}+"-9").val())+parseFloat($("#clientRF-"+{{$c}}+"-10").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
 							$("#clientRF-"+{{$c}}+"-11").val(value);
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var value = parseFloat($("#clientRF-"+{{$c}}+"-12").val())+parseFloat($("#clientRF-"+{{$c}}+"-13").val())+parseFloat($("#clientRF-"+{{$c}}+"-14").val());
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
 							$("#clientRF-"+{{$c}}+"-15").val(value);
 						}
 
-						var Temp = parseFloat($("#clientRF-"+{{$c}}+"-3").val()) + parseFloat($("#clientRF-"+{{$c}}+"-7").val()) + parseFloat($("#clientRF-"+{{$c}}+"-11").val()) + parseFloat($("#clientRF-"+{{$c}}+"-15").val());
+						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
 						$("#totalClient-"+{{$c}}).val(Temp);
 
-						var month = parseFloat(0);
+						var month = handleNumber(0);
 
 						@for($c2=0;$c2<10;$c2++)
-							month += parseFloat($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
 						@endfor
+
+						month = Comma(month);
 
 						$("#rf-"+{{$m}}).val(month);
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-3").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
 							@endfor
+
+							month = Comma(month);
+
 							$("#rf-3").val(month);
 						
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-7").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
 							@endfor
+							
+							month = Comma(month);
+							
 							$("#rf-7").val(month);
 						
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-11").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
 							@endfor
+							
+							month = Comma(month);
+							
 							$("#rf-11").val(month);
 						
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var month = parseFloat(0);
+							var month = handleNumber(0);
 							@for($c2=0;$c2<10;$c2++)
-								month += parseFloat($("#clientRF-"+{{$c2}}+"-15").val());
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
 							@endfor
+
+							month = Comma(month);
+							
 							$("#rf-15").val(month);
 						}
 
-						var total = parseFloat($("#rf-3").val()) + parseFloat($("#rf-7").val()) + parseFloat($("#rf-11").val()) + parseFloat($("#rf-15").val());
+						var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
 
 						$("#total-total").val(total);
 
 						@for($c2=0;$c2<10;$c2++)
-							var temp = parseFloat($("#totalClient-"+{{$c2}}).val())/parseFloat($("#total-total").val());
+							var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
 							temp = temp*100;
 							$("#totalPP2-"+{{$c2}}).val(temp);
 							$("#totalPP3-"+{{$c2}}).val(temp);
@@ -406,6 +433,28 @@
 			@endfor
 		});
 		
+		function handleNumber(number){
+
+			number = number.replace(",","");
+
+			number = parseFloat(number);
+			
+			return number;
+		}
+
+	  	function Comma(Num) { //function to add commas to textboxes
+	        Num += '';
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        x = Num.split('.');
+	        x1 = x[0];
+	        x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1))
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        return x1 + x2;
+	    }
+
 	</script>
 
 @endsection

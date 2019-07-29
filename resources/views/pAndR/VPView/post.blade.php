@@ -65,23 +65,24 @@
 							$(this).val(0);
 						}
 
-						$(this).val(handleNumber($(this).val()));
+						$(this).val(Comma(handleNumber($(this).val())));
+
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
-							var value = parseFloat($("#fa-"+{{$b}}+"-0").val())+parseFloat($("#fa-"+{{$b}}+"-1").val())+parseFloat($("#fa-"+{{$b}}+"-2").val());
+							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-0").val())+handleNumber($("#fa-"+{{$b}}+"-1").val())+handleNumber($("#fa-"+{{$b}}+"-2").val()));
 							$("#fa-"+{{$b}}+"-3").val(value);
 						}else if({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6){
-							var value = parseFloat($("#fa-"+{{$b}}+"-4").val())+parseFloat($("#fa-"+{{$b}}+"-5").val())+parseFloat($("#fa-"+{{$b}}+"-6").val());
+							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-4").val())+handleNumber($("#fa-"+{{$b}}+"-5").val())+handleNumber($("#fa-"+{{$b}}+"-6").val()));
 							$("#fa-"+{{$b}}+"-7").val(value);
 						}else if({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10){
-							var value = parseFloat($("#fa-"+{{$b}}+"-8").val())+parseFloat($("#fa-"+{{$b}}+"-9").val())+parseFloat($("#fa-"+{{$b}}+"-10").val());
+							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-8").val())+handleNumber($("#fa-"+{{$b}}+"-9").val())+handleNumber($("#fa-"+{{$b}}+"-10").val()));
 							$("#fa-"+{{$b}}+"-11").val(value);
 						}else if({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14){
-							var value = parseFloat($("#fa-"+{{$b}}+"-12").val())+parseFloat($("#fa-"+{{$b}}+"-13").val())+parseFloat($("#fa-"+{{$b}}+"-14").val());
+							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-12").val())+handleNumber($("#fa-"+{{$b}}+"-13").val())+handleNumber($("#fa-"+{{$b}}+"-14").val()));
 							$("#fa-"+{{$b}}+"-15").val(value);
 						}
 
-						var valueTotal = parseFloat($("#fa-"+{{$b}}+"-3").val()) + parseFloat($("#fa-"+{{$b}}+"-7").val()) + parseFloat($("#fa-"+{{$b}}+"-11").val()) + parseFloat($("#fa-"+{{$b}}+"-15").val());
+						var valueTotal = Comma(handleNumber($("#fa-"+{{$b}}+"-3").val()) + handleNumber($("#fa-"+{{$b}}+"-7").val()) + handleNumber($("#fa-"+{{$b}}+"-11").val()) + handleNumber($("#fa-"+{{$b}}+"-15").val()));
 
 						$("#total-"+{{$b}}).val(valueTotal);
 					});
@@ -92,13 +93,25 @@
 		function handleNumber(number){
 
 			number = number.replace(",","");
+
+			number = parseFloat(number);
 			
 			return number;
 		}
 
-		function viewNumber(number){
+	  	function Comma(Num) { //function to add commas to textboxes
+	        Num += '';
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        x = Num.split('.');
+	        x1 = x[0];
+	        x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1))
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        return x1 + x2;
+	    }
 
-		}
 	</script>
 
 
