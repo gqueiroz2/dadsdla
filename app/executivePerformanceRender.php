@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class executivePerformanceRender extends renderPerformance
 {
     public function case1($mtx){
+    	$size = 64/sizeof($mtx["quarters"]);
     	echo "<div class='row'>";
 	    	if (sizeof($mtx["salesRep"]) == 1) {
 	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
@@ -40,7 +41,7 @@ class executivePerformanceRender extends renderPerformance
 		    			echo "</td>";
 		    			echo "<td style='width:10%;' class='lightGrey'></td>";
 		    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-		    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+		    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 		    			}
 		    			echo "<td style='width:18%;' class='darkBlue'>Total</td>";
 		    		echo "</tr>";
@@ -80,7 +81,7 @@ class executivePerformanceRender extends renderPerformance
 	    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
 	    			echo "<td style='width:10%;' class='lightGrey'></td>";
 	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-	    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+	    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 	    			}
 	    			echo "<td style='width:18%;' class='darkBlue' >Total</td>";
 	    		echo "</tr>";
@@ -139,7 +140,7 @@ class executivePerformanceRender extends renderPerformance
 				    			echo "</td>";
 				    			echo "<td style='width:10%;' class='lightGrey'></td>";
 				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-				    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+				    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 				    			}
 				    			echo "<td style='width:18%;' class='darkBlue'>Total</td>";
 				    		echo "</tr>";
@@ -178,7 +179,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
 			    			echo "<td style='width:10%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+			    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 			    			}
 			    			echo "<td style='width:18%;' class='darkBlue' >Total</td>";
 			    		echo "</tr>";
@@ -217,6 +218,7 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case2($mtx){
+    	$size = 64/sizeof($mtx["quarters"]);
     	echo "<div class='row' >";
     		if (sizeof($mtx["salesRep"]) == 1) {
 	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
@@ -247,7 +249,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$b][1])."' style='width:5%;'>".$mtx["brand"][$b][1]."</td>";
 			    			echo "<td style='width:10%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:16%'>".$mtx["quarters"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%'>".$mtx["quarters"][$q]."</td>";
 			    			}
 			    			echo "<td style='width:18%' class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -286,7 +288,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
 			    			echo "<td style='width:10%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:16%'>".$mtx["quarters"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%'>".$mtx["quarters"][$q]."</td>";
 			    			}
 			    			echo "<td style='width:18%' class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -338,7 +340,7 @@ class executivePerformanceRender extends renderPerformance
 			    				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$t][1])."' style='width:5%;'>".$mtx["brand"][$t][1]."</td>";
 				    			echo "<td style='width:10%;' class='lightGrey'></td>";
 				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-				    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+				    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 				    			}
 				    			echo "<td style='width:18%;' class='darkBlue'>Total</td>";
 				    		echo "</tr>";
@@ -377,7 +379,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
 			    			echo "<td style='width:10%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
-			    				echo "<td style='width:16%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
+			    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["quarters"][$q]."</td>";
 			    			}
 			    			echo "<td style='width:18%;' class='darkBlue' >Total</td>";
 			    		echo "</tr>";
@@ -416,6 +418,7 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case3($mtx){
+    	$size = 84/sizeof($mtx["month"]);
 
     	echo "<div class='row' >";
 	    	echo "<div class='col' style='width:100%; margin-left:auto; margin-right: auto;'>";
@@ -442,7 +445,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -481,7 +484,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -535,7 +538,7 @@ class executivePerformanceRender extends renderPerformance
 				    			echo "</td>";
 				    			echo "<td style='width:5%;' class='lightGrey'></td>";
 					    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-					    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+					    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 					    			}
 				    			echo "<td class='darkBlue'>Total</td>";
 				    		echo "</tr>";
@@ -574,7 +577,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
+			    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue' >Total</td>";
 			    		echo "</tr>";
@@ -613,6 +616,7 @@ class executivePerformanceRender extends renderPerformance
     }
     
     public function case4($mtx){
+    	$size = 84/sizeof($mtx["month"]);
 
     	echo "<div class='row' >";
 	    	echo "<div class='col'style='width:100%; margin-left:auto; margin-right: auto;'>";
@@ -633,7 +637,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$b][1])."' style='width:5%;'>".$mtx["brand"][$b][1]."</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -672,7 +676,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+			    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue'>Total</td>";
 		    			echo "</tr>";
@@ -723,7 +727,7 @@ class executivePerformanceRender extends renderPerformance
 				    			echo "</td>";
 				    			echo "<td style='width:5%;' class='lightGrey'></td>";
 					    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-					    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
+					    				echo "<td class='quarterClick lightGrey' style='width:".$size."%;'>".$mtx["month"][$q]."</td>";
 					    			}
 				    			echo "<td class='darkBlue'>Total</td>";
 				    		echo "</tr>";
@@ -762,7 +766,7 @@ class executivePerformanceRender extends renderPerformance
 			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
-			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
+			    				echo "<td style='width:".$size."%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
 			    			}
 			    			echo "<td class='darkBlue' >Total</td>";
 			    		echo "</tr>";
