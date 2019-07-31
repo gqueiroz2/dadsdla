@@ -22,16 +22,35 @@ class client extends Management{
         return $clientGroupID[0]['id'];
     }
 
-    public function getClientIDbyClientUnit($con,$sql,$parent){
+    public function getClientIDbyClientUnit($con,$sql,$parent,$region,$regionName){
+        
+
         $table = "client c";
         $columns = "c.ID";
-        $join = "LEFT JOIN client_unit cu ON cu.client_id = c.ID";
-        $where = "WHERE cu.name = \"".addslashes($parent)."\"";
+        $join = "LEFT JOIN client_unit cu ON cu.client_id = c.ID
+                 LEFT JOIN client_group cg ON c.client_group_id = cg.ID
+                 LEFT JOIN region r ON r.ID = cg.region_id
+        ";
+        //$where = "WHERE cu.name = \"".addslashes($parent)."\"";
+
+
+        $where = "WHERE ( cu.name = \"".addslashes($parent)."\" ) AND (r.name = \"".$regionName."\") " ;
         $limit = "LIMIT 1";
         $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
         $from = array("ID");
         $to = array('id');
         $clientGroupID = $sql->fetch($res,$from,$to);
+
+        if(!$clientGroupID){
+            var_dump(" INICIO CLIENT");
+            var_dump($regionName);
+            var_dump($parent);
+            var_dump( $clientGroupID );
+            var_dump("FIM CLIENT");
+            //$res = $sql->larica($con,$columns,$table,$join,$where,1,$limit);
+
+        }
+
         return $clientGroupID[0]['id'];        
     }
 

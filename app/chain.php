@@ -129,6 +129,7 @@ class chain extends excel{
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
+            var_dump($spreadSheet['client']);
             var_dump($spreadSheet['agency']);
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
@@ -158,46 +159,34 @@ class chain extends excel{
     }
 
     public function handleForLastTable($con,$table,$current,$columns){
-    	for ($c=0; $c < sizeof($current); $c++) { 
+    	for ($c=0; $c < sizeof($current); $c++) {             
+
             if($table == "cmaps"){
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,"Brazil",$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,"Brazil",$current[$c]['client']);
             }else{                
-                $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['agency']);
-                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['campaign_sales_office_id'],$current[$c]['client']);                
+                $rr = new region();
+                $regionName = $rr->getRegion($con,array($current[$c]['sales_representant_office_id']))[0]['name'];
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['sales_representant_office_id'],$regionName,$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['sales_representant_office_id'],$regionName,$current[$c]['client']);                
             }
         }
-              
-        /*
-    	 	POR ENQUANTO A FUNÇÃO PEGA O ID DA REGIAO E COLOCA NA AGENCIA E NO CLIENTE
-    	 	DEPOIS FAZER A FUNÇÃO PEGAR OS ID'S DOS CLIENTES E AGENCIAS 
-    	
 
-            var_dump($table);
-
-        if($table == 'cmaps'){
-        	for ($c=0; $c < sizeof($current); $c++) { 
-                $current[$c]['agency_id'] = 1;
-                $current[$c]['client_id'] = 1;
-            }
-        }else{
-                      
-        }*/
 		return $current;
     }
 
-    public function seekAgencyID($con,$region,$agency){
+    public function seekAgencyID($con,$region,$regionName,$agency){
         $ag = new agency();
         $sql = new sql();
 
-        $agencyID = $ag->getAgencyIDbyAgencyUnit($con,$sql,$agency);
+        $agencyID = $ag->getAgencyIDbyAgencyUnit($con,$sql,$agency,$region,$regionName);
         return($agencyID);
     }
 
-    public function seekClientID($con,$region,$client){
+    public function seekClientID($con,$region,$regionName,$client){
         $cli = new client();
         $sql = new sql();
-        $clientID = $cli->getClientIDbyClientUnit($con,$sql,$client);
+        $clientID = $cli->getClientIDbyClientUnit($con,$sql,$client,$region,$regionName);
         return($clientID);
     }
 

@@ -23,9 +23,10 @@ class results extends base{
         $div = $base->generateDiv($con,$pRate,$region,array($cYear),$currency);
 
         if ($table == "digital") {
-            $sum = $value."_revenue";
-        }
-        elseif($table == "cmaps"){
+            
+            $sum = "revenue";
+            $div = 1.0;
+        }elseif($table == "cmaps"){
             if($year == $cYear){
                 $sum = $value;
             }else{
@@ -34,9 +35,7 @@ class results extends base{
         }elseif($table == "plan_by_brand"){
             $sum = "revenue";
             $div = 1.0;
-        }/*elseif($table == 'mini_header'){
-            $sum = 'campaign_option_spend';
-        }*/elseif($table = 'ytd'){
+        }elseif($table = 'ytd'){
             $sum = $value."_revenue_prate";
         }else{
             $sum = $value."_value_prate";
@@ -48,19 +47,15 @@ class results extends base{
 
         for ($m=0; $m < sizeof($month); $m++) { 
             for ($b=0; $b < sizeof($brand); $b++) { 
-                /*if($table == 'mini_header'){
-                    if( ($year != $cYear) || ($m < $currentMonth) ){
-                        $sum = $value."_revenue";
-                        $cTable = 'ytd';
-                    }else{
-                        $sum = 'campaign_option_spend';
-                        $cTable = 'mini_header';
-                    }
-                    $res[$m][$b] = $sql->selectSum($con,$sum,$as,$cTable,$join,$where[$m][$b]);
-                }else{*/
-                    $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
-                //}
                 
+                if($table == "digital"){
+                    var_dump($where[$m][$b]);
+                }
+
+
+                $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
+
+
 
                 $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
                 
@@ -111,7 +106,8 @@ class results extends base{
                 if (!$source) {
                     /*if ($brands[$b][1] == 'FN' && $region == 1) {
                         $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                    }else*/if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
+                    }else*/
+                    if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                         if ($form == "mini_header") {
                             if (($year == $cYear) && ($months[$m][1] < $cMonth)) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
@@ -141,7 +137,7 @@ class results extends base{
 
     public function defineValues($con, $table, $currency, $brand, $month, $year, $region, $value, $keyYear, $source=false){
 
-        if ($table != "plan_by_brand") {
+        if ($table != "plan_by_brand" && $table != "digital") {
             $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
@@ -184,11 +180,25 @@ class results extends base{
                 break;
 
             case 'digital':
+                if($currency[0]['name'] == 'USD'){
+                    $seek = 4;
+                }else{
+                    $seek = $region;
+                }
+
+                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
+                $columnsValue = array($region, "ACTUAL", $value, $brand, $year, $month, $seek);
+                $value = "revenue";
+                break;
+/*
+    
+    DIGITAL ESTA VINDO DO ACTUAL DO PLAN BY BRAND
+
                 $columns = array("sales_representant_office_id", "brand_id", "year", "month");
                 $columnsValue = array($region, $brand, $year, $month);
                 $value .= "_revenue";
                 break;
-
+*/
             case 'plan_by_brand':
 
                 if($currency[0]['name'] == 'USD'){
@@ -215,6 +225,10 @@ class results extends base{
             $as = "sum";
 
             $where = $sql->where($columns, $columnsValue);
+
+            if($table == "digital"){
+                $table = "plan_by_brand";
+            }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             

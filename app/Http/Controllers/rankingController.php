@@ -29,8 +29,6 @@ class rankingController extends Controller {
 
         $subR = new subRankings();
 
-        //var_dump($type);
-
         $x = $subR->myMiddleware($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
 
         echo $x;
@@ -125,7 +123,7 @@ class rankingController extends Controller {
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
-        //var_dump($values);
+
         $filterValues = $r->filterValues($values, $type2, $type);
         
         $matrix = $r->assembler($values, $type2, $years, $type, $filterValues);
@@ -141,8 +139,6 @@ class rankingController extends Controller {
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
-        //var_dump($values);
-        //var_dump("mtx",$values);
 
         $subR = new subRankings();
         return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region'));

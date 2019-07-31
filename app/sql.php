@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class sql extends Model{
     
+    public function larica($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){     
+        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";
+        echo "<pre>".$sql."</pre><br>";
+        $res = $con->query($sql);
+        return $res;
+    }
+
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
         $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";
         //echo "<pre>".$sql."</pre><br>";
@@ -16,6 +23,13 @@ class sql extends Model{
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
         //echo "<pre>".$sql."</pre><br>";
+        $res = $con->query($sql);
+        return $res;
+    }
+
+    public function selectSum2($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
+        $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
+        echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
     }
