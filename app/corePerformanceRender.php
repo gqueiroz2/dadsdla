@@ -7,22 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class corePerformanceRender extends renderPerformance
 {
     public function case1($mtx){
-    	echo "<div class='row'  >";
-	    	echo "<div class='col' style='width:100%;'>";
-	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
-	    		echo "</center>";
-	    	echo "</div>";
+    	echo "<div class='row'>";
+	    	if (sizeof($mtx["salesGroup"]) == 1) {
+	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
+    		}else{
+	    		echo "<div class='col-sm' style='width:100%; margin-left:auto; margin-right: auto;'>";
+    		}
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+    		echo "</div>";
     	echo "</div>";
 	    for ($sg=0; $sg < sizeof($mtx["case1"]["value"]); $sg++) {
 	    	if ($sg%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
 	    	if (sizeof($mtx["salesGroup"]) == 1) {
-	    		echo "<center style='width:100%;'>";
-		    	echo "<div class='col-sm-8' style='width:100%;'>";
+		    	echo "<div class='col-sm-8' style='width:100%;  margin-left:auto; margin-right: auto;'>";
 	    	}else{
-		    	echo "<div class='col-sm' style='width:100%;'>";
+		    	echo "<div class='col-sm-6' style='width:100%; margin-left:auto; margin-right: auto;'>";
 	    	}
 	    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >".$mtx["salesGroup"][$sg]["name"]."</th></table>";
 	    	for ($t=0; $t < sizeof($mtx["case1"]["value"][$sg]); $t++) { 
@@ -111,12 +112,10 @@ class corePerformanceRender extends renderPerformance
 	    		echo "</tr>";
 		   	echo "</table>";
 
-	    	if (sizeof($mtx["salesGroup"]) == 1) {
-	    		echo "</center>";
-	    	}
+	    	
 	    	echo "</div>";
 
-	    	if ($sg%2 == 1) {
+	    	if ($sg%2 == 1 || sizeof($mtx["salesGroup"]) == 1) {
 	    		echo "</div>";
 	    	}
 	    }
@@ -218,11 +217,13 @@ class corePerformanceRender extends renderPerformance
     }
     
     public function case2($mtx){
-    	echo "<div class='row' >";
-	    	echo "<div class='col' style='width:100%;'>";
-	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
-	    		echo "</center>";
+    	echo "<div class='row'>";
+	    	if (sizeof($mtx["salesGroup"]) == 1) {
+	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
+    		}else{
+	    		echo "<div class='col-sm' style='width:100%; margin-left:auto; margin-right: auto;'>";
+    		}
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    	echo "</div>";
     	echo "</div>";
     	for ($sg=0; $sg < sizeof($mtx["salesGroup"]); $sg++) {
@@ -230,8 +231,7 @@ class corePerformanceRender extends renderPerformance
 	    		echo "<div class='row'>";
 	    	}
 	    	if (sizeof($mtx["salesGroup"]) == 1) {
-	    		echo "<center style='width:100%;'>";
-		    	echo "<div class='col-sm-8'>";
+		    	echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
 	    	}else{
 		    	echo "<div class='col-sm'>";
 	    	}
@@ -317,13 +317,9 @@ class corePerformanceRender extends renderPerformance
 		    			echo "</tr>";
 		    		
 		    	echo "</table>";
-	    		
-	    		if (sizeof($mtx["salesGroup"]) == 1) {
-	    			echo "</center>";
-	    		}
 	    	
 	    	echo "</div>";
-	    	if ($sg%2 == 1) {
+	    	if ($sg%2 == 1 ||sizeof($mtx["salesGroup"]) == 1) {
 	    		echo "</div>";
 	    	}
     	}
@@ -331,7 +327,7 @@ class corePerformanceRender extends renderPerformance
  	    	if(sizeof($mtx["case2"]["value"])%2 == 0){
 		    	echo "<div class='row'>";
 	    	}
-	    		echo "<div class='col'>";
+	    		echo "<div class='col-sm-6'>";
 	    			echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >Total</th></table>";
     				for ($t=0; $t < sizeof($mtx["brand"]); $t++) { 
 			    		echo "<table style='width: 100%;' class='mt-3'>";
@@ -419,23 +415,22 @@ class corePerformanceRender extends renderPerformance
     
     public function case3($mtx){
     	echo "<div class='row' >";
-	    	echo "<div class='col' style='width:100%;'>";
-	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
-	    		echo "</center>";
+    		echo "<div class='col-sm' style='width:100%;  margin-left:auto; margin-right: auto;'>";
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		
 	    	echo "</div>";
     	echo "</div>";
     	for ($sg=0; $sg < sizeof($mtx["salesGroup"]); $sg++) {
 	    	echo "<div class='row'>";
 	    	
-	    	echo "<div class='col'>";
+	    	echo "<div class='col-sm' style='margin-left: auto; margin-right: auto; width:100%;'>";
 
 		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;' >".$mtx["salesGroup"][$sg]["name"]."</th></table>";
 
 		    	for ($b=0; $b <sizeof($mtx["tier"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";
 			    		echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$b])."' style='width:5%;'>";
+			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$b])."' style='width:3%;'>";
 			    			if ($mtx["tier"][$b] == "TOTH") {
 			    				echo "OTH";
 			    			}else{
@@ -480,7 +475,7 @@ class corePerformanceRender extends renderPerformance
 		    	}
 			    echo "<table style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:3%;'>TT</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
@@ -528,7 +523,7 @@ class corePerformanceRender extends renderPerformance
     				for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
 			    		echo "<table style='width: 100%;' class='mt-3'>";
 		    				echo "<tr>";
-				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:5%;'>";
+				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["tier"][$t])."' style='width:3%;'>";
 				    			if ($mtx["tier"][$t] == "TOTH") {
 				    				echo "OTH";
 				    			}else{
@@ -573,7 +568,7 @@ class corePerformanceRender extends renderPerformance
 	   				}
 	    			echo "<table style='width: 100%;' class='mt-3'>";
 			   			echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>TT</td>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:3%;'>TT</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";
@@ -617,10 +612,8 @@ class corePerformanceRender extends renderPerformance
     
     public function case4($mtx){
     	echo "<div class='row' >";
-	    	echo "<div class='col' style='width:100%;'>";
-	    		echo "<center>";
-	    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
-	    		echo "</center>";
+	    	echo "<div class='col-sm' style='width:100%; margin-left: auto; margin-right: auto;'>";
+	    		echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Executive ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
 	    	echo "</div>";
     	echo "</div>";
 	    for ($sg=0; $sg < sizeof($mtx["salesGroup"]); $sg++) {
@@ -633,7 +626,7 @@ class corePerformanceRender extends renderPerformance
 		    	for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
 			    	echo "<table style='width: 100%;' class='mt-3'>";
 			    		echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$b][1])."' style='width:5%;'>".$mtx["brand"][$b][1]."</td>";
+			    			echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$b][1])."' style='width:3%;'>".$mtx["brand"][$b][1]."</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
@@ -672,7 +665,7 @@ class corePerformanceRender extends renderPerformance
 		    	}
 			    echo "<table style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:3%;'>DN</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='quarterClick lightGrey' style='width:7%;'>".$mtx["month"][$q]."</td>";
@@ -721,7 +714,7 @@ class corePerformanceRender extends renderPerformance
     				for ($t=0; $t < sizeof($mtx["brand"]); $t++) { 
 			    		echo "<table style='width: 100%;' class='mt-3'>";
 		    				echo "<tr>";
-				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$t][1])."' style='width:5%;'>";
+				   				echo "<td rowspan='5' class='tierClick ".strtolower($mtx["brand"][$t][1])."' style='width:3%;'>";
 				    				echo $mtx["brand"][$t][1];
 				    			echo "</td>";
 				    			echo "<td style='width:5%;' class='lightGrey'></td>";
@@ -762,7 +755,7 @@ class corePerformanceRender extends renderPerformance
 	   				}
 	    			echo "<table style='width: 100%;' class='mt-3'>";
 			   			echo "<tr>";
-			    			echo "<td rowspan='5' class='tierClick dn' style='width:5%;'>DN</td>";
+			    			echo "<td rowspan='5' class='tierClick dn' style='width:3%;'>DN</td>";
 			    			echo "<td style='width:5%;' class='lightGrey'></td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td style='width:7%;' class='quarterClick lightGrey' >".$mtx["month"][$q]."</td>";

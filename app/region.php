@@ -40,14 +40,38 @@ class  region extends Management{
         $region = $sql->fetch($res,$from,$from);
 
         return $region;
-    }    
+    }
+
+    public function getRegionByName ($con, $region){
+        $sql = new sql();
+
+        $table = "region r";
+        $columns = "r.ID AS id,
+                r.name AS name,
+                r.role AS role";
+
+        $where = "";
+
+        if ($region) {
+            $where .= "WHERE r.name = '$region'";
+        }
+
+        $res = $sql->select($con,$columns,$table,false,$where);
+
+        $from = array('id','name','role');
+
+        $region = $sql->fetch($res,$from,$from)[0];
+
+        return $region;
+    }
 
     public function getRegion ($con, $ID = false){
         $sql = new sql();
 
         $table = "region r";
         $columns = "r.ID AS id,
-                r.name AS name";
+                r.name AS name,
+                r.role AS role";
 
         $where = "";
     	if ($ID) {
@@ -57,7 +81,7 @@ class  region extends Management{
 
         $res = $sql->select($con,$columns,$table, null, $where);
 
-        $from = array('id','name');
+        $from = array('id','name',"role");
 
         $region = $sql->fetch($res,$from,$from);
 

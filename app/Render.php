@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\dataBase;
 use App\region;
+use App\base;
 
 class Render extends Model{
     
@@ -38,32 +39,87 @@ class Render extends Model{
 
     public function region($region){
 
+        $temp = array();
+
+        for ($r=0; $r <sizeof($region) ; $r++) { 
+            if ($region[$r]['role'] != "None") {
+                array_push($temp, $region[$r]['role']);
+            }
+        }
+
+        $temp = array_unique($temp);
+
+        $temp = array_values($temp);
+
+        $tempId = array(array());
+        $tempName = array(array());
+
+
+        for ($t=0; $t <sizeof($temp); $t++) {
+            $tempId[$t] = array();
+            $tempName[$t] = array();
+            for ($r=0; $r <sizeof($region) ; $r++) { 
+                if ($temp[$t] == $region[$r]['role']) {
+                    array_push($tempId[$t], $region[$r]["id"]);
+                    array_push($tempName[$t], $region[$r]["name"]);
+                }
+            }
+        }
+
     	echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
-            for ($i = 0; $i < sizeof($region); $i++) { 
-    			if($region[$i]['name'] != "LATAM" ){
-                    echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
-                }
-    		}
+            for ($t=0; $t <sizeof($temp) ; $t++) { 
+                echo "<optgroup label='".$temp[$t]."'>";
+                    for ($r=0; $r <sizeof($tempId[$t]) ; $r++) {
+                        echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
+                    }
+                echo "</optgroup>";
+            }
 
 	   echo "</select>";
     }
 
     public function regionFiltered($region,$regionFiltered){
 
-        echo "<select  id='region' name='region' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select </option>";
+        $b = new base();
 
-            if ($regionFiltered == '2') {
-                echo "<option value='2'>Argentina</option>";      
-                echo "<option value='6'>Chile</option>";      
-                echo "<option value='7'>Peru</option>";      
-            }else{
-                for ($i = 0; $i < sizeof($region); $i++) { 
-                    if ( $region[$i]['id'] == $regionFiltered && ($region[$i]['name'] != "LATAM" )) {
-                        echo "<option value='".$region[$i]['id']."'>".$region[$i]['name']."</option>";
-                    }
+        $regions = $b->filteredRegion($regionFiltered);
+
+        $temp = array();
+
+        for ($r=0; $r <sizeof($regions) ; $r++) { 
+            if ($regions[$r]['role'] != "None") {
+                array_push($temp, $regions[$r]['role']);
+            }
+        }
+
+        $temp = array_unique($temp);
+
+        $temp = array_values($temp);
+
+        $tempId = array(array());
+        $tempName = array(array());
+
+
+        for ($t=0; $t <sizeof($temp); $t++) {
+            $tempId[$t] = array();
+            $tempName[$t] = array();
+            for ($r=0; $r <sizeof($regions) ; $r++) { 
+                if ($temp[$t] == $regions[$r]['role']) {
+                    array_push($tempId[$t], $regions[$r]["id"]);
+                    array_push($tempName[$t], $regions[$r]["name"]);
                 }
+            }
+        }
+
+        echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select </option>";
+            for ($t=0; $t <sizeof($temp) ; $t++) { 
+                echo "<optgroup label='".$temp[$t]."'>";
+                    for ($r=0; $r <sizeof($tempId[$t]) ; $r++) {
+                        echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
+                    }
+                echo "</optgroup>";
             }
 
        echo "</select>";

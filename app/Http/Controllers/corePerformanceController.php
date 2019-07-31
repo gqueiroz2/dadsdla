@@ -61,6 +61,7 @@ class corePerformanceController extends Controller{
                     'month' => 'required',
                 ]);
 
+
                 if ($validator->fails()) {
                     return back()->withErrors($validator)->withInput();
                 }

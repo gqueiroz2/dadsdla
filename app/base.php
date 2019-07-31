@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\dataBase;
+use App\region;
 
 class base extends Model{
 
+
+    public $NameName = array("Brazil"=>array("Brazil"), "Argentina"=>array("Argentina","Chile","Peru"),"Colombia"=>array("Colombia"), "Miami"=>array("Miami"), "Mexico"=>array("Mexico"), "Chile"=>array("Chile"), "Peru"=>array("Peru"), "LATAM"=>array("LATAM"),  "Venezuela"=>array("Venezuela"),  "Panama"=>array("Panama"),  "New York International"=>array("New York International"),  "Dominican Republic"=>array("Dominican Republic"),  "Ecuador"=>array("Ecuador"),  "Bolivia"=>array("Bolivia"),  "Us Hispanic"=>array("Us Hispanic"),  "Puerto Rico"=>array("Puerto Rico"),  "Europe"=>array("Europe"),  "Gurugram"=>array("Gurugram"),  "Singapore"=>array("Singapore"));
 
     public $region = array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","New York International","Dominican Republic","Ecuador","Bolivia","Puerto Rico");
 
@@ -37,6 +40,27 @@ class base extends Model{
         }
 
         return $newForm;
+    }
+
+    public function filteredRegion($regionId){
+        $r = new region();
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $regionId = array($regionId);
+
+        $region = $r->getRegion($con,$regionId)[0]["name"];
+
+        $array = $this->NameName[$region];
+
+        $return = array();
+
+        for ($a=0; $a <sizeof($array) ; $a++) { 
+            $return[$a] = $r->getRegionByName($con,$array[$a]);
+        }
+        
+        return $return;
     }
 
     public function TruncateTableName($table){
