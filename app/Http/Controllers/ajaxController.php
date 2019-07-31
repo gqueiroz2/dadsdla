@@ -17,8 +17,42 @@ use App\subRankings;
 
 class ajaxController extends Controller{
 
+    public function baseFilterTitle(){
+        $type = ucfirst( Request::get('type') );
+        echo $type;
+    }
+
+    public function secondaryFilter(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get('type');
+        $regionID = Request::get('region');
+
+        switch ($type) {
+
+            case 'client':
+                $clss  = new client();
+                $base = $clss->getClient($con);
+                //$tralala = "agency";
+                break;
+            
+            default:
+                $clss = new agency();
+                if($type == "agency"){
+                    $base = $clss->getAgencyByRegion($con,array($regionID));
+                    //$tralala = "agencyGroup";
+                }else{
+                    $base = $clss->getAgencyGroupByRegion($con,array($regionID));
+                    //$tralala = "region";
+
+                }
+                break;
+        }
+
+    }
+
     public function baseFilter(){
-        var_dump(Request::all());
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
@@ -28,25 +62,27 @@ class ajaxController extends Controller{
 
             case 'client':
                 $clss  = new client();
-
                 $base = $clss->getClient($con);
+                $tralala = "agency";
                 break;
-            
             default:
                 $clss = new agency();
-
                 if($type == "agency"){
                     $base = $clss->getAgencyByRegion($con,array($regionID));
+                    $tralala = "agencyGroup";
                 }else{
                     $base = $clss->getAgencyGroupByRegion($con,array($regionID));
+                    $tralala = "region";
                 }
-
                 break;
-            
         }
 
-        var_dump($type);
-        var_dump($base);
+        echo "<option> Select </option>";
+        for ($b=0; $b < sizeof($base); $b++) { 
+            echo "<option value=\"". base64_encode(json_encode($base[$b]))."\">"
+                .$base[$b][$type]." - ".$base[$b][$tralala].
+                "</option>";
+        }
     }
 
     public function clientGroupByClient(){

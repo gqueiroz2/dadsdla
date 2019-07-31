@@ -17,46 +17,6 @@ $(document).ready(function(){
     	});
 
       $.ajax({
-        url:"/ajaxRanking/firstPosYear",
-        method:"POST",
-        data:{regionID},
-        success: function(output){
-          $('#firstPos').html(output);
-          var first = $('#firstPos').val();
-
-          $.ajax({
-            url:"/ajaxRanking/secondPosYear",
-            method:"POST",
-            data:{first},
-            success: function(output){
-
-              $('#secondPos').html(output);
-
-              var second = $('#secondPos').val();
-              
-              $.ajax({
-                url:"/ajaxRanking/thirdPosYear",
-                method:"POST",
-                data:{second},
-                success: function(output){
-                  $('#thirdPos').html(output);
-                },
-                error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
-                }
-              });
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-              alert(xhr.status+" "+thrownError);
-            }
-          });
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });
-
-      $.ajax({
         url:"/ajax/adsales/currencyByRegion",
         method:"POST",
         data:{regionID},
@@ -72,64 +32,58 @@ $(document).ready(function(){
         var type = $(this).val();
 
         if (type != "") {
+          
           var region = $("#region").val();
+          
           $.ajax({
             url:"/ajax/dashboards/Overview-BaseFilter",
             method:"POST",
             data:{type,region},
             success: function(output){
-              $('#vlau').html(output);
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-                alert(xhr.status+" "+thrownError);
-            }
-          });
-          /*
-          $.ajax({
-            url:"/ajaxRanking/typeNameByType",
-            method:"POST",
-            data:{type},
-            success: function(output){
-              $('#typeName').removeAttr("style").html(output+":");
+              $('#baseFilter').html(output);
             },
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
             }
           });
 
-          var region = $('#region').val();
-
-          $.ajax({
-            url:"/ajaxRanking/type2ByType",
-            method:"POST",
-            data:{type, region},
-            success: function(output){
-              $('#type2').html(output).selectpicker('refresh');
-
-              var type2 = $('#type2').val();
-
+          $('#baseFilter').change(function(){
+            var baseFilter = $(this).val();
+            alert(baseFilter);
+            if(baseFilter != ""){
               $.ajax({
-                url:"/ajaxRanking/topsByType2",
+                url:"/ajax/dashboards/Overview-SecondaryFilter",
                 method:"POST",
-                data:{type2},
+                data:{type,region},
                 success: function(output){
-                  $('#nPos').html(output);
+                  $('#vlau').html(output);
                 },
                 error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
+                    alert(xhr.status+" "+thrownError);
                 }
               });
+            }
+          }
+          
+
+          $.ajax({
+            url:"/ajax/dashboards/Overview-BaseFilterTitle",
+            method:"POST",
+            data:{type,region},
+            success: function(output){
+              $('#labelBaseFilter').html(output).css("color", "black");
             },
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
             }
-          });
-          */
+          });         
         }else{
-          var option = "<option> Select Type </option>";    
-          $('#typeName').html("Select the previous field:").css("color", "red");
-          $('#type2').empty().selectpicker('refresh');
-          $('#nPos').empty().append(option);
+          $('#baseFilter').empty();
+          $('#baseFilter').html("<option> Select Type </option>");
+          $('#labelBaseFilter').html("Select Type").css("color", "red");
+          $('#secondaryFilter').empty();
+          $('#secondaryFilter').html("<option> Select Type </option>");
+          $('#labelSecondaryFilter').html("Select Type").css("color", "red");
         }
       });
 		}else{
@@ -147,3 +101,7 @@ $(document).ready(function(){
 
 	});
 });
+
+
+
+//$('#typeName').removeAttr("style").html(output+":");

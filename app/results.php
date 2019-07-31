@@ -48,8 +48,8 @@ class results extends base{
         for ($m=0; $m < sizeof($month); $m++) { 
             for ($b=0; $b < sizeof($brand); $b++) { 
                 
-                if($table == "digital"){
-                    var_dump($where[$m][$b]);
+                if($table == "plan_by_brand"){
+                    //var_dump($where[$m][$b]);
                 }
 
 

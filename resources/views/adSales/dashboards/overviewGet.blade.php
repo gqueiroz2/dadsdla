@@ -32,7 +32,7 @@
 							@endif
 						</div>						
 						<div class="col">
-							<label class="labelLeft bold" id="labelBaseFilter"> <span style="color: red;"> Select Type </span> </label>
+							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>
 							@if($errors->has('baseFilter'))
 								<label style="color: red;">* Required</label>
 							@endif
