@@ -15,17 +15,17 @@ class dashboardsController extends Controller{
    
    	public function overviewGet(){
    		$db = new dataBase();
-        $con = $db->openConnection("DLA");
+      $con = $db->openConnection("DLA");
 
-        $region = new region();
-        $salesRegion = $region->getRegion($con);
+      $region = new region();
+      $salesRegion = $region->getRegion($con);
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con);
+      $currency = new pRate();
+      $currencies = $currency->getCurrency($con);
 
-        $b = new brand();
-        $brands = $b->getBrand($con);
-        $render = new renderDashboards();
+      $b = new brand();
+      $brands = $b->getBrand($con);
+      $render = new renderDashboards();
         
    		return view("adSales.dashboards.overviewGet", compact('salesRegion', 'currencies', 'brands', 'render'));
    	}
@@ -33,5 +33,24 @@ class dashboardsController extends Controller{
    	public function overviewPost(){
    		return view("adSales.dashboards.overviewPost");
    	}
+
+    public function brandGet(){
+      
+      $db = new dataBase();
+      $con = $db->openConnection("DLA");
+
+      $region = new region();
+      $salesRegion = $region->getRegion($con);
+
+      $currency = new pRate();
+      $currencies = $currency->getCurrency($con);
+
+      $b = new brand();
+      $brands = $b->getBrand($con);
+
+      $render = new renderDashboards();
+
+      return view("adSales.dashboards.brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
+    }
 
 }

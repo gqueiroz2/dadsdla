@@ -141,7 +141,6 @@ class rankingController extends Controller {
         $names = $r->createNames($type, $months, $years);
 
         $render = new renderRanking();
-        //var_dump($values);
         //var_dump("mtx",$values);
 
         $subR = new subRankings();

@@ -30,7 +30,7 @@
 							@else
 								{{$render->type()}}
 							@endif
-						</div>						
+						</div>
 						<div class="col">
 							<label class="labelLeft bold" id="labelBaseFilter"> <span style="color: red;"> Select Type </span> </label>
 							@if($errors->has('baseFilter'))
@@ -44,8 +44,7 @@
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->secondaryFilter()}}
-							
-						</div>						
+						</div>	
 						<div class="col">
 							<label class="labelLeft bold"> Currency: </label>
 							@if($errors->has('currency'))
