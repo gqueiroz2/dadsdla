@@ -5,9 +5,34 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\dataBase;
 use App\region;
+use App\sql;
 
 class base extends Model{
 
+    public function verifyOnBase($con,$what,$arr){       
+        $sql = new sql();
+        if($what == "client"){
+           $something = "client_id";
+        }else{
+           $something = "agency_id";
+        }
+        for ($a=0; $a < sizeof($arr); $a++) {
+            $select[$a] = "SELECT SUM(gross_revenue_prate) AS mySum 
+                                FROM ytd 
+                                WHERE($something = \"".$arr[$a]."\")";
+            $res[$a] = $con->query($select[$a]);
+            $from = array("mySum");
+            $value[$a] = $sql->fetch($res[$a],$from,$from);
+            if( !is_null($value[$a][0]['mySum']) && $value[$a][0]['mySum'] > 0 ){
+                $verified[$a] = true;
+            }else{
+                $verified[$a] = false;
+            }
+        }
+        
+        return $verified;        
+
+    }
 
     public $NameName = array("Brazil"=>array("Brazil"), "Argentina"=>array("Argentina","Chile","Peru"),"Colombia"=>array("Colombia"), "Miami"=>array("Miami"), "Mexico"=>array("Mexico"), "Chile"=>array("Chile"), "Peru"=>array("Peru"), "LATAM"=>array("LATAM"),  "Venezuela"=>array("Venezuela"),  "Panama"=>array("Panama"),  "New York International"=>array("New York International"),  "Dominican Republic"=>array("Dominican Republic"),  "Ecuador"=>array("Ecuador"),  "Bolivia"=>array("Bolivia"),  "Us Hispanic"=>array("Us Hispanic"),  "Puerto Rico"=>array("Puerto Rico"),  "Europe"=>array("Europe"),  "Gurugram"=>array("Gurugram"),  "Singapore"=>array("Singapore"));
 

@@ -1,9 +1,19 @@
 $(document).ready(function(){
-	$('#region').change(function(){
+	
+  const capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }
+
+  $('#region').change(function(){
 		var regionID = $(this).val();
 
     ajaxSetup();
 		if (regionID != "") {
+      $('#baseFilter').html("<option> Select Type </option>").selectpicker('refresh');
+      $('#labelBaseFilter').html("Select Type").css("color", "red");
+      $('#labelSecondaryFilter').html("Select Type").css("color", "red");
+
       $.ajax({
   			url:"/ajaxRanking/typeByRegion",
   			method:"POST",
@@ -15,6 +25,8 @@ $(document).ready(function(){
       		alert(xhr.status+" "+thrownError);
     		}
     	});
+
+      $('#secondaryFilter').html("<option selected='true'> Select Type </option>").selectpicker('refresh');
 
       $.ajax({
         url:"/ajax/adsales/currencyByRegion",
@@ -28,8 +40,11 @@ $(document).ready(function(){
         }   
       });
 
-      $('#type').change(function(){
+      $('#type').change(function(){       
+
         var type = $(this).val();
+
+        $('#secondaryFilter').html("<option selected='true'> Select "+capitalize(type)+" </option>").selectpicker('refresh');
 
         if (type != "") {
           
@@ -40,7 +55,7 @@ $(document).ready(function(){
             method:"POST",
             data:{type,region},
             success: function(output){
-              $('#baseFilter').html(output);
+              $('#baseFilter').html(output).selectpicker('refresh');
             },
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
@@ -49,22 +64,23 @@ $(document).ready(function(){
 
           $('#baseFilter').change(function(){
             var baseFilter = $(this).val();
-            alert(baseFilter);
             if(baseFilter != ""){
               $.ajax({
                 url:"/ajax/dashboards/Overview-SecondaryFilter",
                 method:"POST",
-                data:{type,region},
+                data:{baseFilter,type,region},
                 success: function(output){
-                  $('#vlau').html(output);
+                  $('#secondaryFilter').html(output).selectpicker('refresh');
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                     alert(xhr.status+" "+thrownError);
                 }
               });
+            }else{
+              $('#secondaryFilter').empty().selectpicker('refresh');
+              $('#secondaryFilter').html("<option selected='true'> Select "+capitalize(type)+" </option>").selectpicker('refresh');  
             }
-          }
-          
+          });          
 
           $.ajax({
             url:"/ajax/dashboards/Overview-BaseFilterTitle",
@@ -76,27 +92,47 @@ $(document).ready(function(){
             error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
             }
-          });         
+          });
+
+          $.ajax({
+            url:"/ajax/dashboards/Overview-SecondaryFilterTitle",
+            method:"POST",
+            data:{type,region},
+            success: function(output){
+              $('#labelSecondaryFilter').html(output).css("color", "black");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });  
+
         }else{
-          $('#baseFilter').empty();
-          $('#baseFilter').html("<option> Select Type </option>");
+          $('#baseFilter').empty().selectpicker('refresh');
+          $('#baseFilter').html("<option> Select Type </option>").selectpicker('refresh');
+          
           $('#labelBaseFilter').html("Select Type").css("color", "red");
-          $('#secondaryFilter').empty();
-          $('#secondaryFilter').html("<option> Select Type </option>");
+          
+          $('#secondaryFilter').empty().selectpicker('refresh');
+          $('#secondaryFilter').html("<option selected='true'> Select Type </option>").selectpicker('refresh');
+          
           $('#labelSecondaryFilter').html("Select Type").css("color", "red");
         }
       });
 		}else{
       var option = "<option> Select Region </option>";
-      var option2 = "<option> Select Type </option>";
       $('#type').empty().append(option);
-      $('#typeName').html("Select the previous field:").css("color", "red");
-      $('#type2').empty().selectpicker('refresh');
-      $('#nPos').empty().append(option2);
-      $('#firstPos').empty().append(option);
-      $('#secondPos').empty().append(option);
-      $('#thirdPos').empty().append(option);
       $('#currency').empty().append(option);
+
+      $('#baseFilter').empty().selectpicker('refresh');
+      $('#baseFilter').html("<option> Select Region </option>").selectpicker('refresh');
+      
+      $('#labelBaseFilter').html("Select Region").css("color", "red");
+      
+      $('#secondaryFilter').empty().selectpicker('refresh');
+      $('#secondaryFilter').html("<option selected='true'> Select Region </option>").selectpicker('refresh');
+      
+      $('#labelSecondaryFilter').html("Select Region").css("color", "red");
+
     }
 
 	});

@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('rankingPost') }}" runat="server" onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('overviewPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col">
@@ -71,6 +71,7 @@
 	</div>
 
 	<div id="vlau"></div>
+	<div id="vlau1"></div>
 
 @endsection
 

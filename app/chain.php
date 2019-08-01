@@ -129,8 +129,9 @@ class chain extends excel{
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
-            var_dump($spreadSheet['client']);
-            var_dump($spreadSheet['agency']);
+            //var_dump($spreadSheet['client']);
+            //var_dump($spreadSheet['agency']);
+            //var_dump($spreadSheet);
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
