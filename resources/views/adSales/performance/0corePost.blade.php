@@ -103,34 +103,31 @@
 			</div>
 		</div>
 		<div class="row mt-2">
-			<div class="col">
-				<div class="container-fluid">
-					<div class="form-group">
-						<div class="form-inline">
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col" id="type1" style=" width: 100%; margin-top: 5%; display: block;">
-									{{$render->case1($mtx)}}
-								</div>
-							</div>
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col" id="type2" style=" width: 100%; margin-top: 5%; display: none;">
-									{{$render->case2($mtx)}}
-
-								</div>
-							</div>
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col" id="type3" style=" width: 100%; margin-top: 5%; display: none;">
-									{{$render->case3($mtx)}}
-								</div>
-							</div>
-							<div class="row" style="margin-right: 0.5%; margin-left: 0.5%; width: 100%;">
-								<div class="col" id="type4" style=" width: 100%; margin-top: 5%; display: none;">
-									{{$render->case4($mtx)}}
-								</div>
+			<div class="col" style='width:100%;' >
+				<div class="form-group" style='width:100%;'>
+					<div class="form-inline" style='width:100%; margin-left: 1.2%; margin-right: auto;'>
+						<div class="row" style="width: 100%;">
+							<div class="col-sm" id="type1" style=" width: 100%; margin-top: 2%; display: block;">
+								{{$render->case1($mtx)}}
 							</div>
 						</div>
-					</div>					
-				</div>
+						<div class="row" style="width: 100%;">
+							<div class="col-sm" id="type2" style=" width: 100%; margin-top: 2%; display: none;">
+								{{$render->case2($mtx)}}
+							</div>
+						</div>
+						<div class="row" style="width: 100%;">
+							<div class="col-sm" id="type3" style=" width: 100%; margin-top: 2%; display: none;">
+								{{$render->case3($mtx)}}
+							</div>
+						</div>
+						<div class="row" style="width: 100%;">
+							<div class="col-sm" id="type4" style=" width: 100%; margin-top: 2%; display: none;">
+								{{$render->case4($mtx)}}
+							</div>
+						</div>
+					</div>
+				</div>					
 			</div>
 		</div>
 	</div>

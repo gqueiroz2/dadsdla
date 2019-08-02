@@ -18,6 +18,10 @@ Route::group(['middleware' => 'auth'],function(){
 
 		Route::group(['prefix'=>'dashboards'],function(){
 			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
+			Route::post("Overview-SecondaryFilter","ajaxController@secondaryFilter");
+
+			Route::post("Overview-BaseFilterTitle","ajaxController@baseFilterTitle");
+			Route::post("Overview-SecondaryFilterTitle","ajaxController@secondaryFilterTitle");
 		});
 
 		Route::group(['prefix'=>'relationship'],function(){

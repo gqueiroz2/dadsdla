@@ -32,6 +32,7 @@ class resultsResume extends results{
 		$joinCorporate = false;
 
 		$tableSales = $this->salesTable($regionID,$cYear);
+
 		$tableTarget = "plan_by_brand";
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
@@ -49,34 +50,18 @@ class resultsResume extends results{
 		                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
 		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
 		                                   ";
-		        }else{// FAZER SE FOR HEADER 
-		        	//if($m < $currentMonth){
-			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-			        	                   AND (ytd.year IN ($cYear) )
-			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
-			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
-			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
+		        }else{	
+		       	//SE FOR IBMS / BTS	           
+		        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+		        	                   AND (ytd.year IN ($cYear) )
+		        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
+		        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+		        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
 
-			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-			                                    AND ( ytd.year IN ($pYear) )
-			                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
-			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
-//			                                    AND (ytd.campaign_currency_id IN (".$regionID."))";
-			        /*}else{
-			        	$whereSales[$m][$b] = "WHERE (mini_header.month IN (".$months[$m][1].") ) 
-			        	                   AND (mini_header.year IN ($cYear) )
-			        	                   AND (mini_header.sales_representant_office_id IN (".$regionID.") )
-			        	                   AND (mini_header.brand_id IN (".$brands[$b][0].") )
-			        	                   AND (ytd.campaign_currency_id IN (".$regionID."))
-			        	                   ";
-
-			            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-			                                    AND ( ytd.year IN ($pYear) )
-			                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
-			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
-			                                    AND (ytd.campaign_currency_id IN (".$regionID."))
-			                                    ";
-			        }*/
+		            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+		                                    AND ( ytd.year IN ($pYear) )
+		                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
+		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
 		        }	
 			}
 		}
@@ -128,8 +113,6 @@ class resultsResume extends results{
 		$mtx["corporate"] = $corporate;
 		$mtx["previousYear"] = $previousYear;
 
-		//var_dump($mtx["previousYear"]);
-
 		return $mtx;
 	}
 	
@@ -140,21 +123,48 @@ class resultsResume extends results{
 		$joinActual = false;
 		$joinCorporate = false;
 
-		$tableSales = "digital";
+		$tableSales = "plan_by_brand";//"digital";
 		$tableTarget = "plan_by_brand";
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
 
+		$tr = strtoupper($value);
+
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
 				
-				$whereSales[$m][$b] = "WHERE (digital.month IN (".$months[$m][1]."))
-										  AND (digital.year IN ($cYear))
-										  AND (digital.brand_id IN (".$brands[$b][0]."))";
+				$whereSales[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+	            					   AND ( year =  \" $cYear \")
+	            					   AND ( source  = \"ACTUAL\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 
-				$whereSalesPYear[$m][$b] = "WHERE (digital.month IN (".$months[$m][1]."))
+	                               ";
+
+/*
+				"WHERE (digital.month IN (".$months[$m][1]."))
+										  AND (digital.year IN ($cYear))
+										  AND (digital.brand_id IN (".$brands[$b][0]."))";*/
+
+				$whereSalesPYear[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+									   AND ( year =  \" $pYear \")
+	            					   AND ( source  = \"ACTUAL\" )
+	                                   AND ( type_of_revenue = \"".$tr."\" )
+	                                   AND (sales_office_id = \"".$regionID."\")
+	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )
+	                               ";
+
+/*
+				"WHERE (digital.month IN (".$months[$m][1]."))
 												AND (digital.year IN ($cYear))
 												AND (digital.brand_id IN (".$brands[$b][0]."))";
+
+*/
+
+
 			}
 		}
 

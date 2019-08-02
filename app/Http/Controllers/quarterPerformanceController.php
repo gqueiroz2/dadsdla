@@ -45,6 +45,8 @@ class quarterPerformanceController extends Controller {
             'brand' => 'required',
             'currency' => 'required',
             'value' => 'required',
+            'salesRepGroup' => 'required',
+            'salesRep' => 'required',
         ]);
 
         if ($validator->fails()) {

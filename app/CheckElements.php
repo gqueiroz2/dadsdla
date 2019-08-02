@@ -47,7 +47,7 @@ class CheckElements extends Model{
 
 		$sql = new sql();
 
-		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
+		$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
 		$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
 		$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
 

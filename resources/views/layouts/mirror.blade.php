@@ -87,15 +87,18 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('brandGet') }}"> Brand </a>
-								<a class="dropdown-item" href="#"> Market </a>                                
-								<a class="dropdown-item" href="#"> Churn </a>                                
 								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
 							</div>
 						</li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+                       <li class="nav-item dropdown">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
+	                        	<a class="nav-link" href="#"> Brand </a>
+								<a class="nav-link" href="#"> Market </a>                                
+								<a class="nav-link" href="#"> Churn </a>                                
+	                            <a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+	                        </div>
                         </li>
 
 						<li class="nav-item">

@@ -28,7 +28,7 @@ class resultsResumeController extends Controller{
 		$region = $r->getRegion($con,false);
         $brand = $b->getBrand($con);
         $currency = $pr->getCurrency($con,false);
-
+        
 		return view('adSales.results.0resumeGet',compact('render','region','brand','currency'));
 
 	}
@@ -93,7 +93,7 @@ class resultsResumeController extends Controller{
 		$brands = $resume->divideBrands($brandID);
 
 		if (empty($brands[0])) {
-			$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+			$Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
 			$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
 
@@ -113,7 +113,7 @@ class resultsResumeController extends Controller{
 
 			$matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);
 			
-			$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+			$Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
 			$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);	
 

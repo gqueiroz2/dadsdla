@@ -14,46 +14,177 @@ use App\brand;
 use App\agency;
 use App\client;
 use App\subRankings;
+use App\base;
 
 class ajaxController extends Controller{
 
-    public function baseFilter(){
-        var_dump(Request::all());
+    public function secondaryFilterTitle(){        
+        $type = Request::get('type');
+        if($type == "agency"){
+            echo "Client:";
+        }else{
+            echo "Agency:";
+        }               
+    }
+
+    public function baseFilterTitle(){
+        $type = Request::get('type');
+        if($type == "agencyGroup"){
+            $type = "Agency Group";
+        }else{
+            $type = ucfirst( $type );    
+        }
+
+        
+        echo $type.":";
+    }
+
+    public function secondaryFilter(){
         $db = new dataBase();
         $con = $db->openConnection("DLA");
+        $sql = new sql();
 
+        $type = Request::get('type');
+        $regionID = Request::get('region');
+        $baseFilter = json_decode( base64_decode( Request::get('baseFilter')  ));
+
+        switch ($type) {
+            case 'client':
+                $showID = "agencyID";
+                $showName = "agency";
+
+                $sql = "SELECT DISTINCT a.ID AS 'agencyID',
+                               a.name AS 'agency'
+                            FROM ytd y
+                            LEFT JOIN agency a ON a.ID = y.agency_id
+                            WHERE (sales_representant_office_id = \"".$regionID."\" )
+                            AND (client_id = \"".$baseFilter->id."\")
+                ";
+                $res = $con->query($sql);
+                if($res && $res->num_rows > 0){
+                    $count = 0;
+                    while($row = $res->fetch_assoc()){
+                        $second[$count]['agencyID'] = $row['agencyID'];
+                        $second[$count]['agency'] = $row['agency'];
+
+                        $count++;
+                    }
+                }else{
+                    $second = false;
+                }
+                break;            
+            default:
+                if($type == "agency"){                
+                    $showID = "clientID";
+                    $showName = "client";
+                    
+                    $sql = "SELECT DISTINCT c.ID AS 'clientID',
+                                   c.name AS 'client'
+                                FROM ytd y
+                                LEFT JOIN client c ON c.ID = y.client_id
+                                WHERE (sales_representant_office_id = \"".$regionID."\" )
+                                AND (agency_id = \"".$baseFilter->id."\")
+                    ";
+                    $res = $con->query($sql);
+                    if($res && $res->num_rows > 0){
+                        $count = 0;
+                        while($row = $res->fetch_assoc()){
+                            $second[$count]['clientID'] = $row['clientID'];
+                            $second[$count]['client'] = $row['client'];
+
+                            $count++;
+                        }
+                    }else{
+                        $second = false;
+                    }
+                }else{
+                    $showID = "agencyID";
+                    $showName = "agency";
+                    
+
+                    $sql = "SELECT DISTINCT a.ID AS 'agencyID',
+                               a.name AS 'agency'
+                            FROM agency a
+                            LEFT JOIN agency ag ON ag.ID = a.agency_group_id
+                            WHERE (a.agency_group_id = \"".$baseFilter->id."\" )
+                            
+                ";
+                    $res = $con->query($sql);
+
+                    if($res && $res->num_rows > 0){
+                        $count = 0;
+                        while($row = $res->fetch_assoc()){
+                            $second[$count]['agencyID'] = $row['agencyID'];
+                            $second[$count]['agency'] = $row['agency'];
+
+                            $count++;
+                        }
+                    }else{
+                        $second = false;
+                    }
+                }
+                break;
+        }
+
+        if($second){               
+            for ($s=0; $s < sizeof($second); $s++) { 
+                echo "<option value=\"".$second[$s][$showID]."\" selected='true'>".$second[$s][$showName]."</option>";
+            }
+        }else{
+            echo "<option value='' selected='true'> No Values Found !!! </option>";
+        }
+
+    }
+
+    public function baseFilter(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $bs = new base();
         $type = Request::get('type');
         $regionID = Request::get('region');
         switch ($type) {
 
             case 'client':
                 $clss  = new client();
-
-                $base = $clss->getClient($con);
+                $base = $clss->getClientByRegion($con,array($regionID));
+                $tralala = "clientGroup";
                 break;
-            
             default:
                 $clss = new agency();
-
                 if($type == "agency"){
                     $base = $clss->getAgencyByRegion($con,array($regionID));
+                    $tralala = "agencyGroup";
                 }else{
                     $base = $clss->getAgencyGroupByRegion($con,array($regionID));
+                    $tralala = "region";
                 }
-
                 break;
-            
         }
 
-        var_dump($type);
-        var_dump($base);
+        for ($bb=0; $bb < sizeof($base); $bb++) { 
+            
+            $forVerify[$bb] = $base[$bb]['id'];
+
+        }
+
+        $verified = $bs->verifyOnBase($con,$type,$forVerify);
+
+        echo "<option value=''> Select </option>";
+        for ($b=0; $b < sizeof($base); $b++) { 
+            if($verified[$b]){
+                echo "<option value=\"". base64_encode(json_encode($base[$b]))."\">"
+                    .$base[$b][$type];
+                if($type != "client"){
+                    echo " - ".$base[$b][$tralala];
+                }
+                echo "</option>";
+            }
+        }
     }
 
     public function clientGroupByClient(){
         $clients = json_decode(base64_decode(Request::get('clients')));
-
         echo "Client Group - ".$clients->clientGroup;
-
         //echo "<option value='".$clients->client_group_id."'> Clients Group ".$clients->clientGroup."</option>";
     }
 
