@@ -271,31 +271,45 @@
 				$("#client-"+{{$c}}).click(function(){
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
-						var size = '2750px';
-						var width = '2.5%';
-						var width2 = '6.5%';
+						var size = '4000px';
+						var width = '3.5%';
+						var width2 = '6%';
 						var displayC = "";
 						var number = 2;
 						var border = "1px 1px 0px 1px";
-						var width3 = '4.5%';
+						var width3 = '5%';
+						var division = 8;
+						var width4 = '3%';
 					}else{
 						var display = 'none';
-						var size = '1250px';
-						var width = '4.5%';
-						var width2 = '12%';
+						var size = '2600px';
+						var width = '3.5%';
+						var width2 = '8%';
 						var displayC = 'none';
 						var number = 1;
 						var border = "1px 0px 0px 0px";
-						var width3 = '4.5%';
+						var width3 = '3.5%';
+						var division = 7;
+						var width4 = '3.5%';
 					}
 
+					$("#division-"+{{$c}}).attr("rowspan",division);
+					$("#sideTable-"+{{$c}}+"-0").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-1").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-2").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-3").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-4").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-0").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-1").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-2").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-3").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-4").css("width",width4);
 					$("#quarter-"+{{$c}}+"-3").css("width",width);
 					$("#quarter-"+{{$c}}+"-7").css("width",width);
 					$("#quarter-"+{{$c}}+"-11").css("width",width);
 					$("#quarter-"+{{$c}}+"-15").css("width",width);
 					$("#TotalTitle-"+{{$c}}).css("width",width);
 					$("#client-"+{{$c}}).css("width",width2);
-
 					$("#table-"+{{$c}}).css("min-width",size);
 
 					@for($m=0;$m<16;$m++)
