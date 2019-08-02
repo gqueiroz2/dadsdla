@@ -11,6 +11,7 @@ use App\brand;
 use App\renderDashboards;
 use Validator;
 use App\dashboards;
+use App\makeChart;
 
 class dashboardsController extends Controller{
    
@@ -40,6 +41,8 @@ class dashboardsController extends Controller{
       $b = new brand();      
       $render = new renderDashboards();
       $p = new pRate();
+      $mc = new makeChart();
+
 
       $con = $db->openConnection("DLA");      
       $salesRegion = $region->getRegion($con);      
@@ -52,21 +55,30 @@ class dashboardsController extends Controller{
       $secondaryFilter = Request::get("secondaryFilter");
       $currency = Request::get("currency");
       $value = Request::get("value");      
-/*
-      var_dump($regionID);
-      var_dump($type);
-      var_dump($baseFilter);
-      var_dump($secondaryFilter);
-      var_dump($currency);
-      var_dump($value);
-*/
 
-      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter);
+      $cYear = intval(date("Y"));
+      $pYear = $cYear - 1;
+      $ppYear = $pYear - 1;
+      $years = array($cYear,$pYear,$ppYear);
 
-      //$last3 = $dash->last3Years($type,$regionID,$currency,$value,$baseFilter,$secondaryFilter);
+      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years);
+
+      $last3YearsChild = $handle['last3YearsChild'];
+      $last3YearsByMonth = $handle['last3YearsByMonth'];
+      $last3YearsByBrand = $handle['last3YearsByBrand'];
+
+      for ($y=0; $y < sizeof($years); $y++) { 
+        $brandChart[$y] = $mc->overviewBrand($con,$last3YearsByBrand[$y]);
+      }
+
+      $childChart = $mc->overviewChild($con,$type,$last3YearsChild,$years);
+
+      $monthChart = $mc->overviewMonth($con,$type,$last3YearsByMonth,$years);
 
 
-      return view("adSales.dashboards.overviewPost", compact('salesRegion', 'currencies', 'brands', 'render'));
+      //  Month  CYear PYear PPYear
+
+      return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' , 'years'));
    	}
 
     public function brandGet(){

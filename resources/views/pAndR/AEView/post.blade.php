@@ -55,9 +55,9 @@
 	<br>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm" style="width: 100%;">
+			<div class="col" style="width: 100%;">
 				<center>
-					{{$render->AE1($total2018,$totaltotal2018,$totalClient2018,$client2018)}}
+					{{$render->AE1($total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray)}}
 				</center>
 			</div>
 		</div>
@@ -158,11 +158,29 @@
 
 						$("#totalClient-"+{{$c}}).val(Temp);
 
+						Temp3 = handleNumber(Temp);
+
+						var tmp2 = 0;
+
+
 						@for($m2=0;$m2<16;$m2++)
 							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
 							temp2 = Comma(temp2*100);
 							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
+							
+							if({{$m2}} != 3 && {{$m2}} != 7 && {{$m2}} != 11 && {{$m2}} != 15){
+								tmp2 += handleNumber($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
+							}
+
 						@endfor
+
+						tmp2 = tmp2.toFixed(2);
+
+						if (Temp3 != handleNumber($("#passTotal-"+{{$c}}).val()) || tmp2 != '100.00') {
+							$("#client-"+{{$c}}).css("background-color","red");
+						}else{
+							$("#client-"+{{$c}}).css("background-color","");
+						}
 
 						var month = 0;
 
@@ -253,14 +271,22 @@
 				$("#client-"+{{$c}}).click(function(){
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
-						var size = '3500px';
+						var size = '2750px';
 						var width = '2.5%';
 						var width2 = '6.5%';
+						var displayC = "";
+						var number = 2;
+						var border = "1px 1px 0px 1px";
+						var width3 = '4.5%';
 					}else{
 						var display = 'none';
-						var size = '';
+						var size = '1250px';
 						var width = '4.5%';
 						var width2 = '12%';
+						var displayC = 'none';
+						var number = 1;
+						var border = "1px 0px 0px 0px";
+						var width3 = '4.5%';
 					}
 
 					$("#quarter-"+{{$c}}+"-3").css("width",width);
@@ -290,17 +316,6 @@
 					}
 					$("#totalTotalPP").css("display",displayT);
 
-					if ($("#newCol-"+{{$c}}+"-0").css("display") == 'none') {
-						var displayC = "";
-						var number = 2;
-						var border = "1px 1px 0px 1px";
-						var width3 = '6.5%';
-					}else{
-						var displayC = 'none';
-						var number = 1;
-						var border = "1px 0px 0px 0px";
-						var width3 = '4.5%';
-					}
 					$("#totalPP-"+{{$c}}).css("display",displayC);
 					$("#newLine-"+{{$c}}).css("display",displayC);
 					$("#client-"+{{$c}}).attr("rowspan",number);
@@ -311,7 +326,6 @@
 					$("#quarter-"+{{$c}}+"-15").attr("rowspan",number);
 					@for($m=0;$m<16;$m++)
 						$("#newCol-"+{{$c}}+"-"+{{$m}}).css("display",displayC);
-						$("#month-"+{{$c}}+"-"+{{$m}}).attr("colspan",number);
 						$("#month-"+{{$c}}+"-"+{{$m}}).css("border-width",border);
 						$("#month-"+{{$c}}+"-"+{{$m}}).css("width",width3);
 					@endfor
@@ -331,8 +345,12 @@
 
 						temp = temp.toFixed(2);
 
+						var tmp2 = handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val());
+
 						if(temp != '100.00'){
 							alert("The sum of client is "+temp);
+							$("#client-"+{{$c}}).css("background-color","red");
+						}else if(tmp2 != handleNumber($("#passTotal-"+{{$c}}).val())){
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");

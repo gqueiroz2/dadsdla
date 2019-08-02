@@ -8,13 +8,17 @@ use App\rank;
 class subRankings extends rank {
     
     public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue){
-        
+        /*
+            $lefName = LEFT JOIN
+            $type no caso de overviw eh a ROOT
+            $filterValue = nome da agencia
+
+        */
         if ($type == "agencyGroup") {
             $filter = "agency_group_id";
         }else{
             $filter = "agency_id";
         }
-
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
         }
@@ -66,8 +70,7 @@ class subRankings extends rank {
         $from = $names;
 
         $res = $sql->fetch($values[$y], $from, $from);
-        
-        //var_dump($res);
+
         return $res;
     }
 

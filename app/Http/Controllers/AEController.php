@@ -11,6 +11,9 @@ use App\dataBase;
 
 class AEController extends Controller
 {
+
+    protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+
     public function get(){
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -69,7 +72,24 @@ class AEController extends Controller
         $client2018[9] = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         $totalClient2018[9] = 0;
 
-        return view('pAndR.AEView.post',compact('render','region','currency','total2018',"totaltotal2018",'totalClient2018',"client2018"));
+        $month = date('M');
+        $tmp = false;
+        $tfArray = array();
+
+        for ($m=0; $m <sizeof($this->month) ; $m++) { 
+            if ($month == $this->month[$m]) {
+                $tmp = true;
+            }
+
+            if ($tmp) {
+                $tfArray[$m] = "";
+            }else{
+                $tfArray[$m] = "readonly='true'";
+            }
+
+        }
+        
+        return view('pAndR.AEView.post',compact('render','region','currency','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
     }
 
 }
