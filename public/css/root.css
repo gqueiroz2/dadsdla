@@ -159,7 +159,8 @@ th{
 }
 
 .lightBlue{
-	background-color: #0070c0;
+	font-weight: bold;
+    background-color: #0070c0;
 	color: white;	
 }
 

@@ -3,6 +3,18 @@
 @section('head')	
 	<script src="/js/dashboards-overview.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
+    <style type="text/css">
+    	
+    .graphInner{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width:100%;
+        height:100%;
+
+    }
+
+    </style>
 @endsection
 
 @section('content')
@@ -68,14 +80,261 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				<div style="float: right;"> Overview </div>
+			</div>
+		</div>	
+	</div>
+	<div class="container-fluid">
+
+		<?php 
+			$flow = array("CYear","PYear","PPYear");
+			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow);
+		?>
+
 	</div>
 
-	<div id="vlau"></div>
-	<div id="vlau1"></div>
-<h1>PST</h1>
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewMonthChart();
+    				$(window).resize(overviewMonthChart);
+  				},
+				'packages':['corechart']
+		});
+		google.charts.setOnLoadCallback(overviewMonthChart);
+		function overviewMonthChart(){
+			var data = google.visualization.arrayToDataTable([
+	          	<?php echo $monthChart; ?>
+	        ]);
+			var options = {
+				hAxis: {
+		          	title: 'Month'
+		        },
+		        vAxis: {
+		          	title: 'Revenue'
+		        },
+		        series: {
+		          	1: {curveType: 'function'}
+		        },
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				
+				
+				/*colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
+				]*/
+			};
+			var chart = new google.visualization.LineChart(document.getElementById('overviewMonthChart'));
+        	chart.draw(data, options);
+		}
+	</script>
+
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewChildChart();
+    				$(window).resize(overviewChildChart);
+  				},
+				'packages':['corechart','bar']
+		});
+		google.charts.setOnLoadCallback(overviewChildChart);
+		function overviewChildChart(){
+			var data = google.visualization.arrayToDataTable([
+		        [
+		        	@for($c = 0 ; $c < sizeof($childChart["label"]);$c++)
+		        		<?php 
+		        			echo "'".$childChart["label"][$c]."',";
+		        		?>
+		        	@endfor
+		         	{ role: 'annotation' } ],
+		        [
+		        	@for($c = 0 ; $c < sizeof($childChart["cYear"]);$c++)
+		        		<?php 
+		        			if($c == 0){
+		        				echo "'".$childChart["cYear"][$c]."',";
+		        			}else{
+		        				echo "".$childChart["cYear"][$c].",";
+		        			}
+		        		?>
+		        	@endfor
+		        	<?php echo "' '"; ?>
+		        	
+		        ],
+		        [
+		        	@for($c = 0 ; $c < sizeof($childChart["pYear"]);$c++)
+		        		<?php 
+		        			if($c == 0){
+		        				echo "'".$childChart["pYear"][$c]."',";
+		        			}else{
+		        				echo "".$childChart["pYear"][$c].",";
+		        			}
+		        		?>
+		        	@endfor
+		        	<?php echo "' '"; ?>
+		        ],
+		        [
+		        	@for($c = 0 ; $c < sizeof($childChart["ppYear"]);$c++)
+		        		<?php 
+		        			if($c == 0){
+		        				echo "'".$childChart["ppYear"][$c]."',";
+		        			}else{
+		        				echo "".$childChart["ppYear"][$c].",";
+		        			}
+		        		?>
+		        	@endfor
+		        	<?php echo "' '"; ?>
+		        ]
+		     ]);
+			
+			var options = {
+				isStacked: 'percent',
+				chart: {
+		            title: 'Company Performance',
+		            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+		        },
+				
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend: { position: 'bottom' },
+				bar: { groupWidth: '60%' },
+        		hAxis: {
+		            minValue: 0,
+		            ticks: [0, .3, .6, .9, 1]
+		        }
+				/*colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
+				]*/
+			};
+			var chart = new google.visualization.BarChart(document.getElementById('overviewChildChart'));
+        	chart.draw(data, options);
+		}
+	</script>
+
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewBrandCharCYear();
+    				$(window).resize(overviewBrandCharCYear);
+  				},
+				'packages':['corechart']
+		});
+		google.charts.setOnLoadCallback(overviewBrandCharCYear);
+		function overviewBrandCharCYear(){
+			var data = new google.visualization.DataTable();
+			data.addColumn("string","Brand");
+			data.addColumn("number","Value");
+			data.addRows([
+				@for($b = 0; $b < sizeof($brandChart[0]); $b++)
+				    ['{{$brandChart[0][$b]["label"]}}',{{$brandChart[0][$b]["value"]}}],
+				@endfor
+			]);
+			var options = {
+				chartArea:{
+					'width':'100%',
+					'height':'100%'
+				},
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend:'none',
+				pieSliceText: 'label',
+				pieSliceTextStyle: {
+					fontSize:'25','color':'black'
+				},
+				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
+				]
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartCYear'));
+        	chart.draw(data, options);
+		}
+	</script>
+
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewBrandCharCYear();
+    				$(window).resize(overviewBrandCharPYear);
+  				},
+				'packages':['corechart']
+		});
+		google.charts.setOnLoadCallback(overviewBrandCharPYear);
+		function overviewBrandCharPYear(){
+			var data = new google.visualization.DataTable();
+			data.addColumn("string","Brand");
+			data.addColumn("number","Value");
+			data.addRows([
+				@for($b = 0; $b < sizeof($brandChart[1]); $b++)
+				    ['{{$brandChart[1][$b]["label"]}}',{{$brandChart[1][$b]["value"]}}],
+				@endfor
+			]);
+			var options = {
+				chartArea:{
+					'width':'100%',
+					'height':'100%'
+				},
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend:'none',
+				pieSliceText: 'label',
+				pieSliceTextStyle: {
+					fontSize:'25','color':'black'
+				},
+				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
+				]
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPYear'));
+        	chart.draw(data, options);
+		}
+	</script>
+
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewBrandCharCYear();
+    				$(window).resize(overviewBrandCharPPYear);
+  				},
+				'packages':['corechart']
+		});
+		google.charts.setOnLoadCallback(overviewBrandCharPPYear);
+		function overviewBrandCharPPYear(){
+			var data = new google.visualization.DataTable();
+			data.addColumn("string","Brand");
+			data.addColumn("number","Value");
+			data.addRows([
+				@for($b = 0; $b < sizeof($brandChart[2]); $b++)
+				    ['{{$brandChart[2][$b]["label"]}}',{{$brandChart[2][$b]["value"]}}],
+				@endfor
+			]);
+			var options = {
+				chartArea:{
+					'width':'100%',
+					'height':'100%'
+				},
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend:'none',
+				pieSliceText: 'label',
+				pieSliceTextStyle: {
+					fontSize:'25','color':'black'
+				},
+				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
+				]
+			};
+			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPPYear'));
+        	chart.draw(data, options);
+		}
+	</script>
+
 @endsection
 
 
+
+    
 
     
 

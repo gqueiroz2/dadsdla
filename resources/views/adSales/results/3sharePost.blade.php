@@ -185,6 +185,10 @@
 			]);
 
 			var options = {
+				chart: {
+		            title: 'Nearby galaxies',
+		            subtitle: 'distance on the left, brightness on the right'
+		          },
 				chartArea:{
 					'width':'100%',
 					'height':'100%'
