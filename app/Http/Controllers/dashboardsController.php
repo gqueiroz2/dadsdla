@@ -16,18 +16,19 @@ use App\makeChart;
 class dashboardsController extends Controller{
    
    	public function overviewGet(){
-   		  $db = new dataBase();
-        $con = $db->openConnection("DLA");
 
-        $region = new region();
-        $salesRegion = $region->getRegion($con);
+   		$db = new dataBase();
+      $con = $db->openConnection("DLA");
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con);
+      $region = new region();
+      $salesRegion = $region->getRegion($con);
 
-        $b = new brand();
-        $brands = $b->getBrand($con);
-        $render = new renderDashboards();
+      $currency = new pRate();
+      $currencies = $currency->getCurrency($con);
+
+      $b = new brand();
+      $brands = $b->getBrand($con);
+      $render = new renderDashboards();
         
    		return view("adSales.dashboards.overviewGet", compact('salesRegion', 'currencies', 'brands', 'render'));
    	}
@@ -80,5 +81,24 @@ class dashboardsController extends Controller{
 
       return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years'));
    	}
+
+    public function brandGet(){
+      
+      $db = new dataBase();
+      $con = $db->openConnection("DLA");
+
+      $region = new region();
+      $salesRegion = $region->getRegion($con);
+
+      $currency = new pRate();
+      $currencies = $currency->getCurrency($con);
+
+      $b = new brand();
+      $brands = $b->getBrand($con);
+
+      $render = new renderDashboards();
+
+      return view("adSales.dashboards.brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
+    }
 
 }

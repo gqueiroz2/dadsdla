@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
-@section('title', 'Dashboards Overview')
+@section('title', 'Dashboards Brand')
 @section('head')	
-	<script src="/js/dashboards-overview.js"></script>
+	<!--<script src="/js/dashboards-overview.js"></script>-->
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 
@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('overviewPost') }}" runat="server" onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('rankingPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col">
@@ -32,19 +32,19 @@
 							@endif
 						</div>
 						<div class="col">
-							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>
-							@if($errors->has('baseFilter'))
-								<label style="color: red;">* Required</label>
+							<label class="labelLeft bold"> Brand: </label>
+							@if($errors->has('brands'))
+								<label style="color: red">* Required</label>
 							@endif
-							{{$render->baseFilter()}}
+							{{$render->brand($brands)}}
 						</div>
 						<div class="col">
-							<label class="labelLeft bold" id="labelSecondaryFilter"> <span style="color: red;"> Select Type </span> </label>
-							@if($errors->has('secondaryFilter'))
-								<label style="color: red;">* Required</label>
+							<label class="labelLeft bold">Months:</label>
+							@if($errors->has('month'))
+								<label style="color: red">* Required</label>
 							@endif
-							{{$render->secondaryFilter()}}
-						</div>	
+							{{$render->months()}}
+						</div>
 						<div class="col">
 							<label class="labelLeft bold"> Currency: </label>
 							@if($errors->has('currency'))
@@ -67,21 +67,8 @@
 				</form>
 			</div>
 		</div>
-
-		<div class="row justify-content-end mt-2">
-			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> Overview </div>
-			</div>
-		</div>	
 	</div>
 
 	<div id="vlau"></div>
-	<div id="vlau1"></div>
 
 @endsection
-
-
-
-    
-
-    

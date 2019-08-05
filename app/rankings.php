@@ -85,7 +85,7 @@ class rankings extends rank{
     }
 
     public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
-
+        //var_dump($type2[$t]->name);
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
 
@@ -173,7 +173,6 @@ class rankings extends rank{
         }
 
         for ($t=0; $t < sizeof($type2); $t++) { 
-            
             if ($filterValues[$type2[$t]->id] == 1) {
                 for ($m=0; $m < sizeof($mtx); $m++) { 
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));

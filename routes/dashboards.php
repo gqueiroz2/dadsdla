@@ -19,6 +19,13 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('/','dashboardsController@overviewPost')
 								->name('overviewPost');
 		});
+
+		Route::group(['prefix'=>'brand'],function(){
+			Route::get('/','dashboardsController@brandGet')
+							->name('brandGet');
+			Route::post('/','dashboardsController@brandPost')
+								->name('brandPost');
+		});
 	});
 });
 

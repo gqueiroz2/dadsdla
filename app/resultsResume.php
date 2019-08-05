@@ -74,7 +74,7 @@ class resultsResume extends results{
             					   AND (source  = \"TARGET\")
                                    AND (type_of_revenue = \"".$tr."\")
                                    AND (sales_office_id = \"".$regionID."\")
-                                   AND (currency_id = \"".$currencyID."\" )
+                                   AND (currency_id = 4 )
                                    AND (brand_id = \"".$brands[$b][0]."\" )
                                ";
 
@@ -82,7 +82,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"ACTUAL\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 	                               ";
 
@@ -90,7 +90,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"CORPORATE\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")  
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
 	                                   ";
         	}
@@ -138,7 +138,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"ACTUAL\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 
 	                               ";
@@ -153,7 +153,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"ACTUAL\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 	                               ";
 
@@ -176,7 +176,7 @@ class resultsResume extends results{
             					   AND (source  = \"TARGET\")
                                    AND (type_of_revenue = \"".$tr."\")
                                    AND (sales_office_id = \"".$regionID."\")
-                                   AND (currency_id = \"".$currencyID."\" )
+                                   AND (currency_id = 4 )
                                    AND (brand_id = \"".$brands[$b][0]."\" )
                                ";
 
@@ -184,7 +184,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"ACTUAL\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 	                               ";
 
@@ -192,7 +192,7 @@ class resultsResume extends results{
 	            					   AND ( source  = \"CORPORATE\" )
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")  
-	                                   AND (currency_id = \"".$currencyID."\" )
+	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
 	                                   ";
         	}

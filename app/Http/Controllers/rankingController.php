@@ -84,6 +84,13 @@ class rankingController extends Controller {
         $region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
+        $tmp = $r->getRegion($con,array($region));
+
+        if(is_array($tmp)){
+            $rtr = $tmp[0]['name'];
+        }else{
+            $rtr = $tmp['name'];
+        }
 
     	$type = Request::get("type");
     	$temp = Request::get("type2");
@@ -140,8 +147,13 @@ class rankingController extends Controller {
 
         $render = new renderRanking();
 
+        $rName = $r->TruncateRegion($rtr);
+
+        //var_dump("region",$rName);
+
         $subR = new subRankings();
-        return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region'));
+
+        return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName'));
 
     }
 }

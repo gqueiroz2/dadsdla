@@ -107,7 +107,7 @@
 			<div class="col-sm-3" style="color: #0070c0;font-size: 22px;">
 				<span style="float: right;"> 
 					<?php $newType = ($type == "agencyGroup") ? "Agency group" : ucfirst($type) ?>
-					{{$newType}} Ranking 
+					{{$rName}} - {{$newType}} Ranking 
 				</span>
 			</div>
 		</div>	
