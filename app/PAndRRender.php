@@ -330,24 +330,169 @@ class PAndRRender extends Render
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
                 echo "</tr>";
-                echo "<tr>";
-                    echo "<td>&nbsp</td>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        echo "<td>&nbsp</td>";
-                    }
-
-                    echo "<td>&nbsp</td>";
-
-                echo "</tr>";
+                
             echo "</table>";
             echo "</div>";
+            echo "<br>";
         }   
-
 
     }
 
     public function VP1(){
+        echo "<div class='table-responsive'>";
+            echo "<table  style='min-width:2600px; width:100%; margin-top:1,5%; text-align:center;'>";
+                echo "<tr>";
+                    echo "<td style='width:8%;'>&nbsp</td>";
+                    echo "<td style='width:1%;'>&nbsp</td>";
+                    echo "<td class='darkBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 0px 0px 1px;' colspan='2'>BookingYTD</td>";
+                    echo "<td class='darkBlue' style='width:5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>MesP.</td>";
+                    echo "<td style='width:1%;'>&nbsp</td>";
+                    echo "<td class='darkBlue' style='width:20%; border-style:solid; border-color:black; border-width: 1px 0px 0px 1px;' colspan='4'>Current Month</td>";
+                    echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;' >MesA.</td>";
+                    echo "<td style='width:1%;'>&nbsp</td>";
+                    echo "<td class='darkBlue' style='width:45%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' colspan='9'>Full Year</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' >&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue'>2018</td>";
+                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' colspan='3' style='width:15%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue'>2018</td>";
+                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' colspan='6' style='width:30%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue' >2018</td>";
+                    echo "<td class='lightBlue' colspan='2' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td class='lightBlue' style='width:8%'>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Bookings</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Fcast</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Total</td>";
+                    echo "<td class='lightBlue' style='width:5%'>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Closed</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Booked</td>";
+                    echo "<td class='lightBlue' style='width:5%'>% Booked</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Proposals</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Fcast</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Total</td>";
+                    echo "<td class='lightBlue' style='width:5%'>Total</td>";
+                    echo "<td class='lightBlue' style='width:5%'>\$</td>";
+                    echo "<td class='lightBlue' style='width:5%'>%</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td class='medBlue'>Total</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td class='medBlue'>%</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>0%</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                    echo "<td class='medBlue'>&nbsp</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                    echo "<td>&nbsp</td>";
+                echo "</tr>";
 
+                for ($c=0; $c </*sizeof(clientes)*/10; $c++) {
+                    if($c%2 == 0){
+                        $class = "rcBlue";
+                    }else{
+                        $class = "odd";
+                    }
+
+                    echo "<tr>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>Nome do Cliente-$c</td>";
+                        echo "<td style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>&nbsp</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>0</td>";
+                        echo "<td>&nbsp</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>0</td>";
+                        echo "<td>&nbsp</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0%</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>0</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>0%</td>";
+                    echo "</tr>";
+                }
+            echo "</table>";
+        echo "</div>";
     }    
 
     public function PandR1(){

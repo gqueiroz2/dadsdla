@@ -52,11 +52,11 @@
 							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'><span class="bold">Currency:</span></label>
-							@if($errors->has('currency'))
+							<label class='labelLeft'><span class="bold">Months:</span></label>
+							@if($errors->has('month'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->currency($currency)}}
+							{{$render->months()}}
 						</div>
 					</div>
 					<div class="row justify-content-center">
@@ -75,11 +75,11 @@
 							{{$render->salesRep()}}
 						</div>
 						<div class="col">
-							<label class='labelLeft'><span class="bold">Months:</span></label>
-							@if($errors->has('month'))
+							<label class='labelLeft'><span class="bold">Currency:</span></label>
+							@if($errors->has('currency'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->months()}}
+							{{$render->currency($currency)}}
 						</div>
 						<div class="col">
 							<label class='labelLeft'><span class="bold">Value:</span></label>
