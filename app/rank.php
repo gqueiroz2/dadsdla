@@ -22,36 +22,6 @@ class rank extends Model{
         return $years;
     }
 
-    public function verifyQuantity($con, $type, $type2, $region){
-        
-        if ($type == "agencyGroup") {
-        	$a = new agency();
-        	$resp = $a->getAgencyGroupByRegion($con, array($region));
-        }elseif ($type == "agency") {
-            $a = new agency();
-            $resp = $a->getAgencyByRegion($con, array($region));
-        }else{
-            $c = new client();
-            $resp = $c->getClientByRegion($con, array($region));
-        }
-
-        for ($n=0; $n < sizeof($resp); $n++) { 
-            
-            $names[$n] = $resp[$n][$type];
-        }
-
-        $auxResp = array_unique($names);
-
-        if (sizeof($type2) == sizeof($auxResp)) {
-            $all = true;
-        }else{
-            $all = false;
-        }
-
-        return $all;
-
-    }
-
     public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
@@ -304,5 +274,40 @@ class rank extends Model{
 
         echo "</tr>";
 
+    }
+
+    public function TruncateRegion($region){
+
+        if ($region == "Brazil") {
+            $name = "BR";            
+        }elseif ($region == "Argentina") {
+            $name = "AR";
+        }elseif ($region == "Colombia") {
+            $name = "COL";
+        }elseif ($region == "Miami") {
+            $name = "MIA";
+        }elseif ($region == "Mexico") {
+            $name = "MEX";
+        }elseif ($region == "Chile") {
+            $name = "CL";
+        }elseif ($region == "Peru") {
+            $name = "PE";
+        }elseif ($region == "Venezuela") {
+            $name = "VE";
+        }elseif ($region == "Panama") {
+            $name = "PA";
+        }elseif ($region == "New York International") {
+            $name = "NY";
+        }elseif ($region == "Dominican Republic") {
+            $name = "DR";
+        }elseif ($region == "Ecuador") {
+            $name = "EC";
+        }elseif ($region == "Bolivia") {
+            $name = "BO";
+        }else {
+            $name = false;
+        }
+
+        return $name;
     }
 }

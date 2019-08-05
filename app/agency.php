@@ -270,8 +270,6 @@ class agency extends Management{
 
         $columns = "ag.name AS 'agencyGroup',
                     ag.ID AS 'id',
-                    ag.name AS 'agencyGroup',
-                    ag.ID AS 'agencyGroupID',
                     r.name AS 'region'
                    ";
 
@@ -283,7 +281,7 @@ class agency extends Management{
         }
 
         $join = "LEFT JOIN region r ON r.ID = ag.region_id";
-
+        
         $res = $sql->select($con,$columns,$table,$join,$where);
 
         $from = array('id','agencyGroup','region');

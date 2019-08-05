@@ -22,10 +22,18 @@ class results extends base{
         
         $div = $base->generateDiv($con,$pRate,$region,array($cYear),$currency);
 
+        $coin = $pRate->getCurrency($con,array($currency))[0]['name'];
+
         if ($table == "digital") {
             
             $sum = "revenue";
-            $div = 1.0;
+            
+            if ($coin == "USD") {
+                $div = 1.0;
+            }else{
+                $div = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
+            }
+            
         }elseif($table == "cmaps"){
             if($year == $cYear){
                 $sum = $value;
@@ -34,7 +42,13 @@ class results extends base{
             }
         }elseif($table == "plan_by_brand"){
             $sum = "revenue";
-            $div = 1.0;
+            
+            if ($coin == "USD") {
+                $div = 1.0;
+            }else{
+                $div = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
+            }
+
         }elseif($table = 'ytd'){
             $sum = $value."_revenue_prate";
         }else{
@@ -52,10 +66,7 @@ class results extends base{
                     //var_dump($where[$m][$b]);
                 }
 
-
                 $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
-
-
 
                 $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];
                 
@@ -68,14 +79,12 @@ class results extends base{
                     $pRateCMAPS = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
                 }else{
                     $pRateCMAPS = 1;
-                }               
-
+                }
+                
                 $vector[$m] = $vector[$m]/$pRateCMAPS;//
             }else{
                 $vector[$m] = $vector[$m]*$div;
             }
-
-                
 
         }
 
@@ -137,8 +146,9 @@ class results extends base{
 
     public function defineValues($con, $table, $currency, $brand, $month, $year, $region, $value, $keyYear, $source=false){
 
+        $p = new pRate();
+
         if ($table != "plan_by_brand" && $table != "digital") {
-            $p = new pRate();
 
             if ($currency[0]['name'] == "USD") {
                 if($table == "cmaps"){
@@ -153,8 +163,14 @@ class results extends base{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                 }                
             }    
-        }else{            
-            $pRate = 1.0;
+        }else{
+
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));    
+            }
+            
         }
 
         switch ($table) {
@@ -180,14 +196,9 @@ class results extends base{
                 break;
 
             case 'digital':
-                if($currency[0]['name'] == 'USD'){
-                    $seek = 4;
-                }else{
-                    $seek = $region;
-                }
 
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
-                $columnsValue = array($region, "ACTUAL", $value, $brand, $year, $month, $seek);
+                $columnsValue = array($region, "ACTUAL", $value, $brand, $year, $month, 4);
                 $value = "revenue";
                 break;
 /*
@@ -201,14 +212,8 @@ class results extends base{
 */
             case 'plan_by_brand':
 
-                if($currency[0]['name'] == 'USD'){
-                    $seek = 4;
-                }else{
-                    $seek = $region;
-                }
-
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
-                $columnsValue = array($region, strtoupper($source), $value, $brand, $year, $month, $seek);
+                $columnsValue = array($region, strtoupper($source), $value, $brand, $year, $month, 4);
                 $value = "revenue";
                 break;
 

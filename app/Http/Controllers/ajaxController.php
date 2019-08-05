@@ -32,7 +32,7 @@ class ajaxController extends Controller{
         if($type == "agencyGroup"){
             $type = "Agency Group";
         }else{
-            $type = ucfirst( $type );    
+            $type = ucfirst( $type );
         }
 
         
@@ -425,7 +425,7 @@ class ajaxController extends Controller{
 
         if ($currency) {
             for ($c=0; $c <sizeof($currency); $c++) {
-                if ($currency[$c]["name"] != "USD" ) {
+                if ($currency[$c]["name"] != "USD" && $currency[$c]['id'] <= 6) {
                     echo "<option value='".$currency[$c]["id"]."'>".$currency[$c]["name"]."</option>";
                 }
             }
