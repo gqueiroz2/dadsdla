@@ -3,9 +3,6 @@
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
-    <style>
-    	
-    </style>
 @endsection
 @section('content')
 	<div class="container-fluid">
