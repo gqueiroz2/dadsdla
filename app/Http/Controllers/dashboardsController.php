@@ -42,7 +42,6 @@ class dashboardsController extends Controller{
       $p = new pRate();
       $mc = new makeChart();
 
-
       $con = $db->openConnection("DLA");      
       $salesRegion = $region->getRegion($con);      
       $currencies = $currency->getCurrency($con);      
@@ -70,14 +69,16 @@ class dashboardsController extends Controller{
         $brandChart[$y] = $mc->overviewBrand($con,$last3YearsByBrand[$y]);
       }
 
+      $temp = $mc->overviewBrandColumn($con,$last3YearsByBrand,$years);
+
+      $brandChartColumn = $temp['string'];
+      $maxChartColumn = $temp['max'];
+
       $childChart = $mc->overviewChild($con,$type,$last3YearsChild,$years);
 
       $monthChart = $mc->overviewMonth($con,$type,$last3YearsByMonth,$years);
 
-
-      //  Month  CYear PYear PPYear
-
-      return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' , 'years'));
+      return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years'));
    	}
 
 }
