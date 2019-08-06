@@ -46,6 +46,13 @@
 					{{$render->currency($currency)}}
 				</div>	
 				<div class="col">
+					<label class="labelLeft"><span class="bold"> Value: </span></label>
+						@if($errors->has('value'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->value2()}}					
+				</div>
+				<div class="col">
 					<label class='labelLeft'> &nbsp; </label>
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 				</div>			
@@ -57,7 +64,7 @@
 		<div class="row">
 			<div class="col" style="width: 100%;">
 				<center>
-					{{$render->AE1($total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray)}}
+					{{$render->AE1($forRender,$client,$total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray)}}
 				</center>
 			</div>
 		</div>

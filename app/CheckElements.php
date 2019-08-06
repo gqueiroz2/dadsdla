@@ -24,11 +24,15 @@ class CheckElements extends Model{
 		
 		$brands = false;//$this->checkNewBrands($conDLA,$con,$table,$sql);
 		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
-
-		
-		$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);
-		
-		$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql,$region);
+		var_dump($table);
+		if($table == "cmaps"){
+			$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
+			$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
+		}else{
+			$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);
+			
+			$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql,$region);
+		}
 		
 
 		$rtr = array(
@@ -90,14 +94,19 @@ class CheckElements extends Model{
 
 			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
 
-			if($new){
-				$count = 0;
-				for ($nn=0; $nn < sizeof($new); $nn++) { 
-					$nova[$count] = $new[$nn]['region'];
-					$count++;
+			if($table != "cmaps"){
+				if($new){
+					$count = 0;
+					
+					for ($nn=0; $nn < sizeof($new); $nn++) { 
+						$nova[$count] = $new[$nn]['region'];
+						$count++;
+					}
+
+					$new = array_values(array_unique($nova));
 				}
-				$new = array_values(array_unique($nova));
 			}
+
 		}else{
 			$new = false;
 		}
@@ -137,13 +146,15 @@ class CheckElements extends Model{
 
 			$new = $this->checkDifferencesAC('agency',$distinctDLA,$distinctFM);
 
-			if($new){
-				$count = 0;
-				for ($nn=0; $nn < sizeof($new); $nn++) { 
-					$nova[$count] = $new[$nn]['region'];
-					$count++;
+			if($table != "cmaps"){
+				if($new){
+					$count = 0;
+					for ($nn=0; $nn < sizeof($new); $nn++) { 
+						$nova[$count] = $new[$nn]['region'];
+						$count++;
+					}
+					$new = array_values(array_unique($nova));
 				}
-				$new = array_values(array_unique($nova));
 			}
 		}else{
 			$new = false;

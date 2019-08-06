@@ -51,17 +51,15 @@ class rankingController extends Controller {
 
         $render = new renderRanking();
 
-        return view('adSales.ranking.0rankingGet', compact('salesRegion', 'currencies', 'brands', 'render'));
+        return view('adSales.ranking.3rankingGet', compact('salesRegion', 'currencies', 'brands', 'render'));
     }
 
     public function post(){
-
 
     	$base = new base();
 
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
-
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -153,94 +151,7 @@ class rankingController extends Controller {
 
         $subR = new subRankings();
 
-        return view('adSales.ranking.0rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName'));
+        return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName'));
 
     }
 }
-
-/*$.ajax({
-                        url: "/ajaxRanking/subRanking",
-                        method: "POST",
-                        data: {name, months, brands, years, aux, value, currency, region},
-                        success: function(output){
-                            $("#sub"+aux+{{$n}}+babaganuch).html(output);
-                            $("#sub"+aux+{{$n}}+babaganuch).css("display", "");
-                        },
-                        error: function(xhr, ajaxOptions,thrownError){
-                            alert(xhr.status+" "+thrownError);
-                        }
-                    });
-
-
-                    var babaganuch = 0;<?php echo $subR->xiforimpola($con, $brands, $type, $region, $value, $pRate, $months, $years, $mtx[3][$n]) ; ?>
-                    console.log("{{$mtx[3][$n]}}");
-                    console.log(babaganuch);
-                    console.log("             ");
-
-                    var aux = "agency";
-                    $(document).on('click', "#"+"agency"+{{$n}}+babaganuch, function(){
-
-                        var pos = $("#pos-"+aux+"{{$n}}").val();
-                        var name = $(this).text();
-                        var months = <?php echo json_encode($months); ?>;
-                        var brands = <?php echo json_encode($brands); ?>;
-                        var years  = <?php echo json_encode($years); ?>;
-                        var type = "{{$type}}";
-                        var value = "{{$value}}";
-                        var currency = <?php echo json_encode($pRate); ?>;
-                        var region = "{{$region}}";
-
-                        if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-
-                            $.ajax({
-                                url: "/ajaxRanking/subRanking",
-                                method: "POST",
-                                data: {name, months, brands, years, aux, value, currency, region},
-                                success: function(output){
-                                    $("#sub"+aux+{{$n}}+babaganuch).html(output);
-                                    $("#sub"+aux+{{$n}}+babaganuch).css("display", "");
-                                },
-                                error: function(xhr, ajaxOptions,thrownError){
-                                    alert(xhr.status+" "+thrownError);
-                                }
-                            });
-                        }else{
-                            $("#sub"+aux+{{$n}}+babaganuch).css("display", "none"); 
-                        }
-                    });
-                @endfor
-
-                @for($n = 0; $n < $size; $n++)
-
-                    var aux = "agencyGroup";
-                    
-                    $(document).on('click', "#"+"agencyGroup"+{{$n}}, function(){
-
-                        var pos = $("#pos-"+aux+"{{$n}}").val();    
-                        var name = $(this).text();
-                        var months = <?php echo json_encode($months); ?>;
-                        var brands = <?php echo json_encode($brands); ?>;
-                        var years  = <?php echo json_encode($years); ?>;
-                        var type = "{{$type}}";
-                        var value = "{{$value}}";
-                        var currency = <?php echo json_encode($pRate); ?>;
-                        var region = "{{$region}}";
-                        
-                        if ($("#sub"+aux+{{$n}}).css("display") == "none") {
-                            $.ajax({
-                                url: "/ajaxRanking/subRanking",
-                                method: "POST",
-                                data: {name, months, brands, years, aux, value, currency, region , pos},
-                                success: function(output){
-                                    $("#sub"+aux+{{$n}}).html(output);
-                                    $("#sub"+aux+{{$n}}).css("display", "");
-                                },
-                                error: function(xhr, ajaxOptions,thrownError){
-                                    alert(xhr.status+" "+thrownError);
-                                }
-                            });
-                        }else{
-                            $("#sub"+aux+{{$n}}).css("display", "none");   
-                        }
-                    });*/
-

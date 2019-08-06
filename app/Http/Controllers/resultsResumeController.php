@@ -134,7 +134,7 @@ class resultsResumeController extends Controller{
 			$matrix = array($matrixTV, $matrixDigital, $matrixDN);
 			$names = array("TV", "Digital", "DN");
 		}
-
+		
 		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names'));
 
 	}

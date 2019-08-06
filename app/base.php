@@ -13,13 +13,27 @@ class base extends Model{
         $sql = new sql();
         if($what == "client"){
            $something = "client_id";
+        }elseif($what == "agencyGroup"){
+           $something = "agency_group_id";
         }else{
            $something = "agency_id";
         }
+
         for ($a=0; $a < sizeof($arr); $a++) {
+            
+            if($what == "agencyGroup"){
+                $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
+                $where = "WHERE($something = \"".$arr[$a]."\")";
+            }else{
+                $join = false;
+                $where = "WHERE($something = \"".$arr[$a]."\")";
+            }
+
             $select[$a] = "SELECT SUM(gross_revenue_prate) AS mySum 
-                                FROM ytd 
-                                WHERE($something = \"".$arr[$a]."\")";
+                                FROM ytd y
+                                $join
+                                $where";
+
             $res[$a] = $con->query($select[$a]);
             $from = array("mySum");
             $value[$a] = $sql->fetch($res[$a],$from,$from);

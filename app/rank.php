@@ -23,7 +23,7 @@ class rank extends Model{
         return $years;
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $leftName2=null){
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -72,7 +72,7 @@ class rank extends Model{
 
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
-                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, $order_by);
                 array_pop($colsValue);
 
                 $from = $names;
@@ -84,7 +84,6 @@ class rank extends Model{
                         $res[$y][$r]['total'] *= $pRate;
                     }
                 }
-
             }
 
         }else{
@@ -97,6 +96,14 @@ class rank extends Model{
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "year");
                 $colsValue = array($region, $brands_id, $months);
+            }elseif ($tableName == "digital") {
+                $value .= "_revenue";
+                $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+                $colsValue = array($region, $brands_id, $months);
+            }elseif ($tableName == "plan_by_brand") {
+                $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
+                $colsValue = array($region, $value, $brands_id, $months);
+                $value = "revenue";
             }else{
                 $columns = array("brand_id", "month", "year");
                 $colsValue = array($brands_id, $months);
@@ -129,7 +136,6 @@ class rank extends Model{
                     }
                 }
             }
-
         }
 
         return $res;
