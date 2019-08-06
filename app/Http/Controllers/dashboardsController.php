@@ -81,23 +81,4 @@ class dashboardsController extends Controller{
       return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' , 'years'));
    	}
 
-    public function brandGet(){
-      
-      $db = new dataBase();
-      $con = $db->openConnection("DLA");
-
-      $region = new region();
-      $salesRegion = $region->getRegion($con);
-
-      $currency = new pRate();
-      $currencies = $currency->getCurrency($con);
-
-      $b = new brand();
-      $brands = $b->getBrand($con);
-
-      $render = new renderDashboards();
-
-      return view("adSales.dashboards.brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
-    }
-
 }

@@ -16,7 +16,13 @@ class renderResume extends Render {
 
     		echo "<tr>";
     			echo "<th class='darkBlue center' style='width:5%'> MONTH </th>";
-    			echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>". strtoupper($salesShow)."</th>";
+                if ($type == "Digital") {
+                    echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>SAP</th>";    
+                }elseif ($type == "DN") {
+                    echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>". strtoupper($salesShow)." + SAP</th>";
+                }else{
+                    echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>". strtoupper($salesShow)."</th>";
+                }
     			echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'> ACTUAL </th>";
     			echo "<th class='darkBlue center' style='width:10%'> TARGET </th>";
     			echo "<th class='darkBlue center' style='width:10%'> CORPORATE </th>";

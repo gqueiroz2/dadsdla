@@ -16,9 +16,9 @@ class rankings extends rank{
     public function getAllResults($con, $brands, $type, $region, $value, $currency, $months, $years){
 
         if ($type == "agencyGroup") {
-            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "agency");            
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "DESC", "agency");            
         }else{
-            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency);    
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "DESC");    
         }
         return $res;
     }
@@ -203,14 +203,9 @@ class rankings extends rank{
     public function createNames($type, $months, $years){
         
         if ($type == "agencyGroup") {
-            $res['name'] = "Agency groups";
+            $res['name'] = "Agency group";
         }else{
-            if ($type == "client") {
-                $res['name'] = ucfirst($type)."s";    
-            }else{
-                $res['name'] = "Agencies";
-            }
-            
+            $res['name'] = ucfirst($type);
         }
 
         $b = new base();

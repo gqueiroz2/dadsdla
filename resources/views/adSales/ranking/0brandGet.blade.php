@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
-@section('title', 'Dashboards Brand')
+@section('title', 'Ranking Brand')
 @section('head')	
-	<!--<script src="/js/dashboards-overview.js"></script>-->
+	<script src="/js/rankingBrand.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 
@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('rankingPost') }}" runat="server" onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('brandPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col">
@@ -67,6 +67,13 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				<div style="float: right;"> Brand Ranking </div>
+			</div>
+		</div>
+
 	</div>
 
 	<div id="vlau"></div>

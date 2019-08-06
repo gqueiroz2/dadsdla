@@ -14,10 +14,20 @@
 Route::group(['middleware' => 'auth'],function(){
 
 
-	Route::get('ranking','rankingController@get')
+	Route::group(['prefix'=>'ranking'], function(){
+		Route::get('/','rankingController@get')
 					->name('rankingGet');				
-	Route::post('ranking','rankingController@post')
+		Route::post('/','rankingController@post')
 					->name('rankingPost');
+	});
+
+	Route::group(['prefix'=>'brand'],function(){
+		Route::get('/','rankingBrandController@brandGet')
+				->name('brandGet');
+		Route::post('/','rankingBrandController@brandPost')
+					->name('brandPost');
+	});
+
 });
 
 Route::group(['prefix' => 'ajaxRanking'], function(){
