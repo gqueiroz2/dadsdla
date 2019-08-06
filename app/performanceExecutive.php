@@ -86,7 +86,7 @@ class performanceExecutive extends performance
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
-                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$currencyId,$value);
+                $planValues[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],"value","plan_by_sales",$value);
             }
         }
 
@@ -116,7 +116,7 @@ class performanceExecutive extends performance
             for ($m=0; $m <sizeof($month); $m++) { 
                 for ($s=0; $s <sizeof($salesRep) ; $s++) { 
                     $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
-                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]; 
+                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]/$div; 
                 }
             }
         }
