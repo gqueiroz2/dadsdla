@@ -22,11 +22,7 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        /*
-         if($table == "plan_by_brand"){
-            var_dump($sql);
-        }
-        */
+        
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
@@ -34,14 +30,14 @@ class sql extends Model{
 
     public function selectSum2($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        echo "<pre>".$sql."</pre><br>";
+        //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
     }
 
     public function selectGroupBy($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order="ASC"){     
         $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
-        //echo "<pre>".$sql."</pre><br>";
+        //echo "<pre>".$sql."</pre><br>";        
         $res = $con->query($sql);
         return $res;
 
