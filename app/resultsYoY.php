@@ -23,11 +23,11 @@ class resultsYoY extends results {
         for ($l=0; $l < 3; $l++) { 
 
             if ($l == 0) {
-                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $pYear, $region, $value, $cYear);
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $pYear, $region, $value, $cYear, $source);
             }elseif($l == 1) {
-                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value, $cYear, $source);
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value, $cYear, $source, $source);
             }else{
-                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value, $cYear);
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $cYear, $region, $value, $cYear, $source);
             }
         }
 
