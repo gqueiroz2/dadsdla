@@ -23,7 +23,7 @@ class rank extends Model{
         return $years;
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null){
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
