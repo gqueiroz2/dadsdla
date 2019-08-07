@@ -106,7 +106,7 @@ class results extends base{
         return $table;
     }
     
-    public function matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $keyYear, $sourceAux, $source=false){
+    public function matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $keyYear, $source=false){
         
         $cMonth = intval(date('m'));
         $cYear = intval(date('Y'));
@@ -116,7 +116,7 @@ class results extends base{
                     if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                         if ($brands[$b][1] == "FN") {
                             if ($year == 2019 && ($months[$m][1] < 6)) {
-                                $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear, $sourceAux);
+                                $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear, "ACTUAL");
                             }else{
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
                             }

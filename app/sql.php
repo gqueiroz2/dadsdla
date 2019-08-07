@@ -22,7 +22,6 @@ class sql extends Model{
 
     public function selectSum($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
@@ -41,6 +40,25 @@ class sql extends Model{
         $res = $con->query($sql);
         return $res;
 
+    }
+
+    public function selectWithUnion($con, $info, $group_by, $order_by, $order){
+        
+        $columns = $info[0]['$columns'];
+        $table = $info[0]['table'];
+        $join = $info[0]['join'];
+        $where = $info[0]['where'];
+
+        $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by";
+
+        $sql .= " UNION ";
+
+        $columns = $info[1]['$columns'];
+        $table = $info[1]['table'];
+        $join = $info[1]['join'];
+        $where = $info[1]['where'];
+
+        $sql .= "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
     }
 
     public function insert($con,$table,$columns,$values){

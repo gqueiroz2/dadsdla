@@ -10,6 +10,9 @@ class rankingBrand extends rank{
 
 	//$con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null
 	public function getAllResults($con, $info, $region, $brands, $value, $months, $currency) {
+
+		$sql = new sql();
+
 		//var_dump($brands);
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			
@@ -19,17 +22,23 @@ class rankingBrand extends rank{
 				$table = $info['table'];
 			}
 
-			$firstClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
-			$secondClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][1]), $months, $currency, "DESC");
-			$plan[$b] = $this->getAllValues($con, "plan_by_brand", $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
-			var_dump("first", $firstClosed[$b]);
-			//var_dump("second", $secondClosed[$b]);
-			//var_dump("plan", $plan[$b]);
+			$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);
+
+			//var_dump("infoQuery", $infoQuery[$b]);
 		}
-		
+
+		for ($y=0; $y < sizeof($info['years']); $y++) { 
+			
+			array_push($infoQuery['colsValue'], $info['years'][$y]);
+			$where = $sql->where($infoQuery['columns'], $infoQuery['colsValue']);
+		}
+		/*$firstClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
+		$secondClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][1]), $months, $currency, "DESC");
+		$plan[$b] = $this->getAllValues($con, "plan_by_brand", $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
+		var_dump("first", $firstClosed[$b]);*/
 
 	}
-    
+
 	public function mountBrands($brands){
 		
 		$brandsTV = array();

@@ -37,9 +37,11 @@ class resultsResume extends results{
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
 
+		$tr = strtoupper($value);
+
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
-				// SE FOR CMAPS 
+				// SE FOR CMAPS
 	            if($salesRegion == 'Brazil'){
 		            $whereSales[$m][$b] = "WHERE (cmaps.month IN (".$months[$m][1].") ) 
 		                               AND (cmaps.year IN ($cYear) )
@@ -50,27 +52,47 @@ class resultsResume extends results{
 		                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
 		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )
 		                                   ";
-		        }else{	
-		       	//SE FOR IBMS / BTS	           
-		        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-		        	                   AND (ytd.year IN ($cYear) )
-		        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
-		        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
-		        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
+		        }else{
+		       	//SE FOR IBMS / BTS
 
-		            $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-		                                    AND ( ytd.year IN ($pYear) )
-		                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
-		                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";
-		        }	
+		        	if ($brands[$b][1] == "FN") {
+						if ($cYear == 2019 && ($months[$m][1] < 6)) {
+							$whereSales[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
+            					   			AND (source  = \"ACTUAL\")
+		                                    AND (type_of_revenue = \"".$tr."\")
+		                                    AND (sales_office_id = \"".$regionID."\")
+		                                    AND (currency_id = 4 )
+		                                    AND (brand_id = \"".$brands[$b][0]."\" )
+		                               		";
+						}else{
+							$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			        	                   AND (ytd.year IN ($cYear) )
+			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
+			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
+  		                }
+					}else{
+
+			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			        	                   AND (ytd.year IN ($cYear) )
+			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
+			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
+			        }
+
+			        $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+			                                    AND ( ytd.year IN ($pYear) )
+			                                    AND (ytd.sales_representant_office_id IN (".$regionID.") )
+			                                    AND (ytd.brand_id IN (".$brands[$b][0].") )";	
+		    	}
 			}
 		}
 
-		$tr = strtoupper($value);
-
 		for ($m=0; $m < sizeof($months); $m++) { 
         	for ($b=0; $b < sizeof($brands); $b++) { 
-        		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
+
+        		
+					$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
             					   AND (source  = \"TARGET\")
                                    AND (type_of_revenue = \"".$tr."\")
                                    AND (sales_office_id = \"".$regionID."\")
@@ -78,21 +100,22 @@ class resultsResume extends results{
                                    AND (brand_id = \"".$brands[$b][0]."\" )
                                ";
 
-	            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
-	            					   AND ( source  = \"ACTUAL\" )
-	                                   AND ( type_of_revenue = \"".$tr."\" )
-	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = 4 )
-	                                   AND (brand_id = \"".$brands[$b][0]."\" )
-	                               ";
+		            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+		            					   AND ( source  = \"ACTUAL\" )
+		                                   AND ( type_of_revenue = \"".$tr."\" )
+		                                   AND (sales_office_id = \"".$regionID."\")
+		                                   AND (currency_id = 4 )
+		                                   AND (brand_id = \"".$brands[$b][0]."\" )
+		                               ";
 
-	            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
-	            					   AND ( source  = \"CORPORATE\" )
-	                                   AND ( type_of_revenue = \"".$tr."\" )
-	                                   AND (sales_office_id = \"".$regionID."\")  
-	                                   AND (currency_id = 4 )
-	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
-	                                   ";
+		            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+		            					   AND ( source  = \"CORPORATE\" )
+		                                   AND ( type_of_revenue = \"".$tr."\" )
+		                                   AND (sales_office_id = \"".$regionID."\")  
+		                                   AND (currency_id = 4 )
+		                                   AND (brand_id = \"".$brands[$b][0]."\" )  
+		                                   ";
+				
         	}
         }
 
