@@ -81,7 +81,7 @@ class results extends base{
                     $pRateCMAPS = 1;
                 }
                 
-                $vector[$m] = $vector[$m]/$pRateCMAPS;//
+                $vector[$m] = $vector[$m]/$pRateCMAPS;
             }else{
                 $vector[$m] = $vector[$m]*$div;
             }
@@ -113,11 +113,14 @@ class results extends base{
         for ($b=0; $b < sizeof($brands); $b++) { 
             for ($m=0; $m < sizeof($months); $m++) { 
                 if (!$source) {
-                    /*if ($brands[$b][1] == 'FN' && $region == 1) {
-                        $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                    }else*/
                     if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
-                        if ($form == "mini_header") {
+                        if ($brands[$b][1] == "FN") {
+                            if ($year == 2019 && ($months[$m][1] < 6)) {
+                                $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear, "ACTUAL");
+                            }else{
+                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
+                            }
+                        }elseif ($form == "mini_header") {
                             if (($year == $cYear) && ($months[$m][1] < $cMonth)) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
                             }else{

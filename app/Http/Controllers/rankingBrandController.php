@@ -76,8 +76,9 @@ class rankingBrandController extends Controller {
     	
     	$rb = new rankingBrand();
 
+    	$brandsFinal = $rb->mountBrands($brands);
     	$info = $rb->mountValues($con, $r, $region);
-    	$rb->getAllResults($con, $info, $region, $brands, $value, $months, $pRate);
+    	$rb->getAllResults($con, $info, $region, $brandsFinal, $value, $months, $pRate);
     	//var_dump($info);
     	//return view("adSales.ranking.0brandPost");
     }

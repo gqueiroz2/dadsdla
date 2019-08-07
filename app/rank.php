@@ -23,7 +23,7 @@ class rank extends Model{
         return $years;
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null){
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -139,6 +139,57 @@ class rank extends Model{
         }
 
         return $res;
+
+    }
+
+    public function getAllValuesUnion($tableName, $leftName, $type, $brands, $region, $value, $months, $currency){
+        
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            $brands_id[$b] = $brands[$b][0];
+        }
+
+        $tableAbv = "a";
+        $leftAbv = "b";
+
+        $as = "total";
+
+        if ($tableName == "ytd") {
+            $value .= "_revenue_prate";
+            $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+            $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "digital") {
+            $value .= "_revenue";
+            $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+            $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "plan_by_brand") {
+            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
+            $colsValue = array($region, $value, $brands_id, $months);
+            $value = "revenue";
+        }else{
+            $columns = array("brand_id", "month", "year");
+            $colsValue = array($brands_id, $months);
+        }
+
+        $table = "$tableName $tableAbv";
+
+        $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".
+               $leftAbv."."."name AS '".$type."', SUM($value) AS $as";
+
+        $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id";       
+
+        $name = $type."_id";
+        $names = array($type."ID", $type, $as);
+
+        $rtr['value'] = $value;
+        $rtr['columns'] = $columns;
+        $rtr['colsValue'] = $colsValue;
+        $rtr['table'] = $table;
+        $rtr['query'] = $tmp;
+        $rtr['join'] = $join;
+        $rtr['name'] = $name;
+        $rtr['names'] = $names;
+
+        return $rtr;
 
     }
 
