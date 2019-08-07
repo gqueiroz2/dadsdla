@@ -40,8 +40,6 @@ class executivePerformanceRender extends renderPerformance
 	    		echo "<div class='row'>";
 	    	}
 
-	    	
-
 	    	if (sizeof($mtx["salesRep"]) == 1) {
 	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}else{

@@ -55,35 +55,26 @@
 
 	<script>
 		$(document).ready(function(){
-			@for($b=0;$b<12;$b++)
-				@for($m=0;$m<16;$m++)
-					$("#fa-"+{{$b}}+"-"+{{$m}}).change(function(){
-						if ($(this).val() == '') {
-							$(this).val(0);
-						}
+			@for($c=0;$c<10;$c++)
+				$("#clientRF-Full-"+{{$c}}).change(function(){
+					if ($(this).val() == "") {
+						$(this).val(0);
+					}
 
-						$(this).val(Comma(handleNumber($(this).val())));
+					var temp = handleNumber($(this).val());
 
+					$(this).val(Comma(temp));
 
-						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
-							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-0").val())+handleNumber($("#fa-"+{{$b}}+"-1").val())+handleNumber($("#fa-"+{{$b}}+"-2").val()));
-							$("#fa-"+{{$b}}+"-3").val(value);
-						}else if({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6){
-							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-4").val())+handleNumber($("#fa-"+{{$b}}+"-5").val())+handleNumber($("#fa-"+{{$b}}+"-6").val()));
-							$("#fa-"+{{$b}}+"-7").val(value);
-						}else if({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10){
-							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-8").val())+handleNumber($("#fa-"+{{$b}}+"-9").val())+handleNumber($("#fa-"+{{$b}}+"-10").val()));
-							$("#fa-"+{{$b}}+"-11").val(value);
-						}else if({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14){
-							var value = Comma(handleNumber($("#fa-"+{{$b}}+"-12").val())+handleNumber($("#fa-"+{{$b}}+"-13").val())+handleNumber($("#fa-"+{{$b}}+"-14").val()));
-							$("#fa-"+{{$b}}+"-15").val(value);
-						}
+				});
+				$("#clientRF-Cm-"+{{$c}}).change(function(){
+					if ($(this).val() == "") {
+						$(this).val(0);
+					}
 
-						var valueTotal = Comma(handleNumber($("#fa-"+{{$b}}+"-3").val()) + handleNumber($("#fa-"+{{$b}}+"-7").val()) + handleNumber($("#fa-"+{{$b}}+"-11").val()) + handleNumber($("#fa-"+{{$b}}+"-15").val()));
+					var temp = handleNumber($(this).val());
 
-						$("#total-"+{{$b}}).val(valueTotal);
-					});
-				@endfor
+					$(this).val(Comma(temp));
+				});
 			@endfor
 		});
 

@@ -10,7 +10,6 @@ use App\dashboards;
 class renderDashboards extends Render{
     
     public function assembler($con,$handler,$type,$baseFilter,$secondaryFilter,$flow){
-        //var_dump($type);
         $sr = new subRankings();
 
         $cYear = intval(date("Y"));
@@ -22,9 +21,6 @@ class renderDashboards extends Render{
         }else{
             $showType = "Agency Group";
         }
-
-        //var_dump($baseFilter);
-        //var_dump($secondaryFilter);
 
         $last3YearsRoot = $handler['last3YearsRoot'];
         $last3YearsChild = $handler['last3YearsChild'];
@@ -39,7 +35,7 @@ class renderDashboards extends Render{
         echo "</div>";
 
         echo "<div class='row justify-content-center mt-3' style='margin-right: 0.3%; margin-left: 0.3%;'>";
-            echo "<div class='col' align='center' style='border: 1px solid black; font-size:14px;'>";
+            echo "<div class='col' align='center'>";
                 echo "<span style='width:100%;'>".$this->renderLast3Root($type,$showType,$baseFilter,$last3YearsRoot,$years)."</span>";
             echo "</div>";
         echo "</div>";
@@ -69,14 +65,28 @@ class renderDashboards extends Render{
             echo "</div>";
         echo "</div>";
 
-
         echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
-            echo "<div class='col' align='center'>";
-                echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
+            echo "<div class='col' style='margin-top:1.5%;'>";
+                echo "<div class='container-fluid' style='margin:0px !important; padding:0px !important;'>";
+                    
+                    echo "<div class='row'>";
+                        echo "<div class='col' align='center'>";
+                            echo "<span><b> Rev. Year By Brand </b></span>";
+                        echo "</div>";  
+                    echo "</div>"; 
+
+                    echo "<div class='row'>";
+                        echo "<div class='col'>";
+                            echo "<div id=\"overviewBrandChartColumn\" class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS POR MARCA </div>";
+                        echo "</div>";  
+                    echo "</div>";
+
+                echo "</div>";
             echo "</div>";
+
             for ($y=0; $y < sizeof($years); $y++) { 
                 
-                echo "<div class='col-2'>";
+                echo "<div class='col' style='margin-top:1.5%;'>";
                     echo "<div class='container-fluid' style='margin:0px !important; padding:0px !important;'>";
                         
                         echo "<div class='row'>";
@@ -93,8 +103,17 @@ class renderDashboards extends Render{
 
                     echo "</div>";
                 echo "</div>";
+            } 
 
-            }
+        echo "</div>";
+
+
+
+        echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
+            echo "<div class='col' align='center'>";
+                echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
+            echo "</div>";
+        echo "</div>";
       
         //echo "</div>";
 
@@ -351,6 +370,38 @@ class renderDashboards extends Render{
     }
 
     public function renderLast3Root($type,$showType,$baseFilter,$l3R,$years){
+        
+  
+                    for ($l=0; $l < sizeof($l3R); $l++) { 
+                        echo "<table style='width: 100%; zoom:100%; font-size: 14px;border: 1px solid black;'>";
+                        for ($n=0; $n < sizeof($l3R[$l][0]); $n++) {
+                            echo "<tr style='text-align:center;'>";
+                            for ($m=0; $m < sizeof($l3R[$l]); $m++) { 
+                                if($n == 0){
+                                    $clr = "lightBlue";
+                                    echo "<td class='$clr'>".$l3R[$l][$m][$n]."</td>";                    
+                                }else{
+                                    $clr = "medBlue";
+                                    if($m >= 0 && $m <=2 ){
+                                        echo "<td class='$clr' >".$l3R[$l][$m][$n]."°</td>";                    
+                                    }else{
+                                        if(is_numeric($l3R[$l][$m][$n])){
+                                            echo "<td class='$clr'>".number_format($l3R[$l][$m][$n])."</td>";                    
+                                        }else{
+                                            echo "<td class='$clr'>".$l3R[$l][$m][$n]."</td>";                    
+                                        }
+                                    }
+
+                                }
+                            }   
+                            echo "</tr>";                 
+                        }
+                        echo "</table>";                    
+                    }
+
+        
+    
+        /*
         echo "<div class='container-fluid' style='margin:0px !important; padding:0px !important;'>";
             echo "<div class='row'>";
                 echo "<div class='col-3 lightBlue'>";
@@ -373,7 +424,7 @@ class renderDashboards extends Render{
                 }  
             echo "</div>";    
         echo "</div>";
-
+        */
     }
 
     public function renderLast3Child($sr,$l3C,$years,$type){

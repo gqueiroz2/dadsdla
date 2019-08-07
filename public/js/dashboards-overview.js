@@ -5,6 +5,10 @@ $(document).ready(function(){
     return s.charAt(0).toUpperCase() + s.slice(1)
   }
 
+  //$('#region').empty().selectpicker('refresh');
+  //$('#region').html("<option selected='true'> Select </option>").selectpicker('refresh');
+
+
   $('#region').change(function(){
 		var regionID = $(this).val();
 

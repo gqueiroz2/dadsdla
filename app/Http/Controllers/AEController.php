@@ -8,10 +8,11 @@ use App\PAndRRender;
 use App\salesRep;
 use App\pRate;
 use App\dataBase;
+use App\brand;
+use App\base;
+use App\AE;
 
-class AEController extends Controller
-{
-
+class AEController extends Controller{
     protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
     public function get(){
@@ -29,20 +30,58 @@ class AEController extends Controller
     }
 
     public function post(){
-    	$db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $r = new region();
-        $sr = new salesRep();
-        $render = new PAndRRender();
-        $pr = new pRate();
 
-        $region = $r->getRegion($con,null);
-        $currency = $pr->getCurrency($con,null);
+    	var_dump(Request::all());
+
+        $db = new dataBase(); 
+        $render = new PAndRRender();
+        $r = new region();
+        $pr = new pRate();
+        $ae = new AE();        
+
+        $con = $db->openConnection("DLA");        
+
+        $region = $r->getRegion($con,false);
+        $currency = $pr->getCurrency($con,false);
+
+        $tmp = $ae->base($con,$r,$pr);
+
+        $forRender = $tmp;
+       
+        $client = $tmp['client'];
+
+        $mtx = false;
 
         $total2018 = array(770,750,490,2010,500,680,1000,2180,350,840,740,1930,1000,1200,1250,3450);
         $totaltotal2018 = 9570;
 
-        $client2018[0] = array(77,75,49,201,50,68,100,218,35,84,74,193,100,120,125,345);
+        for ($c=0; $c < sizeof($client); $c++) { 
+            $client2018[$c] = array( 77*$c ,
+                                    79*$c,
+                                    81*$c,
+                                    (77*$c + 79*$c + 81*$c),
+                                    83*$c,
+                                    85*$c,
+                                    87*$c,
+                                    (83*$c + 85*$c + 87*$c),
+                                    89*$c,
+                                    91*$c,
+                                    93*$c,
+                                    (89*$c + 91*$c + 93*$c),
+                                    95*$c,
+                                    97*$c,
+                                    99*$c,
+                                    (95*$c + 97*$c + 99*$c),                                    
+                                ); 
+
+            $totalClient2018[$c] = 666;   
+        }
+
+/*
+        $client2018[0] = array(77,75,49,201,
+            50,68,100,218
+            ,35,84,74,193,
+            100,120,125,345);
         $totalClient2018[0] = 957;
 
         $client2018[1] = array(77,75,49,201,50,68,100,218,35,84,74,193,100,120,125,345);
@@ -71,7 +110,7 @@ class AEController extends Controller
 
         $client2018[9] = array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
         $totalClient2018[9] = 0;
-
+*/
         $month = date('M');
         $tmp = false;
         $tfArray = array();
@@ -89,7 +128,7 @@ class AEController extends Controller
 
         }
         
-        return view('pAndR.AEView.post',compact('render','region','currency','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
     }
 
 }

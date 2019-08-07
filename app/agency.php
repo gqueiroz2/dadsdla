@@ -75,6 +75,41 @@ class agency extends Management{
         return $agencyGroupID;
     }
 
+    public function getAllAgenciesByClient($con,$sql,$parent,$region){
+        $sel = "SELECT c.ID AS 'clientID' 
+                    FROM client c
+                    LEFT JOIN client_group cg ON cg.ID = c.client_group_id 
+                    WHERE ( c.name = '$parent' )
+                    AND (cg.region_id = '$region')
+
+               ";
+
+        $result = $con->query($sel);
+
+        $fr = array("clientID","clientID");
+
+        $clientIDs = $sql->fetch($result,$fr,$fr)[0];
+
+        if($clientIDs){
+            $implodedClients = implode(",", $clientIDs);
+        }
+
+        $table = "ytd y";
+        $columns = "DISTINCT agency_id AS 'ID'";
+
+        $join = "LEFT JOIN client c ON c.ID = y.client_id";
+
+        $where = "WHERE c.ID IN (\"".addslashes($implodedClients)."\")";
+                
+        $res = $sql->select($con,$columns,$table,$join,$where,1);
+                
+        $from = array("ID");
+        $to = array('id');
+        $agencyID = $sql->fetch($res,$from,$to);
+
+        return $agencyID;
+    }
+
     public function handlerGroup($con,$spreadSheet){
         $sql = new sql();
         $r = new region();

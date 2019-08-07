@@ -16,9 +16,12 @@ class subRankings extends rank {
         */
         if ($type == "agencyGroup") {
             $filter = "agency_group_id";
+        }elseif($type == "client"){
+            $filter = "agency_id";
         }else{
             $filter = "agency_id";
         }
+
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
         }
@@ -34,6 +37,8 @@ class subRankings extends rank {
 
         if ($type == "agencyGroup") {
             $oldAgency = $a->getAgencyGroupID($con, $sql, $filterValue, $region);
+        }elseif($type == "client"){
+            $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);    
         }else{
             $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue);    
         }
@@ -45,7 +50,7 @@ class subRankings extends rank {
         }else{
             $agency = $oldAgency;
         }
-        
+       
         if ($tableName == "ytd") {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year", $filter);
@@ -57,6 +62,10 @@ class subRankings extends rank {
 
         $table = "$tableName $tableAbv";
 
+        if($type == "client"){
+            $leftName = "agency";
+        }
+
         $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
 
         $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
@@ -65,6 +74,7 @@ class subRankings extends rank {
         $names = array($leftName."ID", $leftName, $as);
 
         $where = $sql->where($columns, $colsValue);
+
         $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
         $from = $names;
@@ -194,15 +204,15 @@ class subRankings extends rank {
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
         }else{
-            $res = $name;
+            $res = addslashes($name);
         }
 
         return $res;
     }
 
     public function assembler($sub, $years, $type){
-        
-        if ($type == "agencyGroup") {
+
+        if ($type == "agencyGroup" || $type == "client") {
             $var = "Agency";
             $type2 = "agency";
         }else{
@@ -214,10 +224,11 @@ class subRankings extends rank {
             $mtx[$y][0] = "Pos. ".$years[$y];
         }
 
+
         $last = $y;
         
         $mtx[$last][0] = $var;
-        //var_dump($sub);
+
         for ($l=0; $l < sizeof($years); $l++) { 
             
             $mtx[(sizeof($years)+$l+1)][0] = "Rev. ".$years[$l];
@@ -240,6 +251,7 @@ class subRankings extends rank {
             }
         }
 
+
         
         for ($v=0; $v < sizeof($values); $v++) { 
             for ($m=0; $m < sizeof($mtx); $m++) {
@@ -258,10 +270,9 @@ class subRankings extends rank {
         }
 
         $fun .= ");";
-        /*eval($fun);
-        var_dump($fun);*/
+
         $total = $this->assemblerTotal($mtx, $years);
-        
+
         return array($mtx, $total);
     }
 
