@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\agency;
+use App\client;
 
 class rank extends Model{
 
@@ -37,7 +38,7 @@ class rank extends Model{
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }
-        
+
         $as = "total";
 
         if ($type == "agencyGroup") {
@@ -135,7 +136,6 @@ class rank extends Model{
                     }
                 }
             }
-
         }
 
         return $res;

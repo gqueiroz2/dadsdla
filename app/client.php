@@ -179,6 +179,18 @@ class client extends Management{
         return $client;
     }
 
+    public function getAllClientsByName($con,$sql,$parent){
+        $table = "client";
+        $columns = "ID";
+        $join = false;
+        $where = "WHERE name = \"".addslashes($parent)."\"";
+        $res = $sql->select($con,$columns,$table,$join,$where,1);
+        $from = array("ID");
+        $to = array('id');
+        $clientGroupID = $sql->fetch($res,$from,$to);
+        return $clientGroupID;
+    }
+
     public function getClient($con,$clientID = false){
         $sql = new sql();
 

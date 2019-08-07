@@ -96,6 +96,8 @@
 
 	</div>
 
+	<div id="vlau"></div>
+
 	<script>
 		google.charts.load('current', {
 				callback: function () {
@@ -232,6 +234,7 @@
 				@endfor
 			]);
 			var options = {
+				is3D: true,
 				chartArea:{
 					'width':'100%',
 					'height':'100%'
@@ -244,8 +247,20 @@
 				pieSliceTextStyle: {
 					fontSize:'25','color':'black'
 				},
-				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
-				]
+				slices:{
+					0: {textStyle: {color: 'black' },color: '#0070c0'  },
+					1: {textStyle: {color: 'black' },color: '#ff3300'  },
+					2: {textStyle: {color: 'black' },color: '#ffff00'  },
+					3: {textStyle: {color: 'black' },color: '#009933'  },
+					4: {textStyle: {color: 'black' },color: '#ff0000'  },
+					5: {textStyle: {color: 'white' },color: '#000000'  },
+					6: {textStyle: {color: 'white' },color: '#002060'  },
+					7: {textStyle: {color: 'black' },color: '#ff0000'  },
+					8: {textStyle: {color: 'black' },color: '#6600ff'  },
+					9: {textStyle: {color: 'white' },color: '#004b84'  },
+					10: {textStyle: {color: 'white' },color: '#808080'  },
+					11: {textStyle: {color: 'black' },color: '#88cc00'  }
+				}
 			};
 			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartCYear'));
         	chart.draw(data, options);
@@ -255,7 +270,7 @@
 	<script>
 		google.charts.load('current', {
 				callback: function () {
-    				overviewBrandCharCYear();
+    				overviewBrandCharPYear();
     				$(window).resize(overviewBrandCharPYear);
   				},
 				'packages':['corechart']
@@ -271,6 +286,7 @@
 				@endfor
 			]);
 			var options = {
+				is3D: true,
 				chartArea:{
 					'width':'100%',
 					'height':'100%'
@@ -283,8 +299,21 @@
 				pieSliceTextStyle: {
 					fontSize:'25','color':'black'
 				},
-				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
-				]
+				slices:{
+					0: {textStyle: {color: 'black' },color: '#0070c0'  },
+					1: {textStyle: {color: 'black' },color: '#ff3300'  },
+					2: {textStyle: {color: 'black' },color: '#ffff00'  },
+					3: {textStyle: {color: 'black' },color: '#009933'  },
+					4: {textStyle: {color: 'black' },color: '#ff0000'  },
+					5: {textStyle: {color: 'white' },color: '#000000'  },
+					6: {textStyle: {color: 'white' },color: '#002060'  },
+					7: {textStyle: {color: 'black' },color: '#ff0000'  },
+					8: {textStyle: {color: 'black' },color: '#6600ff'  },
+					9: {textStyle: {color: 'white' },color: '#004b84'  },
+					10: {textStyle: {color: 'white' },color: '#808080'  },
+					11: {textStyle: {color: 'black' },color: '#88cc00'  }
+				}
+				
 			};
 			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPYear'));
         	chart.draw(data, options);
@@ -294,7 +323,7 @@
 	<script>
 		google.charts.load('current', {
 				callback: function () {
-    				overviewBrandCharCYear();
+    				overviewBrandCharPPYear();
     				$(window).resize(overviewBrandCharPPYear);
   				},
 				'packages':['corechart']
@@ -310,6 +339,7 @@
 				@endfor
 			]);
 			var options = {
+				is3D: true,
 				chartArea:{
 					'width':'100%',
 					'height':'100%'
@@ -322,13 +352,64 @@
 				pieSliceTextStyle: {
 					fontSize:'25','color':'black'
 				},
-				colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
-				]
+				slices:{
+					0: {textStyle: {color: 'black' },color: '#0070c0'  },
+					1: {textStyle: {color: 'black' },color: '#ff3300'  },
+					2: {textStyle: {color: 'black' },color: '#ffff00'  },
+					3: {textStyle: {color: 'black' },color: '#009933'  },
+					4: {textStyle: {color: 'black' },color: '#ff0000'  },
+					5: {textStyle: {color: 'white' },color: '#000000'  },
+					6: {textStyle: {color: 'white' },color: '#002060'  },
+					7: {textStyle: {color: 'black' },color: '#ff0000'  },
+					8: {textStyle: {color: 'black' },color: '#6600ff'  },
+					9: {textStyle: {color: 'white' },color: '#004b84'  },
+					10: {textStyle: {color: 'white' },color: '#808080'  },
+					11: {textStyle: {color: 'black' },color: '#88cc00'  }
+				}
 			};
 			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPPYear'));
         	chart.draw(data, options);
 		}
 	</script>
+
+	<script>
+		google.charts.load('current', {
+				callback: function () {
+    				overviewBrandChartColumn();
+    				$(window).resize(overviewBrandChartColumn);
+  				},
+				'packages':['corechart']
+		});
+		google.charts.setOnLoadCallback(overviewBrandChartColumn);
+		function overviewBrandChartColumn(){
+			var data = google.visualization.arrayToDataTable([
+	          	<?php echo $brandChartColumn; ?>
+	        ]);		
+
+			var options = {
+		        vAxis: {
+		          	viewWindow:{
+		          		max:{{ $maxChartColumn }},
+		          	}
+		        },
+				chartArea:{
+					'width':'100%',
+				},
+				'width': '100%',
+				'height': '100%',
+				backgroundColor:'transparent',
+				legend:'none',
+				pieSliceText: 'label',
+				pieSliceTextStyle: {
+					fontSize:'25','color':'black'
+				},
+				colors: ['#0000cc', '#3366ff', '#99ccff', ]
+			};
+			var chart = new google.visualization.ColumnChart(document.getElementById('overviewBrandChartColumn'));
+        	chart.draw(data, options);
+		}
+	</script>
+	
 
 @endsection
 

@@ -32,6 +32,7 @@ class performance extends base{
             $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$value);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
             $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
+            //var_dump( number_format( $values[$s] ));
         }
         return $values;
     }

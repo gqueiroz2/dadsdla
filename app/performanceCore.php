@@ -41,6 +41,20 @@ class performanceCore extends performance
         $div = $base->generateDiv($con,$pr,$region,$tmp,$currency);
         $div = 1/$div;
 
+        if ($region == '6' || $region == '7') {
+            array_push($salesRep, '15');
+        }elseif ($region == '9') {
+            array_push($salesRep, '102');
+        }elseif ($region == '10') {
+            array_push($salesRep, '103');
+        }elseif ($region == '12') {
+            array_push($salesRep, '104');
+        }elseif ($region == '13') {
+            array_push($salesRep, '105');
+        }elseif ($region == '11') {
+            array_push($salesRep, '45');
+        }
+
         $currencyId = $currency;
 
         //nome da moeda pra view
@@ -83,6 +97,17 @@ class performanceCore extends performance
         $salesRep = $sr->getSalesRepById($con,$salesRep);
 
 
+        for ($sr=0; $sr <sizeof($salesRep) ; $sr++) { 
+            if ($salesRep[$sr]["salesRep"] == 'Martin Hernandez' && $region == '6')  {
+                $salesRep[$sr]["salesRepGroup"] = "Chile";
+            }elseif($salesRep[$sr]["salesRep"] == 'Martin Hernandez' && $region == '7'){
+                $salesRep[$sr]["salesRepGroup"] = "Peru";
+            }elseif($salesRep[$sr]["salesRep"] == 'Jesse Leon'){
+                $salesRep[$sr]["salesRepGroup"] = "NY International";
+            }
+        }
+        var_dump($salesRep);
+
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $values[$b][$m] = $this->generateValue($con,$sql,$region,$year,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
@@ -112,7 +137,6 @@ class performanceCore extends performance
                 }
             }
         }
-
 
         for ($b=0; $b <sizeof($brand); $b++) { 
             for ($m=0; $m <sizeof($month); $m++) { 
@@ -174,6 +198,8 @@ class performanceCore extends performance
             }
         }
 
+
+
         for ($sg=0; $sg <sizeof($salesGroup) ; $sg++) {
             for ($s=0; $s <sizeof($salesRep); $s++) { 
                 if ($salesRep[$s]["salesRepGroup"] == $salesGroup[$sg]["name"]) {
@@ -189,7 +215,6 @@ class performanceCore extends performance
         //Termina de Agrupar
 
         $mtx["case4"] = $tmp1;
-
 
         //Começou a agrupar por tier
         for ($sg=0; $sg <sizeof($salesGroup); $sg++) { 

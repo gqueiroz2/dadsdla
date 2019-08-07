@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Request;
 class performanceExecutive extends performance
 {
     public function makeMatrix($con){
-    	 $b = new brand();
+    	$b = new brand();
         $r = new region();
         $base = new base();
         $sql = new sql();
@@ -64,7 +64,7 @@ class performanceExecutive extends performance
         $regionView = $r->getRegion($con,$tmp)[0]["name"];
 
         //define de onde vai se tirar as informações do banco, sendo as opções ytd(IBMS), cmaps, header ou digital.
-        $actualMonth = date("m");
+        //$actualMonth = date("m");
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -80,8 +80,6 @@ class performanceExecutive extends performance
 		//olha quais nucleos serão selecionados
         $salesGroup = $sr->getSalesRepGroupById($con,$salesRepGroup);
         $salesRep = $sr->getSalesRepById($con,$salesRep);
-
-
 
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){

@@ -52,8 +52,6 @@ class makeChart extends Model{
 		$revPY = $tmp[2];
 		$revPPY = $tmp[3];
 
-		
-
 		for ($l=0; $l < sizeof($pivot); $l++) { 
 			$label[$l] = $pivot[$l];
 			if($l == 0){
@@ -84,7 +82,37 @@ class makeChart extends Model{
 		$rtr = array("label" => $label, "cYear" => $revC, "pYear" => $revP, "ppYear" => $revPP);
 
 		return $rtr;
+		
 	}
+
+	public function overviewBrandColumn($con,$l3B,$years){
+
+    	$dash = new dashboards();
+    	$brands = $dash->getBrands($con);
+    	$string = "['Channel','".$years[0]."','".$years[1]."','".$years[2]."'],";
+
+    	$max = 0;
+
+
+    	for ($b=0; $b < sizeof($brands); $b++) { 
+	    	if( ($l3B[0][$b] > 0) || ($l3B[1][$b] > 0) || ($l3B[2][$b] > 0) ){
+	    		$string .= "['".$brands[$b][1]."',";
+	    		for ($y=0; $y < sizeof($years); $y++) { 
+					$string .= " ".$l3B[$y][$b].", ";
+
+					if($l3B[$y][$b] > $max){
+						$max = $l3B[$y][$b];
+					}
+
+				}
+				$string .= " ], ";
+			}
+    	}
+
+    	$rtr = array("string" => $string, "max" => $max);
+
+    	return $rtr;
+    }
 
     public function overviewBrand($con,$l3B){
 
