@@ -19,9 +19,29 @@ class executivePerformanceRender extends renderPerformance
     	echo "</div>";
 
 	    for ($s=0; $s < sizeof($mtx["case1"]["value"]); $s++) {
+
+	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Peru") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Venezuela") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Panama") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Dominican Republic") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Ecuador") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "NY International") {
+	    		$s++;
+	    	}
+
 	    	if ($s%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
+
+	    	
+
 	    	if (sizeof($mtx["salesRep"]) == 1) {
 	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}else{
@@ -235,6 +255,22 @@ class executivePerformanceRender extends renderPerformance
 	    		echo "<div class='row'>";
 	    	}
 	    	
+	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Peru") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Venezuela") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Panama") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Dominican Republic") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Ecuador") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "NY International") {
+	    		$s++;
+	    	}
+
 	    	if (sizeof($mtx["salesRep"]) == 1) {
 	    		echo "<div class='col-sm-8' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}else{
@@ -429,6 +465,22 @@ class executivePerformanceRender extends renderPerformance
     	for ($s=0; $s < sizeof($mtx["salesRep"]); $s++) {
 	    	echo "<div class='row'>";
 	    	
+	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Peru") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Venezuela") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Panama") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Dominican Republic") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Ecuador") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "NY International") {
+	    		$s++;
+	    	}
+
 	    	echo "<div class='col' style='width:100%; margin-left:auto; margin-right: auto;'>";
 
 		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";
@@ -627,6 +679,22 @@ class executivePerformanceRender extends renderPerformance
 	    for ($s=0; $s < sizeof($mtx["salesRep"]); $s++) {
 	    	echo "<div class='row'>";
 	    	
+	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Peru") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Venezuela") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Panama") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Dominican Republic") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Armstrong Boada" && $mtx["region"] == "Ecuador") {
+	    		$s++;
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "NY International") {
+	    		$s++;
+	    	}
+
 	    	echo "<div class='col' style='width:100%; margin-left:auto; margin-right: auto;'>";
 
 		    	echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]." - ".$mtx["salesRep"][$s]["salesRepGroup"]."</th></table>";

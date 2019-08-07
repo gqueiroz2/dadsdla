@@ -106,7 +106,6 @@ class performanceCore extends performance
                 $salesRep[$sr]["salesRepGroup"] = "NY International";
             }
         }
-        var_dump($salesRep);
 
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
