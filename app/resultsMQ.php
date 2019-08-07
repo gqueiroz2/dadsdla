@@ -18,7 +18,7 @@ class resultsMQ extends results{
             if ($l == 0) {
                 $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year);
             }else{
-                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year, $source,);
+                $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year, $source);
             }
         }
         return $lines;

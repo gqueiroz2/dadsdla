@@ -10,25 +10,53 @@ class rankingBrand extends rank{
 
 	//$con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null
 	public function getAllResults($con, $info, $region, $brands, $value, $months, $currency) {
-		
+
+		$sql = new sql();
+
+		//var_dump($brands);
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			
-			if ($brands[$b][1] == "ONL" || $brands[$b][1] == "VIX") {
+			if ($b == 1) {
 				$table = "digital";
 			}else{
 				$table = $info['table'];
 			}
 
-			$firstClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", array($brands[$b]), $region, $value, array($info['years'][0]), $months, $currency, "DESC");
-			$secondClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", array($brands[$b]), $region, $value, array($info['years'][1]), $months, $currency, "DESC");
-			$plan[$b] = $this->getAllValues($con, "plan_by_brand", $info['leftName'], "brand", array($brands[$b]), $region, $value, array($info['years'][0]), $months, $currency, "DESC");
-			/*var_dump("first", $firstClosed[$b]);
-			var_dump("second", $secondClosed[$b]);
-			var_dump("plan", $plan[$b]);*/
+			$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);
+
+			//var_dump("infoQuery", $infoQuery[$b]);
 		}
 
+		for ($y=0; $y < sizeof($info['years']); $y++) { 
+			
+			array_push($infoQuery['colsValue'], $info['years'][$y]);
+			$where = $sql->where($infoQuery['columns'], $infoQuery['colsValue']);
+		}
+		/*$firstClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
+		$secondClosed[$b] = $this->getAllValues($con, $table, $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][1]), $months, $currency, "DESC");
+		$plan[$b] = $this->getAllValues($con, "plan_by_brand", $info['leftName'], "brand", $brands[$b], $region, $value, array($info['years'][0]), $months, $currency, "DESC");
+		var_dump("first", $firstClosed[$b]);*/
+
 	}
-    
+
+	public function mountBrands($brands){
+		
+		$brandsTV = array();
+		$brandsDigital = array();
+
+		for ($b=0; $b < sizeof($brands); $b++) {
+			if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK" || $brands[$b][1] == "AP" 
+				|| $brands[$b][1] == "TLC"|| $brands[$b][1] == "ID" || $brands[$b][1] == "DT" || $brands[$b][1] == "FN" 
+				|| $brands[$b][1] == "OTH" || $brands[$b][1] == "HGTV") {
+				array_push($brandsTV, $brands[$b]);
+			}else{
+				array_push($brandsDigital, $brands[$b]);
+			}
+		}
+
+		return array($brandsTV, $brandsDigital);
+	}
+
 	public function mountValues($con, $r, $regionID){
 
 		$tmp = $r->getRegion($con,array($regionID));
