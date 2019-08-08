@@ -87,4 +87,18 @@ class brand extends Management{
 		return $bool;
 	}
 
+	public function getBrandID($con, $name){
+		
+		$sql = new sql();
+		$table = "brand";
+		$columns = "id,name";
+		$from = array('id','name');	
+		$to = array(0,1);	
+		$where = "WHERE name = '$name'";
+
+		$result = $sql->select($con,$columns,$table,null,$where);
+		$brand = $sql->fetch($result,$from,$from);
+		return $brand;
+	}
+
 }

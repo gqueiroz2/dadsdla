@@ -4,10 +4,12 @@ $(document).ready(function(){
 
     ajaxSetup();
 		if (regionID != "") {
+
+      var bool = true;
       $.ajax({
   			url:"/ajaxRanking/typeByRegion",
   			method:"POST",
-  			data:{regionID},
+  			data:{regionID, bool},
     		success: function(output){
       		$('#type').html(output);
     		},

@@ -229,8 +229,6 @@ class agency extends Management{
 
     }
 
-    
-
     public function getAllAgencies($con,$id = false){
         
         $sql = new sql();

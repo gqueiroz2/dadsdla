@@ -115,7 +115,9 @@ class results extends base{
                 if (!$source) {
                     if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                         if ($brands[$b][1] == "FN") {
-                            if ($year == 2019 && ($months[$m][1] < 6)) {
+                            if ($form == "cmaps" && $year == $cYear) {
+                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
+                            }elseif ($year == 2019 && ($months[$m][1] < 6)) {
                                 $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear, "ACTUAL");
                             }else{
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);

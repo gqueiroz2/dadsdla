@@ -39,4 +39,5 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('type2ByType', 'ajaxController@type2ByType');
 	Route::post('topsByType2', 'ajaxController@topsByType2');
 	Route::post('subRanking', 'ajaxController@subRanking');
+	Route::post('brandSubRanking', 'ajaxController@brandSubRanking');
 });

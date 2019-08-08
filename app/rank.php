@@ -188,7 +188,7 @@ class rank extends Model{
         $rtr['join'] = $join;
         $rtr['name'] = $name;
         $rtr['names'] = $names;
-
+        //var_dump(is_array($rtr['colsValue']));
         return $rtr;
 
     }

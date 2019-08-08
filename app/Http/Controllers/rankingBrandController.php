@@ -8,7 +8,7 @@ use App\dataBase;
 use App\region;
 use App\pRate;
 use App\brand;
-use App\renderRanking;
+use App\renderBrandRanking;
 use App\rankings;
 use App\rankingBrand;
 use Validator;
@@ -29,7 +29,7 @@ class rankingBrandController extends Controller {
       $b = new brand();
       $brands = $b->getBrand($con);
 
-      $render = new renderRanking();
+      $render = new renderBrandRanking();
 
       return view("adSales.ranking.0brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
     }
@@ -76,10 +76,17 @@ class rankingBrandController extends Controller {
     	
     	$rb = new rankingBrand();
 
+    	$cYear = intval(date('Y'));
+        $pYear = $cYear - 1;
+
+		$years = array($cYear, $pYear);
+
     	$brandsFinal = $rb->mountBrands($brands);
-    	$info = $rb->mountValues($con, $r, $region);
-    	$rb->getAllResults($con, $info, $region, $brandsFinal, $value, $months, $pRate);
-    	//var_dump($info);
-    	//return view("adSales.ranking.0brandPost");
+    	$values = $rb->getAllResults($con, $r, $region, $brandsFinal, $value, $months, $pRate, $years);
+    	$mtx = $rb->assembler($values, $years, $brands);
+    	
+    	$render = new renderBrandRanking();
+
+    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx'));
     }
 }

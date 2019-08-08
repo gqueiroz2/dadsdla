@@ -42,23 +42,32 @@ class sql extends Model{
 
     }
 
-    public function selectWithUnion($con, $info, $group_by, $order_by, $order){
+    //só pode ser usada se o info possuir 2 posições, nem mais nem menos
+    public function selectWithUnion($con, $whereArray, $info, $group_by, $order_by, $order=""){
         
-        $columns = $info[0]['$columns'];
+        $columns = $info[0]['query'];
         $table = $info[0]['table'];
         $join = $info[0]['join'];
-        $where = $info[0]['where'];
-
+        $where = $whereArray[0];
+        
         $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by";
 
         $sql .= " UNION ";
 
-        $columns = $info[1]['$columns'];
+        $columns = $info[1]['query'];
         $table = $info[1]['table'];
         $join = $info[1]['join'];
-        $where = $info[1]['where'];
+        $where = $whereArray[1];
 
         $sql .= "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
+
+        /*for ($i=0; $i < strlen($sql); $i++) { 
+            //echo "<pre>".$sql[$i]."</pre>";
+        }
+        echo "<br>";*/
+
+        $res = $con->query($sql);
+        return $res;
     }
 
     public function insert($con,$table,$columns,$values){

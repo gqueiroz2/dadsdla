@@ -36,7 +36,7 @@
 							@if($errors->has('brands'))
 								<label style="color: red">* Required</label>
 							@endif
-							{{$render->brand($brands)}}
+							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Months:</label>
@@ -70,12 +70,59 @@
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> Brand Ranking </div>
+				<div style="float: right;"> Brand Ranking - {{ucfirst($type)}} </div>
 			</div>
 		</div>
-
 	</div>
 
-	<div id="vlau">lllllllllllll</div>
+	<div class="container-fluid">
+		<div class="row mt-2 justify-content-center">
+			<div class="col">
+				{{$render->assembler($mtx)}}
+			</div>
+		</div>
+	</div>
+
+	<div id="vlau"></div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			var months = <?php echo json_encode($months); ?>;
+            var type = "{{$type}}";
+            var value = "{{$value}}";
+            var currency = <?php echo json_encode($pRate); ?>;
+            var region = "{{$region}}";
+
+			ajaxSetup();
+
+			@for($b = 0; $b < sizeof($brands); $b++)
+				$(document).on('click', "#"+"{{$brands[$b][1]}}", function(){
+
+                    var name = $(this).text();
+
+                    if ($("#sub"+"{{$brands[$b][1]}}").css("display") == "none") {
+
+                        $.ajax({
+                            url: "/ajaxRanking/brandSubRanking",
+                            method: "POST",
+                            data: {name, months, type, value, currency, region},
+                            success: function(output){
+                                $("#sub"+"{{$brands[$b][1]}}").html(output);
+                                $("#sub"+"{{$brands[$b][1]}}").css("display", "");
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }else{
+                    	$("#sub"+"{{$brands[$b][1]}}").html(" ");
+                        $("#sub"+"{{$brands[$b][1]}}").css("display", "none");
+                    }
+                });
+            @endfor
+		});
+	</script>
+
 
 @endsection

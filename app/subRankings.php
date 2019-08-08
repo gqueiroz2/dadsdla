@@ -97,6 +97,8 @@ class subRankings extends rank {
 
         if ($currency[0]['name'] == "USD") {
             $pRate = 1.0;
+
+
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }

@@ -14,6 +14,7 @@ use App\brand;
 use App\agency;
 use App\client;
 use App\subRankings;
+use App\subBrandRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -459,10 +460,21 @@ class ajaxController extends Controller{
     }
 
     public function typeByRegion(){
+
+        $bool = Request::get("bool");
+        var_dump($bool);
         echo "<option value=''> Select </option>";
+
+        if ($bool == "false") {
+            echo "<option value='agencyGroup'> Agency Group </option>";
+        }
+
         echo "<option value='agency'> Agency </option>";
-        echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='client'> Client </option>";
+
+        if ($bool == "true") {
+            echo "<option value='products'> Products </option>";            
+        }
     }
 
     public function firstPosYear(){
@@ -508,7 +520,6 @@ class ajaxController extends Controller{
         echo "<option value='0'> EMPTY </option>";
 
     }
-
 
     public function typeNameByType(){
         
@@ -642,5 +653,35 @@ class ajaxController extends Controller{
         }
 
         $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
+    }
+
+    public function brandSubRanking(){
+        
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $name = Request::get("name");
+
+        $sbr = new subBrandRanking();
+
+        $res = $sbr->getSubResults($con, $type, $region, $value, $months, $currency, $name);
+
+        $types = array();
+
+        for ($r=0; $r < sizeof($res); $r++) { 
+            for ($r2=0; $r2 < sizeof($res[$r]); $r2++) { 
+                if (!in_array($res[$r][$r2][$type], $types)) {
+                    array_push($types, $res[$r][$r2][$type]);  
+                }
+            }
+        }
+
+        $matrix = $sbr->assemble($types, $res, $type);
+        
     }
 }
