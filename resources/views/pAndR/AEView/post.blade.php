@@ -102,7 +102,7 @@
 					$("#total-total").val(Temp);
 
 
-					@for($c=0;$c<10;$c++)
+					@for($c=0;$c<sizeof($client);$c++)
 						var temp = Comma(handleNumber($(this).val())*parseFloat($("#totalPP2-"+{{$c}}).val()/100));
 
 
@@ -134,11 +134,10 @@
 
 					@endfor
 					
-							
 				});
 
 
-				@for($c=0;$c<10;$c++)
+				@for($c=0;$c<sizeof($client);$c++)
 					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
 
 						if ($(this).val() == '') {
@@ -191,7 +190,7 @@
 
 						var month = 0;
 
-						@for($c2=0;$c2<10;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
 						@endfor
 
@@ -200,32 +199,32 @@
 						$("#rf-"+{{$m}}).val(month);
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month =0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
 							@endfor
 							month = Comma(month);
 							$("#rf-3").val(month);
 						
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month =0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
 							@endfor
 							month = Comma(month);
 							$("#rf-7").val(month);
 						
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month =0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
 							@endfor
 							month = Comma(month);
 							$("#rf-11").val(month);
 						
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month =0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
 							@endfor
 							month = Comma(month);
@@ -236,20 +235,31 @@
 
 						$("#total-total").val(total);
 
-						@for($c2=0;$c2<10;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
 							temp = Comma(temp*100);
 							$("#totalPP2-"+{{$c2}}).val(temp);
 							$("#totalPP3-"+{{$c2}}).val(temp);
 						@endfor
 
+
+						var value = handleNumber($(this).val());
+
+						var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
+
+						var tmp = value - PY;
+
+						tmp = Comma(tmp);
+
+						$("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
+						
 					});
 				@endfor
 			@endfor
-			@for($c=0;$c<10;$c++)
+			@for($c=0;$c<sizeof($client);$c++)
 				$("#totalPP2-"+{{$c}}).change(function(){
 					var top = 0;
-					@for($c2=0;$c2<10;$c2++)
+					@for($c2=0;$c2<sizeof($client);$c2++)
 						top += handleNumber($("#totalPP2-"+{{$c2}}).val());
 					@endfor
 
@@ -385,6 +395,7 @@
 					@for($m=0;$m<16;$m++)
 						if({{$m}} != 3 && {{$m}} != 7 && {{$m}} != 11 && {{$m}} != 15){
 							var vlau = Comma(parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100));
+
 							$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
 						}
 
@@ -404,11 +415,12 @@
 
 						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
+
 						$("#totalClient-"+{{$c}}).val(Temp);
 
-						var month = handleNumber(0);
+						var month = 0;
 
-						@for($c2=0;$c2<10;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
 						@endfor
 
@@ -417,8 +429,8 @@
 						$("#rf-"+{{$m}}).val(month);
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
 							@endfor
 
@@ -427,8 +439,8 @@
 							$("#rf-3").val(month);
 						
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
 							@endfor
 							
@@ -437,8 +449,8 @@
 							$("#rf-7").val(month);
 						
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
 							@endfor
 							
@@ -447,8 +459,8 @@
 							$("#rf-11").val(month);
 						
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var month = handleNumber(0);
-							@for($c2=0;$c2<10;$c2++)
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
 							@endfor
 
@@ -461,13 +473,12 @@
 
 						$("#total-total").val(total);
 
-						@for($c2=0;$c2<10;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
 							temp = temp*100;
 							$("#totalPP2-"+{{$c2}}).val(temp);
 							$("#totalPP3-"+{{$c2}}).val(temp);
 						@endfor
-
 					@endfor
 				});
 

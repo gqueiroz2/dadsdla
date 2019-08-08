@@ -31,7 +31,7 @@ class AEController extends Controller{
 
     public function post(){
 
-    	var_dump(Request::all());
+    	//var_dump(Request::all());
 
         $db = new dataBase(); 
         $render = new PAndRRender();

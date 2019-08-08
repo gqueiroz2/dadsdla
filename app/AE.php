@@ -34,9 +34,7 @@ class AE extends pAndR{
         $tmp = array($cYear);
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
-        var_dump($div);
         $div = 1/$div;
-        var_dump($currencyID);
 
         //nome da moeda pra view
         $tmp = array($currencyID);
@@ -70,8 +68,6 @@ class AE extends pAndR{
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
-        var_dump($targetValues);
-
         $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
@@ -83,8 +79,11 @@ class AE extends pAndR{
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
 
+        $executiveRevenueCYear = $this->consolidateAE($clientRevenueCYear);
+        $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
+        $executiveRF = $this->consolidateAE($rollingFCST);
 
-       	//var_dump($clientRevenuePYear);
+        $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -96,11 +95,49 @@ class AE extends pAndR{
         				"rollingFCST" => $rollingFCST,
         				"clientRevenueCYear" => $clientRevenueCYear,
         				"clientRevenuePYear" => $clientRevenuePYear,
+
+                        "executiveRF" => $executiveRF,
+                        "executiveRevenuePYear" => $executiveRevenuePYear,
+                        "executiveRevenueCYear" => $executiveRevenueCYear,
+
+                        "pending" => $pending,
                     );
 
         return $rtr;
 
     }
+
+   
+
+    public function subArrays($array1,$array2){
+        $exit = array();
+
+        for ($a=0; $a <sizeof($array1) ; $a++) { 
+            $exit[$a] = $array1[$a] - $array2[$a];
+        }
+
+        return $exit;
+    }
+
+    public function consolidateAE($matrix){
+        $return = array();
+
+        for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
+            $return[$m] = 0;
+        }
+
+        for ($c=0; $c <sizeof($matrix); $c++) { 
+            for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+                $return[$m] += $matrix[$c][$m];
+            }
+        }
+
+        return $return;
+
+    }
+
+
+
     public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
 
     	//var_dump($currency);
@@ -228,7 +265,7 @@ class AE extends pAndR{
     	$resSF = $con->query($sf);
     	$from = array("clientName","clientID");
     	$listSF = $sql->fetch($resSF,$from,$from);
-    	var_dump($listSF);
+    	//var_dump($listSF);
 
     	//GET FROM IBMS/BTS
     	$ytd = "SELECT DISTINCT c.name AS 'clientName',
@@ -246,11 +283,11 @@ class AE extends pAndR{
 
     	$count = 0;
     	if($listSF){
-    		var_dump("TEM CLIENT SF");
+    		//var_dump("TEM CLIENT SF");
     	}
 
     	if($listYTD){
-    		var_dump("TEM CLIENT YTD");
+    		//var_dump("TEM CLIENT YTD");
     		for ($y=0; $y < sizeof($listYTD); $y++) { 
     			$list[$count] = $listYTD[$y];
     			$count ++;
