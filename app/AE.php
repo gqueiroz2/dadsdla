@@ -38,7 +38,6 @@ class AE extends pAndR{
         $div = 1/$div;
         var_dump($currencyID);
 
-
         //nome da moeda pra view
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -66,26 +65,150 @@ class AE extends pAndR{
             }
         }
 
-        $mergeTarget = $this->mergeTarget($targetValues,$month);
 
+
+        $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
         var_dump($targetValues);
 
+        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+        $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
+
+
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+        $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
+
+       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+       	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
+       	
+
+
+       	//var_dump($clientRevenuePYear);
 
         $rtr = array(	
         				"cYear" => $cYear,
         				"pYear" => $pYear,
         				"salesRep" => $salesRep[0],
         				"client" => $listOfClients,
-        				"targetValues" => $targetValues
+        				"targetValues" => $targetValues,
+
+        				"rollingFCST" => $rollingFCST,
+        				"clientRevenueCYear" => $clientRevenueCYear,
+        				"clientRevenuePYear" => $clientRevenuePYear,
                     );
 
         return $rtr;
 
     }
+    public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
 
-    public function getTargetByAE($con,$sql,$regionID,$cYear,$salesRep,$month,$div,$value){
+    	//var_dump($currency);
+    	//var_dump($value);
+
+    	if($currency == "USD"){
+    		$div = 1;
+    	}else{
+    		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+    	}
+    	//var_dump($div);
+
+    	if($value == "gross"){
+    		$ytdColumn = "gross_revenue_prate";
+    	}else{
+    		$ytdColumn = "net_revenue_prate";
+    	}
+
+    	$table = "ytd";
+
+    	for ($c=0; $c < sizeof($clients); $c++) { 
+    		//var_dump($clients[$c]);
+    		for ($m=0; $m < sizeof($month); $m++) {     			
+    			//for ($b=0; $b < sizeof($brand); $b++) { 
+    			/*
+						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
+    			*/
+					/*
+	    			$select[$c][$m] = "
+	    								SELECT SUM($ytdColumn) AS sumValue
+	    								FROM $table
+	    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
+	    								AND (month = \"".$month[$m][1]."\")
+	    								AND (year = \"".$year."\")
+
+	    			                  ";
+					*/
+	    			//var_dump($select[$c][$m]);
+	    			
+	    			//$res[$c][$m] = $con->query($select[$c][$m]);
+	    			//var_dump($res[$c][$m]);
+
+	    			$from = array("sumValue");
+
+	    			$rev[$c][$m] = 0.0;//$sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
+	    			//var_dump($rev[$c][$m]);
+
+	    		//}
+    		}
+    	}
+
+    	return $rev;
+
+    }
+
+
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
+
+    	//var_dump($currency);
+    	//var_dump($value);
+
+    	if($currency == "USD"){
+    		$div = 1;
+    	}else{
+    		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+    	}
+    	//var_dump($div);
+
+    	if($value == "gross"){
+    		$ytdColumn = "gross_revenue_prate";
+    	}else{
+    		$ytdColumn = "net_revenue_prate";
+    	}
+
+    	$table = "ytd";
+
+    	for ($c=0; $c < sizeof($clients); $c++) { 
+    		//var_dump($clients[$c]);
+    		for ($m=0; $m < sizeof($month); $m++) {     			
+    			//for ($b=0; $b < sizeof($brand); $b++) { 
+    			/*
+						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
+    			*/
+
+	    			$select[$c][$m] = "
+	    								SELECT SUM($ytdColumn) AS sumValue
+	    								FROM $table
+	    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
+	    								AND (month = \"".$month[$m][1]."\")
+	    								AND (year = \"".$year."\")
+
+	    			                  ";
+
+	    			//var_dump($select[$c][$m]);
+	    			
+	    			$res[$c][$m] = $con->query($select[$c][$m]);
+	    			//var_dump($res[$c][$m]);
+
+	    			$from = array("sumValue");
+
+	    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
+	    			//var_dump($rev[$c][$m]);
+
+	    		//}
+    		}
+    	}
+
+    	return $rev;
 
     }
 
@@ -155,6 +278,13 @@ class AE extends pAndR{
     	$mergeTarget = $this->addQuartersAndTotal($mergeTarget);
 
     	return $mergeTarget;
+    }
+
+    public function addQuartersAndTotalOnArray($array){
+    	for ($a=0; $a < sizeof($array); $a++) { 
+    		$newArray[$a] = $this->addQuartersAndTotal($array[$a]);
+    	}
+    	return $newArray;
     }
 
     public function addQuartersAndTotal($tgt){
