@@ -252,7 +252,27 @@
 						tmp = Comma(tmp);
 
 						$("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-0").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-1").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-2").val()));
+							$("#RFvsPY-"+{{$c}}+"-3").val(value);
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-4").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-5").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-6").val()));
+							$("#RFvsPY-"+{{$c}}+"-7").val(value);
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-8").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-9").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-10").val()));
+							$("#RFvsPY-"+{{$c}}+"-11").val(value);
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-12").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-13").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-14").val()));
+							$("#RFvsPY-"+{{$c}}+"-15").val(value);
+						}
 						
+						var Temp = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-15").val()));
+
+						alert(Temp);
+
+						$("#totalRFvsPY-"+{{$c}}).val(Temp);
+
 					});
 				@endfor
 			@endfor
@@ -299,15 +319,15 @@
 						var width4 = '2.5%';
 					}else{
 						var display = 'none';
-						var size = '2600px';
-						var width = '3.5%';
-						var width2 = '8%';
+						var size = '3000px';
+						var width = '2.5%';
+						var width2 = '6%';
 						var displayC = 'none';
 						var number = 1;
 						var border = "1px 0px 0px 0px";
-						var width3 = '3.5%';
+						var width3 = '2.5%';
 						var division = 7;
-						var width4 = '3.5%';
+						var width4 = '2.5%';
 					}
 
 					$("#division-"+{{$c}}).attr("rowspan",division);
@@ -323,6 +343,8 @@
 					$("#sideTable-"+{{$c}}+"-3").css("width",width4);
 					$("#sideTable-"+{{$c}}+"-4").css("width",width4);
 					$("#sideTable-"+{{$c}}+"-5").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-6").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-7").css("width",width4);
 					$("#quarter-"+{{$c}}+"-3").css("width",width);
 					$("#quarter-"+{{$c}}+"-7").css("width",width);
 					$("#quarter-"+{{$c}}+"-11").css("width",width);
@@ -483,12 +505,15 @@
 				});
 
 			@endfor
+
 		});
 		
 		function handleNumber(number){
 
-			number = number.replace(",","");
-
+			for (var i = 0; i < number.length/3; i++) {
+				number = number.replace(",","");
+			}
+			
 			number = parseFloat(number);
 			
 			return number;
@@ -496,6 +521,7 @@
 
 	  	function Comma(Num) { //function to add commas to textboxes
 	        Num += '';
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
 	        x = Num.split('.');
@@ -506,6 +532,8 @@
 	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	        return x1 + x2;
 	    }
+
+	  
 
 	</script>
 
