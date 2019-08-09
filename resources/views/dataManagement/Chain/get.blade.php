@@ -22,7 +22,7 @@
 								</div>
 							</div>
 
-							<form action="{{ route('truncateChain') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('truncateChain') }}" runat="server"  onsubmit="ShowLoading()" method="POST" enctype="multipart/form-data">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">
@@ -79,7 +79,7 @@
 							</div>
 
 							
-							<form action="{{ route('firstChain') }}" method="POST" enctype="multipart/form-data">
+							<form action="{{ route('firstChain') }}" runat="server"  onsubmit="ShowLoading()" method="POST" enctype="multipart/form-data">
 							@csrf
 							 	<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -141,7 +141,7 @@
 								</div>
 							</div>
 							<div id="vlau"></div>
-							<form action="{{ route('checkElementsPost') }}" method="POST">
+							<form action="{{ route('checkElementsPost') }}" method="POST" runat="server"  onsubmit="ShowLoading()">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -205,7 +205,7 @@
 									<center><span style="font-size: 18px;"> SECOND CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('secondChain') }}" method="POST">
+							<form action="{{ route('secondChain') }}" method="POST" runat="server"  onsubmit="ShowLoading()">
 							@csrf
 								<div class="row justify-content-center">          
 							 		<div class="col">		
@@ -268,7 +268,7 @@
 									<center><span style="font-size: 18px;"> THIRD CHAIN </span></center>
 								</div>
 							</div>
-							<form action="{{ route('thirdChain') }}" method="POST">
+							<form action="{{ route('thirdChain') }}" method="POST" runat="server"  onsubmit="ShowLoading()">
 							@csrf
 
 								<div class="row justify-content-center">
@@ -331,7 +331,7 @@
 									<center><span style="font-size: 18px;"> THIRD TO DLA </span></center>
 								</div>
 							</div>
-							<form action="{{ route('thirdToDLA') }}" method="POST">
+							<form action="{{ route('thirdToDLA') }}" method="POST" runat="server"  onsubmit="ShowLoading()">
 							@csrf
 								<div class="row justify-content-center">
 									<div class="col">

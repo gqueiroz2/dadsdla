@@ -16,35 +16,48 @@ use App\sql;
 class chain extends excel{
    
     public function handler($con,$table,$spreadSheet,$year){
-		$base = new base();
+        $base = new base();
         $bool = $this->firstChain($con,$table,$spreadSheet,$base,$year);			
         return $bool;
 	}
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
-        if($table == "cmaps"){
+        if($table == "cmaps" || $table == "fw_digital"){
             $parametter = true;
         }else{
             $parametter = false;
         }
 
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+
+        if($table == "fw_digital"){
+            unset($columns[0]);
+            $columns = array_values($columns);
+        }
+
         $into = $this->into($columns);      
         $check = 0;
-        
-        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-            $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
-            if(!$error){
-                $check++;
+               
+        $mark = 0;
+        for ($s=0; $s < sizeof($spreadSheet); $s++) {             
+            if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
+                $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
+                if(!$error){
+                    $check++;
+                }
+            }else{
+                $mark++;
             }
         } 
-        if($check == sizeof($spreadSheet)){
+
+        if($check == (sizeof($spreadSheet) - $mark) ){
             $complete = true;
         }else{
             $complete = false;
         }
         return $complete;
+
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -54,10 +67,23 @@ class chain extends excel{
 
         $base = new base();
         $columns = $this->defineColumns($table,'first');
+        if($table == "fw_digital"){
+            unset($columns[0]);        
+        }
+
+        $columns = array_values($columns);
     	$columnsS = $this->defineColumns($table,'second');
-        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);
+        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
+
+        if($table == "fw_digital"){
+            $current = $this->fixShareAccounts($current);
+            $current = $this->createNetRevenueAndCommission($current);
+            $current = $this->localCurrencyToDolar($con,$current,$year);
+        }       
+        
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
+        
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
    		return $complete;
     }  
@@ -129,9 +155,11 @@ class chain extends excel{
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
-            var_dump($spreadSheet['client']);
-            var_dump($spreadSheet['agency']);
+            var_dump($spreadSheet);
+            //var_dump($spreadSheet['client']);
+            //var_dump($spreadSheet['agency']);
             //var_dump($spreadSheet);
+            var_dump($ins);
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
@@ -139,6 +167,73 @@ class chain extends excel{
 
         return $error;        
    
+    }
+
+    public function localCurrencyToDolar($con,$current,$year){
+        for ($c=0; $c < sizeof($current); $c++) { 
+            $current[$c]['local_gross_revenue'] = $current[$c]['gross_revenue'];
+            $current[$c]['local_commission'] = $current[$c]['commission'];
+            $current[$c]['local_net_revenue'] = $current[$c]['net_revenue'];
+
+            $current[$c]['gross_revenue'] = $this->multiplyByPRate($con,$current[$c]['region'],$year,$current[$c]['local_gross_revenue']);
+            $current[$c]['commission'] = $this->multiplyByPRate($con,$current[$c]['region'],$year,$current[$c]['local_commission']);
+            $current[$c]['net_revenue'] = $this->multiplyByPRate($con,$current[$c]['region'],$year,$current[$c]['local_net_revenue']);
+            
+        }
+
+        return $current;
+    }
+
+    public function multiplyByPRate($con,$region,$year,$value){
+        $r = new region();
+        $pr = new pRate();
+
+        if($value > 0){
+            $regionID = $r->getIDRegion($con,array($region))[0]['id'];
+            $pRate = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+            $newValue = doubleval( bcdiv($value,$pRate,5) );
+        }else{
+            $newValue = $value;
+        }
+
+
+        return $newValue;
+    }
+
+    public function createNetRevenueAndCommission($current){
+        for ($c=0; $c < sizeof($current); $c++) { 
+            $current[$c]['commission'] = $current[$c]['gross_revenue']*$current[$c]['agency_commission_percentage'];
+            $current[$c]['net_revenue'] = $current[$c]['gross_revenue']-$current[$c]['commission'];
+        }
+
+        return $current;
+    }
+
+    public function fixShareAccounts($current){
+
+        $count = 0;
+        for ($c=0; $c < sizeof($current); $c++) { 
+            if($current[$c]['region'] == "Brazil" || $current[$c]['region'] == "Brasil"){                
+                $temp = explode("/", $current[$c]['sales_rep']);
+                    
+                    if(sizeof($temp) > 1){
+
+                        $sales1 = trim($temp[0]);
+                        $sales2 = trim($temp[1]);
+                        $current[$c]['sales_rep'] = $sales1;
+                        $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                        $newC = $current[$c];
+                        $newC['sales_rep'] = $temp[1];
+                        $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                        array_push($current, $newC);
+                        $count ++;
+                    }
+                
+            }
+        }
+
+        return $current;
+
     }
 
     public function getOrderReferences($current){
@@ -155,7 +250,7 @@ class chain extends excel{
 
     public function selectFromCurrentTable($sql,$con,$table,$columns){
     	$res = $sql->select($con,"*",$table);
-    	$current = $sql->fetch($res,$columns,$columns);
+        $current = $sql->fetch($res,$columns,$columns);
     	return $current;
     }
 
@@ -169,6 +264,13 @@ class chain extends excel{
 
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,"Brazil",$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,"Brazil",$regionName,$current[$c]['client']);
+
+            }elseif($table == "fw_digital"){
+
+                $regionName = $rr->getRegion($con,array($current[$c]['region_id']))[0]['name'];
+
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['region_id'],$regionName,$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['region_id'],$regionName,$current[$c]['client']);      
 
             }else{                
 
@@ -217,8 +319,13 @@ class chain extends excel{
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
     			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
-    			$current[$c][$tmp[1]] = $tmp[0];
-    			if($columns[$cc] != $tmp[1]){
+    			if($columns[$cc] == "ad_unit"){
+                    $current[$c][$tmp[0][1]] = $tmp[0][0];
+                    $current[$c][$tmp[1][1]] = $tmp[1][0];
+                }else{
+                    $current[$c][$tmp[1]] = $tmp[0];
+                }
+    			if($columns[$cc] != $tmp[1] && $columns[$cc] != "ad_unit"){
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
@@ -230,6 +337,7 @@ class chain extends excel{
     }
 
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
+        
         if($column == 'campaign_sales_office'){
 			$rtr =  array(false,'campaign_sales_office_id');
 			for ($r=0; $r < sizeof($regions); $r++) { 
@@ -246,12 +354,19 @@ class chain extends excel{
 
             $rtr =  array($bool,'package');
         }elseif($column == 'sales_representant_office'){
-			$rtr =  array(false,'campaign_sales_office_id');
+			$rtr =  array(false,'sales_representant_office');
 			for ($r=0; $r < sizeof($regions); $r++) { 
 				if($current == $regions[$r]['name']){	
 					$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
 				}
 			}
+        }elseif($column == 'region'){
+            $rtr =  array(false,'region');
+            for ($r=0; $r < sizeof($regions); $r++) { 
+                if($current == $regions[$r]['name']){   
+                    $rtr =  array( $regions[$r]['id'],'region_id');
+                }
+            }
         }elseif($column == 'campaign_currency'){
             $rtr =  array(false,'campaign_currency_id');
         	for ($c=0; $c < sizeof($currencies); $c++) { 
@@ -263,7 +378,17 @@ class chain extends excel{
                     break;
                 }
 			}
-
+        }elseif($column == 'currency'){
+            $rtr =  array(false,'currency_id');
+            for ($c=0; $c < sizeof($currencies); $c++) { 
+                if($current == $currencies[$c]['name']){    
+                    $rtr =  array( $currencies[$c]['id'],'currency_id');
+                    break;
+                }elseif($current == 'VES'){
+                    $rtr =  array( 9,'currency_id');
+                    break;
+                }
+            }
         }elseif($column == 'brand'){
         	
         	$rtr =  array(false,'brand_id');
@@ -279,13 +404,26 @@ class chain extends excel{
 				}
 			}
 			
+        }elseif($column == 'ad_unit'){
+            
+            $rtr = array( array(false,'ad_unit') , array(false,'brand_id') );
+            
+            $temp = $current;            
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                if( $temp  == $brands[$b]['brandUnit']){    
+                    $rtr = array( array( $current,'ad_unit')   , array( $brands[$b]['brandID'],'brand_id') );
+                }
+            }
+            
         }elseif($column == 'sales_rep'){
         	$rtr =  array(false,'sales_rep_id');
         	$check = -1;
+
+            $current = trim($current);
+
             /*
                 O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
             */
-
             for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
 				if($current == $salesReps[$sr]['salesRepUnit']){	
 					$rtr =  array( $salesReps[$sr]['salesRepID'],'sales_rep_id');
@@ -327,7 +465,6 @@ class chain extends excel{
     public function insertToLastTable($con,$table,$columns,$current,$into,$nextColumns = false){
     	$count = 0;
     	for ($c=0; $c < sizeof($current); $c++) { 
-    		  //var_dump($current[$c]);
             if($table == 'cmaps'){
                 $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
@@ -392,7 +529,10 @@ class chain extends excel{
 	        $column == 'impression_duration' ||
 	        $column == 'month' ||
 	        $column == 'year' ||
-            $column == 'num_spot'
+            $column == 'num_spot' ||
+            $column == 'agency_commission_percentage' ||
+            $column == 'rep_commission_percentage'
+
     	  ){
     			if($column == 'month' ||
 	               $column == 'year'){
@@ -428,47 +568,63 @@ class chain extends excel{
 	public function assembler($spreadSheet,$columns,$base,$table = false){
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             for ($c=0; $c < sizeof($columns); $c++) { 
-                $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
-				if($bool){
-					if($columns[$c] == 'gross_revenue' ||
-                       $columns[$c] == 'gross' ||
-					   $columns[$c] == 'net_revenue' ||						
-                       $columns[$c] == 'net' ||                     
-					   $columns[$c] == 'net_net_revenue' ||						
-					   $columns[$c] == 'gross_revenue_prate' ||
-					   $columns[$c] == 'net_revenue_prate' ||						
-					   $columns[$c] == 'net_net_revenue_prate' ||						
-					   $columns[$c] == 'revenue' ||
-					   $columns[$c] == 'campaign_option_spend' ||
-					   $columns[$c] == 'spot_duration' ||
-				       $columns[$c] == 'impression_duration' ||
-                       $columns[$c] == 'num_spot'
-				      ){
+                if($columns[$c] != ''){
+                    $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
+    				if($bool){
+    					if($columns[$c] == 'gross_revenue' ||
+                           $columns[$c] == 'gross' ||
+    					   $columns[$c] == 'net_revenue' ||						
+                           $columns[$c] == 'net' ||                     
+    					   $columns[$c] == 'net_net_revenue' ||						
+    					   $columns[$c] == 'gross_revenue_prate' ||
+    					   $columns[$c] == 'net_revenue_prate' ||						
+    					   $columns[$c] == 'net_net_revenue_prate' ||						
+    					   $columns[$c] == 'revenue' ||
+    					   $columns[$c] == 'campaign_option_spend' ||
+    					   $columns[$c] == 'spot_duration' ||
+    				       $columns[$c] == 'impression_duration' ||
+                           $columns[$c] == 'num_spot'
+    				      ){
 
-						if( is_null($spreadSheet[$s][$c])){
-							$columnValue = $c + 1;
-							//$c++;
-						}else{
-							$columnValue = $c;
-						}
-						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
-					}else{
-						if($columns[$c] == 'campaign_option_start_date'){
-                            $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
-                            $spreadSheetV2[$s][$columns[$c]] = $temp;
-						}elseif($columns[$c] == 'obs'){
-                            $spreadSheetV2[$s][$columns[$c]] = "OBS";
-                        }elseif($columns[$c] == 'month'){
-                            if($table == "cmaps"){
-                                $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
-                            }else{
-                                $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
-                            }
-						}else{	
-							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
-						}
-					}
-				}
+    						if( is_null($spreadSheet[$s][$c])){
+    							$columnValue = $c + 1;
+    							//$c++;
+    						}else{
+    							$columnValue = $c;
+    						}
+    						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
+    					}else{
+    						if($columns[$c] == 'campaign_option_start_date'
+                              ){
+                                $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+    						}elseif($columns[$c] == 'io_start_date' ||
+                                    $columns[$c] == 'io_end_date'
+                              ){
+                                $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                            }elseif($columns[$c] == 'rep_commission_percentage' ||
+                                    $columns[$c] == 'agency_commission_percentage'
+                                    ){
+                                if($spreadSheet[$s][$c] == ''){
+                                    $spreadSheetV2[$s][$columns[$c]] = 0.0;
+                                }else{
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]));
+                                }                            
+                            }elseif($columns[$c] == 'obs'){
+                                $spreadSheetV2[$s][$columns[$c]] = "OBS";
+                            }elseif($columns[$c] == 'month'){
+                                if($table == "cmaps" || $table == "fw_digital"){
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
+                                }else{
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
+                                }
+    						}else{	
+    							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+    						}
+    					}
+    				}
+                }
 			}
 		}
 		$spreadSheetV2 = array_values($spreadSheetV2);
@@ -564,6 +720,23 @@ class chain extends excel{
     			}
     			break;
 
+            case 'fw_digital':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->fwDigitalColumnsF;
+                        break;
+                    case 'second':
+                        return $this->fwDigitalColumnsS;
+                        break;
+                    case 'third':
+                        return $this->fwDigitalColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->fwDigitalColumns;
+                        break;
+                }
+                break;
+
     		case 'cmaps':
     			switch ($recurrency) {
     				case 'first':
@@ -586,7 +759,123 @@ class chain extends excel{
 
     }
 
+    /*
+      1 => string 'Advertiser' (length=10)
+      2 => string 'Agency' (length=6)
+      3 => string 'Campaign' (length=8)
+      4 => string 'Insertion Order' (length=15)
+      5 => string 'Insertion Order ID' (length=18)
+      6 => string 'Sales Location' (length=14)
+      7 => string 'Sales Person' (length=12)
+      8 => string 'IO Start Date' (length=13)
+      9 => string 'IO End Date' (length=11)
+      10 => string 'Agency Commission (%)' (length=21)
+      11 => string 'Rep Commission (%)' (length=18)
+      12 => string 'IO Currency' (length=11)
+      13 => string 'Placement' (length=9)
+      14 => string 'Buy Type' (length=8)
+      15 => string 'Content Targeting Set Name' (length=26)
+      16 => string 'Ad Unit' (length=7)
+      17 => string 'MONTH' (length=5)
+      18 => string 'GROSS REVENUE' (length=13)
+    */
 
+    public $fwDigitalColumnsF = array(
+                                  '',
+                                  'client',
+                                  'agency',
+                                  'campaign',
+                                  'insertion_order',
+                                  'insertion_order_id',
+                                  'region',
+                                  'sales_rep',
+                                  'io_start_date',
+                                  'io_end_date',
+                                  'agency_commission_percentage',
+                                  'rep_commission_percentage',
+                                  'currency',
+                                  'placement',
+                                  'buy_type',
+                                  'content_targeting_set_name',
+                                  'ad_unit',
+                                  'month',
+                                  'gross_revenue'
+                              );
+
+    public $fwDigitalColumnsS = array(
+                                  'client',
+                                  'agency',
+                                  'campaign',
+                                  'insertion_order',
+                                  'insertion_order_id',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'io_start_date',
+                                  'io_end_date',
+                                  'agency_commission_percentage',
+                                  'rep_commission_percentage',
+                                  'currency_id',
+                                  'placement',
+                                  'buy_type',
+                                  'content_targeting_set_name',
+                                  'ad_unit',
+                                  'month',
+                                  'gross_revenue',
+                                  'commission',
+                                  'net_revenue',
+                                  'brand_id'
+
+                              );
+
+    public $fwDigitalColumnsT = array(
+                                  'client_id',
+                                  'agency_id',
+                                  'campaign',
+                                  'insertion_order',
+                                  'insertion_order_id',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'io_start_date',
+                                  'io_end_date',
+                                  'agency_commission_percentage',
+                                  'rep_commission_percentage',
+                                  'currency_id',
+                                  'placement',
+                                  'buy_type',
+                                  'content_targeting_set_name',
+                                  'ad_unit',
+                                  'month',
+                                  'gross_revenue',
+                                  'commission',
+                                  'net_revenue',
+                                  'brand_id'
+
+                              );
+
+    public $fwDigitalColumns = array(
+                                  'client_id',
+                                  'agency_id',
+                                  'campaign',
+                                  'insertion_order',
+                                  'insertion_order_id',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'io_start_date',
+                                  'io_end_date',
+                                  'agency_commission_percentage',
+                                  'rep_commission_percentage',
+                                  'currency_id',
+                                  'placement',
+                                  'buy_type',
+                                  'content_targeting_set_name',
+                                  'ad_unit',
+                                  'month',
+                                  'gross_revenue',
+                                  'commission',
+                                  'net_revenue',
+                                  'brand_id'
+
+                              );
 
     public $cmapsColumnsF = array('decode',
                                   'month',

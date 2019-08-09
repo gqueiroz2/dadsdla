@@ -9,6 +9,13 @@ use App\sql;
 
 class base extends Model{
 
+    public function removePercentageSymbol($per){
+        $temp = explode("%", $per);
+        $percen = floatval( $temp[0] );
+        $percentage = $percen/100;
+        return $percentage;
+    }
+
     public function verifyOnBase($con,$what,$arr){       
         $sql = new sql();
         if($what == "client"){
@@ -220,14 +227,53 @@ class base extends Model{
 
     public function formatData($from,$to,$string){
         switch ($from) {
+            case 'mm/dd/aaaa':                
+                switch ($to) {
+                    case 'aaaa-mm-dd':
+                        $tmp = explode("/", $string);
+
+                        
+                        $dd = $tmp[1];
+
+                        if($dd < 10){
+                            $dd = "0".$dd;
+                        }
+
+                        $mm = $tmp[0];
+
+                        if($mm < 10){
+                            $mm = "0".$mm;
+                        }
+                        
+                        $aaaa = $tmp[2];
+
+                        $newString = $aaaa."-".$mm."-".$dd;
+                        break;
+                    
+                    default:
+                        $newString = false;
+                        break;
+                }
+            break;
+
             case 'dd/mm/aaaa':                
                 switch ($to) {
                     case 'aaaa-mm-dd':
 
                         $tmp = explode("/", $string);
 
+                        
                         $dd = $tmp[0];
+
+                        if($dd < 10){
+                            $dd = "0".$dd;
+                        }
+
                         $mm = $tmp[1];
+
+                        if($mm < 10){
+                            $mm = "0".$mm;
+                        }
                         $aaaa = $tmp[2];
 
                         $newString = $aaaa."-".$mm."-".$dd;

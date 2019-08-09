@@ -20,7 +20,7 @@ class  region extends Management{
         return $bool;
     }
 
-    public function getIDRegion ($con, $region = false){
+    public function getIDRegion($con, $region = false){
         $sql = new sql();
 
         $table = "region";

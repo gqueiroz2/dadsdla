@@ -36,6 +36,7 @@ class RenderChain extends Render{
     		//echo "<option value='cmaps'> CMAPS </option>";
 			echo "<option value='ytd'> YTD </option>";
             echo "<option value='cmaps'> CMAPS </option>";
+            echo "<option value='fw_digital'> FW Digital </option>";
 			//echo "<option value='mini_header'> Mini-Header </option>";
 			//echo "<option value='digital'> Digital </option>";
 		echo "</select>";
@@ -48,8 +49,9 @@ class RenderChain extends Render{
     		echo "<option value=''> Select </option>";
     		echo "<option value='cmaps'> CMAPS </option>";
 			echo "<option value='ytd'> YTD </option>";
-			echo "<option value='mini_header'> Mini-Header </option>";
-			echo "<option value='digital'> Digital </option>";
+            echo "<option value='fw_digital'> FW Digital </option>";
+			//echo "<option value='mini_header'> Mini-Header </option>";
+			//echo "<option value='digital'> Digital </option>";
 		echo "</select>";
 
     }

@@ -52,6 +52,7 @@ class ChainController extends Controller{
 		}else{
 			return back()->with('truncateChainError',"There was and error on truncating the $table table on all data bases :( ");
 		}
+
     }
 
     public function firstChain(){
@@ -105,25 +106,26 @@ class ChainController extends Controller{
 				unset($spreadSheet[$pivot]);
 				$spreadSheet = array_values($spreadSheet);
 				break;	
+            case 'fw_digital':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                $spreadSheet = array_values($spreadSheet);
+                break;
+
             case 'digital':
                 
                 $dg = new digital();
 
                 $spreadSheet = $dg->excelToBase($spreadSheet);
 
-                var_dump($spreadSheet);
-
-
                 break;		
 		}
 
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
-		
+
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }/*else{
-            return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
-        }*/
+        }
 		
 
     }
@@ -151,9 +153,7 @@ class ChainController extends Controller{
 
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }/*else{
-            return back()->with('secondChainError',"There was and error on the insertion of the Excel Data :( ");
-        }*/
+        }
 
     }
 
