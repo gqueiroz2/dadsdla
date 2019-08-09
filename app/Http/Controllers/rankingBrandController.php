@@ -55,6 +55,13 @@ class rankingBrandController extends Controller {
         $region = Request::get("region");
     	$r = new region();
     	$salesRegion = $r->getRegion($con);
+    	$tmp = $r->getRegion($con,array($region));
+
+        if(is_array($tmp)){
+            $rtr = $tmp[0]['name'];
+        }else{
+            $rtr = $tmp['name'];
+        }
 
     	$type = Request::get("type");
 
@@ -85,8 +92,17 @@ class rankingBrandController extends Controller {
     	$values = $rb->getAllResults($con, $r, $region, $brandsFinal, $value, $months, $pRate, $years);
     	$mtx = $rb->assembler($values, $years, $brands);
     	
+    	$rName = $rb->TruncateRegion($rtr);
+
     	$render = new renderBrandRanking();
 
-    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx'));
+    	$aux['id'] = '13';
+    	$aux['name'] = "DN";
+
+    	if (sizeof($brand) > 1) {
+    		array_push($brand, $aux);
+    	}
+
+    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName'));
     }
 }

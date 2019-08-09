@@ -122,7 +122,7 @@ class rankingBrand extends rank{
 		for ($b=0; $b < sizeof($brands); $b++) {
 			if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK" || $brands[$b][1] == "AP" 
 				|| $brands[$b][1] == "TLC"|| $brands[$b][1] == "ID" || $brands[$b][1] == "DT" || $brands[$b][1] == "FN" 
-				|| $brands[$b][1] == "OTH" || $brands[$b][1] == "HGTV") {
+				|| $brands[$b][1] == "OTH" || $brands[$b][1] == "HGTV" || $brands[$b][1] == "DN") {
 				array_push($brandsTV, $brands[$b]);
 			}else{
 				array_push($brandsDigital, $brands[$b]);
@@ -157,7 +157,11 @@ class rankingBrand extends rank{
 	}
 
 	public function assembler($values, $years, $brands){
-		//var_dump($values[1]);
+		
+		array_pop($brands);
+
+		//var_dump($brands);
+
 		$mtx[0][0] = "Brand";
 		$mtx[1][0] = "Closed ".$years[0];
 		$mtx[2][0] = "Plan ".$years[0];
@@ -211,61 +215,62 @@ class rankingBrand extends rank{
 				$pClosed += $val;	
 			}
 		}
+		if (sizeof($brands) > 1) {
+			array_push($mtx[0], "DN");
+			array_push($mtx[1], $closed);
+			array_push($mtx[2], $plan);
+			array_push($mtx[3], $pClosed);
 
-		array_push($mtx[0], "DN");
-		array_push($mtx[1], $closed);
-		array_push($mtx[2], $plan);
-		array_push($mtx[3], $pClosed);
+			for ($b=0; $b < sizeof($brands); $b++) { 
+				
+				if ($mtx[1][$b+1] != "-") {
+					$val = ($mtx[1][$b+1] / $closed)*100;
+				}else{
+					$val = "-";
+				}
 
-		for ($b=0; $b < sizeof($brands); $b++) { 
-			
-			if ($mtx[1][$b+1] != "-") {
-				$val = ($mtx[1][$b+1] / $closed)*100;
-			}else{
-				$val = "-";
+				$mtx[4][$b+1] = $val;
+
+				if ($mtx[2][$b+1] != "-") {
+					$val = ($mtx[2][$b+1] / $closed)*100;
+				}else{
+					$val = "-";
+				}
+
+				$mtx[5][$b+1] = $val;
+
+				if ($mtx[3][$b+1] != "-") {
+					$val = ($mtx[3][$b+1] / $closed)*100;
+				}else{
+					$val = "-";
+				}
+
+				$mtx[6][$b+1] = $val;
+
+				if ($mtx[1][$b+1] != "-" && $mtx[2][$b+1] != "-") {
+					$val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
+					$val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
+				}else{
+					$val = "-";
+					$val2 = "-";
+				}
+
+				$mtx[7][$b+1] = $val;
+				$mtx[8][$b+1] = $val2;
 			}
 
-			$mtx[4][$b+1] = $val;
-
-			if ($mtx[2][$b+1] != "-") {
-				$val = ($mtx[2][$b+1] / $closed)*100;
-			}else{
-				$val = "-";
+			for ($c=4; $c < 7; $c++) { 
+				array_push($mtx[$c], 100);
 			}
 
-			$mtx[5][$b+1] = $val;
+			$size = sizeof($mtx[0]);
 
-			if ($mtx[3][$b+1] != "-") {
-				$val = ($mtx[3][$b+1] / $closed)*100;
-			}else{
-				$val = "-";
-			}
+			$val = ($closed / $plan)*100;
+			array_push($mtx[7], $val);
 
-			$mtx[6][$b+1] = $val;
-
-			if ($mtx[1][$b+1] != "-" && $mtx[2][$b+1] != "-") {
-				$val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
-				$val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
-			}else{
-				$val = "-";
-				$val2 = "-";
-			}
-
-			$mtx[7][$b+1] = $val;
-			$mtx[8][$b+1] = $val2;
+			$val = ($closed - $plan);
+			array_push($mtx[8], $val);
 		}
-
-		for ($c=4; $c < 7; $c++) { 
-			array_push($mtx[$c], 100);
-		}
-
-		$size = sizeof($mtx[0]);
-
-		$val = ($closed / $plan)*100;
-		array_push($mtx[7], $val);
-
-		$val = ($closed - $plan);
-		array_push($mtx[8], $val);
 
 		return $mtx;
 	}

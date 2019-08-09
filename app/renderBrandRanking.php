@@ -7,13 +7,16 @@ use App\Render;
 
 class renderBrandRanking extends Render {
     
-    public function assembler($mtx){
+    public function assembler($mtx, $currency, $value){
 		//var_dump($mtx);
+        $currency = $currency[0]['name'];
+        $value = strtoupper($value);
+        
     	echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center>
                             <span style='font-size:18px;'> 
-                                <b>Brand Ranking</b>
+                                <b>Brand Ranking - ($currency/$value)</b>
                             </span>
                         </center></th>";
             echo "</tr>";

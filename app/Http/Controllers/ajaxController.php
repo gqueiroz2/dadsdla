@@ -689,6 +689,6 @@ class ajaxController extends Controller{
         $mtx = $matrix[0];
         $total = $matrix[1];
 
-        $sbr->renderSubAssembler($mtx, $total, $type);    
+        $sbr->renderSubAssembler($mtx, $total, $type, $name);    
     }
 }

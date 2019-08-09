@@ -24,7 +24,19 @@ class subBrandRanking extends rankingBrand {
 
         $b = new brand();
 
-        $brand = $b->getBrandID($con, $filter);
+        if ($filter != 'DN') {
+            $brand = $b->getBrandID($con, $filter);
+        }else{
+            $brands = $b->getBrand($con);
+            //var_dump($brand);
+            $brand = array();
+            $brand[0]['id'] = array();
+
+            for ($i=0; $i < sizeof($brands); $i++) { 
+                array_push($brand[0]['id'], $brands[$i]['id']);
+            }
+        }
+        
 
         $r = new region();
 
@@ -36,7 +48,7 @@ class subBrandRanking extends rankingBrand {
             $region = $tmp['name'];
         }
 
-        for ($y=0; $y < sizeof($years); $y++) { 
+        for ($y=0; $y < sizeof($years); $y++) {
         	
         	if ($filter == "VIX" || $filter == "ONL") {
         		$table = "digital";
@@ -48,13 +60,26 @@ class subBrandRanking extends rankingBrand {
 
 			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand[0]['id']);
 
-			if ($table != "cmaps") {
-				if (is_array($res[$y])) {
-                	for ($r=0; $r < sizeof($res[$y]); $r++) {
-                    	$res[$y][$r]['total'] *= $pRate;
-                	}
-            	}	
-			}
+			
+			if (is_array($res[$y])) {
+            	for ($r=0; $r < sizeof($res[$y]); $r++) {
+                    if ($table != "cmaps") {
+                        if ($currency[0]['name'] == "USD") {
+                            $pRate = 1.0;
+                        }else{
+                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                        }
+                    }else{
+                        if ($currency[0]['name'] == "USD") {
+                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                        }else{
+                            $pRate = 1.0;
+                        }                        
+                    }
+                    $res[$y][$r]['total'] *= $pRate;
+            	}
+        	}	
+			
         }
 
         return $res;
@@ -302,7 +327,7 @@ class subBrandRanking extends rankingBrand {
 		return array($mtx, $total);
     }
 
-    public function renderSubAssembler($mtx, $total, $type){
+    public function renderSubAssembler($mtx, $total, $type, $brand){
     	
     	if ($type == "agency") {
 			$pos = 4;
@@ -313,7 +338,11 @@ class subBrandRanking extends rankingBrand {
     	echo "<div class='container-fluid'>";
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
+                if ($brand == "DN") {
+                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black; color: black; !important'>";
+                }else{
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
+                }
 
         			for ($m=0; $m < sizeof($mtx[0]); $m++) { 
         				echo "<tr>";
