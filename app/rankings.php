@@ -114,7 +114,7 @@ class rankings extends rank{
             if ($mtx[$m][0] == "Agency Group") {
                 $res = $type2[$t]->agencyGroup;
             }else{
-                $res = $type2[$t]->name;    
+                $res = $type2[$t]->name;
             }
         }else{
             $res = $type2[$t]->name;

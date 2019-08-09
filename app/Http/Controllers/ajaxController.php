@@ -680,8 +680,12 @@ class ajaxController extends Controller{
                 }
             }
         }
-
-        $matrix = $sbr->assemble($types, $res, $type);
         
+        $matrix = $sbr->assemble($types, $res, $type);
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+        
+        //var_dump($total);
+        var_dump("expression");
     }
 }

@@ -12,8 +12,8 @@ class rank extends Model{
         
         if ($second == 0 && $third == 0) {
             $years = array($first);
-        }elseif ($second == 0) {
-            $years = array($first, $third);
+        }elseif ($second == 0) {$total = $this->assemblerTotal($mtx, $years);
+            $years = array($first, $third);$total = $this->assemblerTotal($mtx, $years);
         }elseif ($third == 0) {
             $years = array($first, $second);
         }else{

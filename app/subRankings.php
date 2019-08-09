@@ -252,8 +252,6 @@ class subRankings extends rank {
                 }
             }
         }
-
-
         
         for ($v=0; $v < sizeof($values); $v++) { 
             for ($m=0; $m < sizeof($mtx); $m++) {

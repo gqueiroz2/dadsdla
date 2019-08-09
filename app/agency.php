@@ -359,7 +359,7 @@ class agency extends Management{
 
     }
 
-    public function getAgencyByRegion($con,$agencyRegion=false){
+    public function getAgencyByRegion($con,$agencyRegion=false,$agencyID=false){
 
         $sql = new sql();
 
@@ -379,10 +379,15 @@ class agency extends Management{
             $where .= "WHERE region_id IN ('$agencyRegions')";
         }
 
+        if ($agencyID) {
+            $agencyIDs = implode(",", $agencyID);
+            $where .= " AND a.id IN ('$agencyIDs')";
+        }
+
         $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
                  LEFT JOIN region r ON r.ID = ag.region_id
                  ";
-
+        
         $res = $sql->select($con,$columns,$table,$join,$where);
 
         $from = array('id','agency','agencyGroup','agencyGroupID','region');
