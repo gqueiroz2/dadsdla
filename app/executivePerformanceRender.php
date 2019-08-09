@@ -18,7 +18,11 @@ class executivePerformanceRender extends renderPerformance
 	    	echo "</div>";
     	echo "</div>";
 
+    	
+    	$x=0;
+
 	    for ($s=0; $s < sizeof($mtx["case1"]["value"]); $s++) {
+
 
 	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
 	    		$s++;
@@ -36,7 +40,7 @@ class executivePerformanceRender extends renderPerformance
 	    		$s++;
 	    	}
 
-	    	if ($s%2 == 0) {
+	    	if ($x%2 == 0) {
 	    		echo "<div class='row'>";
 	    	}
 
@@ -135,13 +139,16 @@ class executivePerformanceRender extends renderPerformance
 
 	    	echo "</div>";
 
-	    	if ($s%2 == 1 || sizeof($mtx["salesRep"]) == 1) {
+	    	if ($x%2 == 1 || sizeof($mtx["salesRep"]) == 1 ) {
 	    		echo "</div>";
 	    	}
 
+
+	    	$x++;
+
 	    }
 	    if (sizeof($mtx["salesRep"])>1) {
-	    	if(sizeof($mtx["case1"]["value"])%2 == 0){
+	    	if($x%2 == 0){
 		    	echo "<div class='row'>";
 	    	}
 	    		echo "<div class='col-sm-6'>";

@@ -16,7 +16,7 @@ class brand extends Management{
 		$table = "brand";
 		$columns = "id,name";
 		$from = array('id','name');	
-		$where = "";//false;//"WHERE name != 'OTH'";
+		$where = "WHERE sub_brand = '0'";//false;//"WHERE name != 'OTH'";
 
 		if($ID){
 			$IDS = implode(",", $ID);
