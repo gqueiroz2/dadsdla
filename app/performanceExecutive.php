@@ -84,6 +84,8 @@ class performanceExecutive extends performance
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                     $table[$b][$m] = "digital";
+                }elseif($brand[$b][1] == "FN" && $m<5){
+                    $table[$b][$m] = false;
                 }else{
                     $table[$b][$m] = "ytd";
                 }
