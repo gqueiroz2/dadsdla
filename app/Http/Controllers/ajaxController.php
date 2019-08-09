@@ -462,7 +462,8 @@ class ajaxController extends Controller{
     public function typeByRegion(){
 
         $bool = Request::get("bool");
-        var_dump($bool);
+        $region = Request::get("regionID");
+        
         echo "<option value=''> Select </option>";
 
         if ($bool == "false") {
@@ -472,8 +473,9 @@ class ajaxController extends Controller{
         echo "<option value='agency'> Agency </option>";
         echo "<option value='client'> Client </option>";
 
-        if ($bool == "true") {
-            echo "<option value='products'> Products </option>";            
+        if ($bool == "true" && $region == 1) {
+            echo "<option value='sector'> Sector </option>";
+            echo "<option value='category'> Category </option>";
         }
     }
 
@@ -500,7 +502,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> EMPTY </option>";
+        echo "<option value='0'> Empty </option>";
 
     }
 
@@ -517,7 +519,7 @@ class ajaxController extends Controller{
             }
         }
 
-        echo "<option value='0'> EMPTY </option>";
+        echo "<option value='0'> Empty </option>";
 
     }
 
@@ -668,24 +670,25 @@ class ajaxController extends Controller{
         $name = Request::get("name");
 
         $sbr = new subBrandRanking();
-
+        
         $res = $sbr->getSubResults($con, $type, $region, $value, $months, $currency, $name);
-
+        
         $types = array();
 
         for ($r=0; $r < sizeof($res); $r++) { 
-            for ($r2=0; $r2 < sizeof($res[$r]); $r2++) { 
-                if (!in_array($res[$r][$r2][$type], $types)) {
-                    array_push($types, $res[$r][$r2][$type]);  
-                }
+            if (is_array($res[$r])) {
+                for ($r2=0; $r2 < sizeof($res[$r]); $r2++) { 
+                    if (!in_array($res[$r][$r2][$type], $types)) {
+                        array_push($types, $res[$r][$r2][$type]);  
+                    }
+                }   
             }
         }
         
         $matrix = $sbr->assemble($types, $res, $type);
         $mtx = $matrix[0];
         $total = $matrix[1];
-        
-        //var_dump($total);
-        var_dump("expression");
+
+        $sbr->renderSubAssembler($mtx, $total, $type);    
     }
 }

@@ -48,11 +48,13 @@ class subBrandRanking extends rankingBrand {
 
 			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand[0]['id']);
 
-			if (is_array($res[$y])) {
-                for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                    $res[$y][$r]['total'] *= $pRate;
-                }
-            }
+			if ($table != "cmaps") {
+				if (is_array($res[$y])) {
+                	for ($r=0; $r < sizeof($res[$y]); $r++) {
+                    	$res[$y][$r]['total'] *= $pRate;
+                	}
+            	}	
+			}
         }
 
         return $res;
@@ -103,6 +105,11 @@ class subBrandRanking extends rankingBrand {
 
             $names = array($type."ID", $type, "agencyGroup", $as);
 
+        }elseif ($type == "sector" || $type == "category") {
+			$tmp = $tableAbv.".".$type." AS '".$type."', SUM($value) AS $as";
+			$join = null;
+			$name = $type;
+			$names = array($type, $as);
         }else{
         	$join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id";
 
@@ -150,22 +157,26 @@ class subBrandRanking extends rankingBrand {
     }
 
     public function searchYearValue($name, $sub, $type, $y){
-    	
-    	for ($s=0; $s < sizeof($sub[$y]); $s++) { 
-			if ($name == $sub[$y][$s][$type]) {
-				return $sub[$y][$s]['total'];
-			}
+    	if (is_array($sub[$y])) {
+    		for ($s=0; $s < sizeof($sub[$y]); $s++) { 
+				if ($name == $sub[$y][$s][$type]) {
+					return $sub[$y][$s]['total'];
+				}
+    		}	
     	}
+    	
 
     	return 0;
     }
 
     public function existInYear($name, $sub, $type, $y){
     
-    	for ($s=0; $s < sizeof($sub[$y]); $s++) { 
-			if ($name == $sub[$y][$s][$type]) {
-				return true;
-			}
+    	if (is_array($sub[$y])) {
+    		for ($s=0; $s < sizeof($sub[$y]); $s++) { 
+				if ($name == $sub[$y][$s][$type]) {
+					return true;
+				}
+    		}
     	}
 
     	return false;
@@ -212,7 +223,7 @@ class subBrandRanking extends rankingBrand {
     	
     }
 
-    public function assemblerTotal($mtx, $type){
+    public function subAssemblerTotal($mtx, $type){
 
     	$first = 0;
     	$second = 0;
@@ -234,7 +245,7 @@ class subBrandRanking extends rankingBrand {
 
     		$total[$t] = 0;
 
-    		/*if ($t == 0) {
+    		if ($t == 0) {
     			$val = "Total";
     		}elseif ($t == $pos1 || $t == $pos2) {
     			if ($t == $pos1) {
@@ -244,20 +255,20 @@ class subBrandRanking extends rankingBrand {
     			}
     		}elseif ($mtx[$t][0] == "Var(%)") {
     			if ($total[$t-1] != 0 && $total[$t-2] != 0) {
-    				$val = ($total[$pos2]/$total[$pos2])*100;
+    				$val = ($total[$pos1] / $total[$pos2])*100;
     			}else{
     				$val = 0;
     			}
     		}else{
     			$val = " ";
-    		}*/
+    		}
 
-    		//$total[$t] = $val;
+    		$total[$t] = $val;
 
     	}
 
 
-    	/*return $total;*/
+    	return $total;
     }
 
     public function assemble($names, $values, $type){
@@ -286,8 +297,74 @@ class subBrandRanking extends rankingBrand {
 			}
 		}
 		
-	    $total = $this->assemblerTotal($mtx, $type);
+	    $total = $this->subAssemblerTotal($mtx, $type);
 		
-		//return array($mtx, $total);
+		return array($mtx, $total);
+    }
+
+    public function renderSubAssembler($mtx, $total, $type){
+    	
+    	if ($type == "agency") {
+			$pos = 4;
+		}else{
+			$pos = 3;
+		}
+
+    	echo "<div class='container-fluid'>";
+            echo "<div class='row mt-2 mb-2 justify-content-center'>";
+                echo "<div class='col'>";
+                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
+
+        			for ($m=0; $m < sizeof($mtx[0]); $m++) { 
+        				echo "<tr>";
+						
+						if ($m == 0) {
+		        			$color = 'lightBlue';
+		        		}elseif ($m%2 == 0) {
+		        			$color = 'medBlue';
+		        		}else{
+		        			$color = 'rcBlue';
+		        		}
+
+		        		for ($n=0; $n < sizeof($mtx); $n++) { 
+		        			if ($m == 0) {
+		        				echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+		        			}else{
+		        				if (is_numeric($mtx[$n][$m])) {
+		        					if ($n == $pos) {
+		        						echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";	
+		        					}else{
+            							echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+		        					}
+		        				}else{
+		        					echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+		        				}
+		        			}
+		        		}
+
+						echo "</tr>";
+		            }
+
+		            echo "<tr>";
+
+		            for ($t=0; $t < sizeof($total); $t++) {
+		            	if ($t == $pos) {
+		            		echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+		            	}
+		            	elseif (is_numeric($total[$t])) {
+		            		echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+		            	}else{
+		            		echo "<td class='darkBlue center'> ".$total[$t]." </td>";
+		            	}
+		            	
+		            }
+
+		            echo "</tr>";
+
+                    echo "</table>";
+               echo "</div>";
+           echo "</div>";
+       echo "</div>";
+
     }
 }

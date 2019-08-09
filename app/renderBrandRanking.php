@@ -57,7 +57,7 @@ class renderBrandRanking extends Render {
             	echo "</tr>";
 
             	echo "<tr>";
-        			echo "<td id='sub".$mtx[0][$m]."' style='display: none' colspan='".sizeof($mtx)."'></td>";
+        			echo "<td class='$color' id='sub".$mtx[0][$m]."' style='display: none' colspan='".sizeof($mtx)."'></td>";
         		echo "</tr>";
             }
 
