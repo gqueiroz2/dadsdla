@@ -84,6 +84,8 @@ class AE extends pAndR{
         $executiveRF = $this->consolidateAE($rollingFCST);
 
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
+        $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+        $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -101,13 +103,27 @@ class AE extends pAndR{
                         "executiveRevenueCYear" => $executiveRevenueCYear,
 
                         "pending" => $pending,
+                        "RFvsTarget" => $RFvsTarget,
+                        "targetAchievement" => $targetAchievement,
                     );
 
         return $rtr;
 
     }
 
-   
+    public function divArrays($array1,$array2){
+        $exit = array();
+
+        for ($a=0; $a <sizeof($array1) ; $a++) { 
+            if ($array2[$a] != 0) {
+                $exit[$a] = ($array1[$a] / $array2[$a])*100;
+            }else{
+                $exit[$a] = 0;
+            }
+        }
+
+        return $exit;
+    }
 
     public function subArrays($array1,$array2){
         $exit = array();

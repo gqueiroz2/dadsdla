@@ -75,7 +75,7 @@
 	<script>
 		$(document).ready(function(){
 			@for($m=0;$m<16;$m++)
-				$("#rf-"+{{$m}}).change(function(){
+				/*$("#rf-"+{{$m}}).change(function(){
 
 					if ($(this).val() == '') {
 						$(this).val(parseFloat(0));
@@ -134,7 +134,7 @@
 
 					@endfor
 					
-				});
+				});*/
 
 
 				@for($c=0;$c<sizeof($client);$c++)
@@ -160,11 +160,11 @@
 							$("#clientRF-"+{{$c}}+"-15").val(value);
 						}
 
-						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
+						var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 
-						$("#totalClient-"+{{$c}}).val(Temp);
+						$("#totalClient-"+{{$c}}).val(totalClient);
 
-						Temp3 = handleNumber(Temp);
+						Temp3 = handleNumber(totalClient);
 
 						var tmp2 = 0;
 
@@ -188,15 +188,15 @@
 							$("#client-"+{{$c}}).css("background-color","");
 						}
 
-						var month = 0;
+						var rf = 0;
 
 						@for($c2=0;$c2<sizeof($client);$c2++)
-							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+							rf += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
 						@endfor
 
-						month = Comma(month);
+						rf = Comma(rf);
 
-						$("#rf-"+{{$m}}).val(month);
+						$("#rf-"+{{$m}}).val(rf);
 
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
 							var month =0;
@@ -269,9 +269,123 @@
 						
 						var Temp = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-15").val()));
 
-						alert(Temp);
-
 						$("#totalRFvsPY-"+{{$c}}).val(Temp);
+
+						var Temp2 = handleNumber($("#target-"+{{$m}}).val());
+
+						rf = handleNumber(rf);
+
+						var RFvsTarget = Comma(rf-Temp2);
+
+						$("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
+
+						if (Temp2 == 0) {
+							var Temp3 = 0+"%";
+						}else{
+							var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
+						}
+
+						$("#achievement-"+{{$m}}).val(Temp3);
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var month =0;
+
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
+							@endfor
+
+							var target = handleNumber($("#target-0").val())+handleNumber($("#target-1").val())+handleNumber($("#target-2").val());
+
+							var RFvsTargetQ = Comma(month-target);
+
+							$("#RFvsTarget-3").val(RFvsTargetQ);
+						
+							if (target == 0) {
+								var Temp3 = 0+"%";
+							}else{
+								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+							}
+							
+							$("#achievement-3").val(Temp3);
+
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var month =0;
+
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
+							@endfor
+
+							var target = handleNumber($("#target-4").val())+handleNumber($("#target-5").val())+handleNumber($("#target-6").val());
+
+							var RFvsTargetQ = Comma(month-target);
+
+							$("#RFvsTarget-7").val(RFvsTargetQ);
+
+							if (target == 0) {
+								var Temp3 = 0+"%";
+							}else{
+								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+							}
+							
+							$("#achievement-7").val(Temp3);
+						
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var month =0;
+
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
+							@endfor
+
+
+							var target = Comma(handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val()));
+
+							var RFvsTargetQ = Comma(month-target);
+						
+							$("#RFvsTarget-11").val(RFvsTargetQ);
+
+							if (target == 0) {
+								var Temp3 = 0+"%";
+							}else{
+								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+							}
+
+							$("#achievement-11").val(Temp3);
+
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var month =0;
+
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
+							@endfor
+
+							var target = handleNumber($("#target-12").val())+handleNumber($("#target-13").val())+handleNumber($("#target-14").val());
+							
+							var RFvsTargetQ = Comma(month-target);
+
+							$("#RFvsTarget-15").val(RFvsTargetQ);
+
+							if (target == 0) {
+								var Temp3 = 0+"%";
+							}else{
+								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+							}
+							
+							$("#achievement-15").val(Temp3);
+						}
+
+
+						var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
+						var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
+
+						$("#TotalRFvsTarget").val(Comma(RF-target));
+
+						if (target == 0) {
+							var Temp3 = 0+"%";
+						}else{
+							var Temp3 = Comma(((RF/target)*100).toFixed(2))+"%";
+						}
+
+						$("#totalAchievement").val(Temp3);
 
 					});
 				@endfor
@@ -532,8 +646,6 @@
 	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	        return x1 + x2;
 	    }
-
-	  
 
 	</script>
 

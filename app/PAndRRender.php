@@ -29,6 +29,8 @@ class PAndRRender extends Render
         $executiveRevenuePYear = $forRender["executiveRevenuePYear"];
 
         $pending = $forRender["pending"];
+        $RFvsTarget = $forRender["RFvsTarget"];
+        $targetAchievement = $forRender["targetAchievement"];
 
         echo "<div class='table-responsive'>";
     	echo "<table style='min-width:3000px; width:100%; margin-top:1,5%; text-align:center;'>";
@@ -68,13 +70,13 @@ class PAndRRender extends Render
                 $totalTarget = 0.0;
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($targetValues[$m])."</td>";
+                        echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='target-$m' value='".number_format($targetValues[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                         $totalTarget += $targetValues[$m];
                     }else{
-                        echo "<td class='rcBlue'>".number_format($targetValues[$m])."</td>";
+                        echo "<td class='rcBlue'><input type='text' readonly='true' id='target-$m' value='".number_format($targetValues[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }
                 }
-                echo "<td class='smBlue'>".number_format($targetValues[$m])."</td>";
+                echo "<td class='smBlue'><input type='text' readonly='true' id='totalTarget' value='".number_format($targetValues[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'></td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
@@ -222,12 +224,12 @@ class PAndRRender extends Render
                 echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Var RF vs Target</td>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
-                        echo "<td class='odd' >0</td>";
+                        echo "<td class='odd'><input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }
                 }
-                echo "<td class='smBlue' >0</td>";
+                echo "<td class='smBlue' ><input type='text' readonly='true' id='TotalRFvsTarget' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'></td>";
                 echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
@@ -252,12 +254,12 @@ class PAndRRender extends Render
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>% Target Achievement</td>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0</td>";
+                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='achievement-$m' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
-                        echo "<td class='rcBlue' >0</td>";
+                        echo "<td class='rcBlue' ><input type='text' readonly='true' id='achievement-$m' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }
                 }
-                echo "<td class='smBlue' >0</td>";
+                echo "<td class='smBlue' ><input type='text' readonly='true' id='totalAchievement' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'></td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";

@@ -230,11 +230,11 @@ class subBrandRanking extends rankingBrand {
     		$second += $mtx[$pos2][$m];
     	}
 
-    	for ($t=0; $t < sizeof($mtx); $m++) { 
+    	for ($t=0; $t < sizeof($mtx); $t++) { 
 
     		$total[$t] = 0;
 
-    		if ($t == 0) {
+    		/*if ($t == 0) {
     			$val = "Total";
     		}elseif ($t == $pos1 || $t == $pos2) {
     			if ($t == $pos1) {
@@ -250,12 +250,14 @@ class subBrandRanking extends rankingBrand {
     			}
     		}else{
     			$val = " ";
-    		}
+    		}*/
 
-    		$total[$t] = $val;
+    		//$total[$t] = $val;
+
     	}
 
-    	return $total;
+
+    	/*return $total;*/
     }
 
     public function assemble($names, $values, $type){
@@ -284,8 +286,8 @@ class subBrandRanking extends rankingBrand {
 			}
 		}
 		
-		$total = $this->assemblerTotal($mtx, $type);
+	    $total = $this->assemblerTotal($mtx, $type);
 		
-		return array($mtx, $total);
+		//return array($mtx, $total);
     }
 }
