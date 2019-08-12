@@ -78,9 +78,7 @@ class AE extends pAndR{
        	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
-
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID,$month,$regionID,$cYear,$value,$currency,$pr);
-
 
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
@@ -210,7 +208,9 @@ class AE extends pAndR{
                                         AND (month = \"".$month[$m][1]."\")
                                         AND (year = \"".$year."\")";
 
+
                     //var_dump($select2[$c][$m]);
+                    //$res[$c][$m] = $con->query($select[$c][$m]);
 
 	    			$from = array("sumValue");
 

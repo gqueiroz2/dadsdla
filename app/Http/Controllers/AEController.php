@@ -128,7 +128,8 @@ class AEController extends Controller{
 
         }
         
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
+        var_dump($forRender);
+        //return view('pAndR.AEView.post',compact('render','region','currency','forRender','client','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
     }
 
 }
