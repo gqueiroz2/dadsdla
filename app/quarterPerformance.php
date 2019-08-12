@@ -128,6 +128,7 @@ class quarterPerformance extends performance {
 			for ($m=0; $m <sizeof($values[$b]) ; $m++) { 
 				for ($s=0; $s <sizeof($values[$b][$m]) ; $s++) { 
 					$values[$b][$m][$s] = $values[$b][$m][$s]*$div;
+					$planValues[$b][$m][$s] = $planValues[$b][$m][$s]*$div;
 				}
 			}
 		}
