@@ -88,6 +88,7 @@ class quarterPerformance extends performance {
 		}
 
 		//var_dump($salesRepGroup);
+		//var_dump($planValues);
 		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div);
 
 		if (sizeof($brands) > 1) {
