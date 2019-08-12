@@ -30,7 +30,7 @@ class rankingBrandController extends Controller {
       $brands = $b->getBrand($con);
 
       $render = new renderBrandRanking();
-
+      
       return view("adSales.ranking.0brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
     }
 
@@ -89,7 +89,7 @@ class rankingBrandController extends Controller {
 		$years = array($cYear, $pYear);
 
     	$brandsFinal = $rb->mountBrands($brands);
-    	$values = $rb->getAllResults($con, $r, $region, $brandsFinal, $value, $months, $pRate, $years);
+    	$values = $rb->getAllResults($con, $rtr, $region, $brandsFinal, $value, $months, $pRate, $years);
     	$mtx = $rb->assembler($values, $years, $brands);
     	
     	$rName = $rb->TruncateRegion($rtr);

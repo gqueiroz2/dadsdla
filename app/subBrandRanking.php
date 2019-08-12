@@ -52,9 +52,9 @@ class subBrandRanking extends rankingBrand {
         	
         	if ($filter == "VIX" || $filter == "ONL") {
         		$table = "digital";
-        	}elseif ($region == "Brazil" && ($years[$y] == $cYear)) {
+        	}/*elseif ($region == "Brazil" && ($years[$y] == $cYear)) {
 				$table = "cmaps";
-			}else{
+			}*/else{
 				$table = "ytd";
 			}
 
@@ -144,7 +144,7 @@ class subBrandRanking extends rankingBrand {
         }
 
         $where = $sql->where($columns, $colsValue);
-
+        
         $values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
         $from = $names;
@@ -339,7 +339,7 @@ class subBrandRanking extends rankingBrand {
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
                 if ($brand == "DN") {
-                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black; color: black; !important'>";
+                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 1px solid white; color: black; !important'>";
                 }else{
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
                 }

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\rank;
 use App\region;
+use App\pRate;
 
 class rankingBrand extends rank{
 
@@ -54,6 +55,7 @@ class rankingBrand extends rank{
 						)";
 
 		$sql = new sql();
+		$p = new pRate();
 
 		for ($l=0; $l < 2; $l++) {
 			
@@ -98,6 +100,42 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
+
+				if ($info['table'] == "cmaps") {
+					if ($currency[0]['name'] == "USD") {
+			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+			        }else{
+			            $pRate = 1.0;
+			        }
+					
+				}else{
+					if ($currency[0]['name'] == "USD") {
+			            $pRate = 1.0;
+			        }else{
+			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+			        }	
+				}
+
+				/*if ($y == 1) {
+					var_dump("antes da transformação",$res[$y]);
+				}*/
+
+				if (is_array($res[$y])) {
+					/*var_dump($y);
+					var_dump($info['table']);
+					var_dump($pRate);*/
+					for ($i=0; $i < sizeof($res[$y]); $i++) { 
+						if ($info['table'] == "cmaps") {
+							$res[$y][$i]['total'] /= $pRate;	
+						}else{
+							$res[$y][$i]['total'] *= $pRate;
+						}
+					}	
+				}
+
+				/*if ($y == 1) {
+					var_dump("depois da transformação",$res[$y]);
+				}*/
 			}
 
 			//var_dump($res);
@@ -109,7 +147,7 @@ class rankingBrand extends rank{
 
 			//var_dump($line[$l]);
 		}
-
+		
 		return $line;
 
 	}
@@ -134,13 +172,7 @@ class rankingBrand extends rank{
 
 	public function mountValues($con, $r, $regionID, $year){
 
-		$tmp = $r->getRegion($con,array($regionID));
-
-		if(is_array($tmp)){
-            $rtr['region'] = $tmp[0]['name'];
-        }else{
-            $rtr['region'] = $tmp['name'];
-        }
+        $rtr['region'] = $r;
 
         $cYear = intval(date('Y'));
 
@@ -159,7 +191,6 @@ class rankingBrand extends rank{
 	public function assembler($values, $years, $brands){
 		
 		array_pop($brands);
-
 		//var_dump($brands);
 
 		$mtx[0][0] = "Brand";
@@ -215,16 +246,22 @@ class rankingBrand extends rank{
 				$pClosed += $val;	
 			}
 		}
+
+		$closedP = 0;
+		$planP = 0;
+		$pClosedP = 0;
+
 		if (sizeof($brands) > 1) {
 			array_push($mtx[0], "DN");
 			array_push($mtx[1], $closed);
 			array_push($mtx[2], $plan);
 			array_push($mtx[3], $pClosed);
 
-			for ($b=0; $b < sizeof($brands); $b++) { 
+			for ($b=0; $b < sizeof($brands); $b++) {
 				
 				if ($mtx[1][$b+1] != "-") {
 					$val = ($mtx[1][$b+1] / $closed)*100;
+					$closedP += $val;
 				}else{
 					$val = "-";
 				}
@@ -232,7 +269,8 @@ class rankingBrand extends rank{
 				$mtx[4][$b+1] = $val;
 
 				if ($mtx[2][$b+1] != "-") {
-					$val = ($mtx[2][$b+1] / $closed)*100;
+					$val = ($mtx[2][$b+1] / $plan)*100;
+					$planP += $val;
 				}else{
 					$val = "-";
 				}
@@ -240,7 +278,8 @@ class rankingBrand extends rank{
 				$mtx[5][$b+1] = $val;
 
 				if ($mtx[3][$b+1] != "-") {
-					$val = ($mtx[3][$b+1] / $closed)*100;
+					$val = ($mtx[3][$b+1] / $pClosed)*100;
+					$pClosedP += $val;
 				}else{
 					$val = "-";
 				}
@@ -259,9 +298,9 @@ class rankingBrand extends rank{
 				$mtx[8][$b+1] = $val2;
 			}
 
-			for ($c=4; $c < 7; $c++) { 
-				array_push($mtx[$c], 100);
-			}
+			array_push($mtx[4], $closedP);
+			array_push($mtx[5], $planP);
+			array_push($mtx[6], $pClosedP);
 
 			$size = sizeof($mtx[0]);
 
