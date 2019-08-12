@@ -76,7 +76,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT client,region FROM $table ORDER BY client";		
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table";
@@ -85,7 +85,7 @@ class CheckElements extends Model{
 		$res = $con->query($selectDistinctFM);
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
@@ -131,7 +131,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";		
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT agency,region FROM $table ORDER BY agency";		
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT agency,sales_representant_office FROM $table";		
@@ -142,7 +142,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("agency","region"),array("agency","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));
@@ -257,7 +257,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT client,region FROM $table 
 												WHERE (region = '".$seekRegion['name']."')
 												ORDER BY region,client ";
@@ -271,7 +271,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
@@ -305,7 +305,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";		
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT agency,region FROM $table 
 														WHERE (region = '".$seekRegion['name']."')
 														ORDER BY agency";		
@@ -321,7 +321,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
-		}elseif($table == "fw_digital"){
+		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("agency","region"),array("agency","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));

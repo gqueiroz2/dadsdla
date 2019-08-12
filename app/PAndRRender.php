@@ -32,8 +32,8 @@ class PAndRRender extends Render
         $RFvsTarget = $forRender["RFvsTarget"];
         $targetAchievement = $forRender["targetAchievement"];
 
-        echo "<div class='table-responsive'>";
-    	echo "<table style='min-width:3000px; width:100%; margin-top:1,5%; text-align:center;'>";
+        echo "<div class='table-responsive' style='zoom:80%;'>";
+    	echo "<table style='min-width:3000px; width:80%; margin-top:1,5%; text-align:center;'>";
     		/*
                 
                 START OF SALES REP AND SALES REP TOTAL MONTHS
@@ -311,7 +311,7 @@ class PAndRRender extends Render
 
 
         for ($c=0; $c < sizeof($client); $c++) {
-            echo "<div class='table-responsive'>";
+            echo "<div class='table-responsive' style='zoom:80%;'>";
             echo "<table id='table-$c' style='min-width:3000px; width:100%; margin-top:1,5%; margin-bottom:0,5%; text-align:center; overflow:auto;' >";
                 
                 /* 

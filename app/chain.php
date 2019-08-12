@@ -22,13 +22,14 @@ class chain extends excel{
 	}
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
+
         $columns = $this->defineColumns($table,'first');
         if($table == "cmaps" || $table == "fw_digital"){
             $parametter = true;
         }else{
             $parametter = false;
         }
-
+       
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
 
         if($table == "fw_digital"){
@@ -37,6 +38,7 @@ class chain extends excel{
         }
 
         $into = $this->into($columns);      
+        
         $check = 0;
                
         $mark = 0;
@@ -49,7 +51,7 @@ class chain extends excel{
             }else{
                 $mark++;
             }
-        } 
+        }
 
         if($check == (sizeof($spreadSheet) - $mark) ){
             $complete = true;
@@ -83,7 +85,8 @@ class chain extends excel{
         
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
-        
+
+
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
    		return $complete;
     }  
@@ -265,7 +268,7 @@ class chain extends excel{
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,"Brazil",$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,"Brazil",$regionName,$current[$c]['client']);
 
-            }elseif($table == "fw_digital"){
+            }elseif($table == "fw_digital" || $table == "sf_pr"){
 
                 $regionName = $rr->getRegion($con,array($current[$c]['region_id']))[0]['name'];
 
@@ -338,6 +341,8 @@ class chain extends excel{
 
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
         
+        $base = new base();
+
         if($column == 'campaign_sales_office'){
 			$rtr =  array(false,'campaign_sales_office_id');
 			for ($r=0; $r < sizeof($regions); $r++) { 
@@ -353,6 +358,9 @@ class chain extends excel{
             }
 
             $rtr =  array($bool,'package');
+        }elseif($column == 'stage'){
+            $stg = $this->defineStage($current);
+            $rtr =  array($stg,'stage');
         }elseif($column == 'sales_representant_office'){
 			$rtr =  array(false,'sales_representant_office');
 			for ($r=0; $r < sizeof($regions); $r++) { 
@@ -360,6 +368,9 @@ class chain extends excel{
 					$rtr =  array( $regions[$r]['id'],'sales_representant_office_id');
 				}
 			}
+        }elseif($column == 'from_date' || $column == 'to_date'){
+            $rtr =  array( $base->dateToMonth($current) , $column );
+            
         }elseif($column == 'region'){
             $rtr =  array(false,'region');
             for ($r=0; $r < sizeof($regions); $r++) { 
@@ -444,6 +455,12 @@ class chain extends excel{
         	$rtr = array($current,$column);
         }
         return $rtr;
+    }
+
+    public function defineStage($stg){
+        $tmp = explode(" -", $stg);
+        $newStg = $tmp[0];
+        return $newStg;
     }
 
     public function insertToDLA($con,$table,$columns,$current,$into){
@@ -531,7 +548,12 @@ class chain extends excel{
 	        $column == 'year' ||
             $column == 'num_spot' ||
             $column == 'agency_commission_percentage' ||
-            $column == 'rep_commission_percentage'
+
+            $column == 'fcst_amount_gross' ||
+            $column == 'fcst_amount_net' ||
+            $column == 'success_probability' ||
+
+            $column == 'rep_commission_percentage' 
 
     	  ){
     			if($column == 'month' ||
@@ -583,18 +605,23 @@ class chain extends excel{
     					   $columns[$c] == 'campaign_option_spend' ||
     					   $columns[$c] == 'spot_duration' ||
     				       $columns[$c] == 'impression_duration' ||
+                           $columns[$c] == 'fcst_amount_gross' ||
+                           $columns[$c] == 'fcst_amount_net' ||
+                           $columns[$c] == 'success_probability' ||
                            $columns[$c] == 'num_spot'
     				      ){
 
     						if( is_null($spreadSheet[$s][$c])){
-    							$columnValue = $c + 1;
+    							$columnValue = 0.0;
     							//$c++;
     						}else{
     							$columnValue = $c;
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date'
+    						if($columns[$c] == 'campaign_option_start_date' ||
+                                $columns[$c] == 'from_date' ||
+                                $columns[$c] == 'to_date'
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
@@ -737,6 +764,23 @@ class chain extends excel{
                 }
                 break;
 
+            case 'sf_pr':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->sfPandRColumnsF;
+                        break;
+                    case 'second':
+                        return $this->sfPandRColumnsS;
+                        break;
+                    case 'third':
+                        return $this->sfPandRColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->sfPandRColumns;
+                        break;
+                }
+                break;
+
     		case 'cmaps':
     			switch ($recurrency) {
     				case 'first':
@@ -779,6 +823,82 @@ class chain extends excel{
       17 => string 'MONTH' (length=5)
       18 => string 'GROSS REVENUE' (length=13)
     */
+    public $sfPandRColumnsF = array(
+                                  'oppid',
+                                  'region',
+                                  'sales_rep',
+                                  'client',
+                                  'opportunity_name',
+                                  'agency',
+                                  'stage',
+                                  'fcst_category',
+                                  'gross_revenue_currency',
+                                  'gross_revenue',
+                                  'net_revenue_currency',
+                                  'net_revenue',
+                                  'fcst_amount_gross_currency',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net_currency',
+                                  'fcst_amount_net',                                  
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date'
+                              );
+
+    public $sfPandRColumnsS = array(
+                                  'oppid',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'client',
+                                  'opportunity_name',
+                                  'agency',
+                                  'stage',
+                                  'fcst_category',
+                                  'gross_revenue',
+                                  'net_revenue',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',                                  
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date'
+                              );
+
+    public $sfPandRColumnsT = array(
+                                  'oppid',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'client_id',
+                                  'opportunity_name',
+                                  'agency_id',
+                                  'stage',
+                                  'fcst_category',
+                                  'gross_revenue',
+                                  'net_revenue',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',                                  
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date'
+                              );
+
+    public $sfPandRColumns = array(
+                                  'oppid',
+                                  'region_id',
+                                  'sales_rep_id',
+                                  'client_id',
+                                  'opportunity_name',
+                                  'agency_id',
+                                  'stage',
+                                  'fcst_category',
+                                  'gross_revenue',
+                                  'net_revenue',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',                                  
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date'
+                              );      
+
 
     public $fwDigitalColumnsF = array(
                                   '',

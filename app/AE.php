@@ -54,16 +54,17 @@ class AE extends pAndR{
             }
         }
 
+        //var_dump("aki");
+
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value);
+                //var_dump($targetValues[$b][$m]);
                 //$values[$b][$m] = $this->generateValue($con,$sql,$region,$cYear,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
             	//$pYear = $this->
                 
             }
         }
-
-
 
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;

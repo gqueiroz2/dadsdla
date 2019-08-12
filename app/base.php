@@ -9,6 +9,12 @@ use App\sql;
 
 class base extends Model{
 
+    public function dateToMonth($date){
+        $temp = explode("-",$date);
+        $rtr = $temp[1];
+        return $rtr;
+    }
+
     public function removePercentageSymbol($per){
         $temp = explode("%", $per);
         $percen = floatval( $temp[0] );

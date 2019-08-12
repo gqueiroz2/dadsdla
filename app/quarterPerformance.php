@@ -81,7 +81,7 @@ class quarterPerformance extends performance {
 				$where[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
 
 				$values[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], $where[$b][$m], $table[$b][$m]);
-				$planValues[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], "value", "plan_by_sales", $currencyID, $value);
+				$planValues[$b][$m] = $this->generateValue($con, $sql, $regionID, $year, $brands[$b], $salesRep, $months[$m][1], "value", "plan_by_sales", $value);
 
 			}
 

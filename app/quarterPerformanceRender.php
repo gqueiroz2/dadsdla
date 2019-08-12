@@ -9,7 +9,7 @@ class quarterPerformanceRender extends Render {
     
     public function assemble($mtx, $region, $currency, $value, $year, $sales, $tiers){
 
-		echo "<table style='width: 100%; zoom: 100%; font-size: 16px;'>";
+		echo "<table style='width: 100%; zoom: 80%; font-size: 16px;'>";
 			echo "<tr>";
 				echo "<th colspan='11' class='lightBlue'><center><span style='font-size: 20px;'>$region - Quarter $year (".$currency[0]['name']."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
