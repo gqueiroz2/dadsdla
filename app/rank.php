@@ -162,8 +162,8 @@ class rank extends Model{
             $columns = array("campaign_sales_office_id","brand_id", "month", "year");
             $colsValue = array($region, $brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
-            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
-            $colsValue = array($region, $value, $brands_id, $months);
+            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "source", "year");
+            $colsValue = array($region, $value, $brands_id, $months, "TARGET");
             $value = "revenue";
         }else{
             $columns = array("brand_id", "month", "year");

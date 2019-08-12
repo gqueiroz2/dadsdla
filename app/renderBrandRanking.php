@@ -8,7 +8,7 @@ use App\Render;
 class renderBrandRanking extends Render {
     
     public function assembler($mtx, $currency, $value){
-		//var_dump($mtx);
+		
         $currency = $currency[0]['name'];
         $value = strtoupper($value);
         
@@ -22,15 +22,15 @@ class renderBrandRanking extends Render {
             echo "</tr>";
 
             for ($m=0; $m < sizeof($mtx[0]); $m++) {
-
+                
             	echo "<tr>";
 
             	if ($m == 0) {
         			$color = 'lightBlue';
-        		}elseif ($m%2 == 0) {
-        			$color = 'medBlue';
         		}elseif ($m == sizeof($mtx[0])-1) {
         			$color = 'darkBlue';
+        		}elseif ($m%2 == 0) {
+        			$color = 'medBlue';
         		}else{
         			$color = 'rcBlue';
         		}
