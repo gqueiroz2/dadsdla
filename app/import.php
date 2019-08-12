@@ -19,7 +19,9 @@ class import extends Model{
 		 
 		    if('csv' == $extension) {
 		        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-		    } else {
+		    }elseif('xls' == $extension) {
+		       	$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+		    }else{
 		        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
 		    }
 		 
@@ -48,10 +50,12 @@ class import extends Model{
 		 
 		    if('csv' == $extension) {
 		        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-		    } else {
+		    }elseif('xls' == $extension) {
+		       	$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+		    }else{
 		        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
 		    }
-		 
+		    
 		    $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
 		     
 		    $sheetData = $spreadsheet->getActiveSheet()->toArray();

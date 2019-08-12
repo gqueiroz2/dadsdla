@@ -111,13 +111,15 @@ class ChainController extends Controller{
                 unset($spreadSheet[1]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
-
+            case 'sf_pr':
+                unset($spreadSheet[0]);                
+                if($spreadSheet){
+                    $spreadSheet = array_values($spreadSheet);
+                }
+                break;
             case 'digital':
-                
                 $dg = new digital();
-
                 $spreadSheet = $dg->excelToBase($spreadSheet);
-
                 break;		
 		}
 

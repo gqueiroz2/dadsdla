@@ -54,16 +54,17 @@ class AE extends pAndR{
             }
         }
 
+        //var_dump("aki");
+
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
                 $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value);
+                //var_dump($targetValues[$b][$m]);
                 //$values[$b][$m] = $this->generateValue($con,$sql,$region,$cYear,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
             	//$pYear = $this->
                 
             }
         }
-
-
 
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
@@ -79,13 +80,18 @@ class AE extends pAndR{
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
 
-        $executiveRevenueCYear = $this->consolidateAE($clientRevenueCYear);
+        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID,$month,$regionID,$cYear,$value,$currency,$pr);
+
+
+        $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
         $executiveRF = $this->consolidateAE($rollingFCST);
 
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
+
+        //var_dump($rollingFCST);
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -159,6 +165,7 @@ class AE extends pAndR{
     	//var_dump($currency);
     	//var_dump($value);
 
+
     	if($currency == "USD"){
     		$div = 1;
     	}else{
@@ -167,9 +174,11 @@ class AE extends pAndR{
     	//var_dump($div);
 
     	if($value == "gross"){
-    		$ytdColumn = "gross_revenue_prate";
+            $ytdColumn = "gross_revenue_prate";
+    		$fwColumn = "gross_revenue";
     	}else{
     		$ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
     	}
 
     	$table = "ytd";
@@ -196,6 +205,14 @@ class AE extends pAndR{
 	    			//$res[$c][$m] = $con->query($select[$c][$m]);
 	    			//var_dump($res[$c][$m]);
 
+                    $select2[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                        FROM fw_digital
+                                        WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                        AND (month = \"".$month[$m][1]."\")
+                                        AND (year = \"".$year."\")";
+
+                    //var_dump($select2[$c][$m]);
+
 	    			$from = array("sumValue");
 
 	    			$rev[$c][$m] = 0.0;//$sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
@@ -207,6 +224,38 @@ class AE extends pAndR{
 
     	return $rev;
 
+    }
+
+    public function getBookingExecutive($con,$sql,$salesRep,$month,$region,$year,$value,$currency,$pr){
+
+        if ($value == "gross") {
+            $ytdColumn = "gross_revenue_prate";
+        }else{
+            $ytdColumn = "net_revenue_prate";
+        }
+
+        if($currency == "USD"){
+            $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($region),array($year));
+        }
+
+        for ($m=0; $m <sizeof($month) ; $m++) { 
+            $select[$m] = "SELECT SUM($ytdColumn) AS sumValue
+                            FROM ytd
+                            WHERE  (month = \"".$month[$m][1]."\")
+                            AND (year = \"".$year."\")
+                            AND (sales_rep_id = \"".$salesRep[0]."\")";
+
+            $res[$m] = $con->query($select[$m]);
+
+            $from = array("sumValue");
+
+            $rev[$m] = $sql->fetch($res[$m],$from,$from)[0]['sumValue']*$div;                    
+        
+        }
+
+        return $rev;
     }
 
 
