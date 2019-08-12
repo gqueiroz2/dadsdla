@@ -51,7 +51,7 @@ class chain extends excel{
             }else{
                 $mark++;
             }
-        } 
+        }
 
         if($check == (sizeof($spreadSheet) - $mark) ){
             $complete = true;
