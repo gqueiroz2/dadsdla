@@ -32,6 +32,13 @@
 					@endif
 				</div>
 				<div class="col">
+					<label class='labelLeft'><span class="bold">Year:</span></label>
+					@if($errors->has('year'))
+						<label style="color: red;">* Required</label>
+					@endif
+					{{$render->year()}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
 						<label style="color: red;">* Required</label>
