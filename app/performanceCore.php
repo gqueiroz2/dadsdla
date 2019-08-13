@@ -104,7 +104,7 @@ class performanceCore extends performance
                 $salesRep[$sr]["salesRepGroup"] = "Chile";
             }elseif($salesRep[$sr]["salesRep"] == 'Martin Hernandez' && $region == '7'){
                 $salesRep[$sr]["salesRepGroup"] = "Peru";
-            }elseif($salesRep[$sr]["salesRep"] == 'Jesse Leon'){
+            }elseif($salesRep[$sr]["salesRep"] == 'Jesse Leon' && $region == '11'){
                 $salesRep[$sr]["salesRepGroup"] = "NY International";
             }
         }

@@ -75,7 +75,7 @@
 	<script>
 		$(document).ready(function(){
 			@for($m=0;$m<16;$m++)
-				/*$("#rf-"+{{$m}}).change(function(){
+				$("#rf-"+{{$m}}).change(function(){
 
 					if ($(this).val() == '') {
 						$(this).val(parseFloat(0));
@@ -134,7 +134,7 @@
 
 					@endfor
 					
-				});*/
+				});
 
 
 				@for($c=0;$c<sizeof($client);$c++)
@@ -271,11 +271,17 @@
 
 						$("#totalRFvsPY-"+{{$c}}).val(Temp);
 
+						var booking = handleNumber($("#bookingE-"+{{$m}}).val());
+
 						var Temp2 = handleNumber($("#target-"+{{$m}}).val());
 
 						rf = handleNumber(rf);
 
 						var RFvsTarget = Comma(rf-Temp2);
+
+						var pending = Comma(rf-booking);
+
+						$("#pending-"+{{$m}}).val(pending);
 
 						$("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
 
@@ -295,6 +301,10 @@
 							@endfor
 
 							var target = handleNumber($("#target-0").val())+handleNumber($("#target-1").val())+handleNumber($("#target-2").val());
+
+							var booking = handleNumber($("#bookingE-0").val())+handleNumber($("#bookingE-1").val())+handleNumber($("#bookingE-2").val());
+
+							$("#pending-3").val(Comma(month-booking));
 
 							var RFvsTargetQ = Comma(month-target);
 
@@ -317,6 +327,10 @@
 
 							var target = handleNumber($("#target-4").val())+handleNumber($("#target-5").val())+handleNumber($("#target-6").val());
 
+							var booking = handleNumber($("#bookingE-4").val())+handleNumber($("#bookingE-5").val())+handleNumber($("#bookingE-6").val());
+
+							$("#pending-7").val(Comma(month-booking));
+
 							var RFvsTargetQ = Comma(month-target);
 
 							$("#RFvsTarget-7").val(RFvsTargetQ);
@@ -337,7 +351,11 @@
 							@endfor
 
 
-							var target = Comma(handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val()));
+							var target = handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val());
+
+							var booking = handleNumber($("#bookingE-8").val())+handleNumber($("#bookingE-9").val())+handleNumber($("#bookingE-10").val());
+
+							$("#pending-11").val(Comma(month-booking));
 
 							var RFvsTargetQ = Comma(month-target);
 						
@@ -348,6 +366,7 @@
 							}else{
 								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
 							}
+
 
 							$("#achievement-11").val(Temp3);
 
@@ -360,6 +379,10 @@
 
 							var target = handleNumber($("#target-12").val())+handleNumber($("#target-13").val())+handleNumber($("#target-14").val());
 							
+							var booking = handleNumber($("#bookingE-12").val())+handleNumber($("#bookingE-13").val())+handleNumber($("#bookingE-14").val());
+
+							$("#pending-15").val(Comma(month-booking));
+
 							var RFvsTargetQ = Comma(month-target);
 
 							$("#RFvsTarget-15").val(RFvsTargetQ);
@@ -375,7 +398,13 @@
 
 
 						var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
+
 						var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
+
+						var booking = handleNumber($("#bookingE-3").val()) + handleNumber($("#bookingE-7").val()) + handleNumber($("#bookingE-11").val()) + handleNumber($("#bookingE-15").val());
+
+						$("#totalPending").val(Comma(RF-booking));
+
 
 						$("#TotalRFvsTarget").val(Comma(RF-target));
 
