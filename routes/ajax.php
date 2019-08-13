@@ -13,7 +13,9 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'ajax'],function(){
-		
+
+		Route::post('yearOnFcst','ajaxController@yearOnFcst');
+
 		Route::post("agencyNumberByAgencyGroup","rankingController@agencyNumberByAgencyGroup");
 
 		Route::group(['prefix'=>'dashboards'],function(){

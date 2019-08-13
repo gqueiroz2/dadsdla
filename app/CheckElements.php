@@ -29,8 +29,7 @@ class CheckElements extends Model{
 			$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
 			$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
 		}else{
-			$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);
-			
+			$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);			
 			$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql,$region);
 		}
 		
@@ -83,6 +82,8 @@ class CheckElements extends Model{
 		}
 
 		$res = $con->query($selectDistinctFM);
+
+		
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
@@ -91,13 +92,14 @@ class CheckElements extends Model{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
 
+		
 		if($resultsFM){
 
 			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
 			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 
 			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
-
+			
 			if($table != "cmaps"){
 				if($new){
 					$count = 0;
@@ -221,21 +223,25 @@ class CheckElements extends Model{
 	}
 
 	public function checkNewSalesReps($conDLA,$con,$table,$sql){
-		$tableDLA = "sales_rep_unit";
-		
-		$somethingDLA = "name";
-		$something = "sales_rep";
+		if($table != "sf_pr"){
+			$tableDLA = "sales_rep_unit";
+			
+			$somethingDLA = "name";
+			$something = "sales_rep";
 
-		$fromDLA = array("name");
-		$from = array($something);
+			$fromDLA = array("name");
+			$from = array($something);
 
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
 
-		$new = $this->checkDifferences($distinctDLA,$distinctFM);
-		
-		if($new){
-			$new = array_values(array_unique($new));
+			$new = $this->checkDifferences($distinctDLA,$distinctFM);
+			
+			if($new){
+				$new = array_values(array_unique($new));
+			}
+		}else{
+			$new = false;
 		}
 
 		return $new;

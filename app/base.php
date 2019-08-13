@@ -266,24 +266,29 @@ class base extends Model{
                 switch ($to) {
                     case 'aaaa-mm-dd':
 
-                        $tmp = explode("/", $string);
+                        if($string != ''){
 
+                            $tmp = explode("/", $string);
+
+                            $dd = $tmp[0];
+
+                            if($dd < 10){
+                                $dd = "0".$dd;
+                            }
+
+                            $mm = $tmp[1];
+
+                            if($mm < 10){
+                                $mm = "0".$mm;
+                            }
+                            $aaaa = $tmp[2];
+
+                            $newString = $aaaa."-".$mm."-".$dd;
+
+                        }else{
+                            $newString = "2000-01-01";
+                        }
                         
-                        $dd = $tmp[0];
-
-                        if($dd < 10){
-                            $dd = "0".$dd;
-                        }
-
-                        $mm = $tmp[1];
-
-                        if($mm < 10){
-                            $mm = "0".$mm;
-                        }
-                        $aaaa = $tmp[2];
-
-                        $newString = $aaaa."-".$mm."-".$dd;
-
                         break;
                     
                     default:

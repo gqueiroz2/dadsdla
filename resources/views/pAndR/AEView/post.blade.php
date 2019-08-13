@@ -71,7 +71,7 @@
 		<div class="row">
 			<div class="col" style="width: 100%;">
 				<center>
-					{{$render->AE1($forRender,$client,$total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray,$odd,$even)}}
+					{{$render->AE1($forRender,$client,$tfArray,$odd,$even)}}
 				</center>
 			</div>
 		</div>

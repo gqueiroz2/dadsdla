@@ -12,12 +12,13 @@ class PAndRRender extends Render
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function AE1($forRender,$client,$total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray,$odd,$even){
+    public function AE1($forRender,$client,$tfArray,$odd,$even){
 
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
         $salesRep = $forRender['salesRep'];
         $client = $forRender['client'];
+        $splitted = $forRender['splitted'];
         $targetValues = $forRender['targetValues'];
 
         $rollingFCST = $forRender['rollingFCST'];
@@ -319,15 +320,22 @@ class PAndRRender extends Render
 
         for ($c=0; $c < sizeof($client); $c++) {
             echo "<div class='table-responsive linked' style='zoom:80%;'>";
-            echo "<table class='' id='table-$c' style='min-width:3000px; width:100%;  margin-bottom:0,5%; text-align:center; overflow:auto;' >";
+            echo "<table id='table-$c' style='min-width:3000px; width:100%;  margin-bottom:0,5%; text-align:center; overflow:auto;' >";
                 
                 /* 
 
                     START OF CLIENT NAME AND MONTHS
 
                 */
+
+                if($splitted[$c]){
+                    $clr = "ap";
+                }else{
+                    $clr = "lightBlue";
+                }
+
                 echo "<tr>";
-                    echo "<td class='lightBlue' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'>".$client[$c]['clientName']."</span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']."</span>";
 
                     
                     echo "</td>";

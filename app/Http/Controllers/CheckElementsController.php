@@ -41,8 +41,6 @@ class CheckElementsController extends Controller{
 		$conFM = $db->openConnection('firstMatch');	
 		$table = Request::get('tableToCheck');
 		
-		var_dump(Request::all());
-
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
 
 		var_dump($newValues);

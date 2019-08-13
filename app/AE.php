@@ -11,16 +11,12 @@ use App\base;
 use App\sql;
 class AE extends pAndR{
     
-    public function base($con,$r,$pr){
+    public function base($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
         $base = new base();        
         $sql = new sql();
-
-	   	$cYear = intval( date('Y') );
-	   	$pYear = $cYear - 1;
-
-        
+       
         $regionID = Request::get('region');
         $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
@@ -34,14 +30,18 @@ class AE extends pAndR{
         $tmp = array($cYear);
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
-        $div = 1/$div;
+        //div = 1/$div;
 
         //nome da moeda pra view
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear);
+        
 
+        $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
+        //var_dump($splitted);
+        
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -54,11 +54,12 @@ class AE extends pAndR{
             }
         }
 
-        //var_dump("aki");
-
         for ($b=0; $b < sizeof($table); $b++){ 
+
+
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
-                $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value);
+                $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;
+                
                 //var_dump($targetValues[$b][$m]);
                 //$values[$b][$m] = $this->generateValue($con,$sql,$region,$cYear,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
             	//$pYear = $this->
@@ -66,10 +67,12 @@ class AE extends pAndR{
             }
         }
 
+        
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
         $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+        //var_dump($rollingFCST);
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
 
@@ -96,6 +99,7 @@ class AE extends pAndR{
         				"pYear" => $pYear,
         				"salesRep" => $salesRep[0],
         				"client" => $listOfClients,
+                        "splitted" => $splitted,
         				"targetValues" => $targetValues,
 
         				"rollingFCST" => $rollingFCST,
@@ -112,7 +116,7 @@ class AE extends pAndR{
                     );
 
         return $rtr;
-
+        
     }
 
     public function divArrays($array1,$array2){
@@ -156,7 +160,60 @@ class AE extends pAndR{
 
     }
 
+    public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
+        $soma = 0;
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
+            /*
+            $splitted[$l]['client'] = $list[$l]['clientName'];
+            $splitted[$l]['splitted'] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
 
+            if( $splitted[$l]['splitted'] ){
+                $soma ++;
+            }*/
+        }
+        var_dump(sizeof($list));
+        var_dump($soma);
+        return $splitted;        
+    }
+
+    public function boolSplitted($con,$sql,$sR,$list,$year){
+        
+        $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id
+                        FROM ytd
+                        WHERE (client_id = \"".$list['clientID']."\")
+                        AND (year = \"".$year."\")                       
+                  ";
+
+        $res = $con->query($select);
+        $from = array("order_reference","sales_rep_id","client_id");
+        $orderRef = $sql->fetch($res,$from,$from);
+
+        $cc = 0;
+        if($orderRef){
+            for ($o=0; $o < sizeof($orderRef); $o++) { 
+                $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
+                $cc++;
+            }
+        }else{
+            return false;
+        }
+
+        if( isset( $splitted ) ){
+            $splitted = array_values(array_unique($splitted));
+            if(sizeof($splitted) > 1){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }     
+       
+        
+
+        
+    }
 
     public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
 
@@ -169,6 +226,7 @@ class AE extends pAndR{
     	}else{
     		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
     	}
+
     	//var_dump($div);
 
     	if($value == "gross"){
@@ -203,21 +261,24 @@ class AE extends pAndR{
 	    			//$res[$c][$m] = $con->query($select[$c][$m]);
 	    			//var_dump($res[$c][$m]);
 
-                    $select2[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                    $select[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                         FROM fw_digital
                                         WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                         AND (month = \"".$month[$m][1]."\")
-                                        AND (year = \"".$year."\")";
+                                        AND (year = \"".$year."\")
+                                        ";
 
-
-                    //var_dump($select2[$c][$m]);
-                    //$res[$c][$m] = $con->query($select[$c][$m]);
+                    //var_dump($select[$c][$m]);
+                    $res[$c][$m] = $con->query($select[$c][$m]);
+                    //var_dump($res[$c][$m]);
 
 	    			$from = array("sumValue");
 
-	    			$rev[$c][$m] = 0.0;//$sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
+	    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;	    			
 	    			//var_dump($rev[$c][$m]);
-
+                    //var_dump($rev[$c][$m]);
+                    //var_dump($clients[$c]);
+                    //var_dump($month[$m][0]);
 	    		//}
     		}
     	}
@@ -316,22 +377,17 @@ class AE extends pAndR{
 
     public function listClientsByAE($con,$sql,$salesRepID,$cYear){
     	$tmp = $salesRepID[0];
-    	
     	//GET FROM SALES FORCE
-    	$sf = "SELECT c.name AS 'clientName',
+    	$sf = "SELECT DISTINCT c.name AS 'clientName',
     				   c.ID AS 'clientID'
-    				FROM rolling_forecast s
+    				FROM sf_pr s
     				LEFT JOIN client c ON c.ID = s.client_id
-    				WHERE (s.sales_rep_id = \"$tmp\" )
+    				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
     				ORDER BY 1
     	       ";   	
-
-    	//var_dump($sf);
     	$resSF = $con->query($sf);
     	$from = array("clientName","clientID");
     	$listSF = $sql->fetch($resSF,$from,$from);
-    	//var_dump($listSF);
-
     	//GET FROM IBMS/BTS
     	$ytd = "SELECT DISTINCT c.name AS 'clientName',
     				   c.ID AS 'clientID'
@@ -341,25 +397,25 @@ class AE extends pAndR{
     				AND (y.year = \"$cYear\" )
     				ORDER BY 1
     	       ";
-
     	$resYTD = $con->query($ytd);
     	$from = array("clientName","clientID");
     	$listYTD = $sql->fetch($resYTD,$from,$from);
-
     	$count = 0;
     	if($listSF){
-    		//var_dump("TEM CLIENT SF");
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
     	}
-
     	if($listYTD){
-    		//var_dump("TEM CLIENT YTD");
     		for ($y=0; $y < sizeof($listYTD); $y++) { 
     			$list[$count] = $listYTD[$y];
     			$count ++;
     		}
     	}
-
     	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
 
     	return $list;
 
@@ -373,7 +429,7 @@ class AE extends pAndR{
 
     	for ($m=0; $m < sizeof($mergeTarget); $m++) { // SIZE OF MONTH
     		for ($c=0; $c < sizeof($plan); $c++) { //SIZE OF BRAND
-    		$mergeTarget[$m] += $plan[$c][$m][0];    			
+    		$mergeTarget[$m] += $plan[$c][$m];    			
     		}
     	}
 

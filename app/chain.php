@@ -86,7 +86,6 @@ class chain extends excel{
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
-
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
    		return $complete;
     }  
@@ -147,11 +146,9 @@ class chain extends excel{
     }   
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-        //if($nextColumns && ( $table == 'cmaps')){
-        //    $values = $this->values($spreadSheet,$columns,$nextColumns);
-        //}else{
-            $values = $this->values($spreadSheet,$columns);
-        //}
+
+        $values = $this->values($spreadSheet,$columns);
+
         
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
 
@@ -159,16 +156,13 @@ class chain extends excel{
             $error = false;
         }else{
             var_dump($spreadSheet);
-            //var_dump($spreadSheet['client']);
-            //var_dump($spreadSheet['agency']);
-            //var_dump($spreadSheet);
             var_dump($ins);
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
         }     
 
-        return $error;        
+        return $error;     
    
     }
 
@@ -198,7 +192,6 @@ class chain extends excel{
         }else{
             $newValue = $value;
         }
-
 
         return $newValue;
     }
@@ -332,7 +325,7 @@ class chain extends excel{
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
-            if($table == 'cmaps'){
+            if( $table == 'cmaps' || $table == 'fw_digital' || $table == 'sf_pr' ){
                 $current[$c]['year'] = $year;
             }
     	}
@@ -451,6 +444,37 @@ class chain extends excel{
                     }
                 }
 			}
+        }elseif($column == 'sales_rep_owner' || $column == 'sales_rep_splitter'){
+
+            if($column == 'sales_rep_owner'){
+                $smtg = 'sales_rep_owner_id';
+            }else{
+                $smtg = 'sales_rep_splitter_id';
+            }
+
+            $rtr =  array(false,$smtg);
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['salesRepID'],$smtg);
+                    $check++;
+                }
+
+                if($check > 0){
+                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                        if($current == $salesReps[$srr]['salesRepUnit'] &&
+                            $currentC['campaign_sales_office_id'] == $salesReps[$srr]['regionID']){
+                            $rtr =  array( $salesReps[$srr]['salesRepID'],$smtg);   
+                        }                        
+                    }
+                }
+            }
         }else{
         	$rtr = array($current,$column);
         }
@@ -825,8 +849,9 @@ class chain extends excel{
     */
     public $sfPandRColumnsF = array(
                                   'oppid',
-                                  'region',
-                                  'sales_rep',
+                                  'region',                                  
+                                  'sales_rep_owner',
+                                  'sales_rep_splitter',
                                   'client',
                                   'opportunity_name',
                                   'agency',
@@ -842,13 +867,15 @@ class chain extends excel{
                                   'fcst_amount_net',                                  
                                   'success_probability',
                                   'from_date',
-                                  'to_date'
+                                  'to_date',
+                                  'is_split'
+
                               );
 
     public $sfPandRColumnsS = array(
                                   'oppid',
                                   'region_id',
-                                  'sales_rep_id',
+                                  'sales_rep_owner_id',
                                   'client',
                                   'opportunity_name',
                                   'agency',
@@ -860,13 +887,15 @@ class chain extends excel{
                                   'fcst_amount_net',                                  
                                   'success_probability',
                                   'from_date',
-                                  'to_date'
+                                  'to_date',
+                                  'sales_rep_splitter_id',
+                                  'is_split'
                               );
 
     public $sfPandRColumnsT = array(
                                   'oppid',
                                   'region_id',
-                                  'sales_rep_id',
+                                  'sales_rep_owner_id',
                                   'client_id',
                                   'opportunity_name',
                                   'agency_id',
@@ -878,13 +907,15 @@ class chain extends excel{
                                   'fcst_amount_net',                                  
                                   'success_probability',
                                   'from_date',
-                                  'to_date'
+                                  'to_date',
+                                  'sales_rep_splitter_id',
+                                  'is_split'
                               );
 
     public $sfPandRColumns = array(
                                   'oppid',
                                   'region_id',
-                                  'sales_rep_id',
+                                  'sales_rep_owner_id',
                                   'client_id',
                                   'opportunity_name',
                                   'agency_id',
@@ -896,7 +927,9 @@ class chain extends excel{
                                   'fcst_amount_net',                                  
                                   'success_probability',
                                   'from_date',
-                                  'to_date'
+                                  'to_date',
+                                  'sales_rep_splitter_id',
+                                  'is_split'
                               );      
 
 
@@ -943,7 +976,8 @@ class chain extends excel{
                                   'gross_revenue',
                                   'commission',
                                   'net_revenue',
-                                  'brand_id'
+                                  'brand_id',
+                                  'year'
 
                               );
 
@@ -968,7 +1002,8 @@ class chain extends excel{
                                   'gross_revenue',
                                   'commission',
                                   'net_revenue',
-                                  'brand_id'
+                                  'brand_id',
+                                  'year'
 
                               );
 
@@ -993,7 +1028,8 @@ class chain extends excel{
                                   'gross_revenue',
                                   'commission',
                                   'net_revenue',
-                                  'brand_id'
+                                  'brand_id',
+                                  'year'
 
                               );
 

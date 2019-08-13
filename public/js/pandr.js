@@ -27,6 +27,18 @@ $(document).ready(function(){
           alert(xhr.status+" "+thrownError);
         }
       })
+
+      $.ajax({ 
+        url:"/ajax/yearOnFcst",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#year').html(output);          
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
       
     }else{
       var option = "<option> Select Region </option>";

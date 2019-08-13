@@ -285,6 +285,19 @@ class ajaxController extends Controller{
 
     }
 
+    public function yearOnFcst(){
+        
+        $cYear = intval(date('Y'));
+        $nYear = $cYear + 1;
+
+        $years = array($cYear,$nYear);
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            echo "<option value='".$years[$y]."'> ".$years[$y]." </option>";    
+        }      
+
+    }
+
     public function firstPosByRegion(){
 
         $form = Request::get("form");
