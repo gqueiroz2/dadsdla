@@ -5,7 +5,7 @@
     $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');?>
 
     <script src="/js/pandr.js"></script>
-    
+
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -64,7 +64,7 @@
 		<div class="row">
 			<div class="col" style="width: 100%;">
 				<center>
-					{{$render->AE1($forRender,$client,$total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray)}}
+					{{$render->AE1($forRender,$client,$total2018,$totaltotal2018,$totalClient2018,$client2018,$tfArray,$odd,$even)}}
 				</center>
 			</div>
 		</div>
@@ -453,7 +453,7 @@
 						var display = 'block';
 						var size = '4000px';
 						var width = '3.5%';
-						var width2 = '6%';
+						var width2 = '4%';
 						var displayC = "";
 						var number = 2;
 						var border = "1px 1px 0px 1px";
@@ -464,7 +464,7 @@
 						var display = 'none';
 						var size = '3000px';
 						var width = '2.5%';
-						var width2 = '6%';
+						var width2 = '4%';
 						var displayC = 'none';
 						var number = 1;
 						var border = "1px 0px 0px 0px";
@@ -546,7 +546,6 @@
 						var tmp2 = handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val());
 
 						if(temp != '100.00'){
-							alert("The sum of client is "+temp);
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else if(tmp2 != handleNumber($("#passTotal-"+{{$c}}).val())){
 							$("#client-"+{{$c}}).css("background-color","red");
@@ -649,6 +648,7 @@
 
 			@endfor
 
+
 		});
 		
 		function handleNumber(number){
@@ -675,6 +675,12 @@
 	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	        return x1 + x2;
 	    }
+
+	    $('.linked').scroll(function(){
+
+    		$('.linked').scrollLeft($(this).scrollLeft());
+		});
+
 
 	</script>
 

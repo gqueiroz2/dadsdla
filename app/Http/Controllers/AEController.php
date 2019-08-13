@@ -114,6 +114,8 @@ class AEController extends Controller{
         $month = date('M');
         $tmp = false;
         $tfArray = array();
+        $odd = array();
+        $even = array();
 
         for ($m=0; $m <sizeof($this->month) ; $m++) { 
             if ($month == $this->month[$m]) {
@@ -122,14 +124,18 @@ class AEController extends Controller{
 
             if ($tmp) {
                 $tfArray[$m] = "";
+                $odd[$m] = "odd";
+                $even[$m] = "rcBlue";
             }else{
                 $tfArray[$m] = "readonly='true'";
+                $odd[$m] = "oddGrey";
+                $even[$m] = "evenGrey";
             }
 
         }
         
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray"));
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client','total2018',"totaltotal2018",'totalClient2018',"client2018","tfArray","odd","even"));
     }
 
 }
