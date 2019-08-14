@@ -33,27 +33,31 @@ class PAndRRender extends Render
         $RFvsTarget = $forRender["RFvsTarget"];
         $targetAchievement = $forRender["targetAchievement"];
 
+        $currency = $forRender["currency"];
+        $value = $forRender["value"];
+
+
 
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>
-                <tr><th class='lightBlue'>".$salesRep['salesRep']."</th></tr>
+                <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currency."/".$value."</th></tr>
             </table>
         </div>";
 
-        echo "<div class='table-responsive linked' style='zoom:80%;'>";
+        echo "<div class='table-responsive linked' style='zoom:80%; scroll-margin-botton: 10px;'>";
 
-    	echo "<table class='' style='min-width:3000px; width:80%; margin-top:1%; text-align:center;'>";
+    	echo "<table class='' style='min-width:3000px; width:80%; margin-top:1%; text-align:center; min-height: 250px;'>";
     		/*
                 START OF SALES REP AND SALES REP TOTAL MONTHS
 
             */
             echo "<tr>";
-                echo "<td class='darkBlue ' style='width:4%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px'>".$salesRep['abName']."</td>";
+                echo "<td class='darkBlue ' style='width:4%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; '>".$salesRep['abName']."</td>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) {
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                         echo "<td class='quarter' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>".$this->month[$m]."</td>";
                     }else{
-                        echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
+                        echo "<td class='smBlue' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
                     }
                 }
                 echo "<td class='darkBlue' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Total</td>";
@@ -65,7 +69,7 @@ class PAndRRender extends Render
                 echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Adv</td>";
                 echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Contr</td>";
                 echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Total</td>";
-                echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Lose</td>";
+                echo "<td class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Lost</td>";
     		echo "</tr>";
             
             /*
@@ -319,8 +323,8 @@ class PAndRRender extends Render
 
 
         for ($c=0; $c < sizeof($client); $c++) {
-            echo "<div class='table-responsive linked' style='zoom:80%;'>";
-            echo "<table id='table-$c' style='min-width:3000px; width:100%;  margin-bottom:0,5%; text-align:center; overflow:auto;' >";
+            echo "<div class='table-responsive linked ' style='zoom:80%;'>";
+            echo "<table id='table-$c' style='min-width:3000px; width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 
                 /* 
 
@@ -343,11 +347,11 @@ class PAndRRender extends Render
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='quarter' id='quarter-$c-$m' rowspan='1' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>".$this->month[$m]."</td>";
                         }else{
-                            echo "<td class='lightGrey' colspan='1' id='month-$c-$m' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
+                            echo "<td class='smBlue' colspan='1' id='month-$c-$m' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;'>".$this->month[$m]."</td>";
                         }
                     }
                     echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'>Total</td>";
-                    echo "<td rowspan='7' id='division-$c' style='width:0.5%;'>&nbsp</td>";
+                    echo "<td rowspan='6' id='division-$c' style='width:0.5%;'>&nbsp</td>";
                     echo "<td id='sideTable-$c-0' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Closed</td>";
                     echo "<td id='sideTable-$c-1' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Cons.(%)</td>";
                     echo "<td id='sideTable-$c-2' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Exp</td>";
@@ -355,7 +359,7 @@ class PAndRRender extends Render
                     echo "<td id='sideTable-$c-4' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Adv</td>";
                     echo "<td id='sideTable-$c-5' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Contr</td>";
                     echo "<td id='sideTable-$c-6' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Total</td>";
-                    echo "<td id='sideTable-$c-7' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Lose</td>";
+                    echo "<td id='sideTable-$c-7' rowspan='1' class='lightGrey' style='width:2.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'>Lost</td>";
 
                 echo "</tr>";
                 /* 
@@ -370,7 +374,7 @@ class PAndRRender extends Render
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 
                         }else{
-                            echo "<td colspan='1' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;' class='lightGrey'>";
+                            echo "<td colspan='1' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;' class='smBlue'>";
                                 echo "<div class='row'>";
                                     echo "<div class='col' id='input-$c-$m' style='display:none;width:100%;'><span>P.P. (%):</span><input id='inputNumber-$c-$m' type='number' min='0' max='100' step='0.5' value='0' style='width:25%; background-color:transparent; text-align:right; border-style:solid; border-color: grey; border-width:1px;'></div>";
                                     echo "<input type='number' style='display:none;' id='inputNumber2-$c-$m' value='0'>";
@@ -560,29 +564,29 @@ class PAndRRender extends Render
 
                 */
                 echo "<tr>";
-                    echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>Var RF vs 2018</td>";
+                    echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>Var RF vs 2018</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         $tmp = $rollingFCST[$c][$m] - $clientRevenuePYear[$c][$m];
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>";                            
+                            echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>";                            
                                 echo "<input type='text' readonly='true' id='RFvsPY-$c-$m' value='".number_format($tmp)."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center'>";
                             echo "</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='border-style:solid; border-color:black; border-width: 0px 0px 3px 0px;'>";                            
+                            echo "<td class='$even[$m]' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>";                            
                                 echo "<input type='text' readonly='true' id='RFvsPY-$c-$m' value='".number_format($tmp)."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center'>";
                             echo "</td>";
                             echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
                         }
                     }
-                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 3px 0px;'><input type='text' id='totalRFvsPY-$c' readonly='true' value='".number_format($rollingFCST[$c][$m] - $clientRevenuePYear[$c][$m])."' style='width:100%; font-weight:bold; background-color:transparent; border:none; color:white; text-align:center'></td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
-                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 3px 1px;'>&nbsp</td>";
+                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'><input type='text' id='totalRFvsPY-$c' readonly='true' value='".number_format($rollingFCST[$c][$m] - $clientRevenuePYear[$c][$m])."' style='width:100%; font-weight:bold; background-color:transparent; border:none; color:white; text-align:center'></td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
                 echo "</tr>";
                 /* 
 
@@ -595,8 +599,6 @@ class PAndRRender extends Render
             echo "<br>";
         }   
 
-        echo "<input type='text' id='vlau'>";
-        
     }
 
     public function VP1(){

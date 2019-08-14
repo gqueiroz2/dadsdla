@@ -5,7 +5,25 @@
     $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');?>
 
     <script src="/js/pandr.js"></script>
+    <style type="text/css">
+    	::-webkit-scrollbar{
+    		margin-top: 5%;
+    		height: 15px;
+    	}
+    	::-webkit-scrollbar-track {
+    		background: #d9d9d9; 
+		}
 
+		::-webkit-scrollbar-thumb {
+			background: #666666; 
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+			background: #4d4d4d; 
+		}
+		
+		
+    </style>
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -178,6 +196,9 @@
 
 						@for($m2=0;$m2<16;$m2++)
 							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
+							if (isNaN(temp2)) {
+								temp2 = parseFloat('0');
+							}
 							temp2 = Comma(temp2*100);
 							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
 							
@@ -189,7 +210,7 @@
 
 						tmp2 = tmp2.toFixed(2);
 
-						if (Temp3 != handleNumber($("#passTotal-"+{{$c}}).val()) || tmp2 != '100.00') {
+						if (Temp3 != handleNumber($("#passTotal-"+{{$c}}).val()) || ((tmp2 != '100.00') && (tmp2 != '0.00') ) ) {
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
@@ -459,13 +480,13 @@
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
 						var size = '4000px';
-						var width = '3.5%';
+						var width = '2.5%';
 						var width2 = '4%';
 						var displayC = "";
 						var number = 2;
 						var border = "1px 1px 0px 1px";
-						var width3 = '5%';
-						var division = 8;
+						var width3 = '2.5%';
+						var division = 7;
 						var width4 = '2.5%';
 					}else{
 						var display = 'none';
@@ -476,7 +497,7 @@
 						var number = 1;
 						var border = "1px 0px 0px 0px";
 						var width3 = '2.5%';
-						var division = 7;
+						var division = 6;
 						var width4 = '2.5%';
 					}
 
@@ -487,6 +508,8 @@
 					$("#sideTable-"+{{$c}}+"-3").attr("rowspan",number);
 					$("#sideTable-"+{{$c}}+"-4").attr("rowspan",number);
 					$("#sideTable-"+{{$c}}+"-5").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-6").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-7").attr("rowspan",number);
 					$("#sideTable-"+{{$c}}+"-0").css("width",width4);
 					$("#sideTable-"+{{$c}}+"-1").css("width",width4);
 					$("#sideTable-"+{{$c}}+"-2").css("width",width4);
@@ -553,8 +576,6 @@
 						var tmp2 = handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val());
 
 						if(temp != '100.00'){
-							$("#client-"+{{$c}}).css("background-color","red");
-						}else if(tmp2 != handleNumber($("#passTotal-"+{{$c}}).val())){
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
