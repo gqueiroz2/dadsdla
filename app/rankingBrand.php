@@ -174,9 +174,7 @@ class rankingBrand extends rank{
 
         $rtr['region'] = $r;
 
-        $cYear = intval(date('Y'));
-
-		if ($rtr['region'] == "Brazil" && ($year == $cYear)) {
+		if ($rtr['region'] == "Brazil") {
 			$rtr['table'] = "cmaps";
 		}else{
 			$rtr['table'] = "ytd";
