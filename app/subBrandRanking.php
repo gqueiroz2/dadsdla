@@ -52,9 +52,9 @@ class subBrandRanking extends rankingBrand {
         	
         	if ($filter == "VIX" || $filter == "ONL") {
         		$table = "digital";
-        	}/*elseif ($region == "Brazil" && ($years[$y] == $cYear)) {
+        	}elseif ($region == "Brazil") {
 				$table = "cmaps";
-			}*/else{
+			}else{
 				$table = "ytd";
 			}
 
@@ -69,14 +69,18 @@ class subBrandRanking extends rankingBrand {
                         }else{
                             $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
                         }
+
+                        $res[$y][$r]['total'] *= $pRate;
                     }else{
                         if ($currency[0]['name'] == "USD") {
                             $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
                         }else{
                             $pRate = 1.0;
-                        }                        
+                        } 
+
+                        $res[$y][$r]['total'] /= $pRate;                       
                     }
-                    $res[$y][$r]['total'] *= $pRate;
+                    
             	}
         	}	
 			
