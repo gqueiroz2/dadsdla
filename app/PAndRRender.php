@@ -21,6 +21,10 @@ class PAndRRender extends Render
         $splitted = $forRender['splitted'];
         $targetValues = $forRender['targetValues'];
 
+        $odd = $forRender["readable"]["odd"];
+        $even = $forRender["readable"]["even"];
+        $tfArray = $forRender["readable"]["tfArray"];
+
         $rollingFCST = $forRender['rollingFCST'];
         $clientRevenueCYear = $forRender['clientRevenueCYear'];
         $clientRevenuePYear = $forRender['clientRevenuePYear'];
@@ -327,15 +331,24 @@ class PAndRRender extends Render
                     START OF CLIENT NAME AND MONTHS
 
                 */
-
-                if($splitted[$c]){
+                if($splitted[$c]['splitted']){
                     $clr = "ap";
                 }else{
                     $clr = "lightBlue";
                 }
 
+                if(is_null($splitted[$c]['owner'])){
+                    $ow = "UK";
+                }else{
+                    if($splitted[$c]['owner']){
+                        $ow = "OW";
+                    }else{
+                        $ow = "SL";
+                    }
+                }
+
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']."</span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']." ($ow) </span>";
 
                     
                     echo "</td>";
