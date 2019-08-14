@@ -14,7 +14,7 @@ class AE extends pAndR{
     public function base($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
-        $base = new base();        
+        $base = new base();    
         $sql = new sql();
        
         $regionID = Request::get('region');
@@ -92,6 +92,16 @@ class AE extends pAndR{
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
+        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+
+        if ($value == 'gross') {
+            $valueView = 'Gross';
+        }elseif($value == 'net'){
+            $valueView = 'Net';
+        }else{
+            $valueView = 'Net Net';
+        }
+
         //var_dump($rollingFCST);
 
         $rtr = array(	
@@ -113,6 +123,10 @@ class AE extends pAndR{
                         "pending" => $pending,
                         "RFvsTarget" => $RFvsTarget,
                         "targetAchievement" => $targetAchievement,
+                    
+
+                        "currency" => $currencyName,
+                        "value" => $valueView,
                     );
 
         return $rtr;
