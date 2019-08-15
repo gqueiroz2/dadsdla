@@ -65,6 +65,7 @@ class base extends Model{
 
     public $region = array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","New York International","Dominican Republic","Ecuador","Bolivia","Puerto Rico");
 
+    public $monthWQ = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
     protected $month = array( array("JAN",1, "January","JAN"),
                               array("FEB",2, "February","FEV"),

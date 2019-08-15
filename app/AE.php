@@ -36,12 +36,10 @@ class AE extends pAndR{
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear);
-        
+        $readable = $this->monthAnalise($base);
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear);        
 
         $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
-        //var_dump($splitted);
-        
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -76,10 +74,10 @@ class AE extends pAndR{
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
 
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$currency,$currencyID,$value,$listOfClients);
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
+       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$currency,$currencyID,$value,$listOfClients);
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID,$month,$regionID,$cYear,$value,$currency,$pr);
@@ -107,6 +105,8 @@ class AE extends pAndR{
         $rtr = array(	
         				"cYear" => $cYear,
         				"pYear" => $pYear,
+                        "readable" => $readable,
+
         				"salesRep" => $salesRep[0],
         				"client" => $listOfClients,
                         "splitted" => $splitted,
@@ -174,25 +174,49 @@ class AE extends pAndR{
 
     }
 
+    public function monthAnalise($base){
+        $month = date('M');
+
+        $tmp = false;
+
+        for ($m=0; $m <sizeof($base->monthWQ) ; $m++) { 
+            if ($month == $base->monthWQ[$m]) {
+                $tmp = true;
+            }
+
+            if ($tmp) {
+                $tfArray[$m] = "";
+                $odd[$m] = "odd";
+                $even[$m] = "rcBlue";
+            }else{
+                $tfArray[$m] = "readonly='true'";
+                $odd[$m] = "oddGrey";
+                $even[$m] = "evenGrey";
+            }
+        } 
+
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even);    
+
+        return $rtr;
+    }
+
     public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
         $soma = 0;
         for ($l=0; $l < sizeof($list); $l++) { 
             $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
-            /*
-            $splitted[$l]['client'] = $list[$l]['clientName'];
-            $splitted[$l]['splitted'] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
-
-            if( $splitted[$l]['splitted'] ){
-                $soma ++;
-            }*/
-        }
-        var_dump(sizeof($list));
-        var_dump($soma);
+        }        
         return $splitted;        
     }
 
     public function boolSplitted($con,$sql,$sR,$list,$year){
+        $rtr = array( "splitted" => false , "owner" => null );
         
+        /*
+        
+        CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
+
+        */
+
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
@@ -209,23 +233,56 @@ class AE extends pAndR{
                 $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
                 $cc++;
             }
-        }else{
-            return false;
         }
 
         if( isset( $splitted ) ){
             $splitted = array_values(array_unique($splitted));
             if(sizeof($splitted) > 1){
-                return true;
-            }else{
-                return false;
+                $rtr = array( "splitted" => true , "owner" => null );
             }
-        }else{
-            return false;
-        }     
-       
+        } 
+
+        /*
+        
+        CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
+
+        */
+
+        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id
+                        FROM sf_pr
+                        WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (sales_rep_splitter_id != sales_rep_owner_id)                       
+                  ";
+
+        $resSF = $con->query($selectSF);
+        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id");
+        $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
+
+/*
+        var_dump($list);
+        var_dump($sR);
+        var_dump($oppid);
+*/
+
+        if($oppid){
+            $rtr = array( "splitted" => true , "owner" => false );    
+            for ($o=0; $o < sizeof($oppid); $o++) {                 
+                if($sR == $oppid[$o]['sales_rep_owner_id']){
+                    $rtr = array( "splitted" => true , "owner" => true );
+                    break;
+                }
+            }
+        }
+
         
 
+        /*
+
+        FIND A WAY TO USE YEAR TO CHECK FOR SPLIITING
+
+        */
+       
+        return $rtr;
         
     }
 
@@ -334,54 +391,73 @@ class AE extends pAndR{
     }
 
 
-    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$currency,$currencyID,$value,$clients){
 
-    	//var_dump($currency);
-    	//var_dump($value);
+
 
     	if($currency == "USD"){
     		$div = 1;
     	}else{
     		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
     	}
-    	//var_dump($div);
 
     	if($value == "gross"){
     		$ytdColumn = "gross_revenue_prate";
+            $fwColumn = "gross_revenue";            
     	}else{
     		$ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
     	}
 
     	$table = "ytd";
+        $tableFW = "fw_digital"; 
 
     	for ($c=0; $c < sizeof($clients); $c++) { 
-    		//var_dump($clients[$c]);
     		for ($m=0; $m < sizeof($month); $m++) {     			
-    			//for ($b=0; $b < sizeof($brand); $b++) { 
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
 
-	    			$select[$c][$m] = "
-	    								SELECT SUM($ytdColumn) AS sumValue
-	    								FROM $table
-	    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
-	    								AND (month = \"".$month[$m][1]."\")
-	    								AND (year = \"".$year."\")
+    			$select[$c][$m] = "
+    								SELECT SUM($ytdColumn) AS sumValue
+    								FROM $table
+    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
+    								AND (month = \"".$month[$m][1]."\")
+    								AND (year = \"".$year."\")
 
-	    			                  ";
+    			                  ";
 
-	    			//var_dump($select[$c][$m]);
-	    			
-	    			$res[$c][$m] = $con->query($select[$c][$m]);
-	    			//var_dump($res[$c][$m]);
+                $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                    FROM $tableFW
+                                    WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                    AND (month = \"".$month[$m][1]."\")
+                                    AND (sales_rep_id = \"".$salesRep."\")
+                                    AND (year = \"".$year."\")
+                                    ";
 
-	    			$from = array("sumValue");
+    			$res[$c][$m] = $con->query($select[$c][$m]);
+                $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
 
-	    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
-	    			//var_dump($rev[$c][$m]);
+    			$from = array("sumValue");
 
-	    		//}
+    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue'];                    
+
+
+                if( !is_null($revFW[$c][$m]) ){
+                    var_dump($select[$c][$m]);
+                    var_dump($selectFW[$c][$m]);
+                    var_dump($clients[$c]);
+                    var_dump($month[$m][1]);
+                    var_dump($salesRep);
+                    var_dump("IBMS");
+                    var_dump($rev[$c][$m]);
+                    var_dump("FREEWHEEL");
+                    var_dump($revFW[$c][$m]);
+                    $rev[$c][$m] += $revFW[$c][$m];
+                    var_dump($rev[$c][$m]);
+                }
+
     		}
     	}
 
@@ -389,8 +465,16 @@ class AE extends pAndR{
 
     }
 
+    private static function orderClient($a, $b){
+        if ($a == $b)
+            return 0;
+        
+        return ($a['clientName'] < $b['clientName']) ? -1 : 1;
+    }
+
     public function listClientsByAE($con,$sql,$salesRepID,$cYear){
-    	$tmp = $salesRepID[0];
+
+        $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
     				   c.ID AS 'clientID'
@@ -427,9 +511,12 @@ class AE extends pAndR{
     			$count ++;
     		}
     	}
+
     	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
         
         $list = array_values($list);
+
+        usort($list, array($this,'orderClient'));
 
     	return $list;
 

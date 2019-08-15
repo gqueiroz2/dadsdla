@@ -211,17 +211,14 @@ class chain extends excel{
         for ($c=0; $c < sizeof($current); $c++) { 
             if($current[$c]['region'] == "Brazil" || $current[$c]['region'] == "Brasil"){                
                 $temp = explode("/", $current[$c]['sales_rep']);
-                    
                     if(sizeof($temp) > 1){
-
+                        $newC = $current[$c];
                         $sales1 = trim($temp[0]);
                         $sales2 = trim($temp[1]);
                         $current[$c]['sales_rep'] = $sales1;
                         $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
-                        $newC = $current[$c];
                         $newC['sales_rep'] = $temp[1];
                         $newC['gross_revenue'] = $newC['gross_revenue']/2;
-                        array_push($current, $newC);
                         $count ++;
                     }
                 
