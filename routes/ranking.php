@@ -14,19 +14,29 @@
 Route::group(['middleware' => 'auth'],function(){
 
 
-	Route::group(['prefix'=>'ranking'], function(){
-		Route::get('/','rankingController@get')
-					->name('rankingGet');				
-		Route::post('/','rankingController@post')
-					->name('rankingPost');
-	});
+	Route::group(['prefix'=>'rankings'], function(){
+		Route::group(['prefix'=>'ranking'], function(){
+			Route::get('/','rankingController@get')
+						->name('rankingGet');				
+			Route::post('/','rankingController@post')
+						->name('rankingPost');
+		});
 
-	Route::group(['prefix'=>'brand'],function(){
-		Route::get('/','rankingBrandController@brandGet')
-				->name('brandGet');
-		Route::post('/','rankingBrandController@brandPost')
-					->name('brandPost');
+		Route::group(['prefix'=>'brand'],function(){
+			Route::get('/','rankingBrandController@brandGet')
+					->name('brandGet');
+			Route::post('/','rankingBrandController@brandPost')
+						->name('brandPost');
+		});
+
+		Route::group(['prefix'=>'market'],function(){
+			Route::get('/','rankingMarketController@get')
+					->name('marketGet');
+			Route::post('/','rankingMarketController@post')
+						->name('marketPost');
+		});
 	});
+	
 
 });
 
