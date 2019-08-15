@@ -335,24 +335,34 @@ class PAndRRender extends Render
                     START OF CLIENT NAME AND MONTHS
 
                 */
-                if($splitted[$c]['splitted']){
-                    $clr = "ap";
+
+                if($splitted){
+                    if($splitted[$c]['splitted']){
+                        $clr = "ap";
+                    }else{
+                        $clr = "lightBlue";
+                    }                        
                 }else{
-                    $clr = "lightBlue";
+                    $clr = "lightBlue";                    
                 }
 
-                if(is_null($splitted[$c]['owner'])){
-                    $ow = "UK";
-                }else{
-                    if($splitted[$c]['owner']){
-                        $ow = "OW";
+                
+                if($splitted){
+                    if(is_null($splitted[$c]['owner'])){
+                        $ow = "(UK)";
                     }else{
-                        $ow = "SL";
+                        if($splitted[$c]['owner']){
+                            $ow = "(OW)";
+                        }else{
+                            $ow = "(SL)";
+                        }
                     }
+                }else{
+                    $ow = false;
                 }
 
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']." ($ow) </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']." $ow</span>";
 
                     
                     echo "</td>";

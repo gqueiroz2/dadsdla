@@ -16,11 +16,14 @@ class AE extends pAndR{
         $br = new brand();
         $base = new base();    
         $sql = new sql();
+        $reg = new region();
        
         $regionID = Request::get('region');
         $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
         $value = Request::get('value');
+
+        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
 
         $salesRep = $sr->getSalesRepById($con,$salesRepID);        
 
@@ -39,7 +42,12 @@ class AE extends pAndR{
         $readable = $this->monthAnalise($base);
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear);        
 
-        $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
+        if($regionName == "Brazil"){
+            $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
+        }else{
+            $splitted = false;
+        }
+
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -56,12 +64,7 @@ class AE extends pAndR{
 
 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
-                $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;
-                
-                //var_dump($targetValues[$b][$m]);
-                //$values[$b][$m] = $this->generateValue($con,$sql,$region,$cYear,$brand[$b],$salesRep,$month[$m],$sum[$b][$m],$table[$b][$m]);
-            	//$pYear = $this->
-                
+                $targetValues[$b][$m] = $this->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
             }
         }
 
@@ -74,13 +77,13 @@ class AE extends pAndR{
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
 
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$currency,$currencyID,$value,$listOfClients);
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients);
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$currency,$currencyID,$value,$listOfClients);
+       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients);
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
-        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID,$month,$regionID,$cYear,$value,$currency,$pr);
+        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
 
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
@@ -391,9 +394,7 @@ class AE extends pAndR{
     }
 
 
-    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$currency,$currencyID,$value,$clients){
-
-
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients){
 
     	if($currency == "USD"){
     		$div = 1;
@@ -412,8 +413,20 @@ class AE extends pAndR{
     	$table = "ytd";
         $tableFW = "fw_digital"; 
 
+
     	for ($c=0; $c < sizeof($clients); $c++) { 
-    		for ($m=0; $m < sizeof($month); $m++) {     			
+    		  
+            if($splitted){
+                if($splitted[$c]['splitted']){
+                    $factor = 2; 
+                }else{
+                    $factor = 1; 
+                }
+            }else{
+                $factor = 1;
+            }
+
+            for ($m=0; $m < sizeof($month); $m++) {     			
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
@@ -423,6 +436,7 @@ class AE extends pAndR{
     								FROM $table
     								WHERE (client_id = \"".$clients[$c]['clientID']."\")
     								AND (month = \"".$month[$m][1]."\")
+                                    AND (sales_rep_id = \"".$salesRep."\")
     								AND (year = \"".$year."\")
 
     			                  ";
@@ -440,22 +454,14 @@ class AE extends pAndR{
 
     			$from = array("sumValue");
 
-    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue'];	    			
-                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue'];                    
-
+    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*2;	    			
+                
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*2;                    
 
                 if( !is_null($revFW[$c][$m]) ){
-                    var_dump($select[$c][$m]);
-                    var_dump($selectFW[$c][$m]);
-                    var_dump($clients[$c]);
-                    var_dump($month[$m][1]);
-                    var_dump($salesRep);
-                    var_dump("IBMS");
-                    var_dump($rev[$c][$m]);
-                    var_dump("FREEWHEEL");
-                    var_dump($revFW[$c][$m]);
-                    $rev[$c][$m] += $revFW[$c][$m];
-                    var_dump($rev[$c][$m]);
+                    
+                    $rev[$c][$m] += ( $revFW[$c][$m] * $div );
+                    
                 }
 
     		}
