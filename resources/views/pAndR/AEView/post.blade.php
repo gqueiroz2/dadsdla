@@ -7,7 +7,6 @@
     <script src="/js/pandr.js"></script>
     <style type="text/css">
     	::-webkit-scrollbar{
-    		margin-top: 5%;
     		height: 15px;
     	}
     	::-webkit-scrollbar-track {
@@ -219,7 +218,12 @@
 						var rf = 0;
 
 						@for($c2=0;$c2<sizeof($client);$c2++)
-							rf += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+							if ($("#splitted-"+{{$c2}}).val() != null) {
+								var mult = 0.5;
+							}else{
+								var mult = 1;
+							}
+							rf += (handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val())*mult);
 						@endfor
 
 						rf = Comma(rf);
@@ -229,7 +233,12 @@
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
+								if ($("#splitted-"+{{$c2}}).val() != null) {
+									var mult = 0.5;
+								}else{
+									var mult = 1;
+								}
+								month += (handleNumber($("#clientRF-"+{{$c2}}+"-3").val())*mult);
 							@endfor
 							month = Comma(month);
 							$("#rf-3").val(month);
@@ -237,15 +246,26 @@
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
+								if ($("#splitted-"+{{$c2}}).val() != null) {
+									var mult = 0.5;
+								}else{
+									var mult = 1;
+								}
+								month += (handleNumber($("#clientRF-"+{{$c2}}+"-7").val())*mult);
 							@endfor
 							month = Comma(month);
 							$("#rf-7").val(month);
 						
 						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
 							var month =0;
+
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
+								if ($("#splitted-"+{{$c2}}).val() != null) {
+									var mult = 0.5;
+								}else{
+									var mult = 1;
+								}
+								month += (handleNumber($("#clientRF-"+{{$c2}}+"-11").val())*mult);
 							@endfor
 							month = Comma(month);
 							$("#rf-11").val(month);
@@ -253,11 +273,17 @@
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
+								if ($("#splitted-"+{{$c2}}).val() != null) {
+									var mult = 0.5;
+								}else{
+									var mult = 1;
+								}
+								month += (handleNumber($("#clientRF-"+{{$c2}}+"-15").val())*mult);
 							@endfor
 							month = Comma(month);
 							$("#rf-15").val(month);
 						}
+
 
 						var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
 

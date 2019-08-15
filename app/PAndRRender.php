@@ -350,6 +350,7 @@ class PAndRRender extends Render
                         $ow = "SL";
                     }
                 }
+                echo "<input type='text' id='splitted-$c' value='$ow' style='display:none;'>";
 
                 echo "<tr>";
                     echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;'><span style='font-size:18px;'> ".$client[$c]['clientName']." ($ow) </span>";
@@ -443,8 +444,12 @@ class PAndRRender extends Render
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
                         }else{
-                            echo "<td class='$odd[$m]'>
-                                <input type='text' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                            echo "<td class='$odd[$m]'>";
+                                if ($ow == "SL" || $ow == "UK") {
+                                    echo "<input type='text' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                                }else{
+                                    echo "<input type='text' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                                }
                             echo "</td>";
                             /*echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
                                 for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
