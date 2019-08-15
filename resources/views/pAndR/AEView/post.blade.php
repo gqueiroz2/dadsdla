@@ -23,6 +23,12 @@
 		
 		
     </style>
+	<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet"/>
+	<link href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css" rel="stylesheet"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
+
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -218,7 +224,7 @@
 						var rf = 0;
 
 						@for($c2=0;$c2<sizeof($client);$c2++)
-							if ($("#splitted-"+{{$c2}}).val() != null) {
+							if ($("#splitted-"+{{$c2}}).val() != false) {
 								var mult = 0.5;
 							}else{
 								var mult = 1;
@@ -233,7 +239,7 @@
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								if ($("#splitted-"+{{$c2}}).val() != null) {
+								if ($("#splitted-"+{{$c2}}).val() != false) {
 									var mult = 0.5;
 								}else{
 									var mult = 1;
@@ -246,7 +252,7 @@
 						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								if ($("#splitted-"+{{$c2}}).val() != null) {
+								if ($("#splitted-"+{{$c2}}).val() != false) {
 									var mult = 0.5;
 								}else{
 									var mult = 1;
@@ -260,7 +266,7 @@
 							var month =0;
 
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								if ($("#splitted-"+{{$c2}}).val() != null) {
+								if ($("#splitted-"+{{$c2}}).val() != false) {
 									var mult = 0.5;
 								}else{
 									var mult = 1;
@@ -273,7 +279,7 @@
 						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
 							var month =0;
 							@for($c2=0;$c2<sizeof($client);$c2++)
-								if ($("#splitted-"+{{$c2}}).val() != null) {
+								if ($("#splitted-"+{{$c2}}).val() != false) {
 									var mult = 0.5;
 								}else{
 									var mult = 1;
@@ -735,6 +741,14 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 
+	    $(document).ready(function() {
+		    $('#example').DataTable( {
+			    fixedColumns: {
+			        leftColumns: 1
+			    },
+			    dataSrc: "tableData"
+			} );
+		});
 
 	</script>
 
