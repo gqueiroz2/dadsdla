@@ -95,7 +95,7 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
 	                        	<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
-								<a class="nav-link" href="#"> Market </a>                                
+								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
 								<a class="nav-link" href="#"> Churn </a>                                
 	                            <a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
 	                        </div>

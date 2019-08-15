@@ -100,8 +100,8 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
-
-				if ($info['table'] == "cmaps") {
+				
+				if ($infoQuery[$y]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {
 			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
 			        }else{
@@ -116,7 +116,7 @@ class rankingBrand extends rank{
 			        }	
 				}
 
-				/*if ($y == 1) {
+				/*if ($y == 0) {
 					var_dump("antes da transformação",$res[$y]);
 				}*/
 
@@ -125,7 +125,7 @@ class rankingBrand extends rank{
 					var_dump($info['table']);
 					var_dump($pRate);*/
 					for ($i=0; $i < sizeof($res[$y]); $i++) { 
-						if ($info['table'] == "cmaps") {
+						if ($infoQuery[$y]['table'] == "cmaps a") {
 							$res[$y][$i]['total'] /= $pRate;	
 						}else{
 							$res[$y][$i]['total'] *= $pRate;
@@ -133,7 +133,7 @@ class rankingBrand extends rank{
 					}	
 				}
 
-				/*if ($y == 1) {
+				/*if ($y == 0) {
 					var_dump("depois da transformação",$res[$y]);
 				}*/
 			}
@@ -187,8 +187,7 @@ class rankingBrand extends rank{
 	}
 
 	public function assembler($values, $years, $brands){
-		
-		array_pop($brands);
+
 		//var_dump($brands);
 
 		$mtx[0][0] = "Brand";

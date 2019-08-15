@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
-@section('title', 'Ranking Brand')
-@section('head')
-	<script src="/js/rankingBrand.js"></script>
+@section('title', 'Ranking Market')
+@section('head')	
+	<script src="/js/rankingMarket.js"></script>
     <?php include(resource_path('views/auth.php')); ?>
 @endsection
 
@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('brandPost') }}" runat="server" onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('marketPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col">
@@ -27,15 +27,16 @@
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))
 								<label style="color: red;">* Required</label>
+							@else
+								{{$render->type()}}
 							@endif
-							{{$render->type()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold"> Brand: </label>
 							@if($errors->has('brands'))
 								<label style="color: red">* Required</label>
 							@endif
-							{{$render->brand($brands)}}
+							{{$render->brand($brand)}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold">Months:</label>
@@ -69,12 +70,20 @@
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> Brand Ranking </div>
+				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Brand Ranking </div>
 			</div>
 		</div>
+	</div>
 
+	<div class="container-fluid">
+		<div class="row mt-2 justify-content-center">
+			<div class="col">
+
+			</div>
+		</div>
 	</div>
 
 	<div id="vlau"></div>
+
 
 @endsection
