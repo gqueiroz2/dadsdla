@@ -80,7 +80,9 @@
 
 		function handleNumber(number){
 
-			number = number.replace(",","");
+			for (var i = 0; i < number.length/3; i++) {
+				number = number.replace(",","");
+			}
 
 			number = parseFloat(number);
 			

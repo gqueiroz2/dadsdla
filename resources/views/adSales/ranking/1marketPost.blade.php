@@ -70,7 +70,7 @@
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Brand Ranking </div>
+				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Market Ranking </div>
 			</div>
 		</div>
 	</div>
@@ -78,12 +78,50 @@
 	<div class="container-fluid">
 		<div class="row mt-2 justify-content-center">
 			<div class="col">
-
+				{{$render->assembler($mtx, $total, $pRate, $value, $type, $names)}}
 			</div>
 		</div>
 	</div>
 
 	<div id="vlau"></div>
 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			var months = <?php echo json_encode($months); ?>;
+            var type = "{{$type}}";
+            var value = "{{$value}}";
+            var currency = <?php echo json_encode($pRate); ?>;
+            var region = "{{$region}}";
+
+			ajaxSetup();
+
+			@for($m = 0; $m < sizeof($mtx[0]); $m++)
+				$(document).on('click', "#"+type+{{$m}}, function(){
+
+                    var name = $(this).text();
+
+                    if ($("#sub"+type+{{$m}}).css("display") == "none") {
+
+                        $.ajax({
+                            url: "/ajaxRanking/marketSubRanking",
+                            method: "POST",
+                            data: {name, months, type, value, currency, region},
+                            success: function(output){
+                                $("#sub"+type+{{$m}}).html(output);
+                                $("#sub"+type+{{$m}}).css("display", "");
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }else{
+                    	$("#sub"+type+{{$m}}).html(" ");
+                        $("#sub"+type+{{$m}}).css("display", "none");
+                    }
+                });
+            @endfor
+		});
+	</script>
 
 @endsection

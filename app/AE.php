@@ -97,6 +97,7 @@ class AE extends pAndR{
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
+
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
         if ($value == 'gross') {
