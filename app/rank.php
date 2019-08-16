@@ -33,22 +33,47 @@ class rank extends Model{
 
         $p = new pRate();
 
-        if ($currency[0]['name'] == "USD") {
-            $pRate = 1.0;
+        if ($tableName == "cmaps") {
+            if ($currency[0]['name'] == "USD") {
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+            }else{
+                $pRate = 1.0;
+            }
         }else{
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+            }
         }
 
         $as = "total";
 
+        $tableAbv = "a";
+        $leftAbv = "b";
+
+        if ($tableName == "ytd") {
+            $value .= "_revenue_prate";
+            $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+            $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "digital") {
+            $value .= "_revenue";
+            $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+            $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "plan_by_brand") {
+            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
+            $colsValue = array($region, $value, $brands_id, $months);
+            $value = "revenue";
+        }else{
+            $columns = array("brand_id", "month", "year");
+            $colsValue = array($brands_id, $months);
+        }
+
         if ($type == "agencyGroup") {
-            $tableAbv = "a";
-            $leftAbv = "b";
             $leftAbv2 = "c";
             $leftAbv3 = "d";
 
             if ($tableName == "ytd") {
-                $value .= "_revenue_prate";
                 $columns = array("$leftAbv3.ID", "sales_representant_office_id", "brand_id", "month", "year");
                 $colsValue = array($region, $region, $brands_id, $months);
             }else{
@@ -81,43 +106,48 @@ class rank extends Model{
                 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                        $res[$y][$r]['total'] *= $pRate;
+                        if ($tableName == "cmaps") {
+                            $res[$y][$r]['total'] /= $pRate;
+                        }else{
+                            $res[$y][$r]['total'] *= $pRate;
+                        }
                     }
                 }
             }
 
         }else{
-            $tableAbv = "a";
-            $leftAbv = "b";
-
-            $as = "total";
-
-            if ($tableName == "ytd") {
-                $value .= "_revenue_prate";
-                $columns = array("sales_representant_office_id", "brand_id", "month", "year");
-                $colsValue = array($region, $brands_id, $months);
-            }elseif ($tableName == "digital") {
-                $value .= "_revenue";
-                $columns = array("campaign_sales_office_id","brand_id", "month", "year");
-                $colsValue = array($region, $brands_id, $months);
-            }elseif ($tableName == "plan_by_brand") {
-                $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
-                $colsValue = array($region, $value, $brands_id, $months);
-                $value = "revenue";
-            }else{
-                $columns = array("brand_id", "month", "year");
-                $colsValue = array($brands_id, $months);
-            }
 
             $table = "$tableName $tableAbv";
 
-            $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".
-                   $leftAbv."."."name AS '".$type."', SUM($value) AS $as";
+            if ($type == "sector" || $type == "category") {
+                $tmp = $tableAbv.".".$type." AS '".$type."', SUM($value) AS $as";
+                $join = null;
+                $name = $type;
+                $names = array($type, $as);
+            }else{
+                
+                $name = $type."_id";
 
-            $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id";       
+                if ($type == "agency") {
+                    $leftName2 = "agency_group";
+                    $leftAbv2 = "c";
 
-            $name = $type."_id";
-            $names = array($type."ID", $type, $as);
+                    $tmp = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($value) AS $as";
+
+                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id
+                            LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
+
+                    $names = array($type."ID", $type, "agencyGroup", $as);
+                }else{
+                    $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".
+                    $leftAbv."."."name AS '".$type."', SUM($value) AS $as";
+
+                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id";       
+
+                    $names = array($type."ID", $type, $as);
+                }
+                
+            }
 
             for ($y=0; $y < sizeof($years); $y++) {
 
@@ -132,7 +162,11 @@ class rank extends Model{
 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                        $res[$y][$r]['total'] *= $pRate;
+                        if ($tableName == "cmaps") {
+                            $res[$y][$r]['total'] /= $pRate;
+                        }else{
+                            $res[$y][$r]['total'] *= $pRate;
+                        }
                     }
                 }
             }
@@ -207,12 +241,13 @@ class rank extends Model{
     }
 
     public function filterValues($values, $type2, $type){
-        //var_dump($type2);
+        
         for ($t=0; $t < sizeof($type2); $t++) {
             $res[$type2[$t]->id] = $this->searchValue($type2[$t], $values[0], $type);
         }
 
         return $res;
+
         
     }
 

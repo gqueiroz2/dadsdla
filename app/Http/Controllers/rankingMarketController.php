@@ -88,52 +88,24 @@ class rankingMarketController extends Controller {
 
 		$years = array($cYear, $pYear);
 
+		$values = $rm->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
+		
+		if ($type == "sector") {
+			$values2 = $rm->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years, true);
+			$matrix = $rm->assembler($values, $years, $type, $values2);
+		}else{
+			$matrix = $rm->assembler($values, $years, $type);
+		}
+
+		$mtx = $matrix[0];
+		$total = $matrix[1];
+
 		$rName = $rm->TruncateRegion($rtr);
 
 		$render = new renderMarketRanking();
+		$names = $rm->createNames($type, $months, $rtr, $brands);
 
-		return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName'));
+		return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names'));
 	}
 
 }
-
-/*
-<script type="text/javascript">
-		$(document).ready(function(){
-			
-			var months = <?php echo json_encode($months); ?>;
-            var type = "{{$type}}";
-            var value = "{{$value}}";
-            var currency = <?php echo json_encode($pRate); ?>;
-            var region = "{{$region}}";
-
-			ajaxSetup();
-
-			@for($b = 0; $b < sizeof($brand); $b++)
-				$(document).on('click', "#"+"{{$brand[$b]['name']}}", function(){
-
-                    var name = $(this).text();
-
-                    if ($("#sub"+"{{$brand[$b]['name']}}").css("display") == "none") {
-
-                        $.ajax({
-                            url: "/ajaxRanking/brandSubRanking",
-                            method: "POST",
-                            data: {name, months, type, value, currency, region},
-                            success: function(output){
-                                $("#sub"+"{{$brand[$b]['name']}}").html(output);
-                                $("#sub"+"{{$brand[$b]['name']}}").css("display", "");
-                            },
-                            error: function(xhr, ajaxOptions,thrownError){
-                                alert(xhr.status+" "+thrownError);
-                            }
-                        });
-                    }else{
-                    	$("#sub"+"{{$brand[$b]['name']}}").html(" ");
-                        $("#sub"+"{{$brand[$b]['name']}}").css("display", "none");
-                    }
-                });
-            @endfor
-		});
-	</script>
-	*/
