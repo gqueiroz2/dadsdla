@@ -72,25 +72,29 @@ class AE extends pAndR{
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
-        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);
-        //var_dump($rollingFCST);
-        $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
-
-
         $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear");
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear");
-       	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
-       	
-        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
+        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear");
+        $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
+        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
+        
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
+
+        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);
+
+        $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear);
+
+        $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);        
+       	
+        
+
+        
         $executiveRF = $this->consolidateAE($rollingFCST);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
-        var_dump($RFvsTarget);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
@@ -288,20 +292,113 @@ class AE extends pAndR{
         return $rtr;
         
     }
+    public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRev){
 
-    public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
+        if($currency == "USD"){
+            $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+        }
 
-    	//var_dump($currency);
-    	//var_dump($value);
+        if($value == "gross"){
+            $fwColumn = "gross_revenue";
+            $sfColumn = $fwColumn;
+        }else{
+            $fwColumn = "net_revenue";
+            $sfColumn = $fwColumn;
+        }
 
+        
+
+        for ($c=0; $c < sizeof($clients); $c++) {
+            var_dump($salesRepID);
+            var_dump($clients[$c]);
+            var_dump($rollingFCST[$c]);
+            var_dump($splitted[$c]);
+            
+            $someFCST = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
+
+            $monthOPP = $this->periodOfOPP($someFCST); // MONTHS OF THE FCST
+
+            $shareSalesRep = $this->salesRepShareOnPeriod($lastYearRev[$c],$monthOPP,$someFCST);
+
+            var_dump($shareSalesRep);
+        }
+
+    }
+
+    public function salesRepShareOnPeriod($ly,$monthOPP,$someF){
+
+        var_dump($ly);
+
+    }
+
+    public function periodOfOpp($opp){
+        if($opp){
+            for ($o=0; $o < sizeof($opp); $o++){                 
+                $period[$o] = $this->monthOPP($opp[$o]);                
+            }
+        }else{
+            $period = false;
+        }
+
+        return $period;
+    }
+
+    public function monthOPP($opp){
+        $start = intval( $opp['fromDate'] ) - 1;
+        $end = intval( $opp['toDate'] ) - 1;
+        $month = array();
+        for ($m = $start; $m <= $end; $m++) { 
+            array_push($month, $m);
+        }
+        return $month;
+
+    }
+
+    public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
+        
+        $from = array($sfColumn,'from_date','to_date','stage');
+        $to = array("sumValue",'fromDate','toDate','stage');
+        if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
+                $select = "
+                                SELECT from_date , to_date, stage , $sfColumn
+                                FROM sf_pr
+                                WHERE (client_id = \"".$clients['clientID']."\")
+                                AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
+                                AND (stage != '5' && stage != '6')
+                              "; 
+            if($splitted['splitted']){ /* SF FCST FROM A BRAZIL CLIENT , WHERE THERE IS AE SPLITT SALES */
+                
+
+            }else{ /* SF FCST FROM A BRAZIL CLIENT , WHERE THERE IS NOT AE SPLITT SALES */
+                
+            }
+        }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
+            $select = "
+                            SELECT from_date , to_date, stage , $sfColumn
+                            FROM sf_pr
+                            WHERE (client_id = \"".$clients['clientID']."\")
+                            AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
+                            AND (stage != '5' && stage != '6')
+                          ";
+        }
+        $res = $con->query($select);
+        $rev = $sql->fetch($res,$from,$to);
+
+        return $rev;
+
+    }
+
+    public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID){
+        $currentYear = intval(date('Y'));
+        $currentMonth = intval( date("m") );
 
     	if($currency == "USD"){
     		$div = 1;
     	}else{
     		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
     	}
-
-    	//var_dump($div);
 
     	if($value == "gross"){
             $ytdColumn = "gross_revenue_prate";
@@ -314,46 +411,75 @@ class AE extends pAndR{
     	$table = "ytd";
 
     	for ($c=0; $c < sizeof($clients); $c++) { 
-    		//var_dump($clients[$c]);
     		for ($m=0; $m < sizeof($month); $m++) {     			
-    			//for ($b=0; $b < sizeof($brand); $b++) { 
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
-					/*
-	    			$select[$c][$m] = "
-	    								SELECT SUM($ytdColumn) AS sumValue
-	    								FROM $table
-	    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
-	    								AND (month = \"".$month[$m][1]."\")
-	    								AND (year = \"".$year."\")
+                if($year == $currentYear){
 
-	    			                  ";
-					*/
-	    			//var_dump($select[$c][$m]);
-	    			
-	    			//$res[$c][$m] = $con->query($select[$c][$m]);
-	    			//var_dump($res[$c][$m]);
+                    $from = array("sumValue");
 
-                    $select[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                    if( $month[$m][1] < $currentMonth ){
+                        $select[$c][$m] = "
+                                            SELECT SUM($ytdColumn) AS sumValue
+                                            FROM $table
+                                            WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                            AND (month = \"".$month[$m][1]."\")
+                                            AND (sales_rep_id = \"".$salesRepID."\")
+                                            AND (year = \"".$year."\")
+
+                                          ";  
+                        $res[$c][$m] = $con->query($select[$c][$m]);
+                        $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
+                    }else{
+                        $revACT[$c][$m] = 0.0;
+                    }                    
+                    
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                         FROM fw_digital
                                         WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                         AND (month = \"".$month[$m][1]."\")
                                         AND (year = \"".$year."\")
                                         ";
 
-                    //var_dump($select[$c][$m]);
-                    $res[$c][$m] = $con->query($select[$c][$m]);
-                    //var_dump($res[$c][$m]);
+                    $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
+                    $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;   
 
+                    $rev[$c][$m] = $revACT[$c][$m];
+
+                    if( !is_null($revFW[$c][$m]) ){
+                        $rev[$c][$m] += $revFW[$c][$m];
+                    }       
+
+                }else{
 	    			$from = array("sumValue");
+                    $select[$c][$m] = "
+	    								SELECT SUM($ytdColumn) AS sumValue
+	    								FROM $table
+	    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
+	    								AND (month = \"".$month[$m][1]."\")
+	    								AND (year = \"".$year."\")
 
-	    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;	    			
-	    			//var_dump($rev[$c][$m]);
-                    //var_dump($rev[$c][$m]);
-                    //var_dump($clients[$c]);
-                    //var_dump($month[$m][0]);
-	    		//}
+	    			                  ";    					    	    			
+	    			$res[$c][$m] = $con->query($select[$c][$m]);
+                    $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
+
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                        FROM fw_digital
+                                        WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                        AND (month = \"".$month[$m][1]."\")
+                                        AND (year = \"".$year."\")
+                                        ";
+
+                    $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
+	    			$revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;	
+
+                    $rev[$c][$m] = $revACT[$c][$m];
+
+                    if( !is_null($revFW[$c][$m]) ){
+                        $rev[$c][$m] += $revFW[$c][$m];
+                    }		
+    			}
     		}
     	}
 
