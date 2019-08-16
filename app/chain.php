@@ -88,7 +88,7 @@ class chain extends excel{
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-   		//return $complete;
+   		return $complete;
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -457,12 +457,14 @@ class chain extends excel{
             /*
                 O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
             */
-
             if($current == "Milena Timm"){
-                var_dump($column);
-                var_dump($current);
-                var_dump($rtr);
-                var_dump($currentC);
+                
+                if($column == 'sales_rep_owner'){
+                    $pivot = 'sales_rep_splitter_id';
+                }else{
+                    $pivot = 'sales_rep_owner_id';
+                }
+                $rtr = array($currentC[$pivot],$smtg);
             }else{
                 for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
                     if($current == $salesReps[$sr]['salesRepUnit']){    

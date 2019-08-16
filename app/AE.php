@@ -88,9 +88,9 @@ class AE extends pAndR{
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
         $executiveRF = $this->consolidateAE($rollingFCST);
-
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+        var_dump($RFvsTarget);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
 
