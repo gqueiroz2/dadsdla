@@ -15,6 +15,7 @@ use App\agency;
 use App\client;
 use App\subRankings;
 use App\subBrandRanking;
+use App\subMarketRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -703,5 +704,20 @@ class ajaxController extends Controller{
         $total = $matrix[1];
 
         $sbr->renderSubAssembler($mtx, $total, $type, $name);    
+    }
+
+    public function marketSubRanking(){
+        
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $name = Request::get("name");
+
+        $sbm = new subMarketRanking();
     }
 }

@@ -233,6 +233,7 @@ class subBrandRanking extends rankingBrand {
     			if ($this->existInYear($name, $sub, $type, 1)) {
     				$res = "Recovered";
     			}else{
+
     				$res = "New";
     			}
     		}else{
