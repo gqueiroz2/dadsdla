@@ -23,7 +23,11 @@
 		
 
     </style>
-	
+	<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet"/>
+	<link href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css" rel="stylesheet"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 @endsection
 @section('content')
@@ -509,7 +513,89 @@
 					
 				});
 
-				
+				/*$("#client-"+{{$c}}).click(function(){
+					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
+						var display = 'block';
+						var size = '4000px';
+						var width = '2.5%';
+						var width2 = '4%';
+						var displayC = "";
+						var number = 2;
+						var border = "1px 1px 0px 1px";
+						var width3 = '2.5%';
+						var division = 7;
+						var width4 = '2.5%';
+					}else{
+						var display = 'none';
+						var size = '3000px';
+						var width = '2.5%';
+						var width2 = '4%';
+						var displayC = 'none';
+						var number = 1;
+						var border = "1px 0px 0px 0px";
+						var width3 = '2.5%';
+						var division = 6;
+						var width4 = '2.5%';
+					}
+
+					$("#division-"+{{$c}}).attr("rowspan",division);
+					$("#sideTable-"+{{$c}}+"-0").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-1").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-2").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-3").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-4").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-5").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-6").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-7").attr("rowspan",number);
+					$("#sideTable-"+{{$c}}+"-0").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-1").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-2").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-3").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-4").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-5").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-6").css("width",width4);
+					$("#sideTable-"+{{$c}}+"-7").css("width",width4);
+					$("#quarter-"+{{$c}}+"-3").css("width",width);
+					$("#quarter-"+{{$c}}+"-7").css("width",width);
+					$("#quarter-"+{{$c}}+"-11").css("width",width);
+					$("#quarter-"+{{$c}}+"-15").css("width",width);
+					$("#TotalTitle-"+{{$c}}).css("width",width);
+					$("#client-"+{{$c}}).css("width",width2);
+					$("#table-"+{{$c}}).css("min-width",size);
+
+					@for($m=0;$m<16;$m++)
+						$("#input-"+{{$c}}+"-"+{{$m}}).css("display",display);
+					@endfor
+
+
+					if ($("#inputT-0").css("display")=='none') {
+						var displayT = '';
+					}else{
+						var displayT = 'none';
+						for(var c2=0;c2<10;c2++){
+							if ($("#input-"+c2+"-0").css("display") != 'none') {
+								displayT = '';
+								break;
+							}
+						}
+					}
+					$("#totalTotalPP").css("display",displayT);
+
+					$("#totalPP-"+{{$c}}).css("display",displayC);
+					$("#newLine-"+{{$c}}).css("display",displayC);
+					$("#client-"+{{$c}}).attr("rowspan",number);
+					$("#TotalTitle-"+{{$c}}).attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-3").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-7").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-11").attr("rowspan",number);
+					$("#quarter-"+{{$c}}+"-15").attr("rowspan",number);
+					@for($m=0;$m<16;$m++)
+						$("#newCol-"+{{$c}}+"-"+{{$m}}).css("display",displayC);
+						$("#month-"+{{$c}}+"-"+{{$m}}).css("border-width",border);
+						$("#month-"+{{$c}}+"-"+{{$m}}).css("width",width3);
+					@endfor
+				});*/
+
 				@for($m=0;$m<16;$m++)
 					$("#inputNumber-"+{{$c}}+"-"+{{$m}}).change(function(){
 						var temp = 0;
@@ -533,7 +619,97 @@
 						}
 						
 					});
-				@endfor			
+				@endfor
+				/*$("#TotalTitle-"+{{$c}}).click(function(){
+					@for($m=0;$m<16;$m++)
+						if({{$m}} != 3 && {{$m}} != 7 && {{$m}} != 11 && {{$m}} != 15){
+							var vlau = Comma(parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100));
+
+							$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(vlau);
+						}
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
+							$("#clientRF-"+{{$c}}+"-3").val(value);
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
+							$("#clientRF-"+{{$c}}+"-7").val(value);
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
+							$("#clientRF-"+{{$c}}+"-11").val(value);
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
+							$("#clientRF-"+{{$c}}+"-15").val(value);
+						}
+
+						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
+
+
+						$("#totalClient-"+{{$c}}).val(Temp);
+
+						var month = 0;
+
+						@for($c2=0;$c2<sizeof($client);$c2++)
+							month += handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val());
+						@endfor
+
+						month = Comma(month);
+
+						$("#rf-"+{{$m}}).val(month);
+
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
+							@endfor
+
+							month = Comma(month);
+
+							$("#rf-3").val(month);
+						
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
+							@endfor
+							
+							month = Comma(month);
+							
+							$("#rf-7").val(month);
+						
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
+							@endfor
+							
+							month = Comma(month);
+							
+							$("#rf-11").val(month);
+						
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var month = 0;
+							@for($c2=0;$c2<sizeof($client);$c2++)
+								month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
+							@endfor
+
+							month = Comma(month);
+							
+							$("#rf-15").val(month);
+						}
+
+						var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
+
+						$("#total-total").val(total);
+
+						@for($c2=0;$c2<sizeof($client);$c2++)
+							var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
+							temp = temp*100;
+							$("#totalPP2-"+{{$c2}}).val(temp);
+							$("#totalPP3-"+{{$c2}}).val(temp);
+						@endfor
+					@endfor
+				});*/
 
 			@endfor
 
