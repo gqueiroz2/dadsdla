@@ -87,7 +87,7 @@ class PAndRRender extends Render
         echo "</table>";
         echo "</div>";
 
-        echo "<div class='col linked table-responsive ' style='width:90%; padding-left:0px;'>";
+        echo "<div class='col linked table-responsive ' style='width:100%; padding-left:0px;'>";
     	echo "<table style='min-width:3000px; width:80%; text-align:center; min-height:225px'>";
     		/*
                 START OF SALES REP AND SALES REP TOTAL MONTHS

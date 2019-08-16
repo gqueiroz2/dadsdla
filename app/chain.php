@@ -42,6 +42,7 @@ class chain extends excel{
         $check = 0;
                
         $mark = 0;
+        
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -87,7 +88,7 @@ class chain extends excel{
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-   		return $complete;
+   		//return $complete;
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -451,27 +452,35 @@ class chain extends excel{
 
             $rtr =  array(false,$smtg);
             $check = -1;
-
             $current = trim($current);
-
+            
             /*
                 O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
             */
-            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
-                if($current == $salesReps[$sr]['salesRepUnit']){    
-                    $rtr =  array( $salesReps[$sr]['salesRepID'],$smtg);
-                    $check++;
-                }
 
-                if($check > 0){
-                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
-                        if($current == $salesReps[$srr]['salesRepUnit'] &&
-                            $currentC['campaign_sales_office_id'] == $salesReps[$srr]['regionID']){
-                            $rtr =  array( $salesReps[$srr]['salesRepID'],$smtg);   
-                        }                        
+            if($current == "Milena Timm"){
+                var_dump($column);
+                var_dump($current);
+                var_dump($rtr);
+                var_dump($currentC);
+            }else{
+                for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                    if($current == $salesReps[$sr]['salesRepUnit']){    
+                        $rtr =  array( $salesReps[$sr]['salesRepID'],$smtg);
+                        $check++;
+                    }
+
+                    if($check > 0){
+                        for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                            if($current == $salesReps[$srr]['salesRepUnit'] &&
+                                $currentC['campaign_sales_office_id'] == $salesReps[$srr]['regionID']){
+                                $rtr =  array( $salesReps[$srr]['salesRepID'],$smtg);   
+                            }                        
+                        }
                     }
                 }
             }
+
         }else{
         	$rtr = array($current,$column);
         }
@@ -640,16 +649,18 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date' ||
-                                $columns[$c] == 'from_date' ||
-                                $columns[$c] == 'to_date'
+    						if($columns[$c] == 'campaign_option_start_date'
+                                
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
     						}elseif($columns[$c] == 'io_start_date' ||
-                                    $columns[$c] == 'io_end_date'
+                                    $columns[$c] == 'io_end_date' ||
+                                    $columns[$c] == 'from_date' ||
+                                $columns[$c] == 'to_date'
                               ){
                                 $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
                             }elseif($columns[$c] == 'rep_commission_percentage' ||
                                     $columns[$c] == 'agency_commission_percentage'
@@ -675,6 +686,7 @@ class chain extends excel{
                 }
 			}
 		}
+
 		$spreadSheetV2 = array_values($spreadSheetV2);
 		return $spreadSheetV2;
 	}

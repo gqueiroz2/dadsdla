@@ -77,10 +77,10 @@ class AE extends pAndR{
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
 
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients);
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear");
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients);
+       	$clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear");
        	$clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
        	
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
@@ -394,7 +394,7 @@ class AE extends pAndR{
     }
 
 
-    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients){
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear){
 
     	if($currency == "USD"){
     		$div = 1;
@@ -430,8 +430,8 @@ class AE extends pAndR{
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
-
-    			$select[$c][$m] = "
+                if($typeOfYear == "cYear"){
+    			    $select[$c][$m] = "
     								SELECT SUM($ytdColumn) AS sumValue
     								FROM $table
     								WHERE (client_id = \"".$clients[$c]['clientID']."\")
@@ -440,14 +440,29 @@ class AE extends pAndR{
     								AND (year = \"".$year."\")
 
     			                  ";
-
-                $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                     FROM $tableFW
                                     WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                     AND (month = \"".$month[$m][1]."\")
                                     AND (sales_rep_id = \"".$salesRep."\")
                                     AND (year = \"".$year."\")
                                     ";
+                }else{
+                    $select[$c][$m] = "
+                                    SELECT SUM($ytdColumn) AS sumValue
+                                    FROM $table
+                                    WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                    AND (month = \"".$month[$m][1]."\")                                    
+                                    AND (year = \"".$year."\")
+
+                                  ";
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                    FROM $tableFW
+                                    WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                    AND (month = \"".$month[$m][1]."\")
+                                    AND (year = \"".$year."\")
+                                    ";
+                }                   
 
     			$res[$c][$m] = $con->query($select[$c][$m]);
                 $resFW[$c][$m] = $con->query($selectFW[$c][$m]);

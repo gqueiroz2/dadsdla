@@ -235,28 +235,33 @@ class base extends Model{
     public function formatData($from,$to,$string){
         switch ($from) {
             case 'mm/dd/aaaa':                
+                
                 switch ($to) {
                     case 'aaaa-mm-dd':
-                        $tmp = explode("/", $string);
 
-                        
-                        $dd = $tmp[1];
+                        if($string != ''){
+                            $tmp = explode("/", $string);
+                                                    
+                            $dd = $tmp[1];
 
-                        if($dd < 10){
-                            $dd = "0".$dd;
+                            if($dd < 10){
+                                $dd = "0".$dd;
+                            }
+
+                            $mm = $tmp[0];
+
+                            if($mm < 10){
+                                $mm = "0".$mm;
+                            }
+                            
+                            $aaaa = $tmp[2];
+
+                            $newString = $aaaa."-".$mm."-".$dd;
+                        }else{
+                            $newString = "2000-01-01";
                         }
-
-                        $mm = $tmp[0];
-
-                        if($mm < 10){
-                            $mm = "0".$mm;
-                        }
-                        
-                        $aaaa = $tmp[2];
-
-                        $newString = $aaaa."-".$mm."-".$dd;
                         break;
-                    
+                        
                     default:
                         $newString = false;
                         break;
