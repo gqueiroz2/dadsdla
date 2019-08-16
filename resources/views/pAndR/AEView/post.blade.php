@@ -21,7 +21,7 @@
 			background: #4d4d4d; 
 		}
 		
-		
+
     </style>
 	<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet"/>
 	<link href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css" rel="stylesheet"/>
@@ -104,6 +104,11 @@
 
 	<script>
 		$(document).ready(function(){
+			@for($c=0;$c<sizeof($client);$c++)
+				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
+
+			@endfor
+
 			@for($m=0;$m<16;$m++)
 				$("#rf-"+{{$m}}).change(function(){
 
@@ -508,7 +513,7 @@
 					
 				});
 
-				$("#client-"+{{$c}}).click(function(){
+				/*$("#client-"+{{$c}}).click(function(){
 					if ($("#input-"+{{$c}}+"-0").css("display")=='none') {
 						var display = 'block';
 						var size = '4000px';
@@ -589,7 +594,7 @@
 						$("#month-"+{{$c}}+"-"+{{$m}}).css("border-width",border);
 						$("#month-"+{{$c}}+"-"+{{$m}}).css("width",width3);
 					@endfor
-				});
+				});*/
 
 				@for($m=0;$m<16;$m++)
 					$("#inputNumber-"+{{$c}}+"-"+{{$m}}).change(function(){
@@ -615,7 +620,7 @@
 						
 					});
 				@endfor
-				$("#TotalTitle-"+{{$c}}).click(function(){
+				/*$("#TotalTitle-"+{{$c}}).click(function(){
 					@for($m=0;$m<16;$m++)
 						if({{$m}} != 3 && {{$m}} != 7 && {{$m}} != 11 && {{$m}} != 15){
 							var vlau = Comma(parseFloat($("#inputNumber-"+{{$c}}+"-"+{{$m}}).val())*parseFloat($("#totalTClient-"+{{$c}}).val()/100));
@@ -704,9 +709,11 @@
 							$("#totalPP3-"+{{$c2}}).val(temp);
 						@endfor
 					@endfor
-				});
+				});*/
 
 			@endfor
+
+
 
 
 		});
@@ -741,14 +748,7 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 
-	    $(document).ready(function() {
-		    $('#example').DataTable( {
-			    fixedColumns: {
-			        leftColumns: 1
-			    },
-			    dataSrc: "tableData"
-			} );
-		});
+	    
 
 	</script>
 
