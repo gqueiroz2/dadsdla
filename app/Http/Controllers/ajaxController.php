@@ -716,8 +716,40 @@ class ajaxController extends Controller{
         $value = Request::get("value");
         $currency = Request::get("currency");
         $months = Request::get("months");
+        $brands = Request::get("brands");
         $name = Request::get("name");
 
         $sbm = new subMarketRanking();
+
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1);
+
+        if ($type == "agency" || $type == "sector" || $type == "category") {
+            $val = "client";
+        }else{
+            $val = "brand";
+        }
+        
+        $values = $sbm->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
+
+        $cMonth = intval(date('m'));
+        $months2 = array();
+        for ($m=1; $m <= $cMonth; $m++) { 
+            array_push($months2, $m);
+        }
+
+        $valuesYTD = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+
+        $matrix = $sbm->subMarketAssembler($values, $valuesYTD, $type, $brands, $val);
+
+        if (is_string($matrix)) {
+            $mtx = $matrix;
+            $total = false;
+        }else{
+            $mtx = $matrix[0];
+            $total = $matrix[1];
+        }
+        
+        $sbm->renderSubAssembler($mtx, $total, $type, $years);
     }
 }

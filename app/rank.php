@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\agency;
 use App\client;
+use App\sql;
+use App\dataBase;
 
 class rank extends Model{
 
@@ -21,6 +23,24 @@ class rank extends Model{
         }
 
         return $years;
+    }
+
+    public function mountBrands($brands){
+        
+        $brandsTV = array();
+        $brandsDigital = array();
+
+        for ($b=0; $b < sizeof($brands); $b++) {
+            if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK" || $brands[$b][1] == "AP" 
+                || $brands[$b][1] == "TLC"|| $brands[$b][1] == "ID" || $brands[$b][1] == "DT" || $brands[$b][1] == "FN" 
+                || $brands[$b][1] == "OTH" || $brands[$b][1] == "HGTV" || $brands[$b][1] == "DN") {
+                array_push($brandsTV, $brands[$b]);
+            }else{
+                array_push($brandsDigital, $brands[$b]);
+            }
+        }
+
+        return array($brandsTV, $brandsDigital);
     }
 
     public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null){
@@ -176,7 +196,7 @@ class rank extends Model{
 
     }
 
-    public function getAllValuesUnion($tableName, $leftName, $type, $brands, $region, $value, $months, $currency){
+    public function getAllValuesUnion($tableName, $leftName, $type, $brands, $region, $value, $months, $currency, $filter=false){
         
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -187,21 +207,45 @@ class rank extends Model{
 
         $as = "total";
 
-        if ($tableName == "ytd") {
-            $value .= "_revenue_prate";
-            $columns = array("sales_representant_office_id", "brand_id", "month", "year");
-            $colsValue = array($region, $brands_id, $months);
-        }elseif ($tableName == "digital") {
-            $value .= "_revenue";
-            $columns = array("campaign_sales_office_id","brand_id", "month", "year");
-            $colsValue = array($region, $brands_id, $months);
-        }elseif ($tableName == "plan_by_brand") {
-            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "source", "currency_id", "year");
-            $colsValue = array($region, $value, $brands_id, $months, "TARGET", 4);
-            $value = "revenue";
+        if ($filter) {
+
+            $c = new client();
+            $sql = new sql();
+
+            $db = new dataBase();   
+            $con = $db->openConnection("DLA");
+
+            $client = $c->getClientID($con, $sql, $filter);
+
+            if ($tableName == "ytd") {
+                $value .= "_revenue_prate";
+                $columns = array("sales_representant_office_id", "brand_id", "month", "client_id", "year");
+                $colsValue = array($region, $brands_id, $months, $client);
+            }elseif ($tableName == "digital") {
+                $value .= "_revenue";
+                $columns = array("campaign_sales_office_id","brand_id", "month", "client_id", "year");
+                $colsValue = array($region, $brands_id, $months, $client);
+            }else{
+                $columns = array("brand_id", "month", "client_id", "year");
+                $colsValue = array($brands_id, $months, $client);
+            }
         }else{
-            $columns = array("brand_id", "month", "year");
-            $colsValue = array($brands_id, $months);
+            if ($tableName == "ytd") {
+                $value .= "_revenue_prate";
+                $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+                $colsValue = array($region, $brands_id, $months);
+            }elseif ($tableName == "digital") {
+                $value .= "_revenue";
+                $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+                $colsValue = array($region, $brands_id, $months);
+            }elseif ($tableName == "plan_by_brand") {
+                $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "source", "currency_id", "year");
+                $colsValue = array($region, $value, $brands_id, $months, "TARGET", 4);
+                $value = "revenue";
+            }else{
+                $columns = array("brand_id", "month", "year");
+                $colsValue = array($brands_id, $months);
+            }
         }
 
         $table = "$tableName $tableAbv";
@@ -222,7 +266,7 @@ class rank extends Model{
         $rtr['join'] = $join;
         $rtr['name'] = $name;
         $rtr['names'] = $names;
-        //var_dump(is_array($rtr['colsValue']));
+        //var_dump($rtr['colsValue']);
         return $rtr;
 
     }

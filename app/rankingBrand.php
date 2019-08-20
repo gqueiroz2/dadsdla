@@ -51,7 +51,7 @@ class rankingBrand extends rank{
 							WHEN '12'
 							THEN 12
 
-							END						
+							END
 						)";
 
 		$sql = new sql();
@@ -150,24 +150,6 @@ class rankingBrand extends rank{
 		
 		return $line;
 
-	}
-
-	public function mountBrands($brands){
-		
-		$brandsTV = array();
-		$brandsDigital = array();
-
-		for ($b=0; $b < sizeof($brands); $b++) {
-			if ($brands[$b][1] == "DC" || $brands[$b][1] == "HH" || $brands[$b][1] == "DK" || $brands[$b][1] == "AP" 
-				|| $brands[$b][1] == "TLC"|| $brands[$b][1] == "ID" || $brands[$b][1] == "DT" || $brands[$b][1] == "FN" 
-				|| $brands[$b][1] == "OTH" || $brands[$b][1] == "HGTV" || $brands[$b][1] == "DN") {
-				array_push($brandsTV, $brands[$b]);
-			}else{
-				array_push($brandsDigital, $brands[$b]);
-			}
-		}
-
-		return array($brandsTV, $brandsDigital);
 	}
 
 	public function mountValues($con, $r, $regionID, $year){

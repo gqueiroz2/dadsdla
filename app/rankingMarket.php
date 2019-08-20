@@ -12,7 +12,6 @@ class rankingMarket extends rank {
     public function getAllResults($con, $brands, $type, $regionID, $region, $value, $currency, $months, $years, $sector=false){
 
     	if ($sector) {
-
     		$cMonth = intval(date('m'));
     		$months2 = array();
     		for ($m=1; $m <= $cMonth; $m++) { 
@@ -38,7 +37,6 @@ class rankingMarket extends rank {
 			}
 		}
     	
-
     	return "-";
     }
 
@@ -49,7 +47,6 @@ class rankingMarket extends rank {
 				return $values[$year][$s2]['total'];
 			}
 		}
-    	
 
     	return 0;
     }
@@ -108,7 +105,7 @@ class rankingMarket extends rank {
     		}
 
     		if ($mtx[$m-$pos][$p] - $mtx[$m-$pos-1][$p] > 0) {
-    			$res = "Incresed";
+    			$res = "Increased";
     		}else{
     			$res = "Decreased";
     		}
@@ -138,7 +135,7 @@ class rankingMarket extends rank {
     		$res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
     	}elseif ($mtx[$m][0] == "Move YTD") {
     		if ($mtx[$m-3][$p] - $mtx[$m-4][$p] > 0) {
-    			$res = "Incresed";
+    			$res = "Increased";
     		}else{
     			$res = "Decreased";
     		}

@@ -37,7 +37,6 @@ class subBrandRanking extends rankingBrand {
             }
         }
         
-
         $r = new region();
 
         $tmp = $r->getRegion($con,array($regionID));
