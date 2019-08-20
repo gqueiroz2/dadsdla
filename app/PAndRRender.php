@@ -475,7 +475,7 @@ class PAndRRender extends Render
                     
                         }
                     }
-                    echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
+                    echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' readonly='true' value='".number_format($rollingFCST[$c][$m],2)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
 
                     if ($fcstAmountByStage[$c]) {
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][4],2)."</td>";

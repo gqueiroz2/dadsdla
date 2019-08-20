@@ -96,7 +96,7 @@ class AE extends pAndR{
 
         $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);
        	
-        $executiveRF = $this->consolidateAE($rollingFCST);
+        $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
@@ -105,7 +105,6 @@ class AE extends pAndR{
 
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
 
-
         if ($value == 'gross') {
             $valueView = 'Gross';
         }elseif($value == 'net'){
@@ -113,6 +112,8 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+
+
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -225,6 +226,37 @@ class AE extends pAndR{
 
         return $return;
 
+    }
+
+    public function consolidateAEFcst($matrix,$splitted){
+        $return = array();
+
+        for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
+            $return[$m] = 0;
+        }
+        if ($splitted) {
+            for ($c=0; $c <sizeof($matrix); $c++) {
+                
+                if ($splitted[$c]['splitted']) {
+                    $div = 2;
+                }else{
+                    $div = 1;
+                }
+
+                for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+                    $return[$m] += $matrix[$c][$m]/$div;
+                }
+            }
+        }else{
+            for ($c=0; $c <sizeof($matrix); $c++) { 
+                for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+                    $return[$m] += $matrix[$c][$m];
+                }
+            }
+        }
+            
+
+        return $return;
     }
 
     public function monthAnalise($base){
@@ -347,7 +379,6 @@ class AE extends pAndR{
         }        
 
         for ($c=0; $c < sizeof($clients); $c++) {
-            var_dump($clients[$c]);
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c]); // MONTHS OF THE FCST
             if($monthOPP[$c]){
@@ -472,9 +503,6 @@ class AE extends pAndR{
 
     public function fillFCST($sFCST,$mOPP,$sRP,$salesRepUser){
 
-        var_dump($sFCST);
-        //var_dump($salesRepUser);
-        var_dump($sRP);
         $base = new base();
 
         $monthWQ = $base->monthWQ;
@@ -548,12 +576,7 @@ class AE extends pAndR{
             }
         }
 
-        var_dump($share);
-        var_dump($amount);
-
         $newAmount = $amount / sizeof($monthOPP);
-
-        var_dump($newAmount);
 
         for ($s=0; $s < sizeof($share); $s++) { 
             $share[$s] = $share[$s] / ( $newAmount );
@@ -632,7 +655,7 @@ class AE extends pAndR{
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
-                            SELECT from_date , to_date, stage , $sfColumn
+                            SELECT oppid, from_date , to_date, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )

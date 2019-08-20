@@ -52,13 +52,9 @@ class AEController extends Controller{
        
         $client = $tmp['client'];
 
-        
-        
         $tfArray = array();
         $odd = array();
         $even = array();
-
-          
 
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even"));
     }
