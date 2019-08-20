@@ -103,6 +103,9 @@ class AE extends pAndR{
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
+        $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+
+
         if ($value == 'gross') {
             $valueView = 'Gross';
         }elseif($value == 'net'){
@@ -136,6 +139,7 @@ class AE extends pAndR{
 
                         "currency" => $currencyName,
                         "value" => $valueView,
+                        "fcstAmountByStage" => $fcstAmountByStage,
                     );
 
         return $rtr;
@@ -160,6 +164,27 @@ class AE extends pAndR{
 
         return $sum;
     }
+
+
+    public function adjustFcstAmountByStage($fcstAmountByStage){
+
+        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) {
+            if ($fcstAmountByStage[$c]) {
+                $fcstAmountByStage[$c][0][6] = 'Total';
+                $fcstAmountByStage[$c][1][6] = $fcstAmountByStage[$c][1][0] + $fcstAmountByStage[$c][1][1] + $fcstAmountByStage[$c][1][2] + $fcstAmountByStage[$c][1][3] + $fcstAmountByStage[$c][1][4];
+
+                $fcstAmountByStage[$c][0][7] = 'Var(%)';
+                if ($fcstAmountByStage[$c][1][6] != 0) {
+                    $fcstAmountByStage[$c][1][7] = ($fcstAmountByStage[$c][1][4]/$fcstAmountByStage[$c][1][6])*100;
+                }else{
+                    $fcstAmountByStage[$c][1][7] = 0;
+                }
+            }
+        }
+
+        return $fcstAmountByStage;
+    }
+
 
     public function divArrays($array1,$array2){
         $exit = array();

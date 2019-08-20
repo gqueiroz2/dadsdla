@@ -38,7 +38,7 @@ class AEController extends Controller{
 
         $con = $db->openConnection("DLA");        
 
-        $cYear = intval( Request::get('year') );
+        $cYear = intval(Request::get('year'));
 
         $pYear = $cYear - 1;
 
