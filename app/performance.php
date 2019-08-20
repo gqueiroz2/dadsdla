@@ -27,6 +27,14 @@ class performance extends base{
         return $columns;
     }
 
+    public function generateValueWB($con,$sql,$region,$year,$month,$sum,$table,$value=null){
+        $where = $this->createWhere($sql,"ytdWB",$region,$year,false,false,$month,$value);
+        $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
+        $values = $sql->fetchSum($results,"sum")["sum"]; 
+        
+        return $values;
+    }
+
     public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$value=null){
         for ($s=0; $s <sizeof($salesRep); $s++) {
             $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$value);
@@ -40,6 +48,10 @@ class performance extends base{
         if ($source == "ytd") {
             $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
+            $where = $sql->where($columns,$arrayWhere);
+        }elseif ($source == "ytdWB") {
+            $columns = array("sales_representant_office_id","year","month");
+            $arrayWhere = array($region,$year,$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "digital"){
             $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");

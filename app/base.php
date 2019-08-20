@@ -11,7 +11,13 @@ class base extends Model{
 
     public function dateToMonth($date){
         $temp = explode("-",$date);
-        $rtr = $temp[1];
+        
+        $year = $temp[0];
+        $month = $temp[1];
+        
+
+        $rtr = array("year" => $year , "month" => $month);
+
         return $rtr;
     }
 
@@ -67,7 +73,7 @@ class base extends Model{
 
     public $monthWQ = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
-    protected $month = array( array("JAN",1, "January","JAN"),
+    public $month = array( array("JAN",1, "January","JAN"),
                               array("FEB",2, "February","FEV"),
                               array("MAR",3, "March","MAR"),
                               array("APR",4, "April","ABR"),

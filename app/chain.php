@@ -313,13 +313,13 @@ class chain extends excel{
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
     			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
-    			if($columns[$cc] == "ad_unit"){
-                    $current[$c][$tmp[0][1]] = $tmp[0][0];
+    			if($columns[$cc] == "ad_unit" || $columns[$cc] == "from_date" || $columns[$cc] == "to_date"){
                     $current[$c][$tmp[1][1]] = $tmp[1][0];
+                    $current[$c][$tmp[0][1]] = $tmp[0][0];                    
                 }else{
                     $current[$c][$tmp[1]] = $tmp[0];
                 }
-    			if($columns[$cc] != $tmp[1] && $columns[$cc] != "ad_unit"){
+    			if($columns[$cc] != $tmp[1] && $columns[$cc] != "ad_unit" && $columns[$cc] != "from_date" && $columns[$cc] != "to_date" ){
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
@@ -331,7 +331,6 @@ class chain extends excel{
     }
 
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
-        
         $base = new base();
 
         if($column == 'campaign_sales_office'){
@@ -360,7 +359,18 @@ class chain extends excel{
 				}
 			}
         }elseif($column == 'from_date' || $column == 'to_date'){
-            $rtr =  array( $base->dateToMonth($current) , $column );
+            $tmp = $base->dateToMonth($current);
+
+            $rtr1 =  array( $tmp['month'] , $column );
+            
+            if($column == 'from_date'){
+                $rtr2 = array( $tmp['year'] , 'year_from' );
+            }else{
+                $rtr2 = array( $tmp['year'] , 'year_to' );
+            }                
+
+            $rtr = array($rtr1, $rtr2);
+
             
         }elseif($column == 'region'){
             $rtr =  array(false,'region');
@@ -487,7 +497,7 @@ class chain extends excel{
         	$rtr = array($current,$column);
         }
         return $rtr;
-    }
+    } 
 
     public function defineStage($stg){
         $tmp = explode(" -", $stg);
@@ -900,7 +910,10 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'sales_rep_splitter_id',
-                                  'is_split'
+                                  'is_split',
+                                  'year_from',
+                                  'year_to'
+
                               );
 
     public $sfPandRColumnsT = array(
@@ -920,7 +933,9 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'sales_rep_splitter_id',
-                                  'is_split'
+                                  'is_split',
+                                  'year_from',
+                                  'year_to'
                               );
 
     public $sfPandRColumns = array(
@@ -940,7 +955,9 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'sales_rep_splitter_id',
-                                  'is_split'
+                                  'is_split',
+                                  'year_from',
+                                  'year_to'
                               );      
 
 

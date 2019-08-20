@@ -13,7 +13,7 @@ use App\base;
 use App\AE;
 
 class AEController extends Controller{
-    protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+    
 
     public function get(){
     	$db = new dataBase();
@@ -52,27 +52,13 @@ class AEController extends Controller{
        
         $client = $tmp['client'];
 
-        $month = date('M');
-        $tmp = false;
+        
+        
         $tfArray = array();
         $odd = array();
         $even = array();
 
-        for ($m=0; $m <sizeof($this->month) ; $m++) { 
-            if ($month == $this->month[$m]) {
-                $tmp = true;
-            }
-
-            if ($tmp) {
-                $tfArray[$m] = "";
-                $odd[$m] = "odd";
-                $even[$m] = "rcBlue";
-            }else{
-                $tfArray[$m] = "readonly='true'";
-                $odd[$m] = "oddGrey";
-                $even[$m] = "evenGrey";
-            }
-        }       
+          
 
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even"));
     }

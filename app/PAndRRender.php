@@ -382,7 +382,7 @@ class PAndRRender extends Render
             echo "<div class='col-2' style='padding-right:1px'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".($c)." --> ".$client[$c]['clientName']." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Roling Fcast ".$cYear." </td>";
