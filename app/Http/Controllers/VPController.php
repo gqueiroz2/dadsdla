@@ -35,6 +35,10 @@ class VPController extends Controller
         $render = new PAndRRender();
         $pr = new pRate();
 
+        $content = file_get_contents('/home/dads/saida.json');  
+        $contents = json_decode($content, true);  
+        var_dump($contents);
+
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
