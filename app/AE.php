@@ -347,19 +347,20 @@ class AE extends pAndR{
         }        
 
         for ($c=0; $c < sizeof($clients); $c++) {
-            $someFCST = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
-            $monthOPP = $this->periodOfOPP($someFCST); // MONTHS OF THE FCST
-            if($monthOPP){
-                $shareSalesRep = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP,$someFCST);
-                $fcst[$c] = $this->fillFCST($someFCST,$monthOPP,$shareSalesRep);
+            var_dump($clients[$c]);
+            $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c]); // MONTHS OF THE FCST
+            if($monthOPP[$c]){
+                $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
+                $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID);
             }else{
-                $shareSalesRep = false;
+                $shareSalesRep[$c] = false;
                 $fcst[$c] = false;
             }
             if($fcst[$c]){
                 $fcst[$c] = $this->adjustValues($fcst[$c]);
-                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP);
-                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP);
+                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
+                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP[$c],$splitted[$c],$salesRepID);
                 $fcstAmount[$c] = $this->adjustValuesForecastAmount($fcstAmount[$c]);
             }else{
                 $fcstAmountByStage[$c] = false;
@@ -372,11 +373,9 @@ class AE extends pAndR{
         return $rtr;        
     }
 
-    public function fcstAmount($fcst,$mOPP){
+    public function fcstAmount($fcst,$mOPP,$splitted,$salesRepUser){
         $base = new base();
-
         $monthWQ = $base->monthWQ;
-
         for ($m=0; $m < sizeof($monthWQ); $m++) { 
             $fcstAmount[$m] = 0.0;
         }
@@ -384,7 +383,8 @@ class AE extends pAndR{
        for ($m=0; $m < sizeof($mOPP); $m++) { 
            for ($n=0; $n < sizeof($mOPP[$m]); $n++) { 
                 
-               $fcstAmount[$mOPP[$m][$n]] += $fcst[$m][$mOPP[$m][$n]]['value'];
+                    
+               $fcstAmount[$mOPP[$m][$n]] += ($fcst[$m][$mOPP[$m][$n]]['value']);
            }
        }
 
@@ -470,7 +470,11 @@ class AE extends pAndR{
         
     }
 
-    public function fillFCST($sFCST,$mOPP,$sRP){
+    public function fillFCST($sFCST,$mOPP,$sRP,$salesRepUser){
+
+        var_dump($sFCST);
+        //var_dump($salesRepUser);
+        var_dump($sRP);
         $base = new base();
 
         $monthWQ = $base->monthWQ;
@@ -483,10 +487,28 @@ class AE extends pAndR{
         }
 
         for ($i=0; $i < sizeof($sFCST); $i++){
+            if($sFCST[$i]['salesRepOwner'] == $salesRepUser){
+                $factor = 1;
+            }else{
+                $factor = 2;
+            }
+
+            $adjustedValue = $sFCST[$i]['sumValue']* $factor;
+            
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
-                $fcst[$i][$mOPP[$i][$j]]['value'] = $sFCST[$i]['sumValue']*$sRP[$j];
-            }    
+                    
+
+                
+
+
+                
+
+                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
+
+                
+            }   
+
         }
 
         return $fcst;
@@ -526,8 +548,15 @@ class AE extends pAndR{
             }
         }
 
+        var_dump($share);
+        var_dump($amount);
+
+        $newAmount = $amount / sizeof($monthOPP);
+
+        var_dump($newAmount);
+
         for ($s=0; $s < sizeof($share); $s++) { 
-            $share[$s] = $share[$s]/$amount;
+            $share[$s] = $share[$s] / ( $newAmount );
         }        
 
         return $share;
@@ -588,23 +617,19 @@ class AE extends pAndR{
 
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
         
-        $from = array($sfColumn,'from_date','to_date','stage');
-        $to = array("sumValue",'fromDate','toDate','stage');
+        $from = array($sfColumn,'from_date','to_date','stage','oppid','salesRepOwner');
+        $to = array("sumValue",'fromDate','toDate','stage','oppid','salesRepOwner');
         if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
                 $select = "
-                                SELECT from_date , to_date, stage , $sfColumn
+                                SELECT oppid, from_date , to_date, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                                 FROM sf_pr
                                 WHERE (client_id = \"".$clients['clientID']."\")
                                 AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
-                                AND (stage != '5' && stage != '6')
+                                AND ( stage != '5')
+                                AND ( stage != '6')
                                 AND (year_from = \"".$year."\")
                               "; 
-            if($splitted['splitted']){ /* SF FCST FROM A BRAZIL CLIENT , WHERE THERE IS AE SPLITT SALES */
-                
 
-            }else{ /* SF FCST FROM A BRAZIL CLIENT , WHERE THERE IS NOT AE SPLITT SALES */
-                
-            }
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
                             SELECT from_date , to_date, stage , $sfColumn
