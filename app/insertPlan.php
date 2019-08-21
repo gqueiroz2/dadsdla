@@ -87,6 +87,8 @@ class insertPlan extends excel{
 
 		if($del){
 			for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+				var_dump($s);
+				var_dump($spreadSheet[$s]);
 				$bool = $this->insert($con,$spreadSheet[$s],$column,$table,$into);
 				if(!$bool){
 					$check++;

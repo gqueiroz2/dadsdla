@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PAndRRender extends Render
-{
+class PAndRRender extends Render{
+
     protected $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
     protected $channel = array('DC','HH','DK','AP','TLC','ID','DT','FN','ONL','VIX','OTH','HGTV');
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function AE1($forRender,$client,$tfArray,$odd,$even){
+    public function AE1($forRender,$client,$tfArray,$odd,$even,$userName){
 
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
@@ -39,12 +39,24 @@ class PAndRRender extends Render
 
         $currency = $forRender["currency"];
         $value = $forRender["value"];
+        $region = $forRender["region"];
+
+        $currencyName = $forRender["currencyName"];
+        $valueView = $forRender["valueView"];
 
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
 
+        echo "<input type='hidden' name='salesRep' value='". base64_encode(json_encode($salesRep)) ."'>";
+        echo "<input type='hidden' name='client' value='". base64_encode(json_encode($client)) ."'>";
+        echo "<input type='hidden' name='currency' value='". base64_encode(json_encode($currency)) ."'>";
+        echo "<input type='hidden' name='value' value='". base64_encode(json_encode($value)) ."'>";
+        echo "<input type='hidden' name='region' value='". base64_encode(json_encode($region)) ."'>";
+        echo "<input type='hidden' name='user' value='". base64_encode(json_encode($userName)) ."'>";
+        echo "<input type='hidden' name='year' value='". base64_encode(json_encode($cYear)) ."'>";
+
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>
-                <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currency."/".$value."</th></tr>
+                <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>
             </table>
         </div>";
 
@@ -155,7 +167,7 @@ class PAndRRender extends Render
                 echo"</td>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' name='fcstExecutive-$m' readonly='true' id='rf-$m' value='".number_format($executiveRF[$m],2)."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
+                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='rf-$m' value='".number_format($executiveRF[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
                         echo "<td class='$odd[$m]'><input type='text' name='fcstExecutive-$m' readonly='true' id='rf-$m' value='".number_format($executiveRF[$m],2)."' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'></td>";
                     }
