@@ -9,8 +9,34 @@ use App\brand;
 use App\salesRep;
 use App\base;
 use App\sql;
+use App\pRate;
 class AE extends pAndR{
     
+    public function generateID($con,$sql,$pr,$kind,$region,$year,$salesRep,$currency,$value,$week,$month){
+
+        if($kind == "save"){
+            $string = "SAV";
+        }else{
+            $string = "TRS";
+        }
+        /*
+        var_dump($kind);
+        var_dump($region);
+        var_dump($year);
+        var_dump($salesRep);
+        var_dump($currency);
+        var_dump($value);
+        */
+        $string .= "-".preg_replace('/\s+/', '', $salesRep->region).    
+                   "-".$year.
+                   "-".preg_replace('/\s+/', '', $salesRep->salesRep).
+                   "-".$currency.
+                   "-".$month                   
+                ;
+
+        return $string;
+    }
+
     public function base($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
@@ -133,9 +159,12 @@ class AE extends pAndR{
                         "RFvsTarget" => $RFvsTarget,
                         "targetAchievement" => $targetAchievement,
                     
+                        "currency" => $currency, 
+                        "value" => $value,
+                        "region" => $regionID,
 
-                        "currency" => $currencyName,
-                        "value" => $valueView,
+                        "currencyName" => $currencyName,
+                        "valueView" => $valueView,
                     );
 
         return $rtr;
@@ -322,7 +351,6 @@ class AE extends pAndR{
         }        
 
         for ($c=0; $c < sizeof($clients); $c++) {
-            var_dump($clients[$c]);
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c]); // MONTHS OF THE FCST
             if($monthOPP[$c]){
@@ -447,9 +475,6 @@ class AE extends pAndR{
 
     public function fillFCST($sFCST,$mOPP,$sRP,$salesRepUser){
 
-        var_dump($sFCST);
-        //var_dump($salesRepUser);
-        var_dump($sRP);
         $base = new base();
 
         $monthWQ = $base->monthWQ;
@@ -472,15 +497,8 @@ class AE extends pAndR{
             
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
-                    
-
-                
-
-
-                
 
                 $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
-
                 
             }   
 
@@ -523,12 +541,7 @@ class AE extends pAndR{
             }
         }
 
-        var_dump($share);
-        var_dump($amount);
-
         $newAmount = $amount / sizeof($monthOPP);
-
-        var_dump($newAmount);
 
         for ($s=0; $s < sizeof($share); $s++) { 
             $share[$s] = $share[$s] / ( $newAmount );
@@ -607,7 +620,7 @@ class AE extends pAndR{
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
-                            SELECT from_date , to_date, stage , $sfColumn
+                            SELECT oppid, from_date , to_date, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )

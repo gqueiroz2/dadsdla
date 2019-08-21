@@ -87,13 +87,30 @@
 	</form>
 	<br>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col" style="width: 100%;">
-				<center>
-					{{$render->AE1($forRender,$client,$tfArray,$odd,$even)}}
-				</center>
+		<form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
+		@csrf
+			<div class="row justify-content-end">
+				<div class="col-sm-2">
+					<label> &nbsp; </label>
+					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+				</div>	
 			</div>
-		</div>
+
+			<div class="row mt-2 justify-content-end">
+				<div class="col" style="width: 100%;">
+					<center>
+						{{$render->AE1($forRender,$client,$tfArray,$odd,$even,$userName)}}
+					</center>
+				</div>
+			</div>
+
+			<div class="row mt-2 justify-content-end">
+				<div class="col-sm-2">
+					<label> &nbsp; </label>
+					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+				</div>	
+			</div>
+		</form>
 	</div>
 
 	<div id="vlau"></div>

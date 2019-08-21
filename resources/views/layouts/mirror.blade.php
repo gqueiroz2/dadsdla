@@ -110,7 +110,7 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
 								<a class="dropdown-item" href="{{ route('VPGet') }}"> VP View </a>
-								<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a>
+								{{-- <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a> --}}
 							</div>
 						</li>
 
