@@ -164,6 +164,12 @@ th{
 	color: white;	
 }
 
+.lightBlue2{
+    font-weight: bold;
+    background-color: #004a80;
+    color: white;   
+}
+
 .medBlue{
    font-weight: bold;
    background-color:  #c3d8ef;

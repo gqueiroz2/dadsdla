@@ -141,7 +141,7 @@ class rankingController extends Controller {
             $size = ($nPos+1);
         }
 
-        $names = $r->createNames($type, $months, $years);
+        $names = $r->createNames2($type, $months, $years);
 
         $render = new renderRanking();
 

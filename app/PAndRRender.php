@@ -66,7 +66,7 @@ class PAndRRender extends Render{
 
         echo "<div class='row'>";
 
-        echo "<div class='col-2' style='padding-right:1px;'>";
+        echo "<div class='col-1' style='padding-right:1px;'>";
         echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
             echo "<tr>";
                 echo "<td class='darkBlue' style=' border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; height:40px; '>".$salesRep['abName']."</td>";
@@ -363,7 +363,7 @@ class PAndRRender extends Render{
         for ($c=0; $c < sizeof($client); $c++) {
             if($splitted){
                 if($splitted[$c]['splitted']){
-                    $clr = "ap";
+                    $clr = "lightBlue";
                 }else{
                     $clr = "lightBlue";
                 }                        
@@ -374,12 +374,12 @@ class PAndRRender extends Render{
             if($splitted){
                 if($splitted[$c]['splitted']){
                     if(is_null($splitted[$c]['owner'])){
-                        $ow = "(UK)";
+                        $ow = "(?)";
                     }else{
                         if($splitted[$c]['owner']){
-                            $ow = "(OW)";
+                            $ow = "(P)";
                         }else{
-                            $ow = "(SL)";
+                            $ow = "(S)";
                         }
                     }
                 }else{
@@ -391,10 +391,10 @@ class PAndRRender extends Render{
 
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
-            echo "<div class='col-2' style='padding-right:1px'>";
+            echo "<div class='col-1' style='padding-right:1px'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".($c)." --> ".$client[$c]['clientName']." $ow </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style='width:4%; text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Rolling Fcast ".$cYear." </td>";
