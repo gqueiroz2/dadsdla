@@ -67,6 +67,30 @@ class client extends Management{
         return $clientGroupID[0]['id'];
     }
 
+    public function getClientIDByRegion($con,$sql,$parent, $clientRegion){
+        
+        $table = "client c";
+        
+        $columns = "c.ID AS 'id'";
+        
+        $where = "WHERE c.name = '$parent' ";
+
+        if($clientRegion){
+            $clientRegions = implode(",", $clientRegion);
+            $where .= "AND region_id IN ('$clientRegions')";
+        }
+        
+        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id 
+                 LEFT JOIN region r ON r.ID = cg.region_id";
+                 
+        $limit = "LIMIT 1";
+        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $from = array("id");
+        $to = array('id');
+        $clientGroupID = $sql->fetch($res,$from,$to);
+        return $clientGroupID[0]['id'];
+    }
+
     public function handlerGroup($con,$spreadSheet){
         $sql = new sql();
         $r = new region();

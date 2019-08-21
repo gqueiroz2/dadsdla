@@ -19,6 +19,8 @@ class subMarketRanking extends rankingMarket {
 
         $tmp = $r->getRegion($con,array($regionID));
 
+        $p = new pRate();
+
         if(is_array($tmp)){
             $region = $tmp[0]['name'];
         }else{
@@ -61,7 +63,31 @@ class subMarketRanking extends rankingMarket {
 	    			$table = "ytd";
 	    		}
 	    		
+                if ($table != "cmaps") {
+                    if ($currency[0]['name'] == "USD") {
+                        $pRate = 1.0;
+                    }else{
+                        $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                    }
+                }else{
+                    if ($currency[0]['name'] == "USD") {
+                        $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                    }else{
+                        $pRate = 1.0;
+                    }
+                }
+
 	    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency[0]['id'], $brand, $val, $filterType);
+                
+                if (is_array($values[$y])) {
+                    for ($v=0; $v < sizeof($values[$y]); $v++) { 
+                        if ($table != "cmaps") {
+                            $values[$y][$v]['total'] *= $pRate;
+                        }else{
+                            $values[$y][$v]['total'] /= $pRate;
+                        }
+                    }
+                }
 	    	}
 
     	}else{
@@ -143,6 +169,31 @@ class subMarketRanking extends rankingMarket {
 
 				$from = $infoQuery[0]['names'];
 				$values[$y] = $sql->fetch($values[$y], $from, $from);
+
+                if ($infoQuery[$y]['table'] == "cmaps a") {
+                    if ($currency[0]['name'] == "USD") {
+                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                    }else{
+                        $pRate = 1.0;
+                    }
+                    
+                }else{
+                    if ($currency[0]['name'] == "USD") {
+                        $pRate = 1.0;
+                    }else{
+                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                    }   
+                }
+
+                if (is_array($values[$y])) {
+                    for ($v=0; $v < sizeof($values[$y]); $v++) { 
+                        if ($infoQuery[$y]['table'] == "cmaps a") {
+                            $values[$y][$v]['total'] /= $pRate;    
+                        }else{
+                            $values[$y][$v]['total'] *= $pRate;
+                        }
+                    }
+                }
     		}
     	}
 
@@ -179,6 +230,11 @@ class subMarketRanking extends rankingMarket {
 
         $tmp = "$leftAbv.ID AS '".$filterType."ID', $leftAbv.name AS '$filterType', SUM($value) AS '$as'";
         $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
+
+        if ($tableName == "cmaps") {
+            
+        }
+
         $name = $filterType."_id";
 		$names = array($filterType."ID", $filterType, $as);
 
@@ -193,10 +249,25 @@ class subMarketRanking extends rankingMarket {
     	return $res;
     }
 
-    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $values2=null){
+    public function searchPos2($name, $values, $type, $s){
+        
+        if ($values[0] == false) {
+            return ($s+1);
+        }else{
+            for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
+                if ($name == $values[0][$s2][$type]) {
+                    return ($s2+1);
+                }
+            }
+        }
+        
+        return ($s+1);
+    }
+
+    public function checkColumn2($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
         
         if ($mtx[$m][0] == "Ranking") {
-            $res = $this->searchPos($name, $values, $type);
+            $res = $this->searchPos2($name, $values, $type, $s);
         }elseif ($mtx[$m][0] == $years[0]) {
             $res = $this->searchValueByYear($name, $values, $type, 0);
         }elseif ($mtx[$m][0] == $years[1]) {
@@ -211,7 +282,7 @@ class subMarketRanking extends rankingMarket {
             $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
         }elseif ($mtx[$m][0] == "Move") {
             $pos = 3;
-            if ($mtx[$m-$pos][$p] - $mtx[$m-$pos-1][$p] > 0) {
+            if ($mtx[$m-$pos][$p] < $mtx[$m-$pos-1][$p]) {
                 $res = "Increased";
             }else{
                 $res = "Decreased";
@@ -229,7 +300,7 @@ class subMarketRanking extends rankingMarket {
         }elseif ($mtx[$m][0] == "Var Abs YTD.") {
             $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
         }elseif ($mtx[$m][0] == "Move YTD") {
-            if ($mtx[$m-3][$p] - $mtx[$m-4][$p] > 0) {
+            if ($mtx[$m-3][$p] < $mtx[$m-4][$p]) {
                 $res = "Increased";
             }else{
                 $res = "Decreased";
@@ -254,11 +325,17 @@ class subMarketRanking extends rankingMarket {
         $closed = 0;
         $pClosed = 0;
         
-        for ($b=0; $b < sizeof($values[0]); $b++) { 
-            $mtx[0][$b+1] = $values[0][$b][$type];
+        if ($values[0] == false) {
+            $size = $values[1];
+        }else{
+            $size = $values[0];
+        }
 
-            if ($b < sizeof($values[0][0])) {
-                $val = $values[0][$b]['total'];
+        for ($b=0; $b < sizeof($size); $b++) { 
+            $mtx[0][$b+1] = $size[$b][$type];
+
+            if ($b < sizeof($size)) {
+                $val = $size[$b]['total'];
             }else{
                 $val = "-";
             }
@@ -269,11 +346,17 @@ class subMarketRanking extends rankingMarket {
                 $closed += $val;    
             }
 
-            if ($b < sizeof($values[1])) {
-                $val = $values[1][$b]['total'];
+            if ($values[1] != false) {
+                
+                if ($b < sizeof($values[1])) {
+                    $val = $values[1][$b]['total'];
+                }else{
+                    $val = "-";
+                }
             }else{
                 $val = "-";
             }
+            
 
             $mtx[2][$b+1] = $val;
 
@@ -287,12 +370,12 @@ class subMarketRanking extends rankingMarket {
 
         $total = array();
 
-        if (sizeof($values[0]) > 1) {
+        if (sizeof($size) > 1) {
             array_push($total, "DN");
             array_push($total, $closed);
             array_push($total, $pClosed);
 
-            for ($b=0; $b < sizeof($values[0]); $b++) {
+            for ($b=0; $b < sizeof($size); $b++) {
                 
                 if ($mtx[1][$b+1] != "-") {
                     $val = ($mtx[1][$b+1] / $closed)*100;
@@ -312,12 +395,18 @@ class subMarketRanking extends rankingMarket {
 
                 $mtx[4][$b+1] = $val;
 
-                if ($mtx[1][$b+1] != "-" && $mtx[2][$b+1] != "-") {
-                    $val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
-                    $val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
-                }else{
+                if ($mtx[1][$b+1] == "-" || $mtx[2][$b+1] == "-") {
+                    if ($mtx[1][$b+1] == "-") {
+                        $val2 = (0 - $mtx[2][$b+1]);   
+                    }elseif ($mtx[2][$b+1] == "-") {
+                        $val2 = ($mtx[1][$b+1] - 0);   
+                    }else{
+                        $val2 = "-";
+                    }
                     $val = "-";
-                    $val2 = "-";
+                }else{
+                    $val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
+                    $val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
                 }
 
                 $mtx[5][$b+1] = $val;
@@ -329,11 +418,55 @@ class subMarketRanking extends rankingMarket {
 
             $size = sizeof($mtx[0]);
 
-            $val = ($closed / $pClosed)*100;
+            if ($closed == 0 || $pClosed == 0) {
+                $val = 0.0;    
+            }else{
+                $val = ($closed / $pClosed)*100;
+            }
+
             array_push($total, $val);
 
             $val = ($closed - $pClosed);
             array_push($total, $val);
+        }else{
+
+            $total = null;
+
+            for ($b=0; $b < sizeof($size); $b++) {
+                
+                if ($mtx[1][$b+1] != "-") {
+                    $val = ($mtx[1][$b+1] / $closed)*100;
+                }else{
+                    $val = "-";
+                }
+
+                $mtx[3][$b+1] = $val;
+
+                if ($mtx[2][$b+1] != "-") {
+                    $val = ($mtx[2][$b+1] / $pClosed)*100;
+                }else{
+                    $val = "-";
+                }
+
+                $mtx[4][$b+1] = $val;
+
+                if ($mtx[1][$b+1] == "-" || $mtx[2][$b+1] == "-") {
+                    if ($mtx[1][$b+1] == "-") {
+                        $val2 = (0 - $mtx[2][$b+1]);   
+                    }elseif ($mtx[2][$b+1] == "-") {
+                        $val2 = ($mtx[1][$b+1] - 0);   
+                    }else{
+                        $val2 = "-";
+                    }
+                    $val = "-";
+                }else{
+                    $val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
+                    $val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
+                }
+
+                $mtx[5][$b+1] = $val;
+                $mtx[6][$b+1] = $val2;
+            }
         }
         
         return array($mtx, $total);
@@ -384,7 +517,11 @@ class subMarketRanking extends rankingMarket {
         
         $total[7] = $firstYtd;
         $total[8] = $secondYtd;
-        $total[9] = ($total[7]/$total[8])*100;
+        if ($total[7] == 0 || $total[8] == 0) {
+            $total[9] = 0;
+        }else{
+            $total[9] = ($total[7]/$total[8])*100;
+        }
         $total[10] = $total[7] - $total[8];
 
         return $total;
@@ -392,46 +529,54 @@ class subMarketRanking extends rankingMarket {
 
     public function subMarketAssembler($values, $valuesYTD, $type, $brands, $typeF){
         
-        if ($values[0] == false) {
-            return "Don't exist brand data of this $type";
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1);
+
+        if ($type == "client") {
+            $mtx = $this->assemblerMarketBrand($values, $years, $typeF);
+
+            return $mtx;
         }else{
 
-            $cYear = intval(date('Y'));
-            $years = array($cYear, $cYear-1);
+            $mtx[0][0] = "Ranking";
+            $mtx[1][0] = "Client";
+            $mtx[2][0] = $years[0];
+            $mtx[3][0] = $years[1];
+            $mtx[4][0] = "Var (%)";
+            $mtx[5][0] = "Var Abs.";
+            $mtx[6][0] = "Move";
+            $mtx[7][0] = "YTD ".$years[0];
+            $mtx[8][0] = "YTD ".$years[1];
+            $mtx[9][0] = "Var YTD (%)";
+            $mtx[10][0] = "Var Abs YTD.";
+            $mtx[11][0] = "Move YTD";
+    
+            $types = array();
 
-            if ($type == "client") {
-                $mtx = $this->assemblerMarketBrand($values, $years, $typeF);
-
-                return $mtx;
-            }else{
-
-                $mtx[0][0] = "Ranking";
-                $mtx[1][0] = "Client";
-                $mtx[2][0] = $years[0];
-                $mtx[3][0] = $years[1];
-                $mtx[4][0] = "Var (%)";
-                $mtx[5][0] = "Var Abs.";
-                $mtx[6][0] = "Move";
-                $mtx[7][0] = "YTD ".$years[0];
-                $mtx[8][0] = "YTD ".$years[1];
-                $mtx[9][0] = "Var YTD (%)";
-                $mtx[10][0] = "Var Abs YTD.";
-                $mtx[11][0] = "Move YTD";
-            
-                $size = sizeof($values[0]);
-
-                for ($s=0; $s < $size; $s++) { 
-                    for ($m=0; $m < sizeof($mtx); $m++) {
-                        array_push($mtx[$m], $this->checkColumn($mtx, $m, $values[0][$s][$typeF], $values, $years, sizeof($mtx[$m]), $typeF, $valuesYTD));
-                    }
+            for ($r=0; $r < sizeof($values); $r++) { 
+                if (is_array($values[$r])) {
+                    for ($r2=0; $r2 < sizeof($values[$r]); $r2++) { 
+                        if (!in_array($values[$r][$r2][$typeF], $types)) {
+                            array_push($types, $values[$r][$r2][$typeF]);  
+                        }
+                    }   
                 }
-
-                $total = $this->subAssemblerMarketTotal($mtx);
-
-                return array($mtx, $total);
-
             }
+
+            $size = sizeof($types);
+
+            for ($s=0; $s < $size; $s++) { 
+                for ($m=0; $m < sizeof($mtx); $m++) {
+                    array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesYTD));
+                }
+            }
+
+            $total = $this->subAssemblerMarketTotal($mtx);
+
+            return array($mtx, $total);
+
         }
+
 
     }
 
@@ -465,6 +610,8 @@ class subMarketRanking extends rankingMarket {
                                     if (is_numeric($mtx[$n][$m])) {
                                         if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Var YTD (%)" || $mtx[$n][0] == "Share Closed" || $mtx[$n][0] == "Share ".$years[1] || $mtx[$n][0] == "% YoY") {
                                             echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";   
+                                        }elseif ($mtx[$n][0] == "Ranking") {
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])."º</td>";
                                         }else{
                                             echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
                                         }
@@ -477,31 +624,34 @@ class subMarketRanking extends rankingMarket {
                             echo "</tr>";
                         }
 
-                        echo "<tr>";
+                        if (!is_null($total)) {
 
-                        if ($type == "client") {
-                            $pos = 3;
-                            $pos2 = 4;
-                            $pos3 = 5;
-                        }else{
-                            $pos = 4;
-                            $pos2 = 9;
-                            $pos3 = -1;
-                        }
+                            echo "<tr>";
 
-                        for ($t=0; $t < sizeof($total); $t++) {
-                            if ($t == $pos || $t == $pos2 || $t == $pos3) {
-                                echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
-                            }
-                            elseif (is_numeric($total[$t])) {
-                                echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+                            if ($type == "client") {
+                                $pos = 3;
+                                $pos2 = 4;
+                                $pos3 = 5;
                             }else{
-                                echo "<td class='darkBlue center'> ".$total[$t]." </td>";
+                                $pos = 4;
+                                $pos2 = 9;
+                                $pos3 = -1;
                             }
                             
-                        }
+                            for ($t=0; $t < sizeof($total); $t++) {
+                                if ($t == $pos || $t == $pos2 || $t == $pos3) {
+                                    echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+                                }
+                                elseif (is_numeric($total[$t])) {
+                                    echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+                                }else{
+                                    echo "<td class='darkBlue center'> ".$total[$t]." </td>";
+                                }
+                                
+                            }
 
-                        echo "</tr>";
+                            echo "</tr>";
+                        }
                     }
 
                     echo "</table>";

@@ -37,6 +37,12 @@ Route::group(['middleware' => 'auth'],function(){
 		});
 	});
 	
+	Route::group(['prefix'=>'churn'],function(){
+		Route::get('/', 'rankingChurnController@get')
+				->name('churnGet');
+		Route::post('/', 'rankingChurnController@post')
+				->name('churnPost');
+	});
 
 });
 
