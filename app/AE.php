@@ -84,7 +84,7 @@ class AE extends pAndR{
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
         $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
 
-        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);
+        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
 
         $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
@@ -92,10 +92,16 @@ class AE extends pAndR{
 
         $toRollingFCST = $fcst['fcstAmount'];
 
+        $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
+        $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
+
+
         $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);        
 
-        $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);
-       	
+        $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
+
+
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
@@ -104,6 +110,7 @@ class AE extends pAndR{
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+        $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
         if ($value == 'gross') {
             $valueView = 'Gross';
@@ -141,6 +148,7 @@ class AE extends pAndR{
                         "currency" => $currencyName,
                         "value" => $valueView,
                         "fcstAmountByStage" => $fcstAmountByStage,
+                        "fcstAmountByStageEx" => $fcstAmountByStageEx,
                     );
 
         return $rtr;
@@ -166,6 +174,67 @@ class AE extends pAndR{
         return $sum;
     }
 
+    public function adjustFcstAmountByStageEx($fcstAmountByStageEx){
+
+        $fcstAmountByStageEx[0][6] = 'Total';
+        $fcstAmountByStageEx[0][7] = 'Var(%)';
+
+        $fcstAmountByStageEx[1][6] = $fcstAmountByStageEx[1][0]+$fcstAmountByStageEx[1][1]+$fcstAmountByStageEx[1][2]+$fcstAmountByStageEx[1][3]+$fcstAmountByStageEx[1][4];
+
+        if ($fcstAmountByStageEx[1][6] == 0) {
+            $fcstAmountByStageEx[1][7] = 0.0;
+        }else{
+            $fcstAmountByStageEx[1][7] = ($fcstAmountByStageEx[1][4]/$fcstAmountByStageEx[1][6])*100;
+        }
+
+        return $fcstAmountByStageEx;   
+    }
+
+    public function makeFcstAmountByStageEx($fcstAmountByStage,$splitted){
+        $resp[0] = array('1','2','3','4','5','6');
+        $resp[1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
+
+        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
+            if ($splitted) {
+                if ($splitted[$c]['splitted']) {
+                    $div = 2;
+                }else{
+                    $div = 1;
+                }
+                $resp[1][0] += $fcstAmountByStage[$c][1][0]/$div;
+                $resp[1][1] += $fcstAmountByStage[$c][1][1]/$div;
+                $resp[1][2] += $fcstAmountByStage[$c][1][2]/$div;
+                $resp[1][3] += $fcstAmountByStage[$c][1][3]/$div;
+                $resp[1][4] += $fcstAmountByStage[$c][1][4]/$div;
+                $resp[1][5] += $fcstAmountByStage[$c][1][5]/$div;
+
+            }else{
+                $resp[1][0] += $fcstAmountByStage[$c][1][0];
+                $resp[1][1] += $fcstAmountByStage[$c][1][1];
+                $resp[1][2] += $fcstAmountByStage[$c][1][2];
+                $resp[1][3] += $fcstAmountByStage[$c][1][3];
+                $resp[1][4] += $fcstAmountByStage[$c][1][4];
+                $resp[1][5] += $fcstAmountByStage[$c][1][5];
+            }
+        }
+
+        return $resp;
+    }
+
+    public function addClosed($fcstAmountByStage,$rollingFCST){
+
+        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
+            if (!$fcstAmountByStage[$c]) {
+                $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
+                $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
+            }
+
+            for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+                $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
+            }
+        }
+        return $fcstAmountByStage;
+    }
 
     public function adjustFcstAmountByStage($fcstAmountByStage){
 
@@ -429,7 +498,7 @@ class AE extends pAndR{
         $stagesToView = array( 0 => "1" , 1 => "2" , 2 => "3" , 3 => "4" , 4 => "5" , 5 => "6" );
         for ($s=0; $s < sizeof($stages); $s++) { 
             $amountByStage[$s] = 0.0;
-        }        
+        }
 
         for ($s=0; $s < sizeof($stages); $s++) { 
             if(isset($stages[$s]) && is_array($stages[$s])){                
@@ -526,15 +595,7 @@ class AE extends pAndR{
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
                     
-
-                
-
-
-                
-
                 $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
-
-                
             }   
 
         }
@@ -708,21 +769,23 @@ class AE extends pAndR{
 
                                           ";  
                         $res[$c][$m] = $con->query($select[$c][$m]);
-                        $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
+                        $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;
+
+                        $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                            FROM fw_digital
+                                            WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                            AND (month = \"".$month[$m][1]."\")
+                                            AND (year = \"".$year."\")
+                                            ";
+
+                        $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
+                        $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div; 
+
                     }else{
                         $revACT[$c][$m] = 0.0;
+                        $revFW[$c][$m] = 0.0;
                     }                    
                     
-                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
-                                        FROM fw_digital
-                                        WHERE (client_id = \"".$clients[$c]["clientID"]."\")
-                                        AND (month = \"".$month[$m][1]."\")
-                                        AND (year = \"".$year."\")
-                                        ";
-
-                    $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
-                    $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;   
-
                     $rev[$c][$m] = $revACT[$c][$m];
 
                     if( !is_null($revFW[$c][$m]) ){
