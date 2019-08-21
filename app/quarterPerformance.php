@@ -125,8 +125,6 @@ class quarterPerformance extends performance {
 		$newPlanValues = array(0, 1, 2);
 		$newValues = array(0, 1, 2);
 
-		var_dump($div);
-
 		for ($b=0; $b <sizeof($values) ; $b++) { 
 			for ($m=0; $m <sizeof($values[$b]) ; $m++) { 
 				for ($s=0; $s <sizeof($values[$b][$m]) ; $s++) { 

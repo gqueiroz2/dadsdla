@@ -246,7 +246,7 @@ class subRankings extends rank{
         $values = array();
 
         for ($y=0; $y < sizeof($sub); $y++) { 
-            if( is_array($sub[$y]) ){
+            if (is_array($sub[$y])) {
                 for ($n=0; $n < sizeof($sub[$y]); $n++) { 
                     if (!in_array($sub[$y][$n][$type2], $values)) {
                         array_push($values, $sub[$y][$n][$type2]);
