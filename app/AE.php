@@ -122,12 +122,14 @@ class AE extends pAndR{
 
         $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);
        	
-        $executiveRF = $this->consolidateAE($rollingFCST);
+        $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+
+        $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
 
         if ($value == 'gross') {
             $valueView = 'Gross';
@@ -136,6 +138,8 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+
+
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -165,6 +169,9 @@ class AE extends pAndR{
 
                         "currencyName" => $currencyName,
                         "valueView" => $valueView,
+                        "currency" => $currencyName,
+                        "value" => $valueView,
+                        "fcstAmountByStage" => $fcstAmountByStage,
                     );
 
         return $rtr;
@@ -189,6 +196,27 @@ class AE extends pAndR{
 
         return $sum;
     }
+
+
+    public function adjustFcstAmountByStage($fcstAmountByStage){
+
+        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) {
+            if ($fcstAmountByStage[$c]) {
+                $fcstAmountByStage[$c][0][6] = 'Total';
+                $fcstAmountByStage[$c][1][6] = $fcstAmountByStage[$c][1][0] + $fcstAmountByStage[$c][1][1] + $fcstAmountByStage[$c][1][2] + $fcstAmountByStage[$c][1][3] + $fcstAmountByStage[$c][1][4];
+
+                $fcstAmountByStage[$c][0][7] = 'Var(%)';
+                if ($fcstAmountByStage[$c][1][6] != 0) {
+                    $fcstAmountByStage[$c][1][7] = ($fcstAmountByStage[$c][1][4]/$fcstAmountByStage[$c][1][6])*100;
+                }else{
+                    $fcstAmountByStage[$c][1][7] = 0;
+                }
+            }
+        }
+
+        return $fcstAmountByStage;
+    }
+
 
     public function divArrays($array1,$array2){
         $exit = array();
@@ -229,6 +257,37 @@ class AE extends pAndR{
 
         return $return;
 
+    }
+
+    public function consolidateAEFcst($matrix,$splitted){
+        $return = array();
+
+        for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
+            $return[$m] = 0;
+        }
+        if ($splitted) {
+            for ($c=0; $c <sizeof($matrix); $c++) {
+                
+                if ($splitted[$c]['splitted']) {
+                    $div = 2;
+                }else{
+                    $div = 1;
+                }
+
+                for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+                    $return[$m] += $matrix[$c][$m]/$div;
+                }
+            }
+        }else{
+            for ($c=0; $c <sizeof($matrix); $c++) { 
+                for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+                    $return[$m] += $matrix[$c][$m];
+                }
+            }
+        }
+            
+
+        return $return;
     }
 
     public function monthAnalise($base){

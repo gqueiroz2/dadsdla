@@ -19,8 +19,6 @@ class insertController extends Controller{
 		$rtr = $in->baseBrand();
 		if($rtr){
 			return back()->with('insertSuccess',"There insetions was successfully made :( ");	
-		}else{
-			return back()->with('insertError',"There was and error on the insertions on the table :( ");	
 		}
 	}
 

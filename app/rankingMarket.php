@@ -29,7 +29,7 @@ class rankingMarket extends rank {
         return $res;
     }
 
-    public function searchPos($name, $values, $type){
+    public function searchPos($name, $values, $type, $s){
     	
 		for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
 			if ($name == $values[0][$s2][$type]) {
@@ -37,31 +37,37 @@ class rankingMarket extends rank {
 			}
 		}
     	
-    	return "-";
+    	return ($s+1);
     }
 
     public function searchValueByYear($name, $values, $type, $year){
     	
-		for ($s2=0; $s2 < sizeof($values[$year]); $s2++) { 
-			if ($name == $values[$year][$s2][$type]) {
-				return $values[$year][$s2]['total'];
-			}
-		}
+        if ($values[$year] == false) {
+            return 0;
+        }else{
+            for ($s2=0; $s2 < sizeof($values[$year]); $s2++) { 
+                if ($name == $values[$year][$s2][$type]) {
+                    return $values[$year][$s2]['total'];
+                }
+            }
+        }
 
     	return 0;
     }
 
     public function searchGroupValue($name, $values){
     	
-		for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
-			if ($name == $values[0][$s2]['agency']) {
-				if ($values[0][$s2]['agencyGroup'] == "Others") {
-					return "-";
-				}else{
-					return $values[0][$s2]['agencyGroup'];
-				}
-			}
-		}
+        for ($s=0; $s < sizeof($values); $s++) { 
+            for ($s2=0; $s2 < sizeof($values[$s]); $s2++) { 
+                if ($name == $values[$s][$s2]['agency']) {
+                    if ($values[$s][$s2]['agencyGroup'] == "Others") {
+                        return "-";
+                    }else{
+                        return $values[$s][$s2]['agencyGroup'];
+                    }
+                }
+            }
+        }
     	
     }
 
@@ -79,10 +85,10 @@ class rankingMarket extends rank {
 
     }
 
-    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $values2=null){
+    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
     	
     	if ($mtx[$m][0] == "Ranking") {
-    		$res = $this->searchPos($name, $values, $type);
+    		$res = $this->searchPos($name, $values, $type, $s);
     	}elseif ($mtx[$m][0] == "Agency group") {
     		$res = $this->searchGroupValue($name, $values);
     	}elseif ($mtx[$m][0] == $years[0]) {
@@ -104,7 +110,7 @@ class rankingMarket extends rank {
     			$pos = 3;
     		}
 
-    		if ($mtx[$m-$pos][$p] - $mtx[$m-$pos-1][$p] > 0) {
+    		if ($mtx[$m-$pos][$p] < $mtx[$m-$pos-1][$p]) {
     			$res = "Increased";
     		}else{
     			$res = "Decreased";
@@ -134,7 +140,7 @@ class rankingMarket extends rank {
     	}elseif ($mtx[$m][0] == "Var Abs. YTD") {
     		$res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
     	}elseif ($mtx[$m][0] == "Move YTD") {
-    		if ($mtx[$m-3][$p] - $mtx[$m-4][$p] > 0) {
+    		if ($mtx[$m-4][$p] > $mtx[$m-3][$p]) {
     			$res = "Increased";
     		}else{
     			$res = "Decreased";
@@ -234,24 +240,24 @@ class rankingMarket extends rank {
 			$mtx[$pos][0] = "Move YTD";$pos++;	
     	}
 
-		/*$types = array();
+		$types = array();
 
-        for ($r=0; $r < sizeof($values); $r++) { 
+        for ($r=0; $r < sizeof($values); $r++) {
             if (is_array($values[$r])) {
                 for ($r2=0; $r2 < sizeof($values[$r]); $r2++) { 
                     if (!in_array($values[$r][$r2][$type], $types)) {
                         array_push($types, $values[$r][$r2][$type]);  
                     }
-                }   
+                }
             }
-        }*/
+        }
 
-        for ($t=0; $t < sizeof($values[0]); $t++) { 
+        for ($t=0; $t < sizeof($types); $t++) { 
         	for ($m=0; $m < sizeof($mtx); $m++) { 
         		if ($type == "sector") {
-        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $values[0][$t][$type], $values, $years, sizeof($mtx[$m]), $type, $values2));
+        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $types[$t], $values, $years, sizeof($mtx[$m]), $type, $t, $values2));
         		}else{
-        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $values[0][$t][$type], $values, $years, sizeof($mtx[$m]), $type));
+        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $types[$t], $values, $years, sizeof($mtx[$m]), $type, $t));
         		}
         	}
         }
@@ -261,48 +267,4 @@ class rankingMarket extends rank {
     	return array($mtx, $total);
     }
 
-    public function createNames($type, $months, $region, $brands){
-        
-        $res['name'] = ucfirst($type);
-
-        if ($region == "Brazil") {
-            $res['source'] = "CMAPS";
-        }else{
-            $res['source'] = "IBMS";
-        }
-
-        $res['brands'] = "";
-
-        for ($b=0; $b < sizeof($brands); $b++) { 
-            $res['brands'] .= $brands[$b][1];
-
-            if ($b != (sizeof($brands)-1)) {
-                $res['brands'] .= " - ";                
-            }
-        }
-
-        $b = new base();
-
-        if (sizeof($months) == 12) {
-            $res['months'] = "All Year";            
-        }else{
-            $month = $b->intToMonth2($months);
-
-            $res['months'] = "";
-
-            for ($m=0; $m < sizeof($month); $m++) { 
-                
-                $res['months'] .= $month[$m];
-
-                if ($m == sizeof($month)-2) {
-                    $res['months'] .= " and ";
-                }elseif (($m != sizeof($month)-2) && ($m != sizeof($month)-1)) {
-                    $res['months'] .= ", ";
-                }
-                
-            }
-        }
-
-        return $res;
-    }
 }

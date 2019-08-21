@@ -215,7 +215,7 @@ class rank extends Model{
             $db = new dataBase();   
             $con = $db->openConnection("DLA");
 
-            $client = $c->getClientID($con, $sql, $filter);
+            $client = $c->getClientIDByRegion($con, $sql, $filter, array($region));
 
             if ($tableName == "ytd") {
                 $value .= "_revenue_prate";
@@ -452,5 +452,50 @@ class rank extends Model{
         }
 
         return $name;
+    }
+
+    public function createNames($type, $months, $region, $brands){
+        
+        $res['name'] = ucfirst($type);
+
+        if ($region == "Brazil") {
+            $res['source'] = "CMAPS";
+        }else{
+            $res['source'] = "IBMS";
+        }
+
+        $res['brands'] = "";
+
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            $res['brands'] .= $brands[$b][1];
+
+            if ($b != (sizeof($brands)-1)) {
+                $res['brands'] .= " - ";                
+            }
+        }
+
+        $b = new base();
+
+        if (sizeof($months) == 12) {
+            $res['months'] = "All Year";            
+        }else{
+            $month = $b->intToMonth2($months);
+
+            $res['months'] = "";
+
+            for ($m=0; $m < sizeof($month); $m++) { 
+                
+                $res['months'] .= $month[$m];
+
+                if ($m == sizeof($month)-2) {
+                    $res['months'] .= " and ";
+                }elseif (($m != sizeof($month)-2) && ($m != sizeof($month)-1)) {
+                    $res['months'] .= ", ";
+                }
+                
+            }
+        }
+
+        return $res;
     }
 }

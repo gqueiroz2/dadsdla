@@ -3,6 +3,14 @@
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
+    <style>
+    	.temporario{
+    		display:block;
+    		float: left;
+    		clear: left;
+    		width: 100%;
+    	}
+    </style>
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -45,7 +53,7 @@
 	<br>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col" style="width: 100%;">
+			<div class="col" style="width: 100%; padding-right: 2%;">
 				<center>
 					{{$render->VP1()}}
 				</center>
@@ -55,8 +63,8 @@
 
 	<script>
 		$(document).ready(function(){
-			@for($c=0;$c<10;$c++)
-				$("#clientRF-Full-"+{{$c}}).change(function(){
+			@for($c=0;$c<100;$c++)
+				$("#clientRF-Fy-"+{{$c}}).change(function(){
 					if ($(this).val() == "") {
 						$(this).val(0);
 					}
@@ -64,6 +72,16 @@
 					var temp = handleNumber($(this).val());
 
 					$(this).val(Comma(temp));
+
+					var temp2 = parseFloat(0);
+
+					@for($c2=0;$c2<100;$c2++)
+						temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
+					@endfor
+
+					temp2 = Comma(temp2);
+
+					$("#RF-Total-Fy").val(temp2);
 
 				});
 				$("#clientRF-Cm-"+{{$c}}).change(function(){
@@ -74,6 +92,16 @@
 					var temp = handleNumber($(this).val());
 
 					$(this).val(Comma(temp));
+
+					var temp2 = parseFloat(0);
+					
+					@for($c2=0;$c2<100;$c2++)
+						temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
+					@endfor
+
+					temp2 = Comma(temp2);
+
+					$("#RF-Total-Cm").val(temp2);
 				});
 			@endfor
 		});
@@ -101,6 +129,16 @@
 	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	        return x1 + x2;
 	    }
+
+	    $('.linked').scroll(function(){
+
+    		$('.linked').scrollLeft($(this).scrollLeft());
+		});
+
+		$('.linked2').scroll(function(){
+
+    		$('.linked2').scrollTop($(this).scrollTop());
+		});
 
 	</script>
 

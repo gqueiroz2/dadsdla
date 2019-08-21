@@ -34,6 +34,10 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('AEGet');
 		Route::post('/','AEController@post')
 									->name('AEPost');
+		Route::post('save','AEController@save')
+									->name('AESave');
+
+
 	});
 
 	Route::group(['prefix'=>'ajax'],function(){

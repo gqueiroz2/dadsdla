@@ -110,7 +110,6 @@ class AEController extends Controller{
         $r = new region();
         $pr = new pRate();
         $ae = new AE();        
-
         $con = $db->openConnection("DLA");        
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
@@ -119,12 +118,9 @@ class AEController extends Controller{
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
         $forRender = $tmp;
         $client = $tmp['client'];
-        
         $tfArray = array();
         $odd = array();
         $even = array();
-
-          
 
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even"));
     }

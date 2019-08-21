@@ -8,6 +8,7 @@ use App\PAndRRender;
 use App\salesRep;
 use App\pRate;
 use App\dataBase;
+use App\VP;
 
 class VPController extends Controller
 {
@@ -34,9 +35,12 @@ class VPController extends Controller
         $sr = new salesRep();
         $render = new PAndRRender();
         $pr = new pRate();
+        $vp = new vp();
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
+
+        $forRender = $vp->base($con);
 
         return view('pAndR.VPView.post',compact('render','region','currency'));
     }

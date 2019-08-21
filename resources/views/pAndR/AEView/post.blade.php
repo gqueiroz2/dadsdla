@@ -233,7 +233,7 @@
 
 						tmp2 = tmp2.toFixed(2);
 
-						if (Temp3 != handleNumber($("#passTotal-"+{{$c}}).val()) || ((tmp2 != '100.00') && (tmp2 != '0.00') ) ) {
+						if (Temp3.toFixed(2) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(2) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
@@ -566,11 +566,11 @@
 			}
 			
 			number = parseFloat(number);
-			
 			return number;
 		}
 
 	  	function Comma(Num) { //function to add commas to textboxes
+	  		Num = Num.toFixed(2);
 	        Num += '';
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
