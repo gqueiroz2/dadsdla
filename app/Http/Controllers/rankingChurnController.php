@@ -88,7 +88,9 @@ class rankingChurnController extends Controller {
 	  	$rc = new rankingChurn();
 
 	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-
+	  	$finalValues = $rc->fixArray($values, $type);
+	  	
+	  	
 	  	$cMonth = intval(date('m'));
 		$months2 = array();
 		for ($m=1; $m <= $cMonth; $m++) { 
@@ -96,17 +98,18 @@ class rankingChurnController extends Controller {
 		}
 
 		$valuesYTD = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);
+		$finalValuesYTD = $rc->fixArray($valuesYTD, $type);
 
-		$matrix = $rc->assembler($values, $valuesYTD, $years, $type);
+		$matrix = $rc->assembler($finalValues, $finalValuesYTD, $years, $type);
 
-		/*$mtx = $matrix[0];
+		$mtx = $matrix[0];
 		$total = $matrix[1];
 
 		$rName = $rc->TruncateRegion($rtr);
 
 		$render = new renderChurnRanking();
-  		$names = $rc->createNames($type, $months, $rtr, $brands);*/
+  		$names = $rc->createNames($type, $months, $rtr, $brands);
 
-  		//return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names'));
+  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names'));
 	}
 }

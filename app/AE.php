@@ -9,8 +9,34 @@ use App\brand;
 use App\salesRep;
 use App\base;
 use App\sql;
+use App\pRate;
 class AE extends pAndR{
     
+    public function generateID($con,$sql,$pr,$kind,$region,$year,$salesRep,$currency,$value,$week,$month){
+
+        if($kind == "save"){
+            $string = "SAV";
+        }else{
+            $string = "TRS";
+        }
+        /*
+        var_dump($kind);
+        var_dump($region);
+        var_dump($year);
+        var_dump($salesRep);
+        var_dump($currency);
+        var_dump($value);
+        */
+        $string .= "-".preg_replace('/\s+/', '', $salesRep->region).    
+                   "-".$year.
+                   "-".preg_replace('/\s+/', '', $salesRep->salesRep).
+                   "-".$currency.
+                   "-".$month                   
+                ;
+
+        return $string;
+    }
+
     public function base($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
@@ -144,7 +170,12 @@ class AE extends pAndR{
                         "RFvsTarget" => $RFvsTarget,
                         "targetAchievement" => $targetAchievement,
                     
+                        "currency" => $currency, 
+                        "value" => $value,
+                        "region" => $regionID,
 
+                        "currencyName" => $currencyName,
+                        "valueView" => $valueView,
                         "currency" => $currencyName,
                         "value" => $valueView,
                         "fcstAmountByStage" => $fcstAmountByStage,
@@ -594,8 +625,9 @@ class AE extends pAndR{
             
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
-                    
+
                 $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
+                
             }   
 
         }

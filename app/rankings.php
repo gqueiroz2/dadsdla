@@ -200,7 +200,7 @@ class rankings extends rank{
         return array($mtx, $total);
     }
 
-    public function createNames($type, $months, $years){
+    public function createNames2($type, $months, $years){
         
         if ($type == "agencyGroup") {
             $res['name'] = "Agency group";

@@ -45,14 +45,14 @@ class shareRender extends Render{
 	    		echo "<tr>";
     				echo "<td class='".$string."' >".$mtx["salesRep"][$s]."</td>";
 	    			for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
-	    				echo "<td class='".$string."' >".(number_format($mtx["values"][$b][$s], 0, ",", "."))."</td>";
+	    				echo "<td class='".$string."' >".(number_format($mtx["values"][$b][$s], 0, ".", ","))."</td>";
 	    			}
 	    			if ($mtx["dn"]) {
-		    			echo "<td class='smBlue'>".(number_format($mtx["dn"][$s], 0, ",", "."))."</td>";
+		    			echo "<td class='smBlue'>".(number_format($mtx["dn"][$s], 0, ".", ","))."</td>";
 	    			}
 		    		echo "<td style='background-color:transparent;'> &nbsp </td>";
 
-		    		echo "<td class='".$string."' >".(number_format($mtx["share"][$s], 0, ",", "."))."%</td>";
+		    		echo "<td class='".$string."' >".(number_format($mtx["share"][$s], 0, ".", ","))."%</td>";
 	    		echo "</tr>";
 	    	}
 	    	//Começa o total
@@ -60,10 +60,10 @@ class shareRender extends Render{
 		    	echo "<td class='darkBlue' >Total</td>";
 		    	
 	    		for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
-	    			echo "<td class='darkBlue' >".(number_format($mtx["total"][$b], 0, ",", "."))."</td>";
+	    			echo "<td class='darkBlue' >".(number_format($mtx["total"][$b], 0, ".", ","))."</td>";
 	    		}
 	    		if ($mtx["dn"]) {
-	    			echo "<td class='darkBlue' >".(number_format($mtx["totalT"], 0, ",", "."))."</td>";	
+	    			echo "<td class='darkBlue' >".(number_format($mtx["totalT"], 0, ".", ","))."</td>";	
 	    		}
 		    	echo "<td style='background-color:transparent;'> &nbsp </td>";
 		    	echo "<td class='darkBlue'> 100% </td>";
@@ -93,24 +93,24 @@ class shareRender extends Render{
 		    		echo "<tr>";
 	    				echo "<td class='".$string."'>".$mtx["salesRep"][$s]."</td>";
 		    			for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
-		    				echo "<td class='".$string."'>".(number_format($mtx["values"][$b][$s], 0, ",", "."))."</td>";
+		    				echo "<td class='".$string."'>".(number_format($mtx["values"][$b][$s], 0, ".", ","))."</td>";
 		    			}
 		    			if ($mtx["dn"]) {
-			    			echo "<td class='smBlue'>".(number_format($mtx["dn"][$s], 0, ",", "."))."</td>";
+			    			echo "<td class='smBlue'>".(number_format($mtx["dn"][$s], 0, ".", ","))."</td>";
 		    			}
 		    			echo "<td> &nbsp; </td>";
-			    		echo "<td class='".$string."'>".(number_format($mtx["share"][$s], 0, ",", "."))."%</td>";
+			    		echo "<td class='".$string."'>".(number_format($mtx["share"][$s], 0, ".", ","))."%</td>";
 		    		echo "</tr>";
 		    	}
 		    	//Começa o total
 		    	echo "<tr>";
 			    	echo "<td class='darkBlue'>Total</td>";
 		    		for ($b=0; $b <sizeof($mtx["brand"]); $b++) { 
-		    			echo "<td class='darkBlue'>".(number_format($mtx["total"][$b], 0, ",", "."))."</td>";
+		    			echo "<td class='darkBlue'>".(number_format($mtx["total"][$b], 0, ".", ","))."</td>";
 		    		}
 
 		    		if ($mtx["dn"]) {
-			    		echo "<td class='darkBlue'>".number_format($mtx["totalT"], 0, ",", ".")."</td>";
+			    		echo "<td class='darkBlue'>".number_format($mtx["totalT"], 0, ".", ",")."</td>";
 			    	}
 			    	echo "<td> &nbsp; </td>";
 			    	echo "<td class='darkBlue'>100%</td>";
@@ -142,7 +142,7 @@ class shareRender extends Render{
 		    		$string = "rcBlue";
 		    	}
 	    		echo "<tr class='".$string."'>";
-		    		echo "<td>".(number_format($mtx["share"][$s], 0, ",", "."))."%</td>";
+		    		echo "<td>".(number_format($mtx["share"][$s], 0, ".", ","))."%</td>";
 	    		echo "</tr>";
 	    	}
 
