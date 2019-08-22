@@ -126,7 +126,6 @@ class rankings extends rank{
     }
 
     public function assembler($values, $type2, $years, $type, $filterValues){
-        //var_dump($values);
 
         if (strlen($type) > 6) {
             $var = "agency groups";

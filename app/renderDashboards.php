@@ -109,11 +109,11 @@ class renderDashboards extends Render{
 
 
 
-        echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
+        /*echo "<div class='row justify-content-center mt-2' style='margin-right: 0.1%; margin-left: 0.1%; min-height:250px;'>";
             echo "<div class='col' align='center'>";
                 echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
             echo "</div>";
-        echo "</div>";
+        echo "</div>";*/
       
         //echo "</div>";
 
@@ -124,7 +124,9 @@ class renderDashboards extends Render{
 
         echo "<div class='row justify-content-center mt-2 mb-4' style='margin-right: 0.3%; margin-left: 0.3%;'>";
             echo "<div class='col' align='center'>";
-                echo "<span style='width:100%;'> ".$this->renderLast3ByProduct($con,$last3YearsByProduct,$years,$type)." </span>";
+                echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
+                //echo "<span>&nbsp;</span>";
+                //echo "<span style='width:100%;'> ".$this->renderLast3ByProduct($con,$last3YearsByProduct,$years,$type)." </span>";
             echo "</div>";
             /*
             echo "<div class='col' align='center' style='border:2px solid black; background-color:pink; color:black;'>";

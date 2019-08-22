@@ -8,7 +8,6 @@ $(document).ready(function(){
   //$('#region').empty().selectpicker('refresh');
   //$('#region').html("<option selected='true'> Select </option>").selectpicker('refresh');
 
-
   $('#region').change(function(){
 		var regionID = $(this).val();
 

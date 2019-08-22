@@ -459,6 +459,7 @@ class base extends Model{
 
     }
 
+
     public function generateDivCMAPS($con,$pr,$region,$year,$currencyID){
         
         $region = array($region);

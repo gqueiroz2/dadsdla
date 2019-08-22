@@ -24,6 +24,8 @@ Route::group(['middleware' => 'auth'],function(){
 
 			Route::post("Overview-BaseFilterTitle","ajaxController@baseFilterTitle");
 			Route::post("Overview-SecondaryFilterTitle","ajaxController@secondaryFilterTitle");
+
+			Route::post("Overview-Product", "ajaxController@Product");
 		});
 
 		Route::group(['prefix'=>'relationship'],function(){

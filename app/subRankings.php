@@ -64,6 +64,11 @@ class subRankings extends rank{
 
         if($type == "client"){
             $leftName = "agency";
+            array_push($columns, $type."_id");
+
+            $c = new client();
+            $val = $c->getClientIDByRegion($con,$sql,$filterValue,array($region));
+            array_push($colsValue, $val);
         }
 
         $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
@@ -74,7 +79,7 @@ class subRankings extends rank{
         $names = array($leftName."ID", $leftName, $as);
 
         $where = $sql->where($columns, $colsValue);
-
+        
         $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
         $from = $names;
@@ -89,6 +94,8 @@ class subRankings extends rank{
         
         if ($type == "agencyGroup") {
             $name = "agency";
+        }elseif ($type == "client") {
+            $name = "agency";
         }else{
             $name = "client";
         }
@@ -97,8 +104,6 @@ class subRankings extends rank{
 
         if ($currency[0]['name'] == "USD") {
             $pRate = 1.0;
-
-
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }
@@ -205,6 +210,8 @@ class subRankings extends rank{
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;
             }
+        }elseif ($mtx[$m][0] == "Agency group") {
+            $res = $mtx[$m][$p]['agencyGroup'];
         }else{
             $res = addslashes($name);
         }
@@ -226,18 +233,24 @@ class subRankings extends rank{
             $mtx[$y][0] = "Pos. ".$years[$y];
         }
 
-
         $last = $y;
-        
+        $v = 0;
+
+        if ($type == "client") {
+            $mtx[$last][0] = "Agency Group";
+            $last++;
+            $v = 1;
+        }
+
         $mtx[$last][0] = $var;
 
         for ($l=0; $l < sizeof($years); $l++) { 
             
-            $mtx[(sizeof($years)+$l+1)][0] = "Rev. ".$years[$l];
+            $mtx[(sizeof($years)+$l+1+$v)][0] = "Rev. ".$years[$l];
         }
-
+        
         if (sizeof($years) >= 2) {
-            $last = $l+sizeof($years)+1;
+            $last = $l+sizeof($years)+1+$v;
 
             $mtx[$last][0] = "VAR ABS.";
             $mtx[$last+1][0] = "VAR %";    

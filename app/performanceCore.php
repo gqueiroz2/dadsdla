@@ -83,7 +83,7 @@ class performanceCore extends performance
         for ($b=0; $b <sizeof($brand); $b++) {
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
-                    $table[$b][$m] = "digital";
+                    $table[$b][$m] = "discovery";
                 }elseif($brand[$b][1] == "FN" && $m<5){
                     $table[$b][$m] = false;
                 }else{
