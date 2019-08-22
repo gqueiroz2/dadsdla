@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()" onkeydown="return event.key != 'Enter';">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
