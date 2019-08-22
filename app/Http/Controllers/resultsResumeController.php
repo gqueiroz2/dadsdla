@@ -73,7 +73,7 @@ class resultsResumeController extends Controller{
 		if($salesRegion == 'Brazil'){
 			$salesShow = 'CMAPS';
 		}else{
-			$salesShow = 'Header';
+			$salesShow = 'IBMS';
 		}
 
 		$tmp = Request::get("brand");

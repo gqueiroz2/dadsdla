@@ -108,7 +108,7 @@ class AE extends pAndR{
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
         
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
-        $executiveRevenuePYear = $this->consolidateAE($clientRevenuePYear);
+        $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
         $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
 
@@ -145,6 +145,7 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+
 
 
 

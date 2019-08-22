@@ -49,8 +49,10 @@ class results extends base{
                 $div = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
             }
 
-        }elseif($table = 'ytd'){
+        }elseif($table == 'ytd'){
             $sum = $value."_revenue_prate";
+        }elseif($table == 'fw_digital'){
+            $sum = $value."_revenue";
         }else{
             $sum = $value."_value_prate";
         }
@@ -62,7 +64,7 @@ class results extends base{
         for ($m=0; $m < sizeof($month); $m++) { 
             for ($b=0; $b < sizeof($brand); $b++) { 
                 
-                if($table == "plan_by_brand"){
+                if($table == "fw_digital"){
                     //var_dump($where[$m][$b]);
                 }
 
@@ -202,9 +204,9 @@ class results extends base{
 
             case 'digital':
 
-                $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
-                $columnsValue = array($region, "ACTUAL", $value, $brand, $year, $month, 4);
-                $value = "revenue";
+                $columns = array("region_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);
+                $value .= "_revenue";
                 break;
 /*
     
@@ -237,7 +239,7 @@ class results extends base{
             $where = $sql->where($columns, $columnsValue);
 
             if($table == "digital"){
-                $table = "plan_by_brand";
+                $table = "fw_digital";
             }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
