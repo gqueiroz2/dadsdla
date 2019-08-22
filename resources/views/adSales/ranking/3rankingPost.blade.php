@@ -126,44 +126,42 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			@if ($type != "client")
+			
+			var months = <?php echo json_encode($months); ?>;
+            var brands = <?php echo json_encode($brands); ?>;
+            var years  = <?php echo json_encode($years); ?>;
+            var type = "{{$type}}";
+            var value = "{{$value}}";
+            var currency = <?php echo json_encode($pRate); ?>;
+            var region = "{{$region}}";
 
-				var months = <?php echo json_encode($months); ?>;
-                var brands = <?php echo json_encode($brands); ?>;
-                var years  = <?php echo json_encode($years); ?>;
-                var type = "{{$type}}";
-                var value = "{{$value}}";
-                var currency = <?php echo json_encode($pRate); ?>;
-                var region = "{{$region}}";
+			ajaxSetup();
 
-				ajaxSetup();
+			@for($n = 1; $n <= $size; $n++)
+				$(document).on('click', "#"+type+{{$n}}, function(){
 
-				@for($n = 1; $n <= $size; $n++)
-					$(document).on('click', "#"+type+{{$n}}, function(){
+                    var name = $(this).text();
 
-                        var name = $(this).text();
+                    if ($("#sub"+type+{{$n}}).css("display") == "none") {
 
-                        if ($("#sub"+type+{{$n}}).css("display") == "none") {
-
-                            $.ajax({
-                                url: "/ajaxRanking/subRanking",
-                                method: "POST",
-                                data: {name, months, brands, years, type, value, currency, region},
-                                success: function(output){
-                                    $("#sub"+type+{{$n}}).html(output);
-                                    $("#sub"+type+{{$n}}).css("display", "");
-                                },
-                                error: function(xhr, ajaxOptions,thrownError){
-                                    alert(xhr.status+" "+thrownError);
-                                }
-                            });
-                        }else{
-                        	$("#sub"+type+{{$n}}).html(" ");
-                            $("#sub"+type+{{$n}}).css("display", "none");
-                        }
-                    });
-                @endfor
-			@endif
+                        $.ajax({
+                            url: "/ajaxRanking/subRanking",
+                            method: "POST",
+                            data: {name, months, brands, years, type, value, currency, region},
+                            success: function(output){
+                                $("#sub"+type+{{$n}}).html(output);
+                                $("#sub"+type+{{$n}}).css("display", "");
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }else{
+                    	$("#sub"+type+{{$n}}).html(" ");
+                        $("#sub"+type+{{$n}}).css("display", "none");
+                    }
+                });
+            @endfor
 		});
 	</script>
 

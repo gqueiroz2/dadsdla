@@ -364,6 +364,8 @@ class rank extends Model{
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
                             }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Agency Group") {
                                 echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
+                            }elseif ($type == "client" && $mtx[$i][0] == "Client") {
+                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
                             }else{
                                 if ($mtx[$i][$m] == "Others") {
                                     echo "<td class='$color center'> - </td>";      
@@ -392,11 +394,9 @@ class rank extends Model{
 
             echo "</tr>";
             
-            if ($type != "client") {
-                echo "<tr class='$color'>";
-                    echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
-                echo "</tr>";
-            }
+            echo "<tr class='$color'>";
+                echo "<td id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>"; 
+            echo "</tr>";
         }
 
         echo "<tr>";
