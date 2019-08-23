@@ -41,7 +41,6 @@ class resultsMonthlyYoY extends results{
         
         $size = sizeof($brands);
 
-
         $source = strtolower($source);
         $source = ucfirst($source);
 
@@ -87,9 +86,9 @@ class resultsMonthlyYoY extends results{
     */
     public function assemblerQuarter($matrix, $min, $max, $brands, $year, $source){
 
-        $quarter[0][0] = "Actual ".($year-1);
+        $quarter[0][0] = "Bookings ".($year-1);
         $quarter[1][0] = "$source $year";
-        $quarter[2][0] = "Actual $year";
+        $quarter[2][0] = "Bookings $year";
 
         //zera os valores do quarter para calculo
         for ($i=1; $i <= $brands; $i++) { 
@@ -119,9 +118,9 @@ class resultsMonthlyYoY extends results{
     */
     public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year, $source){
 
-        $matrix[0][0] = "Actual ".($year-1);
+        $matrix[0][0] = "Bookings ".($year-1);
         $matrix[1][0] = "$source $year";
-        $matrix[2][0] = "Actual $year";
+        $matrix[2][0] = "Bookings $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) { 
 
@@ -138,9 +137,9 @@ class resultsMonthlyYoY extends results{
 
     public function assemblerDN($matrix, $pos, $months, $year, $source){
         
-        $currentMatrix[0][0] = "Actual ".($year-1);
+        $currentMatrix[0][0] = "Bookings ".($year-1);
         $currentMatrix[1][0] = "$source $year";
-        $currentMatrix[2][0] = "Actual $year";
+        $currentMatrix[2][0] = "Bookings $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) {
 

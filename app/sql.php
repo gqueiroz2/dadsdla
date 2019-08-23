@@ -61,12 +61,16 @@ class sql extends Model{
 
         $sql .= "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
 
+
         /*for ($i=0; $i < strlen($sql); $i++) { 
             echo $sql[$i];
         }
+        echo "<br>";
+        echo "<br>";
         echo "<br>";*/
 
         $res = $con->query($sql);
+
         return $res;
     }
 

@@ -295,29 +295,34 @@ class agency extends Management{
         return $agency;
     }
 
-    public function getAgencyGroupByRegion($con,$agencyRegion=false){
+    public function getAgencyGroupByRegion($con,$agencyRegion=false, $year=false){
 
-        $sql = new sql();    
+        $sql = new sql();
 
-        $table = "agency_group ag";
+        $table = "ytd y";
 
-        $columns = "ag.name AS 'agencyGroup',
-                    ag.ID AS 'id',
-                    r.name AS 'region'
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup'
                    ";
 
         $where = "";
 
         if($agencyRegion){
             $agencyRegions = implode(",", $agencyRegion);
-            $where .= "WHERE region_id IN ('$agencyRegions')";
+            $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
+
+            if ($year) {
+                $years = implode(",", $year);
+                $where .= " AND year IN ('$years')";
+            }
         }
 
-        $join = "LEFT JOIN region r ON r.ID = ag.region_id";
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id";
         
-        $res = $sql->select($con,$columns,$table,$join,$where);
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
 
-        $from = array('id','agencyGroup','region');
+        $from = array('id','agencyGroup');
 
         $agency = $sql->fetch($res,$from,$from);
 
@@ -359,11 +364,11 @@ class agency extends Management{
 
     }
 
-    public function getAgencyByRegion($con,$agencyRegion=false,$agencyID=false){
+    public function getAgencyByRegion($con,$agencyRegion=false,$year=false){
 
         $sql = new sql();
 
-        $table = "agency a";
+        $table = "ytd y";
 
         $columns = "a.name AS 'agency',
                     a.ID AS 'id',
@@ -376,19 +381,20 @@ class agency extends Management{
 
         if($agencyRegion){
             $agencyRegions = implode(",", $agencyRegion);
-            $where .= "WHERE region_id IN ('$agencyRegions')";
+            $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
+
+            if ($year) {
+                $years = implode(",", $year);
+                $where .= " AND year IN ('$years')";
+            }
         }
 
-        if ($agencyID) {
-            $agencyIDs = implode(",", $agencyID);
-            $where .= " AND a.id IN ('$agencyIDs')";
-        }
-
-        $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
-                 LEFT JOIN region r ON r.ID = ag.region_id
+        $join = "LEFT JOIN agency a ON a.id = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON ag.region_id = r.ID
                  ";
         
-        $res = $sql->select($con,$columns,$table,$join,$where);
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
 
         $from = array('id','agency','agencyGroup','agencyGroupID','region');
 

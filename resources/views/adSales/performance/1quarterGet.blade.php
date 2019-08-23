@@ -99,7 +99,7 @@
 			<div class="col"></div>
 			<div class="col"></div>
 			<div class="col" style="color: #0070c0;font-size: 22px;">
-				Quarter
+				Office
 			</div>
 		</div>
 

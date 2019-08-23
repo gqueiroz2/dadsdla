@@ -35,6 +35,7 @@ class RenderChain extends Render{
     		//echo "<option value=''> Select </option>";
     		//echo "<option value='cmaps'> CMAPS </option>";
 			echo "<option value='ytd'> YTD </option>";
+            echo "<option value='ytdFN'> YTD FN </option>";
             echo "<option value='cmaps'> CMAPS </option>";
             echo "<option value='fw_digital'> FW Digital </option>";
             echo "<option value='sf_pr'> SF P&R </option>";

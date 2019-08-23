@@ -94,9 +94,53 @@
 			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow);
 		?>
 
+		<div class='row justify-content-center mt-2 mb-4' style='margin-right: 0.3%; margin-left: 0.3%;'>
+            <div class='col' align='center'>
+            	<div id="product" width="100%" class="lightBlue">Click here to show the products</div>
+            	<span>&nbsp;</span>
+            	<div id="subProduct" style="display: none"></div>
+        	</div>
+    	</div>
+
 	</div>
 
 	<div id="vlau"></div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#product").click(function(){
+				
+				ajaxSetup();
+
+				var option1 = "<div id='product' width='100%' class='lightBlue'>Click here to show the products</div>";
+				var option2 = "<div id='product' width='100%' class='lightBlue'>Click here to hide the products</div>";
+
+				if ($("#subProduct").css("display") == "none") {
+					var years = <?php echo json_encode($years); ?>;
+					var handle = <?php echo json_encode($handle); ?>;
+					var type = "{{$type}}";
+
+					$.ajax({
+			  			url:"/ajax/dashboards/Overview-Product",
+			  			method:"POST",
+			  			data: {years, handle, type},
+			    		success: function(output){
+			      			$('#subProduct').html(output);
+			      			$('#subProduct').css("display", "");
+			      			$('#product').html(option2);
+			    		},
+			    		error: function(xhr, ajaxOptions,thrownError){
+			      			alert(xhr.status+" "+thrownError);
+			    		}
+			    	});
+				}else{
+                    $("#subProduct").css("display", "none");
+                    $('#product').html(option1);
+				}
+
+			});
+		});
+	</script>
 
 	<script>
 		google.charts.load('current', {
@@ -125,9 +169,6 @@
 				'height': '100%',
 				backgroundColor:'transparent',
 				
-				
-				/*colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
-				]*/
 			};
 			var chart = new google.visualization.LineChart(document.getElementById('overviewMonthChart'));
         	chart.draw(data, options);
@@ -197,11 +238,13 @@
 		            title: 'Company Performance',
 		            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
 		        },
-				
+				chartArea:{
+					'width':'92.5%',
+				},
 				'width': '100%',
 				'height': '100%',
 				backgroundColor:'transparent',
-				legend: { position: 'bottom' },
+				legend: { position: 'none' },
 				bar: { groupWidth: '60%' },
         		hAxis: {
 		            minValue: 0,

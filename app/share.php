@@ -242,7 +242,7 @@ class share extends results
         }elseif($source == "Header"){
             $table = "mini_header";
         }elseif($source == "Digital"){
-            $table = "digital";
+            $table = "fw_digital";
         }
 
         return $table;
@@ -262,7 +262,7 @@ class share extends results
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "Digital"){
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("region_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }else{

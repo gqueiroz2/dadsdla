@@ -246,11 +246,12 @@ class client extends Management{
         return $client;
     }
 
-    public function getClientByRegion($con,$clientRegion = false){
+    public function getClientByRegion($con,$clientRegion=false,$year=false){
      
         $sql = new sql();
 
-        $table = "client c";
+        $table = "ytd y";
+
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
                     cg.ID AS 'clientGroupID',
@@ -262,14 +263,22 @@ class client extends Management{
 
         if($clientRegion){
             $clientRegions = implode(",",$clientRegion);
-            $where .= "WHERE region_id IN ('$clientRegions')";
+            $where .= "WHERE sales_representant_office_id IN ('$clientRegions')";
+
+            if ($year) {
+                $years = implode(",", $year);
+                $where .= " AND year IN ('$years')";
+            }
         }
 
-        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
-                 LEFT JOIN region r ON r.ID = cg.region_id
-        ";
 
-        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $join = "LEFT JOIN client c ON c.ID = y.client_id
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON cg.region_id = r.ID
+                ";
+
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
 
         $from = array('id','client','clientGroupID','clientGroup','region');
 

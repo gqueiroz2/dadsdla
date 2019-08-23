@@ -91,9 +91,9 @@ class rankingMarket extends rank {
     		$res = $this->searchPos($name, $values, $type, $s);
     	}elseif ($mtx[$m][0] == "Agency group") {
     		$res = $this->searchGroupValue($name, $values);
-    	}elseif ($mtx[$m][0] == $years[0]) {
+    	}elseif ($mtx[$m][0] == "Booking ".$years[0]) {
     		$res = $this->searchValueByYear($name, $values, $type, 0);
-    	}elseif ($mtx[$m][0] == $years[1]) {
+    	}elseif ($mtx[$m][0] == "Booking ".$years[1]) {
     		$res = $this->searchValueByYear($name, $values, $type, 1);
     	}elseif ($mtx[$m][0] == "Var (%)") {
     		if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
@@ -221,8 +221,8 @@ class rankingMarket extends rank {
     	}
     	
     	$mtx[$pos][0] = ucfirst($type);$pos++;
-    	$mtx[$pos][0] = $years[0];$pos++;
-    	$mtx[$pos][0] = $years[1];$pos++;
+    	$mtx[$pos][0] = "Booking ".$years[0];$pos++;
+    	$mtx[$pos][0] = "Booking ".$years[1];$pos++;
     	$mtx[$pos][0] = "Var (%)";$pos++;
     	$mtx[$pos][0] = "Var Abs.";$pos++;
 

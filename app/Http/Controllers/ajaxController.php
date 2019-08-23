@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Request;
 use App\Render;
 use App\renderYoY;
+use App\renderDashboards;
 use App\region;
 use App\dataBase;
 use App\salesRep;
@@ -144,20 +145,25 @@ class ajaxController extends Controller{
         $bs = new base();
         $type = Request::get('type');
         $regionID = Request::get('region');
+
+        //$cYear = intval(date('Y'));
+        //$years = array($cYear, $cYear-1, $cYear-2);
+        $years = false;
+
         switch ($type) {
 
             case 'client':
                 $clss  = new client();
-                $base = $clss->getClientByRegion($con,array($regionID));
+                $base = $clss->getClientByRegion($con,array($regionID),$years);
                 $tralala = "clientGroup";
                 break;
             default:
                 $clss = new agency();
                 if($type == "agency"){
-                    $base = $clss->getAgencyByRegion($con,array($regionID));
+                    $base = $clss->getAgencyByRegion($con,array($regionID),$years);
                     $tralala = "agencyGroup";
                 }else{
-                    $base = $clss->getAgencyGroupByRegion($con,array($regionID));
+                    $base = $clss->getAgencyGroupByRegion($con,array($regionID),$years);
                     $tralala = "region";
                 }
                 break;
@@ -182,6 +188,20 @@ class ajaxController extends Controller{
                 echo "</option>";
             }
         }
+    }
+
+    public function Product(){
+        
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $render = new renderDashboards();
+
+        $last3YearsByProduct = Request::get("handle")['last3YearsByProduct'];
+        $years = Request::get("years");
+        $type = Request::get("type");
+
+        echo "<span style='width:100%;'> ".$render->renderLast3ByProduct($con,$last3YearsByProduct,$years,$type)." </span>";
     }
 
     public function clientGroupByClient(){
@@ -556,23 +576,23 @@ class ajaxController extends Controller{
         echo "$resp";
     }
 
-    function typeHandler($con, $name, $group, $region){
+    function typeHandler($con, $name, $group, $region, $year){
 
         if ($name == "agency") {
             $a = new agency();
 
             if ($group == 1) {
-                $resp = $a->getAgencyGroupByRegion($con, array($region));
+                $resp = $a->getAgencyGroupByRegion($con, array($region), $year);
                 $var = "agencyGroup";
             }else{
-                $resp = $a->getAgencyByRegion($con, array($region));
+                $resp = $a->getAgencyByRegion($con, array($region), $year);
                 $var = "agency";
             }
 
         }else{
             $c = new client();
 
-            $resp = $c->getClientByRegion($con, array($region));
+            $resp = $c->getClientByRegion($con, array($region), $year);
             $var = "client";
             
         }
@@ -598,16 +618,23 @@ class ajaxController extends Controller{
         
         $name = Request::get("type");
         $region = Request::get("region");
-        
+        $year = Request::get("year");
+
+        if (is_null($year)) {
+            $year = false;        
+        }else{
+            $year = array($year);
+        }
+
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
         $fun = substr($name, 0, 6);
 
         if (strlen($name) > 6) {
-            $resp = $this->typeHandler($con, $fun, 1, $region);
+            $resp = $this->typeHandler($con, $fun, 1, $region, $year);
         }else{
-            $resp = $this->typeHandler($con, $fun, 0, $region);
+            $resp = $this->typeHandler($con, $fun, 0, $region, $year);
         }
 
 
@@ -656,7 +683,7 @@ class ajaxController extends Controller{
 
         $subValues = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $name);
         $matrix = $sr->assembler($subValues, $years, $type);
-
+        
         $mtx = $matrix[0];
         $total = $matrix[1];
 
@@ -665,9 +692,9 @@ class ajaxController extends Controller{
         }elseif ($type == "agency") {
             $newType = "client";
         }else{
-            $newType = "client";
+            $newType = "agency";
         }
-
+        
         $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
     }
 
@@ -703,7 +730,7 @@ class ajaxController extends Controller{
         $mtx = $matrix[0];
         $total = $matrix[1];
 
-        $sbr->renderSubAssembler($mtx, $total, $type, $name);    
+        $sbr->renderSubAssembler($mtx, $total, $type, $name);
     }
 
     public function marketSubRanking(){
@@ -733,19 +760,21 @@ class ajaxController extends Controller{
         $values = $sbm->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
 
         if ($type != "client") {
-            $cMonth = intval(date('m'));
+
+            $base = new base();
+
             $months2 = array();
-            for ($m=1; $m <= $cMonth; $m++) { 
+            for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
                 array_push($months2, $m);
             }
 
-            $valuesYTD = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+            $valuesTotal = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
     
         }else{
-            $valuesYTD = null;
+            $valuesTotal = null;
         }
         
-        $matrix = $sbm->subMarketAssembler($values, $valuesYTD, $type, $brands, $val);
+        $matrix = $sbm->subMarketAssembler($values, $valuesTotal, $type, $brands, $val);
 
         if (is_string($matrix)) {
             $mtx = $matrix;

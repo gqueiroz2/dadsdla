@@ -146,7 +146,7 @@ class resultsResume extends results{
 		$joinActual = false;
 		$joinCorporate = false;
 
-		$tableSales = "plan_by_brand";//"digital";
+		$tableSales = "fw_digital";//"digital";
 		$tableTarget = "plan_by_brand";
 		$tableActual = $tableTarget;
 		$tableCorporate = $tableActual;
@@ -156,12 +156,9 @@ class resultsResume extends results{
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
 				
-				$whereSales[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
+				$whereSales[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
 	            					   AND ( year =  \" $cYear \")
-	            					   AND ( source  = \"ACTUAL\" )
-	                                   AND ( type_of_revenue = \"".$tr."\" )
-	                                   AND (sales_office_id = \"".$regionID."\")
-	                                   AND (currency_id = 4 )
+	                                   AND (region_id = \"".$regionID."\")
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 
 	                               ";
@@ -179,15 +176,12 @@ class resultsResume extends results{
 	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )
 	                               ";
-
 /*
 				"WHERE (digital.month IN (".$months[$m][1]."))
 												AND (digital.year IN ($cYear))
 												AND (digital.brand_id IN (".$brands[$b][0]."))";
 
 */
-
-
 			}
 		}
 
@@ -231,7 +225,7 @@ class resultsResume extends results{
 			$tableSales = 'ytd';
 		}
 
-		$previousYear = $this->generateVector($con,$tableSales,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereSalesPYear);
+		$previousYear = $this->generateVector($con,$tableActual,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereActual);
 
 		$mtx["salesCYear"] = $salesCYear;
 		$mtx["target"] = $target;

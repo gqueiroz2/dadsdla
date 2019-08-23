@@ -61,9 +61,9 @@ class resultsYoY extends results {
         $valuePastYearSum = 0;
 
         $matrix[0][0] = $brand[1];
-        $matrix[1][0] = "Actual ".($year-1);
+        $matrix[1][0] = "Bookings ".($year-1);
         $matrix[2][0] = "$source $year";
-        $matrix[3][0] = "Actual $year";
+        $matrix[3][0] = "Bookings $year";
         $matrix[4][0] = "Dif. 3° - 2°";
         $matrix[5][0] = "Dif. YoY";
 
@@ -100,9 +100,9 @@ class resultsYoY extends results {
     public function assemblerDN($matrix, $pos, $months, $year, $source){
 
         $currentMatrix[0][0] = "DN";
-        $currentMatrix[1][0] = "Actual ".($year-1);
+        $currentMatrix[1][0] = "Bookings ".($year-1);
         $currentMatrix[2][0] = "$source $year";
-        $currentMatrix[3][0] = "Actual $year";
+        $currentMatrix[3][0] = "Bookings $year";
         $currentMatrix[4][0] = "Dif. 3° - 2°";
         $currentMatrix[5][0] = "Dif. YoY";
 

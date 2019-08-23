@@ -12,7 +12,7 @@ class subBrandRanking extends rankingBrand {
 	public function getSubResults($con, $type, $regionID, $value, $months, $currency, $filter){
 		
 		$cYear = intval(date('Y'));
-		$years = array($cYear, $cYear-1);
+		$years = array($cYear, $cYear-1, $cYear-2);
 
 		$p = new pRate();
 
@@ -197,17 +197,39 @@ class subBrandRanking extends rankingBrand {
     	return 0;
     }
 
-    public function existInYear($name, $sub, $type, $y){
+    public function checkClass($valCyear, $valPyear, $valPPyear){
     
-    	if (is_array($sub[$y])) {
-    		for ($s=0; $s < sizeof($sub[$y]); $s++) { 
-				if ($name == $sub[$y][$s][$type]) {
-					return true;
-				}
-    		}
-    	}
+    	if ($valPPyear > 0) { //ANO RETRASADO > 0
+            if ($valPyear == 0) { // ANO PASSADO = 0
+                if ($valCyear == 0) { //ANO CORRENTE = 0
+                    $res = "Churn";
+                }else{ //ANO CORRENTE > 0
+                    $res = "Recovered";
+                }
+            }else{ //ANO PASSADO > 0
+                if ($valCyear == 0) { //ANO CORRENTE = 0
+                    $res = "Churn";
+                }else{ //ANO CORRENTE > 0
+                    $res = "Renovated";
+                }
+            }
+        }else{ //ANO RETRASADO = 0
+            if ($valPyear > 0) { //ANO PASSADO > 0
+                if ($valCyear > 0) { //ANO CORRENTE > 0
+                    $res = "Renovated";
+                }else{ //ANO CORRENTE = 0
+                    $res = "Churn";
+                }
+            }else{ //ANO PASSADO = 0
+                if ($valCyear > 0) { //ANO CORRENTE > 0
+                    $res = "New";
+                }else{
+                    $res = "Churn";
+                }
+            }
+        }
 
-    	return false;
+        return $res;
 
     }
 
@@ -215,31 +237,22 @@ class subBrandRanking extends rankingBrand {
 
     	if ($type == "agency" && $m == 0) {
     		$res = $this->searchGroupValue($name, $sub);
-    	}elseif ($mtx[$m][0] == $years[0]) {
+    	}elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
     		$res = $this->searchYearValue($name, $sub, $type, 0);
-    	}elseif ($mtx[$m][0] == $years[1]) {
+    	}elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
     		$res = $this->searchYearValue($name, $sub, $type, 1);
-    	}elseif ($mtx[$m][0] == "Var(%)") {
-    		if (($mtx[$m-1][$p] == 0) || ($mtx[$m-2][$p] == 0)) {
+    	}elseif ($mtx[$m][0] == "Bookings ".$years[2]) {
+            $res = $this->searchYearValue($name, $sub, $type, 2);
+        }elseif ($mtx[$m][0] == "Var(%)") {
+    		if (($mtx[$m-2][$p] == 0) || ($mtx[$m-3][$p] == 0)) {
     			$res = 0;
     		}else{
-    			$res = ($mtx[$m-2][$p] / $mtx[$m-1][$p])*100;
+    			$res = ($mtx[$m-3][$p] / $mtx[$m-2][$p])*100;
     		}
-    	}elseif ($mtx[$m][0] == "Type") {
-    		if ($mtx[$m-3][$p] == 0 && $mtx[$m-2][$p] > 0) {
-    			$res = "Churn";
-    		}elseif ($mtx[$m-3][$p] > 0 && $mtx[$m-2][$p] == 0) {
-    			if ($this->existInYear($name, $sub, $type, 1)) {
-    				$res = "Recovered";
-    			}else{
-
-    				$res = "New";
-    			}
-    		}else{
-    			$res = "Renovated";
-    		}
+    	}elseif ($mtx[$m][0] == "Class") {
+    		$res = $this->checkClass($mtx[$m-4][$p], $mtx[$m-3][$p], $mtx[$m-2][$p]);
     	}elseif($mtx[$m][0] == "Move"){
-    		if ($mtx[$m-4][$p]-$mtx[$m-3][$p] > 0) {
+    		if ($mtx[$m-5][$p]-$mtx[$m-4][$p] > 0) {
     			$res = "Increased";
     		} else {
     			$res = "Decreased";
@@ -256,18 +269,22 @@ class subBrandRanking extends rankingBrand {
 
     	$first = 0;
     	$second = 0;
+        $third = 0;
 
     	if ($type == "agency") {
     		$pos1 = 2;
     		$pos2 = 3;
+            $pos3 = 4;
     	}else{
     		$pos1 = 1;
     		$pos2 = 2;
+            $pos3 = 3;
     	}
 
     	for ($m=1; $m < sizeof($mtx[0]); $m++) { 
     		$first += $mtx[$pos1][$m];
     		$second += $mtx[$pos2][$m];
+            $third += $mtx[$pos3][$m];
     	}
 
     	for ($t=0; $t < sizeof($mtx); $t++) { 
@@ -276,14 +293,16 @@ class subBrandRanking extends rankingBrand {
 
     		if ($t == 0) {
     			$val = "Total";
-    		}elseif ($t == $pos1 || $t == $pos2) {
+    		}elseif ($t == $pos1 || $t == $pos2 || $t == $pos3) {
     			if ($t == $pos1) {
     				$val = $first;
-    			}else{
-    				$val = $second;
+    			}elseif ($t == $pos2) {
+                    $val = $second;
+                }else{
+    				$val = $third;
     			}
     		}elseif ($mtx[$t][0] == "Var(%)") {
-    			if ($total[$t-1] != 0 && $total[$t-2] != 0) {
+    			if ($total[$pos1] != 0 && $total[$pos2] != 0) {
     				$val = ($total[$pos1] / $total[$pos2])*100;
     			}else{
     				$val = 0;
@@ -303,7 +322,7 @@ class subBrandRanking extends rankingBrand {
     public function assemble($names, $values, $type){
     	
     	$cYear = intval(date('Y'));
-		$years = array($cYear, $cYear-1);
+		$years = array($cYear, $cYear-1, $cYear-2);
 
 		$pos = 0;
 
@@ -314,12 +333,13 @@ class subBrandRanking extends rankingBrand {
 
 		$mtx[$pos][0] = ucfirst($type);$pos++;
 
-		$mtx[$pos][0] = $years[0];$pos++;
-		$mtx[$pos][0] = $years[1];$pos++;
+		$mtx[$pos][0] = "Bookings ".$years[0];$pos++;
+		$mtx[$pos][0] = "Bookings ".$years[1];$pos++;
+        $mtx[$pos][0] = "Bookings ".$years[2];$pos++;
 		$mtx[$pos][0] = "Var(%)";$pos++;
-		$mtx[$pos][0] = "Type";$pos++;
+		$mtx[$pos][0] = "Class";$pos++;
 		$mtx[$pos][0] = "Move";
-
+        
 		for ($n=0; $n < sizeof($names); $n++) { 
 			for ($m=0; $m < sizeof($mtx); $m++) { 
 				array_push($mtx[$m], $this->checkColumn($mtx, $m, $names[$n], $values, $years, sizeof($mtx[$m]), $type));
@@ -334,9 +354,9 @@ class subBrandRanking extends rankingBrand {
     public function renderSubAssembler($mtx, $total, $type, $brand){
     	
     	if ($type == "agency") {
-			$pos = 4;
+			$pos = 5;
 		}else{
-			$pos = 3;
+			$pos = 4;
 		}
 
     	echo "<div class='container-fluid'>";

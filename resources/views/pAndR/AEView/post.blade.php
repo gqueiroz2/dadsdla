@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()" onkeydown="return event.key != 'Enter';">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
@@ -116,6 +116,10 @@
 	<div id="vlau"></div>
 
 	<script>
+		$('.linked').scroll(function(){
+    		$('.linked').scrollLeft($(this).scrollLeft());
+		});
+
 		$(document).ready(function(){
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
@@ -584,10 +588,7 @@
 	        return x1 + x2;
 	    }
 
-	    $('.linked').scroll(function(){
-
-    		$('.linked').scrollLeft($(this).scrollLeft());
-		});
+	    
 
 	    
 

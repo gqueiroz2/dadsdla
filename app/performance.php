@@ -54,7 +54,7 @@ class performance extends base{
             $arrayWhere = array($region,$year,$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif ($source == "digital"){
-            $columns = array("campaign_sales_office_id","year","brand_id","sales_rep_id","month");
+            $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
         }elseif($source == "plan_by_sales"){

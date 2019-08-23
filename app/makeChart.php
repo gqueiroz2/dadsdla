@@ -40,11 +40,12 @@ class makeChart extends Model{
 
 		$temp = $sr->assembler($l3C,$years,$type);
 		$tmp = $temp[0];
+		//unset para retirar  posições, e nome do grupo da agência
 		unset($tmp[0]);
 		unset($tmp[1]);
 		unset($tmp[2]);
-		unset($tmp[7]);
 		unset($tmp[8]);
+		unset($tmp[9]);
 		$tmp = array_values($tmp);
 
 		$pivot = $tmp[0];		

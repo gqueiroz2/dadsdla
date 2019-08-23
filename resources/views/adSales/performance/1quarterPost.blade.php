@@ -98,7 +98,7 @@
 			<div class="col"></div>
 			<div class="col"></div>
 			<div class="col-2" style="color: #0070c0;font-size: 22px;">
-				{{$rName}} - Quarter : {{$year}}
+				{{$rName}} - Office : {{$year}}
 			</div>
 			<div class="col">
 				<button type="button" class="btn btn-primary" style="width: 100%">

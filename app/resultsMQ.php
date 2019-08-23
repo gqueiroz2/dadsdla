@@ -13,6 +13,7 @@ class resultsMQ extends results{
     
     public function lines($con, $currency, $months, $form, $brands, $year, $region, $value, $source){
 
+
         for ($l=0; $l < 2; $l++) { 
 
             if ($l == 0) {
@@ -21,6 +22,7 @@ class resultsMQ extends results{
                 $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year, $source);
             }
         }
+
         return $lines;
 
     }
@@ -51,7 +53,7 @@ class resultsMQ extends results{
 
         $matrix[0][0] = $brand[1];
         $matrix[1][0] = "$source $year";
-        $matrix[2][0] = "Actual $year";
+        $matrix[2][0] = "Bookings $year";
         $matrix[3][0] = "Var(%)";
         $matrix[4][0] = "Absolut Var.";
 
@@ -118,7 +120,7 @@ class resultsMQ extends results{
             $quarter[$b][0][7] = "Total";
 
             $quarter[$b][1][0] = "$source $year";
-            $quarter[$b][2][0] = "Actual $year";
+            $quarter[$b][2][0] = "Bookings $year";
             $quarter[$b][3][0] = "Var(%)";
             $quarter[$b][4][0] = "Absolut Var.";
 

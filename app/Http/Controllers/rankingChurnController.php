@@ -69,7 +69,7 @@ class rankingChurnController extends Controller {
 	    $base = new base();
 	    $brands = $base->handleBrand($tmp);
 
-	    $b = new brand();
+	    $b = new brand();        
 	    $brand = $b->getBrand($con);
 
 	  	$months = Request::get("month");
