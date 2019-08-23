@@ -250,51 +250,13 @@ class subMarketRanking extends rankingMarket {
     	return $res;
     }
 
-    public function searchPos2($name, $values, $type, $s){
-        
-        if ($values[0] == false) {
-            return ($s+1);
-        }else{
-            for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
-                if ($name == $values[0][$s2][$type]) {
-                    return ($s2+1);
-                }
-            }
-        }
-        
-        return ($s+1);
-    }
-
-    public function checkColumn2($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
-        
-        if ($mtx[$m][0] == "Ranking") {
-            $res = $this->searchPos2($name, $values, $type, $s);
-        }elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
-            $res = $this->searchValueByYear($name, $values, $type, 0);
-        }elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
-            $res = $this->searchValueByYear($name, $values, $type, 1);
-        }elseif ($mtx[$m][0] == "Var (%)") {
-            if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
-                $res = 0;
-            }else{
-                $res = ($mtx[$m-2][$p]/$mtx[$m-1][$p])*100;
-            }
-        }elseif ($mtx[$m][0] == "Var Abs.") {
-            $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
-        }else{
-            $res = $name;
-        }
-
-        return $res;
-    }
-
     public function assemblerMarketBrand($values, $years, $type){
         
         $mtx[0][0] = "Brand";
-        $mtx[1][0] = "Closed ".$years[0];
-        $mtx[2][0] = $years[1];
-        $mtx[3][0] = "Share Closed";
-        $mtx[4][0] = "Share ".$years[1];
+        $mtx[1][0] = "Bookings ".$years[0];
+        $mtx[2][0] = "Bookings ".$years[1];
+        $mtx[3][0] = "Share Bookings";
+        $mtx[4][0] = "Share Bookings ".$years[1];
         $mtx[5][0] = "% YoY";
         $mtx[6][0] = "Dif. YoY";
 
@@ -448,18 +410,64 @@ class subMarketRanking extends rankingMarket {
         return array($mtx, $total);
     }
 
+    public function searchPos2($name, $values, $type, $s){
+        
+        if ($values[0] == false) {
+            return ($s+1);
+        }else{
+            for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
+                if ($name == $values[0][$s2][$type]) {
+                    return ($s2+1);
+                }
+            }
+        }
+        
+        return ($s+1);
+    }
+
+    public function checkColumn2($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
+        
+        if ($mtx[$m][0] == "Ranking") {
+            $res = $this->searchPos2($name, $values, $type, $s);
+        }elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
+            $res = $this->searchValueByYear($name, $values, $type, 0);
+        }elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
+            $res = $this->searchValueByYear($name, $values, $type, 1);
+        }elseif ($mtx[$m][0] == "Var (%)") {
+            if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
+                $res = 0;
+            }else{
+                $res = ($mtx[$m-2][$p]/$mtx[$m-1][$p])*100;
+            }
+        }elseif ($mtx[$m][0] == "Var Abs.") {
+            $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
+        }elseif ($mtx[$m][0] == "Total ".$years[0]) {
+            $res = $this->searchValueByYear($name, $values2, $type, 0);
+        }elseif ($mtx[$m][0] == "Total ".$years[1]) {
+            $res = $this->searchValueByYear($name, $values2, $type, 1);
+        }else{
+            $res = $name;
+        }
+
+        return $res;
+    }
+
     public function subAssemblerMarketTotal($mtx){
         
         $total[0] = "Total";
 
         $first = 0;
         $second = 0;
+        $totalFirst = 0;
+        $totalSecond = 0;
 
         $pos = 2;
 
         for ($m=1; $m < sizeof($mtx[0]); $m++) { 
             $first += $mtx[$pos][$m];
             $second += $mtx[$pos+1][$m];
+            $totalFirst += $mtx[sizeof($mtx)-2][$m];
+            $totalSecond += $mtx[sizeof($mtx)-1][$m];
         }
 
         for ($m=1; $m < sizeof($mtx); $m++) { 
@@ -479,6 +487,10 @@ class subMarketRanking extends rankingMarket {
                 }
             }elseif ($mtx[$m][0] == "Var Abs.") {
                 $total[$m] = $total[$m-3] - $total[$m-2];
+            }elseif ($m == sizeof($mtx)-2) {
+                $total[$m] = $totalFirst;
+            }elseif ($m == sizeof($mtx)-1) {
+                $total[$m] = $totalSecond;
             }else{
                 $total[$m] = "-";
             }
@@ -503,6 +515,8 @@ class subMarketRanking extends rankingMarket {
             $mtx[3][0] = "Bookings ".$years[1];
             $mtx[4][0] = "Var (%)";
             $mtx[5][0] = "Var Abs.";
+            $mtx[6][0] = "Total ".$years[0];
+            $mtx[7][0] = "Total ".$years[1];
     
             $types = array();
 
@@ -523,7 +537,7 @@ class subMarketRanking extends rankingMarket {
                     array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesTotal));
                 }
             }
-
+            
             $total = $this->subAssemblerMarketTotal($mtx);
 
             return array($mtx, $total);
@@ -561,7 +575,7 @@ class subMarketRanking extends rankingMarket {
                                     echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
                                 }else{
                                     if (is_numeric($mtx[$n][$m])) {
-                                        if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Var YTD (%)" || $mtx[$n][0] == "Share Closed" || $mtx[$n][0] == "Share ".$years[1] || $mtx[$n][0] == "% YoY") {
+                                        if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Share Bookings" || $mtx[$n][0] == "Share Bookings ".$years[1] || $mtx[$n][0] == "% YoY") {
                                             echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";   
                                         }elseif ($mtx[$n][0] == "Ranking") {
                                             echo "<td class='$color center'> ".number_format($mtx[$n][$m])."º</td>";

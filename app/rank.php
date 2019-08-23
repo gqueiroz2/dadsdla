@@ -190,7 +190,7 @@ class rank extends Model{
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
-                $values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
+                //$values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
 
                 array_pop($colsValue);
 
@@ -198,7 +198,7 @@ class rank extends Model{
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-                $res2[$y] = $sql->fetch($values2[$y], $from, $from);
+                //$res2[$y] = $sql->fetch($values2[$y], $from, $from);
 
 
                 if(is_array($res[$y])){
@@ -210,11 +210,11 @@ class rank extends Model{
                         }
                     }
                 }
-                if(is_array($res2[$y])){
+                /*if(is_array($res2[$y])){
                     for ($r=0; $r < sizeof($res2[$y]); $r++) { 
                         $res2[$y][$r]['total'] *= $pRateDigital;
                     }
-                }
+                }*/
 
                 //$tmp2 = array();
 
