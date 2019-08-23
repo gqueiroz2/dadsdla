@@ -27,7 +27,9 @@ class rankingChurn extends rank {
     		}
 
     		if($bool == -1){
-				array_push($finalValues, $values[1][$v]);
+                if ($values[1][$v]['total'] > 0) {
+                    array_push($finalValues, $values[1][$v]);   
+                }
     		}
     	}
 

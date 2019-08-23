@@ -74,7 +74,8 @@ class rankingBrand extends rank{
 					}else{
 						$table = 'plan_by_brand';
 					}
-
+					//var_dump($years[$y]);
+					//var_dump($table);
 					$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);
 
 					//var_dump("infoQuery", $infoQuery[$b]);
@@ -101,7 +102,7 @@ class rankingBrand extends rank{
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
 				
-				if ($infoQuery[$y]['table'] == "cmaps a") {
+				if ($infoQuery[0]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {
 			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
 			        }else{
@@ -173,17 +174,17 @@ class rankingBrand extends rank{
 		//var_dump($brands);
 
 		$mtx[0][0] = "Brand";
-		$mtx[1][0] = "Closed ".$years[0];
-		$mtx[2][0] = "Plan ".$years[0];
-		$mtx[3][0] = $years[1];
-		$mtx[4][0] = "Share Closed";
-		$mtx[5][0] = "Share Plan";
-		$mtx[6][0] = "Share ".$years[1];
-		$mtx[7][0] = "%(Closed / Plan)";
-		$mtx[8][0] = "(Closed - Plan)";
+		$mtx[1][0] = "Booking ".$years[0];
+		$mtx[2][0] = "Target ".$years[0];
+		$mtx[3][0] = "Booking ".$years[1];
+		$mtx[4][0] = "Share Booking ".$years[0];
+		$mtx[5][0] = "Share Target";
+		$mtx[6][0] = "Share Booking ".$years[1];
+		$mtx[7][0] = "%(Booking / Target)";
+		$mtx[8][0] = "(Booking - Target)";
 
 		$closed = 0;
-		$plan = 0;
+		$target = 0;
 		$pClosed = 0;
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
@@ -210,7 +211,7 @@ class rankingBrand extends rank{
 			$mtx[2][$b+1] = $val;
 
 			if ($val != "-") {
-				$plan += $val;	
+				$target += $val;	
 			}
 
 			if ($b < sizeof($values[0][1])) {
@@ -227,13 +228,13 @@ class rankingBrand extends rank{
 		}
 
 		$closedP = 0;
-		$planP = 0;
+		$targetP = 0;
 		$pClosedP = 0;
 
 		if (sizeof($brands) > 1) {
 			array_push($mtx[0], "DN");
 			array_push($mtx[1], $closed);
-			array_push($mtx[2], $plan);
+			array_push($mtx[2], $target);
 			array_push($mtx[3], $pClosed);
 
 			for ($b=0; $b < sizeof($brands); $b++) {
@@ -248,8 +249,8 @@ class rankingBrand extends rank{
 				$mtx[4][$b+1] = $val;
 
 				if ($mtx[2][$b+1] != "-") {
-					$val = ($mtx[2][$b+1] / $plan)*100;
-					$planP += $val;
+					$val = ($mtx[2][$b+1] / $target)*100;
+					$targetP += $val;
 				}else{
 					$val = "-";
 				}
@@ -278,15 +279,15 @@ class rankingBrand extends rank{
 			}
 
 			array_push($mtx[4], $closedP);
-			array_push($mtx[5], $planP);
+			array_push($mtx[5], $targetP);
 			array_push($mtx[6], $pClosedP);
 
 			$size = sizeof($mtx[0]);
 
-			$val = ($closed / $plan)*100;
+			$val = ($closed / $target)*100;
 			array_push($mtx[7], $val);
 
-			$val = ($closed - $plan);
+			$val = ($closed - $target);
 			array_push($mtx[8], $val);
 		}
 

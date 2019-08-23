@@ -231,6 +231,8 @@ class dashboards extends rank{
 
     	if($type == "client"){
     		$smt = "client";
+            $join = false;
+            $where = "WHERE( ".$smt."_id = \"".$filter->id."\" )";
     	}else{
     		$smt = "agency";
 

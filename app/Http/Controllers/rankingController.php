@@ -14,26 +14,6 @@ use App\subRankings;
 use Validator;
 
 class rankingController extends Controller {
-    
-    public function agencyNumberByAgencyGroup(){
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $brands = Request::get("brands");
-        $type = Request::get("aux");
-        $region = Request::get("region");
-        $value = Request::get("value");
-        $currency = Request::get("currency");
-        $months = Request::get("months");
-        $years = Request::get("years");
-        $filter = Request::get("name");
-
-        $subR = new subRankings();
-
-        $x = $subR->myMiddleware($con, $brands, $type, $region, $value, $currency, $months, $years, $filter);
-
-        echo $x;
-
-    }
 
     public function get(){
     	
@@ -97,10 +77,6 @@ class rankingController extends Controller {
             $type2[$t] = json_decode(base64_decode($temp[$t]));
         }
 
-        /*for ($t=0; $t < sizeof($type2); $t++) { 
-    		$type2[$t] = base64_decode($type2[$t]);
-    	}*/
-
     	$nPos = Request::get("nPos");
 
     	$months = Request::get("month");
@@ -150,7 +126,7 @@ class rankingController extends Controller {
         //var_dump("region",$rName);
 
         $subR = new subRankings();
-
+        
         return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName'));
 
     }

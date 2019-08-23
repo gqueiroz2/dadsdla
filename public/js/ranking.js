@@ -86,11 +86,12 @@ $(document).ready(function(){
           });
 
           var region = $('#region').val();
+          var year = $("#firstPos").val();
 
           $.ajax({
             url:"/ajaxRanking/type2ByType",
             method:"POST",
-            data:{type, region},
+            data:{type, region, year},
             success: function(output){
               $('#type2').html(output).selectpicker('refresh');
 
@@ -113,6 +114,25 @@ $(document).ready(function(){
             }
           });
 
+          $('#firstPos').change(function(){
+            
+            var region = $('#region').val();
+            var year = $("#firstPos").val();
+            var type = $('#type').val();
+            
+            $.ajax({
+              url:"/ajaxRanking/type2ByType",
+              method:"POST",
+              data:{type, region, year},
+              success: function(output){
+                $('#type2').html(output).selectpicker('refresh');
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                  alert(xhr.status+" "+thrownError);
+              }
+            });            
+          });
+
         }else{
           var option = "<option> Select Type </option>";    
           $('#typeName').html("Select the previous field:").css("color", "red");
@@ -120,6 +140,7 @@ $(document).ready(function(){
           $('#nPos').empty().append(option);
         }
       });
+
 		}else{
       var option = "<option> Select Region </option>";
       var option2 = "<option> Select Type </option>";
