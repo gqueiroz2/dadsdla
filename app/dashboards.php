@@ -205,9 +205,9 @@ class dashboards extends rank{
 	    if($kind == "root"){
 
 	    	if ($type == "agencyGroup") {
-	    		$somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months,$cr, "agency");
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months,$cr, "agency");
 	    	}else{
-	    		$somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr );
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr );
 	    	}
             
 	    	$filterValues = $sr->filterValues($somekind, array($baseFilter), $type);

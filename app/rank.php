@@ -45,6 +45,7 @@ class rank extends Model{
 
     public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null){
         
+
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
         }
@@ -52,6 +53,8 @@ class rank extends Model{
         $sql = new sql();
 
         $p = new pRate();
+
+        var_dump($value);
 
         if ($tableName == "cmaps") {
             if ($currency[0]['name'] == "USD") {
@@ -78,13 +81,13 @@ class rank extends Model{
         $tableAbv = "a";
         $leftAbv = "b";
 
+        $valueDigital = $value."_revenue";
+        $columnsDigital = array("f.region_id","brand_id", "month", "year");
+        $colsValueDigital = array($region, $brands_id, $months);
+
         if ($tableName == "ytd") {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year");
-            $colsValue = array($region, $brands_id, $months);
-        }elseif ($tableName == "fw_digital") {
-            $value .= "_revenue";
-            $columns = array("region_id","brand_id", "month", "year");
             $colsValue = array($region, $brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
@@ -94,6 +97,7 @@ class rank extends Model{
             $columns = array("brand_id", "month", "year");
             $colsValue = array($brands_id, $months);
         }
+
 
         if ($type == "agencyGroup") {
             $leftAbv2 = "c";
@@ -109,12 +113,24 @@ class rank extends Model{
 
             $table = "$tableName $tableAbv";
 
+            $tableDigital = "fw_digital f";
+
             $tmp = $leftAbv.".ID AS '".$type."ID', ".
                    $leftAbv.".name AS '".$type."', SUM($value) AS $as";
 
-           $join = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = ".     $tableAbv.".".$leftName2."_id
+            $tmpD = $leftAbv.".ID AS '".$type."ID', ".
+                   $leftAbv.".name AS '".$type."', SUM($valueDigital) AS $as";
+
+
+            $join = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = ".$tableAbv.".".$leftName2."_id
                     LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
                     LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
+
+
+            $joinD = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = f.".$leftName2."_id
+                    LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
+                    LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
+
 
             $name = substr($type, 0, 6)."_group_id";
             $names = array($type."ID", $type, $as);
@@ -122,14 +138,21 @@ class rank extends Model{
             for ($y=0; $y < sizeof($years); $y++) {
 
                 array_push($colsValue, $years[$y]);
+                array_push($colsValueDigital, $years[$y]);
+
                 $where = $sql->where($columns, $colsValue);
+                $whereD = $sql->where($columnsDigital, $colsValueDigital);
+                
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, $order_by);
+                $valuesD[$y] = $sql->selectGroupBy($con, $tmpD, $tableDigital, $joinD, $whereD, "total", $name, $order_by);
                 array_pop($colsValue);
+                array_pop($colsValueDigital);
 
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
 
+                $resD[$y] = $sql->fetch($valuesD[$y], $from, $from);
 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
@@ -140,15 +163,26 @@ class rank extends Model{
                         }
                     }
                 }
+
+                if(is_array($resD[$y])){
+                    for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                        $resD[$y][$r]['total'] *= $pRateDigital;
+                    }
+                }
+
+
             }
 
         }else{
 
             $table = "$tableName $tableAbv";
+            $tableDigital = "fw_digital f";
 
             if ($type == "sector" || $type == "category") {
                 $tmp = $tableAbv.".".$type." AS '".$type."', SUM($value) AS $as";
+                $tmpD = false;
                 $join = null;
+                $joinD = null;
                 $name = $type;
                 $names = array($type, $as);
             }else{
@@ -161,23 +195,23 @@ class rank extends Model{
 
                     $tmp = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($value) AS $as";
                     
-                    $tmp2 = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM(".$value."_revenue) AS $as";
+                    $tmpD = $leftAbv."ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($valueDigital) AS $as";
 
                     $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id
                             LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
 
-                    $join2 = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$type."_id
+                    $joinD = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$type."_id
                             LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
 
                     $names = array($type."ID", $type, "agencyGroup", $as);
                 }else{
                     $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM($value) AS $as";
 
-                    $tmp2 = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM(".$value."_revenue) AS $as";
+                    $tmpD = $type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM($valueDigital) AS $as";
 
                     $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id"; 
 
-                    $join2 = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$type."_id"; 
+                    $joinD = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$type."_id"; 
 
                     $names = array($type."ID", $type, $as);
                 }
@@ -190,16 +224,23 @@ class rank extends Model{
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
-                $values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
+
+                if($tmpD){
+                    array_push($colsValueDigital, $years[$y]);
+                    $whereDigital = $sql->where($columnsDigital,$colsValueDigital);
+                    $valuesD[$y] = $sql->selectGroupBy($con, $tmpD, $tableDigital, $joinD, $whereDigital, "total", $name, "DESC");
+                    array_pop($colsValueDigital);
+                }
 
                 array_pop($colsValue);
-
 
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-                $res2[$y] = $sql->fetch($values2[$y], $from, $from);
 
+                if ($tmpD) {
+                    $resD[$y] = $sql->fetch($valuesD[$y], $from, $from);
+                }
 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
@@ -210,17 +251,23 @@ class rank extends Model{
                         }
                     }
                 }
-                if(is_array($res2[$y])){
-                    for ($r=0; $r < sizeof($res2[$y]); $r++) { 
-                        $res2[$y][$r]['total'] *= $pRateDigital;
+
+
+                if($tmpD && is_array($resD[$y])){
+                    for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                        $resD[$y][$r]['total'] *= $pRateDigital;
                     }
+                    var_dump($resD[$y]);
                 }
 
-                //$tmp2 = array();
 
-                for ($r=0; $r <sizeof($res[$y]) ; $r++) { 
 
-                }
+                /*if ($tmp2) {
+                    for ($r=0; $r <sizeof($res[$y]) ; $r++) { 
+
+
+                    }
+                }*/
 
 
 
