@@ -374,14 +374,16 @@ class AE extends pAndR{
                 $tfArray[$m] = "";
                 $odd[$m] = "odd";
                 $even[$m] = "rcBlue";
+                $manualEstimation[$m] = "background-color:#99b3ff;";
             }else{
                 $tfArray[$m] = "readonly='true'";
                 $odd[$m] = "oddGrey";
                 $even[$m] = "evenGrey";
+                $manualEstimation[$m] = "";
             }
         } 
 
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even);    
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation);    
 
         return $rtr;
     }
