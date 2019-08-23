@@ -8,6 +8,7 @@ use App\region;
 use App\brand;
 use App\agency;
 use App\sql;
+use App\base;
 
 class subMarketRanking extends rankingMarket {
     
@@ -15,8 +16,8 @@ class subMarketRanking extends rankingMarket {
 
     	$sql = new sql();
 
-    	$r = new region();
-
+    	$r = new region();                      
+                                
         $tmp = $r->getRegion($con,array($regionID));
 
         $p = new pRate();
@@ -31,7 +32,7 @@ class subMarketRanking extends rankingMarket {
 		$years = array($cYear, $cYear-1);
 
     	if ($filterType == "client") {
-    		
+    		  
     		$brand = array();
 
 	        for ($i=0; $i < sizeof($brands); $i++) { 
@@ -268,9 +269,9 @@ class subMarketRanking extends rankingMarket {
         
         if ($mtx[$m][0] == "Ranking") {
             $res = $this->searchPos2($name, $values, $type, $s);
-        }elseif ($mtx[$m][0] == $years[0]) {
+        }elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
             $res = $this->searchValueByYear($name, $values, $type, 0);
-        }elseif ($mtx[$m][0] == $years[1]) {
+        }elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
             $res = $this->searchValueByYear($name, $values, $type, 1);
         }elseif ($mtx[$m][0] == "Var (%)") {
             if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
@@ -280,31 +281,6 @@ class subMarketRanking extends rankingMarket {
             }
         }elseif ($mtx[$m][0] == "Var Abs.") {
             $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
-        }elseif ($mtx[$m][0] == "Move") {
-            $pos = 3;
-            if ($mtx[$m-$pos][$p] < $mtx[$m-$pos-1][$p]) {
-                $res = "Increased";
-            }else{
-                $res = "Decreased";
-            }
-        }elseif ($mtx[$m][0] == "YTD ".$years[0]) {
-            $res = $this->searchValueByYear($name, $values2, $type, 0);
-        }elseif ($mtx[$m][0] == "YTD ".$years[1]) {
-            $res = $this->searchValueByYear($name, $values2, $type, 1);
-        }elseif ($mtx[$m][0] == "Var YTD (%)") {
-            if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
-                $res = 0;
-            }else{
-                $res = ($mtx[$m-2][$p]/$mtx[$m-1][$p])*100;
-            }
-        }elseif ($mtx[$m][0] == "Var Abs YTD.") {
-            $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
-        }elseif ($mtx[$m][0] == "Move YTD") {
-            if ($mtx[$m-3][$p] < $mtx[$m-4][$p]) {
-                $res = "Increased";
-            }else{
-                $res = "Decreased";
-            }
         }else{
             $res = $name;
         }
@@ -479,17 +455,11 @@ class subMarketRanking extends rankingMarket {
         $first = 0;
         $second = 0;
 
-        $firstYtd = 0;
-        $secondYtd = 0;
-
         $pos = 2;
 
         for ($m=1; $m < sizeof($mtx[0]); $m++) { 
             $first += $mtx[$pos][$m];
             $second += $mtx[$pos+1][$m];
-            
-            $firstYtd += $mtx[7][$m];
-            $secondYtd += $mtx[8][$m];
         }
 
         for ($m=1; $m < sizeof($mtx); $m++) { 
@@ -514,20 +484,10 @@ class subMarketRanking extends rankingMarket {
             }
         }
 
-        
-        $total[7] = $firstYtd;
-        $total[8] = $secondYtd;
-        if ($total[7] == 0 || $total[8] == 0) {
-            $total[9] = 0;
-        }else{
-            $total[9] = ($total[7]/$total[8])*100;
-        }
-        $total[10] = $total[7] - $total[8];
-
         return $total;
     }
 
-    public function subMarketAssembler($values, $valuesYTD, $type, $brands, $typeF){
+    public function subMarketAssembler($values, $valuesTotal, $type, $brands, $typeF){
         
         $cYear = intval(date('Y'));
         $years = array($cYear, $cYear-1);
@@ -536,20 +496,13 @@ class subMarketRanking extends rankingMarket {
             $mtx = $this->assemblerMarketBrand($values, $years, $typeF);
 
             return $mtx;
-        }else{
-
+        }else{  
             $mtx[0][0] = "Ranking";
             $mtx[1][0] = "Client";
-            $mtx[2][0] = $years[0];
-            $mtx[3][0] = $years[1];
+            $mtx[2][0] = "Bookings ".$years[0];
+            $mtx[3][0] = "Bookings ".$years[1];
             $mtx[4][0] = "Var (%)";
             $mtx[5][0] = "Var Abs.";
-            $mtx[6][0] = "Move";
-            $mtx[7][0] = "YTD ".$years[0];
-            $mtx[8][0] = "YTD ".$years[1];
-            $mtx[9][0] = "Var YTD (%)";
-            $mtx[10][0] = "Var Abs YTD.";
-            $mtx[11][0] = "Move YTD";
     
             $types = array();
 
@@ -559,7 +512,7 @@ class subMarketRanking extends rankingMarket {
                         if (!in_array($values[$r][$r2][$typeF], $types)) {
                             array_push($types, $values[$r][$r2][$typeF]);  
                         }
-                    }   
+                    }
                 }
             }
 
@@ -567,7 +520,7 @@ class subMarketRanking extends rankingMarket {
 
             for ($s=0; $s < $size; $s++) { 
                 for ($m=0; $m < sizeof($mtx); $m++) {
-                    array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesYTD));
+                    array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesTotal));
                 }
             }
 

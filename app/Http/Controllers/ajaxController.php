@@ -760,19 +760,21 @@ class ajaxController extends Controller{
         $values = $sbm->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
 
         if ($type != "client") {
-            $cMonth = intval(date('m'));
+
+            $base = new base();
+
             $months2 = array();
-            for ($m=1; $m <= $cMonth; $m++) { 
+            for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
                 array_push($months2, $m);
             }
 
-            $valuesYTD = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+            $valuesTotal = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
     
         }else{
-            $valuesYTD = null;
+            $valuesTotal = null;
         }
         
-        $matrix = $sbm->subMarketAssembler($values, $valuesYTD, $type, $brands, $val);
+        $matrix = $sbm->subMarketAssembler($values, $valuesTotal, $type, $brands, $val);
 
         if (is_string($matrix)) {
             $mtx = $matrix;

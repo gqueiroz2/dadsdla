@@ -419,8 +419,10 @@ class rank extends Model{
                             }else{
                                 echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                             }
+                        }elseif ($mtx[$i][0] == "VAR %") {
+                            echo "<td class='$color center'> ".number_format($mtx[$i][$m])." %</td>";
                         }else{
-                            echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";    
+                            echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";
                         }
                         
                     }
