@@ -134,7 +134,7 @@ class Render extends Model{
 
     public function brand($brand){
 
-    	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
+    	echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
                 if ($brand[$i]["name"] != "DN") {
                     $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
@@ -194,7 +194,7 @@ class Render extends Model{
 
     public function months(){
 
-    	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%'>";
+    	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='6' data-width='100%'>";
             //echo "<option selected='true' value='all'>All</option>";
     		//echo "<option value='ytd'>YTD</option>";
     		for ($m=0; $m < sizeof($this->month); $m++) { 
