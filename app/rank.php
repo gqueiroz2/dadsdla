@@ -54,7 +54,7 @@ class rank extends Model{
 
         $p = new pRate();
 
-        var_dump($value);
+        $newRes = array();
 
         if ($tableName == "cmaps") {
             if ($currency[0]['name'] == "USD") {
@@ -136,6 +136,7 @@ class rank extends Model{
             $names = array($type."ID", $type, $as);
 
             for ($y=0; $y < sizeof($years); $y++) {
+                $newRes[$y]= array();
 
                 array_push($colsValue, $years[$y]);
                 array_push($colsValueDigital, $years[$y]);
@@ -164,11 +165,28 @@ class rank extends Model{
                     }
                 }
 
+
+
                 if(is_array($resD[$y])){
                     for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
+
+                    $size1 = sizeof($resD[$y]);
+
+                    $size2 = sizeof($res[$y]);
+
+                    for ($r=0; $r <$size1 ; $r++) { 
+                        for ($r2=0; $r2 <$size2 ; $r2++) {
+                            if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+
+                                //array_push($newRes[$y], var)
+                            }
+                        }
+                    }
                 }
+
+
 
 
             }
@@ -195,7 +213,7 @@ class rank extends Model{
 
                     $tmp = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($value) AS $as";
                     
-                    $tmpD = $leftAbv."ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($valueDigital) AS $as";
+                    $tmpD = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($valueDigital) AS $as";
 
                     $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id
                             LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
@@ -219,6 +237,7 @@ class rank extends Model{
             }
 
             for ($y=0; $y < sizeof($years); $y++) {
+                $newRes[$y]= array();
 
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
@@ -257,7 +276,25 @@ class rank extends Model{
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
-                    var_dump($resD[$y]);
+                    $size1 = sizeof($resD[$y]);
+
+                    $size2 = sizeof($res[$y]);
+                    for ($r=0; $r <$size1 ; $r++) { 
+                        for ($r2=0; $r2 <$size2 ; $r2++) {
+                            if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+                                $grouping = array();
+                                $grouping[$type."ID"] = $resD[$y][$r][$type."ID"];
+                                $grouping[$type] = $resD[$y][$r][$type];
+                                if ($type == "agency") {
+                                    $grouping[$type."Group"] = $resD[$y][$r][$type."Group"];
+                                }
+                                $grouping['total'] = $resD[$y][$r]['total'] + $res[$y][$r2]['total'];;
+
+                                //unset($resD[$y][$r]);
+                                //unset($res[$y][$r2]);
+                            }
+                        }
+                    }
                 }
 
 
