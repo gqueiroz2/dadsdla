@@ -67,6 +67,12 @@ class rank extends Model{
             }
         }
 
+        if ($currency[0]['name'] == "USD") {
+            $pRateDigital = 1.0;
+        }else{
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+        }
+
         $as = "total";
 
         $tableAbv = "a";
@@ -76,9 +82,9 @@ class rank extends Model{
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year");
             $colsValue = array($region, $brands_id, $months);
-        }elseif ($tableName == "digital") {
+        }elseif ($tableName == "fw_digital") {
             $value .= "_revenue";
-            $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+            $columns = array("region_id","brand_id", "month", "year");
             $colsValue = array($region, $brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
@@ -123,7 +129,8 @@ class rank extends Model{
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-                
+
+
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
                         if ($tableName == "cmaps") {
@@ -153,16 +160,24 @@ class rank extends Model{
                     $leftAbv2 = "c";
 
                     $tmp = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($value) AS $as";
+                    
+                    $tmp2 = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM(".$value."_revenue) AS $as";
 
                     $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id
                             LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
 
+                    $join2 = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$type."_id
+                            LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
+
                     $names = array($type."ID", $type, "agencyGroup", $as);
                 }else{
-                    $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".
-                    $leftAbv."."."name AS '".$type."', SUM($value) AS $as";
+                    $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM($value) AS $as";
 
-                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id";       
+                    $tmp2 = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM(".$value."_revenue) AS $as";
+
+                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id"; 
+
+                    $join2 = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$type."_id"; 
 
                     $names = array($type."ID", $type, $as);
                 }
@@ -174,11 +189,17 @@ class rank extends Model{
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+
+                $values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
+
                 array_pop($colsValue);
+
 
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
+                $res2[$y] = $sql->fetch($values2[$y], $from, $from);
+
 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
@@ -189,6 +210,21 @@ class rank extends Model{
                         }
                     }
                 }
+                if(is_array($res2[$y])){
+                    for ($r=0; $r < sizeof($res2[$y]); $r++) { 
+                        $res2[$y][$r]['total'] *= $pRateDigital;
+                    }
+                }
+
+                //$tmp2 = array();
+
+                for ($r=0; $r <sizeof($res[$y]) ; $r++) { 
+
+                }
+
+
+
+
             }
         }
 
@@ -234,9 +270,9 @@ class rank extends Model{
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "year");
                 $colsValue = array($region, $brands_id, $months);
-            }elseif ($tableName == "digital") {
+            }elseif ($tableName == "fw_digital") {
                 $value .= "_revenue";
-                $columns = array("campaign_sales_office_id","brand_id", "month", "year");
+                $columns = array("region_id","brand_id", "month", "year");
                 $colsValue = array($region, $brands_id, $months);
             }elseif ($tableName == "plan_by_brand") {
                 $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "source", "currency_id", "year");

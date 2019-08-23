@@ -24,6 +24,7 @@ class PAndRRender extends Render{
         $odd = $forRender["readable"]["odd"];
         $even = $forRender["readable"]["even"];
         $tfArray = $forRender["readable"]["tfArray"];
+        $manualEstimation = $forRender["readable"]["manualEstimation"];
 
         $rollingFCST = $forRender['rollingFCST'];
         $clientRevenueCYear = $forRender['clientRevenueCYear'];
@@ -528,11 +529,11 @@ class PAndRRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' name='fcstClient-$c-$m' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' value='".number_format($rollingFCST[$c][$m],2)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
                         }else{
-                            echo "<td class='$odd[$m]'>";
-                                if ($ow == "SL" || $ow == "UK") {
+                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'>";
+                                if ($ow && $ow != '(P)') {
                                     echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m],2)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
                                 }else{
-                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m],2)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m],2)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
                                 }
                             echo "</td>";
                             /*echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";

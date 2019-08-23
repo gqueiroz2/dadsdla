@@ -67,7 +67,7 @@ class rankingBrand extends rank{
 				
 					if ($l == 0) {
 						if ($b == 1) {
-							$table = "digital";
+							$table = "fw_digital";
 						}else{
 							$table = $info['table'];
 						}
@@ -101,6 +101,7 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
+					var_dump($table);
 				
 				if ($infoQuery[0]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {
@@ -116,6 +117,14 @@ class rankingBrand extends rank{
 			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
 			        }	
 				}
+			    
+				if ($currency[0]['name'] == "USD") {
+		            $pRateDigital = 1.0;
+		        }else{
+		            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+		        }
+
+
 
 				/*if ($y == 0) {
 					var_dump("antes da transformação",$res[$y]);
@@ -126,7 +135,10 @@ class rankingBrand extends rank{
 					var_dump($info['table']);
 					var_dump($pRate);*/
 					for ($i=0; $i < sizeof($res[$y]); $i++) { 
-						if ($infoQuery[$y]['table'] == "cmaps a") {
+						if($res[$y][$i]['brand'] == 'ONL' || $res[$y][$i]['brand'] == 'VIX'){
+							$res[$y][$i]['total'] *= $pRateDigital;
+						}
+						elseif ($infoQuery[$y]['table'] == "cmaps a") {
 							$res[$y][$i]['total'] /= $pRate;	
 						}else{
 							$res[$y][$i]['total'] *= $pRate;

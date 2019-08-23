@@ -18,68 +18,68 @@ class dashboardsController extends Controller{
    	public function overviewGet(){
 
    		$db = new dataBase();
-      $con = $db->openConnection("DLA");
+         $con = $db->openConnection("DLA");
 
-      $region = new region();
-      $salesRegion = $region->getRegion($con);
+         $region = new region();
+         $salesRegion = $region->getRegion($con);
 
-      $currency = new pRate();
-      $currencies = $currency->getCurrency($con);
+         $currency = new pRate();
+         $currencies = $currency->getCurrency($con);
 
-      $b = new brand();
-      $brands = $b->getBrand($con);
-      $render = new renderDashboards();
-        
+         $b = new brand();
+         $brands = $b->getBrand($con);
+         $render = new renderDashboards();
+           
    		return view("adSales.dashboards.overviewGet", compact('salesRegion', 'currencies', 'brands', 'render'));
    	}
 
    	public function overviewPost(){
-   		$db = new dataBase();
-      $region = new region();
-      $dash = new dashboards();
-      $currency = new pRate();
-      $b = new brand();      
-      $render = new renderDashboards();
-      $p = new pRate();
-      $mc = new makeChart();
+      	$db = new dataBase();
+         $region = new region();
+         $dash = new dashboards();
+         $currency = new pRate();
+         $b = new brand();      
+         $render = new renderDashboards();
+         $p = new pRate();
+         $mc = new makeChart();
 
-      $con = $db->openConnection("DLA");      
-      $salesRegion = $region->getRegion($con);      
-      $currencies = $currency->getCurrency($con);      
-      $brands = $b->getBrand($con);      
+         $con = $db->openConnection("DLA");      
+         $salesRegion = $region->getRegion($con);      
+         $currencies = $currency->getCurrency($con);      
+         $brands = $b->getBrand($con);      
 
-      $regionID = Request::get("region");
-      $type = Request::get("type");
-      $baseFilter = json_decode( base64_decode( Request::get("baseFilter") ));
-      $secondaryFilter = Request::get("secondaryFilter");
-      $currency = Request::get("currency");
-      $value = Request::get("value");      
+         $regionID = Request::get("region");
+         $type = Request::get("type");
+         $baseFilter = json_decode( base64_decode( Request::get("baseFilter") ));
+         $secondaryFilter = Request::get("secondaryFilter");
+         $currency = Request::get("currency");
+         $value = Request::get("value");      
 
-      $cYear = intval(date("Y"));
-      $pYear = $cYear - 1;
-      $ppYear = $pYear - 1;
-      $years = array($cYear,$pYear,$ppYear);
+         $cYear = intval(date("Y"));
+         $pYear = $cYear - 1;
+         $ppYear = $pYear - 1;
+         $years = array($cYear,$pYear,$ppYear);
 
-      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years);
+         $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years);
 
-      $last3YearsChild = $handle['last3YearsChild'];
-      $last3YearsByMonth = $handle['last3YearsByMonth'];
-      $last3YearsByBrand = $handle['last3YearsByBrand'];
+         $last3YearsChild = $handle['last3YearsChild'];
+         $last3YearsByMonth = $handle['last3YearsByMonth'];
+         $last3YearsByBrand = $handle['last3YearsByBrand'];
 
-      for ($y=0; $y < sizeof($years); $y++) { 
-        $brandChart[$y] = $mc->overviewBrand($con,$last3YearsByBrand[$y]);
-      }
+         for ($y=0; $y < sizeof($years); $y++) { 
+           $brandChart[$y] = $mc->overviewBrand($con,$last3YearsByBrand[$y]);
+         }
 
-      $temp = $mc->overviewBrandColumn($con,$last3YearsByBrand,$years);
+         $temp = $mc->overviewBrandColumn($con,$last3YearsByBrand,$years);
 
-      $brandChartColumn = $temp['string'];
-      $maxChartColumn = $temp['max'];
+         $brandChartColumn = $temp['string'];
+         $maxChartColumn = $temp['max'];
 
-      $childChart = $mc->overviewChild($con,$type,$last3YearsChild,$years);
+         $childChart = $mc->overviewChild($con,$type,$last3YearsChild,$years);
 
-      $monthChart = $mc->overviewMonth($con,$type,$last3YearsByMonth,$years);
+         $monthChart = $mc->overviewMonth($con,$type,$last3YearsByMonth,$years);
 
-      return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years'));
+         return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years'));
    	}
 
 }
