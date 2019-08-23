@@ -44,7 +44,6 @@ class makeChart extends Model{
 		unset($tmp[0]);
 		unset($tmp[1]);
 		unset($tmp[2]);
-		unset($tmp[3]);
 		unset($tmp[8]);
 		unset($tmp[9]);
 		$tmp = array_values($tmp);

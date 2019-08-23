@@ -11,7 +11,7 @@ class quarterRender extends Render
     	
 		//var_dump($mtx);
 		
-    	echo "<table style='width: 100%; zoom:100%; font-size: 16px'>";
+    	echo "<table style='width: 100%; zoom:80%; font-size: 16px'>";
 
 			echo "<tr>";
 				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'>$region - Quarter :(".$form.") ".$year." (".$currency[0]['name']."/".strtoupper($value).") </span></center></th>";
