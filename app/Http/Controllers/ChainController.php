@@ -89,6 +89,11 @@ class ChainController extends Controller{
 				unset($spreadSheet[$pivot]);
 				$spreadSheet = array_values($spreadSheet);
 				break;
+            case 'ytdFN':
+                unset($spreadSheet[0]);                
+                $spreadSheet = array_values($spreadSheet);
+                $table = "ytd";
+                break;
 			case 'cmaps':
 				unset($spreadSheet[0]);
 				$spreadSheet = array_values($spreadSheet);
@@ -151,7 +156,12 @@ class ChainController extends Controller{
     	$table = Request::get('tableSecondChain');
 
     	$year = Request::get('year');
-    	$complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
+
+        if($table == "ytdFN"){
+            $table = "ytd";
+        }
+
+        $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
 
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
@@ -177,7 +187,13 @@ class ChainController extends Controller{
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('tableThirdChain');
     	$year = Request::get('year');
-    	$complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
+    	
+
+        if($table == "ytdFN"){
+            $table = "ytd";
+        }
+
+        $complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
 
     	if($complete){
             return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");

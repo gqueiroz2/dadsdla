@@ -91,7 +91,7 @@
 				</form>
 				<div class="row justify-content-end">
 					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
-						<span class="reportsTitle">Executive Performance</span>
+						<span class="reportsTitle">Individual Performance</span>
 					</div>
 				</div>
 			</div>

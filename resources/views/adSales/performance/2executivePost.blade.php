@@ -96,41 +96,41 @@
 				</form>
 				<div class="row justify-content-end">
 					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
-						<span class="reportsTitle">Executive Performance</span>
+						<span class="reportsTitle">Individual Performance</span>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row mt-2">
+		<div class="row mt-2" style="width: 100%;">
 			<div class="col">
-				<div class="container-fluid">
-					<div class="form-group">
-						<div class="form-inline" style='width:100%; margin-left: 1.2%; margin-right: auto;'>
+				<div class="container-fluid" style='width:100%; zoom:80%;'>
+					<div class="form-group" style='width:100%;'>
+						<div class="form-inline" style='width:100%; margin-left: 1.2%; margin-right: 0.2%;'>
 							<div class="row" style="width: 100%;">
 								<div class="col" id="type1" style=" width: 100%; margin-top: 2%; display: block;">
 									<div class="container-fluid">
-										{{$render->case1($mtx)}}
+										{{$render->case1($mtx,$cYear)}}
 									</div>
 								</div>
 							</div>
 							<div class="row" style="width: 100%;">
 								<div class="col" id="type2" style=" width: 100%; margin-top: 2%; display: none;">
 									<div class="container-fluid">
-										{{$render->case2($mtx)}}
+										{{$render->case2($mtx,$cYear)}}
 									</div>
 								</div>
 							</div>
 							<div class="row" style="width: 100%;">
 								<div class="col" id="type3" style=" width: 100%; margin-top: 2%; display: none;">
 									<div class="container-fluid">
-										{{$render->case3($mtx)}}
+										{{$render->case3($mtx,$cYear)}}
 									</div>
 								</div>
 							</div>
 							<div class="row" style="width: 100%;">
 								<div class="col" id="type4" style=" width: 100%; margin-top: 2%; display: none;">
 									<div class="container-fluid">
-										{{$render->case4($mtx)}}
+										{{$render->case4($mtx,$cYear)}}
 									</div>
 								</div>
 							</div>

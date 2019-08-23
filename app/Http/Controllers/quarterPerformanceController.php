@@ -90,8 +90,6 @@ class quarterPerformanceController extends Controller {
 
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $qp->TRuncateRegion($region);
-        //var_dump($mtx[0]);
-        //var_dump($sales);
 
         $tiersFinal = array();
 

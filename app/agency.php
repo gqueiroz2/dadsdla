@@ -373,7 +373,8 @@ class agency extends Management{
         $columns = "a.name AS 'agency',
                     a.ID AS 'id',
                     ag.name AS 'agencyGroup',
-                    ag.ID AS 'agencyGroupID'
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
                    ";
 
         $where = "";
@@ -389,11 +390,13 @@ class agency extends Management{
         }
 
         $join = "LEFT JOIN agency a ON a.id = y.agency_id
-                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id";
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON ag.region_id = r.ID
+                 ";
         
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
 
-        $from = array('id','agency','agencyGroup','agencyGroupID');
+        $from = array('id','agency','agencyGroup','agencyGroupID','region');
 
         $agency = $sql->fetch($res,$from,$from);
 

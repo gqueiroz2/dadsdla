@@ -290,7 +290,8 @@ class client extends Management{
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
                     cg.ID AS 'clientGroupID',
-                    cg.name AS 'clientGroup'
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
                    ";
 
         $where = "";
@@ -305,12 +306,16 @@ class client extends Management{
             }
         }
 
+
+
         $join = "LEFT JOIN client c ON c.ID = y.client_id
-                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id";
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON cg.region_id = r.ID
+                ";
 
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
 
-        $from = array('id','client','clientGroupID','clientGroup');
+        $from = array('id','client','clientGroupID','clientGroup','region');
 
         $client = $sql->fetch($res,$from,$from);
 

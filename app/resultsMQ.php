@@ -53,7 +53,7 @@ class resultsMQ extends results{
 
         $matrix[0][0] = $brand[1];
         $matrix[1][0] = "$source $year";
-        $matrix[2][0] = "Actual $year";
+        $matrix[2][0] = "Bookings $year";
         $matrix[3][0] = "Var(%)";
         $matrix[4][0] = "Absolut Var.";
 
@@ -120,7 +120,7 @@ class resultsMQ extends results{
             $quarter[$b][0][7] = "Total";
 
             $quarter[$b][1][0] = "$source $year";
-            $quarter[$b][2][0] = "Actual $year";
+            $quarter[$b][2][0] = "Bookings $year";
             $quarter[$b][3][0] = "Var(%)";
             $quarter[$b][4][0] = "Absolut Var.";
 
