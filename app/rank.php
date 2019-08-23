@@ -243,6 +243,7 @@ class rank extends Model{
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
+                //$values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
 
                 if($tmpD){
                     array_push($colsValueDigital, $years[$y]);
