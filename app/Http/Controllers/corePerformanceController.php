@@ -73,7 +73,7 @@ class corePerformanceController extends Controller{
                 $brand = $b->getBrand($con);
                 $salesRepGroup = $sr->getSalesRepGroup($con,null);
                 $currency = $pr->getCurrency($con,null);
-
-                return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx'));
+                $cYear = date("Y");
+                return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear'));
         }
 }

@@ -20,18 +20,18 @@ class renderResume extends Render {
 
     		echo "<tr>";
     			echo "<th class='darkBlue center' style='width:5%'> MONTH </th>";
-                echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>BOOKING $cYear</th>";
+                echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'>BOOKINGS $cYear</th>";
     			echo "<th class='lightBlue center' style='font-weight: bold !important; width:10%;'> SAP </th>";
     			echo "<th class='darkBlue center' style='width:10%'> TARGET </th>";
     			echo "<th class='darkBlue center' style='width:10%'> CORPORATE </th>";
     			//<th class="darkBlue"> P&R FCST </th>
 				//<th class="darkBlue"> Finance FCST </th>
-				echo "<th class='darkBlue center' style='width:10%'> BOOKING $pYear </th>";	
-				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKING/TARGET </th>";
-				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKING/CORPORATE </th>";
+				echo "<th class='darkBlue center' style='width:10%'> BOOKINGS $pYear </th>";	
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKINGS/TARGET </th>";
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKINGS/CORPORATE </th>";
 				//<th class="grey"> Sales/P&R </th>
 				//<th class="grey"> Sales/Finance </th>
-				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKING ($cYear/$pYear) </th>";
+				echo "<th class='grey center' style='font-weight: bold !important; width:15%;'>BOOKINGS ($cYear/$pYear) </th>";
     		echo "</tr>";
 
     		for ($m=0; $m < sizeof($matrix); $m++) { 

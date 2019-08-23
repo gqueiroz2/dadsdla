@@ -12,6 +12,7 @@ use App\pRate;
 use App\agency;
 use App\client;
 use App\sql;
+use App\dataBase;
 
 class chain extends excel{
    
@@ -24,12 +25,12 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
 
         $columns = $this->defineColumns($table,'first');
-        if($table == "cmaps" || $table == "fw_digital"){
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr"){
             $parametter = true;
         }else{
             $parametter = false;
         }
-       
+
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
 
         if($table == "fw_digital"){
@@ -136,7 +137,7 @@ class chain extends excel{
                 if($con->query($delete[$y])){
                 }
             }
-        }        
+        }    
 
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
@@ -401,9 +402,10 @@ class chain extends excel{
                     break;
                 }
             }
-        }elseif($column == 'brand'){
+        }elseif($column == 'brand' && $table != "sf_pr"){
         	
         	$rtr =  array(false,'brand_id');
+            
             if($table == "cmaps"){
                 $temp = strtoupper($current);
             }else{
@@ -412,6 +414,7 @@ class chain extends excel{
 
         	for ($b=0; $b < sizeof($brands); $b++) { 
 				if( $temp  == $brands[$b]['brandUnit']){	
+
 					$rtr =  array( $brands[$b]['brandID'],'brand_id');
 				}
 			}
@@ -630,12 +633,22 @@ class chain extends excel{
 	}
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
+        $feed = array();
+
+        $bd = new brand();
+
+        $db = new dataBase();
+
+        $con = $db->openConnection("DLA");
+
+        $allBrands = $bd->getBrandUnit($con);
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             for ($c=0; $c < sizeof($columns); $c++) { 
                 if($columns[$c] != ''){
                     $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
-    				if($bool){
-    					if($columns[$c] == 'gross_revenue' ||
+                	if($bool){
+                        if($columns[$c] == 'gross_revenue' ||
                            $columns[$c] == 'gross' ||
     					   $columns[$c] == 'net_revenue' ||						
                            $columns[$c] == 'net' ||                     
@@ -655,7 +668,6 @@ class chain extends excel{
 
     						if( is_null($spreadSheet[$s][$c])){
     							$columnValue = 0.0;
-    							//$c++;
     						}else{
     							$columnValue = $c;
     						}
@@ -682,6 +694,36 @@ class chain extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]));
                                 }                            
+                            }elseif($columns[$c] == "brand" && $table == "sf_pr"){
+                                
+                                if(!is_null($spreadSheet[$s][$c])){
+                                    $temporario = explode(";", $spreadSheet[$s][$c]);
+                                    $cc = 0;
+                                    for ($t=0; $t < sizeof($temporario); $t++) {                                     
+                                        for ($u=0; $u < sizeof($allBrands); $u++) { 
+                                            if( trim($temporario[$t]) === $allBrands[$u]['brandUnit'] ){
+                                                $temporario2[$cc] = $allBrands[$u]['brand'];
+                                                $cc++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $ff = sizeof($temporario2);
+                                    for ($i=$ff; $i >= $cc; $i--) { 
+                                        unset($temporario2[$i]);
+                                    }
+                                    $temporario2 = array_values( array_unique( $temporario2 ) );
+                                    $string = "";
+                                    for ($tt=0; $tt < sizeof($temporario2); $tt++) { 
+                                        $string .= $temporario2[$tt];
+                                        if($tt < (sizeof($temporario2) - 1) ){
+                                            $string .= ";";
+                                        }
+                                    }
+                                }else{
+                                    $string = "NOCHANNELS";
+                                }
+                                $spreadSheetV2[$s][$columns[$c]] = $string;
                             }elseif($columns[$c] == 'obs'){
                                 $spreadSheetV2[$s][$columns[$c]] = "OBS";
                             }elseif($columns[$c] == 'month'){
@@ -874,6 +916,7 @@ class chain extends excel{
                                   'sales_rep_owner',
                                   'sales_rep_splitter',
                                   'client',
+                                  'brand',
                                   'opportunity_name',
                                   'agency',
                                   'stage',
@@ -898,6 +941,7 @@ class chain extends excel{
                                   'region_id',
                                   'sales_rep_owner_id',
                                   'client',
+                                  'brand',
                                   'opportunity_name',
                                   'agency',
                                   'stage',
@@ -921,6 +965,7 @@ class chain extends excel{
                                   'region_id',
                                   'sales_rep_owner_id',
                                   'client_id',
+                                  'brand',
                                   'opportunity_name',
                                   'agency_id',
                                   'stage',
@@ -943,6 +988,7 @@ class chain extends excel{
                                   'region_id',
                                   'sales_rep_owner_id',
                                   'client_id',
+                                  'brand',
                                   'opportunity_name',
                                   'agency_id',
                                   'stage',

@@ -169,9 +169,6 @@
 				'height': '100%',
 				backgroundColor:'transparent',
 				
-				
-				/*colors: ['#0070c0','#ff3300','#ffff00','#009933','#ff0000','#000000','#002060','#ff0000','#6600ff','#004b84','#808080','#88cc00'
-				]*/
 			};
 			var chart = new google.visualization.LineChart(document.getElementById('overviewMonthChart'));
         	chart.draw(data, options);
@@ -241,11 +238,13 @@
 		            title: 'Company Performance',
 		            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
 		        },
-				
+				chartArea:{
+					'width':'92.5%',
+				},
 				'width': '100%',
 				'height': '100%',
 				backgroundColor:'transparent',
-				legend: { position: 'bottom' },
+				legend: { position: 'none' },
 				bar: { groupWidth: '60%' },
         		hAxis: {
 		            minValue: 0,

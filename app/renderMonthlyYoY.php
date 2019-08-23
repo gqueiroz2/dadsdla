@@ -13,7 +13,7 @@ class renderMonthlyYoY extends Render{
 	*/
 	public function assemble($mtx,$quarters,$form,$pRate,$value,$year,$months,$brands, $source, $region){
 		
-		echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
+		echo "<table style='width: 100%; zoom:80%; font-size: 16px;'>";
 
 			echo "<th class='lightBlue center' colspan='13'>";
 				echo "<span style='font-size:24px;''>";
@@ -106,9 +106,9 @@ class renderMonthlyYoY extends Render{
 				$class = $thirdClass;
 			}
 
-			echo "<td $class>Actual ".($year-1)."</td>";
-			echo "<td $class>$source ".$year."</td>";
-			echo "<td $class>Actual ".$year."</td>";
+			echo "<td $class> Bookings ".($year-1)."</td>";
+			echo "<td $class> $source ".$year."</td>";
+			echo "<td $class> Bookings ".$year."</td>";
 		}
 
     }
@@ -225,9 +225,9 @@ class renderMonthlyYoY extends Render{
     			$class = $firstClass;
     		}
 
-    		echo "<td $class $style colspan='1'>Actual ".($year-1)."</td>";
+    		echo "<td $class $style colspan='1'>Bookings ".($year-1)."</td>";
 			echo "<td $class $style colspan='1'>$source ".$year."</td>";
-			echo "<td $class $style colspan='1'>Actual ".$year."</td>";
+			echo "<td $class $style colspan='1'>Bookings ".$year."</td>";
     	}
     }
 
