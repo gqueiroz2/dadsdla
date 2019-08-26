@@ -207,6 +207,18 @@ class results extends base{
                 $columns = array("region_id", "brand_id", "year", "month");
                 $columnsValue = array($region, $brand, $year, $month);
                 $value .= "_revenue";
+                if ($brand == '9') {
+                    $where = "WHERE ( month = \"".$month."\" ) 
+                                           AND ( year =  \" $year \")
+                                           AND (region_id = \"".$region."\")
+                                           AND (brand_id != '10')";
+                }else{
+                    $where = "WHERE ( month = \"".$month."\" ) 
+                                           AND ( year =  \" $year \")
+                                           AND (region_id = \"".$region."\")
+                                           AND (brand_id = '".$brand."')";;
+                }
+
                 break;
 /*
     
@@ -236,7 +248,11 @@ class results extends base{
 
             $as = "sum";
 
-            $where = $sql->where($columns, $columnsValue);
+
+            if ($table != "digital") {
+                $where = $sql->where($columns, $columnsValue);
+            }
+            
 
             if($table == "digital"){
                 $table = "fw_digital";

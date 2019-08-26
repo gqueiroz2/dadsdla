@@ -156,13 +156,17 @@ class resultsResume extends results{
 		for ($m=0; $m < sizeof($months); $m++) { 
 			for ($b=0; $b < sizeof($brands); $b++) { 
 				
-				$whereSales[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
+				if ($brands[$b][1] == 'ONL') {
+					$whereSales[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
 	            					   AND ( year =  \" $cYear \")
 	                                   AND (region_id = \"".$regionID."\")
-	                                   AND (brand_id = \"".$brands[$b][0]."\" )
-
-	                               ";
-
+	                                   AND (brand_id != '10')";
+				}else{
+					$whereSales[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
+	            					   AND ( year =  \" $cYear \")
+	                                   AND (region_id = \"".$regionID."\")
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )";
+	            }
 /*
 				"WHERE (digital.month IN (".$months[$m][1]."))
 										  AND (digital.year IN ($cYear))
