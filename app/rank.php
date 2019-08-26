@@ -50,6 +50,21 @@ class rank extends Model{
             $brands_id[$b] = $brands[$b][0];
         }
 
+        $check = false;
+
+        for ($b=0; $b <sizeof($brands_id) ; $b++) { 
+            if ($brands_id[$b] == '9') {
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            array_push($brands_id, '13');
+            array_push($brands_id, '14');
+            array_push($brands_id, '15');
+            array_push($brands_id, '16');
+        }
+
         $sql = new sql();
 
         $p = new pRate();
@@ -165,29 +180,37 @@ class rank extends Model{
                     }
                 }
 
-
-
-                if(is_array($resD[$y])){
-                    for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                if($tmpD && is_array($resD[$y])){
+                    for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
 
-                    $size1 = sizeof($resD[$y]);
+                    if ($res[$y]) {
+                        $size1 = sizeof($resD[$y]);
+                        $size2 = sizeof($res[$y]);
 
-                    $size2 = sizeof($res[$y]);
+                        for ($r=0; $r <$size1 ; $r++) { 
+                            for ($r2=0; $r2 <$size2 ; $r2++) {
+                                if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+                                    $res[$y][$r2]['total'] += $resD[$y][$r]['total'];
 
-                    for ($r=0; $r <$size1 ; $r++) { 
-                        for ($r2=0; $r2 <$size2 ; $r2++) {
-                            if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
-
-                                //array_push($newRes[$y], var)
+                                    unset($resD[$y][$r]);
+                                    break;
+                                }
                             }
                         }
+
+                        $resD[$y] = array_values($resD[$y]);
+                        for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                            array_push($res[$y], $resD[$y][$r]);
+                        }
+
+                        usort($res[$y], array($this,'compare'));
+                    }else{
+                        $res[$y] = $resD[$y];
                     }
+
                 }
-
-
-
 
             }
 
@@ -272,41 +295,37 @@ class rank extends Model{
                     }
                 }
 
-
                 if($tmpD && is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
-                    $size1 = sizeof($resD[$y]);
 
-                    $size2 = sizeof($res[$y]);
-                    for ($r=0; $r <$size1 ; $r++) { 
-                        for ($r2=0; $r2 <$size2 ; $r2++) {
-                            if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
-                                $grouping = array();
-                                $grouping[$type."ID"] = $resD[$y][$r][$type."ID"];
-                                $grouping[$type] = $resD[$y][$r][$type];
-                                if ($type == "agency") {
-                                    $grouping[$type."Group"] = $resD[$y][$r][$type."Group"];
+                    if ($res[$y]) {
+                        $size1 = sizeof($resD[$y]);
+                        $size2 = sizeof($res[$y]);
+
+                        for ($r=0; $r <$size1 ; $r++) { 
+                            for ($r2=0; $r2 <$size2 ; $r2++) {
+                                if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+                                    $res[$y][$r2]['total'] += $resD[$y][$r]['total'];
+
+                                    unset($resD[$y][$r]);
+                                    break;
                                 }
-                                $grouping['total'] = $resD[$y][$r]['total'] + $res[$y][$r2]['total'];;
-
-                                //unset($resD[$y][$r]);
-                                //unset($res[$y][$r2]);
                             }
                         }
+
+                        $resD[$y] = array_values($resD[$y]);
+                        for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                            array_push($res[$y], $resD[$y][$r]);
+                        }
+
+                        usort($res[$y], array($this,'compare'));
+                    }else{
+                        $res[$y] = $resD[$y];
                     }
+
                 }
-
-
-
-                /*if ($tmp2) {
-                    for ($r=0; $r <sizeof($res[$y]) ; $r++) { 
-
-
-                    }
-                }*/
-
 
 
 
@@ -316,6 +335,7 @@ class rank extends Model{
         return $res;
 
     }
+
 
     public function getAllValuesUnion($tableName, $leftName, $type, $brands, $region, $value, $months, $currency, $filter=false){
         
@@ -625,4 +645,10 @@ class rank extends Model{
 
         return $res;
     }
+
+    public function compare($object1,$object2){
+        return $object1['total'] < $object2['total'];
+    }
 }
+
+

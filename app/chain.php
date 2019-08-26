@@ -30,20 +30,13 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
-
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-
-        if($table == "fw_digital"){
-            unset($columns[0]);
-            $columns = array_values($columns);
-        }
 
         $into = $this->into($columns);      
         
         $check = 0;
                
         $mark = 0;
-        
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -72,11 +65,12 @@ class chain extends excel{
         $base = new base();
         $columns = $this->defineColumns($table,'first');
         if($table == "fw_digital"){
-            unset($columns[0]);        
+            //unset($columns[0]);        
         }
 
         $columns = array_values($columns);
     	$columnsS = $this->defineColumns($table,'second');
+
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
 
         if($table == "fw_digital"){
@@ -151,9 +145,7 @@ class chain extends excel{
 
         $values = $this->values($spreadSheet,$columns);
 
-        
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
-
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
@@ -165,7 +157,7 @@ class chain extends excel{
         }     
 
         return $error;     
-   
+        
     }
 
     public function localCurrencyToDolar($con,$current,$year){
@@ -211,22 +203,55 @@ class chain extends excel{
 
         $count = 0;
         for ($c=0; $c < sizeof($current); $c++) { 
-            if($current[$c]['region'] == "Brazil" || $current[$c]['region'] == "Brasil"){                
+            //if($current[$c]['region'] == "Brazil" || $current[$c]['region'] == "Brasil"){                
                 $temp = explode("/", $current[$c]['sales_rep']);
-                    if(sizeof($temp) > 1){
-                        $newC = $current[$c];
-                        $sales1 = trim($temp[0]);
-                        $sales2 = trim($temp[1]);
-                        $current[$c]['sales_rep'] = $sales1;
-                        $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
-                        $newC['sales_rep'] = $temp[1];
-                        $newC['gross_revenue'] = $newC['gross_revenue']/2;
-                        $count ++;
-                    }
-                
-            }
-        }
 
+                if(sizeof($temp) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp[0]);
+                    $sales2 = trim($temp[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                }
+
+                $temp2 = explode("&", $current[$c]['sales_rep']);
+
+                if(sizeof($temp2) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp2[0]);
+                    $sales2 = trim($temp2[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp2[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                }
+
+                $temp3 = explode(" e ", $current[$c]['sales_rep']);
+
+                if(sizeof($temp3) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp3[0]);
+                    $sales2 = trim($temp3[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp3[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                }
+
+            //}
+                
+        }
         return $current;
 
     }
@@ -375,9 +400,14 @@ class chain extends excel{
             
         }elseif($column == 'region'){
             $rtr =  array(false,'region');
-            for ($r=0; $r < sizeof($regions); $r++) { 
-                if($current == $regions[$r]['name']){   
-                    $rtr =  array( $regions[$r]['id'],'region_id');
+            
+            if( $current == "" ){
+                $rtr =  array( 8,'region_id');
+            }else{
+                for ($r=0; $r < sizeof($regions); $r++) { 
+                    if($current == $regions[$r]['name']){   
+                        $rtr =  array( $regions[$r]['id'],'region_id');
+                    }
                 }
             }
         }elseif($column == 'campaign_currency'){
@@ -447,14 +477,26 @@ class chain extends excel{
 				}
 
                 if($check > 0){
+
+                    if($table == "fw_digital"){
+                        $frt = "region_id";
+                    }else{
+                        $frt = "campaign_sales_office_id";                        
+                    }
+
                     for ($srr=0; $srr < sizeof($salesReps); $srr++) {
                         if($current == $salesReps[$srr]['salesRepUnit'] &&
-                            $currentC['campaign_sales_office_id'] == $salesReps[$srr]['regionID']){
+                            $currentC[$frt] == $salesReps[$srr]['regionID']){
+                            
                             $rtr =  array( $salesReps[$srr]['salesRepID'],'sales_rep_id');   
                         }                        
                     }
                 }
 			}
+            if(!$rtr[0]){
+                var_dump($current);
+            }
+
         }elseif($column == 'sales_rep_owner' || $column == 'sales_rep_splitter'){
 
             if($column == 'sales_rep_owner'){
@@ -683,9 +725,11 @@ class chain extends excel{
                                     $columns[$c] == 'from_date' ||
                                 $columns[$c] == 'to_date'
                               ){
-                                $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 
-                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                                //$temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                //$spreadSheetV2[$s][$columns[$c]] = $temp;
+
+                                $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                             }elseif($columns[$c] == 'rep_commission_percentage' ||
                                     $columns[$c] == 'agency_commission_percentage'
                                     ){
@@ -1008,7 +1052,6 @@ class chain extends excel{
 
 
     public $fwDigitalColumnsF = array(
-                                  '',
                                   'client',
                                   'agency',
                                   'campaign',
@@ -1025,8 +1068,9 @@ class chain extends excel{
                                   'buy_type',
                                   'content_targeting_set_name',
                                   'ad_unit',
-                                  'month',
-                                  'gross_revenue'
+                                  'gross_revenue',
+                                  'month'
+                                  
                               );
 
     public $fwDigitalColumnsS = array(

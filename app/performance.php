@@ -53,10 +53,13 @@ class performance extends base{
             $columns = array("sales_representant_office_id","year","month");
             $arrayWhere = array($region,$year,$month);
             $where = $sql->where($columns,$arrayWhere);
-        }elseif ($source == "digital"){
-            $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
+        }elseif ($source == "fw_digital"){
+            $columns = array("region_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
+            if ($brand == '9') {
+                $where = "WHERE (region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month = \"$month\") AND (sales_rep_id = \"".$salesRep['id']."\")";
+            }
         }elseif($source == "plan_by_sales"){
             $columns = array("region_id","year","month","sales_rep_id","brand_id","currency_id","type_of_revenue");
             $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand,'4',$value);

@@ -47,10 +47,11 @@ class subBrandRanking extends rankingBrand {
             $region = $tmp['name'];
         }
 
+
         for ($y=0; $y < sizeof($years); $y++) {
         	
         	if ($filter == "VIX" || $filter == "ONL") {
-        		$table = "digital";
+        		$table = "fw_digital";
         	}elseif ($region == "Brazil") {
 				$table = "cmaps";
 			}else{
@@ -102,17 +103,34 @@ class subBrandRanking extends rankingBrand {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "month", "year", "brand_id");
             $colsValue = array($region, $months, $year, $filter);
-        }elseif ($tableName == "digital") {
+            $where = $sql->where($columns, $colsValue);
+        }elseif ($tableName == "fw_digital") {
             $value .= "_revenue";
-            $columns = array("campaign_sales_office_id", "month", "year", "brand_id");
+            $columns = array("region_id", "month", "year", "brand_id");
             $colsValue = array($region, $months, $year, $filter);
+            $where = $sql->where($columns, $colsValue);
+
+
+            if ($filter == '9') {
+                $where2 = "WHERE (region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month IN (";
+                    for ($m=0; $m <sizeof($months) ; $m++) { 
+                        if ($m = 0) {
+                            $where2 .= "'".$months[$m]."'";
+                        }else{
+                            $where2 .= ",'".$months[$m]."'";
+                        }
+                    }
+                $where2 .= ")) AND (sales_rep_id = \"".$salesRep['id']."\")";
+            }
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue", "month", "year", "brand_id");
             $colsValue = array($region, $value, $months, $year, $filter);
             $value = "revenue";
+            $where = $sql->where($columns, $colsValue);
         }else{
             $columns = array("month", "year", "brand_id");
             $colsValue = array($months, $year, $filter);
+            $where = $sql->where($columns, $colsValue);
         }
 
         $table = "$tableName $tableAbv";
@@ -146,7 +164,6 @@ class subBrandRanking extends rankingBrand {
         	$names = array($type."ID", $type, $as);
         }
 
-        $where = $sql->where($columns, $colsValue);
         
         $values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
@@ -154,7 +171,6 @@ class subBrandRanking extends rankingBrand {
 
         $res = $sql->fetch($values, $from, $from);
 
-        //var_dump($res);
         return $res;
     }
 
