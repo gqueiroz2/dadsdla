@@ -339,8 +339,12 @@ class rank extends Model{
 
     public function getAllValuesUnion($tableName, $leftName, $type, $brands, $region, $value, $months, $currency, $filter=false){
         
-        for ($b=0; $b < sizeof($brands); $b++) { 
-            $brands_id[$b] = $brands[$b][0];
+        if (empty($brands)) {
+            $brands_id = "";
+        }else{
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                $brands_id[$b] = $brands[$b][0];
+            }
         }
 
         $tableAbv = "a";

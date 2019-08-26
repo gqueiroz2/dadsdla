@@ -21,32 +21,83 @@ class rankingChurn extends rank {
 		
     }
 
-    public function checkValue(){
+    public function getValue($values, $type, $name, $year){
         
+        for ($v=0; $v < sizeof($values[$year]); $v++) { 
+            if ($values[$year][$v][$type] == $name) {
+                return $values[$year][$v]['total'];
+            }
+        }
+
+        return 0;
     }
 
-    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $v, $cont, $values2){
+    public function getAgencyGroup($values, $name){
+        
+        for ($v=0; $v < sizeof($values); $v++) { 
+            for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                if ($values[$v][$v2]['agency'] == $name) {
+                    if ($values[$v][$v2]['agencyGroup'] == "Others") {
+                        return "-";
+                    }else{
+                        return $values[$v][$v2]['agencyGroup'];
+                    }
+                }
+            }
+        }
+    }
+
+    public function checkRank($cont, $values, $name, $type, $years){
+        
+        $bool = -1;
+
+        for ($v=0; $v < sizeof($values[0]); $v++) { 
+            if ($values[0][$v][$type] == $name) {
+                $bool = 0;
+                if ($values[0][$v]['total'] == 0) {
+                    $bool = 1;
+                    return $cont;
+                }
+            }
+        } 
+
+        if ($bool == -1) {
+            return $cont;
+        }
+
+        return -1;
+    }
+
+    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $v, $cont, $valuesTotal){
     	
     	if ($mtx[$m][0] == "Ranking") {
-    		$res = ($v+1);
+    		$res = $this->checkRank($cont, $values, $name, $type, $years);
     	}elseif ($mtx[$m][0] == "Agency group") {
-    		$res = $values[$v]['agencyGroup'];
-    	}elseif ($mtx[$m][0] == $years[0]) {
-    		$res = 0;
-    	}elseif ($mtx[$m][0] == $years[1]) {
-    		$res = $values[$v]['total'];
-    	}elseif ($mtx[$m][0] == "Var (%)") {
-    		if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
+    		$res = $this->getAgencyGroup($values, $name);
+    	}elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
+    		$res = $this->getValue($values, $type, $name, 0);
+    	}elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
+            $res = $this->getValue($values, $type, $name, 1);
+        }elseif ($mtx[$m][0] == "Bookings ".$years[2]) {
+            $res = $this->getValue($values, $type, $name, 2);
+        }elseif ($mtx[$m][0] == "Var (%)") {
+    		if ($mtx[$m-3][$p] == 0 || $mtx[$m-2][$p] == 0) {
     			$res = 0;
     		}else{
-    			$res = ($mtx[$m-2][$p]/$mtx[$m-1][$p])*100;
+    			$res = ($mtx[$m-3][$p]/$mtx[$m-2][$p])*100;
     		}
     	}elseif ($mtx[$m][0] == "Var Abs.") {
-    		$res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
-    	}elseif ($mtx[$m][0] == "Class") {
-			$res = "Churn";
+            $res = $mtx[$m-4][$p] - $mtx[$m-3][$p];
+    	}elseif ($mtx[$m][0] == "Total ".$years[0]) {
+            $res = $this->getValue($valuesTotal, $type, $name, 0);
+        }elseif ($mtx[$m][0] == "Total ".$years[1]) {
+            $res = $this->getValue($valuesTotal, $type, $name, 1);
+        }elseif ($mtx[$m][0] == "Total ".$years[2]) {
+            $res = $this->getValue($valuesTotal, $type, $name, 2);
+        }elseif ($mtx[$m][0] == "Class") {
+            $res = "Churn";
     	}else{
-    		$res = $name;
+            $res = $name;
     	}
 
     	return $res;
@@ -58,9 +109,11 @@ class rankingChurn extends rank {
 
         $first = 0;
         $second = 0;
+        $third = 0;
 
-        $firstYtd = 0;
-        $secondYtd = 0;
+        $firstTotal = 0;
+        $secondTotal = 0;
+        $thirdTotal = 0;
 
         if ($type == "agency") {
     		$pos = 3;
@@ -71,38 +124,35 @@ class rankingChurn extends rank {
     	}
 
         for ($m=1; $m < sizeof($mtx[0]); $m++) { 
-            $first += $mtx[$pos][$m];
             $second += $mtx[$pos+1][$m];
+            $third += $mtx[$pos+2][$m];
 
-            if ($mtx[$pos2+1][$m] != "-") {
-            	$secondYtd += $mtx[$pos2+1][$m];
-            }
-            
+            $secondTotal += $mtx[$pos2+1][$m];
+            $thirdTotal += $mtx[$pos2+2][$m];
         }
 
         for ($m=1; $m < sizeof($mtx); $m++) { 
 
-            if ($m == $pos || $m == ($pos+1)) {
-                
+            if ($m == $pos || $m == ($pos+1) || $m == ($pos+2)) {
                 if ($m == $pos) {
                     $total[$m] = $first;
-                }else{
+                }elseif ($m == ($pos+1)) {
                     $total[$m] = $second;
-                }
-            }elseif ($m == $pos2 || $m == ($pos2+1)) {
-            	if ($m == $pos2) {
-                    $total[$m] = $firstYtd;
                 }else{
-                    $total[$m] = $secondYtd;
+                    $total[$m] = $third;
+                }
+            }elseif ($m == $pos2 || $m == ($pos2+1) || $m == ($pos2+2)) {
+            	if ($m == $pos2) {
+                    $total[$m] = $firstTotal;
+                }elseif ($m == ($pos2+1)) {
+                    $total[$m] = $secondTotal;
+                }else{
+                    $total[$m] = $thirdTotal;
                 }
             }elseif ($mtx[$m][0] == "Var (%)") {
-                if ($total[$m-1] != 0 && $total[$m-2] != 0) {
-                    $total[$m] = ($total[$pos] / $total[$pos+1])*100;
-                }else{
-                    $total[$m] = 0;
-                }
+                $total[$m] = 0;
             }elseif ($mtx[$m][0] == "Var Abs.") {
-                $total[$m] = $total[$m-3] - $total[$m-2];
+                $total[$m] = $total[$m-4] - $total[$m-3];
             }else{
                 $total[$m] = "-";
             }
@@ -133,21 +183,42 @@ class rankingChurn extends rank {
     	$mtx[$pos][0] = "Class";$pos++;
 		
         $cont = 1;
-
+        
         for ($v=0; $v < sizeof($nameValues); $v++) { 
         	for ($m=0; $m < sizeof($mtx); $m++) { 
-                /*$res = $this->checkColumn($mtx, $m, $nameValues[$v], $values, $years, sizeof($mtx[$m]), $type, $v, $cont, $valuesTotal);
+                
+                $res = $this->checkColumn($mtx, $m, $nameValues[$v], $values, $years, sizeof($mtx[$m]), $type, $v, $cont, $valuesTotal);
 
-                if (!is_null($res)) {
-                    $cont++;
-                }*/
-
-				//array_push($mtx[$m], $this->checkColumn($mtx, $m, $values[$v][$type], $values, $years, sizeof($mtx[$m]), $type, $v, $valuesYTD));
+                if ($res == -1) {
+                    break;
+                }else{
+                    if ($m == 0) {
+                        $cont++;   
+                    }
+                
+                    array_push($mtx[$m], $res);
+                }
         	}
         }
-		
-        /*$total = $this->assemblerChurnTotal($mtx, $type, $years);
-    	//var_dump($total);
-    	return array($mtx, $total);*/
+
+        $c = 0;
+        $fun = "array_multisort(";
+
+        for ($m=0; $m < sizeof($mtx); $m++) {
+            if (substr($mtx[$m][0], 0, 8) == "Bookings") {
+                $fun .= "\$mtx[".$m."], SORT_ASC";
+                $c++;
+                if ($c != sizeof($years)) {
+                    $fun .= ", ";
+                }
+            }
+        }
+
+        $fun .= ");";var_dump($fun);
+        eval($fun);
+
+        $total = $this->assemblerChurnTotal($mtx, $type, $years);
+    	
+    	return array($mtx, $total);
     }
 }
