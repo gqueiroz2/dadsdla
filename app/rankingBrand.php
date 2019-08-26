@@ -12,6 +12,7 @@ class rankingBrand extends rank{
 	//$con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null
 	public function getAllResults($con, $r, $region, $brands, $value, $months, $currency, $years) {
 
+
 		$order_by = " (
 							CASE brandID
 
