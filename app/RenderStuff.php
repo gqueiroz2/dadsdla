@@ -73,7 +73,7 @@ class RenderStuff extends Model{
 								/*
 										AGÊNCIAS
 								*/
-								$agency = $ag->getAgencybyRegion($con,array($region));
+								$agency = $ag->getAllAgenciesByRegion($con,array($region));
 
 								echo "<div class='row mt-1'>";
 									echo "<div class='col-1'><center> ".($n+1)." </center></div>";
@@ -112,7 +112,8 @@ class RenderStuff extends Model{
 								/*
 										CLIENTES
 								*/
-								$client = $cli->getClientByRegion($con,array($region));
+
+								$client = $cli->getAllClientsByRegion($con,array($region));
 
 								echo "<div class='row mt-1'>";
 									echo "<div class='col-1'><center> ".($n+1)." </center></div>";

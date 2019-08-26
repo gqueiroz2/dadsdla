@@ -404,17 +404,16 @@ class agency extends Management{
 
     }
 
-    public function getAllAgencysByRegion($con,$agencyRegion=false){
+    public function getAllAgenciesByRegion($con,$agencyRegion=false){
      
         $sql = new sql();
 
-        $table = "agency_unit au";
+        $table = "agency a";
 
-        $columns = "a.ID AS 'id',
+        $columns = "DISTINCT a.ID AS 'id',
                     a.name AS 'agency',
-                    au.ID AS 'agencyUnitID',
-                    au.name AS 'agencyUnitName',
                     ag.ID AS 'agencyGroupID',
+                    ag.name AS 'agencyGroup',
                     r.name AS 'region'
                     ";
 
@@ -425,14 +424,14 @@ class agency extends Management{
             $where .= "WHERE r.ID IN ('$agencyRegion')";
         }
 
-        $join = "LEFT JOIN agency a ON a.ID = au.agency_id
+        $join = "LEFT JOIN agency_unit au ON a.ID = au.agency_id
                  LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
                  LEFT JOIN region r ON r.ID = ag.region_id
                  ";
 
         $res = $sql->select($con,$columns,$table,$join,$where);
 
-        $from = array('id','agency', 'agencyUnitID', 'agencyUnitName', 'agencyGroupID','region');
+        $from = array('id','agency',  'agencyGroupID', 'agencyGroup','region');
 
         $agency = $sql->fetch($res,$from,$from);
 

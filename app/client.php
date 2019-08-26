@@ -250,13 +250,12 @@ class client extends Management{
      
         $sql = new sql();
 
-        $table = "client_unit cu";
+        $table = "client c";
 
-        $columns = "c.ID AS 'id',
+        $columns = "DISTINCT c.ID AS 'id',
                     c.name AS 'client',
-                    cu.ID AS 'clientUnitID',
-                    cu.name AS 'clientUnitName',
                     cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup',
                     r.name AS 'region'
                     ";
 
@@ -267,14 +266,14 @@ class client extends Management{
             $where .= "WHERE r.ID IN ('$clientRegions')";
         }
 
-        $join = "LEFT JOIN client c ON c.ID = cu.client_id
+        $join = "LEFT JOIN client_unit cu ON cu.client_id = c.ID
                  LEFT JOIN client_group cg ON cg.ID = c.client_group_id
                  LEFT JOIN region r ON r.ID = cg.region_id
                  ";
 
         $res = $sql->select($con,$columns,$table,$join,$where);
 
-        $from = array('id','client', 'clientUnitID', 'clientUnitName', 'clientGroupID','region');
+        $from = array('id','client', 'clientGroupID', 'clientGroup','region');
 
         $client = $sql->fetch($res,$from,$from);
 
