@@ -101,7 +101,6 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
-					var_dump($table);
 				
 				if ($infoQuery[0]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {

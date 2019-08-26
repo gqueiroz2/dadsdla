@@ -19,14 +19,14 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('core','corePerformanceController@post')
 									->name('corePerformancePost');
 
-		Route::get('quarter','quarterPerformanceController@get')
+		Route::get('office','quarterPerformanceController@get')
 									->name('quarterPerformanceGet');
-		Route::post('quarter','quarterPerformanceController@post')
+		Route::post('office','quarterPerformanceController@post')
 									->name('quarterPerformancePost');
 
-		Route::get('executive','executivePerformanceController@get')
+		Route::get('individual','executivePerformanceController@get')
 									->name('executivePerformanceGet');
-		Route::post('executive','executivePerformanceController@post')
+		Route::post('individual','executivePerformanceController@post')
 									->name('executivePerformancePost');
 	});
 });

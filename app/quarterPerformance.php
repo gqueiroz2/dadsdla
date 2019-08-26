@@ -75,7 +75,7 @@ class quarterPerformance extends performance {
 				if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
 					$table[$b][$m] = "ytd";
 				}else{
-					$table[$b][$m] = "digital";
+					$table[$b][$m] = "fw_digital";
 				}
 
 				$where[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
