@@ -34,10 +34,9 @@ Route::group(['middleware' => 'auth'],function(){
 		});
 
 		Route::group(['prefix'=>'checkElements'],function(){
-			Route::post('clientGroupByClient','ajaxController@clientGroupByClient');									
+			Route::post('clientGroupByClient','ajaxController@clientGroupByClient');
 
 			Route::post('agencyGroupByAgency','ajaxController@agencyGroupByAgency');
-									
 
 		});
 

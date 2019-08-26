@@ -51,7 +51,7 @@
 					</div>
 
 					<div class="col-sm-2">
-						<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+						<label class="labeexpressionlLeft"><span class="bold"> &nbsp; </span> </label>
 						<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">
 					</div>
 				</div>
@@ -59,22 +59,23 @@
 		</div>
 	</div>
 
-	<div class="row justify-content-end mt-2">
-		<div class="col-sm"></div>
-		<div class="col-sm"></div>
-		<div class="col-sm"></div>
-		<div class="col-sm"></div>
-		<div class="col-sm"></div>
-		<div class="col-sm"></div>
-		<div class="col-sm-2" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
-		</div>
-		<div class="col-sm-2">
-			<button type="button" class="btn btn-primary" style="width: 100%">
-				Generate Excel
-			</button>				
-		</div>
-	</div>	
+	<form method="POST" action="{{ route('testExcel') }}" runat="server"  onsubmit="ShowLoading()">
+		@csrf
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm-2" style="color: #0070c0;font-size: 22px;">
+				<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
+			</div>
+			<div class="col-sm-2">
+				<input type="submit" value="Generate Excel" class="btn btn-primary" style="width: 100%;">
+			</div>
+		</div>	
+	</form>
 	
 </div>
 

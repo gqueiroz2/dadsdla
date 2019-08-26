@@ -7,7 +7,7 @@ use App\Render;
 
 class renderBrandRanking extends Render {
     
-    public function assembler($mtx, $currency, $value){
+    public function assembler($mtx, $currency, $value, $region, $names){
 		
         $currency = $currency[0]['name'];
         $value = strtoupper($value);
@@ -16,7 +16,7 @@ class renderBrandRanking extends Render {
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center>
                             <span style='font-size:18px;'> 
-                                <b>Brand Ranking - ($currency/$value)</b>
+                                <b>$region - Brand Ranking (".strtoupper($names['source']).") : ($currency/$value)</b>
                             </span>
                         </center></th>";
             echo "</tr>";
