@@ -105,6 +105,8 @@ class rankingBrandController extends Controller {
     		array_push($brand, $aux);
     	}
 
-    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName'));
+        $names = $rb->createNames($type, $months, $rtr, $brands);
+
+    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names'));
     }
 }

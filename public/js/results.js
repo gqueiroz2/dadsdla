@@ -84,7 +84,6 @@ $(document).ready(function(){
     		}
     	});
 
-			
 		}else{
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);

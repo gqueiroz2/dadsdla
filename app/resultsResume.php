@@ -55,7 +55,7 @@ class resultsResume extends results{
 		        }else{
 		       	//SE FOR IBMS / BTS
 
-		        	if ($brands[$b][1] == "FN") {
+		        	/*if ($brands[$b][1] == "FN") {
 						if ($cYear == 2019 && ($months[$m][1] < 6)) {
 							$whereSales[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
             					   			AND (source  = \"ACTUAL\")
@@ -72,13 +72,13 @@ class resultsResume extends results{
 			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
   		                }
 					}else{
-
+					*/
 			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			        	                   AND (ytd.year IN ($cYear) )
 			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
 			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
 			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
-			        }
+			        //}
 
 			        $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
