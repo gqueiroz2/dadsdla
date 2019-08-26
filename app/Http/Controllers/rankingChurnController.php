@@ -88,6 +88,7 @@ class rankingChurnController extends Controller {
 	  	$rc = new rankingChurn();
 
 	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
+
 	  	$finalValues = array();
 
 	  	for ($v=0; $v < sizeof($values); $v++) { 
@@ -115,6 +116,6 @@ class rankingChurnController extends Controller {
 		$render = new renderChurnRanking();
   		$names = $rc->createNames($type, $months, $rtr, $brands);
 
-  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names'));
+  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
 	}
 }

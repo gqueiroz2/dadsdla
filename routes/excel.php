@@ -15,8 +15,9 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
 
-		Route::any('test','excelController@test')
+		Route::post('test','excelController@test')
 									->name('testExcel');
+		
 		});
 	});
 });

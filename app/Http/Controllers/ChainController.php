@@ -92,7 +92,7 @@ class ChainController extends Controller{
             case 'ytdFN':
                 unset($spreadSheet[0]);                
                 $spreadSheet = array_values($spreadSheet);
-                $table = "ytd";
+                //$table = "ytd";
                 break;
 			case 'cmaps':
 				unset($spreadSheet[0]);
@@ -187,7 +187,6 @@ class ChainController extends Controller{
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('tableThirdChain');
     	$year = Request::get('year');
-    	
 
         if($table == "ytdFN"){
             $table = "ytd";

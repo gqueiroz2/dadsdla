@@ -78,7 +78,7 @@
 	<div class="container-fluid">
 		<div class="row mt-2 justify-content-center">
 			<div class="col">
-				{{$render->assembler($mtx, $pRate, $value)}}
+				{{$render->assembler($mtx, $pRate, $value, $rtr, $names)}}
 			</div>
 		</div>
 	</div>

@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderMarketRanking extends Render {
     
-    public function assembler($mtx, $total, $currency, $value, $type, $names){
+    public function assembler($mtx, $total, $currency, $value, $type, $names, $region){
     	
     	echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
             	echo "<th colspan='".sizeof($mtx)."' class='lightBlue'><center>";
                             echo "<span style='font-size:18px;'>";
-                                echo "<b> Ranking ".ucfirst($type)." (".strtoupper($names['source']).") : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
+                                echo "<b> $region - Market Ranking (".strtoupper($names['source']).") : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
 	                            if ($type != "sector") {
 	                            	echo "<span style='font-size:18px;'>";
 	                            		echo "<b> Refer to the brands: ".$names['brands']."</b></br>";
