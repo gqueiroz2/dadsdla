@@ -14,6 +14,7 @@ class subRankings extends rank{
             $filterValue = nome da agencia
 
         */
+
         if ($type == "agencyGroup") {
             $filter = "agency_group_id";
         }elseif($type == "client"){
@@ -22,8 +23,21 @@ class subRankings extends rank{
             $filter = "agency_id";
         }
 
-        for ($b=0; $b < sizeof($brands); $b++) { 
-            $brands_id[$b] = $brands[$b][0];
+        $brands_id = array();
+        $brands_idD = array();
+
+        for ($b=0; $b < sizeof($brands); $b++) {
+            if ($brands[$b][0] == '9') {
+                array_push($brands_idD, '9');
+                array_push($brands_idD, '13');
+                array_push($brands_idD, '14');
+                array_push($brands_idD, '15');
+                array_push($brands_idD, '16');
+            }elseif ($brands[$b][0] == '10') {
+                array_push($brands_idD, '10');
+            }else{
+                array_push($brands_id,$brands[$b][0]);
+            }
         }
 
         $sql = new sql();
@@ -50,14 +64,21 @@ class subRankings extends rank{
         }else{
             $agency = $oldAgency;
         }
-       
+
         if ($tableName == "ytd") {
+            $valueD = $value."_revenue";
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year", $filter);
             $colsValue = array($region, $brands_id, $months, $year, $agency);
+            $columnsD = array("region_id","brand_id","month","year","agency_id");
+            $colsValueD = array($region,$brands_idD,$months,$year,$agency);
+
         }else{
+            $valueD = $value."_revenue";
             $columns = array("brand_id", "month", "year", $filter);
             $colsValue = array($brands_id, $months, $year, $agency);
+            $columnsD = array("region_id","brand_id","month","year","agency_id");
+            $colsValueD = array($region,$brands_idD,$months,$year,$agency);
         }
 
         $table = "$tableName $tableAbv";
@@ -65,26 +86,41 @@ class subRankings extends rank{
         if($type == "client"){
             $leftName = "agency";
             array_push($columns, $type."_id");
+            array_push($columnsD, $type."_id");
 
             $c = new client();
             $val = $c->getClientIDByRegion($con,$sql,$filterValue,array($region));
             array_push($colsValue, $val);
+            array_push($colsValueD, $val);
         }
 
         $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
-
+        
         $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
+
+
+
+        $tmpD = $leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($valueD) AS $as";
+
+        $joinD = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$leftName."_id";
 
         $name = $leftName."_id";
         $names = array($leftName."ID", $leftName, $as);
 
         $where = $sql->where($columns, $colsValue);
+        $whereD = $sql->where($columnsD, $colsValueD);
         
         $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+        $valuesD[$y] = $sql->selectGroupBy($con, $tmpD, "fw_digital", $joinD, $whereD, "total", $name, "DESC");
 
         $from = $names;
 
         $res = $sql->fetch($values[$y], $from, $from);
+        $resD = $sql->fetch($valuesD[$y], $from, $from);
+
+
+        var_dump($resD);
+
 
         return $res;
     }

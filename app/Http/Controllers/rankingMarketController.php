@@ -90,16 +90,11 @@ class rankingMarketController extends Controller {
 
   	$values = $rm->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
   	
-  	if ($type == "sector") {
-  		$values2 = $rm->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years, true);
-  		$matrix = $rm->assembler($values, $years, $type, $values2);
-  	}else{
-  		$matrix = $rm->assembler($values, $years, $type);
-  	}
+		$matrix = $rm->assembler($values, $years, $type);
 
   	$mtx = $matrix[0];
   	$total = $matrix[1];
-
+    
   	$rName = $rm->TruncateRegion($rtr);
 
   	$render = new renderMarketRanking();
