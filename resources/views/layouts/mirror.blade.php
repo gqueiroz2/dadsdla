@@ -102,7 +102,7 @@
                         </li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="#"> Header / CMAPS <span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="#"> Viewer <span class="sr-only">(current)</span></a>
 						</li>
 
 						<li class="nav-item dropdown">

@@ -35,7 +35,9 @@ class quarterPerformanceRender extends Render {
 					for ($c=1; $c < sizeof($mtx[$t][$b]); $c++) { 
 						echo "<tr>";
 						for ($v=0; $v < sizeof($mtx[$t][$b][$c]); $v++) { 
-							if ($v == 0) {
+							if($v == 3 || $v == 6){
+
+							}elseif ($v == 0) {
 								if (($t == (sizeof($tiers)-1))) {
 									if ($c == 5 || $c == 1) {
 										echo "<td class='darkBlue center'>".$mtx[$t][$b][$c][$v]."</td>";
@@ -52,7 +54,7 @@ class quarterPerformanceRender extends Render {
 									echo "<td class='medBlue center'>".$mtx[$t][$b][$c][$v]."</td>";	
 								}
 							}elseif ($v >= 1 && $v <= 6) {
-								$style = "style='width: 10%'";
+								$style = "style='width: 15%'";
 								if ($c == 2 || $c == 3) {
 									echo "<td class='center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
 								}elseif ($c == 4) {

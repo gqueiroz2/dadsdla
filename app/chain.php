@@ -25,8 +25,8 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
 
         $columns = $this->defineColumns($table,'first');
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr"){
-            $parametter = true;
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN"){
+            $parametter = $table;
         }else{
             $parametter = false;
         }
@@ -34,8 +34,11 @@ class chain extends excel{
 
         $into = $this->into($columns);      
         
-        $check = 0;
-               
+        if($table == "ytdFN"){
+            $table = "ytd";
+        }
+
+        $check = 0;               
         $mark = 0;
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
@@ -116,22 +119,93 @@ class chain extends excel{
     }
 
      public function thirdToDLA($sql,$con,$tCon,$table,$year,$truncate){
-    	
         $base = new base(); 
-        if($truncate){
-            $truncateStatement = "TRUNCATE TABLE $table";
-            if($con->query($truncateStatement) === TRUE){
-                $truncated = true;
+
+        if($table == "ytdFN"){
+            if($year == "2019"){
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $delete[$y] = "DELETE FROM $table 
+                                        WHERE(year = '".$year[$y]."')
+                                        AND (brand_id = '8')
+                                        AND (month < '6')
+                                  ";     
+                    if($con->query($delete[$y])){
+                    }
+                }
             }else{
-                $truncated = false;
-            }
-        }else{
-            for ($y=0; $y < sizeof($year); $y++) { 
-                $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";     
-                if($con->query($delete[$y])){
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $delete[$y] = "DELETE FROM $table 
+                                        WHERE(year = '".$year[$y]."')
+                                        AND (brand_id = '8')                                        
+                                  ";     
+                    if($con->query($delete[$y])){
+                    }
                 }
             }
-        }    
+
+            $table = "ytd";
+
+        }else{
+            if($table == "ytd"){
+                if($truncate){
+                    $truncateStatement = "TRUNCATE TABLE $table";
+                    if($con->query($truncateStatement) === TRUE){
+                        $truncated = true;
+                    }else{
+                        $truncated = false;
+                    }
+                }else{
+                    if($year == "2019"){
+                        for ($y=0; $y < sizeof($year); $y++) { 
+                            $delete[$y] = "DELETE FROM $table 
+                                                WHERE(year = '".$year[$y]."')
+                                                AND (brand_id != '8')                                            
+                                                ";     
+                            if($con->query($delete[$y])){
+                            }
+                            $delete2[$y] = "DELETE FROM $table 
+                                                WHERE(year = '".$year[$y]."')
+                                                AND (brand_id = '8')
+                                                AND (month > '5')                                           
+                                                ";     
+                            if($con->query($delete2[$y])){
+                            }
+                        }
+                    }elseif($year == "2018"){
+                        for ($y=0; $y < sizeof($year); $y++) { 
+                            $delete[$y] = "DELETE FROM $table 
+                                                WHERE(year = '".$year[$y]."')
+                                                AND (brand_id != '8')                                            
+                                                ";     
+                            if($con->query($delete[$y])){
+                            }                            
+                        }
+                    }else{
+                        for ($y=0; $y < sizeof($year); $y++) { 
+                            $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";     
+                            if($con->query($delete[$y])){
+                            }
+                        }
+                    }
+                }
+            }else{
+                if($truncate){
+                    $truncateStatement = "TRUNCATE TABLE $table";
+                    if($con->query($truncateStatement) === TRUE){
+                        $truncated = true;
+                    }else{
+                        $truncated = false;
+                    }
+                }else{
+                    for ($y=0; $y < sizeof($year); $y++) { 
+                        $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."')";     
+                        if($con->query($delete[$y])){
+                        }
+                    }
+                }
+            }
+        }   
+            
 
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
@@ -773,6 +847,8 @@ class chain extends excel{
                             }elseif($columns[$c] == 'month'){
                                 if($table == "cmaps" || $table == "fw_digital"){
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
+                                }elseif($table == "ytdFN"){
+                                    $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
                                 }
@@ -860,6 +936,23 @@ class chain extends excel{
     					break;
     			}
     			break;
+
+            case 'ytdFN':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->ytdColumnsF;
+                        break;
+                    case 'second':
+                        return $this->ytdColumnsS;
+                        break;
+                    case 'third':
+                        return $this->ytdColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->ytdColumns;
+                        break;
+                }
+                break;
 
     		case 'mini_header':
     			switch ($recurrency) {
