@@ -265,6 +265,9 @@ class share extends results
             $columns = array("region_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
+            if ($brand == '9') {
+                $where = "WHERE (region_id = \"$region\") AND (year = \"$year[0]\") AND (brand_id != \"10\") AND (month = \"$month\") AND (sales_rep_id = \"".$salesRep['id']."\")";
+            }
         }else{
             $where = false;
         }

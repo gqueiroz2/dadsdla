@@ -83,24 +83,29 @@ class rankingChurnController extends Controller {
 
 	  	$cYear = intval(date('Y'));
     	$pYear = $cYear - 1;
-	  	$years = array($cYear, $pYear);
+	  	$years = array($cYear, $pYear, $pYear-1);
 
 	  	$rc = new rankingChurn();
 
 	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-	  	$finalValues = $rc->fixArray($values, $type);
-	  	
-	  	
-	  	$cMonth = intval(date('m'));
-		$months2 = array();
-		for ($m=1; $m <= $cMonth; $m++) { 
-			array_push($months2, $m);
-		}
+	  	$finalValues = array();
 
-		$valuesYTD = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);
-		$finalValuesYTD = $rc->fixArray($valuesYTD, $type);
+	  	for ($v=0; $v < sizeof($values); $v++) { 
+	  		for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+	  			if (!in_array($values[$v][$v2][$type], $finalValues)) {
+                    array_push($finalValues, $values[$v][$v2][$type]);
+                }
+	  		}
+	  	}
 
-		$matrix = $rc->assembler($finalValues, $finalValuesYTD, $years, $type);
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
+        }
+
+		$valuesTotal = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);	
+
+		$matrix = $rc->assembler($values, $finalValues, $valuesTotal, $years, $type);
 
 		$mtx = $matrix[0];
 		$total = $matrix[1];

@@ -12,41 +12,43 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-	Route::group(['prefix'=>'pacingReport'],function(){
+	Route::group(['prefix'=>'pAndR'],function(){
+
+
+		Route::group(['prefix'=>'pacingReport'],function(){
+			
+			Route::get('/','pacingReportController@get')
+										->name('pacingReportGet');
+			Route::post('/','pacingReportController@post')
+										->name('pacingReportPost');
+		});
+
+		Route::group(['prefix'=>'VPReport'],function(){
+			
+			Route::get('/','VPController@get')
+										->name('VPGet');
+			Route::post('/','VPController@post')
+										->name('VPPost');
+		});
+
+		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
+			
+			Route::get('/','AEController@get')
+										->name('AEGet');
+			Route::post('/','AEController@post')
+										->name('AEPost');
+			Route::post('save','AEController@save')
+										->name('AESave');
+
+
+		});
+
 		
-		Route::get('/','pacingReportController@get')
-									->name('pacingReportGet');
-		Route::post('/','pacingReportController@post')
-									->name('pacingReportPost');
 	});
-
-	Route::group(['prefix'=>'VPReport'],function(){
-		
-		Route::get('/','VPController@get')
-									->name('VPGet');
-		Route::post('/','VPController@post')
-									->name('VPPost');
-	});
-
-	Route::group(['prefix'=>'AccountExecutiveReport'],function(){
-		
-		Route::get('/','AEController@get')
-									->name('AEGet');
-		Route::post('/','AEController@post')
-									->name('AEPost');
-		Route::post('save','AEController@save')
-									->name('AESave');
-
-
-	});
-
 	Route::group(['prefix'=>'ajax'],function(){
-
 		Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion')
 									->name('salesRepByRegion');
-
 	});
-
 });
 
 

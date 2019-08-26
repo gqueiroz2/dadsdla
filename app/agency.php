@@ -404,6 +404,40 @@ class agency extends Management{
 
     }
 
+    public function getAllAgenciesByRegion($con,$agencyRegion=false){
+     
+        $sql = new sql();
+
+        $table = "agency a";
+
+        $columns = "DISTINCT a.ID AS 'id',
+                    a.name AS 'agency',
+                    ag.ID AS 'agencyGroupID',
+                    ag.name AS 'agencyGroup',
+                    r.name AS 'region'
+                    ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegion = implode(",",$agencyRegion);
+            $where .= "WHERE r.ID IN ('$agencyRegion')";
+        }
+
+        $join = "LEFT JOIN agency_unit au ON a.ID = au.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('id','agency',  'agencyGroupID', 'agencyGroup','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+    }
+
     public function getAgencyUnit($con,$agencyID=false){
 
         $sql = new sql();

@@ -89,8 +89,9 @@ class rankingBrandController extends Controller {
 		$years = array($cYear, $pYear);
 
     	$brandsFinal = $rb->mountBrands($brands);
+
     	$values = $rb->getAllResults($con, $rtr, $region, $brandsFinal, $value, $months, $pRate, $years);
-    	//var_dump($values);
+    	
         $mtx = $rb->assembler($values, $years, $brands);
     	
     	$rName = $rb->TruncateRegion($rtr);
