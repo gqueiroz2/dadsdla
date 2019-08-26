@@ -29,15 +29,42 @@ class rankingMarket extends rank {
         return $res;
     }
 
-    public function searchPos($name, $values, $type, $s){
-    	
-		for ($s2=0; $s2 < sizeof($values[0]); $s2++) { 
-			if ($name == $values[0][$s2][$type]) {
-				return ($s2+1);
-			}
-		}
-    	
-    	return ($s+1);
+    public function searchPos($name, $values, $type, $cont){
+
+        $bool = -1;
+        $bool2 = -1;
+
+        for ($v=0; $v < sizeof($values[0]); $v++) { 
+            if ($values[0][$v][$type] == $name) {
+                $bool = 0;
+                if ($values[0][$v]['total'] == 0) {
+                    $bool = 1;
+                }else{
+                    $bool = 2;
+                }
+            }
+        }
+
+        for ($v=0; $v < sizeof($values[1]); $v++) { 
+            if ($values[1][$v][$type] == $name) {
+                $bool2 = 0;
+                if ($values[1][$v]['total'] == 0) {
+                    $bool2 = 1;
+                }else{
+                    $bool2 = 2;
+                }
+            }
+        }
+
+        if ($bool == -1 || $bool == 1) {
+            if ($bool2 == -1 || $bool2 == 1) {
+                return -1;
+            }else{
+                return $cont;
+            }
+        }else{
+            return $cont;
+        }
     }
 
     public function searchValueByYear($name, $values, $type, $year){
@@ -85,10 +112,10 @@ class rankingMarket extends rank {
 
     }
 
-    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
+    public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $cont, $values2=null){
     	
     	if ($mtx[$m][0] == "Ranking") {
-    		$res = $this->searchPos($name, $values, $type, $s);
+    		$res = $this->searchPos($name, $values, $type, $cont);
     	}elseif ($mtx[$m][0] == "Agency group") {
     		$res = $this->searchGroupValue($name, $values);
     	}elseif ($mtx[$m][0] == "Booking ".$years[0]) {
@@ -115,36 +142,6 @@ class rankingMarket extends rank {
     		}else{
     			$res = "Decreased";
     		}
-    	}elseif ($mtx[$m][0] == "Class") {
-    		if ($mtx[$m-3][$p] == 0 && $mtx[$m-4][$p] > 0) {
-    			if ($this->existInYear($name, $values, $type, 1)) {
-    				$res = "Recovered";
-    			}else{
-    				$res = "New";
-    			}
-    		}elseif ($mtx[$m-3][$p] > 0 && $mtx[$m-4][$p] > 0) {
-    			$res = "Renovated";
-    		}else{
-    			$res = "Churn";
-    		}
-    	}elseif ($mtx[$m][0] == "YTD ".$years[0]) {
-    		$res = $this->searchValueByYear($name, $values2, $type, 0);
-    	}elseif ($mtx[$m][0] == "YTD ".$years[1]) {
-    		$res = $this->searchValueByYear($name, $values2, $type, 1);
-    	}elseif ($mtx[$m][0] == "Var YTD (%)") {
-    		if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
-    			$res = 0;
-    		}else{
-    			$res = ($mtx[$m-2][$p]/$mtx[$m-1][$p])*100;
-    		}
-    	}elseif ($mtx[$m][0] == "Var Abs. YTD") {
-    		$res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
-    	}elseif ($mtx[$m][0] == "Move YTD") {
-    		if ($mtx[$m-4][$p] > $mtx[$m-3][$p]) {
-    			$res = "Increased";
-    		}else{
-    			$res = "Decreased";
-    		}
     	}else{
     		$res = $name;
     	}
@@ -159,9 +156,6 @@ class rankingMarket extends rank {
     	$first = 0;
     	$second = 0;
 
-    	$firstYtd = 0;
-    	$secondYtd = 0;
-
     	if ($type == "agency") {
     		$pos = 3;
     	}else{
@@ -171,11 +165,6 @@ class rankingMarket extends rank {
     	for ($m=1; $m < sizeof($mtx[0]); $m++) { 
     		$first += $mtx[$pos][$m];
     		$second += $mtx[$pos+1][$m];
-
-    		if ($type == "sector") {
-    			$firstYtd += $mtx[7][$m];
-    			$secondYtd += $mtx[8][$m];
-    		}
     	}
 
     	for ($m=1; $m < sizeof($mtx); $m++) { 
@@ -200,17 +189,10 @@ class rankingMarket extends rank {
     		}
     	}
 
-    	if ($type == "sector") {
-			$total[7] = $firstYtd;
-			$total[8] = $secondYtd;
-			$total[9] = ($total[7]/$total[8])*100;
-			$total[10] = $total[7] - $total[8];
-		}
-
     	return $total;
     }
 
-    public function assembler($values, $years, $type, $values2=null){
+    public function assembler($values, $years, $type){
     	
     	$mtx[0][0] = "Ranking";
     	$pos = 1;
@@ -232,14 +214,6 @@ class rankingMarket extends rank {
 
     	$mtx[$pos][0] = "Move";$pos++;
 
-    	if ($type == "sector") {
-    		$mtx[$pos][0] = "YTD ".$years[0];$pos++;
-			$mtx[$pos][0] = "YTD ".$years[1];$pos++;
-			$mtx[$pos][0] = "Var YTD (%)";$pos++;
-			$mtx[$pos][0] = "Var Abs. YTD";$pos++;
-			$mtx[$pos][0] = "Move YTD";$pos++;	
-    	}
-
 		$types = array();
 
         for ($r=0; $r < sizeof($values); $r++) {
@@ -252,13 +226,23 @@ class rankingMarket extends rank {
             }
         }
 
+        $cont = 1;
+
         for ($t=0; $t < sizeof($types); $t++) { 
         	for ($m=0; $m < sizeof($mtx); $m++) { 
-        		if ($type == "sector") {
-        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $types[$t], $values, $years, sizeof($mtx[$m]), $type, $t, $values2));
-        		}else{
-        			array_push($mtx[$m], $this->checkColumn($mtx, $m, $types[$t], $values, $years, sizeof($mtx[$m]), $type, $t));
-        		}
+                    
+                $res = $this->checkColumn($mtx, $m, $types[$t], $values, $years, sizeof($mtx[$m]), $type, $cont);
+
+                if ($res == -1) {
+                    break;
+                }else{
+                    
+                    if ($m == 0) {
+                        $cont++;    
+                    }
+
+                    array_push($mtx[$m], $res);
+                }
         	}
         }
 

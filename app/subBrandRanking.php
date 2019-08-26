@@ -191,13 +191,40 @@ class subBrandRanking extends rankingBrand {
 
 	public function searchNameValue($name, $sub, $type){
     	
-    	for ($s=0; $s < sizeof($sub); $s++) { 
-    		for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) { 
-    			if ($name == $sub[$s][$s2][$type]) {
-					return $sub[$s][$s2][$type];
-    			}
-    		}
-    	}
+        $bool = -1;
+        $bool2 = -1;
+
+        for ($v=0; $v < sizeof($sub[0]); $v++) { 
+            if ($sub[0][$v][$type] == $name) {
+                $bool = 0;
+                if ($sub[0][$v]['total'] == 0) {
+                    $bool = 1;
+                }else{
+                    $bool = 2;
+                }
+            }
+        }
+
+        for ($v=0; $v < sizeof($sub[1]); $v++) { 
+            if ($sub[1][$v][$type] == $name) {
+                $bool2 = 0;
+                if ($sub[1][$v]['total'] == 0) {
+                    $bool2 = 1;
+                }else{
+                    $bool2 = 2;
+                }
+            }
+        }
+
+        if ($bool == -1 || $bool == 1) {
+            if ($bool2 == -1 || $bool2 == 1) {
+                return -1;
+            }else{
+                return $name;
+            }
+        }else{
+            return $name;
+        }
     }
 
     public function searchYearValue($name, $sub, $type, $y){
@@ -251,7 +278,7 @@ class subBrandRanking extends rankingBrand {
 
     public function checkColumn($mtx, $m, $name, $sub, $years, $p, $type){
 
-    	if ($type == "agency" && $m == 0) {
+    	if ($type == "agency" && $m == 1) {
     		$res = $this->searchGroupValue($name, $sub);
     	}elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
     		$res = $this->searchYearValue($name, $sub, $type, 0);
@@ -343,11 +370,11 @@ class subBrandRanking extends rankingBrand {
 		$pos = 0;
 
 		if ($type == "agency") {
-			$mtx[$pos][0] = "Agency Group";
-			$pos++;
-		}
-
-		$mtx[$pos][0] = ucfirst($type);$pos++;
+			$mtx[$pos][0] = "Agency";$pos++;
+            $mtx[$pos][0] = "Agency Group";$pos++;
+		}else{
+            $mtx[$pos][0] = ucfirst($type);$pos++;
+        }
 
 		$mtx[$pos][0] = "Bookings ".$years[0];$pos++;
 		$mtx[$pos][0] = "Bookings ".$years[1];$pos++;
@@ -357,11 +384,26 @@ class subBrandRanking extends rankingBrand {
 		$mtx[$pos][0] = "Move";
         
 		for ($n=0; $n < sizeof($names); $n++) { 
-			for ($m=0; $m < sizeof($mtx); $m++) { 
-				array_push($mtx[$m], $this->checkColumn($mtx, $m, $names[$n], $values, $years, sizeof($mtx[$m]), $type));
+			for ($m=0; $m < sizeof($mtx); $m++) {
+
+                $res = $this->checkColumn($mtx, $m, $names[$n], $values, $years, sizeof($mtx[$m]), $type);
+
+                if ($res == -1) {
+                    break;
+                }else{
+                    array_push($mtx[$m], $res);
+                }
 			}
 		}
-		
+
+        if ($type == "agency") {
+            $aux = $mtx[0];
+            $auxGroup = $mtx[1];
+
+            $mtx[0] = $auxGroup;
+            $mtx[1] = $aux;
+        }
+
 	    $total = $this->subAssemblerTotal($mtx, $type);
 		
 		return array($mtx, $total);

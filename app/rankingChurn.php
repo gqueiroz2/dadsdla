@@ -50,22 +50,55 @@ class rankingChurn extends rank {
     public function checkRank($cont, $values, $name, $type, $years){
         
         $bool = -1;
+        $bool2 = -1;
+        $bool3 = -1;
 
         for ($v=0; $v < sizeof($values[0]); $v++) { 
             if ($values[0][$v][$type] == $name) {
                 $bool = 0;
                 if ($values[0][$v]['total'] == 0) {
                     $bool = 1;
-                    return $cont;
+                }else{
+                    $bool = 2;
                 }
             }
-        } 
-
-        if ($bool == -1) {
-            return $cont;
         }
 
-        return -1;
+        for ($v=0; $v < sizeof($values[1]); $v++) { 
+            if ($values[1][$v][$type] == $name) {
+                $bool2 = 0;
+                if ($values[1][$v]['total'] == 0) {
+                    $bool2 = 1;
+                }else{
+                    $bool2 = 2;
+                }
+            }
+        }
+
+        for ($v=0; $v < sizeof($values[2]); $v++) { 
+            if ($values[2][$v][$type] == $name) {
+                $bool3 = 0;
+                if ($values[2][$v]['total'] == 0) {
+                    $bool3 = 1;
+                }else{
+                    $bool3 = 2;
+                }
+            }
+        }
+
+        if ($bool == -1 || $bool == 1) {
+            if ($bool2 == -1 || $bool2 == 1) {
+                if ($bool3 == -1 || $bool3 == 1) {
+                    return -1;
+                }else{
+                    return $cont;
+                }
+            }else{
+                return $cont;
+            }
+        }else{
+            return -1;
+        }
     }
 
     public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $v, $cont, $valuesTotal){
@@ -162,7 +195,7 @@ class rankingChurn extends rank {
     }
 
     public function assembler($values, $nameValues, $valuesTotal, $years, $type){
-    	
+
     	$mtx[0][0] = "Ranking";
     	$pos = 1;
     	
@@ -193,29 +226,13 @@ class rankingChurn extends rank {
                     break;
                 }else{
                     if ($m == 0) {
-                        $cont++;   
+                        $cont++;
                     }
                 
                     array_push($mtx[$m], $res);
                 }
         	}
         }
-
-        $c = 0;
-        $fun = "array_multisort(";
-
-        for ($m=0; $m < sizeof($mtx); $m++) {
-            if (substr($mtx[$m][0], 0, 8) == "Bookings") {
-                $fun .= "\$mtx[".$m."], SORT_ASC";
-                $c++;
-                if ($c != sizeof($years)) {
-                    $fun .= ", ";
-                }
-            }
-        }
-
-        $fun .= ");";var_dump($fun);
-        eval($fun);
 
         $total = $this->assemblerChurnTotal($mtx, $type, $years);
     	
