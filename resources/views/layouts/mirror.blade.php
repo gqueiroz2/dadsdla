@@ -79,30 +79,30 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Individual </a>
-								<a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
-								<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
+								<a class="dropdown-item" href=""> Individual </a>
+								<a class="dropdown-item" href=""> Core </a>
+								<a class="dropdown-item" href=""> Office </a>
 							</div>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
+								<a class="dropdown-item" href=""> Overview </a>
 							</div>
 						</li>
 
                        <li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
-	                        	<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
-								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
-								<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
-	                            <a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+	                        	<a class="nav-link" href=""> Brand </a>
+								<a class="nav-link" href=""> Market </a>                                
+								<a class="nav-link" href=""> Churn </a>
+	                            <a class="nav-link" href=""> Ranking <span class="sr-only">(current)</span></a>
 	                        </div>
                         </li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="#"> Header / CMAPS <span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="#"> Viewer <span class="sr-only">(current)</span></a>
 						</li>
 
 						<li class="nav-item dropdown">
