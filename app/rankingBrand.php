@@ -76,9 +76,7 @@ class rankingBrand extends rank{
 					}
 					//var_dump($years[$y]);
 					//var_dump($table);
-					$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);
-
-					//var_dump("infoQuery", $infoQuery[$b]);
+					$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);	
 				}
 
 				if (sizeof($brands) > 1) {
@@ -101,7 +99,6 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
-					var_dump($table);
 				
 				if ($infoQuery[0]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {
@@ -124,16 +121,8 @@ class rankingBrand extends rank{
 		            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
 		        }
 
-
-
-				/*if ($y == 0) {
-					var_dump("antes da transformação",$res[$y]);
-				}*/
-
 				if (is_array($res[$y])) {
-					/*var_dump($y);
-					var_dump($info['table']);
-					var_dump($pRate);*/
+
 					for ($i=0; $i < sizeof($res[$y]); $i++) { 
 						if($res[$y][$i]['brand'] == 'ONL' || $res[$y][$i]['brand'] == 'VIX'){
 							$res[$y][$i]['total'] *= $pRateDigital;
@@ -146,19 +135,13 @@ class rankingBrand extends rank{
 					}	
 				}
 
-				/*if ($y == 0) {
-					var_dump("depois da transformação",$res[$y]);
-				}*/
 			}
 
-			//var_dump($res);
 			$line[$l] = $res;
 
 			if ($l != 0) {
 				array_pop($line[$l]);
 			}
-
-			//var_dump($line[$l]);
 		}
 		
 		return $line;
@@ -202,10 +185,14 @@ class rankingBrand extends rank{
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			$mtx[0][$b+1] = $brands[$b][1];
 
-			if ($b < sizeof($values[0][0])) {
-				$val = $values[0][0][$b]['total'];
-			}else{
+			if ($values[0][0] == false) {
 				$val = "-";
+			}else{
+				if ($b < sizeof($values[0][0])) {
+					$val = $values[0][0][$b]['total'];
+				}else{
+					$val = "-";
+				}
 			}
 
 			$mtx[1][$b+1] = $val;
@@ -214,10 +201,14 @@ class rankingBrand extends rank{
 				$closed += $val;	
 			}
 
-			if ($b < sizeof($values[1][0])) {
-				$val = $values[1][0][$b]['total'];
-			}else{
+			if ($values[1][0] == false) {
 				$val = "-";
+			}else{
+				if ($b < sizeof($values[1][0])) {
+					$val = $values[1][0][$b]['total'];
+				}else{
+					$val = "-";
+				}
 			}
 
 			$mtx[2][$b+1] = $val;
@@ -226,10 +217,14 @@ class rankingBrand extends rank{
 				$target += $val;	
 			}
 
-			if ($b < sizeof($values[0][1])) {
-				$val = $values[0][1][$b]['total'];
-			}else{
+			if ($values[0][1] == false) {
 				$val = "-";
+			}else{
+				if ($b < sizeof($values[0][1])) {
+					$val = $values[0][1][$b]['total'];
+				}else{
+					$val = "-";
+				}
 			}
 
 			$mtx[3][$b+1] = $val;
