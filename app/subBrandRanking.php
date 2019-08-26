@@ -60,7 +60,7 @@ class subBrandRanking extends rankingBrand {
 
 			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand[0]['id']);
 
-			
+
 			if (is_array($res[$y])) {
             	for ($r=0; $r < sizeof($res[$y]); $r++) {
                     if ($table != "cmaps") {
