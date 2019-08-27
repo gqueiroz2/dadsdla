@@ -13,7 +13,6 @@
 
 Route::group(['middleware' => 'auth'],function(){
 
-
 	Route::group(['prefix'=>'rankings'], function(){
 		Route::group(['prefix'=>'ranking'], function(){
 			Route::get('/','rankingController@get')
@@ -57,4 +56,5 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('subRanking', 'ajaxController@subRanking');
 	Route::post('brandSubRanking', 'ajaxController@brandSubRanking');
 	Route::post('marketSubRanking', 'ajaxController@marketSubRanking');
+	Route::post('churnSubRanking', 'ajaxController@churnSubRanking');
 });

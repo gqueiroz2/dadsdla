@@ -33,7 +33,6 @@ class client extends Management{
         ";
         //$where = "WHERE cu.name = \"".addslashes($parent)."\"";
 
-
         $where = "WHERE ( cu.name = \"".addslashes($parent)."\" ) AND (r.name = \"".$regionName."\") " ;
         $limit = "LIMIT 1";
         $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);

@@ -28,11 +28,20 @@ class renderDashboards extends Render{
         $last3YearsByBrand = $handler['last3YearsByBrand'];
         $last3YearsByProduct = $handler['last3YearsByProduct'];
 
+        //Linha do titulo
         echo "<div class='row justify-content-center mt-3' style='margin-right: 0.3%; margin-left: 0.3%;'>";
             echo "<div class='col lightBlue' align='center'>";
                 echo "<span style='font-size:22px;'> $showType : ".$baseFilter->$type." </span>";
             echo "</div>";
         echo "</div>";
+
+
+        //linha do Ranking
+
+        //var_dump($showType);
+        //var_dump($baseFilter);
+        //var_dump($last3YearsRoot);
+        //var_dump($years);
 
         echo "<div class='row justify-content-center mt-3' style='margin-right: 0.3%; margin-left: 0.3%;'>";
             echo "<div class='col' align='center'>";
@@ -40,28 +49,28 @@ class renderDashboards extends Render{
             echo "</div>";
         echo "</div>";
 
-        echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
-            echo "<div class='col' align='center'>";
-                echo "<div style='width:100%;' id='overviewChildChart' class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS DO TIPO CHILD </div>";
-            echo "</div>";
-        echo "</div>";
 
-        echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%;'>";
-            echo "<div class='col' align='center'>";
-                echo "<span style='width:100%;'> ".$this->renderLast3Child($sr,$last3YearsChild,$years,$type)." </span>";
+        if ($type == 'agency') {
+            echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
+                echo "<div class='col' align='center'>";
+                    echo "<div style='width:100%;' id='overviewChildChart' class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS DO TIPO CHILD </div>";
+                echo "</div>";
             echo "</div>";
-        echo "</div>";  
+
+            echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%;'>";
+                echo "<div class='col' align='center'>";
+                    echo "<span style='width:100%;'> ".$this->renderLast3Child($sr,$last3YearsChild,$years,$type)." </span>";
+                echo "</div>";
+            echo "</div>";  
+        }
         
 
         echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:300px;'>";
-            echo "<div class='col' align='center'>";
-                echo "<div style='width:100%;' id='overviewMonthChart' class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS POR MES </div>";
-            echo "</div>";
-        echo "</div>";
-
-        echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%;'>";
-            echo "<div class='col' align='center'>";
+            echo "<div class='col-3' align='center'>";
                 echo "<span style='width:100%;'> ".$this->renderLast3ByMonth($last3YearsByMonth,$years,$type)." </span>";
+            echo "</div>";
+            echo "<div class='col-9' align='center' style='min-width:300px;'>";
+                echo "<div style='width:100%;' id='overviewMonthChart' class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS POR MES </div>";
             echo "</div>";
         echo "</div>";
 
@@ -69,17 +78,7 @@ class renderDashboards extends Render{
             echo "<div class='col' style='margin-top:1.5%;'>";
                 echo "<div class='container-fluid' style='margin:0px !important; padding:0px !important;'>";
                     
-                    echo "<div class='row'>";
-                        echo "<div class='col' align='center'>";
-                            echo "<span><b> Rev. Year By Brand </b></span>";
-                        echo "</div>";  
-                    echo "</div>"; 
-
-                    echo "<div class='row'>";
-                        echo "<div class='col'>";
-                            echo "<div id=\"overviewBrandChartColumn\" class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS POR MARCA </div>";
-                        echo "</div>";  
-                    echo "</div>";
+                    echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
 
                 echo "</div>";
             echo "</div>";
@@ -122,18 +121,7 @@ class renderDashboards extends Render{
         echo "</div>";
 
 
-        echo "<div class='row justify-content-center mt-2 mb-4' style='margin-right: 0.3%; margin-left: 0.3%;'>";
-            echo "<div class='col' align='center'>";
-                echo "<span style='width:100%;'> ".$this->renderLast3ByBrand($con,$last3YearsByBrand,$years,$type)." </span>";
-                //echo "<span>&nbsp;</span>";
-                //echo "<span style='width:100%;'> ".$this->renderLast3ByProduct($con,$last3YearsByProduct,$years,$type)." </span>";
-            echo "</div>";
-            /*
-            echo "<div class='col' align='center' style='border:2px solid black; background-color:pink; color:black;'>";
-                echo "<span style='width:100%;'> GRAFICO VALORES DOS ULTIMOS 3 ANOS POR MARCA </span>";
-            echo "</div>";
-            */
-        echo "</div>";
+        
 
 
     }
@@ -255,53 +243,53 @@ class renderDashboards extends Render{
             }
         }
 
-        echo "<div class='container-fluid' style='border: 1px solid black; font-size:14px;'>";
-            echo "<div class='row'>";
-                echo "<div class='col-3 lightBlue'>";
+        echo "<table style='width:100%; border: 1px solid black; font-size:14px; text-align:center;'>";
+            echo "<tr>";
+                echo "<td class='lightBlue'>";
                     echo "<span> Brand </span>";
-                echo "</div>"; 
+                echo "</td>"; 
                 for ($y=0; $y < sizeof($years); $y++){ 
-                    echo "<div class='col-3 lightBlue'>";
+                    echo "<td class='lightBlue'>";
                         echo "<span> ".$years[$y]." </span>";
-                    echo "</div>";
+                    echo "</td>";
                 }    
-            echo "</div>"; 
+            echo "</tr>"; 
             for ($b=0; $b < sizeof($brands); $b++){ 
                 if($b%2 ==0){
                     $something = "medBlue";
                 }else{
                     $something = "rcBlue";
                 }
-                echo "<div class='row'>";
-                    echo "<div class='col-3 $something'>";
+                echo "<tr>";
+                    echo "<td class='$something'>";
                         echo "<span> ".$brands[$b][1]." </span>";
-                    echo "</div>";
+                    echo "</td>";
                     for ($y=0; $y < sizeof($years); $y++){ 
-                        echo "<div class='col-3 $something'>";
+                        echo "<td class='$something'>";
                             if($l3BB[$y][$b] > 0){
                                 echo "<span> ".number_format($l3BB[$y][$b])." </span>";
                             }else{
                                 echo "<span> - </span>";
                             }
-                        echo "</div>";
+                        echo "</td>";
                     }
-                echo "</div>"; 
+                echo "</tr>"; 
             }   
-            echo "<div class='row'>";
-                echo "<div class='col-3 darkBlue'>";
+            echo "<tr>";
+                echo "<td class='darkBlue'>";
                     echo "<span> Total </span>";
-                echo "</div>";
+                echo "</td>";
                 for ($y=0; $y < sizeof($years); $y++){ 
-                    echo "<div class='col-3 darkBlue'>";
+                    echo "<td class='darkBlue'>";
                         if($l3BBTotal[$y] > 0){
                             echo "<span> ".number_format($l3BBTotal[$y])." </span>";
                         }else{
                             echo "<span> - </span>";
                         }
-                    echo "</div>";
+                    echo "</td>";
                 }
-            echo "</div>"; 
-        echo "</div>";
+            echo "</tr>"; 
+        echo "</table>";
     }
 
     public function renderLast3ByMonth($l3BM,$years,$type){
@@ -321,53 +309,53 @@ class renderDashboards extends Render{
             }
         }
 
-        echo "<div class='container-fluid' style='border: 1px solid black; font-size:14px;'>";
-            echo "<div class='row'>";
-                echo "<div class='col-3 lightBlue'>";
+        echo "<table style='width:100%;border: 1px solid black; font-size:14px; text-align:center;'>";
+            echo "<tr'>";
+                echo "<td class='lightBlue'>";
                     echo "<span> Month </span>";
-                echo "</div>"; 
+                echo "</td>"; 
                 for ($y=0; $y < sizeof($years); $y++){ 
-                    echo "<div class='col-3 lightBlue'>";
+                    echo "<td class='lightBlue'>";
                         echo "<span> ".$years[$y]." </span>";
-                    echo "</div>";
+                    echo "</td>";
                 }    
-            echo "</div>"; 
+            echo "</tr>"; 
             for ($m=0; $m < sizeof($months); $m++){ 
                 if($m%2 ==0){
                     $something = "medBlue";
                 }else{
                     $something = "rcBlue";
                 }
-                echo "<div class='row'>";
-                    echo "<div class='col-3 $something'>";
+                echo "<tr>";
+                    echo "<td class='$something'>";
                         echo "<span> ".$monthsFN[$m]." </span>";
-                    echo "</div>";
+                    echo "</td>";
                     for ($y=0; $y < sizeof($years); $y++){ 
-                        echo "<div class='col-3 $something'>";
+                        echo "<td class='$something'>";
                             if($l3BM[$y][$m] > 0){
                                 echo "<span> ".number_format($l3BM[$y][$m])." </span>";
                             }else{
                                 echo "<span> - </span>";
                             }
-                        echo "</div>";
+                        echo "</td>";
                     }
-                echo "</div>"; 
+                echo "</tr>"; 
             }   
-            echo "<div class='row'>";
-                echo "<div class='col-3 darkBlue'>";
+            echo "<tr>";
+                echo "<td class='darkBlue'>";
                     echo "<span> Total </span>";
-                echo "</div>";
+                echo "</td>";
                 for ($y=0; $y < sizeof($years); $y++){ 
-                    echo "<div class='col-3 darkBlue'>";
+                    echo "<td class='darkBlue'>";
                         if($l3BMTotal[$y] > 0){
                             echo "<span> ".number_format($l3BMTotal[$y])." </span>";
                         }else{
                             echo "<span> - </span>";
                         }
-                    echo "</div>";
+                    echo "</td>";
                 }
-            echo "</div>"; 
-        echo "</div>";
+            echo "</tr>"; 
+        echo "</table>";
 
     }
 
