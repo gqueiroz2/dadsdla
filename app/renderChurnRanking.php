@@ -51,12 +51,21 @@ class renderChurnRanking extends Render {
             					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
             				}
             			}else{
-        					echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+                            if ($mtx[$n][0] == ucfirst($type)) {
+                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$n][$m]." </td>";
+                                $name = $mtx[$n][$m];
+                            }else{
+                                echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+                            }
             			}
             		}
             	}
 
             	echo "</tr>";
+
+                echo "<tr>";
+                    echo "<td class='$color' id='sub".$type.$m."' style='display: none' colspan='".sizeof($mtx)."'></td>";
+                echo "</tr>";
             }
 
             echo "<tr>";

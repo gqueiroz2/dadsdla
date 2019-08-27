@@ -87,4 +87,44 @@
 
 	<div id="vlau"></div>
 
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+			var months = <?php echo json_encode($months); ?>;
+            var type = "{{$type}}";
+            var value = "{{$value}}";
+            var currency = <?php echo json_encode($pRate); ?>;
+            var region = "{{$region}}";
+            var brands = <?php echo json_encode($brands); ?>;
+
+			ajaxSetup();
+
+			@for($m = 0; $m < sizeof($mtx[0]); $m++)
+				$(document).on('click', "#"+type+{{$m}}, function(){
+
+                    var name = $(this).text();
+
+                    if ($("#sub"+type+{{$m}}).css("display") == "none") {
+
+                        $.ajax({
+                            url: "/ajaxRanking/churnSubRanking",
+                            method: "POST",
+                            data: {name, months, type, value, currency, region, brands},
+                            success: function(output){
+                                $("#sub"+type+{{$m}}).html(output);
+                                $("#sub"+type+{{$m}}).css("display", "");
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }else{
+                    	$("#sub"+type+{{$m}}).html(" ");
+                        $("#sub"+type+{{$m}}).css("display", "none");
+                    }
+                });
+            @endfor
+		});
+	</script>
+
 @endsection
