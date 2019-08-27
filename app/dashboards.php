@@ -67,6 +67,8 @@ class dashboards extends rank{
 
 	    		break;
 	    }
+
+        /*
         var_dump("last3YearsRoot");
         var_dump($last3YearsRoot);
         var_dump("last3YearsChild");
@@ -77,7 +79,7 @@ class dashboards extends rank{
         var_dump($last3YearsByBrand);
         var_dump("last3YearsByProduct");
         var_dump($last3YearsByProduct);
-        var_dump("------------------------------------------------------------");
+        var_dump("------------------------------------------------------------");*/
 
 
 
@@ -245,9 +247,11 @@ class dashboards extends rank{
                 $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr );
 	    	}
             
-	    	$filterValues = $sr->filterValues($somekind, array($baseFilter), $type);
+            $filterValues = $sr->filterValues2($somekind, array($baseFilter), $type);
+
 
 	    	$values = $this->assembler($somekind,array($baseFilter), $years, $type, $filterValues);
+
 
 	    	unset($values[1]);
 	    	
@@ -331,6 +335,7 @@ class dashboards extends rank{
         
         $mtx[$last][0] = "Agency Group";
 
+
         if ($type == "agency") {
             $option = 2;
             $mtx[$last+1][0] = ucfirst($var);
@@ -353,6 +358,7 @@ class dashboards extends rank{
             $mtx[$last+1][0] = "VAR %";    
         }
 
+
         for ($t=0; $t < sizeof($type2); $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
@@ -361,19 +367,6 @@ class dashboards extends rank{
                 }
             }
         }
-        
-        $fun = "array_multisort(";
-
-        for ($m=0; $m < sizeof($mtx); $m++) { 
-            $fun .= "\$mtx[".$m."], SORT_ASC";
-
-            if ($m != sizeof($mtx)-1) {
-                $fun .= ", ";
-            }
-        }
-
-        $fun .= ");";
-        eval($fun);
 
         $total = $this->assemblerTotal($mtx, $years);
 
@@ -401,7 +394,7 @@ class dashboards extends rank{
                 $res = $mtx[$m-sizeof($years)][$p] - $mtx[$m-sizeof($years)+1][$p];
             }
         }elseif ($mtx[$m][0] == "VAR %") {
-            if ($mtx[$m-sizeof($years)][$p] == 0 || $mtx[$m-sizeof($years)][$p] == "-") {
+            if ($mtx[$m-sizeof($years)][$p] == 0 || $mtx[$m-sizeof($years)][$p] == "-" || $mtx[$m-sizeof($years)-1][$p] == "-") {
                 $res = 0.0;
             }else{
                 $res = ($mtx[$m-sizeof($years)-1][$p] / $mtx[$m-sizeof($years)][$p])*100;

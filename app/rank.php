@@ -420,6 +420,7 @@ class rank extends Model{
 
         for ($v=0; $v < sizeof($values); $v++) {
             $something = $type."ID";
+            //var_dump($something);
             if ($name->id == $values[$v][$something]) {
                 return 1;
             }
@@ -431,13 +432,39 @@ class rank extends Model{
 
     public function filterValues($values, $type2, $type){
         
+
         for ($t=0; $t < sizeof($type2); $t++) {
             $res[$type2[$t]->id] = $this->searchValue($type2[$t], $values[0], $type);
         }
 
+
         return $res;
 
         
+    }
+
+
+    public function filterValues2($values, $type2, $type){
+    
+        for ($y=0; $y <sizeof($values) ; $y++) { 
+            for ($t=0; $t < sizeof($type2); $t++) {
+                $tmp[$y][$type2[$t]->id] = $this->searchValue($type2[$t], $values[$y], $type);
+            }
+        }
+
+        for ($t=0; $t < sizeof($type2); $t++) {
+            for ($i=0; $i <sizeof($tmp); $i++) { 
+               if ($tmp[$i][$type2[$t]->id] == 1) {
+                   $res[$type2[$t]->id] = 1;
+                   break;
+               }else{
+                   $res[$type2[$t]->id] = 0;
+               }
+            }
+        }
+
+
+        return $res;
     }
 
     public function assemblerTotal($mtx, $years){
