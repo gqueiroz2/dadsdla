@@ -22,7 +22,7 @@
 							@elseif($userLevel == '1B')
 								{{$render->regionFilteredReps($region, $regionID)}}
 							@else
-								{{$render->regionFiltered($region, $regionID)}}
+								{{$render->regionFiltered($salesRegion, $regionID)}}
 							@endif
 						</div>
 						<div class="col">
