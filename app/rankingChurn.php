@@ -23,9 +23,11 @@ class rankingChurn extends rank {
 
     public function getValue($values, $type, $name, $year){
         
-        for ($v=0; $v < sizeof($values[$year]); $v++) { 
-            if ($values[$year][$v][$type] == $name) {
-                return $values[$year][$v]['total'];
+        if (is_array($values[$year])) {
+            for ($v=0; $v < sizeof($values[$year]); $v++) { 
+                if ($values[$year][$v][$type] == $name) {
+                    return $values[$year][$v]['total'];
+                }
             }
         }
 
@@ -53,35 +55,41 @@ class rankingChurn extends rank {
         $bool2 = -1;
         $bool3 = -1;
 
-        for ($v=0; $v < sizeof($values[0]); $v++) { 
-            if ($values[0][$v][$type] == $name) {
-                $bool = 0;
-                if ($values[0][$v]['total'] == 0) {
-                    $bool = 1;
-                }else{
-                    $bool = 2;
+        if (is_array($values[0])) {
+            for ($v=0; $v < sizeof($values[0]); $v++) { 
+                if ($values[0][$v][$type] == $name) {
+                    $bool = 0;
+                    if ($values[0][$v]['total'] == 0) {
+                        $bool = 1;
+                    }else{
+                        $bool = 2;
+                    }
+                }
+            }   
+        }
+
+        if (is_array($values[1])) {
+            for ($v=0; $v < sizeof($values[1]); $v++) { 
+                if ($values[1][$v][$type] == $name) {
+                    $bool2 = 0;
+                    if ($values[1][$v]['total'] == 0) {
+                        $bool2 = 1;
+                    }else{
+                        $bool2 = 2;
+                    }
                 }
             }
         }
 
-        for ($v=0; $v < sizeof($values[1]); $v++) { 
-            if ($values[1][$v][$type] == $name) {
-                $bool2 = 0;
-                if ($values[1][$v]['total'] == 0) {
-                    $bool2 = 1;
-                }else{
-                    $bool2 = 2;
-                }
-            }
-        }
-
-        for ($v=0; $v < sizeof($values[2]); $v++) { 
-            if ($values[2][$v][$type] == $name) {
-                $bool3 = 0;
-                if ($values[2][$v]['total'] == 0) {
-                    $bool3 = 1;
-                }else{
-                    $bool3 = 2;
+        if (is_array($values[2])) {
+            for ($v=0; $v < sizeof($values[2]); $v++) { 
+                if ($values[2][$v][$type] == $name) {
+                    $bool3 = 0;
+                    if ($values[2][$v]['total'] == 0) {
+                        $bool3 = 1;
+                    }else{
+                        $bool3 = 2;
+                    }
                 }
             }
         }

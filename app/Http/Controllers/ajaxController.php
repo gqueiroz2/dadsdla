@@ -17,6 +17,7 @@ use App\client;
 use App\subRankings;
 use App\subBrandRanking;
 use App\subMarketRanking;
+use App\subChurnRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -786,5 +787,66 @@ class ajaxController extends Controller{
         
 
         $sbm->renderSubAssembler($mtx, $total, $type, $years);
+    }
+
+    public function churnSubRanking(){
+        
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $brands = Request::get("brands");
+        $name = Request::get("name");
+
+        $scr = new subChurnRanking();
+
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1, $cYear-2);
+
+        if ($type == "client") {
+            $val = "agency";
+        }else{
+            $val = "client";
+        }
+        
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);        
+
+        if ($type == "client") {
+            $filterType = "agency";
+        }else{
+            $filterType = "client";
+        }
+
+        $finalValues = array();
+
+        for ($v=0; $v < sizeof($values); $v++) { 
+            if (is_array($values[$v])) {
+                for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                    if (!in_array($values[$v][$v2][$filterType], $finalValues)) {
+                        array_push($finalValues, $values[$v][$v2][$filterType]);
+                    }
+                }   
+            }
+        }
+
+        $base = new base();
+
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
+        }
+
+        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+        
+        $matrix = $scr->assembler($values, $finalValues, $valuesTotal, $years, $filterType);
+
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+
+        $scr->renderSubAssembler($mtx, $total, $type, $years);
     }
 }
