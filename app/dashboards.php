@@ -67,7 +67,7 @@ class dashboards extends rank{
 
 	    		break;
 	    }
-        /*var_dump("last3YearsRoot");
+        var_dump("last3YearsRoot");
         var_dump($last3YearsRoot);
         var_dump("last3YearsChild");
         var_dump($last3YearsChild);
@@ -77,7 +77,9 @@ class dashboards extends rank{
         var_dump($last3YearsByBrand);
         var_dump("last3YearsByProduct");
         var_dump($last3YearsByProduct);
-        var_dump("------------------------------------------------------------");*/
+        var_dump("------------------------------------------------------------");
+
+
 
 	    $rtr = array( "last3YearsRoot" => $last3YearsRoot,
 	    			  "last3YearsChild" => $last3YearsChild,
@@ -257,6 +259,8 @@ class dashboards extends rank{
 	    }
 	    return $values;
     }
+
+    
 
     public function getProducts($con,$table,$type,$filter){
     	$sql = new sql();
