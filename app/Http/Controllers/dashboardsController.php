@@ -53,7 +53,7 @@ class dashboardsController extends Controller{
          $baseFilter = json_decode( base64_decode( Request::get("baseFilter") ));
          $secondaryFilter = Request::get("secondaryFilter");
          $currency = Request::get("currency");
-         $value = Request::get("value");      
+         $value = Request::get("value");
 
          $cYear = intval(date("Y"));
          $pYear = $cYear - 1;
@@ -79,7 +79,17 @@ class dashboardsController extends Controller{
 
          $monthChart = $mc->overviewMonth($con,$type,$last3YearsByMonth,$years);
 
-         return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years'));
+         if ($value == "gross") {
+            $valueView = "Gross";
+         }elseif ($value == "net") {
+            $valueView = "Net";
+         }
+
+         $currency = array($currency);
+
+         $currencyView = $p->getCurrency($con,$currency)[0]['name'];
+
+         return view("adSales.dashboards.overviewPost", compact('con' , 'salesRegion', 'currencies', 'brands', 'render' , 'handle' , 'type' , 'baseFilter' , 'secondaryFilter' , 'brandChart' , 'childChart' , 'monthChart' ,  'brandChartColumn' , 'maxChartColumn' , 'years', 'valueView', 'currencyView'));
    	}
 
 }

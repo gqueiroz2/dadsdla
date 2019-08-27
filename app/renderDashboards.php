@@ -9,7 +9,7 @@ use App\dashboards;
 
 class renderDashboards extends Render{
     
-    public function assembler($con,$handler,$type,$baseFilter,$secondaryFilter,$flow){
+    public function assembler($con,$handler,$type,$baseFilter,$secondaryFilter,$flow,$currencyView,$valueView){
         $sr = new subRankings();
 
         $cYear = intval(date("Y"));
@@ -31,7 +31,7 @@ class renderDashboards extends Render{
         //Linha do titulo
         echo "<div class='row justify-content-center mt-3' style='margin-right: 0.3%; margin-left: 0.3%;'>";
             echo "<div class='col lightBlue' align='center'>";
-                echo "<span style='font-size:22px;'> $showType : ".$baseFilter->$type." </span>";
+                echo "<span style='font-size:22px;'> $showType : ".$baseFilter->$type.": ".$currencyView."/".$valueView."</span>";
             echo "</div>";
         echo "</div>";
 
