@@ -20,7 +20,7 @@
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($salesRegion)}}
 							@else
-								{{$render->regionFiltered($region, $regionID)}}
+								{{$render->regionFiltered($salesRegion, $regionID)}}
 							@endif
 						</div>
 						<div class="col">
