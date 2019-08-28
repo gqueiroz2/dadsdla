@@ -243,7 +243,29 @@ class client extends Management{
         $client = $sql->fetch($res,$from,$from);
 
         return $client;
-    }
+    }   
+
+    public function getClientUnitByClientID($con,$clientID = false){
+
+        $sql = new sql();
+
+        $table = "client c";
+        $columns = "cu.name AS 'clientUnit'";
+
+        $where = "";
+        $where .= "WHERE ( c.ID = '$clientID')";
+        
+
+        $join = "LEFT JOIN client_unit cu ON c.ID = cu.client_id                 
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('clientUnit');
+
+        $client = $sql->fetch($res,$from,$from);
+        return $client;
+    }   
 
     public function getAllClientsByRegion($con,$clientRegion=false){
      
@@ -251,8 +273,9 @@ class client extends Management{
 
         $table = "client c";
 
-        $columns = "DISTINCT c.ID AS 'id',
+        $columns = "DISTINCT 
                     c.name AS 'client',
+                    c.ID AS 'id',
                     cg.ID AS 'clientGroupID',
                     cg.name AS 'clientGroup',
                     r.name AS 'region'
@@ -273,6 +296,37 @@ class client extends Management{
         $res = $sql->select($con,$columns,$table,$join,$where);
 
         $from = array('id','client', 'clientGroupID', 'clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+    public function getRelationshipClient($con,$region=false){        
+        $sql = new sql();
+
+        $table = "client c";
+
+        $columns = "DISTINCT 
+                    c.ID AS 'clientID',
+                    c.name AS 'client',                                        
+                    r.name AS 'region'
+                    ";
+
+        $where = "";
+
+        if($region){
+            $regions = implode(",",$region);
+            $where .= "WHERE r.ID IN ('$regions')";
+        }
+
+        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON r.ID = cg.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where,false,false,false);
+
+        $from = array('clientID','client', 'region');
 
         $client = $sql->fetch($res,$from,$from);
 

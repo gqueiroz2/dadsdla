@@ -30,7 +30,7 @@ class dashboardsController extends Controller{
          $brands = $b->getBrand($con);
          $render = new renderDashboards();
            
-   		return view("adSales.dashboards.overviewGet", compact('salesRegion', 'currencies', 'brands', 'render'));
+   		return view("adSales.dashboards.overviewGet", compact('region','salesRegion', 'currencies', 'brands', 'render'));
    	}
 
    	public function overviewPost(){
@@ -54,6 +54,23 @@ class dashboardsController extends Controller{
          $secondaryFilter = Request::get("secondaryFilter");
          $currency = Request::get("currency");
          $value = Request::get("value");
+
+         $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'type' => 'required',
+            'baseFilter' => 'required',
+            'secondaryFilter' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+
+
 
          $cYear = intval(date("Y"));
          $pYear = $cYear - 1;

@@ -67,7 +67,32 @@ class base extends Model{
 
     }
 
-    public $NameName = array("Brazil"=>array("Brazil"), "Argentina"=>array("Argentina","Chile","Peru"),"Colombia"=>array("Colombia"), "Miami"=>array("Miami"), "Mexico"=>array("Mexico"), "Chile"=>array("Chile"), "Peru"=>array("Peru"), "LATAM"=>array("LATAM"),  "Venezuela"=>array("Venezuela"),  "Panama"=>array("Panama"),  "New York International"=>array("New York International"),  "Dominican Republic"=>array("Dominican Republic"),  "Ecuador"=>array("Ecuador"),  "Bolivia"=>array("Bolivia"),  "Us Hispanic"=>array("Us Hispanic"),  "Puerto Rico"=>array("Puerto Rico"),  "Europe"=>array("Europe"),  "Gurugram"=>array("Gurugram"),  "Singapore"=>array("Singapore"));
+    public $nameReps = array(
+                "Reps" => array("Venezuela","Panama","Dominican Republic","Ecuador")
+        );
+
+    public $NameName = array(
+            "Brazil"=>array("Brazil"), 
+            "Argentina"=>array("Argentina","Chile","Peru"),
+            "Colombia"=>array("Colombia"), 
+            "Miami"=>array("Miami"), 
+            "Mexico"=>array("Mexico"), 
+            "Chile"=>array("Chile"), 
+            "Peru"=>array("Peru"), 
+            "LATAM"=>array("LATAM"),  
+            "Venezuela"=>array("Venezuela"),  
+            "Panama"=>array("Panama"),  
+            "New York International"=>array("New York International"),  
+            "Dominican Republic"=>array("Dominican Republic"),  
+            "Ecuador"=>array("Ecuador"),  
+            "Bolivia"=>array("Bolivia"),  
+            "Us Hispanic"=>array("Us Hispanic"),  
+            "Puerto Rico"=>array("Puerto Rico"),  
+            "Europe"=>array("Europe"),  
+            "Gurugram"=>array("Gurugram"),  
+            "Singapore"=>array("Singapore"),
+            "London"=>array("London")
+        );
 
     public $region = array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","New York International","Dominican Republic","Ecuador","Bolivia","Puerto Rico");
 
@@ -121,6 +146,28 @@ class base extends Model{
         
         return $return;
     }
+
+    public function filteredRegionReps($regionId,$kind){
+        $r = new region();
+
+        $db = new dataBase();
+
+        $con = $db->openConnection("DLA");
+
+        $region = $r->getRegion($con,array($regionId))[0]["name"];
+
+        $array = $this->NameName[$region];
+
+        for ($s=0; $s < sizeof($this->nameReps[$kind]); $s++) { 
+            array_push($array, $this->nameReps[$kind][$s]);
+        }
+
+        $return = array();
+        for ($a=0; $a <sizeof($array) ; $a++) { 
+            $return[$a] = $r->getRegionByName($con,$array[$a]);
+        }
+        return $return;
+    } 
 
     public function TruncateTableName($table){
         return (strtoupper($table));

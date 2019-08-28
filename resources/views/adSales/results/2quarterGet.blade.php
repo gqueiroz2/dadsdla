@@ -19,8 +19,10 @@
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$qRender->region($salesRegion)}}							
+							@elseif($userLevel == '1B')
+								{{$qRender->regionFilteredReps($salesRegion, $regionID)}}
 							@else
-								{{$qRender->regionFiltered($salesRegion, $regionID )}}
+								{{$qRender->regionFiltered($salesRegion, $regionID)}}
 							@endif
 						</div>
 
