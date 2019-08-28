@@ -6,8 +6,169 @@ use Illuminate\Database\Eloquent\Model;
 use App\Render;
 
 
-class relationshipRender extends Model{
+class relationshipRender extends Render{
     
+	public function construct($type,$structure){
+		echo "<table style ='width:100%;'>";
+			if($type == "client"){
+				$this->constructClient($structure);
+			}else{
+				$this->constructAgency($structure);
+			}
+
+		echo "</table>";
+
+
+	}
+
+	public function constructAgency($structure){
+		
+
+		echo "<tr>";
+			echo "<th class='darkBlue'><center> Agency Group </center></th>";
+			echo "<th class='darkBlue'><center> Agency </center></th>";
+			echo "<th class='darkBlue'><center> Agency Unit </center></th>";
+		echo "</tr>";
+
+		for ($s=0; $s < sizeof($structure); $s++) { 
+			if($s%2 == 0){
+				$clr = 'rcBlue';
+			}else{
+				$clr = 'odd';
+			}
+			
+			if($structure[$s]['agency']){
+				if($structure[$s]['agency']){
+					$tam[$s] = 0;
+				}else{
+					$tam[$s] = 1;
+				}
+
+				$sizeU = 0;
+
+				for ($t=0; $t < sizeof($structure[$s]['agency']); $t++) { 					
+					if($structure[$s]['agency'][$t]['agencyUnit']){
+						$tam[$s] += sizeof($structure[$s]['agency'][$t]['agencyUnit']);
+						$sizeU++;
+					}
+				}
+
+				if(sizeof($structure[$s]['agency']) != $sizeU){
+					$xiz = sizeof($structure[$s]['agency']) - $sizeU;
+					$tam[$s] += $xiz;
+
+
+				}
+
+				if($structure[$s]['agencyGroup'] != "Others"){
+					for ($t=0; $t < sizeof($structure[$s]['agency']); $t++) { 					
+						
+						if($structure[$s]['agency'][$t]['agencyUnit']){
+							$tam2[$s][$t] = sizeof($structure[$s]['agency'][$t]['agencyUnit']);
+						}else{
+							$tam2[$s][$t] = "";
+						}
+
+						if($structure[$s]['agency'][$t]['agencyUnit']){
+							for ($u=0; $u < sizeof($structure[$s]['agency'][$t]['agencyUnit']); $u++) { 
+								
+								if(sizeof($structure[$s]['agency']) == $sizeU){
+									echo "<tr>";
+								}
+									if($t == 0 && $u == 0){	
+										echo "<td class='".$clr."' rowspan='".($tam[$s])."'>
+													<center>".$structure[$s]['agencyGroup']."</center>
+											  </td>";
+									}
+									if($u == 0){
+										echo "<td class='".$clr."' rowspan='".$tam2[$s][$t]."'>
+													<center>".$structure[$s]['agency'][$t]['name']."</center>
+											  </td>";
+									}
+
+									echo "<td class='".$clr."'><center>".$structure[$s]['agency'][$t]['agencyUnit'][$u]."</center></td>";
+								
+								echo "</tr>";
+							}
+							if(sizeof($structure[$s]['agency']) != $sizeU){
+								echo "</tr>";
+							}
+						}else{
+							if($sizeU == 0){
+								echo "<tr>";
+									echo "<td class='".$clr."'><center>".$structure[$s]['agencyGroup']."</center></td>";
+									echo "<td class='".$clr."'><center>".$structure[$s]['agency'][$t]['name']."</center></td>";
+									echo "<td class='".$clr."'><center> - </center></td>";				
+								echo "</tr>";
+							}else{
+								if(sizeof($structure[$s]['agency']) != $sizeU){									
+										echo "<tr>";
+											if($t==0){
+												echo "<td class='".$clr."' rowspan='".($tam[$s])."'>
+																<center>".$structure[$s]['agencyGroup']."</center>
+														  </td>";
+											}
+										echo "<td class='".$clr."' rowspan='".$tam2[$s][$t]."'>
+														<center>".$structure[$s]['agency'][$t]['name']."</center>
+												  </td>";
+										echo "<td class='".$clr."'><center> - </center></td>";	
+										echo "</tr>";									
+								}else{
+
+								}
+								
+							}
+							
+						}
+					}
+				}
+			}else{
+				
+				echo "<tr>";
+					echo "<td class='".$clr."' rowspan='".$tam[$s]."'><center>".$structure[$s]['agencyGroup']."</center></td>";				
+					echo "<td class='".$clr."'><center> - </center></td>";				
+					echo "<td class='".$clr."'><center> - </center></td>";				
+				echo "</tr>";
+			}
+		}
+	}
+
+	public function constructClient($structure){
+		echo "<tr>";
+			echo "<th class='darkBlue' style='width:40%;'><center> Client </center></th>";
+			echo "<th class='darkBlue' style='width:60%;'><center> Client Unit </center></th>";
+		echo "</tr>";
+		for ($s=0; $s < sizeof($structure); $s++) { 
+			if($structure[$s]['clientUnit']){
+				$tam[$s] = sizeof($structure[$s]['clientUnit']);
+			}else{
+				$tam[$s] = "";
+			}
+
+			if($s%2 == 0){
+				$clr = 'rcBlue';
+			}else{
+				$clr = 'odd';
+			}
+
+			if($structure[$s]['clientUnit']){
+				for ($t=0; $t < sizeof($structure[$s]['clientUnit']); $t++) { 
+					echo "<tr>";
+						if($t == 0){
+							echo "<td class='".$clr."' rowspan='".$tam[$s]."'><center>".$structure[$s]['client']."</center></td>";				
+						}
+						echo "<td class='".$clr."'><center>".$structure[$s]['clientUnit'][$t]."</center></td>";
+					echo "</tr>";
+				}
+			}else{
+				echo "<tr>";
+					echo "<td class='".$clr."' rowspan='".$tam[$s]."'><center>".$structure[$s]['client']."</center></td>";				
+					echo "<td class='".$clr."'><center> - </center></td>";				
+				echo "</tr>";
+			}
+		}
+	}
+
 	public function base($agencies,$agency){
 
 		echo "<div class='row justify-content-center mt-4'>";

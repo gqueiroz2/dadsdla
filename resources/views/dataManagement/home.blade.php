@@ -96,25 +96,7 @@
 								</div>															
 							</div>
 
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('relationshipAgencyGet') }}" style="color: white">
-											RelationShip Agency
-										</a>
-									</button>	
-								</div>
-							</div>
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('relationshipClientGet') }}" style="color: white">
-											RelationShip Client
-										</a>
-									</button>	
-								</div>
-							</div>
+							{{--
 
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
@@ -125,7 +107,7 @@
 									</button>	
 								</div>
 							</div>
-
+							--}}
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
@@ -145,9 +127,7 @@
 										</a>
 									</button>	
 								</div>
-							</div>
-
-							<div class="row mt-2 justify-content-center">
+							
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('insertPlanBySalesGet') }}" style="color: white">
@@ -156,7 +136,7 @@
 									</button>	
 								</div>
 							</div>
-
+{{--
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
@@ -166,7 +146,7 @@
 									</button>	
 								</div>
 							</div>
-
+--}}
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 

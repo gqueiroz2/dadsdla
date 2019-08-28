@@ -55,7 +55,7 @@ class  region extends Management{
         if ($region) {
             $where .= "WHERE r.name = '$region'";
         }
-
+        
         $res = $sql->select($con,$columns,$table,false,$where);
 
         $from = array('id','name','role');
