@@ -13,6 +13,7 @@ use App\base;
 use App\AE;
 use App\sql;
 use App\excel;
+use Validator;
 
 class AEController extends Controller{
     
@@ -121,6 +122,19 @@ class AEController extends Controller{
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false);
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+            'salesRep' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
         $forRender = $tmp;
         $client = $tmp['client'];

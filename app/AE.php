@@ -12,6 +12,17 @@ use App\sql;
 use App\pRate;
 class AE extends pAndR{
     
+    public function insertUpdate($region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+
+    }
+    public function weekOfMonth($date) {
+        $date = strtotime($date);
+        //Get the first day of the month.
+        $firstOfMonth = strtotime(date("Y-m-01", $date));
+        //Apply above formula.
+        return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
+    }
+
     public function generateID($con,$sql,$pr,$kind,$region,$year,$salesRep,$currency,$value,$week,$month){
 
         if($kind == "save"){

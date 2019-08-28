@@ -800,10 +800,14 @@ class chain extends excel{
                                 $columns[$c] == 'to_date'
                               ){
                                 
-                                $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
-                                $spreadSheetV2[$s][$columns[$c]] = $temp;
-
-                                //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+                                //$temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                //$spreadSheetV2[$s][$columns[$c]] = $temp;
+                                if(trim($spreadSheet[$s][$c]) != ""){
+                                    $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+                                }else{
+                                    $someYear = date("Y");
+                                    $spreadSheetV2[$s][$columns[$c]] = $someYear."-12-"."31";
+                                }
                             }elseif($columns[$c] == 'rep_commission_percentage' ||
                                     $columns[$c] == 'agency_commission_percentage'
                                     ){
