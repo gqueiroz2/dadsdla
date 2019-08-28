@@ -12,6 +12,7 @@ use App\brand;
 use App\base;
 use App\AE;
 use App\sql;
+use App\excel;
 
 class AEController extends Controller{
     
@@ -21,6 +22,7 @@ class AEController extends Controller{
         $pr = new pRate();
         $ae = new AE();
         $base = new base();
+        $excel = new excel();
 
         $con = $db->openConnection("DLA");  
 
@@ -53,7 +55,7 @@ class AEController extends Controller{
         $client = json_decode( base64_decode( Request::get('client') ) );
 
         for ($m=0; $m < sizeof($monthWQ); $m++) { 
-            $manualEstimantionBySalesRep[$m] = Request::get("fcstSalesRep-$m");
+            $manualEstimantionBySalesRep[$m] = $excel->fixExcelNumber(Request::get("fcstSalesRep-$m"));
         }
 
         unset($manualEstimantionBySalesRep[3]);
@@ -65,7 +67,7 @@ class AEController extends Controller{
 
         for ($c=0; $c < sizeof($client); $c++) { 
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                $manualEstimantionByClient[$c][$m] = Request::get("fcstClient-$c-$m");
+                $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
         }       
 
@@ -87,6 +89,10 @@ class AEController extends Controller{
         */
         $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,"week",$fcstMonth);
 
+        $weeki = $ae->weekOfMonth("2019-08-28");
+        var_dump($weeki);
+
+        //$bool = $ae->saveUpdate($regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
         var_dump($ID);
     }
 
