@@ -93,7 +93,7 @@
 
 		<?php 
 			$flow = array("CYear","PYear","PPYear");
-			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow);
+			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow,$currencyView,$valueView);
 		?>
 
 		<div class='row justify-content-center mt-2 mb-4' style='margin-right: 0.3%; margin-left: 0.3%;'>
