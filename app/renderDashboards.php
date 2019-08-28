@@ -9,7 +9,7 @@ use App\dashboards;
 
 class renderDashboards extends Render{
     
-    public function assembler($con,$handler,$type,$baseFilter,$secondaryFilter,$flow){
+    public function assembler($con,$handler,$type,$baseFilter,$secondaryFilter,$flow,$currencyView,$valueView){
         $sr = new subRankings();
 
         $cYear = intval(date("Y"));
@@ -31,7 +31,7 @@ class renderDashboards extends Render{
         //Linha do titulo
         echo "<div class='row justify-content-center mt-3' style='margin-right: 0.3%; margin-left: 0.3%;'>";
             echo "<div class='col lightBlue' align='center'>";
-                echo "<span style='font-size:22px;'> $showType : ".$baseFilter->$type." </span>";
+                echo "<span style='font-size:22px;'> $showType : ".$baseFilter->$type.": ".$currencyView."/".$valueView."</span>";
             echo "</div>";
         echo "</div>";
 
@@ -131,9 +131,13 @@ class renderDashboards extends Render{
 
         $products = $l3BP['products'];
         $values = $l3BP['values'];
-        $mtx = $this->assembleProductsMatrix($values,$products,$years);
+        if ($type != "client") {
+            $mtx = $this->assembleProductsMatrix2($values,$products,$years);
+        }else{
+            $mtx = $this->assembleProductsMatrix($values,$products,$years);
+        }
 
-        $this->renderlast3ProductTable($mtx,$years);
+        $this->renderlast3ProductTable($mtx,$years,$type);
 
     }
 
@@ -189,10 +193,68 @@ class renderDashboards extends Render{
 
     }
 
-    public function renderlast3ProductTable($mtx,$years){
+    public function assembleProductsMatrix2($values,$products,$years){
+       
+        for ($p=0; $p < sizeof($products); $p++) { 
+            
+            $mtx[$p][0] = $products[$p]['product'];
+            $mtx[$p][1] = $products[$p]['client'];
+            for ($q=0; $q < sizeof($years); $q++) {                
+                $mtx[$p][$q+2] = $values[$q][$p]; 
+            }
+        }
+
+        $sort = array();
+        foreach($mtx as $k=>$v) {
+            $sort['cYear'][$k] = $v[2];
+            $sort['pYear'][$k] = $v[3];
+            $sort['ppYear'][$k] = $v[4];
+        }
+        # sort by event_type desc and then title asc
+        array_multisort($sort['cYear'], SORT_DESC, 
+                        $sort['pYear'], SORT_DESC,
+                        $sort['ppYear'], SORT_DESC,
+                        $mtx);
+
+        $last = sizeof($mtx);
+
+        
+
+        $ttCYear = 0.0;
+        $ttPYear = 0.0;
+        $ttPPYear = 0.0;
+
+        for ($i=0; $i < sizeof($mtx); $i++) {             
+
+            for ($j=0; $j < sizeof($mtx[$i]); $j++) { 
+                
+                if($j == 2){
+                    $ttCYear += $mtx[$i][$j];
+                }elseif($j == 3){
+                    $ttPYear += $mtx[$i][$j];
+                }elseif($j == 4){
+                    $ttPPYear += $mtx[$i][$j];
+                }
+
+            }
+        }
+        $mtx[$last][0] = "Total";
+        $mtx[$last][1] = "&nbsp";
+        $mtx[$last][2] = $ttCYear;
+        $mtx[$last][3] = $ttPYear;
+        $mtx[$last][4] = $ttPPYear;
+        
+        return $mtx;
+
+    }
+
+    public function renderlast3ProductTable($mtx,$years,$type){
         echo "<table style='width:100%; border: 1px solid black; font-size:14px;'>";
         echo "<tr>";
-            echo "<td class='lightBlue'> Product </td>";
+            echo "<td class='lightBlue' style='width:25%;'> Product </td>";
+            if ($type != "client") {   
+                echo "<td class='lightBlue' style='width:25%;'> Client </td>";
+            }
             for ($y=0; $y < sizeof($years); $y++) { 
                 echo "<td class='lightBlue'>".$years[$y]."</td>";    
             }

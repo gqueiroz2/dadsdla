@@ -127,6 +127,7 @@
 								@if($userLevel == "SU")
 									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
 								@endif
+								<a class="dropdown-item" href="{{ route('relationshipGet') }}"> RelationShip </a>
 								<a class="dropdown-item" href="{{ route('dataCurrentThrough') }}"> Data Current Through </a>
 							</div>
 						</li>

@@ -30,18 +30,19 @@
 								<label style="color: red;">* Required</label>
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
-								{{$render->region($salesRegion)}}
+								{{$render->region($salesRegion)}}							
+							@elseif($userLevel == '1B')
+								{{$render->regionFilteredReps($salesRegion, $regionID)}}
 							@else
-								{{$render->regionFiltered($region, $regionID)}}
+								{{$render->regionFiltered($salesRegion, $regionID)}}
 							@endif
 						</div>
 						<div class="col">
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))
 								<label style="color: red;">* Required</label>
-							@else
-								{{$render->type()}}
 							@endif
+							{{$render->type()}}
 						</div>						
 						<div class="col">
 							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>
@@ -91,7 +92,7 @@
 
 		<?php 
 			$flow = array("CYear","PYear","PPYear");
-			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow);
+			$render->assembler($con,$handle,$type,$baseFilter,$secondaryFilter,$flow,$currencyView,$valueView);
 		?>
 
 		<div class='row justify-content-center mt-2 mb-4' style='margin-right: 0.3%; margin-left: 0.3%;'>

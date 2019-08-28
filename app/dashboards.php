@@ -82,7 +82,6 @@ class dashboards extends rank{
         var_dump("------------------------------------------------------------");*/
 
 
-
 	    $rtr = array( "last3YearsRoot" => $last3YearsRoot,
 	    			  "last3YearsChild" => $last3YearsChild,
 	    			  "last3YearsByMonth" => $last3YearsByMonth,
@@ -108,18 +107,21 @@ class dashboards extends rank{
 		    		$join = "LEFT JOIN agency a ON a.ID = y.agency_id";
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (client_product = \"".$products[$p]['product']."\")
-		    					AND ( ".$smt."_id = \"".$baseFilter->id."\")";
+		    					AND ( ".$smt."_id = \"".$baseFilter->id."\")
+                                AND ( client_id = \"".$products[$p]['clientID']."\") ";
 		    	}else{
 		    		$join = false;
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (client_product = \"".$products[$p]['product']."\")
-		    					AND ( ".$type."_id = \"".$baseFilter->id."\")";
+		    					AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND ( client_id = \"".$products[$p]['clientID']."\") ";
 		    	}
 
 				$some[$y][$p] = "SELECT SUM($column) AS mySum 
 		    					FROM $table y 
 		    					$join
 		    					$where";
+
 
 		    	$res[$y][$p] = $con->query($some[$y][$p]);
 		    	$from = array("mySum");
@@ -271,30 +273,32 @@ class dashboards extends rank{
 
     	if($type == "client"){
     		$smt = "client";
-            $join = false;
+            $join = "LEFT JOIN client c ON c.ID = y.client_id";
             $where = "WHERE( ".$smt."_id = \"".$filter->id."\" )";
     	}else{
     		$smt = "agency";
 
     		if($type == "agencyGroup"){
 
-    			$join = "LEFT JOIN agency a ON a.ID = y.agency_id";
+    			$join = "LEFT JOIN agency a ON a.ID = y.agency_id client c ON c.ID = y.client_id";
 
     			$where = "WHERE( ".$smt."_group_id = \"".$filter->id."\" )";
     		}else{
-    			$join = false;
+                $join = "LEFT JOIN client c ON c.ID = y.client_id";
     			$where = "WHERE( ".$smt."_id = \"".$filter->id."\" )";
     		}    		
 
     	}
 
-    	$select = "SELECT DISTINCT client_product 
+    	$select = "SELECT DISTINCT client_product, client_id, c.name AS \"client\"
+
     						FROM $table y $join $where";
 
     	$res = $con->query($select);
-    	$from = array("client_product");
-    	$to = array("product");
+    	$from = array("client_product","client_id","client");
+    	$to = array("product","clientID","client");
     	$products = $sql->fetch($res,$from,$to);
+
 
     	return $products;
     }
