@@ -27,9 +27,8 @@
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))
 								<label style="color: red;">* Required</label>
-							@else
-								{{$render->type()}}
 							@endif
+							{{$render->type()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>

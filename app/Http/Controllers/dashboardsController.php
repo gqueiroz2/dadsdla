@@ -55,6 +55,23 @@ class dashboardsController extends Controller{
          $currency = Request::get("currency");
          $value = Request::get("value");
 
+         $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'type' => 'required',
+            'baseFilter' => 'required',
+            'secondaryFilter' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+
+
+
          $cYear = intval(date("Y"));
          $pYear = $cYear - 1;
          $ppYear = $pYear - 1;
