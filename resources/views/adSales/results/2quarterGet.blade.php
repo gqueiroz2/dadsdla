@@ -18,11 +18,11 @@
 								<label style="color: red;">* Required</label>
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
-								{{$render->region($region)}}							
+								{{$qRender->region($salesRegion)}}							
 							@elseif($userLevel == '1B')
-								{{$render->regionFilteredReps($region, $regionID)}}
+								{{$qRender->regionFilteredReps($salesRegion, $regionID)}}
 							@else
-								{{$render->regionFiltered($region, $regionID)}}
+								{{$qRender->regionFiltered($salesRegion, $regionID)}}
 							@endif
 						</div>
 
