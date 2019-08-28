@@ -30,7 +30,7 @@ class dashboardsController extends Controller{
          $brands = $b->getBrand($con);
          $render = new renderDashboards();
            
-   		return view("adSales.dashboards.overviewGet", compact('salesRegion', 'currencies', 'brands', 'render'));
+   		return view("adSales.dashboards.overviewGet", compact('region','salesRegion', 'currencies', 'brands', 'render'));
    	}
 
    	public function overviewPost(){
