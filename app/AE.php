@@ -12,7 +12,41 @@ use App\sql;
 use App\pRate;
 class AE extends pAndR{
     
-    public function insertUpdate($region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+    public function insertUpdate($oppid,$region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+
+        $tableFCST = "forecast";
+        $tableFCSTClient = "forecast_client";
+        $tableFCSTSalesRep = "forecast_sales_rep";
+
+        $columns = "(
+                     oppid,
+                     region_id,sales_rep_id,
+                     year,month,read,date,
+                     currency_id,type_of_value,
+                     last_modify_by,last_modify_date,last_modify_time
+                    )";
+
+        $values = "(
+                    \"".$oppid."\",
+                    \"".."\"
+                  )";
+
+        $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+
+        var_dump($insertFCST);
+
+        var_dump($region);
+        var_dump($salesRep);
+        var_dump($currency);
+        var_dump($value);
+        var_dump($user);
+        var_dump($year);
+        var_dump($date);
+        var_dump($time);
+        var_dump($fcstMonth);
+        var_dump($manualEstimantionBySalesRep);
+        var_dump($manualEstimantionByClient);
+
 
     }
     public function weekOfMonth($date) {

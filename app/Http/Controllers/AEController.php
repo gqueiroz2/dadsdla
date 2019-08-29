@@ -35,14 +35,14 @@ class AEController extends Controller{
         $year = json_decode( base64_decode( Request::get('year') ));
 
         $salesRepID = $salesRep->id;
-
+/*
         var_dump($regionID);
         var_dump($salesRepID);        
         var_dump($currencyID);
         var_dump($value);
         var_dump($user);
         var_dump($year);
-
+*/
         $date = date('Y-d-m');
         $time = date('H:i');
         $fcstMonth = date('m');
@@ -89,12 +89,12 @@ class AEController extends Controller{
             kind,region,year,salesRep,currency,value,week,month
         */
         $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,"week",$fcstMonth);
-
-        $weeki = $ae->weekOfMonth("2019-08-28");
+        $today = date("Y-m-d");
+        $weeki = $ae->weekOfMonth($today);
         var_dump($weeki);
 
-        //$bool = $ae->saveUpdate($regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
-        var_dump($ID);
+        $bool = $ae->insertUpdate($ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
+        
     }
 
     public function get(){

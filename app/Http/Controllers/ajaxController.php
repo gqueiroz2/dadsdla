@@ -326,7 +326,7 @@ class ajaxController extends Controller{
 
         
         if($form == "ytd"){
-            $showForm = "IBMS";
+            $showForm = "BOOKINGS";
         }elseif($form == "cmaps"){
             $showForm = "CMAPS";
         }elseif($form == "mini_header"){
