@@ -12,13 +12,11 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-	Route::group(['prefix'=>'generate'],function(){
-		Route::group(['prefix'=>'excel'],function(){
-
-		Route::post('month','excelController@resultsMonth')
-									->name('monthExcel');
-		
-		});
+	Route::group(['prefix'=>'relationship'],function(){		
+		Route::get('/','relationshipController@get')
+									->name('relationshipGet');
+		Route::post('/','relationshipController@post')
+									->name('relationshipPost');
 	});
 });
 

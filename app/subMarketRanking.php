@@ -32,12 +32,6 @@ class subMarketRanking extends rankingMarket {
 		$years = array($cYear, $cYear-1);
 
     	if ($filterType == "client") {
-    		  
-    		$brand = array();
-
-	        for ($i=0; $i < sizeof($brands); $i++) { 
-	            array_push($brand, $brands[$i][0]);
-	        }
 
     		if ($type == "agency") {
     			
@@ -63,24 +57,10 @@ class subMarketRanking extends rankingMarket {
 	    		}else{
 	    			$table = "ytd";
 	    		}
-	    		
-                if ($table != "cmaps") {
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = 1.0;
-                    }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
-                    }
-                }else{
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
-                    }else{
-                        $pRate = 1.0;
-                    }
-                }
 
-	    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency[0]['id'], $brand, $val, $filterType);
-                
-                if (is_array($values[$y])) {
+	    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brands, $val, $filterType);
+
+                /*if (is_array($values[$y])) {
                     for ($v=0; $v < sizeof($values[$y]); $v++) { 
                         if ($table != "cmaps") {
                             $values[$y][$v]['total'] *= $pRate;
@@ -88,7 +68,7 @@ class subMarketRanking extends rankingMarket {
                             $values[$y][$v]['total'] /= $pRate;
                         }
                     }
-                }
+                }*/
 	    	}
 
     	}else{
@@ -203,7 +183,56 @@ class subMarketRanking extends rankingMarket {
 
     public function getSubValues($con, $tableName, $type, $region, $value, $year, $months, $currency, $brands, $filter, $filterType){
     	
+        $brand = array();
+
+        for ($i=0; $i < sizeof($brands); $i++) { 
+            array_push($brand, $brands[$i][0]);
+        }
+
+        $check = false;
+
+        for ($b=0; $b < sizeof($brands) ; $b++) { 
+            if ($brands[$b][1] == 'ONL') {
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            array_push($brand, '13');
+            array_push($brand, '14');
+            array_push($brand, '15');
+            array_push($brand, '16');
+        }
+
     	$sql = new sql();
+
+        $newRes = array();
+
+        $p = new pRate();
+
+        if ($tableName != "cmaps") {
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array(intval(date('Y'))));
+            }
+        }else{
+            if ($currency[0]['name'] == "USD") {
+                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array(intval(date('Y'))));
+            }else{
+                $pRate = 1.0;
+            }
+        }
+
+        if ($currency[0]['name'] == "USD") {
+            $pRateDigital = 1.0;
+        }else{
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
+        $valueDigital = $value."_revenue";
+        $columnsDigital = array("f.region_id","brand_id", "month", "year", "agency_id");
+        $colsValueDigital = array($region, $brand, $months, $year, $filter);
 
     	$as = "total";
 
@@ -213,10 +242,10 @@ class subMarketRanking extends rankingMarket {
 		if ($tableName == "ytd") {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "month", "year", "brand_id", "agency_id");
-            $colsValue = array($region, $months, $year, $brands, $filter);
+            $colsValue = array($region, $months, $year, $brand, $filter);
         }else{
             $columns = array("month", "year", "brand_id");
-            $colsValue = array($months, $year, $brands, $filter);
+            $colsValue = array($months, $year, $brand, $filter);
 
             if ($type == "agency") {
             	array_push($columns, "agency_id");
@@ -228,25 +257,30 @@ class subMarketRanking extends rankingMarket {
         }
 
         $table = "$tableName $tableAbv";
+        $tableDigital = "fw_digital f";
 
         $tmp = "$leftAbv.ID AS '".$filterType."ID', $leftAbv.name AS '$filterType', SUM($value) AS '$as'";
-        $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
+        $tmpD = $leftAbv.".ID AS '".$filterType."ID', ".$leftAbv.".name AS '".$filterType."', SUM($valueDigital) AS $as";
 
-        if ($tableName == "cmaps") {
-            
-        }
+        $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
+        $joinD = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = f.".$filterType."_ID";
 
         $name = $filterType."_id";
 		$names = array($filterType."ID", $filterType, $as);
 
         $where = $sql->where($columns, $colsValue);
+        $whereD = $sql->where($columnsDigital, $colsValueDigital);
     
     	$values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+        $valuesD = $sql->selectGroupBy($con, $tmpD, $tableDigital, $joinD, $whereD, "total", $name, "DESC");
 
     	$from = $names;
 
     	$res = $sql->fetch($values, $from, $from);
+        $resD = $sql->fetch($valuesD, $from, $from);
 
+        
+        
     	return $res;
     }
 

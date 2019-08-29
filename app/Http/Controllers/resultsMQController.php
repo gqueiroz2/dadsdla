@@ -89,7 +89,7 @@ class resultsMQController extends Controller{
 
                 $rName = $mq->TruncateRegion($salesRegion);
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName'));
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'year', 'brandID', 'firstPos', 'secondPos', 'tmp'));
         }
 
 

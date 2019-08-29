@@ -98,8 +98,6 @@ class subRankings extends rank{
         
         $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
 
-
-
         $tmpD = $leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($valueD) AS $as";
 
         $joinD = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$leftName."_id";
@@ -118,13 +116,39 @@ class subRankings extends rank{
         $res = $sql->fetch($values[$y], $from, $from);
         $resD = $sql->fetch($valuesD[$y], $from, $from);
 
+        if ($resD && $res) {
+            $size1 = sizeof($resD);
+            for ($r=0; $r <$size1; $r++) { 
+                for ($r2=0; $r2 <sizeof($res) ; $r2++) { 
+                    if ($resD[$r][$leftName.'ID'] == $res[$r2][$leftName.'ID']) {
+                        $res[$r2]['total'] += $resD[$r]['total'];
 
-        var_dump($resD);
+                        unset($resD[$r]);
 
+                        break;
+                    }
+                }
+            }
+
+            $resD = array_values($resD);
+
+            for ($r=0; $r <sizeof($resD) ; $r++) { 
+                array_push($res, $resD[$r]);
+            }
+
+            usort($res, array($this,'compare'));
+
+
+        }elseif ($resD) {
+            $res = $resD;
+        }
 
         return $res;
     }
 
+    public function compare($object1,$object2){
+        return $object1['total'] < $object2['total'];
+    }
 
     public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
         

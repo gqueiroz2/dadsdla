@@ -302,7 +302,8 @@ class agency extends Management{
         $table = "ytd y";
 
         $columns = "ag.ID AS 'id',
-                    ag.name AS 'agencyGroup'
+                    ag.name AS 'agencyGroup',
+                    r.name AS 'region'
                    ";
 
         $where = "";
@@ -318,11 +319,12 @@ class agency extends Management{
         }
 
         $join = "LEFT JOIN agency a ON a.ID = y.agency_id
-                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id";
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = y.sales_representant_office_id";
         
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
 
-        $from = array('id','agencyGroup');
+        $from = array('id','agencyGroup', 'region');
 
         $agency = $sql->fetch($res,$from,$from);
 
@@ -362,6 +364,51 @@ class agency extends Management{
 
         return $agency;
 
+    }
+
+    public function getAgencyByAgencyGroupID($con,$agencyID = false){
+
+        $sql = new sql();
+
+        $table = "agency a";
+        $columns = "a.ID AS 'agencyID',
+                    a.name AS 'agency'";
+
+        $where = "";
+        $where .= "WHERE ( ag.ID = '$agencyID')";
+        
+
+        $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id                 
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('agency','agencyID');
+
+        $agency = $sql->fetch($res,$from,$from);
+        return $agency;
+    }
+
+    public function getAgencyUnitByAgencyID($con,$agencyID = false){
+
+        $sql = new sql();
+
+        $table = "agency_unit au";
+        $columns = "au.name AS 'agencyUnit'";
+
+        $where = "";
+        $where .= "WHERE ( a.ID = '$agencyID')";
+        
+
+        $join = "LEFT JOIN agency a ON a.ID = au.agency_id                 
+        ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where);
+
+        $from = array('agencyUnit');
+
+        $agency = $sql->fetch($res,$from,$from);
+        return $agency;
     }
 
     public function getAgencyByRegion($con,$agencyRegion=false,$year=false){
@@ -437,6 +484,68 @@ class agency extends Management{
 
         return $agency;
     }
+
+    public function getRelationshipAgencyGroup($con,$region=false){        
+        $sql = new sql();
+
+        $table = "agency_group ag";
+
+        $columns = "DISTINCT 
+                    ag.ID AS 'agencyGroupID',
+                    ag.name AS 'agencyGroup',                                        
+                    r.name AS 'region'
+                    ";
+
+        $where = "";
+
+        if($region){
+            $regions = implode(",",$region);
+            $where .= "WHERE r.ID IN ('$regions')";
+        }
+
+        $join = "LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where,false,false,false);
+
+        $from = array('agencyGroupID','agencyGroup', 'region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+    }
+
+    public function getRelationshipAgency($con,$region=false){        
+        $sql = new sql();
+
+        $table = "agency a";
+
+        $columns = "DISTINCT 
+                    a.ID AS 'agencyID',
+                    a.name AS 'agency',                                        
+                    r.name AS 'region'
+                    ";
+
+        $where = "";
+
+        if($region){
+            $regions = implode(",",$region);
+            $where .= "WHERE r.ID IN ('$regions')";
+        }
+
+        $join = "LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->select($con,$columns,$table,$join,$where,false,false,false);
+
+        $from = array('agencyID','agency', 'region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+    }
+
 
     public function getAgencyUnit($con,$agencyID=false){
 

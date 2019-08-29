@@ -15,8 +15,10 @@
 						<label class="labelLeft"><span class="bold"> Region: </span></label>
 						@if($userLevel == 'L0' || $userLevel == 'SU')
 							{{$render->region($region)}}							
+						@elseif($userLevel == '1B')
+							{{$render->regionFilteredReps($region, $regionID)}}
 						@else
-							{{$render->regionFiltered($region, $regionID )}}
+							{{$render->regionFiltered($region, $regionID)}}
 						@endif
 					</div>
 
@@ -59,8 +61,16 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('testExcel') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('monthExcel') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
+		<input type="hidden" name="region" value="{{$regionID}}">
+		<input type="hidden" name="year" value="{{$year}}">
+		<input type="hidden" name="brand" value="{{ base64_encode(json_encode($brandID)) }}">
+		<input type="hidden" name="firstPos" value="{{$firstPos}}">
+		<input type="hidden" name="secondPos" value="{{$secondPos}}">
+		<input type="hidden" name="currency" value="{{ base64_encode(json_encode($tmp)) }}">
+		<input type="hidden" name="value" value="{{$value}}">
+
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
@@ -74,7 +84,7 @@
 			<div class="col-sm-2">
 				<input type="submit" value="Generate Excel" class="btn btn-primary" style="width: 100%;">
 			</div>
-		</div>	
+		</div>
 	</form>
 	
 </div>

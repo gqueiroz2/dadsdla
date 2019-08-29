@@ -9,7 +9,7 @@ class renderYoY extends Render {
     
     public function sourceYoY($region){
     	echo "<select name='source' style='width:100%;'>";
-            echo "<option value='ytd'> IBMS </option>";
+            echo "<option value='ytd'> BKGS </option>";
             
             if ($region == 'Brazil') {
                 echo "<option value='cmaps'> CMAPS </option>";

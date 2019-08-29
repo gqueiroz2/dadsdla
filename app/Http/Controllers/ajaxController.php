@@ -17,6 +17,7 @@ use App\client;
 use App\subRankings;
 use App\subBrandRanking;
 use App\subMarketRanking;
+use App\subChurnRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -153,7 +154,7 @@ class ajaxController extends Controller{
         switch ($type) {
 
             case 'client':
-                $clss  = new client();
+                $clss = new client();
                 $base = $clss->getClientByRegion($con,array($regionID),$years);
                 $tralala = "clientGroup";
                 break;
@@ -168,7 +169,7 @@ class ajaxController extends Controller{
                 }
                 break;
         }
-
+        
         for ($bb=0; $bb < sizeof($base); $bb++) { 
             
             $forVerify[$bb] = $base[$bb]['id'];
@@ -182,7 +183,7 @@ class ajaxController extends Controller{
             if($verified[$b]){
                 echo "<option value=\"". base64_encode(json_encode($base[$b]))."\">"
                     .$base[$b][$type];
-                if($type != "client"){
+                if($type != "client" && $type != 'agencyGroup'){
                     echo " - ".$base[$b][$tralala];
                 }
                 echo "</option>";
@@ -325,7 +326,7 @@ class ajaxController extends Controller{
 
         
         if($form == "ytd"){
-            $showForm = "IBMS";
+            $showForm = "BKGS";
         }elseif($form == "cmaps"){
             $showForm = "CMAPS";
         }elseif($form == "mini_header"){
@@ -424,11 +425,19 @@ class ajaxController extends Controller{
         $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
+            $performanceName = Request::session()->get('performanceName');
             $check = false;            
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                if($salesRep[$s]["salesRep"] == $userName){
-                    echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
-                    $check = true;
+                if (!is_null($performanceName)) {
+                    if($salesRep[$s]["salesRep"] == $performanceName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }else{
+                    if($salesRep[$s]["salesRep"] == $userName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
                 }
             }
             if (!$check) {
@@ -474,10 +483,10 @@ class ajaxController extends Controller{
     public function sourceByRegion(){
         $region = Request::get('regionID');
         if ($region == 1) {
-            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='IBMS'> BOOKINGS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";
         }else{
-            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='IBMS'> BOOKINGS </option>";
         }
     }
 
@@ -500,10 +509,8 @@ class ajaxController extends Controller{
         
         echo "<option value=''> Select </option>";
 
-        if ($bool == "false") {
-            echo "<option value='agencyGroup'> Agency Group </option>";
-        }
-
+        
+        echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='agency'> Agency </option>";
         echo "<option value='client'> Client </option>";
 
@@ -735,7 +742,7 @@ class ajaxController extends Controller{
 
     public function marketSubRanking(){
         
-        $db = new dataBase();   
+        $db = new dataBase();
         $con = $db->openConnection("DLA");
 
         $type = Request::get("type");
@@ -786,5 +793,66 @@ class ajaxController extends Controller{
         
 
         $sbm->renderSubAssembler($mtx, $total, $type, $years);
+    }
+
+    public function churnSubRanking(){
+        
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $brands = Request::get("brands");
+        $name = Request::get("name");
+
+        $scr = new subChurnRanking();
+
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1, $cYear-2);
+
+        if ($type == "client") {
+            $val = "agency";
+        }else{
+            $val = "client";
+        }
+        
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);        
+
+        if ($type == "client") {
+            $filterType = "agency";
+        }else{
+            $filterType = "client";
+        }
+
+        $finalValues = array();
+
+        for ($v=0; $v < sizeof($values); $v++) { 
+            if (is_array($values[$v])) {
+                for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                    if (!in_array($values[$v][$v2][$filterType], $finalValues)) {
+                        array_push($finalValues, $values[$v][$v2][$filterType]);
+                    }
+                }   
+            }
+        }
+
+        $base = new base();
+
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
+        }
+
+        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+        
+        $matrix = $scr->assembler($values, $finalValues, $valuesTotal, $years, $filterType);
+
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+
+        $scr->renderSubAssembler($mtx, $total, $type, $years);
     }
 }

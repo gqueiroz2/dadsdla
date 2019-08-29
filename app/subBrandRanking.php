@@ -47,7 +47,6 @@ class subBrandRanking extends rankingBrand {
             $region = $tmp['name'];
         }
 
-
         for ($y=0; $y < sizeof($years); $y++) {
         	
         	if ($filter == "VIX" || $filter == "ONL") {
@@ -58,9 +57,8 @@ class subBrandRanking extends rankingBrand {
 				$table = "ytd";
 			}
 
-			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand[0]['id']);
-
-
+			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand);
+            
 			if (is_array($res[$y])) {
             	for ($r=0; $r < sizeof($res[$y]); $r++) {
                     if ($table != "cmaps") {
@@ -82,7 +80,7 @@ class subBrandRanking extends rankingBrand {
                     }
                     
             	}
-        	}	
+        	}
 			
         }
 
@@ -102,37 +100,38 @@ class subBrandRanking extends rankingBrand {
         if ($tableName == "ytd") {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "month", "year", "brand_id");
-            $colsValue = array($region, $months, $year, $filter);
+            $colsValue = array($region, $months, $year, $filter[0]['id']);
             $where = $sql->where($columns, $colsValue);
         }elseif ($tableName == "fw_digital") {
             $value .= "_revenue";
-            $columns = array("region_id", "month", "year", "brand_id");
-            $colsValue = array($region, $months, $year, $filter);
-            $where = $sql->where($columns, $colsValue);
-
-
-            if ($filter == '9') {
-                $where2 = "WHERE (region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month IN (";
-                    for ($m=0; $m <sizeof($months) ; $m++) { 
-                        if ($m = 0) {
-                            $where2 .= "'".$months[$m]."'";
+            
+            if ($filter[0]['name'] == 'ONL') {
+                
+                $where = "WHERE (a.region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month IN (";
+                    for ($m=0; $m < sizeof($months); $m++) { 
+                        if ($m == sizeof($months)-1) {
+                            $where .= "'".$months[$m]."'";
                         }else{
-                            $where2 .= ",'".$months[$m]."'";
+                            $where .= "'".$months[$m]."',";   
                         }
                     }
-                $where2 .= ")) AND (sales_rep_id = \"".$salesRep['id']."\")";
+                $where .= "))";
+            }else{
+                $columns = array("a.region_id", "month", "year", "brand_id");
+                $colsValue = array($region, $months, $year, $filter[0]['id']);
+                $where = $sql->where($columns, $colsValue);
             }
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue", "month", "year", "brand_id");
-            $colsValue = array($region, $value, $months, $year, $filter);
+            $colsValue = array($region, $value, $months, $year, $filter[0]['id']);
             $value = "revenue";
             $where = $sql->where($columns, $colsValue);
         }else{
             $columns = array("month", "year", "brand_id");
-            $colsValue = array($months, $year, $filter);
+            $colsValue = array($months, $year, $filter[0]['id']);
             $where = $sql->where($columns, $colsValue);
         }
-
+        
         $table = "$tableName $tableAbv";
 
         $leftName = $type;
@@ -163,7 +162,6 @@ class subBrandRanking extends rankingBrand {
 
         	$names = array($type."ID", $type, $as);
         }
-
         
         $values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
@@ -194,26 +192,30 @@ class subBrandRanking extends rankingBrand {
         $bool = -1;
         $bool2 = -1;
 
-        for ($v=0; $v < sizeof($sub[0]); $v++) { 
-            if ($sub[0][$v][$type] == $name) {
-                $bool = 0;
-                if ($sub[0][$v]['total'] == 0) {
-                    $bool = 1;
-                }else{
-                    $bool = 2;
+        if (is_array($sub[0])) {
+            for ($v=0; $v < sizeof($sub[0]); $v++) { 
+                if ($sub[0][$v][$type] == $name) {
+                    $bool = 0;
+                    if ($sub[0][$v]['total'] == 0) {
+                        $bool = 1;
+                    }else{
+                        $bool = 2;
+                    }
                 }
-            }
+            }   
         }
 
-        for ($v=0; $v < sizeof($sub[1]); $v++) { 
-            if ($sub[1][$v][$type] == $name) {
-                $bool2 = 0;
-                if ($sub[1][$v]['total'] == 0) {
-                    $bool2 = 1;
-                }else{
-                    $bool2 = 2;
+        if (is_array($sub[1])) {
+            for ($v=0; $v < sizeof($sub[1]); $v++) { 
+                if ($sub[1][$v][$type] == $name) {
+                    $bool2 = 0;
+                    if ($sub[1][$v]['total'] == 0) {
+                        $bool2 = 1;
+                    }else{
+                        $bool2 = 2;
+                    }
                 }
-            }
+            }   
         }
 
         if ($bool == -1 || $bool == 1) {

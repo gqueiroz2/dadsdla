@@ -250,6 +250,21 @@ class salesRep extends Management{
 		return $bool;
 	}
 
+	public function getSalesRepByName($con,$salesRepName=false){
+		$sql = new sql();
+		$table = "sales_rep sr";
+		$columns = "sr.ID AS 'id'";
+
+		$where = "WHERE ( sr.name = \"".$salesRepName."\" )";
+
+		$res = $sql->select($con,$columns,$table,false,$where);
+		$from = array('id');
+
+		$salesRep = $sql->fetch($res,$from,$from);
+
+    	return $salesRep;
+	}
+
     public function getSalesRep($con,$salesRepGroupID=false){
 		$sql = new sql();
 

@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class sql extends Model{
     
     public function larica($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){     
-        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";
+        $sql = "SELECT $columns FROM $table $join $where ORDER BY 1 $limit";
         echo "<pre>".$sql."</pre><br>";
-        $res = $con->query($sql);
-        return $res;
+        //$res = $con->query($sql);
+        //return $res;
     }
 
-    public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){    	
-        $sql = "SELECT $columns FROM $table $join $where ORDER BY $order_by $limit";
-        //=echo "<pre>".$sql."</pre><br>";
+    public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false , $groupBy = false){    	
+        $sql = "SELECT $columns FROM $table $join $where $groupBy ORDER BY 1 $limit";
+        //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
     }
@@ -34,7 +34,14 @@ class sql extends Model{
         return $res;
     }
 
-    public function selectGroupBy($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){     
+    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){
+        $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
+        echo "<pre>".$sql."</pre><br>";
+        $res = $con->query($sql);
+        return $res;
+    }
+
+    public function selectGroupBy($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){
         $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
@@ -60,7 +67,6 @@ class sql extends Model{
         $where = $whereArray[1];
 
         $sql .= "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
-
 
         /*for ($i=0; $i < strlen($sql); $i++) { 
             echo $sql[$i];

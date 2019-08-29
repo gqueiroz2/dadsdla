@@ -10,7 +10,6 @@ use App\agency;
 class Management extends Model{
 
 	public function checkForMissMatches($con,$classe,$type,$array){
-		
 
 		$sizeA = sizeof($array);
 		$toCreate = array();
