@@ -158,6 +158,7 @@ class AE extends pAndR{
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
         
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
+
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
         $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
@@ -382,6 +383,18 @@ class AE extends pAndR{
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
 
+        $test = intval( date('n') );
+
+        if ($test < 4) {
+            $test++;
+        }elseif ($test < 7) {
+            $test += 2;
+        }elseif ($test < 10) {
+            $test += 3;
+        }else{
+            $test += 4;
+        }
+
         for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
             $return[$m] = 0;
         }
@@ -394,10 +407,15 @@ class AE extends pAndR{
                     $div = 1;
                 }
 
-                for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
-                    $return[$m] += $matrix[$c][$m]/$div;
+                for ($m=0; $m <sizeof($matrix[$c]); $m++) {
+                    if ($test > ($m+1)) {
+                        $return[$m] += $matrix[$c][$m];
+                    }else{
+                        $return[$m] += $matrix[$c][$m]/$div;
+                    }
                 }
             }
+        $return[16] = $return[3] + $return[7] + $return[11] + $return[15];
         }else{
             for ($c=0; $c <sizeof($matrix); $c++) { 
                 for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
@@ -405,7 +423,8 @@ class AE extends pAndR{
                 }
             }
         }
-            
+
+
 
         return $return;
     }
@@ -861,6 +880,7 @@ class AE extends pAndR{
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
+                                            AND (sales_rep_id = \"".$salesRepID."\")
                                             ";
 
                         $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
@@ -915,10 +935,12 @@ class AE extends pAndR{
 
     public function getBookingExecutive($con,$sql,$salesRep,$month,$region,$year,$value,$currency,$pr){
 
-        if ($value == "gross") {
+        if($value == "gross"){
             $ytdColumn = "gross_revenue_prate";
+            $fwColumn = "gross_revenue";
         }else{
             $ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
         }
 
         if($currency == "USD"){
@@ -929,16 +951,27 @@ class AE extends pAndR{
 
         for ($m=0; $m <sizeof($month) ; $m++) { 
             $select[$m] = "SELECT SUM($ytdColumn) AS sumValue
-                            FROM ytd
-                            WHERE  (month = \"".$month[$m][1]."\")
-                            AND (year = \"".$year."\")
-                            AND (sales_rep_id = \"".$salesRep[0]."\")";
+                                FROM ytd
+                                WHERE  (month = \"".$month[$m][1]."\")
+                                AND (year = \"".$year."\")
+                                AND (sales_rep_id = \"".$salesRep[0]."\")";
+            $selectFW[$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                FROM fw_digital
+                                WHERE (month = \"".$month[$m][1]."\")
+                                AND (year = \"".$year."\")
+                                AND (sales_rep_id = \"".$salesRep[0]."\")";            
 
             $res[$m] = $con->query($select[$m]);
+            $resFW[$m] = $con->query($selectFW[$m]);
 
             $from = array("sumValue");
 
             $rev[$m] = $sql->fetch($res[$m],$from,$from)[0]['sumValue']*$div;                    
+            $revFW[$m] = $sql->fetch($resFW[$m],$from,$from)[0]['sumValue']*$div;  
+
+            if ($revFW[$m]) {
+                $rev[$m] += $revFW[$m];
+            }                  
         
         }
 
@@ -1021,9 +1054,9 @@ class AE extends pAndR{
 
     			$from = array("sumValue");
 
-    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*2;	    			
+    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$factor;	    			
                 
-                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*2;                    
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$factor;                    
 
                 if( !is_null($revFW[$c][$m]) ){
                     
