@@ -175,7 +175,7 @@ class results extends base{
             if ($currency[0]['name'] == "USD") {
                 $pRate = 1.0;
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));    
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
             }
             
         }
