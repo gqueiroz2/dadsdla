@@ -326,7 +326,7 @@ class ajaxController extends Controller{
 
         
         if($form == "ytd"){
-            $showForm = "IBMS";
+            $showForm = "BKGS";
         }elseif($form == "cmaps"){
             $showForm = "CMAPS";
         }elseif($form == "mini_header"){
@@ -475,10 +475,10 @@ class ajaxController extends Controller{
     public function sourceByRegion(){
         $region = Request::get('regionID');
         if ($region == 1) {
-            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='IBMS'> BOOKINGS </option>";
             echo "<option value='CMAPS'> CMAPS </option>";
         }else{
-            echo "<option value='IBMS'> IBMS </option>";
+            echo "<option value='IBMS'> BOOKINGS </option>";
         }
     }
 
