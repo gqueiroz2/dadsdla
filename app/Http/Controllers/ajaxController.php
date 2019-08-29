@@ -154,7 +154,7 @@ class ajaxController extends Controller{
         switch ($type) {
 
             case 'client':
-                $clss  = new client();
+                $clss = new client();
                 $base = $clss->getClientByRegion($con,array($regionID),$years);
                 $tralala = "clientGroup";
                 break;
@@ -169,7 +169,7 @@ class ajaxController extends Controller{
                 }
                 break;
         }
-
+        
         for ($bb=0; $bb < sizeof($base); $bb++) { 
             
             $forVerify[$bb] = $base[$bb]['id'];
@@ -183,7 +183,7 @@ class ajaxController extends Controller{
             if($verified[$b]){
                 echo "<option value=\"". base64_encode(json_encode($base[$b]))."\">"
                     .$base[$b][$type];
-                if($type != "client"){
+                if($type != "client" && $type != 'agencyGroup'){
                     echo " - ".$base[$b][$tralala];
                 }
                 echo "</option>";
@@ -509,10 +509,8 @@ class ajaxController extends Controller{
         
         echo "<option value=''> Select </option>";
 
-        if ($bool == "false") {
-            echo "<option value='agencyGroup'> Agency Group </option>";
-        }
-
+        
+        echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='agency'> Agency </option>";
         echo "<option value='client'> Client </option>";
 
@@ -744,7 +742,7 @@ class ajaxController extends Controller{
 
     public function marketSubRanking(){
         
-        $db = new dataBase();   
+        $db = new dataBase();
         $con = $db->openConnection("DLA");
 
         $type = Request::get("type");

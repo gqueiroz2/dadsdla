@@ -69,9 +69,6 @@ class dashboardsController extends Controller{
             return back()->withErrors($validator)->withInput();
         }
 
-
-
-
          $cYear = intval(date("Y"));
          $pYear = $cYear - 1;
          $ppYear = $pYear - 1;

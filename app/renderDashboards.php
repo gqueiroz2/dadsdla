@@ -50,7 +50,7 @@ class renderDashboards extends Render{
         echo "</div>";
 
 
-        if ($type == 'agency') {
+        if ($type == 'agency' || $type == "agencyGroup") {
             echo "<div class='row justify-content-center mt-2' style='margin-right: 0.3%; margin-left: 0.3%; min-height:250px;'>";
                 echo "<div class='col' align='center'>";
                     echo "<div style='width:100%;' id='overviewChildChart' class='graphInner'> GRAFICO VALORES DOS ULTIMOS 3 ANOS DO TIPO CHILD </div>";

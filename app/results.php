@@ -216,7 +216,7 @@ class results extends base{
                     $where = "WHERE ( month = \"".$month."\" ) 
                                            AND ( year =  \" $year \")
                                            AND (region_id = \"".$region."\")
-                                           AND (brand_id = '".$brand."')";;
+                                           AND (brand_id = '".$brand."')";
                 }
 
                 break;
