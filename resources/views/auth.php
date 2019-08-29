@@ -7,5 +7,6 @@
         $userLevel = Request::session()->get('userLevel');
         $userSalesRepGroup = Request::session()->get('userSalesRepGroup');
         $userSalesRepGroupID = Request::session()->get('userSalesRepGroupID');
+        $performanceName = Request::session()->get('performanceName');
 
 ?>

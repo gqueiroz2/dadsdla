@@ -425,11 +425,19 @@ class ajaxController extends Controller{
         $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
+            $performanceName = Request::session()->get('performanceName');
             $check = false;            
             for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                if($salesRep[$s]["salesRep"] == $userName){
-                    echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
-                    $check = true;
+                if (!is_null($performanceName)) {
+                    if($salesRep[$s]["salesRep"] == $performanceName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }else{
+                    if($salesRep[$s]["salesRep"] == $userName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
                 }
             }
             if (!$check) {
