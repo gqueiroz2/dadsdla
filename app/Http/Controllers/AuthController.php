@@ -84,6 +84,7 @@ class AuthController extends Controller
             Request::session()->put('userRegionID',$resp['regionID']);
             Request::session()->put('userEmail',$resp['email']);
             Request::session()->put('userLevel',$resp['level']);
+            Request::session()->put('performanceName',$resp['performance_name']);
 
             if($resp['subLevelBool'] == 1){
                 Request::session()->put('userSalesRepGroup',$resp['salesRepGroup']);
