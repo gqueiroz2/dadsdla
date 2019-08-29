@@ -13,7 +13,6 @@ class resultsMQ extends results{
     
     public function lines($con, $currency, $months, $form, $brands, $year, $region, $value, $source){
 
-
         for ($l=0; $l < 2; $l++) { 
 
             if ($l == 0) {
