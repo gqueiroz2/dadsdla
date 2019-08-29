@@ -56,6 +56,7 @@ class rankingBrand extends rank{
 						)";
 
 		$sql = new sql();
+
 		$p = new pRate();
 
 		for ($l=0; $l < 2; $l++) {
@@ -75,8 +76,7 @@ class rankingBrand extends rank{
 					}else{
 						$table = 'plan_by_brand';
 					}
-					//var_dump($years[$y]);
-					//var_dump($table);
+					
 					$infoQuery[$b] = $this->getAllValuesUnion($table, $info['leftName'], "brand", $brands[$b], $region, $value, $months, $currency);	
 				}
 
@@ -101,6 +101,42 @@ class rankingBrand extends rank{
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
 				
+				if (is_array($res[$y])) {
+					$size = sizeof($res[$y]);
+					$sum = 0;
+					$check = false;
+
+					for ($r=0; $r < $size; $r++) { 
+
+						if ($res[$y][$r]['brand'] == 'ONL-SM') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
+						}elseif ($res[$y][$r]['brand'] == 'ONL') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+						}elseif ($res[$y][$r]['brand'] == 'ONL-DSS') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
+						}elseif ($res[$y][$r]['brand'] == 'VOD') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
+						}
+					}
+
+					if ($check) {
+						$res[$y] = array_values($res[$y]);
+
+						for ($r=0; $r < sizeof($res[$y]); $r++) { 
+							if ($res[$y][$r]['brand'] == 'ONL') {
+								$res[$y][$r]['total'] = $sum;
+							}
+						}
+					}	
+				}
+				
 				if ($infoQuery[0]['table'] == "cmaps a") {
 					if ($currency[0]['name'] == "USD") {
 			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
@@ -121,7 +157,7 @@ class rankingBrand extends rank{
 		        }else{
 		            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
 		        }
-
+		        
 				if (is_array($res[$y])) {
 
 					for ($i=0; $i < sizeof($res[$y]); $i++) { 
@@ -133,9 +169,8 @@ class rankingBrand extends rank{
 						}else{
 							$res[$y][$i]['total'] *= $pRate;
 						}
-					}	
+					}
 				}
-
 			}
 
 			$line[$l] = $res;
@@ -162,12 +197,55 @@ class rankingBrand extends rank{
 		$rtr['leftName'] = "brand";
 
 		return $rtr;
+	}
 
+	public function getValueColumn($values, $brand, $year, $column){
+		
+		if (is_array($values[$column][$year])) {
+			for ($b=0; $b < sizeof($values[$column][$year]); $b++) { 
+				if ($brand == $values[$column][$year][$b]['brand']) {
+					return $values[$column][$year][$b]['total'];
+				}
+			}
+		}
+
+		return "-";
+	}
+
+	public function checkBrandColumn($brand, $mtx, $m, $years, $values){
+		
+		if ($mtx[$m][0] == "Booking ".$years[0] || $mtx[$m][0] == "Share Booking ".$years[0]) {
+			$res = $this->getValueColumn($values, $brand, 0, 0);
+		}elseif ($mtx[$m][0] == "Target ".$years[0] || $mtx[$m][0] == "Share Target") {
+			$res = $this->getValueColumn($values, $brand, 0, 1);
+		}elseif ($mtx[$m][0] == "Booking ".$years[1] || $mtx[$m][0] == "Share Booking ".$years[1]) {
+			$res = $this->getValueColumn($values, $brand, 1, 0);
+		}elseif ($mtx[$m][0] == "%(Booking / Target)") {
+			$val1 = $this->getValueColumn($values, $brand, 0, 0);
+			$val2 = $this->getValueColumn($values, $brand, 1, 0);
+
+			if ($val1 != "-" && $val2 != "-") {
+				$res = ($val1 / $val2)*100;
+			}else{
+				$res = "-";
+			}
+		}elseif ($mtx[$m][0] == "(Booking - Target)") {
+			$val1 = $this->getValueColumn($values, $brand, 0, 0);
+			$val2 = $this->getValueColumn($values, $brand, 1, 0);
+
+			if ($val1 != "-" && $val2 != "-") {
+				$res = $val1 - $val2;
+			}else{
+				$res = "-";
+			}
+		}else{
+			$res = $brand;
+		}
+
+		return $res;
 	}
 
 	public function assembler($values, $years, $brands){
-
-		//var_dump($brands);
 
 		$mtx[0][0] = "Brand";
 		$mtx[1][0] = "Booking ".$years[0];
@@ -183,114 +261,80 @@ class rankingBrand extends rank{
 		$target = 0;
 		$pClosed = 0;
 
-		for ($b=0; $b < sizeof($brands); $b++) { 
-			$mtx[0][$b+1] = $brands[$b][1];
-
-			if ($values[0][0] == false) {
-				$val = "-";
-			}else{
-				if ($b < sizeof($values[0][0])) {
-					$val = $values[0][0][$b]['total'];
-				}else{
-					$val = "-";
-				}
-			}
-
-			$mtx[1][$b+1] = $val;
-			
-			if ($val != "-") {
-				$closed += $val;	
-			}
-
-			if ($values[1][0] == false) {
-				$val = "-";
-			}else{
-				if ($b < sizeof($values[1][0])) {
-					$val = $values[1][0][$b]['total'];
-				}else{
-					$val = "-";
-				}
-			}
-
-			$mtx[2][$b+1] = $val;
-
-			if ($val != "-") {
-				$target += $val;	
-			}
-
-			if ($values[0][1] == false) {
-				$val = "-";
-			}else{
-				if ($b < sizeof($values[0][1])) {
-					$val = $values[0][1][$b]['total'];
-				}else{
-					$val = "-";
-				}
-			}
-
-			$mtx[3][$b+1] = $val;
-
-			if ($val != "-") {
-				$pClosed += $val;	
-			}
-		}
-
 		$closedP = 0;
 		$targetP = 0;
 		$pClosedP = 0;
+		
+		for ($b=0; $b < sizeof($brands); $b++) {
+			for ($m=0; $m < 4; $m++) {
+				$res = $this->checkBrandColumn($brands[$b][1], $mtx, $m, $years, $values);
+
+				if ($mtx[$m][0] == "Booking ".$years[0]) {
+					if ($res != "-") {
+						$closed += $res;	
+					}
+				}elseif ($mtx[$m][0] == "Booking ".$years[1]) {
+					if ($res != "-") {
+						$pClosed += $res;	
+					}
+				}elseif ($mtx[$m][0] == "Target ".$years[0]) {
+					if ($res != "-") {
+						$target += $res;	
+					}
+				}
+
+				array_push($mtx[$m], $res);
+			}
+			
+		}
+
+		for ($b=0; $b < sizeof($brands); $b++) {
+			for ($m=4; $m < 7; $m++) { 
+				$val = $this->checkBrandColumn($brands[$b][1], $mtx, $m, $years, $values);
+
+				if ($mtx[$m][0] == "Share Booking ".$years[0]) {
+					if ($val != "-") {
+						$res = ($val / $closed)*100;
+						$closedP += $val;
+					}else{
+						$res = $val;
+					}
+				}elseif ($mtx[$m][0] == "Share Target") {
+					if ($val != "-") {
+						$res = ($val / $target)*100;
+						$targetP += $val;
+					}else{
+						$res = $val;
+					}
+				}elseif ($mtx[$m][0] == "Share Booking ".$years[1]) {
+					if ($val != "-") {
+						$res = ($val / $pClosed)*100;
+						$pClosedP += $val;
+					}else{
+						$res = $val;
+					}
+				}
+
+				array_push($mtx[$m], $res);
+			}
+		}
+
+		for ($b=0; $b < sizeof($brands); $b++) { 
+			for ($m=7; $m < sizeof($mtx); $m++) {
+				$res = $this->checkBrandColumn($brands[$b][1], $mtx, $m, $years, $values);
+
+				array_push($mtx[$m], $res);
+			}
+		}
 
 		if (sizeof($brands) > 1) {
 			array_push($mtx[0], "DN");
 			array_push($mtx[1], $closed);
 			array_push($mtx[2], $target);
 			array_push($mtx[3], $pClosed);
-
-			for ($b=0; $b < sizeof($brands); $b++) {
-				
-				if ($mtx[1][$b+1] != "-") {
-					$val = ($mtx[1][$b+1] / $closed)*100;
-					$closedP += $val;
-				}else{
-					$val = "-";
-				}
-
-				$mtx[4][$b+1] = $val;
-
-				if ($mtx[2][$b+1] != "-") {
-					$val = ($mtx[2][$b+1] / $target)*100;
-					$targetP += $val;
-				}else{
-					$val = "-";
-				}
-
-				$mtx[5][$b+1] = $val;
-
-				if ($mtx[3][$b+1] != "-") {
-					$val = ($mtx[3][$b+1] / $pClosed)*100;
-					$pClosedP += $val;
-				}else{
-					$val = "-";
-				}
-
-				$mtx[6][$b+1] = $val;
-
-				if ($mtx[1][$b+1] != "-" && $mtx[2][$b+1] != "-") {
-					$val = ($mtx[1][$b+1] / $mtx[2][$b+1])*100;
-					$val2 = ($mtx[1][$b+1] - $mtx[2][$b+1]);
-				}else{
-					$val = "-";
-					$val2 = "-";
-				}
-
-				$mtx[7][$b+1] = $val;
-				$mtx[8][$b+1] = $val2;
-			}
-
 			array_push($mtx[4], $closedP);
 			array_push($mtx[5], $targetP);
 			array_push($mtx[6], $pClosedP);
-
-			$size = sizeof($mtx[0]);
 
 			$val = ($closed / $target)*100;
 			array_push($mtx[7], $val);

@@ -52,8 +52,8 @@ class rank extends Model{
 
         $check = false;
 
-        for ($b=0; $b <sizeof($brands_id) ; $b++) { 
-            if ($brands_id[$b] == '9') {
+        for ($b=0; $b < sizeof($brands) ; $b++) { 
+            if ($brands[$b][1] == 'ONL') {
                 $check = true;
             }
         }
@@ -113,7 +113,6 @@ class rank extends Model{
             $colsValue = array($brands_id, $months);
         }
 
-
         if ($type == "agencyGroup") {
             $leftAbv2 = "c";
             $leftAbv3 = "d";
@@ -136,16 +135,13 @@ class rank extends Model{
             $tmpD = $leftAbv.".ID AS '".$type."ID', ".
                    $leftAbv.".name AS '".$type."', SUM($valueDigital) AS $as";
 
-
             $join = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = ".$tableAbv.".".$leftName2."_id
                     LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
                     LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
 
-
             $joinD = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = f.".$leftName2."_id
                     LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
                     LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
-
 
             $name = substr($type, 0, 6)."_group_id";
             $names = array($type."ID", $type, $as);
@@ -189,8 +185,8 @@ class rank extends Model{
                         $size1 = sizeof($resD[$y]);
                         $size2 = sizeof($res[$y]);
 
-                        for ($r=0; $r <$size1 ; $r++) { 
-                            for ($r2=0; $r2 <$size2 ; $r2++) {
+                        for ($r=0; $r < $size1; $r++) { 
+                            for ($r2=0; $r2 < $size2; $r2++) {
                                 if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
                                     $res[$y][$r2]['total'] += $resD[$y][$r]['total'];
 
@@ -201,7 +197,7 @@ class rank extends Model{
                         }
 
                         $resD[$y] = array_values($resD[$y]);
-                        for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                        for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                             array_push($res[$y], $resD[$y][$r]);
                         }
 
@@ -266,8 +262,6 @@ class rank extends Model{
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
-                //$values2[$y] = $sql->selectGroupBy($con, $tmp2, "fw_digital", $join2, $where, "total", $name, "DESC");
-
                 if($tmpD){
                     array_push($colsValueDigital, $years[$y]);
                     $whereDigital = $sql->where($columnsDigital,$colsValueDigital);
@@ -326,9 +320,6 @@ class rank extends Model{
                     }
 
                 }
-
-
-
             }
         }
 
@@ -345,6 +336,21 @@ class rank extends Model{
             for ($b=0; $b < sizeof($brands); $b++) { 
                 $brands_id[$b] = $brands[$b][0];
             }
+        }
+
+        $check = false;
+
+        for ($b=0; $b < sizeof($brands) ; $b++) { 
+            if ($brands[$b][1] == 'ONL') {
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            array_push($brands_id, '13');
+            array_push($brands_id, '14');
+            array_push($brands_id, '15');
+            array_push($brands_id, '16');
         }
 
         $tableAbv = "a";

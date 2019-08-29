@@ -24,7 +24,6 @@ class dashboards extends rank{
 	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
 	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
 
-	    
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
 
         if ($currencyName == "USD") {
@@ -56,20 +55,20 @@ class dashboards extends rank{
 	    			$last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
 	    			$last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
 	    			$last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);	    			
+	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
 	    		}else{
 	    			$last3YearsRoot = $this->last3Years($con,"agencyGroup","root",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
 	    			$last3YearsChild = $this->last3Years($con,"agency","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
 	    			$last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
 	    			$last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);	  
+	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
 	    		}
 
 	    		break;
 	    }
 
-        /*
-        var_dump("last3YearsRoot");
+        
+        /*var_dump("last3YearsRoot");
         var_dump($last3YearsRoot);
         var_dump("last3YearsChild");
         var_dump($last3YearsChild);
@@ -98,7 +97,6 @@ class dashboards extends rank{
 		$sql = new sql(); 	
 
 		$products = $this->getProducts($con,$table,$type,$baseFilter);
-
 
 		for ($y=0; $y < sizeof($years); $y++) { 
 			for ($p=0; $p < sizeof($products); $p++) { 
@@ -158,7 +156,7 @@ class dashboards extends rank{
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
                                 AND (brand_id != \"10\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")";                        # code...
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")";
                     }else{
                         $where = "WHERE(year = \"".$years[$y]."\")
                                 AND (brand_id = \"".$brands[$b][0]."\")
@@ -244,7 +242,7 @@ class dashboards extends rank{
 	    if($kind == "root"){
 
 	    	if ($type == "agencyGroup") {
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months,$cr, "agency");
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency");
 	    	}else{
                 $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr );
 	    	}
@@ -280,7 +278,8 @@ class dashboards extends rank{
 
     		if($type == "agencyGroup"){
 
-    			$join = "LEFT JOIN agency a ON a.ID = y.agency_id client c ON c.ID = y.client_id";
+    			$join = "LEFT JOIN agency a ON a.ID = y.agency_id 
+                         LEFT JOIN client c ON c.ID = y.client_id";
 
     			$where = "WHERE( ".$smt."_group_id = \"".$filter->id."\" )";
     		}else{
@@ -293,7 +292,7 @@ class dashboards extends rank{
     	$select = "SELECT DISTINCT client_product, client_id, c.name AS \"client\"
 
     						FROM $table y $join $where";
-
+                            
     	$res = $con->query($select);
     	$from = array("client_product","client_id","client");
     	$to = array("product","clientID","client");
@@ -338,7 +337,6 @@ class dashboards extends rank{
         $last = $y;
         
         $mtx[$last][0] = "Agency Group";
-
 
         if ($type == "agency") {
             $option = 2;

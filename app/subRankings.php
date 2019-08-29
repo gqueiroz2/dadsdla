@@ -98,8 +98,6 @@ class subRankings extends rank{
         
         $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
 
-
-
         $tmpD = $leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($valueD) AS $as";
 
         $joinD = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$leftName."_id";
