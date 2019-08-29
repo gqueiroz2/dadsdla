@@ -123,72 +123,9 @@
 		$(document).ready(function(){
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
-
 			@endfor
 
 			@for($m=0;$m<16;$m++)
-				$("#rf-"+{{$m}}).change(function(){
-
-					if ($(this).val() == '') {
-						$(this).val(parseFloat(0));
-					}
-					
-					$(this).val(Comma(handleNumber($(this).val())));
-
-					if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-						var value = Comma(handleNumber($("#rf-0").val())+handleNumber($("#rf-1").val())+handleNumber($("#rf-2").val()));
-						$("#rf-3").val(value);
-					}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-						var value = Comma(handleNumber($("#rf-4").val())+handleNumber($("#rf-5").val())+handleNumber($("#rf-6").val()));
-						$("#rf-7").val(value);
-					}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-						var value = Comma(handleNumber($("#rf-8").val())+handleNumber($("#rf-9").val())+handleNumber($("#rf-10").val()));
-						$("#rf-11").val(value);
-					}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-						var value = Comma(handleNumber($("#rf-12").val())+handleNumber($("#rf-13").val())+handleNumber($("#rf-14").val()));
-						$("#rf-15").val(value);
-					}
-				
-					var Temp = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
-
-					$("#total-total").val(Temp);
-
-
-					@for($c=0;$c<sizeof($client);$c++)
-						var temp = Comma(handleNumber($(this).val())*parseFloat($("#totalPP2-"+{{$c}}).val()/100));
-
-
-						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(temp);
-						
-						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
-							$("#clientRF-"+{{$c}}+"-3").val(value);
-						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
-							$("#clientRF-"+{{$c}}+"-7").val(value);
-						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
-							$("#clientRF-"+{{$c}}+"-11").val(value);
-						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
-							$("#clientRF-"+{{$c}}+"-15").val(value);
-						}
-						
-						var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
-
-						$("#totalClient-"+{{$c}}).val(Temp);
-
-						@for($m2=0;$m2<16;$m2++)
-							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
-							temp2 = temp2*100;
-							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
-						@endfor
-
-					@endfor
-					
-				});
-
-
 				@for($c=0;$c<sizeof($client);$c++)
 					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
 
@@ -312,7 +249,6 @@
 							$("#rf-15").val(month);
 						}
 
-
 						var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
 
 						$("#total-total").val(total);
@@ -323,7 +259,6 @@
 							$("#totalPP2-"+{{$c2}}).val(temp);
 							$("#totalPP3-"+{{$c2}}).val(temp);
 						@endfor
-
 
 						var value = handleNumber($(this).val());
 
@@ -432,7 +367,6 @@
 								month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
 							@endfor
 
-
 							var target = handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val());
 
 							var booking = handleNumber($("#bookingE-8").val())+handleNumber($("#bookingE-9").val())+handleNumber($("#bookingE-10").val());
@@ -448,7 +382,6 @@
 							}else{
 								var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
 							}
-
 
 							$("#achievement-11").val(Temp3);
 
@@ -478,7 +411,6 @@
 							$("#achievement-15").val(Temp3);
 						}
 
-
 						var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
 
 						var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
@@ -486,7 +418,6 @@
 						var booking = handleNumber($("#bookingE-3").val()) + handleNumber($("#bookingE-7").val()) + handleNumber($("#bookingE-11").val()) + handleNumber($("#bookingE-15").val());
 
 						$("#totalPending").val(Comma(RF-booking));
-
 
 						$("#TotalRFvsTarget").val(Comma(RF-target));
 
@@ -501,80 +432,15 @@
 					});
 				@endfor
 			@endfor
-			@for($c=0;$c<sizeof($client);$c++)
-				$("#totalPP2-"+{{$c}}).change(function(){
-					var top = 0;
-					@for($c2=0;$c2<sizeof($client);$c2++)
-						top += handleNumber($("#totalPP2-"+{{$c2}}).val());
-					@endfor
-
-					top = Comma(top);
-
-					$("#totalClients").val(top);
-
-					@for($m=0;$m<16;$m++)
-						if($("#totalPP3-"+{{$c}}).val() != 0){
-							var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m}}).val())*handleNumber($(this).val())/handleNumber($("#totalPP3-"+{{$c}}).val()));
-						}else{
-							var value = Comma(handleNumber($("#rf-"+{{$m}}).val())*parseFloat($(this).val()/100));
-						}
-						$("#clientRF-"+{{$c}}+"-"+{{$m}}).val(value);
-					@endfor
-
-					$("#totalPP3-"+{{$c}}).val($(this).val());
-
-					var Temp = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
-
-					$("#totalClient-"+{{$c}}).val(Temp);
-
-					
-				});
-
-				
-				@for($m=0;$m<16;$m++)
-					$("#inputNumber-"+{{$c}}+"-"+{{$m}}).change(function(){
-						var temp = 0;
-
-						var antigo = $(this).val();
-
-						@for($m2=0;$m2<16;$m2++)
-							if({{$m2}} != 3 && {{$m2}} != 7 && {{$m2}} != 11 && {{$m2}} != 15){
-								temp += handleNumber($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
-							}
-						@endfor
-
-						temp = temp.toFixed(2);
-
-						var tmp2 = handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val());
-
-						if(temp != '100.00'){
-							$("#client-"+{{$c}}).css("background-color","red");
-						}else{
-							$("#client-"+{{$c}}).css("background-color","");
-						}
-						
-					});
-				@endfor			
-
-			@endfor
-
-
-
-
 		});
-		
 		function handleNumber(number){
-
 			for (var i = 0; i < number.length/3; i++) {
 				number = number.replace(",","");
 			}
-			
 			number = parseFloat(number);
 			return number;
 		}
-
 	  	function Comma(Num) { //function to add commas to textboxes
-	  		Num = Num.toFixed(2);
 	        Num += '';
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
 	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
@@ -587,11 +453,6 @@
 	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	        return x1 + x2;
 	    }
-
-	    
-
-	    
-
 	</script>
 
 @endsection
