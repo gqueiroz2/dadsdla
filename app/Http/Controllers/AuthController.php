@@ -15,14 +15,14 @@ class AuthController extends Controller
 
     public function logout(){
 	
-        return view('auth.login');
+        //return view('auth.login');
 
 
-        /*require_once('/var/simplesamlphp/lib/_autoload.php');
+        require_once('/var/simplesamlphp/lib/_autoload.php');
 
         $as = new \SimpleSAML\Auth\Simple('default-sp');
 
-        $as->logout(route('logoutGet'));*/
+        $as->logout(route('logoutGet'));
 
 
     }
@@ -33,7 +33,7 @@ class AuthController extends Controller
     }
 
     public function autenticate(){
-    	/*$user = new User();
+    	$user = new User();
     	$db = new dataBase();
 
     	$con = $db->openConnection('DLA');
@@ -48,8 +48,8 @@ class AuthController extends Controller
     		return redirect('home');
     	}else{
     		return redirect('permission');
-    	}*/
-        return view('auth.login');
+    	}
+        //return view('auth.login');
         
     }
 
