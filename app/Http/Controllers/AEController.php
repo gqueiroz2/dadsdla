@@ -93,7 +93,7 @@ class AEController extends Controller{
         $weeki = $ae->weekOfMonth($today);
         var_dump($weeki);
 
-        $bool = $ae->insertUpdate($ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
         
     }
 

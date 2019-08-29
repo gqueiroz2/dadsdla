@@ -12,7 +12,9 @@ use App\sql;
 use App\pRate;
 class AE extends pAndR{
     
-    public function insertUpdate($oppid,$region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+
+        $sr = new salesRep();
 
         $tableFCST = "forecast";
         $tableFCSTClient = "forecast_client";
@@ -26,9 +28,12 @@ class AE extends pAndR{
                      last_modify_by,last_modify_date,last_modify_time
                     )";
 
+        $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep);
+        var_dump($salesRepID);
+
         $values = "(
                     \"".$oppid."\",
-                    \"".."\"
+                    \"".$region."\",\"".$salesRep->salesRep."\",
                   )";
 
         $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
