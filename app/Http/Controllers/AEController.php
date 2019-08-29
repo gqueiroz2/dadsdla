@@ -88,12 +88,14 @@ class AEController extends Controller{
         /*
             kind,region,year,salesRep,currency,value,week,month
         */
-        $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,"week",$fcstMonth);
         $today = date("Y-m-d");
-        $weeki = $ae->weekOfMonth($today);
-        var_dump($weeki);
+        $read = $ae->weekOfMonth($today);
+        $read = "0".$read;
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
+        $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
+        
+
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
         
     }
 

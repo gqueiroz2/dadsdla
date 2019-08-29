@@ -12,9 +12,28 @@ use App\sql;
 use App\pRate;
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
-
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+/*
+        var_dump($region);
+        var_dump($salesRep);
+        var_dump($currency);
+        var_dump($value);
+        var_dump($user);
+        var_dump($year);
+        var_dump($date);
+        var_dump($time);
+        var_dump($fcstMonth);
+        var_dump($manualEstimantionBySalesRep);
+        var_dump($manualEstimantionByClient);
+*/
         $sr = new salesRep();
+
+        $tmp = explode("-", $date);
+        if($tmp && isset($tmp[2])){
+            $month = $tmp[2];
+        }else{
+            $month = 0;
+        }
 
         $tableFCST = "forecast";
         $tableFCSTClient = "forecast_client";
@@ -28,32 +47,30 @@ class AE extends pAndR{
                      last_modify_by,last_modify_date,last_modify_time
                     )";
 
-        $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep);
-        var_dump($salesRepID);
+        $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
 
         $values = "(
                     \"".$oppid."\",
-                    \"".$region."\",\"".$salesRep->salesRep."\",
+                    \"".$region."\",\"".$salesRepID."\",
+                    \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
+                    \"".$currency."\",\"".$value."\",
+                    \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\"
                   )";
 
         $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
 
-        var_dump($insertFCST);
+        echo "<pre>".$insertFCST."</pre>";
 
-        var_dump($region);
-        var_dump($salesRep);
-        var_dump($currency);
-        var_dump($value);
-        var_dump($user);
-        var_dump($year);
-        var_dump($date);
-        var_dump($time);
-        var_dump($fcstMonth);
-        var_dump($manualEstimantionBySalesRep);
-        var_dump($manualEstimantionByClient);
-
+        
+        $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep);
 
     }
+
+    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep){
+        var_dump($oppid);
+        var_dump($manualEstimantionBySalesRep);
+    }
+
     public function weekOfMonth($date) {
         $date = strtotime($date);
         //Get the first day of the month.
@@ -69,19 +86,14 @@ class AE extends pAndR{
         }else{
             $string = "TRS";
         }
-        /*
-        var_dump($kind);
-        var_dump($region);
-        var_dump($year);
-        var_dump($salesRep);
-        var_dump($currency);
-        var_dump($value);
-        */
+       
         $string .= "-".preg_replace('/\s+/', '', $salesRep->region).    
                    "-".$year.
+                   "-".$month.                   
+                   "-WEEK-".$week.                   
                    "-".preg_replace('/\s+/', '', $salesRep->salesRep).
-                   "-".$currency.
-                   "-".$month                   
+                   "-".$currency
+                   
                 ;
 
         return $string;
