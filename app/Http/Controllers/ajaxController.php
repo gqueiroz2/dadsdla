@@ -501,8 +501,10 @@ class ajaxController extends Controller{
         
         echo "<option value=''> Select </option>";
 
+        if ($bool == "false") {
+            echo "<option value='agencyGroup'> Agency Group </option>";    
+        }
         
-        echo "<option value='agencyGroup'> Agency Group </option>";
         echo "<option value='agency'> Agency </option>";
         echo "<option value='client'> Client </option>";
 
