@@ -7,7 +7,7 @@ use App\rank;
 
 class subRankings extends rank{
     
-    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue){
+    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $secondaryFilter=false){
         /*
             $lefName = LEFT JOIN
             $type no caso de overviw eh a ROOT
@@ -51,10 +51,13 @@ class subRankings extends rank{
 
         if ($type == "agencyGroup") {
             $oldAgency = $a->getAgencyGroupID($con, $sql, $filterValue, $region);
+            $aux = "agency";
         }elseif($type == "client"){
-            $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);    
+            $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);
+            $aux = "agency";
         }else{
-            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue);    
+            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue);
+            $aux = "client";
         }
 
         if (is_array($oldAgency)) {
@@ -79,6 +82,13 @@ class subRankings extends rank{
             $colsValue = array($brands_id, $months, $year, $agency);
             $columnsD = array("region_id","brand_id","month","year","agency_id");
             $colsValueD = array($region,$brands_idD,$months,$year,$agency);
+        }
+
+        if ($secondaryFilter) {
+            array_push($columns, $aux."_id");
+            array_push($colsValue, $secondaryFilter);
+            array_push($columnsD, $aux."_id");
+            array_push($colsValueD, $secondaryFilter);
         }
 
         $table = "$tableName $tableAbv";
@@ -150,7 +160,7 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
-    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter){
+    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter){
         
         if ($type == "agencyGroup") {
             $name = "agency";
@@ -168,8 +178,13 @@ class subRankings extends rank{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
         }
 
-        for ($y=0; $y < sizeof($years); $y++) { 
-            $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter);
+        for ($y=0; $y < sizeof($years); $y++) {
+            if ($secondaryFilter) {
+                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $secondaryFilter);    
+            }else{
+                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter);
+            }
+            
 
             if (is_array($res[$y])) {
                 for ($r=0; $r < sizeof($res[$y]); $r++) { 

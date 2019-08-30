@@ -31,10 +31,8 @@
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($salesRegion)}}							
-							@elseif($userLevel == '1B')
-								{{$render->regionFilteredReps($salesRegion, $regionID)}}
 							@else
-								{{$render->regionFiltered($salesRegion, $regionID)}}
+								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
 						</div>
 						<div class="col">
@@ -272,8 +270,16 @@
 			var data = new google.visualization.DataTable();
 			data.addColumn("string","Brand");
 			data.addColumn("number","Value");
+
+			<?php $check = false; ?>
+
 			data.addRows([
 				@for($b = 0; $b < sizeof($brandChart[0]); $b++)
+					
+					<?php if ($brandChart[0][$b]["value"] != 0) 
+						$check = true;
+					?>
+
 				    ['{{$brandChart[0][$b]["label"]}}',{{$brandChart[0][$b]["value"]}}],
 				@endfor
 			]);
@@ -292,22 +298,26 @@
 					fontSize:'25','color':'black'
 				},
 				slices:{
-					0: {textStyle: {color: 'black' },color: '#0070c0'  },
-					1: {textStyle: {color: 'black' },color: '#ff3300'  },
-					2: {textStyle: {color: 'black' },color: '#ffff00'  },
-					3: {textStyle: {color: 'black' },color: '#009933'  },
-					4: {textStyle: {color: 'black' },color: '#ff0000'  },
-					5: {textStyle: {color: 'white' },color: '#000000'  },
-					6: {textStyle: {color: 'white' },color: '#002060'  },
-					7: {textStyle: {color: 'black' },color: '#ff0000'  },
-					8: {textStyle: {color: 'black' },color: '#6600ff'  },
-					9: {textStyle: {color: 'white' },color: '#004b84'  },
-					10: {textStyle: {color: 'white' },color: '#808080'  },
-					11: {textStyle: {color: 'black' },color: '#88cc00'  }
+					0: {textStyle: {color: 'black' },color: '#0070c0'},
+					1: {textStyle: {color: 'black' },color: '#ff3300'},
+					2: {textStyle: {color: 'black' },color: '#ffff00'},
+					3: {textStyle: {color: 'black' },color: '#009933'},
+					4: {textStyle: {color: 'black' },color: '#ff0000'},
+					5: {textStyle: {color: 'white' },color: '#000000'},
+					6: {textStyle: {color: 'white' },color: '#002060'},
+					7: {textStyle: {color: 'black' },color: '#ff0000'},
+					8: {textStyle: {color: 'black' },color: '#6600ff'},
+					9: {textStyle: {color: 'white' },color: '#004b84'},
+					10: {textStyle: {color: 'white' },color: '#808080'},
+					11: {textStyle: {color: 'black' },color: '#88cc00'}
 				}
 			};
-			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartCYear'));
-        	chart.draw(data, options);
+			@if ($check)
+				var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartCYear'));
+        		chart.draw(data, options);
+			@else
+				document.getElementById("overviewBrandChartCYear").innerHTML = "<center><span>No revenues for this year</span></center>";
+			@endif
 		}
 	</script>
 
@@ -324,8 +334,16 @@
 			var data = new google.visualization.DataTable();
 			data.addColumn("string","Brand");
 			data.addColumn("number","Value");
+
+			<?php $check = false; ?>
+
 			data.addRows([
 				@for($b = 0; $b < sizeof($brandChart[1]); $b++)
+
+					<?php if ($brandChart[1][$b]["value"] != 0) 
+						$check = true;
+					?>
+
 				    ['{{$brandChart[1][$b]["label"]}}',{{$brandChart[1][$b]["value"]}}],
 				@endfor
 			]);
@@ -359,8 +377,13 @@
 				}
 				
 			};
-			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPYear'));
-        	chart.draw(data, options);
+
+			@if ($check)
+				var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPYear'));
+        		chart.draw(data, options);
+			@else
+				document.getElementById("overviewBrandChartPYear").innerHTML = "<center><span>No revenues for this year</span></center>";
+			@endif
 		}
 	</script>
 
@@ -377,8 +400,16 @@
 			var data = new google.visualization.DataTable();
 			data.addColumn("string","Brand");
 			data.addColumn("number","Value");
+
+			<?php $check = false; ?>
+
 			data.addRows([
 				@for($b = 0; $b < sizeof($brandChart[2]); $b++)
+
+					<?php if ($brandChart[2][$b]["value"] != 0) 
+						$check = true;
+					?>
+
 				    ['{{$brandChart[2][$b]["label"]}}',{{$brandChart[2][$b]["value"]}}],
 				@endfor
 			]);
@@ -397,22 +428,27 @@
 					fontSize:'25','color':'black'
 				},
 				slices:{
-					0: {textStyle: {color: 'black' },color: '#0070c0'  },
-					1: {textStyle: {color: 'black' },color: '#ff3300'  },
-					2: {textStyle: {color: 'black' },color: '#ffff00'  },
-					3: {textStyle: {color: 'black' },color: '#009933'  },
-					4: {textStyle: {color: 'black' },color: '#ff0000'  },
-					5: {textStyle: {color: 'white' },color: '#000000'  },
-					6: {textStyle: {color: 'white' },color: '#002060'  },
-					7: {textStyle: {color: 'black' },color: '#ff0000'  },
-					8: {textStyle: {color: 'black' },color: '#6600ff'  },
-					9: {textStyle: {color: 'white' },color: '#004b84'  },
-					10: {textStyle: {color: 'white' },color: '#808080'  },
-					11: {textStyle: {color: 'black' },color: '#88cc00'  }
+					0: {textStyle: {color: 'black' },color: '#0070c0'},
+					1: {textStyle: {color: 'black' },color: '#ff3300'},
+					2: {textStyle: {color: 'black' },color: '#ffff00'},
+					3: {textStyle: {color: 'black' },color: '#009933'},
+					4: {textStyle: {color: 'black' },color: '#ff0000'},
+					5: {textStyle: {color: 'white' },color: '#000000'},
+					6: {textStyle: {color: 'white' },color: '#002060'},
+					7: {textStyle: {color: 'black' },color: '#ff0000'},
+					8: {textStyle: {color: 'black' },color: '#6600ff'},
+					9: {textStyle: {color: 'white' },color: '#004b84'},
+					10: {textStyle: {color: 'white' },color: '#808080'},
+					11: {textStyle: {color: 'black' },color: '#88cc00'}
 				}
 			};
-			var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPPYear'));
-        	chart.draw(data, options);
+
+			@if ($check)
+				var chart = new google.visualization.PieChart(document.getElementById('overviewBrandChartPPYear'));
+        		chart.draw(data, options);
+			@else
+				document.getElementById("overviewBrandChartPPYear").innerHTML = "<center><span>No revenues for this year</span></center>";
+			@endif
 		}
 	</script>
 

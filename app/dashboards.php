@@ -96,6 +96,10 @@ class dashboards extends rank{
 	public function last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
 		$sql = new sql(); 	
 
+        if (is_array($secondaryFilter)) {
+            $secondaryFilter = implode(",", $secondaryFilter);
+        }
+
 		$products = $this->getProducts($con,$table,$type,$baseFilter);
 
 		for ($y=0; $y < sizeof($years); $y++) { 
@@ -106,13 +110,22 @@ class dashboards extends rank{
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (client_product = \"".$products[$p]['product']."\")
 		    					AND ( ".$smt."_id = \"".$baseFilter->id."\")
-                                AND ( client_id = \"".$products[$p]['clientID']."\") ";
-		    	}else{
+                                AND ( client_id = \"".$products[$p]['clientID']."\")
+                                AND (agency_id IN (".$secondaryFilter."))";
+		    	}elseif ($type == "agency") {
+                    $join = false;
+                    $where = "WHERE(year = \"".$years[$y]."\")
+                                AND (client_product = \"".$products[$p]['product']."\")
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND ( client_id = \"".$products[$p]['clientID']."\")
+                                AND (client_id IN (".$secondaryFilter."))";
+                }else{
 		    		$join = false;
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (client_product = \"".$products[$p]['product']."\")
 		    					AND ( ".$type."_id = \"".$baseFilter->id."\")
-                                AND ( client_id = \"".$products[$p]['clientID']."\") ";
+                                AND ( client_id = \"".$products[$p]['clientID']."\")
+                                AND (agency_id IN (".$secondaryFilter."))";
 		    	}
 
 				$some[$y][$p] = "SELECT SUM($column) AS mySum 
@@ -135,32 +148,52 @@ class dashboards extends rank{
 		$sql = new sql(); 
 		$brands = $this->getBrands($con);
 
+        if (is_array($secondaryFilter)) {
+            $secondaryFilter = implode(",", $secondaryFilter);
+        }
+
 		for ($y=0; $y < sizeof($years); $y++) { 
 		    for ($b=0; $b < sizeof($brands); $b++) { 
 		    	
-
 		    	if($type == "agencyGroup"){
 		    		$smt = "agency_group";
 		    		$join = "LEFT JOIN agency a ON a.ID = y.agency_id";
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
                                     AND (brand_id != \"10\")
-                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")";
+                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")
+                                    AND (agency_id IN (".$secondaryFilter."))";
                     }else{
                         $where = "WHERE(year = \"".$years[$y]."\")
                                     AND (brand_id = \"".$brands[$b][0]."\")
-                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")";
+                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")
+                                    AND (agency_id IN (".$secondaryFilter."))";
                     }
-		    	}else{
+		    	}elseif ($type == "agency") {
+                    $join = false;
+                    if ($brands[$b][0] == '9') {
+                        $where = "WHERE(year = \"".$years[$y]."\")
+                                AND (brand_id != \"10\")
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND (client_id IN (".$secondaryFilter."))";
+                    }else{
+                        $where = "WHERE(year = \"".$years[$y]."\")
+                                AND (brand_id = \"".$brands[$b][0]."\")
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND (client_id IN (".$secondaryFilter."))";    
+                    }
+                }else{
 		    		$join = false;
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
                                 AND (brand_id != \"10\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")";
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND (agency_id IN (".$secondaryFilter."))";
                     }else{
                         $where = "WHERE(year = \"".$years[$y]."\")
                                 AND (brand_id = \"".$brands[$b][0]."\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")";    
+                                AND ( ".$type."_id = \"".$baseFilter->id."\")
+                                AND (agency_id IN (".$secondaryFilter."))";    
                     }
 		    	}	    	
 
@@ -176,10 +209,6 @@ class dashboards extends rank{
                                 $where";
                 }
 
-
-		    	
-
-
 		    	$res[$y][$b] = $con->query($some[$y][$b]);
 		    	$from = array("mySum");
 		    	$values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
@@ -192,6 +221,11 @@ class dashboards extends rank{
 	public function last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD){
 		$sql = new sql(); 
 		$months = $this->months; 
+
+        if (is_array($secondaryFilter)) {
+            $secondaryFilter = implode(",", $secondaryFilter);
+        }
+
 		for ($y=0; $y < sizeof($years); $y++) { 
 		    for ($m=0; $m < sizeof($months); $m++) { 
 		    	
@@ -200,14 +234,21 @@ class dashboards extends rank{
 		    		$join = "LEFT JOIN agency a ON a.ID = y.agency_id";
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (month = \"".$months[$m]."\")
-		    					AND ( ".$smt."_id = \"".$baseFilter->id."\")";
-                    $someD[$y][$m] = "SELECT SUM($columnD) as 'mySum' FROM fw_digital y $join WHERE (year = \"".$years[$y]."\") AND (month = \"".$months[$m]."\") AND ( ".$smt."_id = \"".$baseFilter->id."\")";
-		    	}else{
+		    					AND ( ".$smt."_id = \"".$baseFilter->id."\")
+                                AND (agency_id IN (".$secondaryFilter."))";
+                    $someD[$y][$m] = "SELECT SUM($columnD) as 'mySum' FROM fw_digital y $join WHERE (year = \"".$years[$y]."\") AND (month = \"".$months[$m]."\") AND ( ".$smt."_id = \"".$baseFilter->id."\") AND (agency_id IN (".$secondaryFilter."))";
+		    	}elseif ($type == "agency") {
+                    $join = false;
+                    $where = "WHERE(year = \"".$years[$y]."\")
+                                AND (month = \"".$months[$m]."\")
+                                AND ( ".$type."_id = \"".$baseFilter->id."\") AND (client_id IN (".$secondaryFilter."))";
+                    $someD[$y][$m] = "SELECT SUM($columnD) as 'mySum' FROM fw_digital y $join WHERE (year = \"".$years[$y]."\") AND (month = \"".$months[$m]."\") AND ( ".$type."_id = \"".$baseFilter->id."\") AND (client_id IN (".$secondaryFilter."))";
+                }else{
 		    		$join = false;
 		    		$where = "WHERE(year = \"".$years[$y]."\")
 		    					AND (month = \"".$months[$m]."\")
-		    					AND ( ".$type."_id = \"".$baseFilter->id."\")";
-                    $someD[$y][$m] = "SELECT SUM($columnD) as 'mySum' FROM fw_digital y $join WHERE (year = \"".$years[$y]."\") AND (month = \"".$months[$m]."\") AND ( ".$type."_id = \"".$baseFilter->id."\")";
+		    					AND ( ".$type."_id = \"".$baseFilter->id."\") AND (agency_id IN (".$secondaryFilter."))";
+                    $someD[$y][$m] = "SELECT SUM($columnD) as 'mySum' FROM fw_digital y $join WHERE (year = \"".$years[$y]."\") AND (month = \"".$months[$m]."\") AND ( ".$type."_id = \"".$baseFilter->id."\") AND (agency_id IN (".$secondaryFilter."))";
 		    	}
 
 		    	$some[$y][$m] = "SELECT SUM($column) AS mySum 
@@ -240,25 +281,25 @@ class dashboards extends rank{
 	    $cr = $p->getCurrency($con, array($currency));
 	    
 	    if($kind == "root"){
-
 	    	if ($type == "agencyGroup") {
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency");
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency", $secondaryFilter);
+                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency");
 	    	}else{
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr );
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, null, null, $secondaryFilter);
+                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr);
 	    	}
             
             $filterValues = $sr->filterValues2($somekind, array($baseFilter), $type);
 
-
-	    	$values = $this->assembler($somekind,array($baseFilter), $years, $type, $filterValues);
-
+	    	$values = $this->assembler($somekind,array($baseFilter), $years, $type, $filterValues, $somekind2);
 
 	    	unset($values[1]);
 	    	
 	    }else{    	
 	    	$filter = $baseFilter->$type;
 	    	
-	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter);
+	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $secondaryFilter);
+            
 	    	//$mtx = $sr->assembler($values,$years,$type);
 	    }
 	    return $values;
@@ -314,7 +355,7 @@ class dashboards extends rank{
     	return $brands;
     }
 
-    public function assembler($values, $type2, $years, $type, $filterValues){
+    public function assembler($values, $type2, $years, $type, $filterValues, $somekind){
 
         if (strlen($type) > 6) {
             $var = "agency groups";
@@ -360,12 +401,39 @@ class dashboards extends rank{
             $mtx[$last+1][0] = "VAR %";    
         }
 
+        if (is_array($values[0])) {
+            $p = 0;
+        }elseif (is_array($values[1])) {
+            $p = 1;
+        }else{
+            $p = 2;
+        }
+
+        $name = $values[$p][0][$type];
+
+        for ($i=0; $i < sizeof($somekind); $i++) { 
+            for ($j=0; $j < sizeof($somekind[$i]); $j++) { 
+                if ($somekind[$i][$j][$type] == $name) {
+                    for ($p=0; $p < 3; $p++) { 
+                        if (is_array($values[$i])) {
+                            $somekind[$i][$j]['total'] = $values[$p][0]['total'];
+                        }else{
+                            $somekind[$i][$j]['total'] = 0;
+                        }   
+                    }
+                }
+            }
+        }
+
+        for ($i=0; $i < sizeof($somekind); $i++) { 
+            usort($somekind[$i], array($this,'compare'));   
+        }
 
         for ($t=0; $t < sizeof($type2); $t++) { 
             
             if ($filterValues[$type2[$t]->id] == 1) {
                 for ($m=0; $m < sizeof($mtx); $m++) { 
-                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
+                    array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m]), $somekind));
                 }
             }
         }
@@ -375,12 +443,12 @@ class dashboards extends rank{
         return array($mtx, $total);
     }
 
-    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
+    public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p, $somekind){
 
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
 
-            $res = $this->checkOtherYearsPosition($type2[$t]->$type, $values, $var, $years, $type);
+            $res = $this->checkOtherYearsPosition($type2[$t]->$type, $values, $var, $years, $type, $somekind);
         }elseif (substr($mtx[$m][0], 0, 3) == "Rev") {
             $var = substr($mtx[$m][0], 5);
 
@@ -416,7 +484,7 @@ class dashboards extends rank{
 
     }
 
-    public function checkOtherYearsPosition($name, $values, $year, $years, $type){
+    public function checkOtherYearsPosition($name, $values, $year, $years, $type, $somekind){
         
         for ($y=0; $y < sizeof($years); $y++) { 
             if ($year == $years[$y]) {
@@ -426,9 +494,9 @@ class dashboards extends rank{
 
         $ok = 0;
 
-        if (is_array($values[$p])) {
-            for ($v=0; $v < sizeof($values[$p]); $v++) { 
-                if ($values[$p][$v][$type] == $name) {
+        if (is_array($somekind[$p])) {
+            for ($v=0; $v < sizeof($somekind[$p]); $v++) { 
+                if ($somekind[$p][$v][$type] == $name) {
                     $pos = $v+1;
                     $ok = 1;
                 }
