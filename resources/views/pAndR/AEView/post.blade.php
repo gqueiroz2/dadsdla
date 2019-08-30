@@ -3,7 +3,6 @@
 @section('head')	
     <?php include(resource_path('views/auth.php')); 
     $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');?>
-
     <script src="/js/pandr.js"></script>
     <style type="text/css">
     	::-webkit-scrollbar{
@@ -12,19 +11,13 @@
     	::-webkit-scrollbar-track {
     		background: #d9d9d9; 
 		}
-
 		::-webkit-scrollbar-thumb {
 			background: #666666; 
 		}
-
 		::-webkit-scrollbar-thumb:hover {
 			background: #4d4d4d; 
 		}
-		
-
     </style>
-	
-
 @endsection
 @section('content')
 	<div class="container-fluid">
