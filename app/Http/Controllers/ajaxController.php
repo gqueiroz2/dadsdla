@@ -388,13 +388,12 @@ class ajaxController extends Controller{
         $regionID = array(Request::get('regionID'));
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
+        $regionIDUser = Request::session()->get('regionID');
         $userLevel = Request::session()->get('userLevel');
+        $special = Request::session()->get('special');
 
-        if ($userLevel == "L3" || $userLevel == "L4") {
-            $groupID = Request::session()->get('userSalesRepGroupID');
-            $groupName = Request::session()->get('userSalesRepGroup');
-            echo "<option value='".$groupID."' selected='true'>".$groupName."</option>";
-        }else{
+
+        if (!is_null($special) && $regionIDUser != $regionID[0]) {
             if($salesRepGroup){
                 for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
                     echo "<option value='".$salesRepGroup[$s]["id"]."' selected='true'>"
@@ -404,7 +403,24 @@ class ajaxController extends Controller{
             }else{
                 echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
             }
+        }else{
+            if ($userLevel == "L3" || $userLevel == "L4") {
+                $groupID = Request::session()->get('userSalesRepGroupID');
+                $groupName = Request::session()->get('userSalesRepGroup');
+                echo "<option value='".$groupID."' selected='true'>".$groupName."</option>";
+            }else{
+                if($salesRepGroup){
+                    for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
+                        echo "<option value='".$salesRepGroup[$s]["id"]."' selected='true'>"
+                            .$salesRepGroup[$s]["name"].
+                        "</option>";
+                    }
+                }else{
+                    echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
+                }
+            }
         }
+            
 
         
     }
@@ -419,10 +435,12 @@ class ajaxController extends Controller{
         $year = Request::get('year');        
         $source = Request::get('source');
         $userLevel = Request::session()->get('userLevel');
+        $special = Request::session()->get('special');
+        $regionIDUser = Request::session()->get('regionID');
 
         $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
-
         $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+        
         if ($userLevel == "L4") {
             $userName = Request::session()->get('userName');
             $performanceName = Request::session()->get('performanceName');

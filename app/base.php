@@ -68,12 +68,13 @@ class base extends Model{
     }
 
     public $nameReps = array(
-                "Reps" => array("Venezuela","Panama","Dominican Republic","Ecuador")
+                "EC1" => array("New York International"),
+                "EC2" => array("Venezuela","Panama","Dominican Republic","Ecuador")
         );
 
     public $NameName = array(
             "Brazil"=>array("Brazil"), 
-            "Argentina"=>array("Argentina","Chile","Peru"),
+            "Argentina"=>array("Argentina","Chile","Peru","Bolivia"),
             "Colombia"=>array("Colombia"), 
             "Miami"=>array("Miami"), 
             "Mexico"=>array("Mexico"), 
@@ -126,7 +127,7 @@ class base extends Model{
         return $newForm;
     }
 
-    public function filteredRegion($regionId){
+    public function filteredRegion($regionId,$special){
         $r = new region();
 
         $db = new dataBase();
@@ -137,6 +138,15 @@ class base extends Model{
         $region = $r->getRegion($con,$regionId)[0]["name"];
 
         $array = $this->NameName[$region];
+
+        if (!is_null($special)) {
+            $var = $this->nameReps[$special];
+            for ($v=0; $v <sizeof($var) ; $v++) { 
+                array_push($array, $var[$v]);
+            }
+
+            $array = array_values($array);
+        }
 
         $return = array();
 
