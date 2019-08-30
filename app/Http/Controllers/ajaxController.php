@@ -108,9 +108,10 @@ class ajaxController extends Controller{
 
                     $sql = "SELECT DISTINCT a.ID AS 'agencyID',
                                a.name AS 'agency'
-                            FROM agency a
-                            LEFT JOIN agency ag ON ag.ID = a.agency_group_id
-                            WHERE (a.agency_group_id = \"".$baseFilter->id."\" )
+                            FROM ytd y
+                            LEFT JOIN agency a ON a.ID = y.agency_id
+                            LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                            WHERE (ag.ID = \"".$baseFilter->id."\" )
                             
                 ";
                     $res = $con->query($sql);
