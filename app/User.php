@@ -49,6 +49,7 @@ class User extends Management{
             Request::session()->put('userEmail',$user['email']);
             Request::session()->put('userLevel',$user['level']);
             Request::session()->put('performanceName',$user['performance_name']);
+            Request::session()->put('special',$user['special']);
 
             if($user['subLevelBool']){
                 Request::session()->put('userSalesRepGroup',$user['salesRepGroup']);
@@ -159,7 +160,8 @@ class User extends Management{
                     u.token AS 'token',
                     u.token_start_date AS 'token_start_date',
                     u.token_end_date AS 'token_end_date',
-                    u.performance_name AS 'performance_name'
+                    u.performance_name AS 'performance_name',
+                    u.specialCases AS 'special'
                    ";
 
         $join = "LEFT JOIN region r ON r.ID = u.region_id
@@ -171,7 +173,7 @@ class User extends Management{
 
         $result = $sql->select($con,$columns,$table,$join, $where);
 
-        $from = array('id','name','email','password','status','subLevelBool','region','regionID','userType','level','salesRepGroup','salesRepGroupID','token','token_start_date','token_end_date','performance_name');
+        $from = array('id','name','email','password','status','subLevelBool','region','regionID','userType','level','salesRepGroup','salesRepGroupID','token','token_start_date','token_end_date','performance_name','special');
         $to = $from;
 
         $user = $sql->fetch($result,$from,$to)[0];
@@ -293,6 +295,7 @@ class User extends Management{
             $resp['subLevelBool'] = $usr['subLevelBool'];
             $resp['status'] = $usr['status'];
             $resp['performance_name'] = $usr['performance_name'];
+            $resp['special'] = $usr['special'];
             $resp['msg'] = "Login Successfull";
 
             if ($resp['status'] == 0) {
