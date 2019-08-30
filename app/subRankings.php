@@ -160,7 +160,7 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
-    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter){
+    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter=false){
         
         if ($type == "agencyGroup") {
             $name = "agency";

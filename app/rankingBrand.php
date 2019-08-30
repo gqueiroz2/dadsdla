@@ -163,8 +163,7 @@ class rankingBrand extends rank{
 					for ($i=0; $i < sizeof($res[$y]); $i++) { 
 						if($res[$y][$i]['brand'] == 'ONL' || $res[$y][$i]['brand'] == 'VIX'){
 							$res[$y][$i]['total'] *= $pRateDigital;
-						}
-						elseif ($infoQuery[$y]['table'] == "cmaps a") {
+						}elseif ($infoQuery[$y]['table'] == "cmaps a") {
 							$res[$y][$i]['total'] /= $pRate;	
 						}else{
 							$res[$y][$i]['total'] *= $pRate;
