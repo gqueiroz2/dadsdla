@@ -17,10 +17,11 @@ $(document).ready(function(){
       $('#labelBaseFilter').html("Select Type").css("color", "red");
       $('#labelSecondaryFilter').html("Select Type").css("color", "red");
 
+      var bool = "false";
       $.ajax({
   			url:"/ajaxRanking/typeByRegion",
   			method:"POST",
-  			data:{regionID},
+  			data:{regionID, bool},
     		success: function(output){
       		$('#type').html(output);
     		},

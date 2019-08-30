@@ -34,6 +34,7 @@ class dashboardsController extends Controller{
    	}
 
    	public function overviewPost(){
+
       	$db = new dataBase();
          $region = new region();
          $dash = new dashboards();
@@ -63,7 +64,6 @@ class dashboardsController extends Controller{
             'currency' => 'required',
             'value' => 'required',
         ]);
-
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();

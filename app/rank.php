@@ -43,8 +43,7 @@ class rank extends Model{
         return array($brandsTV, $brandsDigital);
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null){
-        
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null, $secondaryFilter=false){
 
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -96,34 +95,59 @@ class rank extends Model{
         $tableAbv = "a";
         $leftAbv = "b";
 
+        if ($type == "agency") {
+            $aux = "client";
+        }elseif ($type == "client") {
+            $aux = "agency";
+        }else{
+            $aux = "agency";
+        }
+
         $valueDigital = $value."_revenue";
-        $columnsDigital = array("f.region_id","brand_id", "month", "year");
+        $columnsDigital = array("f.region_id","brand_id", "month");
         $colsValueDigital = array($region, $brands_id, $months);
 
         if ($tableName == "ytd") {
             $value .= "_revenue_prate";
-            $columns = array("sales_representant_office_id", "brand_id", "month", "year");
+            $columns = array("sales_representant_office_id", "brand_id", "month");
             $colsValue = array($region, $brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
-            $columns = array("sales_office_id","type_of_revenue","brand_id", "month", "year");
+            $columns = array("sales_office_id","type_of_revenue","brand_id", "month");
             $colsValue = array($region, $value, $brands_id, $months);
             $value = "revenue";
         }else{
-            $columns = array("brand_id", "month", "year");
+            $columns = array("brand_id", "month");
             $colsValue = array($brands_id, $months);
         }
 
+        if ($secondaryFilter) {
+            array_push($columns, $aux."_id");
+            array_push($colsValue, $secondaryFilter);
+            array_push($columnsDigital, $aux."_id");
+            array_push($colsValueDigital, $secondaryFilter);
+        }
+
+        array_push($columns, "year");
+        array_push($columnsDigital, "year");
+        
         if ($type == "agencyGroup") {
             $leftAbv2 = "c";
             $leftAbv3 = "d";
 
             if ($tableName == "ytd") {
-                $columns = array("$leftAbv3.ID", "sales_representant_office_id", "brand_id", "month", "year");
+                $columns = array("$leftAbv3.ID", "sales_representant_office_id", "brand_id", "month");
                 $colsValue = array($region, $region, $brands_id, $months);
             }else{
-                $columns = array("brand_id", "month", "year");
+                $columns = array("brand_id", "month");
                 $colsValue = array($brands_id, $months);
             }
+
+            if ($secondaryFilter) {
+                array_push($columns, $aux."_id");
+                array_push($colsValue, $secondaryFilter);
+            }
+
+            array_push($columns, "year");
 
             $table = "$tableName $tableAbv";
 
@@ -424,12 +448,14 @@ class rank extends Model{
 
     public function searchValue($name, $values, $type){
 
-        for ($v=0; $v < sizeof($values); $v++) {
-            $something = $type."ID";
-            //var_dump($something);
-            if ($name->id == $values[$v][$something]) {
-                return 1;
-            }
+        if (is_array($values)) {
+            for ($v=0; $v < sizeof($values); $v++) {
+                $something = $type."ID";
+                //var_dump($something);
+                if ($name->id == $values[$v][$something]) {
+                    return 1;
+                }
+            }   
         }
 
         return 0;
