@@ -17,10 +17,8 @@
 							<label>Sales Region</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($region)}}							
-							@elseif($userLevel == '1B')
-								{{$render->regionFilteredReps($region, $regionID)}}
 							@else
-								{{$render->regionFiltered($region, $regionID)}}
+								{{$render->regionFiltered($region, $regionID, $special)}}
 							@endif
 						</div>
 

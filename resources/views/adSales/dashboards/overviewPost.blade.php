@@ -31,10 +31,8 @@
 							@endif
 							@if($userLevel == 'L0' || $userLevel == 'SU')
 								{{$render->region($salesRegion)}}							
-							@elseif($userLevel == '1B')
-								{{$render->regionFilteredReps($salesRegion, $regionID)}}
 							@else
-								{{$render->regionFiltered($salesRegion, $regionID)}}
+								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
 						</div>
 						<div class="col">

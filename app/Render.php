@@ -123,10 +123,10 @@ class Render extends Model{
        echo "</select>";
     }
 
-    public function regionFiltered($region,$regionFiltered){
+    public function regionFiltered($region,$regionFiltered,$special){
         $b = new base();
 
-        $regions = $b->filteredRegion($regionFiltered);
+        $regions = $b->filteredRegion($regionFiltered,$special);
 
         $temp = array();
 
@@ -137,8 +137,6 @@ class Render extends Model{
         }
 
         $temp = array_unique($temp);
-
-        $temp = array_values($temp);
 
         $tempId = array(array());
         $tempName = array(array());
