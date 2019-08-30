@@ -62,6 +62,21 @@ class quarterPerformance extends performance {
 		$pr = new pRate();
 
 		$sr = new salesRep();
+
+		if ($regionID == '6' || $regionID == '7') {
+            array_push($salesRepID, '15');
+        }elseif ($regionID == '9') {
+            array_push($salesRepID, '102');
+        }elseif ($regionID == '10') {
+            array_push($salesRepID, '103');
+        }elseif ($regionID == '12') {
+            array_push($salesRepID, '104');
+        }elseif ($regionID == '13') {
+            array_push($salesRepID, '105');
+        }elseif ($regionID == '11') {
+            array_push($salesRepID, '45');
+        }
+
         $salesRep = $sr->getSalesRepById($con, $salesRepID);
 
         $value = strtoupper($value);
