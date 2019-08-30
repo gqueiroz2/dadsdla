@@ -58,7 +58,7 @@ class AE extends pAndR{
                   )";
 
         $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
-
+        var_dump("FOI AKI");
         echo "<pre>".$insertFCST."</pre>";
 
         
