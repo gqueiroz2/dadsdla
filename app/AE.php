@@ -12,7 +12,8 @@ use App\sql;
 use App\pRate;
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list){
+        $sql = new sql();
 /*
         var_dump($region);
         var_dump($salesRep);
@@ -39,36 +40,122 @@ class AE extends pAndR{
         $tableFCSTClient = "forecast_client";
         $tableFCSTSalesRep = "forecast_sales_rep";
 
-        $columns = "(
-                     oppid,
-                     region_id,sales_rep_id,
-                     year,month,read,date,
-                     currency_id,type_of_value,
-                     last_modify_by,last_modify_date,last_modify_time
-                    )";
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
 
-        $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
+        $from = array("ID");
 
-        $values = "(
-                    \"".$oppid."\",
-                    \"".$region."\",\"".$salesRepID."\",
-                    \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
-                    \"".$currency."\",\"".$value."\",
-                    \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\"
-                  )";
+        $result = $con->query($select);
 
-        $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+        $id = $sql->fetch($result,$from,$from);
 
-        echo "<pre>".$insertFCST."</pre>";
+        if ($id) {
+            $update = "UPDATE $tableFCST SET read_q = \"".$read."\", last_modify_date = \"".$date."\", last_modify_time = \"".$time."\"";
 
-        
-        $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep);
+            if($con->query($update) === true){
+                var_dump("Foi caralha");
+            }else{
+                var_dump("Deu ruim");
+                var_dump($con->error);
+            }
+
+
+        }else{
+
+            $columns = "(
+                         oppid,
+                         region_id,sales_rep_id,
+                         year,month,read_q,date_m,
+                         currency_id,type_of_value,
+                         last_modify_by,last_modify_date,last_modify_time
+                        )";
+
+            $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
+
+
+
+            $values = "(
+                        \"".$oppid."\",
+                        \"".$region."\",\"".$salesRepID."\",
+                        \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
+                        \"".$currency['id']."\",\"".$value."\",
+                        \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\"
+                      )";
+
+            $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+
+            if ($con->query($insertFCST) === true) {
+                var_dump("Foi caralha");
+            }else{
+                var_dump("Deu ruim");
+                var_dump($con->error);
+            }
+
+            $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
+
+            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list);
+        }
+    }
+
+    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$table){
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        var_dump($manualEstimantionBySalesRep);
+
+        $columns = "(forecast_id,month,value)";
+        for ($m=0; $m <sizeof($manualEstimantionBySalesRep); $m++) { 
+            $values[$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".$manualEstimantionBySalesRep[$m]."\")";
+
+            $insert[$m] = "INSERT INTO $table $columns VALUES ".$values[$m]."";
+
+            if ($con->query($insert[$m]) === true) {
+                var_dump("Foi caralha-$m");
+            }else{
+                var_dump("Deu ruim-$m");
+                var_dump($con->error);
+            }
+        }
+
 
     }
 
-    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep){
-        var_dump($oppid);
-        var_dump($manualEstimantionBySalesRep);
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list){
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        $columns = "(forecast_id,month,value,client_id)";
+        for ($c=0; $c <sizeof($list) ; $c++) { 
+            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".$manualEstimantion[$c][$m]."\",\"".$list[$c]->clientID."\")";
+
+                $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
+
+                if ($con->query($insert[$c][$m]) === true) {
+                    var_dump("Foi caralha-$c-$m");
+                }else{
+                    var_dump("Deu ruim-$c-$m");
+                    var_dump($con->error);
+                }
+                //var_dump($insert[$c][$m]);
+            }
+        }
+
     }
 
     public function weekOfMonth($date) {
@@ -87,12 +174,15 @@ class AE extends pAndR{
             $string = "TRS";
         }
        
+        $value = strtoupper($value);
+
         $string .= "-".preg_replace('/\s+/', '', $salesRep->region).    
                    "-".$year.
                    "-".$month.                   
                    "-WEEK-".$week.                   
                    "-".preg_replace('/\s+/', '', $salesRep->salesRep).
-                   "-".$currency
+                   "-".$currency.
+                   "-".$value
                    
                 ;
 
@@ -110,6 +200,7 @@ class AE extends pAndR{
         $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
         $value = Request::get('value');
+        $source = Request::get('source');
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
 

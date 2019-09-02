@@ -57,6 +57,13 @@
 						{{$render->value2()}}
 				</div>
 				<div class="col">
+					<label class="labelLeft"><span class="bold"> Source: </span></label>
+						@if($errors->has('source'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->source2()}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'> &nbsp; </label>
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 				</div>			

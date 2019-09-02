@@ -150,6 +150,25 @@ class pRate extends Management{
 		return $currency;
 	}
 
+	public function getCurrencybyName($con, $name = false){
+		$sql = new sql();
+		$table = "currency c";
+		$where = "";
+		if($name){
+			$name .= "WHERE c.name = \"$name\"";
+		}
+		$columns = "c.ID AS 'id',
+					c.name AS 'name',
+					r.name AS 'region'
+				   ";
+		$join = "LEFT JOIN region r ON c.region_id = r.ID";		
+		$order = "3";
+		$result = $sql->select($con,$columns,$table,$join,$where);
+		$from = array('id','name','region');	
+		$currency = $sql->fetch($result,$from,$from)[0];
+		return $currency;
+	}
+
 	public function getCurrencyByRegion($con,$id = false){
 
 		$sql = new sql();
