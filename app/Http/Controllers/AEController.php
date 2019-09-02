@@ -110,7 +110,6 @@ class AEController extends Controller{
 
         $user = Request::session()->get('userName');
         $permission = Request::session()->get('userLevel');
-        var_dump($user);
 
         //$checkForForecasts = $ae->checkForForecasts();
 

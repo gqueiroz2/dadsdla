@@ -41,6 +41,7 @@ class Render extends Model{
         $week = $tmp[1][1].$tmp[1][2];
 
         echo "<select id='savedFCST' class='selectpicker' name='savedFCST' data-width='100%'>";
+            echo "<option value=''> Select </option>";
             echo "<option value='".$month."-".$week."'>".$month."-".$week."</option>";
         echo "</select>";
 
