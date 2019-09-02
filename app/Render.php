@@ -33,13 +33,22 @@ class Render extends Model{
         $from = array('oppid','region_id','currency_id','type_of_value','read_q','year','date_m','last_modify_by','last_modify_date','last_modify_time');
 
         $to = array('oppid','regionID','currencyID','typeOfValue','readQ','year','dateM','lastModifyBy','lastModifyDate','lastModifyTime');
+<<<<<<< HEAD
 /*
         $fcst = $sql->fetch($res,$from,$to)[0];
+=======
+
+        /*$fcst = $sql->fetch($res,$from,$to)[0];
+>>>>>>> 174d01010f59d8352dddde9f3f37908222ccded7
         $tmp = explode("WEEK",$fcst['oppid']);
         $size =strlen($tmp[0]);
         $month = $tmp[0][($size - 3)].$tmp[0][($size - 2)];
         $week = $tmp[1][1].$tmp[1][2];
+<<<<<<< HEAD
 */
+=======
+        */
+>>>>>>> 174d01010f59d8352dddde9f3f37908222ccded7
         echo "<select id='savedFCST' class='selectpicker' name='savedFCST' data-width='100%'>";
             echo "<option value=''> Select </option>";
             //echo "<option value='".$month."-".$week."'>".$month."-".$week."</option>";
