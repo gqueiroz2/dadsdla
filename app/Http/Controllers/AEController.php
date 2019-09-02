@@ -107,10 +107,16 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $pr = new pRate();
 
+        $user = Request::session()->get('userName');
+        $permission = Request::session()->get('userLevel');
+        var_dump($user);
+
+        //$checkForForecasts = $ae->checkForForecasts();
+
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-		return view('pAndR.AEView.get',compact('render','region','currency'));
+		return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'));
     }
 
     public function post(){

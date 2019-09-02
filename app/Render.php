@@ -6,10 +6,45 @@ use Illuminate\Database\Eloquent\Model;
 use App\dataBase;
 use App\region;
 use App\base;
+use App\salesRep;
+use App\sql;
 
 class Render extends Model{
     
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+    public function savedFCST($con,$permission,$userName){
+
+        $sql = new sql();
+
+        $sr = new salesRep();
+
+        if( $permission == "L3" || $permission == "L4"){
+            $salesRepID = $sr->getSalesRepByName($con,$userName)[0]['id'];
+        }else{
+            $salesRepID = false;
+        }
+
+        $select = " SELECT * FROM forecast
+                            WHERE(sales_rep_id = \"".$salesRepID."\")
+
+        ";
+        $res = $con->query($select);
+        $from = array('oppid','region_id','currency_id','type_of_value','read_q','year','date_m','last_modify_by','last_modify_date','last_modify_time');
+
+        $to = array('oppid','regionID','currencyID','typeOfValue','readQ','year','dateM','lastModifyBy','lastModifyDate','lastModifyTime');
+
+        $fcst = $sql->fetch($res,$from,$to)[0];
+        $tmp = explode("WEEK",$fcst['oppid']);
+        $size =strlen($tmp[0]);
+        $month = $tmp[0][($size - 3)].$tmp[0][($size - 2)];
+        $week = $tmp[1][1].$tmp[1][2];
+
+        echo "<select id='savedFCST' class='selectpicker' name='savedFCST' data-width='100%'>";
+            echo "<option value='".$month."-".$week."'>".$month."-".$week."</option>";
+        echo "</select>";
+
+    }
 
     public function tiers(){
         

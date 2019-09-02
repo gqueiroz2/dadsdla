@@ -36,6 +36,13 @@
 					{{$render->year()}}
 				</div>
 				<div class="col">
+					<label class='labelLeft'><span class="bold">Save (Month-Week) :</span></label>
+					@if($errors->has('save'))
+						<label style="color: red;">* Required</label>
+					@endif
+					{{$render->savedFCST($con,$permission,$user)}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
 						<label style="color: red;">* Required</label>
