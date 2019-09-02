@@ -247,6 +247,13 @@ class Render extends Model{
         echo "</select>";   
     }
 
+    public function source2(){
+        echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
+            echo "<option value='sf'> Sales Force </option>";
+            echo "<option value='db'> Last Saved File </option>";
+        echo "</select>";   
+    }
+
     public function salesRepGroup($salesRepGroup){
     	echo "<select id='salesRepGroup'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRepGroup[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
     		//echo "<option value=''> Select Region </option>";
