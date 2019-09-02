@@ -50,7 +50,6 @@ class AE extends pAndR{
 
         if ($id) {
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", last_modify_date = \"".$date."\", last_modify_time = \"".$time."\"";
-
             if($con->query($update) === true){
                 var_dump("Foi caralha");
             }else{

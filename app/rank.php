@@ -396,9 +396,9 @@ class rank extends Model{
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "client_id", "year");
                 $colsValue = array($region, $brands_id, $months, $client);
-            }elseif ($tableName == "digital") {
+            }elseif ($tableName == "fw_digital") {
                 $value .= "_revenue";
-                $columns = array("campaign_sales_office_id","brand_id", "month", "client_id", "year");
+                $columns = array("region_id","brand_id", "month", "client_id", "year");
                 $colsValue = array($region, $brands_id, $months, $client);
             }else{
                 $columns = array("brand_id", "month", "client_id", "year");
