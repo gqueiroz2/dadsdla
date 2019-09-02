@@ -50,6 +50,7 @@ class AE extends pAndR{
 
         if ($id) {
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", last_modify_date = \"".$date."\", last_modify_time = \"".$time."\"";
+            
             if($con->query($update) === true){
                 var_dump("Foi caralha");
             }else{
@@ -57,6 +58,9 @@ class AE extends pAndR{
                 var_dump($con->error);
             }
 
+            $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
+
+            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list);
 
         }else{
 
@@ -95,7 +99,32 @@ class AE extends pAndR{
         }
     }
 
-    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$table){
+    public function updateFCSTSalesRep($con,$oppid,$manualEstimantion,$table){
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        for ($m=0; $m <sizeof($manualEstimantion) ; $m++) { 
+            $update[$m] = "UPDATE $table SET value = \"".$manualEstimantion[$m]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\"";
+
+            if ($con->query($update[$m]) === true) {
+                var_dump("Foi caralha-$m");
+            }else{
+                var_dump("Deu ruim-$m");
+                var_dump($con->error);
+            }
+
+        }
+
+    }
+
+    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list){
 
         $sql = new sql();
 
@@ -107,7 +136,34 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        var_dump($manualEstimantionBySalesRep);
+        for ($c=0; $c <sizeof($list) ; $c++) { 
+            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+
+                $update[$c][$m] = "UPDATE $table SET value = \"".$manualEstimantion[$c][$m]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+
+                if ($con->query($update[$c][$m]) === true) {
+                    var_dump("Foi caralha-$c-$m");
+                }else{
+                    var_dump("Deu ruim-$c-$m");
+                    var_dump($con->error);
+                }
+                //var_dump($insert[$c][$m]);
+            }
+        }
+
+    }
+
+    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$table){
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
         $columns = "(forecast_id,month,value)";
         for ($m=0; $m <sizeof($manualEstimantionBySalesRep); $m++) { 
