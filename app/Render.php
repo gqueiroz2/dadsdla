@@ -34,7 +34,6 @@ class Render extends Model{
 
         $to = array('oppid','regionID','currencyID','typeOfValue','readQ','year','dateM','lastModifyBy','lastModifyDate','lastModifyTime');
 
-
         echo "<select id='savedFCST' class='selectpicker' name='savedFCST' data-width='100%'>";
             echo "<option value=''> Select </option>";
             //echo "<option value='".$month."-".$week."'>".$month."-".$week."</option>";
