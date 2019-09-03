@@ -58,6 +58,13 @@
 					{{$render->salesRep2()}}
 				</div>
 				<div class="col">
+					<label class="labelLeft"><span class="bold"> Source: </span></label>
+						@if($errors->has('source'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->source2()}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
@@ -70,13 +77,6 @@
 							<label style="color: red;">* Required</label>
 						@endif
 						{{$render->value2()}}					
-				</div>
-				<div class="col">
-					<label class="labelLeft"><span class="bold"> Source: </span></label>
-						@if($errors->has('source'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->source2()}}
 				</div>
 				<div class="col">
 					<label class='labelLeft'> &nbsp; </label>
