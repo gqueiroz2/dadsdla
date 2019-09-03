@@ -81,7 +81,7 @@ class subBrandRanking extends rankingBrand {
                     
             	}
         	}
-			
+
         }
 
         return $res;
@@ -238,7 +238,6 @@ class subBrandRanking extends rankingBrand {
     		}	
     	}
     	
-
     	return 0;
     }
 
@@ -447,7 +446,11 @@ class subBrandRanking extends rankingBrand {
 		        					if ($n == $pos) {
 		        						echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";	
 		        					}else{
-            							echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                        if ($mtx[$n][$m] == 0) {
+                                            echo "<td class='$color center'> - </td>";
+                                        }else{
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                        }
 		        					}
 		        				}else{
 		        					echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";

@@ -26,7 +26,7 @@ class rank extends Model{
     }
 
     public function mountBrands($brands){
-        
+
         $brandsTV = array();
         $brandsDigital = array();
 
@@ -51,7 +51,7 @@ class rank extends Model{
 
         $check = false;
 
-        for ($b=0; $b < sizeof($brands) ; $b++) { 
+        for ($b=0; $b < sizeof($brands); $b++) {
             if ($brands[$b][1] == 'ONL') {
                 $check = true;
             }
@@ -67,8 +67,6 @@ class rank extends Model{
         $sql = new sql();
 
         $p = new pRate();
-
-        $newRes = array();
 
         if ($tableName == "cmaps") {
             if ($currency[0]['name'] == "USD") {
@@ -171,7 +169,6 @@ class rank extends Model{
             $names = array($type."ID", $type, $as);
 
             for ($y=0; $y < sizeof($years); $y++) {
-                $newRes[$y]= array();
 
                 array_push($colsValue, $years[$y]);
                 array_push($colsValueDigital, $years[$y]);
@@ -199,8 +196,8 @@ class rank extends Model{
                         }
                     }
                 }
-
-                if($tmpD && is_array($resD[$y])){
+                
+                if(is_array($res[$y]) && is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
@@ -226,10 +223,16 @@ class rank extends Model{
                         }
 
                         usort($res[$y], array($this,'compare'));
-                    }else{
-                        $res[$y] = $resD[$y];
                     }
-
+                }elseif(is_array($resD[$y])){
+                    var_dump("antes", $resD[$y]);
+                    for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                        $resD[$y][$r]['total'] *= $pRateDigital;
+                    }
+                    var_dump("depois", $resD[$y]);
+                    $res[$y] = $resD[$y];
+                }else{
+                    $res[$y] = $resD[$y];
                 }
 
             }
@@ -280,7 +283,6 @@ class rank extends Model{
             }
 
             for ($y=0; $y < sizeof($years); $y++) {
-                $newRes[$y]= array();
 
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
@@ -312,37 +314,43 @@ class rank extends Model{
                         }
                     }
                 }
+                
+                if ($tmpD) {
+                    if(is_array($res[$y]) && is_array($resD[$y])){
+                        for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                            $resD[$y][$r]['total'] *= $pRateDigital;
+                        }
 
-                if($tmpD && is_array($resD[$y])){
-                    for ($r=0; $r < sizeof($resD[$y]); $r++) { 
-                        $resD[$y][$r]['total'] *= $pRateDigital;
-                    }
+                        if ($res[$y]) {
+                            $size1 = sizeof($resD[$y]);
+                            $size2 = sizeof($res[$y]);
 
-                    if ($res[$y]) {
-                        $size1 = sizeof($resD[$y]);
-                        $size2 = sizeof($res[$y]);
+                            for ($r=0; $r < $size1; $r++) { 
+                                for ($r2=0; $r2 < $size2; $r2++) {
+                                    if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+                                        $res[$y][$r2]['total'] += $resD[$y][$r]['total'];
 
-                        for ($r=0; $r <$size1 ; $r++) { 
-                            for ($r2=0; $r2 <$size2 ; $r2++) {
-                                if ($resD[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
-                                    $res[$y][$r2]['total'] += $resD[$y][$r]['total'];
-
-                                    unset($resD[$y][$r]);
-                                    break;
+                                        unset($resD[$y][$r]);
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        $resD[$y] = array_values($resD[$y]);
-                        for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
-                            array_push($res[$y], $resD[$y][$r]);
-                        }
+                            $resD[$y] = array_values($resD[$y]);
+                            for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
+                                array_push($res[$y], $resD[$y][$r]);
+                            }
 
-                        usort($res[$y], array($this,'compare'));
+                            usort($res[$y], array($this,'compare'));
+                        }
+                    }elseif(is_array($resD[$y])){
+                        for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                            $resD[$y][$r]['total'] *= $pRateDigital;
+                        }
+                        $res[$y] = $resD[$y];
                     }else{
                         $res[$y] = $resD[$y];
-                    }
-
+                    }   
                 }
             }
         }
@@ -390,8 +398,8 @@ class rank extends Model{
             $db = new dataBase();   
             $con = $db->openConnection("DLA");
 
-            $client = $c->getClientIDByRegion($con, $sql, $filter, array($region));
-
+            $client = $c->getClientIDByRegion($con, $sql, addslashes($filter), array($region));
+            
             if ($tableName == "ytd") {
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "client_id", "year");
@@ -441,7 +449,7 @@ class rank extends Model{
         $rtr['join'] = $join;
         $rtr['name'] = $name;
         $rtr['names'] = $names;
-        //var_dump($rtr['colsValue']);
+        
         return $rtr;
 
     }

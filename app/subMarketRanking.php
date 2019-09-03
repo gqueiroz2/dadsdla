@@ -17,7 +17,7 @@ class subMarketRanking extends rankingMarket {
 
     	$sql = new sql();
 
-    	$r = new region();                      
+    	$r = new region();
                                 
         $tmp = $r->getRegion($con,array($regionID));
 
@@ -41,7 +41,7 @@ class subMarketRanking extends rankingMarket {
     			$oldAgency = $a->getAllAgenciesByName($con, $sql, $filter);
 
     			if (is_array($oldAgency)) {
-		            for ($a=0; $a < sizeof($oldAgency); $a++) { 
+		            for ($a = 0; $a < sizeof($oldAgency); $a++) { 
 		                $val[$a] = $oldAgency[$a]['id'];
 		            }    
 		        }else{
@@ -178,35 +178,64 @@ class subMarketRanking extends rankingMarket {
                     }   
                 }
 
-                if ($infoQuery[$y]['table'] == "cmaps a") {
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                for ($b=0; $b < sizeof($infoQuery); $b++) {
+
+                    if ($infoQuery[$b]['table'] == "cmaps a") {
+                        if ($currency[0]['name'] == "USD") {
+                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                        }else{
+                            $pRate = 1.0;
+                        }
                     }else{
-                        $pRate = 1.0;
+                        if ($currency[0]['name'] == "USD") {
+                            $pRate = 1.0;
+                        }else{
+                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                        }
                     }
                     
-                }else{
-                    if ($currency[0]['name'] == "USD") {
-                        $pRate = 1.0;
-                    }else{
-                        $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-                    }   
-                }
-
-                if ($currency[0]['name'] == "USD") {
-                    $pRateDigital = 1.0;
-                }else{
-                    $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-                }
-
-                if (is_array($values[$y])) {
-                    for ($v=0; $v < sizeof($values[$y]); $v++) { 
-                        if($values[$y][$v]['brand'] == 'ONL' || $values[$y][$v]['brand'] == 'VIX'){
-                            $values[$y][$v]['total'] *= $pRateDigital;
-                        }elseif ($infoQuery[$y]['table'] == "cmaps a") {
-                            $values[$y][$v]['total'] /= $pRate;    
-                        }else{
-                            $values[$y][$v]['total'] *= $pRate;
+                    if (is_array($values[$y])) {
+                        for ($i=0; $i < sizeof($values[$y]); $i++) {
+                            if ($infoQuery[$b]['table'] == "cmaps a") {
+                                /*var_dump($years[$y]);
+                                var_dump("cmaps");
+                                var_dump("brand", $values[$y][$i]['brand']);*/
+                                if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
+                                    //var_dump($pRate);
+                                    $values[$y][$i]['total'] /= $pRate;
+                                }else{
+                                    //var_dump(1.0);
+                                    $values[$y][$i]['total'] /= 1.0;
+                                }
+                            }elseif ($infoQuery[$b]['table'] == "ytd a") {
+                                /*var_dump($years[$y]);
+                                var_dump("ytd");
+                                var_dump("brand", $values[$y][$i]['brand']);*/
+                                if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
+                                    //var_dump($pRate);
+                                    $values[$y][$i]['total'] *= $pRate;
+                                }else{
+                                    //var_dump(1.0);
+                                    $values[$y][$i]['total'] *= 1.0;
+                                }
+                            }elseif ($infoQuery[$b]['table'] == "fw_digital a") {
+                                /*var_dump($years[$y]);
+                                var_dump("digital");
+                                var_dump("brand", $values[$y][$i]['brand']);*/
+                                if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
+                                    $values[$y][$i]['total'] *= 1.0;
+                                    //var_dump(1.0);
+                                }else{
+                                    //var_dump($pRate);
+                                    $values[$y][$i]['total'] *= $pRate;
+                                }
+                            }else{
+                                /*var_dump($years[$y]);
+                                var_dump("plan");
+                                var_dump("brand", $values[$y][$i]['brand']);
+                                var_dump($pRate);*/
+                                $values[$y][$i]['total'] *= $pRate;
+                            }
                         }
                     }
                 }
@@ -226,7 +255,7 @@ class subMarketRanking extends rankingMarket {
 
         $check = false;
 
-        for ($b=0; $b < sizeof($brands) ; $b++) { 
+        for ($b=0; $b < sizeof($brands) ; $b++) {
             if ($brands[$b][1] == 'ONL') {
                 $check = true;
             }
@@ -240,8 +269,6 @@ class subMarketRanking extends rankingMarket {
         }
 
     	$sql = new sql();
-
-        $newRes = array();
 
         $p = new pRate();
 
@@ -313,13 +340,13 @@ class subMarketRanking extends rankingMarket {
 
     	$res = $sql->fetch($values, $from, $from);
         $resD = $sql->fetch($valuesD, $from, $from);
-
+        
         if (is_array($res)) {
             for ($v=0; $v < sizeof($res); $v++) { 
-                if ($table != "cmaps") {
-                    $res[$v]['total'] /= $pRate;
-                }else{
+                if ($tableName != "cmaps") {
                     $res[$v]['total'] *= $pRate;
+                }else{
+                    $res[$v]['total'] /= $pRate;
                 }
             }
         }
@@ -353,6 +380,12 @@ class subMarketRanking extends rankingMarket {
             }else{
                 $res = $resD;
             }
+
+        }elseif ($resD) {
+            for ($r=0; $r < sizeof($resD); $r++) { 
+                $resD[$r]['total'] *= $pRateDigital;
+            }
+            $res = $resD;
 
         }
         
@@ -666,16 +699,21 @@ class subMarketRanking extends rankingMarket {
                             }
 
                             for ($n=0; $n < sizeof($mtx); $n++) { 
-                                if ($m == 0) {
+                                if ($m == 0) { 
                                     echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
                                 }else{
                                     if (is_numeric($mtx[$n][$m])) {
                                         if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Share Bookings ".$years[0] || $mtx[$n][0] == "Share Bookings ".$years[1] || $mtx[$n][0] == "% YoY") {
-                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m], 2)." %</td>";   
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";   
                                         }elseif ($mtx[$n][0] == "Ranking") {
                                             echo "<td class='$color center'> ".number_format($mtx[$n][$m])."º</td>";
                                         }else{
-                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                            if ($mtx[$n][$m] == 0) {
+                                                echo "<td class='$color center'> - </td>";
+                                            }else{
+                                                echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                            }
+                                            
                                         }
                                     }else{
                                         echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
