@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\region;
 use App\PAndRRender;
 use App\salesRep;
@@ -97,7 +98,19 @@ class AEController extends Controller{
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client);
-        
+     
+        if ($bool == "Updated") {
+            $msg = "Forecast Updated";
+            return back()->with("Success",$msg);
+        }elseif($bool == "Created"){
+            $msg = "Forecast Created";
+            return back()->with("Success",$msg);
+        }else{
+            $msg = "Error";
+            return back()->with("Error",$msg);
+        }
+
+
     }
 
     public function get(){
@@ -144,6 +157,11 @@ class AEController extends Controller{
         }
         
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
+
+        if (!$tmp) {
+            
+        }
+
         $forRender = $tmp;
         $client = $tmp['client'];
         $tfArray = array();
