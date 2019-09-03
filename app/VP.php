@@ -15,14 +15,39 @@ class VP extends pAndR{
 
 	public function base($con,$regionID){
     	$sql = new sql();
+        $base = new base();
     	
+        $year = 2019;
+
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
-    	$listOfClients = $this->listFCSTClients($con,$sql,$fcstInfo);
-    	var_dump($listOfClients);
+    	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo);
+        $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$year,$listOfClients);
+        $bookingsYTDcYearByClient = $this->fullYearByClient($con,$sql,"bkgYTD",$regionID,$year,$listOfClients);
+        $rtr = array(   
+                        "client" => $listOfClients,
+                        "fcstFullYearByClient" => $fcstFullYearByClient,
+                        
+                    );
+
+        return $rtr;
+
 
     }
 
-    public function listFCSTClients($con,$sql,$fcstInfo){
+    public function fullYearByClient($con,$sql,$kind,$regionID,$listOfClients){
+        for ($c=0; $c < sizeof($listOfClients); $c++) { 
+            $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
+                                 FROM forecast_client
+                                 WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                         ";            
+            $res[$c] = $con->query($selectSum[$c]);
+            $from = array("revenue");
+            $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+        }
+        return $selectSum;
+    }
+
+    public function listFCSTClients($con,$sql,$base,$fcstInfo){
     	$from = array("clientID","client");
     	for ($f=0; $f < sizeof($fcstInfo); $f++) { 
 
@@ -47,7 +72,7 @@ class VP extends pAndR{
     		}
     	}
 
-    	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        $list = $base->superUnique($list,'clientID');
 
 	    return $list;
 
@@ -55,11 +80,9 @@ class VP extends pAndR{
 
 	public function getForecast($con,$sql,$regionID){
 		$select = " SELECT * FROM forecast
-                           WHERE(region_id = \"".$regionID."\")
-                           GROUP BY oppid
+                           WHERE(region_id = \"".$regionID."\")                           
                            ORDER BY ID
-        ";
-        				
+                  ";
         $res = $con->query($select);
         $from = array('ID','oppid','region_id','currency_id',
         	          'type_of_value','read_q','year',

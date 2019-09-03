@@ -706,7 +706,10 @@ class PAndRRender extends Render{
 
     }
 
-    public function VP1(){
+    public function VP1($forRender){
+
+        $client = $forRender['client'];
+        $fcstFullYearByClient = $forRender['fcstFullYearByClient'] ;
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
@@ -843,14 +846,14 @@ class PAndRRender extends Render{
 
         echo "<div class='col-2'>";
             echo "<table class='temporario linked2' style='width:100%; height:400px; overflow-y:scroll; text-align:center;'>";
-                for ($c=0; $c <100 ; $c++) {
+                for ($c=0; $c <sizeof($client) ; $c++) {
                     if($c%2 == 0){
                         $class = "rcBlue";
                     }else{
                         $class = "odd";
                     }
                     echo "<tr>";
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:30px; width:100%;'>Nome do Cliente-$c</td>";
+                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:30px; width:100%;'>".$client[$c]['client']."</td>";
                         echo "<td>&nbsp</td>";
                     echo "</tr>";
                 }
@@ -860,7 +863,7 @@ class PAndRRender extends Render{
         echo "<div class='col table-responsive linked '>";
             echo "<table class='temporario linked2' style='min-width:2615px; height:400px; width:100%; overflow-y:scroll; text-align:center; width:100%;'>";
                 
-                for ($c=0; $c </*sizeof(clientes)*/100; $c++) {
+                for ($c=0; $c < sizeof($client); $c++) {
                     if($c%2 == 0){
                         $class = "rcBlue";
                     }else{

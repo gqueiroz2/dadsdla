@@ -28,7 +28,6 @@ class VPController extends Controller
     }
 
     public function post(){
-        var_dump(Request::all());
         $db = new dataBase();
         $con = $db->openConnection("DLA");
         $r = new region();
@@ -43,9 +42,7 @@ class VPController extends Controller
         $currency = $pr->getCurrency($con,null);
 
         $forRender = $vp->base($con,$regionID);
-
         
-        var_dump($forRender);
-        return view('pAndR.VPView.post',compact('render','region','currency'));
+        return view('pAndR.VPView.post',compact('render','region','currency','forRender'));
     }
 }

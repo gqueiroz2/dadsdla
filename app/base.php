@@ -9,6 +9,17 @@ use App\sql;
 
 class base extends Model{
 
+    public function superUnique($array,$key){
+       $temp_array = [];
+       foreach ($array as &$v) {
+           if (!isset($temp_array[$v[$key]]))
+           $temp_array[$v[$key]] =& $v;
+       }
+       $array = array_values($temp_array);
+       return $array;
+
+    }
+ 
     public function dateToMonth($date){
         $temp = explode("-",$date);
         
