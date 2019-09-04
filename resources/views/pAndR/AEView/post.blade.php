@@ -120,6 +120,7 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 		$(document).ready(function(){
+
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
 			@endfor

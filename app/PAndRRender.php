@@ -48,13 +48,13 @@ class PAndRRender extends Render{
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
 
-        echo "<input type='hidden' name='salesRep' value='". base64_encode(json_encode($salesRep)) ."'>";
-        echo "<input type='hidden' name='client' value='". base64_encode(json_encode($client)) ."'>";
-        echo "<input type='hidden' name='currency' value='". base64_encode(json_encode($currency)) ."'>";
-        echo "<input type='hidden' name='value' value='". base64_encode(json_encode($value)) ."'>";
-        echo "<input type='hidden' name='region' value='". base64_encode(json_encode($region)) ."'>";
-        echo "<input type='hidden' name='user' value='". base64_encode(json_encode($userName)) ."'>";
-        echo "<input type='hidden' name='year' value='". base64_encode(json_encode($cYear)) ."'>";
+        echo "<input type='hidden' id='salesRep' name='salesRep' value='". base64_encode(json_encode($salesRep)) ."'>";
+        echo "<input type='hidden' id='client' name='client' value='". base64_encode(json_encode($client)) ."'>";
+        echo "<input type='hidden' id='currency' name='currency' value='". base64_encode(json_encode($currency)) ."'>";
+        echo "<input type='hidden' id='value' name='value' value='". base64_encode(json_encode($value)) ."'>";
+        echo "<input type='hidden' id='region' name='region' value='". base64_encode(json_encode($region)) ."'>";
+        echo "<input type='hidden' id='user' name='user' value='". base64_encode(json_encode($userName)) ."'>";
+        echo "<input type='hidden' id='year' name='year' value='". base64_encode(json_encode($cYear)) ."'>";
 
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>

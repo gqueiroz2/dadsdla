@@ -159,7 +159,7 @@ class AEController extends Controller{
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
 
         if (!$tmp) {
-            
+            return back()->with("Error","Don't have a Forecast Saved");
         }
 
         $forRender = $tmp;
