@@ -88,17 +88,19 @@ class rankingChurnController extends Controller {
 	  	$rc = new rankingChurn();
 
 	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-
+	  	
 	  	$finalValues = array();
 
-	  	for ($v=0; $v < sizeof($values); $v++) { 
-	  		for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-	  			if (!in_array($values[$v][$v2][$type], $finalValues)) {
-                    array_push($finalValues, $values[$v][$v2][$type]);
-                }
+	  	for ($v=0; $v < sizeof($values); $v++) {
+	  		if (is_array($values[$v])) {
+	  			for ($v2=0; $v2 < sizeof($values[$v]); $v2++) {
+		  			if (!in_array($values[$v][$v2][$type], $finalValues)) {
+	                    array_push($finalValues, $values[$v][$v2][$type]);
+	                }
+		  		}
 	  		}
 	  	}
-
+	  	
         $months2 = array();
         for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
             array_push($months2, $m);

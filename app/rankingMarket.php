@@ -6,26 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use App\rank;
 use App\region;
 use App\pRate;
+use App\base;
 
 class rankingMarket extends rank {
     
     public function getAllResults($con, $brands, $type, $regionID, $region, $value, $currency, $months, $years, $sector=false){
-
-    	if ($sector) {
-    		$cMonth = intval(date('m'));
-    		$months2 = array();
-    		for ($m=1; $m <= $cMonth; $m++) { 
-    			array_push($months2, $m);
-    		}
-    		$res = $this->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months2, $currency, "DESC");
-    	}else{
-    		if ($region == "Brazil") {
-				$res = $this->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency, "DESC");
-			}else{
-				$res = $this->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency, "DESC");    	
-			}
-    	}
         
+		if ($region == "Brazil") {
+			$res = $this->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency, "DESC");
+		}else{
+			$res = $this->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency, "DESC");    	
+		}
+    	
         return $res;
     }
 
@@ -209,7 +201,7 @@ class rankingMarket extends rank {
     	$mtx[$pos][0] = "Var Abs.";$pos++;
 
     	if ($type == "client") {
-			$mtx[$pos][0] = "Class";$pos++;    		
+			//$mtx[$pos][0] = "Class";$pos++;    		
     	}
 
     	$mtx[$pos][0] = "Move";$pos++;

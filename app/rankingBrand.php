@@ -10,7 +10,7 @@ use App\pRate;
 class rankingBrand extends rank{
 
 	//$con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by, $leftName2=null
-	public function getAllResults($con, $r, $region, $brands, $value, $months, $currency, $years) {
+	public function getAllResults($con, $regionName, $region, $brands, $value, $months, $currency, $years) {
 
 
 		$order_by = " (
@@ -63,7 +63,7 @@ class rankingBrand extends rank{
 			
 			for ($y=0; $y < sizeof($years); $y++) {
 
-				$info = $this->mountValues($con, $r, $region, $years[$y]);
+				$info = $this->mountValues($con, $regionName, $region, $years[$y]);
 
 				for ($b=0; $b < sizeof($brands); $b++) {
 				
@@ -137,38 +137,65 @@ class rankingBrand extends rank{
 					}	
 				}
 				
-				if ($infoQuery[0]['table'] == "cmaps a") {
-					if ($currency[0]['name'] == "USD") {
-			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-			        }else{
-			            $pRate = 1.0;
-			        }
-					
-				}else{
-					if ($currency[0]['name'] == "USD") {
-			            $pRate = 1.0;
-			        }else{
-			            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-			        }	
-				}
-			    
-				if ($currency[0]['name'] == "USD") {
-		            $pRateDigital = 1.0;
-		        }else{
-		            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-		        }
-		        
-				if (is_array($res[$y])) {
+				for ($b=0; $b < sizeof($infoQuery); $b++) { 
+					if ($infoQuery[$b]['table'] == "cmaps a") {
+						if ($currency[0]['name'] == "USD") {
+				            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+				        }else{
+				            $pRate = 1.0;
+				        }
+					}else{
+						if ($currency[0]['name'] == "USD") {
+				            $pRate = 1.0;
+				        }else{
+				            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+				        }
+					}
 
-					for ($i=0; $i < sizeof($res[$y]); $i++) { 
-						if($res[$y][$i]['brand'] == 'ONL' || $res[$y][$i]['brand'] == 'VIX'){
-							$res[$y][$i]['total'] *= $pRateDigital;
+					if (is_array($res[$y])) {
+						for ($i=0; $i < sizeof($res[$y]); $i++) {
+							if ($infoQuery[$b]['table'] == "cmaps a") {
+								/*var_dump($years[$y]);
+								var_dump("cmaps");
+								var_dump("brand", $res[$y][$i]['brand']);*/
+                                if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
+                                	//var_dump($pRate);
+                                    $res[$y][$i]['total'] /= $pRate;
+                                }else{
+                                	//var_dump(1.0);
+                                    $res[$y][$i]['total'] /= 1.0;
+                                }
+                            }elseif ($infoQuery[$b]['table'] == "ytd a") {
+                            	/*var_dump($years[$y]);
+                            	var_dump("ytd");
+                            	var_dump("brand", $res[$y][$i]['brand']);*/
+                                if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
+                            		//var_dump($pRate);
+                                    $res[$y][$i]['total'] *= $pRate;
+                                }else{
+                                	//var_dump(1.0);
+                                    $res[$y][$i]['total'] *= 1.0;
+                                }
+                            }elseif ($infoQuery[$b]['table'] == "fw_digital a") {
+                            	/*var_dump($years[$y]);
+                            	var_dump("digital");
+                            	var_dump("brand", $res[$y][$i]['brand']);*/
+                            	if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
+                                    $res[$y][$i]['total'] *= 1.0;
+                                    //var_dump(1.0);
+                                }else{
+                                	//var_dump($pRate);
+                                    $res[$y][$i]['total'] *= $pRate;
+                                }
+                            }else{
+                            	/*var_dump($years[$y]);
+                            	var_dump("plan");
+                            	var_dump("brand", $res[$y][$i]['brand']);
+                            	var_dump($pRate);*/
+                            	$res[$y][$i]['total'] *= $pRate;
+                            }
 						}
-						elseif ($infoQuery[$y]['table'] == "cmaps a") {
-							$res[$y][$i]['total'] /= $pRate;	
-						}else{
-							$res[$y][$i]['total'] *= $pRate;
-						}
+						//var_dump("-------------------------------------------------------------------");
 					}
 				}
 			}
@@ -295,21 +322,21 @@ class rankingBrand extends rank{
 				if ($mtx[$m][0] == "Share Booking ".$years[0]) {
 					if ($val != "-") {
 						$res = ($val / $closed)*100;
-						$closedP += $val;
+						$closedP += $res;
 					}else{
 						$res = $val;
 					}
 				}elseif ($mtx[$m][0] == "Share Target") {
 					if ($val != "-") {
 						$res = ($val / $target)*100;
-						$targetP += $val;
+						$targetP += $res;
 					}else{
 						$res = $val;
 					}
 				}elseif ($mtx[$m][0] == "Share Booking ".$years[1]) {
 					if ($val != "-") {
 						$res = ($val / $pClosed)*100;
-						$pClosedP += $val;
+						$pClosedP += $res;
 					}else{
 						$res = $val;
 					}

@@ -6,10 +6,40 @@ use Illuminate\Database\Eloquent\Model;
 use App\dataBase;
 use App\region;
 use App\base;
+use App\salesRep;
+use App\sql;
 
 class Render extends Model{
     
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+    public function savedFCST($con,$permission,$userName){
+
+        $sql = new sql();
+
+        $sr = new salesRep();
+
+        if( $permission == "L3" || $permission == "L4"){
+            $salesRepID = $sr->getSalesRepByName($con,$userName)[0]['id'];
+        }else{
+            $salesRepID = false;
+        }
+
+        $select = " SELECT * FROM forecast
+                            WHERE(sales_rep_id = \"".$salesRepID."\")
+
+        ";
+        $res = $con->query($select);
+        $from = array('oppid','region_id','currency_id','type_of_value','read_q','year','date_m','last_modify_by','last_modify_date','last_modify_time');
+
+        $to = array('oppid','regionID','currencyID','typeOfValue','readQ','year','dateM','lastModifyBy','lastModifyDate','lastModifyTime');
+
+        echo "<select id='savedFCST' class='selectpicker' name='savedFCST' data-width='100%'>";
+            echo "<option value=''> Select </option>";
+            //echo "<option value='".$month."-".$week."'>".$month."-".$week."</option>";
+        echo "</select>";
+
+    }
 
     public function tiers(){
         
@@ -209,6 +239,14 @@ class Render extends Model{
         
         echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
+        echo "</select>";   
+    }
+
+    public function source2(){
+        echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select </option>";
+            echo "<option value='sf'> Sales Force </option>";
+            echo "<option value='db'> Saved </option>";
         echo "</select>";   
     }
 

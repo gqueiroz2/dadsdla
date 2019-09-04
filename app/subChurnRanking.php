@@ -20,12 +20,16 @@ class subChurnRanking extends rankingChurn {
                                 
         $tmp = $r->getRegion($con,array($regionID));
 
-        $p = new pRate();
-
         if(is_array($tmp)){
             $region = $tmp[0]['name'];
         }else{
             $region = $tmp['name'];
+        }
+
+        if ($region == "Brazil") {
+            $table = "cmaps";
+        }else{
+            $table = "ytd";
         }
 
         $cYear = intval(date('Y'));
@@ -59,38 +63,8 @@ class subChurnRanking extends rankingChurn {
 		}
 		
 		for ($y=0; $y < sizeof($years); $y++) { 
-		
-    		if ($region == "Brazil") {
-    			$table = "cmaps";
-    		}else{
-    			$table = "ytd";
-    		}
-    		
-            if ($table != "cmaps") {
-                if ($currency[0]['name'] == "USD") {
-                    $pRate = 1.0;
-                }else{
-                    $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
-                }
-            }else{
-                if ($currency[0]['name'] == "USD") {
-                    $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
-                }else{
-                    $pRate = 1.0;
-                }
-            }
 
-    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency[0]['id'], $brand, $val, $filterType);
-            
-            if (is_array($values[$y])) {
-                for ($v=0; $v < sizeof($values[$y]); $v++) { 
-                    if ($table != "cmaps") {
-                        $values[$y][$v]['total'] *= $pRate;
-                    }else{
-                        $values[$y][$v]['total'] /= $pRate;
-                    }
-                }
-            }
+    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand, $val, $filterType);
     	}
     	
 		return $values;
@@ -99,12 +73,57 @@ class subChurnRanking extends rankingChurn {
     public function getSubValues($con, $tableName, $type, $region, $value, $year, $months, $currency, $brands, $filter, $filterType){
     	
     	$sql = new sql();
+        
+        $p = new pRate();
+
+        if ($tableName != "cmaps") {
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+            }
+        }else{
+            if ($currency[0]['name'] == "USD") {
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+            }else{
+                $pRate = 1.0;
+            }
+        }
+
+        if ($currency[0]['name'] == "USD") {
+            $pRateDigital = 1.0;
+        }else{
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
+        $brands_id = array();
+        $brands_idD = array();
+        
+        for ($b=0; $b < sizeof($brands); $b++) {
+            if ($brands[$b] == '9') {
+                array_push($brands_idD, '9');
+                array_push($brands_idD, '13');
+                array_push($brands_idD, '14');
+                array_push($brands_idD, '15');
+                array_push($brands_idD, '16');
+            }elseif ($brands[$b] == '10') {
+                array_push($brands_idD, '10');
+            }else{
+                array_push($brands_id,$brands[$b]);
+            }
+        }
 
     	$as = "total";
 
         $tableAbv = "a";
         $leftAbv = "b";
 
+        if ($type == "agency" || $type == "client") {
+            $valueD = $value."_revenue";
+            $columnsD = array("region_id","brand_id","month","year");
+            $colsValueD = array($region, $brands_idD, $months, $year, $filter);
+        }
+        
 		if ($tableName == "ytd") {
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "month", "year", "brand_id");
@@ -112,37 +131,90 @@ class subChurnRanking extends rankingChurn {
         }else{
             $columns = array("month", "year", "brand_id");
             $colsValue = array($months, $year, $brands, $filter);
-
-            if ($type == "agency") {
-            	array_push($columns, "agency_id");
-            }elseif ($type == "client") {
-            	array_push($columns, "client_id");
-            }elseif($type == "sector"){
-            	array_push($columns, "sector");
-            }else{
-            	array_push($columns, "category");
-            }
         }
 
-        $table = "$tableName $tableAbv";
+        if ($type == "agency") {
+            array_push($columns, "agency_id");
+            array_push($columnsD, "agency_id");
+        }elseif ($type == "client") {
+            array_push($columns, "client_id");
+            array_push($columnsD, "client_id");
+        }elseif($type == "sector"){
+            array_push($columns, "sector");
+        }else{
+            array_push($columns, "category");
+        }
+
+        $table = "$tableName $tableAbv";        
 
         $tmp = "$leftAbv.ID AS '".$filterType."ID', $leftAbv.name AS '$filterType', SUM($value) AS '$as'";
-        $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
 
-        if ($tableName == "cmaps") {
-            
-        }
+        $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
 
         $name = $filterType."_id";
 		$names = array($filterType."ID", $filterType, $as);
 
         $where = $sql->where($columns, $colsValue);
-    
-    	$values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
 
+    	$values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+        
     	$from = $names;
 
     	$res = $sql->fetch($values, $from, $from);
+
+        if ($type == "agency" || $type == "client") {
+            $tmpD = $filterType."_id AS '".$filterType."ID', ".$leftAbv.".name AS '".$filterType."', SUM($valueD) AS $as";
+            $joinD = "LEFT JOIN ".$filterType." ".$leftAbv." ON ".$leftAbv.".ID = ".$filterType."_id";
+            $whereD = $sql->where($columnsD, $colsValueD);
+            $valuesD = $sql->selectGroupBy($con, $tmpD, "fw_digital", $joinD, $whereD, "total", $name, "DESC");
+            $resD = $sql->fetch($valuesD, $from, $from);
+        }
+
+        if (is_array($res)) {
+            for ($v=0; $v < sizeof($res); $v++) { 
+                if ($tableName != "cmaps") {
+                    $res[$v]['total'] *= $pRate;
+                }else{
+                    $res[$v]['total'] /= $pRate;
+                }
+            }
+        }
+        if ($type == "agency" || $type == "client") {
+            if ($resD && $res) {
+            
+                for ($r=0; $r < sizeof($resD); $r++) { 
+                    $resD[$r]['total'] *= $pRateDigital;
+                }
+
+                $size1 = sizeof($resD);
+                for ($r=0; $r < $size1; $r++) { 
+                    for ($r2=0; $r2 < sizeof($res); $r2++) {
+                        if ($resD[$r][$filterType.'ID'] == $res[$r2][$filterType.'ID']) {
+                            $res[$r2]['total'] += $resD[$r]['total'];
+
+                            unset($resD[$r]);
+
+                            break;
+                        }
+                    }
+                }
+
+                $resD = array_values($resD);
+
+                for ($r=0; $r < sizeof($resD) ; $r++) { 
+                    array_push($res, $resD[$r]);
+                }
+
+                usort($res, array($this,'compare'));
+
+            }elseif ($resD) {
+                for ($r=0; $r < sizeof($resD); $r++) { 
+                    $resD[$r]['total'] *= $pRateDigital;
+                }
+                $res = $resD;
+
+            }
+        }
 
     	return $res;
     }
