@@ -34,6 +34,7 @@ class AEController extends Controller{
         $value = json_decode( base64_decode( Request::get('value') ));
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
+        $splitted = json_decode( base64_decode( Request::get('splitted') ));
 
         $salesRepID = $salesRep->id;
 /*
@@ -47,9 +48,6 @@ class AEController extends Controller{
         $date = date('Y-d-m');
         $time = date('H:i');
         $fcstMonth = date('m');
-
-        var_dump($date);
-        var_dump($time);
 
         $month = $base->month;
         $monthWQ = $base->monthWQ;        
@@ -97,8 +95,9 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client);
-     
+
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted);
+
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
             return back()->with("Success",$msg);
@@ -109,8 +108,6 @@ class AEController extends Controller{
             $msg = "Error";
             return back()->with("Error",$msg);
         }
-
-
     }
 
     public function get(){
@@ -159,7 +156,7 @@ class AEController extends Controller{
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
 
         if (!$tmp) {
-            
+            return back()->with("Error","Don't have a Forecast Saved");
         }
 
         $forRender = $tmp;

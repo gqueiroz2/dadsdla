@@ -104,12 +104,7 @@
 				</div>
 			</div>
 
-			<div class="row mt-2 justify-content-end">
-				<div class="col-sm-2">
-					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-				</div>	
-			</div>
+			
 		</form>
 	</div>
 

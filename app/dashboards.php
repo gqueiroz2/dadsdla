@@ -300,9 +300,10 @@ class dashboards extends rank{
 	    	
 	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $secondaryFilter);
             
-	    	//$mtx = $sr->assembler($values,$years,$type);
+	    	$mtx = $sr->assembler($values,$years,$type);
 	    }
-	    return $values;
+	    
+        return $values;
     }
 
     
@@ -411,22 +412,26 @@ class dashboards extends rank{
 
         $name = $values[$p][0][$type];
 
-        for ($i=0; $i < sizeof($somekind); $i++) { 
-            for ($j=0; $j < sizeof($somekind[$i]); $j++) { 
-                if ($somekind[$i][$j][$type] == $name) {
-                    for ($p=0; $p < 3; $p++) { 
-                        if (is_array($values[$i])) {
-                            $somekind[$i][$j]['total'] = $values[$p][0]['total'];
-                        }else{
-                            $somekind[$i][$j]['total'] = 0;
-                        }   
+        for ($i=0; $i < sizeof($somekind); $i++) {
+            if (is_array($somekind[$i])) {
+                for ($j=0; $j < sizeof($somekind[$i]); $j++) { 
+                    if ($somekind[$i][$j][$type] == $name) {
+                        for ($p=0; $p < 3; $p++) { 
+                            if (is_array($values[$i])) {
+                                $somekind[$i][$j]['total'] = $values[$p][0]['total'];
+                            }else{
+                                $somekind[$i][$j]['total'] = 0;
+                            }   
+                        }
                     }
-                }
+                }   
             }
         }
 
-        for ($i=0; $i < sizeof($somekind); $i++) { 
-            usort($somekind[$i], array($this,'compare'));   
+        for ($i=0; $i < sizeof($somekind); $i++) {
+            if (is_array($somekind[$i])) {
+                usort($somekind[$i], array($this,'compare'));
+            }
         }
 
         for ($t=0; $t < sizeof($type2); $t++) { 
