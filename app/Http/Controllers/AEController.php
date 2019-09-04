@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\region;
 use App\PAndRRender;
 use App\salesRep;
@@ -33,6 +34,7 @@ class AEController extends Controller{
         $value = json_decode( base64_decode( Request::get('value') ));
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
+        $splitted = json_decode( base64_decode( Request::get('splitted') ));
 
         $salesRepID = $salesRep->id;
 /*
@@ -46,9 +48,6 @@ class AEController extends Controller{
         $date = date('Y-d-m');
         $time = date('H:i');
         $fcstMonth = date('m');
-
-        var_dump($date);
-        var_dump($time);
 
         $month = $base->month;
         $monthWQ = $base->monthWQ;        
@@ -94,9 +93,21 @@ class AEController extends Controller{
 
         $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
         
+        $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currencyID,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient);
-        
+
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted);
+
+        if ($bool == "Updated") {
+            $msg = "Forecast Updated";
+            return back()->with("Success",$msg);
+        }elseif($bool == "Created"){
+            $msg = "Forecast Created";
+            return back()->with("Success",$msg);
+        }else{
+            $msg = "Error";
+            return back()->with("Error",$msg);
+        }
     }
 
     public function get(){
@@ -107,10 +118,15 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $pr = new pRate();
 
+        $user = Request::session()->get('userName');
+        $permission = Request::session()->get('userLevel');
+
+        //$checkForForecasts = $ae->checkForForecasts();
+
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-		return view('pAndR.AEView.get',compact('render','region','currency'));
+		return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'));
     }
 
     public function post(){
@@ -138,6 +154,11 @@ class AEController extends Controller{
         }
         
         $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
+
+        if (!$tmp) {
+            return back()->with("Error","Don't have a Forecast Saved");
+        }
+
         $forRender = $tmp;
         $client = $tmp['client'];
         $tfArray = array();

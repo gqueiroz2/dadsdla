@@ -58,6 +58,13 @@
 					{{$render->salesRep2()}}
 				</div>
 				<div class="col">
+					<label class="labelLeft"><span class="bold"> Source: </span></label>
+						@if($errors->has('source'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->source2()}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
@@ -97,12 +104,7 @@
 				</div>
 			</div>
 
-			<div class="row mt-2 justify-content-end">
-				<div class="col-sm-2">
-					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-				</div>	
-			</div>
+			
 		</form>
 	</div>
 

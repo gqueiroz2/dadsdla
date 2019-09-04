@@ -42,6 +42,20 @@ class subRankings extends rank{
 
         $sql = new sql();
 
+        $p = new pRate();
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
+        if ($currency[0]['name'] == "USD") {
+            $pRateDigital = 1.0;
+        }else{
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
         $as = "total";
 
         $tableAbv = "a";
@@ -68,20 +82,17 @@ class subRankings extends rank{
             $agency = $oldAgency;
         }
 
+        $valueD = $value."_revenue";
+        $columnsD = array("region_id","brand_id","month","year",$filter);
+        $colsValueD = array($region,$brands_idD,$months,$year,$agency);
+
         if ($tableName == "ytd") {
-            $valueD = $value."_revenue";
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month", "year", $filter);
             $colsValue = array($region, $brands_id, $months, $year, $agency);
-            $columnsD = array("region_id","brand_id","month","year","agency_id");
-            $colsValueD = array($region,$brands_idD,$months,$year,$agency);
-
         }else{
-            $valueD = $value."_revenue";
             $columns = array("brand_id", "month", "year", $filter);
             $colsValue = array($brands_id, $months, $year, $agency);
-            $columnsD = array("region_id","brand_id","month","year","agency_id");
-            $colsValueD = array($region,$brands_idD,$months,$year,$agency);
         }
 
         if ($secondaryFilter) {
@@ -125,11 +136,22 @@ class subRankings extends rank{
 
         $res = $sql->fetch($values[$y], $from, $from);
         $resD = $sql->fetch($valuesD[$y], $from, $from);
+        
+        if (is_array($res)) {
+            for ($r=0; $r < sizeof($res); $r++) { 
+                $res[$r]['total'] *= $pRate;
+            }
+        }
 
         if ($resD && $res) {
+            
+            for ($r=0; $r < sizeof($resD); $r++) { 
+                $resD[$r]['total'] *= $pRateDigital;
+            }
+
             $size1 = sizeof($resD);
-            for ($r=0; $r <$size1; $r++) { 
-                for ($r2=0; $r2 <sizeof($res) ; $r2++) { 
+            for ($r=0; $r < $size1; $r++) { 
+                for ($r2=0; $r2 < sizeof($res); $r2++) {
                     if ($resD[$r][$leftName.'ID'] == $res[$r2][$leftName.'ID']) {
                         $res[$r2]['total'] += $resD[$r]['total'];
 
@@ -142,15 +164,18 @@ class subRankings extends rank{
 
             $resD = array_values($resD);
 
-            for ($r=0; $r <sizeof($resD) ; $r++) { 
+            for ($r=0; $r < sizeof($resD) ; $r++) { 
                 array_push($res, $resD[$r]);
             }
 
             usort($res, array($this,'compare'));
 
-
         }elseif ($resD) {
+            for ($r=0; $r < sizeof($resD); $r++) { 
+                $resD[$r]['total'] *= $pRateDigital;
+            }
             $res = $resD;
+
         }
 
         return $res;
@@ -160,7 +185,7 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
-    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter){
+    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter=false){
         
         if ($type == "agencyGroup") {
             $name = "agency";
@@ -170,26 +195,11 @@ class subRankings extends rank{
             $name = "client";
         }
 
-        $p = new pRate();
-
-        if ($currency[0]['name'] == "USD") {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
-        }
-
         for ($y=0; $y < sizeof($years); $y++) {
             if ($secondaryFilter) {
                 $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $secondaryFilter);    
             }else{
                 $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter);
-            }
-            
-
-            if (is_array($res[$y])) {
-                for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                    $res[$y][$r]['total'] *= $pRate;
-                }
             }
         }
 

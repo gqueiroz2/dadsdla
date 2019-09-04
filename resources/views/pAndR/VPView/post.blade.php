@@ -55,7 +55,7 @@
 		<div class="row">
 			<div class="col" style="width: 100%; padding-right: 2%;">
 				<center>
-					{{$render->VP1()}}
+					{{$render->VP1($forRender)}}
 				</center>
 			</div>
 		</div>

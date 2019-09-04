@@ -48,7 +48,11 @@ class renderMarketRanking extends Render {
             				}elseif ($mtx[$n][0] == "Ranking") {
             					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." º</td>";
             				}else{
-            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                if ($mtx[$n][$m] == 0) {
+                                    echo "<td class='$color center'> - </td>";
+                                }else{
+                                    echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                }
             				}
             			}else{
             				if ($mtx[$n][0] == ucfirst($type)) {
