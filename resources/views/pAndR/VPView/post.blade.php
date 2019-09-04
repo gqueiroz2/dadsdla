@@ -63,7 +63,9 @@
 
 	<script>
 		$(document).ready(function(){
-			@for($c=0;$c<100;$c++)
+			@for($c=0;$c< sizeof($client);$c++)
+				$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
+				
 				$("#clientRF-Fy-"+{{$c}}).change(function(){
 					if ($(this).val() == "") {
 						$(this).val(0);
