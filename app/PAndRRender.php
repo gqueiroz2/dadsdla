@@ -710,6 +710,8 @@ class PAndRRender extends Render{
 
         $client = $forRender['client'];
         $fcstFullYearByClient = $forRender['fcstFullYearByClient'] ;
+        $bookingsYTDcYearByClient = $forRender['bookingsYTDcYearByClient'];
+
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";

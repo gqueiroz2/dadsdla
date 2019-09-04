@@ -21,30 +21,57 @@ class VP extends pAndR{
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
     	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo);
+        
         $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$year,$listOfClients);
+        
         $bookingsYTDcYearByClient = $this->fullYearByClient($con,$sql,"bkgYTD",$regionID,$year,$listOfClients);
         $rtr = array(   
                         "client" => $listOfClients,
                         "fcstFullYearByClient" => $fcstFullYearByClient,
-                        
+                        "bookingsYTDcYearByClient" => $bookingsYTDcYearByClient
                     );
 
         return $rtr;
 
-
     }
 
-    public function fullYearByClient($con,$sql,$kind,$regionID,$listOfClients){
-        for ($c=0; $c < sizeof($listOfClients); $c++) { 
-            $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
-                                 FROM forecast_client
-                                 WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                         ";            
-            $res[$c] = $con->query($selectSum[$c]);
-            $from = array("revenue");
-            $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+    public function fullYearByClient($con,$sql,$kind,$regionID,$year,$listOfClients){
+
+        switch ($kind) {
+            case 'fcst':
+                for ($c=0; $c < sizeof($listOfClients); $c++) { 
+                    $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
+                                         FROM forecast_client
+                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                                 ";            
+                    $res[$c] = $con->query($selectSum[$c]);
+                    $from = array("revenue");
+                    $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+                }
+                break;
+
+            case 'bkgYTD':
+                $revenue = "gross_revenue_prate";
+                for ($c=0; $c < sizeof($listOfClients); $c++) { 
+                    $sumRevenue[$c] = 0.0;
+                    $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
+                                         FROM ytd
+                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (year = \"".$year."\")                                         
+                                 ";            
+                    $res[$c] = $con->query($selectSum[$c]);
+                    $from = array("revenue");
+                    $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+                    $sumRevenue[$c] += $tmp;                    
+                }
+                break;
+            
+            default:
+                # code...
+                break;
         }
-        return $selectSum;
+        
+        return $sumRevenue;
     }
 
     public function listFCSTClients($con,$sql,$base,$fcstInfo){
