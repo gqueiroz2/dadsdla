@@ -244,6 +244,7 @@ class Render extends Model{
 
     public function source2(){
         echo "<select id='source' name='source' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select </option>";
             echo "<option value='sf'> Sales Force </option>";
             echo "<option value='db'> Saved </option>";
         echo "</select>";   
