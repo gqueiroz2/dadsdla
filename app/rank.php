@@ -225,11 +225,9 @@ class rank extends Model{
                         usort($res[$y], array($this,'compare'));
                     }
                 }elseif(is_array($resD[$y])){
-                    var_dump("antes", $resD[$y]);
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
-                    var_dump("depois", $resD[$y]);
                     $res[$y] = $resD[$y];
                 }else{
                     $res[$y] = $resD[$y];
