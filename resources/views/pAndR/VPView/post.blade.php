@@ -10,6 +10,16 @@
     		clear: left;
     		width: 100%;
     	}
+
+    	#myInput {
+		  background-position: 10px 12px; /* Position the search icon */
+		  background-repeat: no-repeat; /* Do not repeat the icon image */
+		  width: 100%; /* Full-width */
+		  font-size: 16px; /* Increase font-size */
+		  border: 1px solid #ddd; /* Add a grey border */
+		  margin-bottom: 12px; /* Add some space below the input */
+		  text-align: center;
+		}
     </style>
 @endsection
 @section('content')
@@ -62,6 +72,34 @@
 	</div>
 
 	<script>
+
+		function myFunc(){
+			var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
+
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table1 = document.getElementById("table1");
+			table2 = document.getElementById("table2");
+			tr1 = table1.getElementsByTagName("tr");
+			tr2 = table2.getElementsByTagName("tr");
+
+			for (i = 0; i < tr1.length; i++) {
+				td1 = tr1[i].getElementsByTagName("td")[0];
+				td2 = tr2[i].getElementsByTagName("td")[0];
+				if (td1 && td2) {
+					txtValue = td1.textContent || td1.innerText;
+					if (txtValue.toUpperCase().indexOf(filter)>-1) {
+						tr1[i].style.display = "";
+						tr2[i].style.display = "";
+					}else{
+						tr1[i].style.display = "none";
+						tr2[i].style.display = "none";
+					}
+				}
+			}
+		}
+
+
 		$(document).ready(function(){
 			@for($c=0;$c< sizeof($client);$c++)
 				$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
