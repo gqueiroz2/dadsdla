@@ -191,6 +191,7 @@ class subBrandRanking extends rankingBrand {
     	
         $bool = -1;
         $bool2 = -1;
+        $bool3 = -1;
 
         if (is_array($sub[0])) {
             for ($v=0; $v < sizeof($sub[0]); $v++) { 
@@ -215,18 +216,35 @@ class subBrandRanking extends rankingBrand {
                         $bool2 = 2;
                     }
                 }
-            }   
+            }
+        }
+
+        if (is_array($sub[2])) {
+            for ($v=0; $v < sizeof($sub[2]); $v++) { 
+                if ($sub[2][$v][$type] == $name) {
+                    $bool2 = 0;
+                    if ($sub[2][$v]['total'] == 0) {
+                        $bool3 = 1;
+                    }else{
+                        $bool3 = 2;
+                    }
+                }
+            }
         }
 
         if ($bool == -1 || $bool == 1) {
             if ($bool2 == -1 || $bool2 == 1) {
-                return -1;
+            	if ($bool3 == -1 || $bool3 == 1) {
+            		$res = -1;	
+            	}
             }else{
-                return $name;
+                $res = $name;
             }
         }else{
-            return $name;
+            $res = $name;
         }
+
+        return $res;
     }
 
     public function searchYearValue($name, $sub, $type, $y){
