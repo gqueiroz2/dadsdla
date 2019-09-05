@@ -49,14 +49,14 @@ class PAndRRender extends Render{
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
 
-        echo "<input type='hidden' id='salesRep' name='salesRep' value='". base64_encode(json_encode($salesRep)) ."'>";
-        echo "<input type='hidden' id='client' name='client' value='". base64_encode(json_encode($client)) ."'>";
-        echo "<input type='hidden' id='currency' name='currency' value='". base64_encode(json_encode($currency)) ."'>";
-        echo "<input type='hidden' id='currency' name='splitted' value='". base64_encode(json_encode($splitted)) ."'>";
-        echo "<input type='hidden' id='value' name='value' value='". base64_encode(json_encode($value)) ."'>";
-        echo "<input type='hidden' id='region' name='region' value='". base64_encode(json_encode($region)) ."'>";
-        echo "<input type='hidden' id='user' name='user' value='". base64_encode(json_encode($userName)) ."'>";
-        echo "<input type='hidden' id='year' name='year' value='". base64_encode(json_encode($cYear)) ."'>";
+        echo "<input type='hidden' id='salesRep' name='salesRep' value='".base64_encode(json_encode($salesRep))."'>";
+        echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
+        echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
+        echo "<input type='hidden' id='splitted' name='splitted' value='".base64_encode(json_encode($splitted))."'>";
+        echo "<input type='hidden' id='value' name='value' value='".base64_encode(json_encode($value))."'>";
+        echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
+        echo "<input type='hidden' id='user' name='user' value='".base64_encode(json_encode($userName))."'>";
+        echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
 
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>
@@ -463,12 +463,11 @@ class PAndRRender extends Render{
                 */
 
                                    
-                echo "<tr style='display:none;' id='newLine-$c'>";
+                /*echo "<tr style='display:none;' id='newLine-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 
                         }else{
-                            /*
                             echo "<td colspan='1' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;' class='smBlue'>";
                                 echo "<div class='row'>";
                                     echo "<div class='col' id='input-$c-$m' style='display:none;width:100%;'><span>P.P. (%):</span><input id='inputNumber-$c-$m' name='inputNumber-$c-$m' type='number' min='0' max='100' step='0.5' value='0' style='width:25%; background-color:transparent; text-align:right; border-style:solid; border-color: grey; border-width:1px;'></div>";
@@ -477,10 +476,10 @@ class PAndRRender extends Render{
                                 echo "</div>";
 
                             echo "</td>";
-                            */
+                            
                         }
                     }
-                echo "</tr>";
+                echo "</tr>";*/
                 
                 /* 
 
@@ -775,7 +774,7 @@ class PAndRRender extends Render{
         echo "<div class='col-2'>";
             echo "<table  style=' width:100%;  text-align:center;'>";
                 echo "<tr>";
-                    echo "<td style='width:8%; height:40px;'>&nbsp</td>";
+                    echo "<td style='width:8%; height:40px;'><input type='text' id='myInput' onkeyup=\"myFunc()\" placeholder=\"Search for clients...\"></td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:20px;' >&nbsp</td>";
@@ -932,7 +931,7 @@ class PAndRRender extends Render{
         echo "<div class='row '>";
 
         echo "<div class='col-2'>";
-            echo "<table class='temporario linked2' style='width:100%; height:400px; overflow-y:scroll; text-align:center;'>";
+            echo "<table class='temporario linked2' id='table1' style='width:100%; height:400px; overflow-y:scroll; text-align:center;'>";
                 for ($c=0; $c <sizeof($client) ; $c++) {
                     if($c%2 == 0){
                         $class = "rcBlue";
@@ -948,7 +947,7 @@ class PAndRRender extends Render{
         echo "</div>";
 
         echo "<div class='col table-responsive linked '>";
-            echo "<table class='temporario linked2' style='min-width:2615px; height:400px; width:100%; overflow-y:scroll; text-align:center; width:100%;'>";
+            echo "<table class='temporario linked2' id='table2' style='min-width:2615px; height:400px; width:100%; overflow-y:scroll; text-align:center; width:100%;'>";
                 
                 for ($c=0; $c < sizeof($client); $c++) {
                     if($c%2 == 0){
