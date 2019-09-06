@@ -75,22 +75,22 @@ class ytd extends Management{
         $table = "ytd ytd";
 
         $columns = "ytd.ID AS 'id',
-                    r.name AS 'campaignRegion',
-                    r.name AS 'Salesregion',
+                    r.name AS 'campaign_sales_office',
+                    r.name AS 'sales_representant_office',
                     b.name AS 'brand',
-                    sr.name AS 'salesRep',
+                    sr.name AS 'sales_rep',
                     cl.name AS 'client',
                     agc.name AS 'agency',
-                    c.name AS 'campaignCurrency',
+                    c.name AS 'campaign_currency',
                     ytd.year AS 'year',
                     ytd.month AS 'month',
-                    ytd.brand_feed AS 'brandFeed',
-                    ytd.client_product AS 'clientProduct',
-                    ytd.order_reference AS 'orderReference',
-                    ytd.campaign_reference AS 'campaignReference',
-                    ytd.spot_duration AS 'spotDuration',
-                    ytd.impression_duration AS 'impressionDuration',
-                    ytd.num_spot AS 'numSpotImpressions',
+                    ytd.brand_feed AS 'brand_feed',
+                    ytd.client_product AS 'client_product',
+                    ytd.order_reference AS 'order_reference',
+                    ytd.campaign_reference AS 'campaign_reference',
+                    ytd.spot_duration AS 'spot_duration',
+                    ytd.impression_duration AS 'impression_duration',
+                    ytd.num_spot AS 'num_spot',
                     ytd.".$value."_revenue AS '".$value."_revenue',
                     ytd.".$value."_revenue_prate AS '".$value."_revenue_prate'";
 
@@ -107,11 +107,11 @@ class ytd extends Management{
             $where = "";
         }
 
-        $result = $sql->sql($con, $columns, $table, $join, $where, $order_by);
+        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('campaignRegion', 'Salesregion', 'brand', 'salesRep', 'client', 'agency', 'campaignCurrency',
-                      'year', 'month', 'brandFeed', 'clientProduct', 'orderReference', 'campaignReference', 'spotDuration',
-                      'impressionDuration', 'numSpotImpressions', $value.'_revenue', 
+        $from = array('campaign_sales_office', 'sales_representant_office', 'brand', 'sales_rep', 'client', 'agency', 'campaign_currency',
+                      'year', 'month', 'brand_feed', 'client_product', 'order_reference', 'campaign_reference', 'spot_duration',
+                      'impression_duration', 'num_spot', $value.'_revenue', 
                       $value.'_revenue_prate');
 
         $to = $from;

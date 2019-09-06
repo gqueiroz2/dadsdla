@@ -11,7 +11,7 @@ class renderMQ extends Render{
     	echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>";
     		
 			echo "<tr>";
-				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Monthly : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
+				echo "<th colspan='14' class='lightBlue'><center><span style='font-size:24px;'> $region - Month : ".$form." - ".$year." (".$currency."/".strtoupper($value).")</span></center></th>";
 			echo "</tr>";
 
 			echo "<tr><td> &nbsp; </td></tr>";

@@ -222,6 +222,8 @@ class base extends Model{
             $name = "EC";
         }elseif ($region == "Bolivia") {
             $name = "BO";
+        }elseif ($region == "Puerto Rico") {
+            $name = "PR";
         }else {
             $name = false;
         }
