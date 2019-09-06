@@ -151,16 +151,16 @@ class AE extends pAndR{
             }else{
                 $div = 1;
             }
+            if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
+                for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m]/$div)."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
-            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-
-                $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m]/$div)."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
-
-                if ($con->query($update[$c][$m]) === true) {
-                    
-                }else{
-                    var_dump($con->error);
-                    return false;
+                    if ($con->query($update[$c][$m]) === true) {
+                        
+                    }else{
+                        var_dump($con->error);
+                        return false;
+                    }
                 }
             }
         }
@@ -216,16 +216,18 @@ class AE extends pAndR{
             }else{
                 $div = 1;
             }
-            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m]/$div)."\",\"".$list[$c]->clientID."\")";
+            if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
+                for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m]/$div)."\",\"".$list[$c]->clientID."\")";
 
-                $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
+                    $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
-                if ($con->query($insert[$c][$m]) === true) {
-                    
-                }else{
-                    var_dump($con->error);
-                    return false;
+                    if ($con->query($insert[$c][$m]) === true) {
+                        
+                    }else{
+                        var_dump($con->error);
+                        return false;
+                    }
                 }
             }
         }
@@ -275,13 +277,15 @@ class AE extends pAndR{
         $value = Request::get('value');
 
 
-        $select = "SELECT oppid,ID FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
 
         $result = $con->query($select);
 
-        $from = array("oppid","ID");
+        $from = array("oppid","ID","type_of_value","currency_id");
 
         $save = $sql->fetch($result,$from,$from);
+
+        var_dump($save);
 
         if (!$save) {
             $save = false;
@@ -339,13 +343,9 @@ class AE extends pAndR{
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
- 
-
-        
         $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear");
 
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
-
 
         $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear");
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
@@ -359,6 +359,25 @@ class AE extends pAndR{
         if ($save) {
             $select = array();
             $result = array();
+
+            $from = "value";
+
+            $from2 = array("sales_reps");
+
+            $select2 = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\"";
+
+            $result2 = $con->query($select2);
+
+            $salesReps = $sql->fetch($result2,$from2,$from2);
+
+            $salesRepsOR = "( f2.sales_rep_id = \"".$salesReps[0]['sales_reps']."\"";
+
+            for ($s=1; $s < sizeof($salesReps) ; $s++) { 
+                $salesRepsOR .= " OR f2.sales_rep_id = \"".$salesReps[$s]['sales_reps']."\"";
+            }
+
+            $salesRepsOR .= ")";
+
             for ($c=0; $c <sizeof($listOfClients) ; $c++) {
                 if ($splitted) {
                     if ($splitted[$c]["splitted"]) {
@@ -369,13 +388,14 @@ class AE extends pAndR{
                 }else{
                     $mul = 1;
                 }
-                $select[$c] = "SELECT value FROM forecast_client WHERE forecast_id = \"".$save["ID"]."\" AND client_id = \"".$listOfClients[$c]["clientID"]."\" ORDER BY month";
 
-                $result[$c] = $con->query($select[$c]);
+                for ($m=0; $m <12 ; $m++) { 
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR";
+                    $result[$c][$m] = $con->query($select[$c][$m]);
+                    $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
+                }
 
-                $from = array("value");
 
-                $saida[$c] = $sql->fetch($result[$c],$from,$from);
                 if ($saida[$c]) {
                     for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
                         $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value'])*$mul;                
@@ -383,7 +403,7 @@ class AE extends pAndR{
                 }else{
                     for ($m=0; $m <12; $m++) { 
                         $rollingFCST[$c][$m] = 0;
-                    }
+                    }    
                 }
                 
                 
@@ -447,9 +467,6 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
-
-
-
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -558,13 +575,15 @@ class AE extends pAndR{
 
     public function addClosed($fcstAmountByStage,$rollingFCST){
 
+        $fechado = date('n') - 1;
+
         for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
             }
 
-            for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+            for ($m=0; $m <$fechado ; $m++) { 
                 $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
             }
         }
@@ -787,6 +806,7 @@ class AE extends pAndR{
         return $rtr;
         
     }
+
     public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
 
         if($currency == "USD"){
