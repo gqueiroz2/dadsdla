@@ -58,13 +58,6 @@
 					{{$render->salesRep2()}}
 				</div>
 				<div class="col">
-					<label class="labelLeft"><span class="bold"> Source: </span></label>
-						@if($errors->has('source'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->source2()}}
-				</div>
-				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
@@ -141,20 +134,7 @@
 						var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
 						$("#totalClient-"+{{$c}}).val(totalClient);
 						Temp3 = handleNumber(totalClient);
-						var tmp2 = 0;
-						@for($m2=0;$m2<16;$m2++)
-							var temp2 = handleNumber($("#clientRF-"+{{$c}}+"-"+{{$m2}}).val())/handleNumber($("#totalClient-"+{{$c}}).val());
-							if (isNaN(temp2)) {
-								temp2 = parseFloat('0');
-							}
-							temp2 = Comma(temp2*100);
-							$("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val(temp2);
-							if({{$m2}} != 3 && {{$m2}} != 7 && {{$m2}} != 11 && {{$m2}} != 15){
-								tmp2 += handleNumber($("#inputNumber-"+{{$c}}+"-"+{{$m2}}).val());
-							}
-						@endfor
-						tmp2 = tmp2.toFixed(2);
-						if (Temp3.toFixed(2) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(2) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
+						if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
 							$("#client-"+{{$c}}).css("background-color","red");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
@@ -341,7 +321,7 @@
 			@endfor
 		});
 		function handleNumber(number){
-			for (var i = 0; i < number.length/3; i++) {
+			for (var i = 0; i < number.length; i++) {
 				number = number.replace(",","");
 			}
 			number = parseFloat(number);

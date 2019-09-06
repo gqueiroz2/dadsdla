@@ -273,22 +273,19 @@ class AE extends pAndR{
         $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
         $value = Request::get('value');
-        $source = Request::get('source');
 
 
-        if ($source == 'db') {
-            $select = "SELECT oppid,ID FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
+        $select = "SELECT oppid,ID FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
 
-            $result = $con->query($select);
+        $result = $con->query($select);
 
-            $from = array("oppid","ID");
+        $from = array("oppid","ID");
 
-            $save = $sql->fetch($result,$from,$from);
+        $save = $sql->fetch($result,$from,$from);
 
-            if (!$save) {
-                return false;
-            }
-
+        if (!$save) {
+            $save = false;
+        }else{
             $save = $save[0];
         }
 
@@ -359,7 +356,7 @@ class AE extends pAndR{
 
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
-        if ($source == "db") {
+        if ($save) {
             $select = array();
             $result = array();
             for ($c=0; $c <sizeof($listOfClients) ; $c++) {
@@ -379,9 +376,16 @@ class AE extends pAndR{
                 $from = array("value");
 
                 $saida[$c] = $sql->fetch($result[$c],$from,$from);
-                for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                    $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value'])*$mul;                
+                if ($saida[$c]) {
+                    for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
+                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value'])*$mul;                
+                    }
+                }else{
+                    for ($m=0; $m <12; $m++) { 
+                        $rollingFCST[$c][$m] = 0;
+                    }
                 }
+                
                 
             }
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -632,6 +636,7 @@ class AE extends pAndR{
         $return = array();
 
         $test = intval( date('n') );
+        //var_dump($matrix);
 
         if ($test < 4) {
             $test++;
@@ -656,11 +661,11 @@ class AE extends pAndR{
                 }
 
                 for ($m=0; $m <sizeof($matrix[$c]); $m++) {
-                    if ($test > ($m+1)) {
-                        $return[$m] += $matrix[$c][$m];
-                    }else{
+                    //if ($test > ($m+1)) {
+                    //    $return[$m] += $matrix[$c][$m];
+                    //}else{
                         $return[$m] += $matrix[$c][$m]/$div;
-                    }
+                    //}
                 }
             }
         $return[16] = $return[3] + $return[7] + $return[11] + $return[15];
