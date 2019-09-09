@@ -41,16 +41,22 @@ class AE extends pAndR{
         $tableFCSTClient = "forecast_client";
         $tableFCSTSalesRep = "forecast_sales_rep";
 
-        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
 
         $from = array("ID");
 
         $result = $con->query($select);
 
-        $id = $sql->fetch($result,$from,$from);
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
         if ($id) {
-            $update = "UPDATE $tableFCST SET read_q = \"".$read."\", last_modify_date = \"".$date."\", last_modify_time = \"".$time."\" WHERE oppid = \"".$oppid."\"";
+            $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
+                                            last_modify_date = \"".$date."\", 
+                                            last_modify_time = \"".$time."\", 
+                                            oppid = \"".$oppid."\",
+                                            currency_id = \"".$currency['id']."\", 
+                                            year = \"".$year."\", 
+                                            type_of_value = \"".$value."\" WHERE ID = \"".$id."\"";
             
             if($con->query($update) === true){
 
@@ -59,9 +65,9 @@ class AE extends pAndR{
                 return false;
             }
 
-            $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
+            $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$salesRep,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
 
-            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted);
+            $updateFCSTClient = $this->updateFCSTClient($con,$salesRep,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted);
 
             return "Updated";
 
@@ -105,10 +111,10 @@ class AE extends pAndR{
         }
     }
 
-    public function updateFCSTSalesRep($con,$oppid,$manualEstimantion,$table){
+    public function updateFCSTSalesRep($con,$salesRep,$manualEstimantion,$table){
         $sql = new sql();
 
-        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
 
         $from = array("ID");
 
@@ -128,11 +134,11 @@ class AE extends pAndR{
         }
     }
 
-    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list,$splitted){
+    public function updateFCSTClient($con,$salesRep,$manualEstimantion,$table,$list,$splitted){
 
         $sql = new sql();
 
-        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
 
         $from = array("ID");
 
@@ -277,7 +283,7 @@ class AE extends pAndR{
         $value = Request::get('value');
 
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time ASC";
 
         $result = $con->query($select);
 
@@ -285,12 +291,32 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
 
-        var_dump($save);
-
         if (!$save) {
             $save = false;
+            $valueCheck = false;
+            $currencyCheck = false;
         }else{
             $save = $save[0];
+            if ($currencyID == $save['currency_id']) {
+                $currencyCheck = false;
+            }else{
+                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
+                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);
+                $currencyCheck = true;
+            }
+            if ($value ==  strtolower($save["type_of_value"])) {
+                $valueCheck = false;
+            }else{
+                $valueCheck = true;
+                $tmp = array($regionID);
+                $mult = $base->getAgencyComm($con,$tmp);
+                if ($value == "net") {
+                    $multValue = (100 - $mult)/100;
+                }elseif($value == "gross"){
+                    $multValue = 1/(1-($mult/100));
+                }
+            }
+
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
@@ -343,11 +369,11 @@ class AE extends pAndR{
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
         
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear");
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
 
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear");
+        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
@@ -406,6 +432,17 @@ class AE extends pAndR{
                     }    
                 }
                 
+                if ($valueCheck) {
+                    for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                    }
+                }
+
+                if ($currencyCheck) {
+                    for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+                        $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                    }
+                }
                 
             }
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -1141,7 +1178,6 @@ class AE extends pAndR{
                                             FROM $table
                                             WHERE (client_id = \"".$clients[$c]['clientID']."\")
                                             AND (month = \"".$month[$m][1]."\")
-                                            AND (sales_rep_id = \"".$salesRepID."\")
                                             AND (year = \"".$year."\")
 
                                           ";  
@@ -1153,7 +1189,6 @@ class AE extends pAndR{
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
-                                            AND (sales_rep_id = \"".$salesRepID."\")
                                             ";
 
                         $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
@@ -1252,12 +1287,12 @@ class AE extends pAndR{
     }
 
 
-    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear){
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear){
 
     	if($currency == "USD"){
     		$div = 1;
     	}else{
-    		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+    		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
     	}
 
     	if($value == "gross"){
@@ -1274,66 +1309,36 @@ class AE extends pAndR{
 
     	for ($c=0; $c < sizeof($clients); $c++) { 
     		  
-            if($splitted){
-                if($splitted[$c]['splitted']){
-                    $factor = 2; 
-                }else{
-                    $factor = 1; 
-                }
-            }else{
-                $factor = 1;
-            }
-
             for ($m=0; $m < sizeof($month); $m++) {     			
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
-                if($typeOfYear == "cYear"){
-    			    $select[$c][$m] = "
-    								SELECT SUM($ytdColumn) AS sumValue
-    								FROM $table
-    								WHERE (client_id = \"".$clients[$c]['clientID']."\")
-    								AND (month = \"".$month[$m][1]."\")
-                                    AND (sales_rep_id = \"".$salesRep."\")
-    								AND (year = \"".$year."\")
+                $select[$c][$m] = "
+                                SELECT SUM($ytdColumn) AS sumValue
+                                FROM $table
+                                WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                AND (month = \"".$month[$m][1]."\")                                    
+                                AND (year = \"".$year."\")
 
-    			                  ";
-                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
-                                    FROM $tableFW
-                                    WHERE (client_id = \"".$clients[$c]["clientID"]."\")
-                                    AND (month = \"".$month[$m][1]."\")
-                                    AND (sales_rep_id = \"".$salesRep."\")
-                                    AND (year = \"".$year."\")
-                                    ";
-                }else{
-                    $select[$c][$m] = "
-                                    SELECT SUM($ytdColumn) AS sumValue
-                                    FROM $table
-                                    WHERE (client_id = \"".$clients[$c]['clientID']."\")
-                                    AND (month = \"".$month[$m][1]."\")                                    
-                                    AND (year = \"".$year."\")
-
-                                  ";
-                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
-                                    FROM $tableFW
-                                    WHERE (client_id = \"".$clients[$c]["clientID"]."\")
-                                    AND (month = \"".$month[$m][1]."\")
-                                    AND (year = \"".$year."\")
-                                    ";
-                }                   
+                              ";
+                $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                FROM $tableFW
+                                WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                AND (month = \"".$month[$m][1]."\")
+                                AND (year = \"".$year."\")
+                                ";
 
     			$res[$c][$m] = $con->query($select[$c][$m]);
                 $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
 
     			$from = array("sumValue");
 
-    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$factor;	    			
-                
-                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$factor;                    
+    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;	    			
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;                    
 
                 if( !is_null($revFW[$c][$m]) ){
                     
-                    $rev[$c][$m] += ( $revFW[$c][$m] * $div );
+                    $rev[$c][$m] += ( $revFW[$c][$m] );
                     
                 }
 

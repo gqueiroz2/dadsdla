@@ -9,6 +9,26 @@ use App\sql;
 
 class base extends Model{
 
+    protected $agencyComm = array("Argentina" => 7.5150,
+                                    "Brazil" => 20.0000,
+                                    "Mexico" => 0.9826,
+                                    "Colombia" => 9.8631,
+                                    "Panama" => 13.9754,
+                                    "Miami" => 4.1349,
+                                    "New York International" => 2.9584,
+                                    "Chile" => 0,
+                                    "Peru" => 0,
+                                    "Venezuela" => 0,
+                                    "Dominican Republic" => 0,
+                                    "Ecuador" => 0,
+                                    "Bolivia" => 0,
+                                    "US Hispanic" => 0,
+                                    "Puerto Rico" => 0,
+                                    "Europe" => 0,
+                                    "Gurugram" => 0,
+                                    "Singapore" => 0,
+                                    "London" => 0);
+
     public function superUnique($array,$key){
        $temp_array = [];
        foreach ($array as &$v) {
@@ -18,6 +38,16 @@ class base extends Model{
        $array = array_values($temp_array);
        return $array;
 
+    }
+
+    public function getAgencyComm($con,$regionID){
+        $r = new region();  
+
+        $region = $r->getRegion($con,$regionID)[0]["name"];
+
+        $return = $this->agencyComm[$region];
+
+        return $return;
     }
  
     public function dateToMonth($date){
