@@ -10,6 +10,7 @@ use App\salesRep;
 use App\base;
 use App\sql;
 use App\pRate;
+
 class AE extends pAndR{
     
     public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted){
@@ -76,8 +77,6 @@ class AE extends pAndR{
                         )";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
-
-
 
             $values = "(
                         \"".$oppid."\",
@@ -276,7 +275,6 @@ class AE extends pAndR{
         $currencyID = Request::get('currency');
         $value = Request::get('value');
 
-
         $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" ORDER BY last_modify_date, last_modify_time DESC";
 
         $result = $con->query($select);
@@ -403,7 +401,7 @@ class AE extends pAndR{
                 }else{
                     for ($m=0; $m <12; $m++) { 
                         $rollingFCST[$c][$m] = 0;
-                    }    
+                    }
                 }
                 
                 
@@ -1409,7 +1407,7 @@ class AE extends pAndR{
 
     	for ($m=0; $m < sizeof($mergeTarget); $m++) { // SIZE OF MONTH
     		for ($c=0; $c < sizeof($plan); $c++) { //SIZE OF BRAND
-    		$mergeTarget[$m] += $plan[$c][$m];    			
+    		  $mergeTarget[$m] += $plan[$c][$m];    			
     		}
     	}
 

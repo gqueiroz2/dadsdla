@@ -92,7 +92,7 @@ class base extends Model{
             "Chile"=>array("Chile"), 
             "Peru"=>array("Peru"), 
             "LATAM"=>array("LATAM"),  
-            "Venezuela"=>array("Venezuela"),  
+            "Venezuela"=>array("Venezuela"),
             "Panama"=>array("Panama"),  
             "New York International"=>array("New York International"),  
             "Dominican Republic"=>array("Dominican Republic"),  
