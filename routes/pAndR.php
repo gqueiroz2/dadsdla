@@ -40,9 +40,15 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('save','AEController@save')
 										->name('AESave');
 
-
 		});
 
+		Route::group(['prefix'=>'VPMonthReport'],function(){
+			
+			Route::get('/','VPMonthController@get')
+										->name('VPMonthGet');
+			Route::post('/','VPMonthController@post')
+										->name('VPMonthPost');
+		});
 		
 	});
 	Route::group(['prefix'=>'ajax'],function(){

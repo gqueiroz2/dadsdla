@@ -135,7 +135,7 @@ class VP extends pAndR{
 
         switch ($kind) {
             case 'ytd':
-            
+
                 $revenue = "gross_revenue_prate";
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
                     $sumRevenue[$c] = 0.0;

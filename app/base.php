@@ -122,7 +122,7 @@ class base extends Model{
             "Chile"=>array("Chile"), 
             "Peru"=>array("Peru"), 
             "LATAM"=>array("LATAM"),  
-            "Venezuela"=>array("Venezuela"),  
+            "Venezuela"=>array("Venezuela"),
             "Panama"=>array("Panama"),  
             "New York International"=>array("New York International"),  
             "Dominican Republic"=>array("Dominican Republic"),  
@@ -252,6 +252,8 @@ class base extends Model{
             $name = "EC";
         }elseif ($region == "Bolivia") {
             $name = "BO";
+        }elseif ($region == "Puerto Rico") {
+            $name = "PR";
         }else {
             $name = false;
         }
