@@ -38,6 +38,8 @@ class pRate extends Management{
 
 	public function getPRateByRegionAndYear($con,$region,$year){
 		
+		$sql = new sql();
+		
 		$where = "";
 
 		if($region && $year){
@@ -69,6 +71,29 @@ class pRate extends Management{
 		}
 		return $pRate;
 	}
+
+	public function getPrateByCurrencyAndYear($con,$currency,$year){
+		$sql = new sql();
+		
+		$where = "WHERE (currency_id = \"".$currency."\") AND (year = \"".$year."\")";
+
+		$table = "p_rate";
+
+		$columns = "value";
+
+		$from = array("value");
+
+		$select = "SELECT $columns FROM $table $where";
+
+		$result = $con->query($select);
+		$pRate = doubleval($sql->fetch($result,$from,$from)[0]['value']);
+
+		if ($pRate == 0) {
+			$pRate = 1;
+		}
+		return $pRate;
+	}
+
 
 	public function addPRate($con){
 		$sql = new sql();
@@ -155,7 +180,7 @@ class pRate extends Management{
 		$table = "currency c";
 		$where = "";
 		if($name){
-			$name .= "WHERE c.name = \"$name\"";
+			$where .= "WHERE c.name = \"$name\"";
 		}
 		$columns = "c.ID AS 'id',
 					c.name AS 'name',
@@ -254,5 +279,6 @@ class pRate extends Management{
 
 		return $bool;
 	}
+
 
 }

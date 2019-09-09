@@ -13,7 +13,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
