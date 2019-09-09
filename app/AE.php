@@ -285,8 +285,6 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
 
-        var_dump($save);
-
         if (!$save) {
             $save = false;
         }else{
@@ -432,7 +430,7 @@ class AE extends pAndR{
             $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
-
+            
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $toRollingFCST = $fcst['fcstAmount'];
@@ -446,6 +444,7 @@ class AE extends pAndR{
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
 
             $lastRollingFCST = $rollingFCST;
+            
         }
 
 
@@ -825,7 +824,8 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
-            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c]); // MONTHS OF THE FCST
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+            
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID);
@@ -842,6 +842,7 @@ class AE extends pAndR{
                 $fcstAmountByStage[$c] = false;
                 $fcstAmount[$c] = false;
             }
+            
         }
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
@@ -1023,10 +1024,10 @@ class AE extends pAndR{
         return $share;
     }
 
-    public function periodOfOpp($opp){
+    public function periodOfOpp($opp,$year){
         if($opp){
             for ($o=0; $o < sizeof($opp); $o++){                 
-                $period[$o] = $this->monthOPP($opp[$o]);       
+                $period[$o] = $this->monthOPP($opp[$o],$year);       
             }
         }else{
             $period = false;
@@ -1037,26 +1038,46 @@ class AE extends pAndR{
         return $period;
     }
 
-    public function monthOPP($opp){
+    public function monthOPP($opp,$year){
+        
         $start = intval( $opp['fromDate'] );
         $end = intval( $opp['toDate'] );
-        $month = array();
-        for ($m = $start; $m <= $end; $m++) { 
-            array_push($month, $m);
-        }
+
+        $yearStart = intval( $opp['yearFrom'] );
+        $yearEnd = intval( $opp['yearTo'] );
+
+        if($yearStart == $yearEnd){
+            $month = array();
+            for ($m = $start; $m <= $end; $m++) { 
+                array_push($month, $m);
+            }   
+        }else{
+            $month = false;
+            if($year == $yearStart){
+                $month = array();
+                for ($m = $start; $m <= 12; $m++) { 
+                    array_push($month, $m);
+                }    
+            }else{
+                $month = array();
+                for ($m = 1; $m <= $end; $m++) { 
+                    array_push($month, $m);
+                }
+            }
+        }        
 
         $month = $this->matchMonthWithArray($month);
-
+        
         return $month;
 
     }
 
     public function matchMonthWithArray($monthOPP){
-
         $base = new base();
 
         $month = $base->month;
         $monthWQ = $base->monthWQ;
+        
         for ($m=0; $m < sizeof($monthOPP); $m++) { 
             for ($o=0; $o < sizeof($month); $o++) { 
                 if($monthOPP[$m] == $month[$o][1]){
@@ -1073,16 +1094,17 @@ class AE extends pAndR{
             }
         }
         return $pivot;
+        
     }
 
 
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
         
-        $from = array($sfColumn,'from_date','to_date','stage','oppid','salesRepOwner');
-        $to = array("sumValue",'fromDate','toDate','stage','oppid','salesRepOwner');
+        $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
+        $to = array("sumValue",'fromDate','toDate','yearFrom','yearTo','stage','oppid','salesRepOwner');
         if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
                 $select = "
-                                SELECT oppid, from_date , to_date, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
+                                SELECT oppid, from_date , to_date, year_from, year_to, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                                 FROM sf_pr
                                 WHERE (client_id = \"".$clients['clientID']."\")
                                 AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
@@ -1093,7 +1115,7 @@ class AE extends pAndR{
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
-                            SELECT oppid, from_date , to_date, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
+                            SELECT oppid, from_date , to_date,year_from, year_to,stage , stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )

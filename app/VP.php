@@ -23,7 +23,7 @@ class VP extends pAndR{
         $currentMonth = intval( date('m') );
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
-    	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo);
+    	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients);
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients);
@@ -46,6 +46,38 @@ class VP extends pAndR{
 
         $bookingscYTD = $this->consolidadeColumn($bookingscYTDByClient);
         $bookingspYTD = $this->consolidadeColumn($bookingspYTDByClient);
+        
+        $varAbsYTD = $this->subArrays(array($bookingscYTD),array($bookingspYTD))[0];
+        $varPerYTD = $this->varPer(array($bookingscYTD),array($bookingspYTD))[0];
+        
+        $fcstcMonth = $this->consolidadeColumn($fcstcMonthByClient);
+        $bookingscMonth = $this->consolidadeColumn($bookingscMonthByClient);
+        $totalcYearMonth = $this->consolidadeColumn($totalcYearMonthByClient);
+        $bookingspMonth = $this->consolidadeColumn($bookingspMonthByClient);
+
+        $varAbscMonth = $this->subArrays(array($totalcYearMonth),array($bookingspMonth))[0];
+        $varPercMonth = $this->varPer(array($totalcYearMonth),array($bookingspMonth))[0];
+
+        $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
+        $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
+
+        $closedFullYear = $this->consolidadeColumn($closedFullYearByClient);
+        $fcstFullYear = $this->consolidadeColumn($fcstFullYearByClient);
+
+
+
+        $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
+        $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
+        $bookedPercentageFullYear = $this->consolidadeColumn($bookedPercentageFullYearByClient);
+        $totalFullYear = $this->consolidadeColumn($totalFullYearByClient);      
+
+        $bookingsOverclosed = $this->varPer(array($bookingscYear ),array($closedFullYear))[0];
+        $closedFullYearPercentage = $this->varPer(array($closedFullYear ),array($totalFullYear))[0];
+        $bookingscYearPercentage = $this->varPer(array($bookingscYear),array($totalFullYear))[0];
+        $fcstFullYearPercentage = $this->varPer(array($fcstcMonth),array($totalFullYear))[0];
+
+        $varAbsFullYear = $this->subArrays( array($totalFullYear) , array($bookingspYear) )[0];
+        $varPerFullYear = $this->varPer(array($totalFullYear),array($bookingspYear))[0];
 
         $rtr = array(   
                         "client" => $listOfClients,
@@ -71,6 +103,33 @@ class VP extends pAndR{
 
                         "bookingscYTD" => $bookingscYTD,
                         "bookingspYTD" => $bookingspYTD,
+                        "varAbsYTD" => $varAbsYTD,
+                        "varPerYTD" => $varPerYTD,
+
+                        "fcstcMonth" => $fcstcMonth,
+                        "bookingscMonth" => $bookingscMonth,
+                        "totalcYearMonth" => $totalcYearMonth,
+                        "bookingspMonth" => $bookingspMonth,
+
+                        "varAbscMonth" => $varAbscMonth,
+                        "varPercMonth" => $varPercMonth,
+
+                        "closedFullYear" => $closedFullYear,
+                        "fcstFullYear" => $fcstFullYear,
+                        "bookingscYear" => $bookingscYear,
+                        "bookingspYear" => $bookingspYear,
+                        "bookedPercentageFullYear" => $bookedPercentageFullYear,
+                        "totalFullYear" => $totalFullYear,
+
+                        "fcstFullYearPercentage" => $fcstFullYearPercentage,
+
+                        "varAbsFullYear" => $varAbsFullYear,
+                        "varPerFullYear" => $varPerFullYear,
+
+                        "bookingsOverclosed" => $bookingsOverclosed,
+                        "closedFullYearPercentage" => $closedFullYearPercentage,
+                        "bookingscYearPercentage" => $bookingscYearPercentage,
+                        "fcstFullYearPercentage" => $fcstFullYearPercentage
 
                     );
 
@@ -118,13 +177,13 @@ class VP extends pAndR{
 
         $string = "";
 
-        for ($m=1; $m <= $cMonth; $m++) { 
+        for ($m=1; $m < $cMonth; $m++) { 
             $string .= $m;
-            if($m != $cMonth){
+            if($m != ($cMonth-1)){
                 $string .= ",";
             }
         }
-
+        //var_dump($string);
         return $string;
 
     }
@@ -249,7 +308,7 @@ class VP extends pAndR{
         return $sumRevenue;
     }
 
-    public function listFCSTClients($con,$sql,$base,$fcstInfo){
+    public function listFCSTClients($con,$sql,$base,$fcstInfo,$regionID){
     	$from = array("clientID","client");
     	for ($f=0; $f < sizeof($fcstInfo); $f++) { 
 
@@ -265,14 +324,41 @@ class VP extends pAndR{
     		$listC[$f] = $sql->fetch($res[$f],$from,$from);
     	}
 
-    	$cc = 0;
+        $selectYTD = "SELECT DISTINCT c.name AS 'client',
+                          c.ID AS 'clientID'
+                    FROM ytd y
+                    LEFT JOIN client c ON c.ID = y.client_id
+                    WHERE (sales_representant_office_id = \"".$regionID."\")
+                  ";
+        
+        $resYTD = $con->query($selectYTD);
 
+        $listCYTD = $sql->fetch($resYTD,$from,$from);
+
+        $selectFW = "SELECT DISTINCT c.name AS 'client',
+                          c.ID AS 'clientID'
+                    FROM fw_digital y
+                    LEFT JOIN client c ON c.ID = y.client_id
+                    WHERE (sales_representant_office_id = \"".$regionID."\")
+                  ";
+        
+        $resFW = $con->query($selectFW);
+
+        $listCFW = $sql->fetch($resFW,$from,$from);
+
+    	$cc = 0;
     	for ($c=0; $c < sizeof($listC); $c++) { 
     		for ($d=0; $d < sizeof($listC[$c]); $d++) { 
     			$list[$cc] = $listC[$c][$d];
     			$cc++; 
     		}
     	}
+
+        for ($d=0; $d < sizeof($listCYTD); $d++) { 
+            $list[$cc] = $listCYTD[$d];
+            $cc++;
+        }
+
 
         $list = $base->superUnique($list,'clientID');
 
