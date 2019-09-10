@@ -334,7 +334,7 @@ class AE extends pAndR{
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear);
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if($regionName == "Brazil"){
             $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
@@ -1435,7 +1435,7 @@ class AE extends pAndR{
         return ($a['clientName'] < $b['clientName']) ? -1 : 1;
     }
 
-    public function listClientsByAE($con,$sql,$salesRepID,$cYear){
+    public function listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID){
 
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
@@ -1444,6 +1444,7 @@ class AE extends pAndR{
     				FROM sf_pr s
     				LEFT JOIN client c ON c.ID = s.client_id
     				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
+                    AND ( region_id = \"".$regionID."\")
     				ORDER BY 1
     	       ";   	
     	$resSF = $con->query($sf);
@@ -1454,8 +1455,10 @@ class AE extends pAndR{
     				   c.ID AS 'clientID'
     				FROM ytd y
     				LEFT JOIN client c ON c.ID = y.client_id
+                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
     				AND (y.year = \"$cYear\" )
+                    AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";
     	$resYTD = $con->query($ytd);
