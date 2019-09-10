@@ -76,6 +76,7 @@
 								<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
 							</div>
 						</li>
+						@if($userLevel != 'SU' || $userLevel != 'L0' || $userLevel != 'L1' || $userLevel != 'L3' || $userLevel != 'L4' )
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -84,6 +85,7 @@
 								<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
 							</div>
 						</li>
+						@endif
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
