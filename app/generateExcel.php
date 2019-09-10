@@ -13,12 +13,12 @@ use App\digital;
 
 class generateExcel extends Model {
     
-	/*public function month($sheet, $mtx, $brands, $months, $currency, $value, $year, $form, $region){
+	public function month($sheet, $mtx, $brands, $currency, $value, $year, $form, $region){
 
 		$startLetter = 'A';
 		$letter = $startLetter;
 
-		$head = $region."- Monthly : ".$form." - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
+		$head = $region."- Month : ".$form." - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
 
 		$sheet->setCellValue($letter.'1', $head);
 		$sheet->getStyle($letter.'1')->getFont()->setSize(20);
@@ -42,10 +42,17 @@ class generateExcel extends Model {
 		        ],
 		    ],
 		];
-		
+
+		foreach ($mtx[0][0] as $key => $val) {
+            $sheet->setCellValue($letter.'3', $key);
+            $sheet->getStyle($letter.'3')->applyFromArray($headStyle);
+            $letter++;    
+        }
+
+        $letter = $startLetter;
 
 		return $sheet;
-	}*/
+	}
 
 	public function selectDataMonth($con, $region, $year, $brands, $form, $currency, $value){
 		

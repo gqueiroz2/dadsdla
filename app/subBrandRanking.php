@@ -174,16 +174,18 @@ class subBrandRanking extends rankingBrand {
 
     public function searchGroupValue($name, $sub){
     	
-    	for ($s=0; $s < sizeof($sub); $s++) { 
-    		for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) { 
-    			if ($name == $sub[$s][$s2]['agency']) {
-    				if ($sub[$s][$s2]['agencyGroup'] == "Others") {
-    					return "-";
-    				}else{
-    					return $sub[$s][$s2]['agencyGroup'];
-    				}
-    			}
-    		}
+    	for ($s=0; $s < sizeof($sub); $s++) {
+            if (is_array($sub[$s])) {
+                for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) {
+                    if ($name == $sub[$s][$s2]['agency']) {
+                        if ($sub[$s][$s2]['agencyGroup'] == "Others") {
+                            return "-";
+                        }else{
+                            return $sub[$s][$s2]['agencyGroup'];
+                        }
+                    }
+                }   
+            }
     	}
     }
 

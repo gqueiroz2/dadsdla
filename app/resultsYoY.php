@@ -42,8 +42,7 @@ class resultsYoY extends results {
 
         for ($i = 0; $i < sizeof($brands); $i++) {
 
-            $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i],
-                                                $months, $year, $brands[$i], $source);
+            $matrix[$i] = $this->assembler($lines[2][$i], $lines[1][$i], $lines[0][$i], $months, $year, $brands[$i], $source);
         }
 
         if (sizeof($brands) > 1) {

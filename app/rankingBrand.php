@@ -119,6 +119,10 @@ class rankingBrand extends rank{
 							$check = true;
 							$sum += $res[$y][$r]['total'];
 							unset($res[$y][$r]);
+						}elseif ($res[$y][$r]['brand'] == 'ONL-G9') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
 						}elseif ($res[$y][$r]['brand'] == 'VOD') {
 							$check = true;
 							$sum += $res[$y][$r]['total'];
@@ -129,10 +133,17 @@ class rankingBrand extends rank{
 					if ($check) {
 						$res[$y] = array_values($res[$y]);
 
+						$has = false;
+
 						for ($r=0; $r < sizeof($res[$y]); $r++) { 
 							if ($res[$y][$r]['brand'] == 'ONL') {
+								$has = true;
 								$res[$y][$r]['total'] = $sum;
 							}
+						}
+
+						if (!$has) {
+							array_push($res[$y], array('brand' => 'ONL', 'total' => $sum));
 						}
 					}	
 				}
@@ -363,7 +374,11 @@ class rankingBrand extends rank{
 			array_push($mtx[5], $targetP);
 			array_push($mtx[6], $pClosedP);
 
-			$val = ($closed / $target)*100;
+			if ($closed == 0 || $target == 0) {
+				$val = 0;
+			}else{
+				$val = ($closed / $target)*100;
+			}
 			array_push($mtx[7], $val);
 
 			$val = ($closed - $target);

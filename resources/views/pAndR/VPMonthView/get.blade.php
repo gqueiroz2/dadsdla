@@ -13,7 +13,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
@@ -29,26 +29,12 @@
 					@endif
 				</div>
 				<div class="col">
-					<label class='labelLeft'><span class="bold">Year:</span></label>
-					@if($errors->has('year'))
-						<label style="color: red;">* Required</label>
-					@endif
-					{{$render->year()}}
-				</div>
-				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
 					@endif
 					{{$render->currency($currency)}}
 				</div>	
-				<div class="col">
-					<label class="labelLeft"><span class="bold"> Value: </span></label>
-						@if($errors->has('value'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->value2()}}
-				</div>
 				<div class="col">
 					<label class='labelLeft'> &nbsp; </label>
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
