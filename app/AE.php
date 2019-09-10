@@ -453,7 +453,7 @@ class AE extends pAndR{
 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
-            $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
+            $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
@@ -464,7 +464,7 @@ class AE extends pAndR{
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
 
         }else{
-            $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0]);//Ibms meses fechados e fw total
+            $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
             
@@ -1165,7 +1165,7 @@ class AE extends pAndR{
 
     }
 
-    public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID){
+    public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
         $currentYear = intval(date('Y'));
         $currentMonth = intval( date("m") );
 
@@ -1185,7 +1185,17 @@ class AE extends pAndR{
 
     	$table = "ytd";
 
-    	for ($c=0; $c < sizeof($clients); $c++) { 
+    	for ($c=0; $c < sizeof($clients); $c++) {
+            if ($splitted) {
+                if ($splitted[$c]['splitted'] == true) {
+                    $mult = 2;
+                }else{
+                    $mult = 1;
+                }
+            }else{
+                $mult = 1;
+            }
+
     		for ($m=0; $m < sizeof($month); $m++) {     			
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
@@ -1204,7 +1214,7 @@ class AE extends pAndR{
                                             AND (sales_rep_id = \"".$salesRepID."\")
                                           ";  
                         $res[$c][$m] = $con->query($select[$c][$m]);
-                        $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;
+                        $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div*$mult;
 
                         $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                             FROM fw_digital
@@ -1215,7 +1225,7 @@ class AE extends pAndR{
                                             ";
 
                         $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
-                        $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div; 
+                        $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div*$mult; 
 
                     }else{
                         $revACT[$c][$m] = 0.0;
