@@ -315,7 +315,7 @@ class VP extends pAndR{
     		                      c.name AS 'client'
     		                    FROM forecast_client fc
     		                    LEFT JOIN client c ON c.ID = fc.client_id
-    							WHERE(forecast_id = \"".$fcstInfo[$f]['ID']."\")
+    							WHERE(forecast_id = \"".$fcstInfo[$f]['ID']."\")                                
     							ORDER BY client
 
     		              ";
@@ -328,6 +328,7 @@ class VP extends pAndR{
                     FROM ytd y
                     LEFT JOIN client c ON c.ID = y.client_id
                     WHERE (sales_representant_office_id = \"".$regionID."\")
+                    AND (sales_representant_office_id = \"".$regionID."\")
                   ";
         
         $resYTD = $con->query($selectYTD);
@@ -338,7 +339,7 @@ class VP extends pAndR{
                           c.ID AS 'clientID'
                     FROM fw_digital y
                     LEFT JOIN client c ON c.ID = y.client_id
-                    WHERE (sales_representant_office_id = \"".$regionID."\")
+                    WHERE (region_id = \"".$regionID."\")
                   ";
         
         $resFW = $con->query($selectFW);
@@ -362,8 +363,11 @@ class VP extends pAndR{
             $cc++;
         }
 
+        var_dump($list);
 
         $list = $base->superUnique($list,'clientID');
+
+        var_dump($list);
         usort($list, array($this,'orderClient'));
 
 	    return $list;
