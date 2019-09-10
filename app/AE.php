@@ -375,7 +375,7 @@ class AE extends pAndR{
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
-        
+
         $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
 
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
@@ -1201,7 +1201,7 @@ class AE extends pAndR{
                                             WHERE (client_id = \"".$clients[$c]['clientID']."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
-
+                                            AND (sales_rep_id = \"".$salesRepID."\")
                                           ";  
                         $res[$c][$m] = $con->query($select[$c][$m]);
                         $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;
@@ -1211,6 +1211,7 @@ class AE extends pAndR{
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
+                                            AND (sales_rep_id = \"".$salesRepID."\")
                                             ";
 
                         $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
@@ -1284,12 +1285,13 @@ class AE extends pAndR{
                                 FROM ytd
                                 WHERE  (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
-                                AND (sales_rep_id = \"".$salesRep[0]."\")";
+                                AND (sales_rep_id = \"".$salesRep."\")";
+
             $selectFW[$m] = "SELECT SUM($fwColumn) AS sumValue 
                                 FROM fw_digital
                                 WHERE (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
-                                AND (sales_rep_id = \"".$salesRep[0]."\")";            
+                                AND (sales_rep_id = \"".$salesRep."\")";            
 
             $res[$m] = $con->query($select[$m]);
             $resFW[$m] = $con->query($selectFW[$m]);
