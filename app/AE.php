@@ -57,7 +57,8 @@ class AE extends pAndR{
                                             oppid = \"".$oppid."\",
                                             currency_id = \"".$currency['id']."\", 
                                             year = \"".$year."\", 
-                                            type_of_value = \"".$value."\" WHERE ID = \"".$id."\"";
+                                            type_of_value = \"".$value."\",
+                                            month = \"".$month."\" WHERE ID = \"".$id."\"";
             
             if($con->query($update) === true){
 
@@ -158,7 +159,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m]/$div)."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
                     if ($con->query($update[$c][$m]) === true) {
                         
@@ -223,7 +224,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m]/$div)."\",\"".$list[$c]->clientID."\")";
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
@@ -369,6 +370,8 @@ class AE extends pAndR{
         
         $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
 
+        $clientRevenueCYearTMP = $clientRevenueCYear;
+
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
         $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
@@ -422,7 +425,7 @@ class AE extends pAndR{
 
                 if ($saida[$c]) {
                     for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value'])*$mul;                
+                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);                
                     }
                 }else{
                     for ($m=0; $m <12; $m++) { 
@@ -443,6 +446,9 @@ class AE extends pAndR{
                 }
                 
             }
+
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
@@ -466,8 +472,10 @@ class AE extends pAndR{
         }else{
             $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
-            
+
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $toRollingFCST = $fcst['fcstAmount'];
@@ -484,9 +492,8 @@ class AE extends pAndR{
             
         }
 
-
-
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
+        $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
@@ -542,6 +549,35 @@ class AE extends pAndR{
 
         return $rtr;
         
+    }
+
+    public function closedMonth($fcst,$booking){
+        $date = date('n')-1;
+        for ($c=0; $c <sizeof($fcst) ; $c++) { 
+            for ($m=0; $m <$date ; $m++) { 
+                $fcst[$c][$m] = $booking[$c][$m];   
+            }
+        }
+        return $fcst;
+    }
+
+    public function closedMonthEx($fcst,$booking){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($m=0; $m <$date ; $m++) { 
+            $fcst[$m] = $booking[$m];
+        }
+
+        return $fcst;
     }
 
     public function addFcstWithBooking($booking,$fcst){

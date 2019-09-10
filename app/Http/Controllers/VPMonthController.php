@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
 use App\region;
-use App\PAndRRender;
+use App\renderVPMonth;
 use App\salesRep;
 use App\pRate;
 use App\dataBase;
@@ -18,7 +18,7 @@ class VPMonthController extends Controller {
         $con = $db->openConnection("DLA");
         $r = new region();
         $sr = new salesRep();
-        $render = new PAndRRender();
+        $render = new renderVPMonth();
         $pr = new pRate();
 
         $region = $r->getRegion($con,null);
@@ -31,22 +31,40 @@ class VPMonthController extends Controller {
     	
     	$db = new dataBase();
         $con = $db->openConnection("DLA");
+        
         $r = new region();
-
         $regionID = Request::get("region");
-        $currencyID = Request::get("currency");
+        $region = $r->getRegion($con);
 
-        $year = intval(date('Y'));
+        $tmp = $r->getRegion($con,array($regionID));
+
+        if(is_array($tmp)){
+            $rtr = $tmp[0]['name'];
+        }else{
+            $rtr = $tmp['name'];
+        }
+
+        $pr = new pRate();
+        $currencyID = Request::get("currency");
+        $currency = $pr->getCurrency($con);
+
+        $pRate = $pr->getCurrency($con, array($currencyID));
+
+        $year = Request::get("year");
+        $value = Request::get("value");
 
         $vpMonth = new VPMonth();
 
-        $target = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, "Target");
-        $forecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, "Roling Fcast ".$year);
-        $bookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, "Bookings");
-        $pBookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, ($year-1));
+        $target = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Target");
+        $forecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Rolling Fcast ".$year);
+        $pForecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Past Rolling Fcast");
+        $bookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Bookings");
+        $pBookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, ($year-1));
 
-        $mtx = $vpMonth->assembler($target, $forecast, $bookings, $pBookings, $year);
+        $mtx = $vpMonth->assembler($target, $forecast, $pForecast, $bookings, $pBookings, $year, $rtr);
 
-        var_dump($mtx);
+        $render = new renderVPMonth();
+
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'pRate', 'rtr', 'value', 'mtx'));
     }
 }
