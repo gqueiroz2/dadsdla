@@ -494,6 +494,7 @@ class AE extends pAndR{
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
         if ($value == 'gross') {
@@ -861,6 +862,7 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
+            //var_dump($someFCST);
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
             if($monthOPP[$c]){
@@ -893,10 +895,8 @@ class AE extends pAndR{
         for ($m=0; $m < sizeof($monthWQ); $m++) { 
             $fcstAmount[$m] = 0.0;
         }
-
        for ($m=0; $m < sizeof($mOPP); $m++) { 
            for ($n=0; $n < sizeof($mOPP[$m]); $n++) { 
-                
                     
                $fcstAmount[$mOPP[$m][$n]] += ($fcst[$m][$mOPP[$m][$n]]['value']);
            }
@@ -1009,7 +1009,7 @@ class AE extends pAndR{
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
 
-                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
+                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$i][$j] );
                 
             }   
 
@@ -1019,44 +1019,52 @@ class AE extends pAndR{
     }
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
+        
         /*
 
             GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP
 
         */        
             
-        $amount = 0.0;
+        
         for ($l=0; $l < sizeof($monthOPP); $l++){
+            $amount[$l] = 0.0;
             for ($m=0; $m < sizeof($monthOPP[$l]); $m++) { 
                 if($lyRClient[$monthOPP[$l][$m]] > 0 && $lyRClient[16] > 0){
                     /*
                         GET THE SHARE OF THE CLIENT ON THE SAME MONTH ON LAST YEAR
                     */
-                    $share[$m] = $lyRClient[$monthOPP[$l][$m]];//$lyRClient[16];
-                    $amount += $share[$m];
+                    $share[$l][$m] = $lyRClient[$monthOPP[$l][$m]];//$lyRClient[16];
+                    $amount[$l] += $share[$l][$m];
                 }elseif($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
                     /*
                         IF THE CLINET DOES NOT HAVE REVENUE ON THE MONTH LAST YEAR GET THE SHARE OF THE REP ON THE SAME MONTH ON LAST YEAR
                     */
                     if($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
-                        $share[$m] = $lyRSP[$monthOPP[$l][$m]];//$lyRSP[16];  
-                        $amount += $share[$m];
+                        $share[$l][$m] = $lyRSP[$monthOPP[$l][$m]];//$lyRSP[16];  
+                        $amount[$l] += $share[$l][$m];
                     }else{
                         /*
                             IF THE SALES REP DOES NOT HAVE REVENUE ON THE MONTH LAST YEAR GET THE SHARE OF THE MONTH ON THE  ON LAST YEAR
                         */
-                        $share[$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
-                        $amount += $share[$m];
+                        $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
+                        $amount[$l] += $share[$l][$m];
                     }
                 }
             }
+
+            $newAmount[$l] = $amount[$l];// / sizeof($monthOPP[$l]);
         }
-
-        $newAmount = $amount / sizeof($monthOPP);
-
+       
         for ($s=0; $s < sizeof($share); $s++) { 
-            $share[$s] = $share[$s] / ( $newAmount );
+            for ($t=0; $t < sizeof($share[$s]); $t++) { 
+               
+                $share[$s][$t] = $share[$s][$t] / ( $newAmount[$s] );
+
+            }
         }        
+
+
 
         return $share;
     }
@@ -1268,6 +1276,7 @@ class AE extends pAndR{
                     }		
     			}
     		}
+
     	}
 
     	return $rev;
