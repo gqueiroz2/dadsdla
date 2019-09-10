@@ -3,6 +3,24 @@
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
+    <style>
+    	.temporario{
+    		display:block;
+    		float: left;
+    		clear: left;
+    		width: 100%;
+    	}
+
+    	#myInput {
+		  background-position: 10px 12px; /* Position the search icon */
+		  background-repeat: no-repeat; /* Do not repeat the icon image */
+		  width: 100%; /* Full-width */
+		  font-size: 16px; /* Increase font-size */
+		  border: 1px solid #ddd; /* Add a grey border */
+		  margin-bottom: 12px; /* Add some space below the input */
+		  text-align: center;
+		}
+    </style>
 @endsection
 @section('content')
 	<div class="container-fluid">
@@ -25,7 +43,7 @@
 					@if($userLevel == 'L0' || $userLevel == 'SU')
 						{{$render->region($region)}}							
 					@else
-						{{$render->regionFiltered($region, $regionID, $special )}}
+						{{$render->regionFiltered($region, $regionID, $special)}}
 					@endif
 				</div>
 				<div class="col">
@@ -56,6 +74,15 @@
 			</div>
 		</div>
 	</form>
-
+	<br>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" style="width: 100%; padding-right: 2%;">
+				<center>
+					{{ $render->assemble($mtx, $value, $pRate, $rtr) }}
+				</center>
+			</div>
+		</div>
+	</div>
 
 @endsection

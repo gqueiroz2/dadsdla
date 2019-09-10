@@ -57,7 +57,8 @@ class AE extends pAndR{
                                             oppid = \"".$oppid."\",
                                             currency_id = \"".$currency['id']."\", 
                                             year = \"".$year."\", 
-                                            type_of_value = \"".$value."\" WHERE ID = \"".$id."\"";
+                                            type_of_value = \"".$value."\",
+                                            month = \"".$month."\" WHERE ID = \"".$id."\"";
             
             if($con->query($update) === true){
 
@@ -158,7 +159,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m]/$div)."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
                     if ($con->query($update[$c][$m]) === true) {
                         
@@ -223,7 +224,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m]/$div)."\",\"".$list[$c]->clientID."\")";
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
@@ -369,6 +370,8 @@ class AE extends pAndR{
         
         $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
 
+        $clientRevenueCYearTMP = $clientRevenueCYear;
+
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
         $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
@@ -422,7 +425,7 @@ class AE extends pAndR{
 
                 if ($saida[$c]) {
                     for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value'])*$mul;                
+                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);                
                     }
                 }else{
                     for ($m=0; $m <12; $m++) { 
@@ -443,6 +446,9 @@ class AE extends pAndR{
                 }
                 
             }
+
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
@@ -466,8 +472,10 @@ class AE extends pAndR{
         }else{
             $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
-            
+
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $toRollingFCST = $fcst['fcstAmount'];
@@ -484,9 +492,8 @@ class AE extends pAndR{
             
         }
 
-
-
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
+        $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
@@ -494,6 +501,7 @@ class AE extends pAndR{
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
         if ($value == 'gross') {
@@ -541,6 +549,35 @@ class AE extends pAndR{
 
         return $rtr;
         
+    }
+
+    public function closedMonth($fcst,$booking){
+        $date = date('n')-1;
+        for ($c=0; $c <sizeof($fcst) ; $c++) { 
+            for ($m=0; $m <$date ; $m++) { 
+                $fcst[$c][$m] = $booking[$c][$m];   
+            }
+        }
+        return $fcst;
+    }
+
+    public function closedMonthEx($fcst,$booking){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($m=0; $m <$date ; $m++) { 
+            $fcst[$m] = $booking[$m];
+        }
+
+        return $fcst;
     }
 
     public function addFcstWithBooking($booking,$fcst){
@@ -861,6 +898,7 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c]); // PERIOD OF FCST , VALUES AND STAGE
+            //var_dump($someFCST);
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
             if($monthOPP[$c]){
@@ -893,10 +931,8 @@ class AE extends pAndR{
         for ($m=0; $m < sizeof($monthWQ); $m++) { 
             $fcstAmount[$m] = 0.0;
         }
-
        for ($m=0; $m < sizeof($mOPP); $m++) { 
            for ($n=0; $n < sizeof($mOPP[$m]); $n++) { 
-                
                     
                $fcstAmount[$mOPP[$m][$n]] += ($fcst[$m][$mOPP[$m][$n]]['value']);
            }
@@ -1009,7 +1045,7 @@ class AE extends pAndR{
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
 
-                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$j] );
+                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$i][$j] );
                 
             }   
 
@@ -1019,44 +1055,52 @@ class AE extends pAndR{
     }
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
+        
         /*
 
             GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP
 
         */        
             
-        $amount = 0.0;
+        
         for ($l=0; $l < sizeof($monthOPP); $l++){
+            $amount[$l] = 0.0;
             for ($m=0; $m < sizeof($monthOPP[$l]); $m++) { 
                 if($lyRClient[$monthOPP[$l][$m]] > 0 && $lyRClient[16] > 0){
                     /*
                         GET THE SHARE OF THE CLIENT ON THE SAME MONTH ON LAST YEAR
                     */
-                    $share[$m] = $lyRClient[$monthOPP[$l][$m]];//$lyRClient[16];
-                    $amount += $share[$m];
+                    $share[$l][$m] = $lyRClient[$monthOPP[$l][$m]];//$lyRClient[16];
+                    $amount[$l] += $share[$l][$m];
                 }elseif($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
                     /*
                         IF THE CLINET DOES NOT HAVE REVENUE ON THE MONTH LAST YEAR GET THE SHARE OF THE REP ON THE SAME MONTH ON LAST YEAR
                     */
                     if($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
-                        $share[$m] = $lyRSP[$monthOPP[$l][$m]];//$lyRSP[16];  
-                        $amount += $share[$m];
+                        $share[$l][$m] = $lyRSP[$monthOPP[$l][$m]];//$lyRSP[16];  
+                        $amount[$l] += $share[$l][$m];
                     }else{
                         /*
                             IF THE SALES REP DOES NOT HAVE REVENUE ON THE MONTH LAST YEAR GET THE SHARE OF THE MONTH ON THE  ON LAST YEAR
                         */
-                        $share[$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
-                        $amount += $share[$m];
+                        $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
+                        $amount[$l] += $share[$l][$m];
                     }
                 }
             }
+
+            $newAmount[$l] = $amount[$l];// / sizeof($monthOPP[$l]);
         }
-
-        $newAmount = $amount / sizeof($monthOPP);
-
+       
         for ($s=0; $s < sizeof($share); $s++) { 
-            $share[$s] = $share[$s] / ( $newAmount );
+            for ($t=0; $t < sizeof($share[$s]); $t++) { 
+               
+                $share[$s][$t] = $share[$s][$t] / ( $newAmount[$s] );
+
+            }
         }        
+
+
 
         return $share;
     }
@@ -1268,6 +1312,7 @@ class AE extends pAndR{
                     }		
     			}
     		}
+
     	}
 
     	return $rev;
