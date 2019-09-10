@@ -347,12 +347,16 @@ class VP extends pAndR{
         $listCFW = $sql->fetch($resFW,$from,$from);
 
     	$cc = 0;
-    	for ($c=0; $c < sizeof($listC); $c++) { 
-    		for ($d=0; $d < sizeof($listC[$c]); $d++) { 
-    			$list[$cc] = $listC[$c][$d];
-    			$cc++; 
-    		}
-    	}
+        if($listC){
+        	for ($c=0; $c < sizeof($listC); $c++) { 
+            	if($listC[$c]){
+                	for ($d=0; $d < sizeof($listC[$c]); $d++) { 
+            			$list[$cc] = $listC[$c][$d];
+            			$cc++; 
+            		}
+                }
+        	}
+        }
 
         for ($d=0; $d < sizeof($listCYTD); $d++) { 
             $list[$cc] = $listCYTD[$d];
