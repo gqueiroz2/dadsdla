@@ -216,7 +216,6 @@ class VP extends pAndR{
     }
 
     public function currentMonthByClient($con,$sql,$kind,$regionID,$year,$currentMonth,$listOfClients){
-
         switch ($kind) {
             case 'fcst':
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
@@ -224,8 +223,9 @@ class VP extends pAndR{
                                          FROM forecast_client
                                          WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
                                          AND (month = \"".$currentMonth."\")
-                                 ";            
+                                 ";   
                     $res[$c] = $con->query($selectSum[$c]);
+
                     $from = array("revenue");
                     $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
                 }
@@ -252,7 +252,6 @@ class VP extends pAndR{
                 # code...
                 break;
         }
-        
         return $sumRevenue;
     }
 
@@ -365,9 +364,17 @@ class VP extends pAndR{
 
 
         $list = $base->superUnique($list,'clientID');
+        usort($list, array($this,'orderClient'));
 
 	    return $list;
 
+    }
+
+    private static function orderClient($a, $b){
+        if ($a == $b)
+            return 0;
+        
+        return ($a['client'] < $b['client']) ? -1 : 1;
     }
 
 	public function getForecast($con,$sql,$regionID){
