@@ -155,7 +155,7 @@ class VPMonth extends pAndR {
 
             $where = $sql->where($columns, $colsValue);
 
-            $values[$m] = $sql->select($con, $tmp, $table, $join, $where);
+            $values[$m] = $sql->larica($con, $tmp, $table, $join, $where);
             
             $res[$m] = $sql->fetch($values[$m], $names, $names);
             

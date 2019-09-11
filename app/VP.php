@@ -23,6 +23,11 @@ class VP extends pAndR{
         $currentMonth = intval( date('m') );
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
+
+        if(!$fcstInfo){
+            return false;
+        }
+        
     	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients);
@@ -134,13 +139,14 @@ class VP extends pAndR{
                     );
 
         return $rtr;
-
+        
     }
 
     public function consolidadeColumn($array){
         $sum = 0.0;
         for ($a=0; $a < sizeof($array); $a++) { 
             $sum += $array[$a];
+
         }
 
         return $sum;
@@ -209,6 +215,24 @@ class VP extends pAndR{
                     $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
                     $sumRevenue[$c] += $tmp;                    
                 }
+
+                $revenueFW = "gross_revenue";
+                for ($c=0; $c < sizeof($listOfClients); $c++) { 
+                    $selectSumFW[$c] = "SELECT SUM($revenueFW) AS 'revenue' 
+                                         FROM fw_digital
+                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (month IN ($whereIN))
+                                         AND (year = \"".$year."\")                                         
+                                 ";
+                    $resFW[$c] = $con->query($selectSumFW[$c]);
+                    $fromFW = array("revenue");
+                    $tmpFW = doubleval($sql->fetch($resFW[$c],$fromFW,$fromFW)[0]['revenue']);
+                    $sumRevenue[$c] += $tmpFW;                    
+                }
+
+
+
+
                 break;
         }
         
@@ -260,13 +284,18 @@ class VP extends pAndR{
         switch ($kind) {
             case 'fcst':
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
-                                         FROM forecast_client
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                 ";            
+                    $selectSum[$c] = "SELECT SUM(fc.value) AS 'revenue' 
+                                         FROM forecast_client fc
+                                         JOIN forecast f ON f.ID = fc.forecast_id
+                                         WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
+                                         AND (f.type_of_forecast = 'AE')
+                                 ";       
+                    var_dump($selectSum[$c]);
                     $res[$c] = $con->query($selectSum[$c]);
                     $from = array("revenue");
                     $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+                    var_dump($sumRevenue[$c]);
                 }
                 break;
             case 'fcstClosed':
@@ -363,11 +392,8 @@ class VP extends pAndR{
             $cc++;
         }
 
-        var_dump($list);
-
         $list = $base->superUnique($list,'clientID');
 
-        var_dump($list);
         usort($list, array($this,'orderClient'));
 
 	    return $list;
