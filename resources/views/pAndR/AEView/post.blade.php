@@ -83,7 +83,18 @@
 		<form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 			<div class="row justify-content-end">
-				<div class="col-sm-2">
+				<div class="col-2">
+					<label> &nbsp; </label>
+					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+						<label class="btn btn-primary active">
+						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+						</label>
+					</div>
+				</div>
+				<div class="col-2">
 					<label> &nbsp; </label>
 					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
 				</div>	

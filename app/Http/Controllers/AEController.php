@@ -35,9 +35,9 @@ class AEController extends Controller{
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
+        $submit = Request::get('options');
 
         $salesRepID = $salesRep->id;
-
 
 /*
         var_dump($regionID);
@@ -97,7 +97,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";

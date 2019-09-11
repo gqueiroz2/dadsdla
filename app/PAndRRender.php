@@ -393,12 +393,18 @@ class PAndRRender extends Render{
                 $ow = false;
             }
 
+            if (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
+                $color = "red";
+            }else{
+                $color = "";
+            }
+
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
             echo "<div class='col-2' style='padding-right:1px;'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Roling Fcast ".$cYear." </td>";

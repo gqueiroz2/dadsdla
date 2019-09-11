@@ -13,7 +13,7 @@ use App\pRate;
 
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit){
         $sql = new sql();
 /*
         var_dump($region);
@@ -30,6 +30,8 @@ class AE extends pAndR{
         var_dump($splitted);
 */
         $sr = new salesRep();
+
+        $submit = 0;
 
         $tmp = explode("-", $date);
         if($tmp && isset($tmp[2])){
@@ -80,8 +82,8 @@ class AE extends pAndR{
                          region_id,sales_rep_id,
                          year,month,read_q,date_m,
                          currency_id,type_of_value,
-                         last_modify_by,last_modify_date,last_modify_time
-                        )";
+                         last_modify_by,last_modify_date,last_modify_time,
+                         submited,type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
 
@@ -90,7 +92,8 @@ class AE extends pAndR{
                         \"".$region."\",\"".$salesRepID."\",
                         \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
                         \"".$currency['id']."\",\"".$value."\",
-                        \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\"
+                        \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\",
+                        \"".$submit."\", \"AE\"
                       )";
 
             $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
@@ -819,21 +822,28 @@ class AE extends pAndR{
 
         */
 
-        $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id
+        $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
                         AND (year = \"".$year."\")                       
                   ";
 
         $res = $con->query($select);
-        $from = array("order_reference","sales_rep_id","client_id");
+        $from = array("order_reference","sales_rep_id","client_id","agency_id");
         $orderRef = $sql->fetch($res,$from,$from);
-
         $cc = 0;
         if($orderRef){
             for ($o=0; $o < sizeof($orderRef); $o++) { 
-                $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
-                $cc++;
+                if($o == 0){
+                    $comp[$cc]['sales_rep_id'] = $orderRef[$o]['sales_rep_id'];
+                    $comp[$cc]['agency_id'] = $orderRef[$o]['agency_id'];
+                }
+
+                if($comp[0]['agency_id'] == $orderRef[$o]['agency_id']){
+                    $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
+                    $cc++;    
+                }                
+                
             }
         }
 
@@ -1444,7 +1454,7 @@ class AE extends pAndR{
     				FROM sf_pr s
     				LEFT JOIN client c ON c.ID = s.client_id
     				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
-                    AND ( region_id = \"".$regionID."\")
+                    AND ( region_id = \"".$regionID."\") AND ( stage != \"6\") AND ( stage != \"5\")
     				ORDER BY 1
     	       ";   	
     	$resSF = $con->query($sf);
