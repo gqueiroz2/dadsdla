@@ -46,7 +46,7 @@ class VP extends pAndR{
 
         $bookingscYTD = $this->consolidadeColumn($bookingscYTDByClient);
         $bookingspYTD = $this->consolidadeColumn($bookingspYTDByClient);
-        
+
         $varAbsYTD = $this->subArrays(array($bookingscYTD),array($bookingspYTD))[0];
         $varPerYTD = $this->varPer(array($bookingscYTD),array($bookingspYTD))[0];
         

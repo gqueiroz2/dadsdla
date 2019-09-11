@@ -11,6 +11,17 @@ use App\pRate;
 
 class VPMonth extends pAndR {
     
+    public function weekOfMonth($date) {
+        $date = strtotime($date);
+        //Get the first day of the month.
+        $firstOfMonth = strtotime(date("Y-m-01", $date));
+        //Apply above formula.
+
+        $res = intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+
+        return $res > 0 ? $res : ($res+1);
+    }
+
     public function getLinesValue($con, $region, $currencyID, $year, $aux_value, $currency, $line){
         
         $sql = new sql();
@@ -26,6 +37,9 @@ class VPMonth extends pAndR {
         }
 
         $cMonth = intval(date('m'));
+
+        $today = date("Y-m-d");
+        $read = $this->weekOfMonth($today);
 
         for ($m=0; $m < sizeof($base->month); $m++) { 
             $value = $aux_value;
@@ -76,7 +90,11 @@ class VPMonth extends pAndR {
                     $value = ucfirst($value);
                     $tmp = "read_q, SUM(value) AS 'total'";
 
-                    $aux = "MAX(read_q)";
+                    if (($read - 1) > 0) {
+                        $aux = $read-1;
+                    }else{
+                        $aux = $read;
+                    }
 
                     $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
                     $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
@@ -92,7 +110,30 @@ class VPMonth extends pAndR {
                 $value = ucfirst($value);
                 $tmp = "read_q, SUM(value) AS 'total'";
 
-                $aux = "MAX(read_q)-1";
+                if (($read - 2) > 0) {
+                    $aux = $read-2;
+                }else{
+                    $aux = 1;
+                }
+
+                $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
+                $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
+
+                $table = 'forecast_sales_rep f';
+                $join = "LEFT JOIN forecast f2 ON f2.ID = f.forecast_id";
+
+                $names = array("read_q", "total");
+
+            }elseif ($line == "Manual Estimation") {
+                
+                $value = ucfirst($value);
+                $tmp = "read_q, SUM(value) AS 'total'";
+
+                if (($read - 1) > 0) {
+                    $aux = $read-1;
+                }else{
+                    $aux = $read;
+                }
 
                 $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
                 $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
@@ -190,10 +231,11 @@ class VPMonth extends pAndR {
         return $resF;
     }
 
-    public function assembler($target, $forecast, $pForecast, $bookings, $pBookings, $year, $region){
+    public function assembler($target, $forecast, $pForecast, $manualEstimation, $bookings, $pBookings, $year, $region){
     	
     	$totalTarget = 0;
     	$totalForecast = 0;
+        $totalManualEstimation = 0;
         $totalPForecast = 0;
     	$totalBookings = 0;
     	$totalPBookings = 0;
@@ -231,6 +273,7 @@ class VPMonth extends pAndR {
 
     			$matrix[1][($p+1)] = $matrix[1][($p+1)-1] + $matrix[1][($p+1)-2] + $matrix[1][($p+1)-3];
     			$matrix[2][($p+1)] = $matrix[2][($p+1)-1] + $matrix[2][($p+1)-2] + $matrix[2][($p+1)-3];
+                $matrix[3][($p+1)] = $matrix[3][($p+1)-1] + $matrix[3][($p+1)-2] + $matrix[3][($p+1)-3];
     			$matrix[4][($p+1)] = $matrix[4][($p+1)-1] + $matrix[4][($p+1)-2] + $matrix[4][($p+1)-3];
                 $matrix[5][($p+1)] = $matrix[5][($p+1)-1] + $matrix[5][($p+1)-2] + $matrix[5][($p+1)-3];
     			$matrix[6][($p+1)] = $matrix[2][($p+1)] - $matrix[5][($p+1)];
@@ -272,6 +315,14 @@ class VPMonth extends pAndR {
                 }
 
 	        	$totalForecast += $forecast[$m]['total'];
+
+                if (!$manualEstimation[$m]['total'] || is_null($manualEstimation[$m]['total'])) {
+                    $matrix[3][($p+1)] = 0;
+                }else{
+                    $matrix[3][($p+1)] = $manualEstimation[$m]['total'];
+                }
+
+                $totalManualEstimation += $manualEstimation[$m]['total'];
 
                 if (!$pForecast[$m]['total'] || is_null($pForecast[$m]['total'])) {
                     $matrix[4][($p+1)] = 0;
@@ -325,6 +376,7 @@ class VPMonth extends pAndR {
 
         $matrix[1][$last] = $matrix[1][$last-1] + $matrix[1][$last-2] + $matrix[1][$last-3];
         $matrix[2][$last] = $matrix[2][$last-1] + $matrix[2][$last-2] + $matrix[2][$last-3];
+        $matrix[3][$last] = $matrix[3][$last-1] + $matrix[3][$last-2] + $matrix[3][$last-3];
         $matrix[4][$last] = $matrix[4][$last-1] + $matrix[4][$last-2] + $matrix[4][$last-3];
         $matrix[5][$last] = $matrix[5][$last-1] + $matrix[5][$last-2] + $matrix[5][$last-3];
         $matrix[6][$last] = $matrix[2][$last] - $matrix[5][$last];
@@ -351,6 +403,7 @@ class VPMonth extends pAndR {
 		$matrix[0][$last] = "Total";
         $matrix[1][$last] = $totalTarget;
         $matrix[2][$last] = $totalForecast;
+        $matrix[3][$last] = $totalManualEstimation;
         $matrix[4][$last] = $totalPForecast;
 		$matrix[5][$last] = $totalBookings;
 		$matrix[6][$last] = $totalForecast - $totalBookings;
@@ -370,9 +423,6 @@ class VPMonth extends pAndR {
     			$matrix[9][$last] = ($matrix[2][$last]/$matrix[1][$last])*100;
     		}
     	}
-
-        $matrix[3] = $matrix[2];
-        $matrix[3][0] = "Manual Estimation";
 
         return $matrix;
     }
