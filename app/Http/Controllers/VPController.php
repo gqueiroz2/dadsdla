@@ -42,7 +42,12 @@ class VPController extends Controller
         $currency = $pr->getCurrency($con,null);
 
         $forRender = $vp->base($con,$regionID);
-        $client = $forRender['client'];
+        if($forRender){
+            $client = $forRender['client'];
+        }else{
+            $client = false;
+        }
+
         return view('pAndR.VPView.post',compact('render','region','currency','forRender','client'));
     }
 }

@@ -45,7 +45,8 @@ class VP extends pAndR{
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients);
         $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
-        $totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
+        //$totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
+        $totalFullYearByClient = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClient);
         $varAbsFullYearByClient = $this->subArrays($totalFullYearByClient,$bookingspYearByClient);
         $varPerFullYearByClient = $this->varPer($totalFullYearByClient,$bookingspYearByClient);
 
@@ -140,6 +141,20 @@ class VP extends pAndR{
 
         return $rtr;
         
+    }
+
+    public function calculateTotalYear($closed,$booking,$fcst){
+        for ($a=0; $a < sizeof($closed); $a++) { 
+            
+            if($closed[$a] >= $booking[$a] ){
+                $sum[$a] = $closed[$a] + $fcst[$a];
+            }else{
+                $sum[$a] = $booking[$a] + $fcst[$a];
+            }
+
+
+        }
+        return $sum;
     }
 
     public function consolidadeColumn($array){
@@ -291,11 +306,11 @@ class VP extends pAndR{
                                          AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
                                          AND (f.type_of_forecast = 'AE')
                                  ";       
-                    var_dump($selectSum[$c]);
+                    //var_dump($selectSum[$c]);
                     $res[$c] = $con->query($selectSum[$c]);
                     $from = array("revenue");
                     $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
-                    var_dump($sumRevenue[$c]);
+                    //var_dump($sumRevenue[$c]);
                 }
                 break;
             case 'fcstClosed':

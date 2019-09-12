@@ -930,12 +930,12 @@ class PAndRRender extends Render{
                             ".number_format($bookingsOverclosed, 0, ".", ",")."%
                             </td>";
 
-                    /*Proposals*/                    
+                    /*FCST AE*/                    
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
-                            0
+                            ".number_format($fcstFullYear, 0, ".", ",")."
                         </td>";
                     
-                    /*Fcst*/
+                    /*Manual Estimation*/
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
                                 <input type='text' readonly='true' id='RF-Total-Fy' 
                                        value='0' 
