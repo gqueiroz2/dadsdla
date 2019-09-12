@@ -44,7 +44,7 @@ class renderVPMonth extends Render {
         	echo "</tr>";
 
             echo "<tr><td> &nbsp; </td></tr>";
-
+            $cont = 0;
             for ($m=0; $m < sizeof($mtx); $m++) { 
             	echo "<tr>";
             	for ($v=0; $v < sizeof($mtx[$m]); $v++) { 
@@ -72,8 +72,9 @@ class renderVPMonth extends Render {
                                         echo "<td class='center rcBlue'>".number_format($mtx[$m][$v])."%</td>";
                                     }else{
                                         if ($mtx[$m][0] == "Manual Estimation") {
+                                            $cont++;
                                             echo "<td class='center rcBlue' style='background-color:#99b3ff;'>";
-                                                echo "<input type='text' value='".number_format($mtx[$m][$v])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
+                                                echo "<input id='VP-".$cont."' type='text' value='".number_format($mtx[$m][$v])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
                                             echo "</td>";
                                         }else{
                                             echo "<td class='center rcBlue'>".number_format($mtx[$m][$v])."</td>";
