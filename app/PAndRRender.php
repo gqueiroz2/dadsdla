@@ -25,6 +25,7 @@ class PAndRRender extends Render{
         $even = $forRender["readable"]["even"];
         $tfArray = $forRender["readable"]["tfArray"];
         $manualEstimation = $forRender["readable"]["manualEstimation"];
+        $color2 = $forRender["readable"]["color"];
 
         $rollingFCST = $forRender['rollingFCST'];
         $lastRollingFCST = $forRender['lastRollingFCST'];
@@ -395,9 +396,13 @@ class PAndRRender extends Render{
 
             if (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
                 $color = "red";
+                $boolfcst = "0";
             }else{
                 $color = "";
+                $boolfcst = "1";
             }
+
+            echo "<input type='hidden' id='bool-fcst-$c' name='bool-fcst-$c' value='".$boolfcst."'>";
 
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
@@ -543,9 +548,9 @@ class PAndRRender extends Render{
                         }else{
                             echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'>";
                                 if ($ow && $ow != '(P)') {
-                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
                                 }else{
-                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
                                 }
                             echo "</td>";
                             /*echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
