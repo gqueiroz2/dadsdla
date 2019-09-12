@@ -96,7 +96,7 @@
 				</div>
 				<div class="col-2">
 					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
 				</div>	
 			</div>
 
@@ -119,6 +119,13 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 		$(document).ready(function(){
+			$("input[type=radio][name=options]").change(function(){
+				if (this.value == 'save') {
+					$("#button").val("Save");
+				}else{
+					$("#button").val("Submit");
+				}
+			});
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
 			@endfor

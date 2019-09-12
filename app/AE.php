@@ -31,8 +31,6 @@ class AE extends pAndR{
 */
         $sr = new salesRep();
 
-        $submit = 0;
-
         $tmp = explode("-", $date);
         if($tmp && isset($tmp[2])){
             $month = $tmp[2];
@@ -40,17 +38,39 @@ class AE extends pAndR{
             $month = 0;
         }
 
+
+        if ($submit == "submit") {
+            $submit = 1;
+            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
+            if ($region == '1') {
+                $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $from = array("ID");
+
+            $resultSubmit = $con->query($selectSubmit);
+            
+            $resSubmit = $sql->fetch($resultSubmit,$from,$from)[0]["ID"];
+
+            if ($resSubmit != null) {
+                return "Already Submitted";
+            }
+        }else{
+            $submit = 0;
+        }
+        
         $tableFCST = "forecast";
         $tableFCSTClient = "forecast_client";
         $tableFCSTSalesRep = "forecast_sales_rep";
 
-        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\" and submitted = \"0\"";
 
         $from = array("ID");
 
         $result = $con->query($select);
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
 
         if ($id) {
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
@@ -83,7 +103,7 @@ class AE extends pAndR{
                          year,month,read_q,date_m,
                          currency_id,type_of_value,
                          last_modify_by,last_modify_date,last_modify_time,
-                         submited,type_of_forecast)";
+                         submitted,type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
 
@@ -247,7 +267,12 @@ class AE extends pAndR{
         //Get the first day of the month.
         $firstOfMonth = strtotime(date("Y-m-01", $date));
         //Apply above formula.
-        return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
+        if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
+            # code...
+        }else{
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+        }
     }
 
     public function generateID($con,$sql,$pr,$kind,$region,$year,$salesRep,$currency,$value,$week,$month){

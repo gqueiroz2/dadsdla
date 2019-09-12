@@ -105,6 +105,9 @@ class AEController extends Controller{
         }elseif($bool == "Created"){
             $msg = "Forecast Created";
             return back()->with("Success",$msg);
+        }elseif ($bool = "Already Submitted") {
+            $msg = "You already have submitted the Forecast";
+            return back()->with("Error",$msg);
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
