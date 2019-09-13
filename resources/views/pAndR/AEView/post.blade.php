@@ -154,10 +154,8 @@
 						Temp3 = handleNumber(totalClient);
 						if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
 							$("#client-"+{{$c}}).css("background-color","red");
-							$("#bool-fcst-"+{{$c}}).value("0");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
-							$("#bool-fcst-"+{{$c}}).value("1");
 						}
 						var rf = 0;
 						@for($c2=0;$c2<sizeof($client);$c2++)

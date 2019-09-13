@@ -402,8 +402,6 @@ class PAndRRender extends Render{
                 $boolfcst = "1";
             }
 
-            echo "<input type='hidden' id='bool-fcst-$c' name='bool-fcst-$c' value='".$boolfcst."'>";
-
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
             echo "<div class='col-2' style='padding-right:1px;'>";

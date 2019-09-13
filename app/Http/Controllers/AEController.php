@@ -68,9 +68,15 @@ class AEController extends Controller{
         $manualEstimantionBySalesRep = array_values($manualEstimantionBySalesRep);
 
         for ($c=0; $c < sizeof($client); $c++) { 
-            $boolFront[$c] = Request::get("bool-fcst-$c");
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
+            }
+            $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
+            $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
+
+            if ($passTotal[$c] != $totalClient[$c]) {
+                $msg = "Incorrect value submited";
+                return back()->with("Error",$msg);
             }
         }       
 
@@ -100,9 +106,8 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$boolFront);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
 
-        var_dump($bool);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -112,9 +117,6 @@ class AEController extends Controller{
             return back()->with("Success",$msg);
         }elseif ($bool == "Already Submitted") {
             $msg = "You already have submitted the Forecast";
-            return back()->with("Error",$msg);
-        }elseif($bool == "FCST not Correct"){
-            $msg = "Incorrect value submited";
             return back()->with("Error",$msg);
         }else{
             $msg = "Error";

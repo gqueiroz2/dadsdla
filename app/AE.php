@@ -13,7 +13,7 @@ use App\pRate;
 
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit,$bool){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit){
         $sql = new sql();
         $sr = new salesRep();
         $tmp = explode("-", $date);
@@ -25,11 +25,6 @@ class AE extends pAndR{
         }
 
         if ($submit == "submit") {
-            for ($c=0; $c <sizeof($bool) ; $c++) {
-                if ($bool[$c] == "0") {
-                    return "FCST not Correct";
-                }
-            }
             $submit = 1;
             $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
             if ($region == '1') {
@@ -93,11 +88,11 @@ class AE extends pAndR{
 
             $columns = "(
                          oppid,
-                         region_id,sales_rep_id,
-                         year,month,read_q,date_m,
-                         currency_id,type_of_value,
-                         last_modify_by,last_modify_date,last_modify_time,
-                         submitted,type_of_forecast)";
+                         region_id, sales_rep_id,
+                         year,month, read_q,date_m,
+                         currency_id, type_of_value,
+                         last_modify_by, last_modify_date, last_modify_time,
+                         submitted, type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
             var_dump($date);
@@ -110,7 +105,10 @@ class AE extends pAndR{
                         \"".$submit."\", \"AE\"
                       )";
 
+
             $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+
+            echo "<pre>".($insertFCST)."</pre>";
 
             if ($con->query($insertFCST) === true) {
                 var_dump("TRUE");
