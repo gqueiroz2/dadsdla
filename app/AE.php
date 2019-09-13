@@ -13,7 +13,7 @@ use App\pRate;
 
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit,$bool){
         $sql = new sql();
 /*
         var_dump($region);
@@ -39,7 +39,14 @@ class AE extends pAndR{
         }
 
 
+
+
         if ($submit == "submit") {
+            for ($c=0; $c <sizeof($bool) ; $c++) {
+                if ($bool[$c] == "0") {
+                    return "FCST not Correct";
+                }
+            }
             $submit = 1;
             $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
             if ($region == '1') {
@@ -475,8 +482,6 @@ class AE extends pAndR{
                 
             }
 
-            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
-
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
@@ -493,14 +498,20 @@ class AE extends pAndR{
 
             $tmp2 = $tmp1['fcstAmount'];
 
+            $lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYearTMP);
+
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
 
+            $lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
+            $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
+            
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
+            $rollingFCST = $this->adjustFCST($rollingFCST);
+
         }else{
             $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
-
-            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYearTMP);
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
@@ -510,15 +521,21 @@ class AE extends pAndR{
 
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
 
-            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
-            $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);        
+            $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
+            
+            $rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
+            $rollingFCST = $this->adjustFCST($rollingFCST);
 
             $lastRollingFCST = $rollingFCST;
             
         }
+
+        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+           
+        $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
@@ -579,8 +596,41 @@ class AE extends pAndR{
         
     }
 
+    public function addLost($con,$clients,$fcstStages,$value){
+
+        $sql = new sql();
+
+        if ($value == "gross") {
+            $sum = "gross_revenue";
+        }else{
+            $sum = "net_revenue";
+        }
+
+        for ($c=0; $c <sizeof($clients) ; $c++) { 
+            $select[$c] = "SELECT SUM($sum) AS value FROM sf_pr WHERE stage = \"6\" AND client_id = \"".$clients[$c]["clientID"]."\"";
+
+            $res = $con->query($select[$c]);
+
+            $result[$c] = $sql->fetchSum($res,"value");
+            
+            $fcstStages[$c][1][5] = $result[$c]['value'];
+        }
+
+        return $fcstStages;
+    }
+
     public function closedMonth($fcst,$booking){
         $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
         for ($c=0; $c <sizeof($fcst) ; $c++) { 
             for ($m=0; $m <$date ; $m++) { 
                 $fcst[$c][$m] = $booking[$c][$m];   
@@ -603,6 +653,27 @@ class AE extends pAndR{
 
         for ($m=0; $m <$date ; $m++) { 
             $fcst[$m] = $booking[$m];
+        }
+
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+
+        return $fcst;
+    }
+
+    public function adjustFCST($fcst){
+        for ($c=0; $c <sizeof($fcst) ; $c++) { 
+            $fcst[$c][3] = $fcst[$c][0] + $fcst[$c][1] + $fcst[$c][2];
+            $fcst[$c][7] = $fcst[$c][4] + $fcst[$c][5] + $fcst[$c][6];
+            $fcst[$c][11] = $fcst[$c][8] + $fcst[$c][9] + $fcst[$c][10];
+            $fcst[$c][15] = $fcst[$c][12] + $fcst[$c][13] + $fcst[$c][14];
+
+            $fcst[$c][16] = $fcst[$c][3] + $fcst[$c][7] + $fcst[$c][11] + $fcst[$c][15];
         }
 
         return $fcst;
@@ -816,16 +887,18 @@ class AE extends pAndR{
                 $tfArray[$m] = "";
                 $odd[$m] = "odd";
                 $even[$m] = "rcBlue";
-                $manualEstimation[$m] = "background-color:#99b3ff;";
+                $manualEstimation[$m] = "background-color:#235490;";
+                $color[$m] = "color:white;";
             }else{
                 $tfArray[$m] = "readonly='true'";
                 $odd[$m] = "oddGrey";
                 $even[$m] = "evenGrey";
                 $manualEstimation[$m] = "";
+                $color[$m] = "";
             }
         } 
 
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation);    
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
 
         return $rtr;
     }

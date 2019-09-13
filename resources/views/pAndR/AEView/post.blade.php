@@ -86,10 +86,10 @@
 				<div class="col-2">
 					<label> &nbsp; </label>
 					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-						<label class="btn btn-primary active">
+						<label class="btn alert-primary active">
 						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
 						</label>
-						<label class="btn btn-primary">
+						<label class="btn alert-success">
 							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
 						</label>
 					</div>
@@ -154,8 +154,10 @@
 						Temp3 = handleNumber(totalClient);
 						if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
 							$("#client-"+{{$c}}).css("background-color","red");
+							$("#bool-fcst-"+{{$c}}).value("0");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
+							$("#bool-fcst-"+{{$c}}).value("1");
 						}
 						var rf = 0;
 						@for($c2=0;$c2<sizeof($client);$c2++)

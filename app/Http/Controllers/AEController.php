@@ -68,6 +68,7 @@ class AEController extends Controller{
         $manualEstimantionBySalesRep = array_values($manualEstimantionBySalesRep);
 
         for ($c=0; $c < sizeof($client); $c++) { 
+            $boolFront[$c] = Request::get("bool-fcst-$c");
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
@@ -97,7 +98,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$boolFront);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -105,8 +106,11 @@ class AEController extends Controller{
         }elseif($bool == "Created"){
             $msg = "Forecast Created";
             return back()->with("Success",$msg);
-        }elseif ($bool = "Already Submitted") {
+        }elseif ($bool == "Already Submitted") {
             $msg = "You already have submitted the Forecast";
+            return back()->with("Error",$msg);
+        }elseif($bool == "FCST not Correct"){
+            $msg = "Incorrect value submited";
             return back()->with("Error",$msg);
         }else{
             $msg = "Error";
