@@ -197,43 +197,30 @@ class subMarketRanking extends rankingMarket {
                     if (is_array($values[$y])) {
                         for ($i=0; $i < sizeof($values[$y]); $i++) {
                             if ($infoQuery[$b]['table'] == "cmaps a") {
-                                /*var_dump($years[$y]);
-                                var_dump("cmaps");
-                                var_dump("brand", $values[$y][$i]['brand']);*/
+
                                 if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
-                                    //var_dump($pRate);
                                     $values[$y][$i]['total'] /= $pRate;
                                 }else{
-                                    //var_dump(1.0);
                                     $values[$y][$i]['total'] /= 1.0;
                                 }
+
                             }elseif ($infoQuery[$b]['table'] == "ytd a") {
-                                /*var_dump($years[$y]);
-                                var_dump("ytd");
-                                var_dump("brand", $values[$y][$i]['brand']);*/
+                                
                                 if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
-                                    //var_dump($pRate);
                                     $values[$y][$i]['total'] *= $pRate;
                                 }else{
-                                    //var_dump(1.0);
                                     $values[$y][$i]['total'] *= 1.0;
                                 }
+
                             }elseif ($infoQuery[$b]['table'] == "fw_digital a") {
-                                /*var_dump($years[$y]);
-                                var_dump("digital");
-                                var_dump("brand", $values[$y][$i]['brand']);*/
+                                
                                 if ($values[$y][$i]['brand'] != 'ONL' && $values[$y][$i]['brand'] != 'VIX') {
                                     $values[$y][$i]['total'] *= 1.0;
-                                    //var_dump(1.0);
                                 }else{
-                                    //var_dump($pRate);
                                     $values[$y][$i]['total'] *= $pRate;
                                 }
+                                
                             }else{
-                                /*var_dump($years[$y]);
-                                var_dump("plan");
-                                var_dump("brand", $values[$y][$i]['brand']);
-                                var_dump($pRate);*/
                                 $values[$y][$i]['total'] *= $pRate;
                             }
                         }

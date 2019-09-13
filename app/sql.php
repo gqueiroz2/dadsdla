@@ -93,12 +93,11 @@ class sql extends Model{
     }
 
     public function fetch($result,$from,$to){
-        
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
-    			for ($i=0; $i < sizeof($from); $i++) {
-    				$info[$count][$to[$i]] = $row[$from[$i]];  				
+                for ($i=0; $i < sizeof($from); $i++) {
+                    $info[$count][$to[$i]] = $row[$from[$i]];  				
     			}
     			$count++;
     		}
@@ -107,6 +106,29 @@ class sql extends Model{
     	}
 
     	return $info;
+
+    }
+
+    public function fetch2($result,$from,$to){
+        var_dump($from);
+        var_dump($to);
+        $vlau = array();
+        if($result && $result->num_rows > 0){
+            $count = 0;
+            //var_dump($result->fetch_assoc());
+            while ($row = $result->fetch_assoc()){
+                $vlau[] = $row;
+                var_dump($vlau);
+                for ($i=0; $i < sizeof($from); $i++) {
+                    $info[$count][$to[$i]] = $row[$from[$i]];               
+                }
+                $count++;
+            }
+        }else{
+            $info = false;
+        }
+        
+        return $info;
 
     }
 

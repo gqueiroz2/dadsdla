@@ -92,7 +92,7 @@
 			<div class="row mt-2 justify-content-end">
 				<div class="col" style="width: 100%;">
 					<center>
-						{{ $render->assemble($mtx, $value, $pRate, $rtr) }}	
+						{{ $render->firstTableAssemble($firstMtx, $value, $pRate, $rtr) }}	
 					</center>
 				</div>
 			</div>

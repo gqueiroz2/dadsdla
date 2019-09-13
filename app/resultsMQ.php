@@ -185,7 +185,7 @@ class resultsMQ extends results{
         
         $currentMatrix[0][0] = "DN";
         $currentMatrix[1][0] = "$source $year";
-        $currentMatrix[2][0] = "Actual $year";
+        $currentMatrix[2][0] = "Bookings $year";
         $currentMatrix[3][0] = "Var(%)";
         $currentMatrix[4][0] = "Absolut Var.";
 

@@ -10,420 +10,176 @@ use App\base;
 use App\pRate;
 
 class VPMonth extends pAndR {
-    
-    public function weekOfMonth($date) {
-        $date = strtotime($date);
-        //Get the first day of the month.
-        $firstOfMonth = strtotime(date("Y-m-01", $date));
-        //Apply above formula.
 
-        $res = intval(date("W", $date)) - intval(date("W", $firstOfMonth));
-
-        return $res > 0 ? $res : ($res+1);
-    }
-
-    public function getLinesValue($con, $region, $currencyID, $year, $aux_value, $currency, $line){
+    public function base($con, $region, $regionID, $currencyID, $year, $value){
         
+        $base = new base();
         $sql = new sql();
-        $base = new base();
-        $p = new pRate();
+        $pr = new pRate();
 
-        $as = 'total';
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast ORDER BY last_modify_date DESC";
 
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
+        $result = $con->query($select);
+
+        $from = array("ID","oppid","type_of_value","currency_id");
+
+        $save = $sql->fetch($result,$from,$from);
+        
+        if (!$save) {
+            $save = false;
+            $valueCheck = false;
+            $currencyCheck = false;
         }else{
-            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($year));
+            $save = $save[0];
+            
+            if ($currencyID == $save['currency_id']) {
+                $currencyCheck = false;
+            }else{
+                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$year);
+                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$year);
+                $currencyCheck = true;
+            }
+            
+            if ($value ==  strtolower($save["type_of_value"])) {
+                $valueCheck = false;
+            }else{
+                
+                $valueCheck = true;
+                $tmp = array($regionID);
+                $mult = $base->getAgencyComm($con,$tmp);
+
+                if ($value == "net") {
+                    $multValue = (100 - $mult)/100;
+                }elseif($value == "gross"){
+                    $multValue = 1/(1-($mult/100));
+                }
+            }
+
         }
 
-        $cMonth = intval(date('m'));
+        $regionName = $region;
 
-        $today = date("Y-m-d");
-        $read = $this->weekOfMonth($today);
+        $br = new brand();
+        $brand = $br->getBrandBinary($con);
 
-        for ($m=0; $m < sizeof($base->month); $m++) { 
-            $value = $aux_value;
-            $digital = false;
+        $month = $base->getMonth();
 
-            if ($line == "Target") {
-                
-                $value = strtoupper($value);
-                $tmp = "SUM(value) AS 'total'";
+        $tmp = array($year);
+        $pRate = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
 
-                $columns = array("region_id", "currency_id", "year", "type_of_revenue", "month");
-                $colsValue = array($region, $currencyID, $year, $value, $base->month[$m][1]);
+        $readable = $this->monthAnalise($base);
 
-                $table = 'plan_by_sales';
-                $join = null;
+        $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
 
-                $names = array("total");
-
-            }elseif ($line == "Rolling Fcast ".$year) {
-
-                if ($base->month[$m][1] < $cMonth) {
-                    
-                    $value .= '_revenue_prate';
-                    $valueD = $aux_value."_revenue";
-
-                    $tmp = "SUM($value) AS 'total'";
-                    $tmpD = "SUM($valueD) AS 'total'";
-
-                    $columns = array("sales_representant_office_id", "year", "month");
-                    $columnsD = array("region_id", "currency_id", "year", "month");
-
-                    $colsValue = array($region, $year, $base->month[$m][1]);
-                    $colsValueD = array($region, $currencyID, $year, $base->month[$m][1]);
-
-                    $table = 'ytd';
-                    $tableD = 'fw_digital';
-
-                    $join = null;
-                    $joinD = null;
-
-                    $digital = true;
-
-                    $names = array("total");
-                    $namesD = array("total");
-
+        for ($b=0; $b < sizeof($brand); $b++) {
+            for ($m=0; $m < sizeof($month); $m++) {
+                if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    $table[$b][$m] = "digital";
                 }else{
-                    
-                    $value = ucfirst($value);
-                    $tmp = "read_q, SUM(value) AS 'total'";
-
-                    if (($read - 1) > 0) {
-                        $aux = $read-1;
-                    }else{
-                        $aux = $read;
-                    }
-
-                    $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
-                    $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
-
-                    $table = 'forecast_sales_rep f';
-                    $join = "LEFT JOIN forecast f2 ON f2.ID = f.forecast_id";
-
-                    $names = array("read_q", "total");
+                    $table[$b][$m] = "ytd";
                 }
-
-            }elseif ($line == "Past Rolling Fcast") {
-                
-                $value = ucfirst($value);
-                $tmp = "read_q, SUM(value) AS 'total'";
-
-                if (($read - 2) > 0) {
-                    $aux = $read-2;
-                }else{
-                    $aux = 1;
-                }
-
-                $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
-                $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
-
-                $table = 'forecast_sales_rep f';
-                $join = "LEFT JOIN forecast f2 ON f2.ID = f.forecast_id";
-
-                $names = array("read_q", "total");
-
-            }elseif ($line == "Manual Estimation") {
-                
-                $value = ucfirst($value);
-                $tmp = "read_q, SUM(value) AS 'total'";
-
-                if (($read - 1) > 0) {
-                    $aux = $read-1;
-                }else{
-                    $aux = $read;
-                }
-
-                $columns = array("f2.region_id", "f2.currency_id", "f2.year", "f2.type_of_value", "f2.month", "f.month", "f2.read_q");
-                $colsValue = array($region, $currencyID, $year, $value, intval(date('m')), $base->month[$m][1], $aux);
-
-                $table = 'forecast_sales_rep f';
-                $join = "LEFT JOIN forecast f2 ON f2.ID = f.forecast_id";
-
-                $names = array("read_q", "total");
-
-            }elseif ($line == "Bookings") {
-
-                $value .= '_revenue_prate';
-                $valueD = $aux_value."_revenue";
-
-                $tmp = "SUM($value) AS 'total'";
-                $tmpD = "SUM($valueD) AS 'total'";
-
-                $columns = array("sales_representant_office_id", "year", "month");
-                $columnsD = array("region_id", "currency_id", "year", "month");
-
-                $colsValue = array($region, $year, $base->month[$m][1]);
-                $colsValueD = array($region, $currencyID, $year, $base->month[$m][1]);
-
-                $table = 'ytd';
-                $tableD = 'fw_digital';
-
-                $join = null;
-                $joinD = null;
-
-                $digital = true;
-
-                $names = array("total");
-                $namesD = array("total");
-
-            }elseif ($line == ($year-1)) {
-
-                $value .= '_revenue_prate';
-                $valueD = $aux_value."_revenue";
-
-                $tmp = "SUM($value) AS 'total'";
-                $tmpD = "SUM($valueD) AS 'total'";
-
-                $columns = array("sales_representant_office_id", "year", "month");
-                $columnsD = array("region_id", "currency_id", "year", "month");
-
-                $colsValue = array($region, ($year-1), $base->month[$m][1]);
-                $colsValueD = array($region, $currencyID, ($year-1), $base->month[$m][1]);
-
-                $table = 'ytd';
-                $tableD = 'fw_digital';
-
-                $join = null;
-                $joinD = null;
-
-                $digital = true;
-
-                $names = array("total");
-                $namesD = array("total");
-            }
-
-            $where = $sql->where($columns, $colsValue);
-
-            $values[$m] = $sql->select($con, $tmp, $table, $join, $where);
-            
-            $res[$m] = $sql->fetch($values[$m], $names, $names);
-            
-            if (is_array($res[$m])) {
-                $res[$m][0]['total'] /= $pRate;
-            }
-
-            if ($digital) {
-
-                $whereD = $sql->where($columnsD, $colsValueD);
-
-                $valuesD[$m] = $sql->select($con, $tmpD, $tableD, $joinD, $whereD);
-                
-                $resD[$m] = $sql->fetch($valuesD[$m], $namesD, $namesD);
-
-                if (is_array($resD[$m])) {
-                    $resD[$m][0]['total'] /= $pRate;
-                }
-
-                $res[$m][0] += $resD[$m][0];
+                //pega colunas
+                $sum[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
             }
         }
 
-        if (is_array($res)) {
-            for ($r=0; $r < sizeof($res); $r++) { 
-                $resF[$r] = $res[$r][0];       
+        for ($m=0; $m < sizeof($month); $m++) {
+            $lastYear[$m] = $this->generateValueWB($con,$sql,$regionID,($year-1),$month[$m][1], $this->generateColumns($value,"ytd") ,"ytd",$value)*$pRate;
+        }
+
+    }
+
+    public function listClientsByVPMonth($con,$sql,$year,$regionID){
+
+        //GET FROM SALES FORCE
+        $sf = "SELECT DISTINCT c.name AS 'clientName',
+               c.ID AS 'clientID'
+               FROM sf_pr s
+               LEFT JOIN client c ON c.ID = s.client_id
+               WHERE ( region_id = \"".$regionID."\") 
+               AND ( stage != \"6\") AND ( stage != \"5\")
+               ORDER BY 1
+        ";
+
+        $resSF = $con->query($sf);
+        $from = array("clientName","clientID");
+        $listSF = $sql->fetch($resSF,$from,$from);
+
+        //GET FROM IBMS/BTS
+        $ytd = "SELECT DISTINCT c.name AS 'clientName',
+                c.ID AS 'clientID'
+                FROM ytd y
+                LEFT JOIN client c ON c.ID = y.client_id
+                LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    WHERE (y.year = \"$year\" )
+                    AND (r.ID = \"".$regionID."\")
+                    ORDER BY 1
+        ";
+
+        $resYTD = $con->query($ytd);
+        $from = array("clientName","clientID");
+        $listYTD = $sql->fetch($resYTD,$from,$from);
+        
+        $count = 0;
+        if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
             }
-        }else{
-            $resF = $res;
+        }
+        if($listYTD){
+            for ($y=0; $y < sizeof($listYTD); $y++) { 
+                $list[$count] = $listYTD[$y];
+                $count ++;
+            }
         }
         
-        return $resF;
+        $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
+
+        usort($list, array($this,'orderClient'));
+
+        return $list;
+
     }
 
-    public function assembler($target, $forecast, $pForecast, $manualEstimation, $bookings, $pBookings, $year, $region){
-    	
-    	$totalTarget = 0;
-    	$totalForecast = 0;
-        $totalManualEstimation = 0;
-        $totalPForecast = 0;
-    	$totalBookings = 0;
-    	$totalPBookings = 0;
+    public function monthAnalise($base){
+        $month = date('M');
 
-    	$matrix[0][0] = $region;
-    	$matrix[1][0] = "Target";
-        $matrix[2][0] = "Rolling Fcast ".$year;
-        $matrix[3][0] = "Manual Estimation";
-        $matrix[4][0] = "Past Rolling Fcast";
-        $matrix[5][0] = "Bookings";
-        $matrix[6][0] = "Pending";
-        $matrix[7][0] = $year-1;
-        $matrix[8][0] = "Var RF vs Target";
-        $matrix[9][0] = "% Target Achievement";
+        $tmp = false;
 
-        $base = new base();
-
-        $cMonth = intval(date('m'));
-
-        $p = 0;
-
-        $quarter = array(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0);
-
-        for ($m=0; $m < sizeof($base->month); $m++) {
-        	if ($quarter[$p] == 0) {
-    			if ($base->month[$m][1] == 4) {
-    				$val = "Q1";
-    			}elseif ($base->month[$m][1] == 7) {
-    				$val = "Q2";
-    			}else{
-    				$val = "Q3";
-    			}
-
-    			$matrix[0][($p+1)] = $val;
-
-    			$matrix[1][($p+1)] = $matrix[1][($p+1)-1] + $matrix[1][($p+1)-2] + $matrix[1][($p+1)-3];
-    			$matrix[2][($p+1)] = $matrix[2][($p+1)-1] + $matrix[2][($p+1)-2] + $matrix[2][($p+1)-3];
-                $matrix[3][($p+1)] = $matrix[3][($p+1)-1] + $matrix[3][($p+1)-2] + $matrix[3][($p+1)-3];
-    			$matrix[4][($p+1)] = $matrix[4][($p+1)-1] + $matrix[4][($p+1)-2] + $matrix[4][($p+1)-3];
-                $matrix[5][($p+1)] = $matrix[5][($p+1)-1] + $matrix[5][($p+1)-2] + $matrix[5][($p+1)-3];
-    			$matrix[6][($p+1)] = $matrix[2][($p+1)] - $matrix[5][($p+1)];
-    			$matrix[7][($p+1)] = $matrix[7][($p+1)-1] + $matrix[7][($p+1)-2] + $matrix[7][($p+1)-3];
-    			$matrix[8][($p+1)] = $matrix[2][($p+1)] - $matrix[1][($p+1)];
-
-    			if ($base->month[$m][2] < $cMonth) {
-	        		if ($matrix[1][($p+1)] == 0 || $matrix[5][($p+1)] == 0) {
-	        			$matrix[9][($p+1)] = 0;
-	        		}else{
-	        			$matrix[9][($p+1)] = ($matrix[5][($p+1)]/$matrix[1][($p+1)])*100;
-	        		}
-	        	}else{
-	        		if ($matrix[1][($p+1)] == 0 || $matrix[2][($p+1)] == 0) {
-	        			$matrix[9][($p+1)] = 0;
-	        		}else{
-	        			$matrix[9][($p+1)] = ($matrix[2][($p+1)]/$matrix[1][($p+1)])*100;
-	        		}
-	        	}
-
-	        	$quarter[($p+1)] = 1;
-	        	$p++;
-	        	$m--;
-        	}else{
-        		$matrix[0][($p+1)] = $base->month[$m][2];
-
-                if (!$target[$m]['total'] || is_null($target[$m]['total'])) {
-                    $matrix[1][($p+1)] = 0;                    
-                }else{
-                    $matrix[1][($p+1)] = $target[$m]['total'];
-                }
-
-	        	$totalTarget += $target[$m]['total'];
-
-                if (!$forecast[$m]['total'] || is_null($forecast[$m]['total'])) {
-                    $matrix[2][($p+1)] = 0;                    
-                }else{
-                    $matrix[2][($p+1)] = $forecast[$m]['total'];
-                }
-
-	        	$totalForecast += $forecast[$m]['total'];
-
-                if (!$manualEstimation[$m]['total'] || is_null($manualEstimation[$m]['total'])) {
-                    $matrix[3][($p+1)] = 0;
-                }else{
-                    $matrix[3][($p+1)] = $manualEstimation[$m]['total'];
-                }
-
-                $totalManualEstimation += $manualEstimation[$m]['total'];
-
-                if (!$pForecast[$m]['total'] || is_null($pForecast[$m]['total'])) {
-                    $matrix[4][($p+1)] = 0;
-                }else{
-                    $matrix[4][($p+1)] = $pForecast[$m]['total'];
-                }
-
-                $totalPForecast += $pForecast[$m]['total'];
-
-                if (!$bookings[$m]['total'] || is_null($bookings[$m]['total'])) {
-                    $matrix[5][($p+1)] = 0;
-                }else{
-                    $matrix[5][($p+1)] = $bookings[$m]['total'];
-                }
-
-	        	$totalBookings += $bookings[$m]['total'];
-
-	        	$matrix[6][($p+1)] = $forecast[$m]['total'] - $bookings[$m]['total'];
-
-                if (!$pBookings[$m]['total'] || is_null($pBookings[$m]['total'])) {
-                    $matrix[7][($p+1)] = 0;
-                }else{
-                    $matrix[7][($p+1)] = $pBookings[$m]['total'];
-                }
-
-	        	$totalPBookings += $pBookings[$m]['total'];
-
-	        	$matrix[8][($p+1)] = $forecast[$m]['total'] - $target[$m]['total'];
-
-	        	if ($base->month[$m][2] < $cMonth) {
-	        		if ($matrix[1][($p+1)] == 0 || $matrix[5][($p+1)] == 0) {
-	        			$matrix[9][($p+1)] = 0;
-	        		}else{
-	        			$matrix[9][($p+1)] = ($matrix[5][($p+1)]/$matrix[1][($p+1)])*100;
-	        		}
-	        	}else{
-	        		if ($matrix[1][($p+1)] == 0 || $matrix[2][($p+1)] == 0) {
-	        			$matrix[9][($p+1)] = 0;
-	        		}else{
-	        			$matrix[9][($p+1)] = ($matrix[2][($p+1)]/$matrix[1][($p+1)])*100;
-	        		}
-	        	}
-
-	        	$p++;
-        	}
-        }
-
-        $last = ($p+1);
-
-        $matrix[0][$last] = "Q4";
-
-        $matrix[1][$last] = $matrix[1][$last-1] + $matrix[1][$last-2] + $matrix[1][$last-3];
-        $matrix[2][$last] = $matrix[2][$last-1] + $matrix[2][$last-2] + $matrix[2][$last-3];
-        $matrix[3][$last] = $matrix[3][$last-1] + $matrix[3][$last-2] + $matrix[3][$last-3];
-        $matrix[4][$last] = $matrix[4][$last-1] + $matrix[4][$last-2] + $matrix[4][$last-3];
-        $matrix[5][$last] = $matrix[5][$last-1] + $matrix[5][$last-2] + $matrix[5][$last-3];
-        $matrix[6][$last] = $matrix[2][$last] - $matrix[5][$last];
-        $matrix[7][$last] = $matrix[7][$last-1] + $matrix[7][$last-2] + $matrix[7][$last-3];
-        $matrix[8][$last] = $matrix[2][$last] - $matrix[1][$last];
-
-        if ($base->month[$m-1][2] < $cMonth) {
-            if ($matrix[1][$last] == 0 || $matrix[5][$last] == 0) {
-                $matrix[9][$last] = 0;
-            }else{
-                $matrix[9][$last] = ($matrix[5][$last]/$matrix[1][$last])*100;
+        for ($m=0; $m <sizeof($base->monthWQ) ; $m++) { 
+            if ($month == $base->monthWQ[$m]) {
+                $tmp = true;
             }
-        }else{
-            if ($matrix[1][$last] == 0 || $matrix[2][$last] == 0) {
-                $matrix[9][$last] = 0;
+
+            if ($tmp) {
+                $tfArray[$m] = "";
+                $odd[$m] = "odd";
+                $even[$m] = "rcBlue";
+                $manualEstimation[$m] = "background-color:#235490;";
+                $color[$m] = "color:white;";
             }else{
-                $matrix[9][$last] = ($matrix[2][$last]/$matrix[1][$last])*100;
+                $tfArray[$m] = "readonly='true'";
+                $odd[$m] = "oddGrey";
+                $even[$m] = "evenGrey";
+                $manualEstimation[$m] = "";
+                $color[$m] = "";
             }
-        }
+        } 
 
-    	$quarter[$last] = 1;
-    	$last++;
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
 
-		$matrix[0][$last] = "Total";
-        $matrix[1][$last] = $totalTarget;
-        $matrix[2][$last] = $totalForecast;
-        $matrix[3][$last] = $totalManualEstimation;
-        $matrix[4][$last] = $totalPForecast;
-		$matrix[5][$last] = $totalBookings;
-		$matrix[6][$last] = $totalForecast - $totalBookings;
-		$matrix[7][$last] = $totalPBookings;
-		$matrix[8][$last] = $totalForecast - $totalTarget;
-
-		if ($base->month[$m-1][2] < $cMonth) {
-    		if ($matrix[1][$last] == 0 || $matrix[5][$last] == 0) {
-    			$matrix[9][$last] = 0;
-    		}else{
-    			$matrix[9][$last] = ($matrix[5][$last]/$matrix[1][$last])*100;
-    		}
-    	}else{
-    		if ($matrix[1][$last] == 0 || $matrix[2][$last] == 0) {
-    			$matrix[9][$last] = 0;
-    		}else{
-    			$matrix[9][$last] = ($matrix[2][$last]/$matrix[1][$last])*100;
-    		}
-    	}
-
-        return $matrix;
+        return $rtr;
     }
+
+    private static function orderClient($a, $b){
+        
+        if ($a == $b)
+            return 0;
+        
+        return ($a['clientName'] < $b['clientName']) ? -1 : 1;
+    }
+
 }

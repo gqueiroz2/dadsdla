@@ -63,15 +63,14 @@ class subChurnRanking extends rankingChurn {
 		}
 		
 		for ($y=0; $y < sizeof($years); $y++) { 
-
-    		$values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand, $val, $filterType);
+		  $values[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand, $val, $filterType);
     	}
     	
 		return $values;
     }
 
     public function getSubValues($con, $tableName, $type, $region, $value, $year, $months, $currency, $brands, $filter, $filterType){
-    	
+
     	$sql = new sql();
         
         $p = new pRate();
@@ -120,7 +119,7 @@ class subChurnRanking extends rankingChurn {
 
         if ($type == "agency" || $type == "client") {
             $valueD = $value."_revenue";
-            $columnsD = array("region_id","brand_id","month","year");
+            $columnsD = array("f.region_id","brand_id","month","year");
             $colsValueD = array($region, $brands_idD, $months, $year, $filter);
         }
         
@@ -149,24 +148,45 @@ class subChurnRanking extends rankingChurn {
 
         $tmp = "$leftAbv.ID AS '".$filterType."ID', $leftAbv.name AS '$filterType', SUM($value) AS '$as'";
 
+        if ($type == "client") {
+            $tmp .= ", c.name AS 'agencyGroup'";
+        }
+
         $join = "LEFT JOIN $filterType $leftAbv ON $leftAbv.ID = $tableAbv.".$filterType."_ID";
+
+        if ($type == "client") {
+            $join .= " LEFT JOIN agency_group c ON c.ID = b.agency_group_id";
+        }
 
         $name = $filterType."_id";
 		$names = array($filterType."ID", $filterType, $as);
 
+        if ($type == "client") {
+            array_push($names, "agencyGroup");
+        }
+
         $where = $sql->where($columns, $colsValue);
 
     	$values = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
-        
-    	$from = $names;
 
+    	$from = $names;
     	$res = $sql->fetch($values, $from, $from);
 
         if ($type == "agency" || $type == "client") {
             $tmpD = $filterType."_id AS '".$filterType."ID', ".$leftAbv.".name AS '".$filterType."', SUM($valueD) AS $as";
+
+            if ($type == "client") {
+                $tmpD .= ", c.name AS 'agencyGroup'";
+            }
+
             $joinD = "LEFT JOIN ".$filterType." ".$leftAbv." ON ".$leftAbv.".ID = ".$filterType."_id";
+
+            if ($type == "client") {
+                $joinD .= " LEFT JOIN agency_group c ON c.ID = b.agency_group_id";
+            }
+
             $whereD = $sql->where($columnsD, $colsValueD);
-            $valuesD = $sql->selectGroupBy($con, $tmpD, "fw_digital", $joinD, $whereD, "total", $name, "DESC");
+            $valuesD = $sql->selectGroupBy($con, $tmpD, "fw_digital f", $joinD, $whereD, "total", $name, "DESC");
             $resD = $sql->fetch($valuesD, $from, $from);
         }
 
@@ -268,12 +288,18 @@ class subChurnRanking extends rankingChurn {
 			            			}else{
 			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
 			            			}
-			            		}else{
-			        				if ($t == 4 || $t == 10) {
-			        					echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";	
-			        				}else{
-			        					echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";	
-			        				}
+			            		}elseif ($type == "client") {
+                                    if ($t == 6) {
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                    }else{
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                    }
+                                }else{
+                                    if ($t == 5) {
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                    }else{
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                    }
 			        			}
 			            	}else{
 			            		echo "<td class='darkBlue center'> ".$total[$t]." </td>";

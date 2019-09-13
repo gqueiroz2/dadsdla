@@ -34,7 +34,7 @@ class renderVPMonth extends Render {
 
     }
 
-    public function assemble($mtx, $value, $currency, $region){
+    public function firstTableAssemble($mtx, $value, $currency, $region){
     	
         $cMonth = date('F');
 
