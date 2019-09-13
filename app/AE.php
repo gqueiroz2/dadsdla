@@ -1254,6 +1254,8 @@ class AE extends pAndR{
     		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
     	}
 
+        var_dump($div);
+
     	if($value == "gross"){
             $ytdColumn = "gross_revenue_prate";
     		$fwColumn = "gross_revenue";
