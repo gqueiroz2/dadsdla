@@ -274,13 +274,13 @@ class subBrandRanking extends rankingBrand {
                 if ($valCyear == 0) { //ANO CORRENTE = 0
                     $res = "Churn";
                 }else{ //ANO CORRENTE > 0
-                    $res = "Renovated";
+                    $res = "Renewed";
                 }
             }
         }else{ //ANO RETRASADO = 0
             if ($valPyear > 0) { //ANO PASSADO > 0
                 if ($valCyear > 0) { //ANO CORRENTE > 0
-                    $res = "Renovated";
+                    $res = "Renewed";
                 }else{ //ANO CORRENTE = 0
                     $res = "Churn";
                 }

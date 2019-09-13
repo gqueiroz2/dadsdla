@@ -15,31 +15,14 @@ class AE extends pAndR{
     
     public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit,$bool){
         $sql = new sql();
-/*
-        var_dump($region);
-        var_dump($salesRep);
-        var_dump($currency);
-        var_dump($value);
-        var_dump($user);
-        var_dump($year);
-        var_dump($date);
-        var_dump($time);
-        var_dump($fcstMonth);
-        var_dump($manualEstimantionBySalesRep);
-        var_dump($manualEstimantionByClient);
-        var_dump($splitted);
-*/
         $sr = new salesRep();
-
         $tmp = explode("-", $date);
+
         if($tmp && isset($tmp[2])){
             $month = $tmp[2];
         }else{
             $month = 0;
         }
-
-
-
 
         if ($submit == "submit") {
             for ($c=0; $c <sizeof($bool) ; $c++) {
@@ -78,8 +61,11 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
+        var_dump($id);
 
-        if ($id) {
+        if ( $id && !is_null($id) ) {
+            var_dump("IF");
+            var_dump($date);
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
@@ -103,6 +89,7 @@ class AE extends pAndR{
             return "Updated";
 
         }else{
+            var_dump("ELSE");
 
             $columns = "(
                          oppid,
@@ -113,7 +100,7 @@ class AE extends pAndR{
                          submitted,type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
-
+            var_dump($date);
             $values = "(
                         \"".$oppid."\",
                         \"".$region."\",\"".$salesRepID."\",
@@ -126,8 +113,9 @@ class AE extends pAndR{
             $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
 
             if ($con->query($insertFCST) === true) {
-            
+                var_dump("TRUE");
             }else{
+                var_dump("ELSE");
                 var_dump($con->error);
                 return false;
 

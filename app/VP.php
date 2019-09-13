@@ -428,13 +428,13 @@ class VP extends pAndR{
                            ORDER BY ID
                   ";
         $res = $con->query($select);
-        $from = array('ID','oppid','region_id','currency_id',
+        $from = array('ID','oppid','region_id','sales_rep_id','currency_id',
         	          'type_of_value','read_q','year',
-        	          'date_m','last_modify_by','last_modify_date','last_modify_time');
+        	          'date_m','last_modify_by','last_modify_date','last_modify_time','month','submitted','type_of_forecast');
 
-        $to = array('ID','oppid','regionID','currencyID',
+        $to = array('ID','oppid','regionID','salesRepID','currencyID',
         	        'typeOfValue','readQ','year',
-        	        'dateM','lastModifyBy','lastModifyDate','lastModifyTime');
+        	        'dateM','lastModifyBy','lastModifyDate','lastModifyTime','month','submitted','type_of_value');
 
         $fcstInfo = $sql->fetch($res,$from,$to);
         
