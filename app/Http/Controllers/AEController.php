@@ -47,7 +47,7 @@ class AEController extends Controller{
         var_dump($user);
         var_dump($year);
 */
-        $date = date('Y-d-m');
+        $date = date('Y-m-d');
         $time = date('H:i');
         $fcstMonth = date('m');
 
@@ -90,7 +90,9 @@ class AEController extends Controller{
         /*
             kind,region,year,salesRep,currency,value,week,month
         */
-        $today = date("Y-m-d");
+        $today = $date;
+
+        var_dump($today);
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
@@ -99,6 +101,8 @@ class AEController extends Controller{
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$boolFront);
+
+        var_dump($bool);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -116,6 +120,7 @@ class AEController extends Controller{
             $msg = "Error";
             return back()->with("Error",$msg);
         }
+
     }
 
     public function get(){
