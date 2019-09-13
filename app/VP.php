@@ -363,11 +363,9 @@ class VP extends pAndR{
             $cc++;
         }
 
-        var_dump($list);
 
         $list = $base->superUnique($list,'clientID');
 
-        var_dump($list);
         usort($list, array($this,'orderClient'));
 
 	    return $list;
