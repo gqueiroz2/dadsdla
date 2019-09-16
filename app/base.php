@@ -456,6 +456,51 @@ class base extends Model{
         return $tmp;
     }
 
+    public function adaptCurrency($con,$pr,$save,$currencyID,$cYear){
+        if ($currencyID == $save['currency_id']) {
+            $currencyCheck = false;
+            $newCurrency = false;
+            $oldCurrency = false;
+        }else{
+            $currencyCheck = true;
+            $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
+            $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);            
+        }
+
+        $array = array( "currencyCheck" => $currencyCheck,
+                        "newCurrency" => $newCurrency,
+                        "oldCurrency" => $oldCurrency
+                        );
+
+        return $array;
+
+
+    }
+
+    public function adaptValue($value,$save,$regionID){
+        if ($value ==  strtolower($save["type_of_value"])) {
+            $valueCheck = false;
+            $multValue = false;
+        }else{
+            $valueCheck = true;
+            $tmp = array($regionID);
+            $mult = $base->getAgencyComm($con,$tmp);
+            if ($value == "net") {
+                $multValue = (100 - $mult)/100;
+            }elseif($value == "gross"){
+                $multValue = 1/(1-($mult/100));
+            }
+        }
+
+        $array = array("valueCheck" => $valueCheck,
+                       "multValue" => $multValue
+
+        );
+
+        return $array;
+
+    }
+
     public function getBrandColor($brand){
         $rtr = false;
 
