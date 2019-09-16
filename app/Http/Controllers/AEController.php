@@ -170,7 +170,7 @@ class AEController extends Controller{
     }
 
     public function post(){
-        $db = new dataBase(); 
+        $db = new dataBase();
         $render = new PAndRRender();
         $r = new region();
         $pr = new pRate();

@@ -55,8 +55,18 @@ class VPMonthController extends Controller {
         
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
+        if (!$values) {
+            return back()->with("Error","Don't have a Forecast Saved");
+        }
+
+        $forRender = $values;
+        $client = $values['client'];
+        $tfArray = array();
+        $odd = array();
+        $even = array();
+
         $render = new renderVPMonth();
 
-        //return view('pAndR.VPMonthView.post',compact('render','region','currency', 'pRate', 'rtr', 'value', 'firstMtx'));
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
     }
 }
