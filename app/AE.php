@@ -1153,8 +1153,8 @@ class AE extends pAndR{
             GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP
 
         */        
-            
-        
+
+
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
             for ($m=0; $m < sizeof($monthOPP[$l]); $m++) { 
