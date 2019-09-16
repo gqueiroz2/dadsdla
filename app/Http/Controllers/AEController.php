@@ -22,8 +22,10 @@ class AEController extends Controller{
         $db = new dataBase(); 
         $sql = new sql();
         $pr = new pRate();
+        $r = new region();
         $ae = new AE();
         $base = new base();
+        $render = new PAndRRender();
         $excel = new excel();
 
         $con = $db->openConnection("DLA");  
@@ -71,14 +73,38 @@ class AEController extends Controller{
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
+
+        }       
+        for ($c=0; $c < sizeof($client); $c++) { 
+
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
             $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
 
-            if ($passTotal[$c] != $totalClient[$c]) {
+            if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true)) ) {
                 $msg = "Incorrect value submited";
-                return back()->with("Error",$msg);
+
+                if ($value == "Gross") {
+                    $value = "gross";
+                }else{
+                    $value = "net";
+                }
+
+                $forRender = $ae->base2($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
+
+                $region = $r->getRegion($con,false);
+                $currency = $pr->getCurrency($con,false);
+
+                $client = $forRender['client'];
+                $tfArray = array();
+                $odd = array();
+                $even = array();
+
+                $error = "Cannot Submit, Manual Estimation does not match with Rolling FCST";
+        
+                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error"));
+
             }
-        }       
+        }
 
         for ($c=0; $c < sizeof($client); $c++) { 
             
@@ -98,7 +124,6 @@ class AEController extends Controller{
         */
         $today = $date;
 
-        var_dump($today);
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
@@ -106,7 +131,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
+        /*$bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
 
 
         if ($bool == "Updated") {
@@ -121,7 +146,7 @@ class AEController extends Controller{
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }
+        }*/
 
     }
 
