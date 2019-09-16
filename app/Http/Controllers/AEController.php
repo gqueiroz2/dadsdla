@@ -74,7 +74,7 @@ class AEController extends Controller{
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
 
-        }       
+        }
         for ($c=0; $c < sizeof($client); $c++) { 
 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
@@ -89,7 +89,7 @@ class AEController extends Controller{
                     $value = "net";
                 }
 
-                $forRender = $ae->base2($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
+                $forRender = $ae->baseSaved($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
 
                 $region = $r->getRegion($con,false);
                 $currency = $pr->getCurrency($con,false);
@@ -131,7 +131,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        /*$bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
 
 
         if ($bool == "Updated") {
@@ -146,7 +146,7 @@ class AEController extends Controller{
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }*/
+        }
 
     }
 
@@ -193,7 +193,7 @@ class AEController extends Controller{
             return back()->withErrors($validator)->withInput();
         }
         
-        $tmp = $ae->base($con,$r,$pr,$cYear,$pYear);
+        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear);
 
         if (!$tmp) {
             return back()->with("Error","Don't have a Forecast Saved");
@@ -205,7 +205,9 @@ class AEController extends Controller{
         $odd = array();
         $even = array();
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even"));
+        $error = false;
+
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error"));
     }
 
 }

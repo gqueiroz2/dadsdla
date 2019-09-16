@@ -291,7 +291,7 @@ class AE extends pAndR{
         return $string;
     }
 
-    public function base2($con,$r,$pr,$cYear,$regionID,$salesRepID,$currencyID,$value,$manualEstimantionClient){
+    public function baseSaved($con,$r,$pr,$cYear,$regionID,$salesRepID,$currencyID,$value,$manualEstimantionClient){
         $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
@@ -604,7 +604,7 @@ class AE extends pAndR{
 
     }
 
-    public function base($con,$r,$pr,$cYear,$pYear){
+    public function baseLoad($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
         $base = new base();    
