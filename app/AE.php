@@ -317,6 +317,11 @@ class AE extends pAndR{
             $currencyCheck = false;
         }else{
             $save = $save[0];
+            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
+            $currencyCheck = $temp["currencyCheck"];
+            $newCurrency = $temp["newCurrency"];
+            $oldCurrency = $temp["oldCurrency"];
+/*
             if ($currencyID == $save['currency_id']) {
                 $currencyCheck = false;
             }else{
@@ -324,6 +329,14 @@ class AE extends pAndR{
                 $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);
                 $currencyCheck = true;
             }
+*/  
+
+            $temp2 = $base->adaptValue($value,$save,$regionID);
+
+            $valueCheck = $temp2["valueCheck"];
+            $multValue = $temp2["multValue"];
+
+            /*
             if ($value ==  strtolower($save["type_of_value"])) {
                 $valueCheck = false;
             }else{
@@ -335,7 +348,8 @@ class AE extends pAndR{
                 }elseif($value == "gross"){
                     $multValue = 1/(1-($mult/100));
                 }
-            }
+            }  
+            */
 
         }
 
@@ -1316,8 +1330,6 @@ class AE extends pAndR{
     	}else{
     		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
     	}
-
-        var_dump($div);
 
     	if($value == "gross"){
             $ytdColumn = "gross_revenue_prate";
