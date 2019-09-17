@@ -71,7 +71,7 @@ class VPMonth extends pAndR {
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-
+        
         $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
 
         for ($b=0; $b < sizeof($brand); $b++) {
@@ -121,40 +121,69 @@ class VPMonth extends pAndR {
 
             $from = "value";
 
+            for ($m=0; $m < 12; $m++) { 
+                $manualRolling[$m] = 0;
+            }
+
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
                 $mul = 1;
 
-                for ($m=0; $m < 12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1);
+                for ($m=0; $m < 12; $m++) {
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE')";
+                    /*if ($listOfClients[$c]['clientID'] == 208) {
+                        var_dump($select[$c][$m]);
+                    }*/
+                    
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE')";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
-                    
+                    $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
+
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
+                    $pastSaida[$c][$m] = $sql->fetchSum($pastResult[$c][$m],$from);
                 }
 
                 if ($saida[$c]) {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
-                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);                
+                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);
+                        $manualRolling[$m] += $rollingFCST[$c][$m];
+
+                        $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
+                        $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
+
                     }
                 }else{
                     for ($m=0; $m < 12; $m++) { 
+
                         $rollingFCST[$c][$m] = 0;
+                        $manualRolling[$m] = 0;
+
+                        $pastRollingFCST[$c][$m] = 0;
+                        $fPastRollingFCST[$m] = 0;
                     }
                 }
                 
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $manualRolling[$m] = $manualRolling[$m]*$multValue;
+
+                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
+                        $fPastRolling[$m] = $fPastRolling[$m]*$multValue;                        
                     }
                 }
 
                 if ($currencyCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
+
+                        $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $fPastRolling[$m] = ($fPastRolling[$m]*$newCurrency)/$oldCurrency;                       
                     }
                 }
-                
+
             }
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -166,6 +195,10 @@ class VPMonth extends pAndR {
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
+            $pastRollingFCST = $this->addQuartersAndTotalOnArray($pastRollingFCST);
+            
+            $manualRolling = $this->addQuartersAndTotal($manualRolling);
+            $fPastRolling = $this->addQuartersAndTotal($fPastRolling);
             
             $lastRollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
 
@@ -184,6 +217,7 @@ class VPMonth extends pAndR {
             //$rollingFCST = $this->adjustFCST($rollingFCST);*/
 
         }else{
+            
             $rollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -228,7 +262,7 @@ class VPMonth extends pAndR {
             $valueView = 'Net Net';
         }
 
-        $rtr = array(   
+        $rtr = array(
                         "cYear" => $year,
                         "pYear" => ($year-1),
                         "readable" => $readable,
@@ -236,6 +270,7 @@ class VPMonth extends pAndR {
                         "client" => $listOfClients,
                         "targetValues" => $targetValues,
 
+                        "manualRolling" => $manualRolling,
                         "rollingFCST" => $rollingFCST,
                         "lastRollingFCST" => $lastRollingFCST,
                         "clientRevenueCYear" => $clientRevenueCYear,
@@ -329,14 +364,14 @@ class VPMonth extends pAndR {
 
         if ($date < 3) {
         }elseif ($date < 6) {
-            $date ++;
+            $date++;
         }elseif ($date < 9) {
             $date += 2;
         }else{
             $date += 3;
         }
 
-        for ($m=0; $m <$date ; $m++) { 
+        for ($m=0; $m < $date; $m++) {
             $fcst[$m] = $booking[$m];
         }
 
@@ -346,7 +381,6 @@ class VPMonth extends pAndR {
         $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
 
         $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
-
 
         return $fcst;
     }
@@ -361,7 +395,7 @@ class VPMonth extends pAndR {
             $sum = "net_revenue";
         }
 
-        for ($c=0; $c <sizeof($clients) ; $c++) { 
+        for ($c=0; $c < sizeof($clients); $c++) { 
             $select[$c] = "SELECT SUM($sum) AS value FROM sf_pr WHERE stage = \"6\" AND client_id = \"".$clients[$c]["clientID"]."\"";
 
             $res = $con->query($select[$c]);
@@ -548,7 +582,8 @@ class VPMonth extends pAndR {
         }        
 
         for ($c=0; $c < sizeof($clients); $c++) {
-            $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
+            // PERIOD OF FCST , VALUES AND STAGE
+            $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$div); 
             //var_dump($someFCST);
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
@@ -669,7 +704,6 @@ class VPMonth extends pAndR {
         }
 
         return $fcst;
-        
     }
 
     public function fillFCST($sFCST,$mOPP,$sRP){
@@ -689,7 +723,7 @@ class VPMonth extends pAndR {
             
             $factor = 1;
 
-            $adjustedValue = $sFCST[$i]['sumValue']* $factor;
+            $adjustedValue = $sFCST[$i]['sumValue']*$factor;
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
 
@@ -871,8 +905,8 @@ class VPMonth extends pAndR {
             $return[$m] = 0;
         }
 
-        for ($c=0; $c <sizeof($matrix); $c++) { 
-            for ($m=0; $m <sizeof($matrix[$c]); $m++) { 
+        for ($c=0; $c < sizeof($matrix); $c++) { 
+            for ($m=0; $m < sizeof($matrix[$c]); $m++) { 
                 $return[$m] += $matrix[$c][$m];
             }
         }
@@ -1042,15 +1076,16 @@ class VPMonth extends pAndR {
     }
 
     public function monthAnalise($base){
+        
         $month = date('M');
 
         $tmp = false;
-
-        for ($m=0; $m <sizeof($base->monthWQ) ; $m++) { 
+        
+        for ($m=0; $m < sizeof($base->monthWQ); $m++) { 
             if ($month == $base->monthWQ[$m]) {
                 $tmp = true;
             }
-
+            
             if ($tmp) {
                 $tfArray[$m] = "";
                 $odd[$m] = "odd";
