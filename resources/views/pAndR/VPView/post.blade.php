@@ -77,27 +77,44 @@
 	<br>
 	<div class="container-fluid">
 		<div class="row justify-content-end">
-			<div class="col">
-				<!-- Botão para acionar modal -->
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo">
-				  Abrir modal de demonstração
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>				
+			<div class="col">				
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
+				   AE Submissions
 				</button>
 
 
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col" style="width: 100%; padding-right: 2%;">
-				<center>
-					{{$render->VP1($forRender)}}
-				</center>
-			</div>
+		<div class="row justify-content-center mt-2">
+			@if($forRender)
+				<div class="col" style="width: 100%; padding-right: 2%;">
+					<center>
+						{{$render->VP1($forRender)}}
+					</center>
+				</div>
+			@else
+				<div class="col-8" style="width: 100%; padding-right: 2%;">
+					<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+						<span style="font-size:22px;">
+							<center>
+							There is no submissions of Forecast from AE yet !
+							</center>
+						</span>
+					</div>
+				</div>
+			@endif
+				
+			
 		</div>
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="aeSubmissions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  	<div class="modal-dialog" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
@@ -117,114 +134,118 @@
 	  	</div>
 	</div>
 
+	@if($forRender)
+		<script>
 
-	<script>
+			function myFunc(){
+				var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
 
-		function myFunc(){
-			var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
+				input = document.getElementById("myInput");
+				filter = input.value.toUpperCase();
+				table1 = document.getElementById("table1");
+				table2 = document.getElementById("table2");
+				tr1 = table1.getElementsByTagName("tr");
+				tr2 = table2.getElementsByTagName("tr");
 
-			input = document.getElementById("myInput");
-			filter = input.value.toUpperCase();
-			table1 = document.getElementById("table1");
-			table2 = document.getElementById("table2");
-			tr1 = table1.getElementsByTagName("tr");
-			tr2 = table2.getElementsByTagName("tr");
-
-			for (i = 0; i < tr1.length; i++) {
-				td1 = tr1[i].getElementsByTagName("td")[0];
-				td2 = tr2[i].getElementsByTagName("td")[0];
-				if (td1 && td2) {
-					txtValue = td1.textContent || td1.innerText;
-					if (txtValue.toUpperCase().indexOf(filter)>-1) {
-						tr1[i].style.display = "";
-						tr2[i].style.display = "";
-					}else{
-						tr1[i].style.display = "none";
-						tr2[i].style.display = "none";
+				for (i = 0; i < tr1.length; i++) {
+					td1 = tr1[i].getElementsByTagName("td")[0];
+					td2 = tr2[i].getElementsByTagName("td")[0];
+					if (td1 && td2) {
+						txtValue = td1.textContent || td1.innerText;
+						if (txtValue.toUpperCase().indexOf(filter)>-1) {
+							tr1[i].style.display = "";
+							tr2[i].style.display = "";
+						}else{
+							tr1[i].style.display = "none";
+							tr2[i].style.display = "none";
+						}
 					}
 				}
 			}
-		}
 
 
-		$(document).ready(function(){
-			@for($c=0;$c< sizeof($client);$c++)
-				$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
-				
-				$("#clientRF-Fy-"+{{$c}}).change(function(){
-					if ($(this).val() == "") {
-						$(this).val(0);
-					}
-
-					var temp = handleNumber($(this).val());
-
-					$(this).val(Comma(temp));
-
-					var temp2 = parseFloat(0);
-
-					@for($c2=0;$c2<100;$c2++)
-						temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
-					@endfor
-
-					temp2 = Comma(temp2);
-
-					$("#RF-Total-Fy").val(temp2);
-
-				});
-				$("#clientRF-Cm-"+{{$c}}).change(function(){
-					if ($(this).val() == "") {
-						$(this).val(0);
-					}
-
-					var temp = handleNumber($(this).val());
-
-					$(this).val(Comma(temp));
-
-					var temp2 = parseFloat(0);
+			$(document).ready(function(){
+				@for($c=0;$c< sizeof($client);$c++)
+					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
 					
-					@for($c2=0;$c2<100;$c2++)
-						temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
-					@endfor
+					$("#clientRF-Fy-"+{{$c}}).change(function(){
+						if ($(this).val() == "") {
+							$(this).val(0);
+						}
 
-					temp2 = Comma(temp2);
+						var temp = handleNumber($(this).val());
 
-					$("#RF-Total-Cm").val(temp2);
-				});
-			@endfor
-		});
+						$(this).val(Comma(temp));
 
-		function handleNumber(number){
+						var temp2 = parseFloat(0);
 
-			for (var i = 0; i < number.length/3; i++) {
-				number = number.replace(",","");
+						@for($c2=0;$c2<100;$c2++)
+							temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
+						@endfor
+
+						temp2 = Comma(temp2);
+
+						$("#RF-Total-Fy").val(temp2);
+
+					});
+					$("#clientRF-Cm-"+{{$c}}).change(function(){
+						if ($(this).val() == "") {
+							$(this).val(0);
+						}
+
+						var temp = handleNumber($(this).val());
+
+						$(this).val(Comma(temp));
+
+						var temp2 = parseFloat(0);
+						
+						@for($c2=0;$c2<100;$c2++)
+							temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
+						@endfor
+
+						temp2 = Comma(temp2);
+
+						$("#RF-Total-Cm").val(temp2);
+					});
+				@endfor
+			});
+
+			function handleNumber(number){
+				console.log(number);
+				if(number == null){
+					number = 0.0;
+				}else{
+					for (var i = 0; i < number.length/3; i++) {
+						number = number.replace(",","");
+					}
+
+					number = parseFloat(number);
+				}
+				
+				return number;
 			}
 
-			number = parseFloat(number);
+		  	function Comma(Num) { //function to add commas to textboxes
+		        Num += '';
+		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+		        x = Num.split('.');
+		        x1 = x[0];
+		        x2 = x.length > 1 ? '.' + x[1] : '';
+		        var rgx = /(\d+)(\d{3})/;
+		        while (rgx.test(x1))
+		            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		        return x1 + x2;
+		    }
+
+		    $('.linked').scroll(function(){
+
+	    		$('.linked').scrollLeft($(this).scrollLeft());
+			});
+
 			
-			return number;
-		}
 
-	  	function Comma(Num) { //function to add commas to textboxes
-	        Num += '';
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        x = Num.split('.');
-	        x1 = x[0];
-	        x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1))
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        return x1 + x2;
-	    }
-
-	    $('.linked').scroll(function(){
-
-    		$('.linked').scrollLeft($(this).scrollLeft());
-		});
-
-		
-
-	</script>
-
+		</script>
+	@endif
 
 @endsection

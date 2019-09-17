@@ -15,7 +15,7 @@
 
 	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
-		<div class="container-fluid">		
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Region:</span></label>

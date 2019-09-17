@@ -76,13 +76,27 @@
 	</form>
 	<br>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col" style="width: 100%; padding-right: 2%;">
-				<center>
-					{{ $render->assemble($mtx, $value, $pRate, $rtr) }}
-				</center>
+		<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
+		@csrf
+			<div class="row justify-content-end">
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col">
+					<label> &nbsp; </label>
+					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+				</div>	
 			</div>
-		</div>
+
+			<div class="row mt-2 justify-content-end">
+				<div class="col" style="width: 100%;">
+					<center>
+						{{ $render->assemble($mtx, $value, $pRate, $rtr) }}	
+					</center>
+				</div>
+			</div>
+		</form>
 	</div>
 
 @endsection

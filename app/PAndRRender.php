@@ -25,6 +25,7 @@ class PAndRRender extends Render{
         $even = $forRender["readable"]["even"];
         $tfArray = $forRender["readable"]["tfArray"];
         $manualEstimation = $forRender["readable"]["manualEstimation"];
+        $color2 = $forRender["readable"]["color"];
 
         $rollingFCST = $forRender['rollingFCST'];
         $lastRollingFCST = $forRender['lastRollingFCST'];
@@ -393,12 +394,22 @@ class PAndRRender extends Render{
                 $ow = false;
             }
 
+            if (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
+                $color = "red";
+                $boolfcst = "0";
+            }else{
+                $color = "";
+                $boolfcst = "1";
+            }
+
+            echo "<input type='hidden' id='bool-fcst-$c' name='bool-fcst-$c' value='".$boolfcst."'>";
+
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
             echo "<div class='col-2' style='padding-right:1px;'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Rolling Fcast ".$cYear." </td>";
@@ -537,9 +548,9 @@ class PAndRRender extends Render{
                         }else{
                             echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'>";
                                 if ($ow && $ow != '(P)') {
-                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
                                 }else{
-                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
                                 }
                             echo "</td>";
                             /*echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
@@ -924,15 +935,15 @@ class PAndRRender extends Render{
                             ".number_format($bookingsOverclosed, 0, ".", ",")."%
                             </td>";
 
-                    /*Proposals*/                    
+                    /*FCST AE*/                    
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
-                            0
+                            ".number_format($fcstFullYear, 0, ".", ",")."
                         </td>";
                     
-                    /*Fcst*/
+                    /*Manual Estimation*/
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
                                 <input type='text' readonly='true' id='RF-Total-Fy' 
-                                       value='0' 
+                                       value='".number_format($fcstFullYear, 0, ".", ",")."' 
                                        style=' border:none; font-weight:bold; 
                                        background-color:transparent; text-align:center'>
                           </td>";

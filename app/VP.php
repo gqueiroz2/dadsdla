@@ -23,6 +23,11 @@ class VP extends pAndR{
         $currentMonth = intval( date('m') );
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
+
+        if(!$fcstInfo){
+            return false;
+        }
+        
     	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients);
@@ -40,13 +45,14 @@ class VP extends pAndR{
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients);
         $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
-        $totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
+        //$totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
+        $totalFullYearByClient = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClient);
         $varAbsFullYearByClient = $this->subArrays($totalFullYearByClient,$bookingspYearByClient);
         $varPerFullYearByClient = $this->varPer($totalFullYearByClient,$bookingspYearByClient);
 
         $bookingscYTD = $this->consolidadeColumn($bookingscYTDByClient);
         $bookingspYTD = $this->consolidadeColumn($bookingspYTDByClient);
-        
+
         $varAbsYTD = $this->subArrays(array($bookingscYTD),array($bookingspYTD))[0];
         $varPerYTD = $this->varPer(array($bookingscYTD),array($bookingspYTD))[0];
         
@@ -134,13 +140,28 @@ class VP extends pAndR{
                     );
 
         return $rtr;
+        
+    }
 
+    public function calculateTotalYear($closed,$booking,$fcst){
+        for ($a=0; $a < sizeof($closed); $a++) { 
+            
+            if($closed[$a] >= $booking[$a] ){
+                $sum[$a] = $closed[$a] + $fcst[$a];
+            }else{
+                $sum[$a] = $booking[$a] + $fcst[$a];
+            }
+
+
+        }
+        return $sum;
     }
 
     public function consolidadeColumn($array){
         $sum = 0.0;
         for ($a=0; $a < sizeof($array); $a++) { 
             $sum += $array[$a];
+
         }
 
         return $sum;
@@ -209,6 +230,24 @@ class VP extends pAndR{
                     $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
                     $sumRevenue[$c] += $tmp;                    
                 }
+
+                $revenueFW = "gross_revenue";
+                for ($c=0; $c < sizeof($listOfClients); $c++) { 
+                    $selectSumFW[$c] = "SELECT SUM($revenueFW) AS 'revenue' 
+                                         FROM fw_digital
+                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (month IN ($whereIN))
+                                         AND (year = \"".$year."\")                                         
+                                 ";
+                    $resFW[$c] = $con->query($selectSumFW[$c]);
+                    $fromFW = array("revenue");
+                    $tmpFW = doubleval($sql->fetch($resFW[$c],$fromFW,$fromFW)[0]['revenue']);
+                    $sumRevenue[$c] += $tmpFW;                    
+                }
+
+
+
+
                 break;
         }
         
@@ -260,13 +299,18 @@ class VP extends pAndR{
         switch ($kind) {
             case 'fcst':
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
-                                         FROM forecast_client
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                 ";            
+                    $selectSum[$c] = "SELECT SUM(fc.value) AS 'revenue' 
+                                         FROM forecast_client fc
+                                         JOIN forecast f ON f.ID = fc.forecast_id
+                                         WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
+                                         AND (f.type_of_forecast = 'AE')
+                                 ";       
+                    //var_dump($selectSum[$c]);
                     $res[$c] = $con->query($selectSum[$c]);
                     $from = array("revenue");
                     $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue']);
+                    //var_dump($sumRevenue[$c]);
                 }
                 break;
             case 'fcstClosed':
@@ -363,7 +407,10 @@ class VP extends pAndR{
             $cc++;
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> bd8c174c11f95ed54d2c28bb5265e7c30c2d46fa
         $list = $base->superUnique($list,'clientID');
 
         usort($list, array($this,'orderClient'));
@@ -385,13 +432,13 @@ class VP extends pAndR{
                            ORDER BY ID
                   ";
         $res = $con->query($select);
-        $from = array('ID','oppid','region_id','currency_id',
+        $from = array('ID','oppid','region_id','sales_rep_id','currency_id',
         	          'type_of_value','read_q','year',
-        	          'date_m','last_modify_by','last_modify_date','last_modify_time');
+        	          'date_m','last_modify_by','last_modify_date','last_modify_time','month','submitted','type_of_forecast');
 
-        $to = array('ID','oppid','regionID','currencyID',
+        $to = array('ID','oppid','regionID','salesRepID','currencyID',
         	        'typeOfValue','readQ','year',
-        	        'dateM','lastModifyBy','lastModifyDate','lastModifyTime');
+        	        'dateM','lastModifyBy','lastModifyDate','lastModifyTime','month','submitted','type_of_value');
 
         $fcstInfo = $sql->fetch($res,$from,$to);
         

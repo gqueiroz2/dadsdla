@@ -57,11 +57,12 @@ class VPMonthController extends Controller {
 
         $target = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Target");
         $forecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Rolling Fcast ".$year);
+        $manualEstimation = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Manual Estimation");
         $pForecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Past Rolling Fcast");
         $bookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Bookings");
         $pBookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, ($year-1));
 
-        $mtx = $vpMonth->assembler($target, $forecast, $pForecast, $bookings, $pBookings, $year, $rtr);
+        $mtx = $vpMonth->assembler($target, $forecast, $pForecast, $manualEstimation, $bookings, $pBookings, $year, $rtr);
 
         $render = new renderVPMonth();
 

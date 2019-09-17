@@ -35,9 +35,9 @@ class AEController extends Controller{
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
+        $submit = Request::get('options');
 
         $salesRepID = $salesRep->id;
-
 
 /*
         var_dump($regionID);
@@ -47,7 +47,7 @@ class AEController extends Controller{
         var_dump($user);
         var_dump($year);
 */
-        $date = date('Y-d-m');
+        $date = date('Y-m-d');
         $time = date('H:i');
         $fcstMonth = date('m');
 
@@ -68,6 +68,7 @@ class AEController extends Controller{
         $manualEstimantionBySalesRep = array_values($manualEstimantionBySalesRep);
 
         for ($c=0; $c < sizeof($client); $c++) { 
+            $boolFront[$c] = Request::get("bool-fcst-$c");
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
@@ -89,7 +90,9 @@ class AEController extends Controller{
         /*
             kind,region,year,salesRep,currency,value,week,month
         */
-        $today = date("Y-m-d");
+        $today = $date;
+
+        var_dump($today);
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
@@ -97,7 +100,9 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$boolFront);
+
+        var_dump($bool);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -105,10 +110,17 @@ class AEController extends Controller{
         }elseif($bool == "Created"){
             $msg = "Forecast Created";
             return back()->with("Success",$msg);
+        }elseif ($bool == "Already Submitted") {
+            $msg = "You already have submitted the Forecast";
+            return back()->with("Error",$msg);
+        }elseif($bool == "FCST not Correct"){
+            $msg = "Incorrect value submited";
+            return back()->with("Error",$msg);
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
         }
+
     }
 
     public function get(){

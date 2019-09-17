@@ -9,8 +9,8 @@ class sql extends Model{
     public function larica($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){     
         $sql = "SELECT $columns FROM $table $join $where ORDER BY 1 $limit";
         echo "<pre>".$sql."</pre><br>";
-        //$res = $con->query($sql);
-        //return $res;
+        $res = $con->query($sql);
+        return $res;
     }
 
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false , $groupBy = false){    	

@@ -83,9 +83,20 @@
 		<form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 			<div class="row justify-content-end">
-				<div class="col-sm-2">
+				<div class="col-2">
 					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+						<label class="btn alert-primary active">
+						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+						</label>
+						<label class="btn alert-success">
+							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+						</label>
+					</div>
+				</div>
+				<div class="col-2">
+					<label> &nbsp; </label>
+					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
 				</div>	
 			</div>
 
@@ -108,6 +119,13 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 		$(document).ready(function(){
+			$("input[type=radio][name=options]").change(function(){
+				if (this.value == 'save') {
+					$("#button").val("Save");
+				}else{
+					$("#button").val("Submit");
+				}
+			});
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
 			@endfor
@@ -136,8 +154,10 @@
 						Temp3 = handleNumber(totalClient);
 						if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
 							$("#client-"+{{$c}}).css("background-color","red");
+							$("#bool-fcst-"+{{$c}}).value("0");
 						}else{
 							$("#client-"+{{$c}}).css("background-color","");
+							$("#bool-fcst-"+{{$c}}).value("1");
 						}
 						var rf = 0;
 						@for($c2=0;$c2<sizeof($client);$c2++)

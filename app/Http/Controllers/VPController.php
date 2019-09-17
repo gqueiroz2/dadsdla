@@ -9,6 +9,8 @@ use App\salesRep;
 use App\pRate;
 use App\dataBase;
 use App\VP;
+use App\sql;
+
 
 class VPController extends Controller
 {
@@ -35,14 +37,24 @@ class VPController extends Controller
         $render = new PAndRRender();
         $pr = new pRate();
         $vp = new vp();
+        $sql = new sql();
 
         $regionID = Request::get("region");
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
+        $fcstInfo = $vp->getForecast($con,$sql,$regionID);
+
+        var_dump($fcstInfo);
+
         $forRender = $vp->base($con,$regionID);
-        $client = $forRender['client'];
+        if($forRender){
+            $client = $forRender['client'];
+        }else{
+            $client = false;
+        }
+
         return view('pAndR.VPView.post',compact('render','region','currency','forRender','client'));
     }
 }
