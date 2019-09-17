@@ -76,18 +76,20 @@
 								<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
 							</div>
 						</li>
+						@if($userLevel != 'SU' || $userLevel != 'L0' || $userLevel != 'L1' || $userLevel != 'L3' || $userLevel != 'L4')
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href=""> Individual </a>
-								<a class="dropdown-item" href=""> Core </a>
-								<a class="dropdown-item" href=""> Office </a>
+								<a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Individual </a>
+								<a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
+								<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
 							</div>
 						</li>
+						@endif
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href=""> Overview </a>
+								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
 							</div>
 						</li>
 
@@ -101,16 +103,13 @@
 	                        </div>
                         </li>
 
-						<li class="nav-item">
-							<a class="nav-link" href="#"> Viewer <span class="sr-only">(current)</span></a>
-						</li>
 
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
-								<a class="dropdown-item" href="{{ route('VPGet') }}"> VP View </a>
-								{{-- <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a> --}}
+								<a class="dropdown-item" href=""> AE View </a>
+								<a class="dropdown-item" href=""> VP View </a>
+								{{-- <a class="dropdown-item" href=""> Pacing Report </a> --}}
 							</div>
 						</li>
 
