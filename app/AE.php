@@ -482,6 +482,7 @@ class AE extends pAndR{
                 }
                 
             }
+
             $tmpRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $tmpRollingFCST = $this->addQuartersAndTotalOnArray($tmpRollingFCST);
@@ -807,6 +808,10 @@ class AE extends pAndR{
                 }
             }
 
+            $rollingFCST = $this->addClosedFcst($rollingFCST,$tmpRollingFCST);
+
+            $rollingFCST = $this->adjustFCST($rollingFCST);
+
             $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -816,6 +821,8 @@ class AE extends pAndR{
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
+
+            $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -837,6 +844,8 @@ class AE extends pAndR{
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
+
+            $rollingFCST = $this->adjustFCST($rollingFCST);
             
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
@@ -907,6 +916,29 @@ class AE extends pAndR{
         return $rtr;
         
     }
+
+    public function addClosedFcst($rolling,$tmpRolling){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+        for ($r=0; $r <sizeof($rolling) ; $r++) { 
+            for ($m=0; $m <sizeof($rolling[$m]) ; $m++) { 
+                if ($m < $date) {
+                    $rolling[$r][$m] = $tmpRolling[$r][$m];
+                }
+            }
+        }
+
+        return $rolling;
+    }
+
 
     public function addLost($con,$clients,$fcstStages,$value){
 
@@ -993,17 +1025,24 @@ class AE extends pAndR{
 
     public function addFcstWithBooking($booking,$fcst){
 
+        $date = date('n')-1;
 
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
 
         for ($c=0; $c < sizeof($booking); $c++) { 
             for ($f=0; $f < sizeof($booking[$c]); $f++) { 
-                
-                $sum[$c][$f] = $booking[$c][$f];
-                
-                if($fcst[$c]){
-                    $sum[$c][$f] += $fcst[$c][$f];
+                if ($f<$date) {
+                    $sum[$c][$f] = $booking[$c][$f];
+                }else{
+                    $sum[$c][$f] = $fcst[$c][$f];
                 }
-                
             }
         }        
 
@@ -1235,8 +1274,9 @@ class AE extends pAndR{
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
-                        AND (year = \"".$year."\")                       
+                        AND (year = \"".$year."\")                      
                   ";
+
 
         $res = $con->query($select);
         $from = array("order_reference","sales_rep_id","client_id","agency_id");
@@ -1273,7 +1313,10 @@ class AE extends pAndR{
         $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
-                        AND (sales_rep_splitter_id != sales_rep_owner_id)                       
+                        AND (sales_rep_splitter_id != sales_rep_owner_id)
+                        AND (stage != \"5\")                      
+                        AND (stage != \"6\")                      
+                        AND (stage != \"7\")                      
                   ";
 
         $resSF = $con->query($selectSF);
@@ -1288,6 +1331,24 @@ class AE extends pAndR{
                     break;
                 }
             }
+        }else{
+            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id
+                        FROM sf_pr
+                        WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (sales_rep_splitter_id = sales_rep_owner_id)
+                        AND (stage != \"5\")                      
+                        AND (stage != \"6\")                      
+                        AND (stage != \"7\")                      
+                  ";
+
+            $resSF = $con->query($selectSF);
+            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id");
+            $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
+
+            if($oppid){
+                $rtr = array( "splitted" => false , "owner" => null );    
+            }
+
         }        
 
         /*
@@ -1535,6 +1596,7 @@ class AE extends pAndR{
             $period = false;
         }
 
+
         return $period;
     }
 
@@ -1600,6 +1662,8 @@ class AE extends pAndR{
 
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted,$div){
         
+        $date = date("n")-1;
+
         $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
         $to = array("sumValue",'fromDate','toDate','yearFrom','yearTo','stage','oppid','salesRepOwner');
         if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
@@ -1612,6 +1676,7 @@ class AE extends pAndR{
                                 AND ( stage != '6')
                                 AND ( stage != '7')
                                 AND (year_from = \"".$year."\")
+                                AND (from_date > \"".$date."\")
                               "; 
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
@@ -1621,6 +1686,7 @@ class AE extends pAndR{
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
+                            AND (from_date > \"".$date."\")
                           ";
         }
         $res = $con->query($select);
