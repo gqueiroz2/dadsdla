@@ -13,19 +13,32 @@ use App\sql;
 
 class VP extends pAndR{
 
-	public function base($con,$regionID){
+	public function base($con,$r,$pr,$cYear,$pYear){
     	$sql = new sql();
         $base = new base();
     	
-        $cYear = 2019;
-        $pYear = $cYear - 1;
+        $regionID = Request::get('region');
+        $currencyID = Request::get('currency');
+        $value = Request::get('value');
 
         $currentMonth = intval( date('m') );
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
 
+        //var_dump($fcstInfo);
+
         if(!$fcstInfo){
             return false;
+        }else{
+            
+            $save = $fcstInfo;
+            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear,true);
+            $currencyCheck = $temp["currencyCheck"];
+            $newCurrency = $temp["newCurrency"];
+            $oldCurrency = $temp["oldCurrency"];
+
+            $temp2 = $base->adaptValue($value,$save,$regionID,true);
+
         }
         
     	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);

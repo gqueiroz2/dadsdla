@@ -40,6 +40,9 @@ class VPController extends Controller
         $vp = new vp();
         $sql = new sql();
 
+        $cYear = intval( Request::get('year') );
+        $pYear = $cYear - 1;
+
         $regionID = Request::get("region");
 
         $region = $r->getRegion($con,null);
@@ -47,7 +50,7 @@ class VPController extends Controller
 
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
 
-        $forRender = $vp->base($con,$regionID);
+        $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
         if($forRender){
             $client = $forRender['client'];
         }else{

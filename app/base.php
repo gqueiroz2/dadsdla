@@ -456,15 +456,25 @@ class base extends Model{
         return $tmp;
     }
 
-    public function adaptCurrency($con,$pr,$save,$currencyID,$cYear){
-        if ($currencyID == $save['currency_id']) {
-            $currencyCheck = false;
-            $newCurrency = false;
-            $oldCurrency = false;
+    public function adaptCurrency($con,$pr,$save,$currencyID,$cYear,$type = false){
+        
+        if($type){
+            $curr = "currencyID";
         }else{
-            $currencyCheck = true;
-            $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
-            $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);            
+            $curr = "currency_id";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) { 
+            if ($currencyID == $save[$s][$curr]) {
+                $currencyCheck[$s] = false;
+                $newCurrency[$s] = false;
+                $oldCurrency[$s] = false;
+            }else{
+                $currencyCheck[$s] = true;
+                $newCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
+                $oldCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$save[$s][$curr],$cYear);            
+            }
+
         }
 
         $array = array( "currencyCheck" => $currencyCheck,
@@ -477,18 +487,27 @@ class base extends Model{
 
     }
 
-    public function adaptValue($value,$save,$regionID){
-        if ($value ==  strtolower($save["type_of_value"])) {
-            $valueCheck = false;
-            $multValue = false;
+    public function adaptValue($value,$save,$regionID,$type = false){
+        
+        if($type){
+            $vall = "typeOfValue";
         }else{
-            $valueCheck = true;
-            $tmp = array($regionID);
-            $mult = $base->getAgencyComm($con,$tmp);
-            if ($value == "net") {
-                $multValue = (100 - $mult)/100;
-            }elseif($value == "gross"){
-                $multValue = 1/(1-($mult/100));
+            $vall = "type_of_value";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) {
+            if ($value ==  strtolower($save[$s][$vall])) {
+                $valueCheck[$s] = false;
+                $multValue[$s] = false;
+            }else{
+                $valueCheck[$s] = true;
+                $tmp = array($regionID);
+                $mult = $base->getAgencyComm($con,$tmp);
+                if ($value == "net") {
+                    $multValue[$s] = (100 - $mult)/100;
+                }elseif($value == "gross"){
+                    $multValue[$s] = 1/(1-($mult/100));
+                }
             }
         }
 
