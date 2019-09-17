@@ -401,7 +401,11 @@ class PAndRRender extends Render{
                 $ow = false;
             }
 
-            if (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
+            if (round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) < 5 && round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) > -5) {
+                $lastRollingFCST[$c][16] = $rollingFCST[$c][16];
+                $color = "";
+                $boolfcst = "1";
+            }elseif (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
                 $color = "red";
                 $boolfcst = "0";
             }else{

@@ -80,7 +80,7 @@ class AEController extends Controller{
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
             $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
 
-            if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true)) ) {
+            if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
                 $msg = "Incorrect value submited";
 
                 if ($value == "Gross") {
