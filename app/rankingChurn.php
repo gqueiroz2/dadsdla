@@ -36,15 +36,17 @@ class rankingChurn extends rank {
 
     public function getAgencyGroup($values, $name){
         
-        for ($v=0; $v < sizeof($values); $v++) { 
-            for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-                if ($values[$v][$v2]['agency'] == $name) {
-                    if ($values[$v][$v2]['agencyGroup'] == "Others") {
-                        return "-";
-                    }else{
-                        return $values[$v][$v2]['agencyGroup'];
+        for ($v=0; $v < sizeof($values); $v++) {
+            if (is_array($values[$v])) {
+                for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                    if ($values[$v][$v2]['agency'] == $name) {
+                        if ($values[$v][$v2]['agencyGroup'] == "Others") {
+                            return "-";
+                        }else{
+                            return $values[$v][$v2]['agencyGroup'];
+                        }
                     }
-                }
+                }   
             }
         }
     }

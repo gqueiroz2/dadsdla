@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Request;
 use App\region;
 use App\PAndRRender;
+use App\VPPAndRRender;
 use App\salesRep;
 use App\pRate;
 use App\dataBase;
@@ -34,10 +35,13 @@ class VPController extends Controller
         $con = $db->openConnection("DLA");
         $r = new region();
         $sr = new salesRep();
-        $render = new PAndRRender();
+        $render = new VPPAndRRender();
         $pr = new pRate();
         $vp = new vp();
         $sql = new sql();
+
+        $cYear = intval( Request::get('year') );
+        $pYear = $cYear - 1;
 
         $regionID = Request::get("region");
 
@@ -46,9 +50,7 @@ class VPController extends Controller
 
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
 
-        var_dump($fcstInfo);
-
-        $forRender = $vp->base($con,$regionID);
+        $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
         if($forRender){
             $client = $forRender['client'];
         }else{

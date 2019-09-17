@@ -48,24 +48,25 @@ class VPMonthController extends Controller {
         $currencyID = Request::get("currency");
         $currency = $pr->getCurrency($con);
 
-        $pRate = $pr->getCurrency($con, array($currencyID));
-
         $year = Request::get("year");
         $value = Request::get("value");
 
         $vpMonth = new VPMonth();
+        
+        $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
-        $target = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Target");
-        $forecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Rolling Fcast ".$year);
-        $manualEstimation = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Manual Estimation");
-        $pForecast = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Past Rolling Fcast");
-        $bookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, "Bookings");
-        $pBookings = $vpMonth->getLinesValue($con, $regionID, $currencyID, $year, $value, $pRate, ($year-1));
+        if (!$values) {
+            return back()->with("Error","Don't have a Forecast Saved");
+        }
 
-        $mtx = $vpMonth->assembler($target, $forecast, $pForecast, $manualEstimation, $bookings, $pBookings, $year, $rtr);
+        $forRender = $values;
+        $client = $values['client'];
+        $tfArray = array();
+        $odd = array();
+        $even = array();
 
         $render = new renderVPMonth();
 
-        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'pRate', 'rtr', 'value', 'mtx'));
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
     }
 }

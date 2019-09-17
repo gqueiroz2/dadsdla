@@ -456,6 +456,70 @@ class base extends Model{
         return $tmp;
     }
 
+    public function adaptCurrency($con,$pr,$save,$currencyID,$cYear,$type = false){
+        
+        if($type){
+            $curr = "currencyID";
+        }else{
+            $curr = "currency_id";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) { 
+            if ($currencyID == $save[$s][$curr]) {
+                $currencyCheck[$s] = false;
+                $newCurrency[$s] = false;
+                $oldCurrency[$s] = false;
+            }else{
+                $currencyCheck[$s] = true;
+                $newCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
+                $oldCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$save[$s][$curr],$cYear);            
+            }
+
+        }
+
+        $array = array( "currencyCheck" => $currencyCheck,
+                        "newCurrency" => $newCurrency,
+                        "oldCurrency" => $oldCurrency
+                        );
+
+        return $array;
+
+
+    }
+
+    public function adaptValue($value,$save,$regionID,$type = false){
+        
+        if($type){
+            $vall = "typeOfValue";
+        }else{
+            $vall = "type_of_value";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) {
+            if ($value ==  strtolower($save[$s][$vall])) {
+                $valueCheck[$s] = false;
+                $multValue[$s] = false;
+            }else{
+                $valueCheck[$s] = true;
+                $tmp = array($regionID);
+                $mult = $base->getAgencyComm($con,$tmp);
+                if ($value == "net") {
+                    $multValue[$s] = (100 - $mult)/100;
+                }elseif($value == "gross"){
+                    $multValue[$s] = 1/(1-($mult/100));
+                }
+            }
+        }
+
+        $array = array("valueCheck" => $valueCheck,
+                       "multValue" => $multValue
+
+        );
+
+        return $array;
+
+    }
+
     public function getBrandColor($brand){
         $rtr = false;
 

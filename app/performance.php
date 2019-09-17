@@ -35,12 +35,22 @@ class performance extends base{
         return $values;
     }
 
+    public function generateValueWithOutSalesRep($con,$sql,$region,$year,$brand,$month,$sum,$table,$value=null){
+        
+        $where = $this->createWhere($sql,$table,$region,$year,$brand[0], null, $month,$value);
+        $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
+        $values = $sql->fetchSum($results,"sum")["sum"]; 
+        
+        return $values;
+    }    
+
     public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$value=null){
-        for ($s=0; $s <sizeof($salesRep); $s++) {
+        for ($s=0; $s < sizeof($salesRep); $s++) {
             $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$value);
             $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
             $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
         }
+        
         return $values;
     }
 
@@ -61,9 +71,16 @@ class performance extends base{
                 $where = "WHERE (region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month = \"$month\") AND (sales_rep_id = \"".$salesRep['id']."\")";
             }
         }elseif($source == "plan_by_sales"){
-            $columns = array("region_id","year","month","sales_rep_id","brand_id","currency_id","type_of_revenue");
-            $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand,'4',$value);
-            $where = $sql->where($columns,$arrayWhere);
+
+            if (is_null($salesRep)) {
+                $columns = array("region_id","year","month","brand_id","currency_id","type_of_revenue");
+                $arrayWhere = array($region,$year,$month,$brand,'4',$value);
+                $where = $sql->where($columns,$arrayWhere);                
+            }else{
+                $columns = array("region_id","year","month","sales_rep_id","brand_id","currency_id","type_of_revenue");
+                $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand,'4',$value);
+                $where = $sql->where($columns,$arrayWhere);
+            }
         }else{
             $where = false;
         }

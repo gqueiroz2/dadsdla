@@ -12,7 +12,7 @@ class PAndRRender extends Render{
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function AE1($forRender,$client,$tfArray,$odd,$even,$userName){
+    public function AE1($forRender,$client,$tfArray,$odd,$even,$userName,$error = false){
 
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
@@ -64,6 +64,13 @@ class PAndRRender extends Render{
                 <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>
             </table>
         </div>";
+
+        if($error) {
+            echo "<br>";
+            echo "<div class=\"alert alert-danger\" style=\"width:50%;\">";
+                echo $error;
+            echo "</div>";
+        }
 
         echo "<br>";
 
@@ -394,15 +401,17 @@ class PAndRRender extends Render{
                 $ow = false;
             }
 
-            if (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
+            if (round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) < 5 && round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) > -5) {
+                $lastRollingFCST[$c][16] = $rollingFCST[$c][16];
+                $color = "";
+                $boolfcst = "1";
+            }elseif (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
                 $color = "red";
                 $boolfcst = "0";
             }else{
                 $color = "";
                 $boolfcst = "1";
             }
-
-            echo "<input type='hidden' id='bool-fcst-$c' name='bool-fcst-$c' value='".$boolfcst."'>";
 
             echo "<div class='' style='zoom:80%;'>";
             echo "<div class='row'>";
