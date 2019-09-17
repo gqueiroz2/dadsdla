@@ -291,7 +291,7 @@ class AE extends pAndR{
         return $string;
     }
 
-    public function base2($con,$r,$pr,$cYear,$regionID,$salesRepID,$currencyID,$value,$manualEstimantionClient){
+    public function baseSaved($con,$r,$pr,$cYear,$regionID,$salesRepID,$currencyID,$value,$manualEstimantionClient){
         $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
@@ -604,7 +604,7 @@ class AE extends pAndR{
 
     }
 
-    public function base($con,$r,$pr,$cYear,$pYear){
+    public function baseLoad($con,$r,$pr,$cYear,$pYear){
     	$sr = new salesRep();        
         $br = new brand();
         $base = new base();    
@@ -1455,8 +1455,8 @@ class AE extends pAndR{
             GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP
 
         */        
-            
-        
+
+
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
             for ($m=0; $m < sizeof($monthOPP[$l]); $m++) { 

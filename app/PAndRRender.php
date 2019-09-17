@@ -12,7 +12,7 @@ class PAndRRender extends Render{
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function AE1($forRender,$client,$tfArray,$odd,$even,$userName){
+    public function AE1($forRender,$client,$tfArray,$odd,$even,$userName,$error = false){
 
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
@@ -64,6 +64,13 @@ class PAndRRender extends Render{
                 <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>
             </table>
         </div>";
+
+        if($error) {
+            echo "<br>";
+            echo "<div class=\"alert alert-danger\" style=\"width:50%;\">";
+                echo $error;
+            echo "</div>";
+        }
 
         echo "<br>";
 

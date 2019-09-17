@@ -84,7 +84,7 @@
 		@csrf
 			<div class="row justify-content-end">
 				<div class="col-2">
-					<label> &nbsp; </label>
+					<label> &nbsp;</label>
 					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
 						<label class="btn alert-primary active">
 						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
@@ -103,7 +103,7 @@
 			<div class="row mt-2 justify-content-end">
 				<div class="col" style="width: 100%;">
 					<center>
-						{{$render->AE1($forRender,$client,$tfArray,$odd,$even,$userName)}}
+						{{$render->AE1($forRender,$client,$tfArray,$odd,$even,$userName,$error)}}
 					</center>
 				</div>
 			</div>
