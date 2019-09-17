@@ -131,7 +131,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        /*$bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
 
 
         if ($bool == "Updated") {
@@ -146,7 +146,7 @@ class AEController extends Controller{
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }*/
+        }
 
     }
 

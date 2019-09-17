@@ -317,8 +317,8 @@ class AE extends pAndR{
             $valueCheck = false;
             $currencyCheck = false;
         }else{
-            $save = $save[0];
-            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
+            $save = $save;
+            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
             $currencyCheck = $temp["currencyCheck"];
             $newCurrency = $temp["newCurrency"];
             $oldCurrency = $temp["oldCurrency"];
@@ -629,41 +629,16 @@ class AE extends pAndR{
             $valueCheck = false;
             $currencyCheck = false;
         }else{
-            $save = $save[0];
+            $save = $save;
             $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
-            $currencyCheck = $temp["currencyCheck"];
-            $newCurrency = $temp["newCurrency"];
-            $oldCurrency = $temp["oldCurrency"];
-/*
-            if ($currencyID == $save['currency_id']) {
-                $currencyCheck = false;
-            }else{
-                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
-                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);
-                $currencyCheck = true;
-            }
-*/  
+            
+            $currencyCheck = $temp["currencyCheck"][0];
+            $newCurrency = $temp["newCurrency"][0];
+            $oldCurrency = $temp["oldCurrency"][0];
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
-
-            $valueCheck = $temp2["valueCheck"];
-            $multValue = $temp2["multValue"];
-
-            /*
-            if ($value ==  strtolower($save["type_of_value"])) {
-                $valueCheck = false;
-            }else{
-                $valueCheck = true;
-                $tmp = array($regionID);
-                $mult = $base->getAgencyComm($con,$tmp);
-                if ($value == "net") {
-                    $multValue = (100 - $mult)/100;
-                }elseif($value == "gross"){
-                    $multValue = 1/(1-($mult/100));
-                }
-            }  
-            */
-
+            $valueCheck = $temp2["valueCheck"][0];
+            $multValue = $temp2["multValue"][0];
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
