@@ -75,28 +75,35 @@
 		</div>
 	</form>
 	<br>
-	<div class="container-fluid">
-		<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
-		@csrf
-			<div class="row justify-content-end">
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col">
-					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-				</div>	
-			</div>
 
-			<div class="row mt-2 justify-content-end">
-				<div class="col" style="width: 100%;">
-					<center>
-						{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
-					</center>
+	@if(session('error'))
+		<div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @else
+    	<div class="container-fluid">
+			<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
+			@csrf
+				<div class="row justify-content-end">
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col">
+						<label> &nbsp; </label>
+						<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+					</div>	
 				</div>
-			</div>
-		</form>
-	</div>
+
+				<div class="row mt-2 justify-content-end">
+					<div class="col" style="width: 100%;">
+						<center>
+							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
+						</center>
+					</div>
+				</div>
+			</form>
+		</div>
+    @endif
 
 @endsection
