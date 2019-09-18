@@ -119,6 +119,10 @@ class rankingBrand extends rank{
 							$check = true;
 							$sum += $res[$y][$r]['total'];
 							unset($res[$y][$r]);
+						}elseif ($res[$y][$r]['brand'] == 'ONL-G9') {
+							$check = true;
+							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
 						}elseif ($res[$y][$r]['brand'] == 'VOD') {
 							$check = true;
 							$sum += $res[$y][$r]['total'];
@@ -129,15 +133,22 @@ class rankingBrand extends rank{
 					if ($check) {
 						$res[$y] = array_values($res[$y]);
 
+						$has = false;
+
 						for ($r=0; $r < sizeof($res[$y]); $r++) { 
 							if ($res[$y][$r]['brand'] == 'ONL') {
+								$has = true;
 								$res[$y][$r]['total'] = $sum;
 							}
+						}
+
+						if (!$has) {
+							array_push($res[$y], array('brand' => 'ONL', 'total' => $sum));
 						}
 					}	
 				}
 				
-				for ($b=0; $b < sizeof($infoQuery); $b++) { 
+				for ($b=0; $b < sizeof($infoQuery); $b++) {
 					if ($infoQuery[$b]['table'] == "cmaps a") {
 						if ($currency[0]['name'] == "USD") {
 				            $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
@@ -155,44 +166,38 @@ class rankingBrand extends rank{
 					if (is_array($res[$y])) {
 						for ($i=0; $i < sizeof($res[$y]); $i++) {
 							if ($infoQuery[$b]['table'] == "cmaps a") {
-								/*var_dump($years[$y]);
-								var_dump("cmaps");
-								var_dump("brand", $res[$y][$i]['brand']);*/
+								
                                 if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
-                                	//var_dump($pRate);
-                                    $res[$y][$i]['total'] /= $pRate;
+                                	
+                                    $res[$y][$i]['total'] *= $pRate;
                                 }else{
-                                	//var_dump(1.0);
+                                	
                                     $res[$y][$i]['total'] /= 1.0;
                                 }
                             }elseif ($infoQuery[$b]['table'] == "ytd a") {
-                            	/*var_dump($years[$y]);
-                            	var_dump("ytd");
-                            	var_dump("brand", $res[$y][$i]['brand']);*/
+                            	
                                 if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
-                            		//var_dump($pRate);
+                                	
                                     $res[$y][$i]['total'] *= $pRate;
                                 }else{
-                                	//var_dump(1.0);
+                                	
                                     $res[$y][$i]['total'] *= 1.0;
                                 }
                             }elseif ($infoQuery[$b]['table'] == "fw_digital a") {
-                            	/*var_dump($years[$y]);
-                            	var_dump("digital");
-                            	var_dump("brand", $res[$y][$i]['brand']);*/
+                            	
                             	if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
                                     $res[$y][$i]['total'] *= 1.0;
-                                    //var_dump(1.0);
+                                    
                                 }else{
-                                	//var_dump($pRate);
+                                	
                                     $res[$y][$i]['total'] *= $pRate;
                                 }
                             }else{
-                            	/*var_dump($years[$y]);
-                            	var_dump("plan");
-                            	var_dump("brand", $res[$y][$i]['brand']);
-                            	var_dump($pRate);*/
-                            	$res[$y][$i]['total'] *= $pRate;
+                            	//como a infoquery é dividida em 2 partes, por causa que são canais normais e digital
+                            	//mas o plan só precisa ser executado na primeira iteração
+                            	if ($b == 1) {
+	                            	$res[$y][$i]['total'] *= $pRate;
+                            	}
                             }
 						}
 						//var_dump("-------------------------------------------------------------------");
@@ -363,7 +368,11 @@ class rankingBrand extends rank{
 			array_push($mtx[5], $targetP);
 			array_push($mtx[6], $pClosedP);
 
-			$val = ($closed / $target)*100;
+			if ($closed == 0 || $target == 0) {
+				$val = 0;
+			}else{
+				$val = ($closed / $target)*100;
+			}
 			array_push($mtx[7], $val);
 
 			$val = ($closed - $target);

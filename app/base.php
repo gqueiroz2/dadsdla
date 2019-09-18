@@ -9,6 +9,26 @@ use App\sql;
 
 class base extends Model{
 
+    protected $agencyComm = array("Argentina" => 7.5150,
+                                    "Brazil" => 20.0000,
+                                    "Mexico" => 0.9826,
+                                    "Colombia" => 9.8631,
+                                    "Panama" => 13.9754,
+                                    "Miami" => 4.1349,
+                                    "New York International" => 2.9584,
+                                    "Chile" => 0,
+                                    "Peru" => 0,
+                                    "Venezuela" => 0,
+                                    "Dominican Republic" => 0,
+                                    "Ecuador" => 0,
+                                    "Bolivia" => 0,
+                                    "US Hispanic" => 0,
+                                    "Puerto Rico" => 0,
+                                    "Europe" => 0,
+                                    "Gurugram" => 0,
+                                    "Singapore" => 0,
+                                    "London" => 0);
+
     public function superUnique($array,$key){
        $temp_array = [];
        foreach ($array as &$v) {
@@ -18,6 +38,16 @@ class base extends Model{
        $array = array_values($temp_array);
        return $array;
 
+    }
+
+    public function getAgencyComm($con,$regionID){
+        $r = new region();  
+
+        $region = $r->getRegion($con,$regionID)[0]["name"];
+
+        $return = $this->agencyComm[$region];
+
+        return $return;
     }
  
     public function dateToMonth($date){
@@ -92,7 +122,7 @@ class base extends Model{
             "Chile"=>array("Chile"), 
             "Peru"=>array("Peru"), 
             "LATAM"=>array("LATAM"),  
-            "Venezuela"=>array("Venezuela"),  
+            "Venezuela"=>array("Venezuela"),
             "Panama"=>array("Panama"),  
             "New York International"=>array("New York International"),  
             "Dominican Republic"=>array("Dominican Republic"),  
@@ -222,6 +252,8 @@ class base extends Model{
             $name = "EC";
         }elseif ($region == "Bolivia") {
             $name = "BO";
+        }elseif ($region == "Puerto Rico") {
+            $name = "PR";
         }else {
             $name = false;
         }
@@ -422,6 +454,70 @@ class base extends Model{
         }
 
         return $tmp;
+    }
+
+    public function adaptCurrency($con,$pr,$save,$currencyID,$cYear,$type = false){
+        
+        if($type){
+            $curr = "currencyID";
+        }else{
+            $curr = "currency_id";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) { 
+            if ($currencyID == $save[$s][$curr]) {
+                $currencyCheck[$s] = false;
+                $newCurrency[$s] = false;
+                $oldCurrency[$s] = false;
+            }else{
+                $currencyCheck[$s] = true;
+                $newCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
+                $oldCurrency[$s] = $pr->getPrateByCurrencyAndYear($con,$save[$s][$curr],$cYear);            
+            }
+
+        }
+
+        $array = array( "currencyCheck" => $currencyCheck,
+                        "newCurrency" => $newCurrency,
+                        "oldCurrency" => $oldCurrency
+                        );
+
+        return $array;
+
+
+    }
+
+    public function adaptValue($value,$save,$regionID,$type = false){
+        
+        if($type){
+            $vall = "typeOfValue";
+        }else{
+            $vall = "type_of_value";
+        }
+
+        for ($s=0; $s < sizeof($save); $s++) {
+            if ($value ==  strtolower($save[$s][$vall])) {
+                $valueCheck[$s] = false;
+                $multValue[$s] = false;
+            }else{
+                $valueCheck[$s] = true;
+                $tmp = array($regionID);
+                $mult = $base->getAgencyComm($con,$tmp);
+                if ($value == "net") {
+                    $multValue[$s] = (100 - $mult)/100;
+                }elseif($value == "gross"){
+                    $multValue[$s] = 1/(1-($mult/100));
+                }
+            }
+        }
+
+        $array = array("valueCheck" => $valueCheck,
+                       "multValue" => $multValue
+
+        );
+
+        return $array;
+
     }
 
     public function getBrandColor($brand){

@@ -174,16 +174,18 @@ class subBrandRanking extends rankingBrand {
 
     public function searchGroupValue($name, $sub){
     	
-    	for ($s=0; $s < sizeof($sub); $s++) { 
-    		for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) { 
-    			if ($name == $sub[$s][$s2]['agency']) {
-    				if ($sub[$s][$s2]['agencyGroup'] == "Others") {
-    					return "-";
-    				}else{
-    					return $sub[$s][$s2]['agencyGroup'];
-    				}
-    			}
-    		}
+    	for ($s=0; $s < sizeof($sub); $s++) {
+            if (is_array($sub[$s])) {
+                for ($s2=0; $s2 < sizeof($sub[$s]); $s2++) {
+                    if ($name == $sub[$s][$s2]['agency']) {
+                        if ($sub[$s][$s2]['agencyGroup'] == "Others") {
+                            return "-";
+                        }else{
+                            return $sub[$s][$s2]['agencyGroup'];
+                        }
+                    }
+                }   
+            }
     	}
     }
 
@@ -191,6 +193,7 @@ class subBrandRanking extends rankingBrand {
     	
         $bool = -1;
         $bool2 = -1;
+        $bool3 = -1;
 
         if (is_array($sub[0])) {
             for ($v=0; $v < sizeof($sub[0]); $v++) { 
@@ -215,18 +218,35 @@ class subBrandRanking extends rankingBrand {
                         $bool2 = 2;
                     }
                 }
-            }   
+            }
+        }
+
+        if (is_array($sub[2])) {
+            for ($v=0; $v < sizeof($sub[2]); $v++) { 
+                if ($sub[2][$v][$type] == $name) {
+                    $bool2 = 0;
+                    if ($sub[2][$v]['total'] == 0) {
+                        $bool3 = 1;
+                    }else{
+                        $bool3 = 2;
+                    }
+                }
+            }
         }
 
         if ($bool == -1 || $bool == 1) {
             if ($bool2 == -1 || $bool2 == 1) {
-                return -1;
+            	if ($bool3 == -1 || $bool3 == 1) {
+            		$res = -1;	
+            	}
             }else{
-                return $name;
+                $res = $name;
             }
         }else{
-            return $name;
+            $res = $name;
         }
+
+        return $res;
     }
 
     public function searchYearValue($name, $sub, $type, $y){
@@ -254,13 +274,13 @@ class subBrandRanking extends rankingBrand {
                 if ($valCyear == 0) { //ANO CORRENTE = 0
                     $res = "Churn";
                 }else{ //ANO CORRENTE > 0
-                    $res = "Renovated";
+                    $res = "Renewed";
                 }
             }
         }else{ //ANO RETRASADO = 0
             if ($valPyear > 0) { //ANO PASSADO > 0
                 if ($valCyear > 0) { //ANO CORRENTE > 0
-                    $res = "Renovated";
+                    $res = "Renewed";
                 }else{ //ANO CORRENTE = 0
                     $res = "Churn";
                 }

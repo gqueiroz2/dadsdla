@@ -10,6 +10,16 @@
     		clear: left;
     		width: 100%;
     	}
+
+    	#myInput {
+		  background-position: 10px 12px; /* Position the search icon */
+		  background-repeat: no-repeat; /* Do not repeat the icon image */
+		  width: 100%; /* Full-width */
+		  font-size: 16px; /* Increase font-size */
+		  border: 1px solid #ddd; /* Add a grey border */
+		  margin-bottom: 12px; /* Add some space below the input */
+		  text-align: center;
+		}
     </style>
 @endsection
 @section('content')
@@ -37,12 +47,26 @@
 					@endif
 				</div>
 				<div class="col">
+					<label class='labelLeft'><span class="bold">Year:</span></label>
+					@if($errors->has('year'))
+						<label style="color: red;">* Required</label>
+					@endif
+					{{$render->year()}}
+				</div>
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
 					@endif
 					{{$render->currency($currency)}}
 				</div>	
+				<div class="col">
+					<label class="labelLeft"><span class="bold"> Value: </span></label>
+						@if($errors->has('value'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->value2()}}
+				</div>
 				<div class="col">
 					<label class='labelLeft'> &nbsp; </label>
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
@@ -52,95 +76,176 @@
 	</form>
 	<br>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col" style="width: 100%; padding-right: 2%;">
-				<center>
-					{{$render->VP1($forRender)}}
-				</center>
+		<div class="row justify-content-end">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col"></div>				
+			<div class="col">				
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
+				   AE Submissions
+				</button>
+
+
 			</div>
+		</div>
+
+		<div class="row justify-content-center mt-2">
+			@if($forRender)
+				<div class="col" style="width: 100%; padding-right: 2%;">
+					<center>
+						{{$render->VP1($forRender)}}
+					</center>
+				</div>
+			@else
+				<div class="col-8" style="width: 100%; padding-right: 2%;">
+					<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+						<span style="font-size:22px;">
+							<center>
+							There is no submissions of Forecast from AE yet !
+							</center>
+						</span>
+					</div>
+				</div>
+			@endif
+				
+			
 		</div>
 	</div>
 
-	<script>
-		$(document).ready(function(){
-			@for($c=0;$c<100;$c++)
-				$("#clientRF-Fy-"+{{$c}}).change(function(){
-					if ($(this).val() == "") {
-						$(this).val(0);
+	<!-- Modal -->
+	<div class="modal fade" id="aeSubmissions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  	<div class="modal-dialog" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLabel">Título do modal</h5>
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+	          			<span aria-hidden="true">&times;</span>
+	        		</button>
+	     		</div>
+	      		<div class="modal-body">
+	        		...
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+	        		<button type="button" class="btn btn-primary">Salvar mudanças</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+
+	@if($forRender)
+		<script>
+
+			function myFunc(){
+				var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
+
+				input = document.getElementById("myInput");
+				filter = input.value.toUpperCase();
+				table1 = document.getElementById("table1");
+				table2 = document.getElementById("table2");
+				tr1 = table1.getElementsByTagName("tr");
+				tr2 = table2.getElementsByTagName("tr");
+
+				for (i = 0; i < tr1.length; i++) {
+					td1 = tr1[i].getElementsByTagName("td")[0];
+					td2 = tr2[i].getElementsByTagName("td")[0];
+					if (td1 && td2) {
+						txtValue = td1.textContent || td1.innerText;
+						if (txtValue.toUpperCase().indexOf(filter)>-1) {
+							tr1[i].style.display = "";
+							tr2[i].style.display = "";
+						}else{
+							tr1[i].style.display = "none";
+							tr2[i].style.display = "none";
+						}
 					}
-
-					var temp = handleNumber($(this).val());
-
-					$(this).val(Comma(temp));
-
-					var temp2 = parseFloat(0);
-
-					@for($c2=0;$c2<100;$c2++)
-						temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
-					@endfor
-
-					temp2 = Comma(temp2);
-
-					$("#RF-Total-Fy").val(temp2);
-
-				});
-				$("#clientRF-Cm-"+{{$c}}).change(function(){
-					if ($(this).val() == "") {
-						$(this).val(0);
-					}
-
-					var temp = handleNumber($(this).val());
-
-					$(this).val(Comma(temp));
-
-					var temp2 = parseFloat(0);
-					
-					@for($c2=0;$c2<100;$c2++)
-						temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
-					@endfor
-
-					temp2 = Comma(temp2);
-
-					$("#RF-Total-Cm").val(temp2);
-				});
-			@endfor
-		});
-
-		function handleNumber(number){
-
-			for (var i = 0; i < number.length/3; i++) {
-				number = number.replace(",","");
+				}
 			}
 
-			number = parseFloat(number);
+
+			$(document).ready(function(){
+				@for($c=0;$c< sizeof($client);$c++)
+					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
+					
+					$("#clientRF-Fy-"+{{$c}}).change(function(){
+						if ($(this).val() == "") {
+							$(this).val(0);
+						}
+
+						var temp = handleNumber($(this).val());
+
+						$(this).val(Comma(temp));
+
+						var temp2 = parseFloat(0);
+
+						@for($c2=0;$c2<100;$c2++)
+							temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
+						@endfor
+
+						temp2 = Comma(temp2);
+
+						$("#RF-Total-Fy").val(temp2);
+
+					});
+					$("#clientRF-Cm-"+{{$c}}).change(function(){
+						if ($(this).val() == "") {
+							$(this).val(0);
+						}
+
+						var temp = handleNumber($(this).val());
+
+						$(this).val(Comma(temp));
+
+						var temp2 = parseFloat(0);
+						
+						@for($c2=0;$c2<100;$c2++)
+							temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
+						@endfor
+
+						temp2 = Comma(temp2);
+
+						$("#RF-Total-Cm").val(temp2);
+					});
+				@endfor
+			});
+
+			function handleNumber(number){
+				console.log(number);
+				if(number == null){
+					number = 0.0;
+				}else{
+					for (var i = 0; i < number.length/3; i++) {
+						number = number.replace(",","");
+					}
+
+					number = parseFloat(number);
+				}
+				
+				return number;
+			}
+
+		  	function Comma(Num) { //function to add commas to textboxes
+		        Num += '';
+		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+		        x = Num.split('.');
+		        x1 = x[0];
+		        x2 = x.length > 1 ? '.' + x[1] : '';
+		        var rgx = /(\d+)(\d{3})/;
+		        while (rgx.test(x1))
+		            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		        return x1 + x2;
+		    }
+
+		    $('.linked').scroll(function(){
+
+	    		$('.linked').scrollLeft($(this).scrollLeft());
+			});
+
 			
-			return number;
-		}
 
-	  	function Comma(Num) { //function to add commas to textboxes
-	        Num += '';
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        x = Num.split('.');
-	        x1 = x[0];
-	        x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1))
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        return x1 + x2;
-	    }
-
-	    $('.linked').scroll(function(){
-
-    		$('.linked').scrollLeft($(this).scrollLeft());
-		});
-
-		$('.linked2').scroll(function(){
-
-    		$('.linked2').scrollTop($(this).scrollTop());
-		});
-
-	</script>
-
+		</script>
+	@endif
 
 @endsection

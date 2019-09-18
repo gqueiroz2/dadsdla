@@ -96,10 +96,10 @@
                        <li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
-	                        	<a class="nav-link" href=""> Brand </a>
-								<a class="nav-link" href=""> Market </a>                                
-								<a class="nav-link" href=""> Churn </a>
-	                            <a class="nav-link" href=""> Ranking <span class="sr-only">(current)</span></a>
+	                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
+								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
+								<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
+	                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
 	                        </div>
                         </li>
 
@@ -107,9 +107,10 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href=""> AE View </a>
-								<a class="dropdown-item" href=""> VP View </a>
-								{{-- <a class="dropdown-item" href=""> Pacing Report </a> --}}
+								<a class="dropdown-item" href="#"> AE View </a>
+								<a class="dropdown-item" href="#"> VP View </a>
+								<a class="dropdown-item" href="#"> VP Month View </a>
+								{{-- <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a> --}}
 							</div>
 						</li>
 

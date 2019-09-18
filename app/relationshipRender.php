@@ -60,7 +60,7 @@ class relationshipRender extends Render{
 
 				}
 
-				if($structure[$s]['agencyGroup'] != "Others"){
+				if($structure[$s]['agencyGroup']){
 					for ($t=0; $t < sizeof($structure[$s]['agency']); $t++) { 					
 						
 						if($structure[$s]['agency'][$t]['agencyUnit']){

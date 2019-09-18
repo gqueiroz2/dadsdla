@@ -169,7 +169,7 @@ class rank extends Model{
             $names = array($type."ID", $type, $as);
 
             for ($y=0; $y < sizeof($years); $y++) {
-
+                
                 array_push($colsValue, $years[$y]);
                 array_push($colsValueDigital, $years[$y]);
 
@@ -228,8 +228,6 @@ class rank extends Model{
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
                     }
-                    $res[$y] = $resD[$y];
-                }else{
                     $res[$y] = $resD[$y];
                 }
 
@@ -346,9 +344,7 @@ class rank extends Model{
                             $resD[$y][$r]['total'] *= $pRateDigital;
                         }
                         $res[$y] = $resD[$y];
-                    }else{
-                        $res[$y] = $resD[$y];
-                    }   
+                    }  
                 }
             }
         }
@@ -659,6 +655,8 @@ class rank extends Model{
             $name = "EC";
         }elseif ($region == "Bolivia") {
             $name = "BO";
+        }elseif ($region == "Puerto Rico") {
+            $name = "PR";
         }else {
             $name = false;
         }

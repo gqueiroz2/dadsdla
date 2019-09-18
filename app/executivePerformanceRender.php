@@ -60,6 +60,12 @@ class executivePerformanceRender extends renderPerformance
 	    		}else{
 	    			$s++;
 	    		}
+	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "New York International") {
+	    		if(($s+1) == sizeof($mtx["salesRep"])){
+	    			break;
+	    		}else{
+	    			$s++;
+	    		}
 	    	}elseif ($mtx["salesRep"][$s]["salesRep"] == "Jesse Leon" && $mtx["region"] == "NY International") {
 	    		if(($s+1) == sizeof($mtx["salesRep"])){
 	    			break;

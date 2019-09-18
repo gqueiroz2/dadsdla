@@ -15,7 +15,7 @@
 
 	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
-		<div class="container-fluid">		
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Region:</span></label>
@@ -41,13 +41,6 @@
 						<label style="color: red;">* Required</label>
 					@endif
 					{{$render->salesRep2()}}
-				</div>
-				<div class="col">
-					<label class="labelLeft"><span class="bold"> Source: </span></label>
-						@if($errors->has('source'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->source2()}}
 				</div>
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>

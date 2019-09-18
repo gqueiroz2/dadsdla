@@ -44,13 +44,14 @@ class excelController extends Controller{
                 $ge = new generateExcel();
 
                 $values = $ge->selectDataMonth($con, $region, $year, $brands, $secondPos, $currency, $value);
-                var_dump($values);
+                //var_dump($values);
+
                 $form = $mq->TruncateName($secondPos);
 
-        	/*$spreadsheet = new Spreadsheet();
+        	$spreadsheet = new Spreadsheet();
                 $sheet = $spreadsheet->getActiveSheet();
 
-                $sheet = $ge->month($sheet, $lines, $brands, $months, $currency, $value, $year, $form, $salesRegion);
+                $sheet = $ge->month($sheet, $values, $brands, $currency, $value, $year, $form, $salesRegion);
                 
                 $writer = new Xlsx($spreadsheet);
          

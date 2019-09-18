@@ -12,7 +12,6 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-/*
 	Route::group(['prefix'=>'rankings'], function(){
 		Route::group(['prefix'=>'ranking'], function(){
 			Route::get('/','rankingController@get')
@@ -42,7 +41,6 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('/', 'rankingChurnController@post')
 				->name('churnPost');
 	});
-*/
 });
 
 Route::group(['prefix' => 'ajaxRanking'], function(){

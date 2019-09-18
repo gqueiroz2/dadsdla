@@ -9,8 +9,8 @@ class sql extends Model{
     public function larica($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false){     
         $sql = "SELECT $columns FROM $table $join $where ORDER BY 1 $limit";
         echo "<pre>".$sql."</pre><br>";
-        //$res = $con->query($sql);
-        //return $res;
+        $res = $con->query($sql);
+        return $res;
     }
 
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false , $groupBy = false){    	
@@ -29,13 +29,6 @@ class sql extends Model{
 
     public function selectSum2($con,$sum,$as, $table, $join = null, $where = null, $order_by = 1, $limit = false){
         $sql = "SELECT SUM($sum) AS $as FROM $table $join $where";
-        //echo "<pre>".$sql."</pre><br>";
-        $res = $con->query($sql);
-        return $res;
-    }
-
-    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){
-        $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
         echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
@@ -46,7 +39,13 @@ class sql extends Model{
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
+    }
 
+    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){
+        $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
+        echo "<pre>".$sql."</pre><br>";
+        $res = $con->query($sql);
+        return $res;
     }
 
     //só pode ser usada se o info possuir 2 posições, nem mais nem menos
@@ -94,12 +93,11 @@ class sql extends Model{
     }
 
     public function fetch($result,$from,$to){
-        
     	if($result && $result->num_rows > 0){
     		$count = 0;
     		while ($row = $result->fetch_assoc()){
-    			for ($i=0; $i < sizeof($from); $i++) {
-    				$info[$count][$to[$i]] = $row[$from[$i]];  				
+                for ($i=0; $i < sizeof($from); $i++) {
+                    $info[$count][$to[$i]] = $row[$from[$i]];  				
     			}
     			$count++;
     		}
@@ -108,6 +106,29 @@ class sql extends Model{
     	}
 
     	return $info;
+
+    }
+
+    public function fetch2($result,$from,$to){
+        var_dump($from);
+        var_dump($to);
+        $vlau = array();
+        if($result && $result->num_rows > 0){
+            $count = 0;
+            //var_dump($result->fetch_assoc());
+            while ($row = $result->fetch_assoc()){
+                $vlau[] = $row;
+                var_dump($vlau);
+                for ($i=0; $i < sizeof($from); $i++) {
+                    $info[$count][$to[$i]] = $row[$from[$i]];               
+                }
+                $count++;
+            }
+        }else{
+            $info = false;
+        }
+        
+        return $info;
 
     }
 

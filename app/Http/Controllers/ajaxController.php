@@ -866,7 +866,7 @@ class ajaxController extends Controller{
         for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
             array_push($months2, $m);
         }
-
+        
         $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
         
         $matrix = $scr->assembler($values, $finalValues, $valuesTotal, $years, $filterType);
