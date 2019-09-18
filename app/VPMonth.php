@@ -17,8 +17,8 @@ class VPMonth extends pAndR {
         $sql = new sql();
         $pr = new pRate();
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast ORDER BY last_modify_date DESC";
-
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE type_of_forecast = 'AE' ORDER BY last_modify_date DESC";
+        
         $result = $con->query($select);
 
         $from = array("ID","oppid","type_of_value","currency_id");
@@ -123,6 +123,7 @@ class VPMonth extends pAndR {
 
             for ($m=0; $m < 12; $m++) { 
                 $manualRolling[$m] = 0;
+                $fPastRollingFCST[$m] = 0;
             }
 
             for ($c=0; $c < sizeof($listOfClients); $c++) {
@@ -131,9 +132,6 @@ class VPMonth extends pAndR {
 
                 for ($m=0; $m < 12; $m++) {
                     $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE')";
-                    /*if ($listOfClients[$c]['clientID'] == 208) {
-                        var_dump($select[$c][$m]);
-                    }*/
                     
                     $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE')";
 
@@ -170,7 +168,7 @@ class VPMonth extends pAndR {
                         $manualRolling[$m] = $manualRolling[$m]*$multValue;
 
                         $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
-                        $fPastRolling[$m] = $fPastRolling[$m]*$multValue;                        
+                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
                     }
                 }
 
@@ -180,7 +178,7 @@ class VPMonth extends pAndR {
                         $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
 
                         $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
-                        $fPastRolling[$m] = ($fPastRolling[$m]*$newCurrency)/$oldCurrency;                       
+                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                       
                     }
                 }
 
@@ -198,7 +196,7 @@ class VPMonth extends pAndR {
             $pastRollingFCST = $this->addQuartersAndTotalOnArray($pastRollingFCST);
             
             $manualRolling = $this->addQuartersAndTotal($manualRolling);
-            $fPastRolling = $this->addQuartersAndTotal($fPastRolling);
+            $fPastRollingFCST = $this->addQuartersAndTotal($fPastRollingFCST);
             
             $lastRollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
 
@@ -210,91 +208,68 @@ class VPMonth extends pAndR {
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
 
-            //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
-            //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
+            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+
+            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
             
-            //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
-            //$rollingFCST = $this->adjustFCST($rollingFCST);*/
+            $executiveRF = $this->consolidateAEFcst($rollingFCST);
+            $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
+            $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
+            $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+            $targetAchievement = $this->divArrays($executiveRF,$targetValues);
+
+            $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+
+            $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+
+            $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
+
+            if ($value == 'gross') {
+                $valueView = 'Gross';
+            }elseif($value == 'net'){
+                $valueView = 'Net';
+            }else{
+                $valueView = 'Net Net';
+            }
+
+            $rtr = array(
+                            "cYear" => $year,
+                            "pYear" => ($year-1),
+                            "readable" => $readable,
+
+                            "client" => $listOfClients,
+                            "targetValues" => $targetValues,
+
+                            "manualRolling" => $manualRolling,
+                            "rollingFCST" => $rollingFCST,
+                            "lastRollingFCST" => $lastRollingFCST,
+                            "clientRevenueCYear" => $clientRevenueCYear,
+                            "clientRevenuePYear" => $clientRevenuePYear,
+
+                            "pastExecutiveRF" => $fPastRollingFCST,
+                            "executiveRF" => $executiveRF,
+                            "executiveRevenuePYear" => $executiveRevenuePYear,
+                            "executiveRevenueCYear" => $executiveRevenueCYear,
+
+                            "pending" => $pending,
+                            "RFvsTarget" => $RFvsTarget,
+                            "targetAchievement" => $targetAchievement,
+                        
+                            "currency" => $currency, 
+                            "value" => $value,
+                            "region" => $regionID,
+
+                            "currencyName" => $currencyName,
+                            "valueView" => $valueView,
+                            "currency" => $currencyName,
+                            "value" => $valueView,
+                            "fcstAmountByStage" => $fcstAmountByStage,
+                            "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                        );
 
         }else{
-            
-            $rollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
-
-            $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
-
-            $fcstAmountByStage = $fcst['fcstAmountByStage'];
-
-            $toRollingFCST = $fcst['fcstAmount'];
-
-            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
-
-            $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
-
-            $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
-            
-            //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
-            //$rollingFCST = $this->adjustFCST($rollingFCST);
-
-            $lastRollingFCST = $rollingFCST;
+            $rtr = null;
         }
-
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
-
-        $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
-
-        $executiveRF = $this->consolidateAEFcst($rollingFCST);
-        $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
-        $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
-        $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
-        $targetAchievement = $this->divArrays($executiveRF,$targetValues);
-
-        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
-
-        $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
-
-        $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
-
-        if ($value == 'gross') {
-            $valueView = 'Gross';
-        }elseif($value == 'net'){
-            $valueView = 'Net';
-        }else{
-            $valueView = 'Net Net';
-        }
-
-        $rtr = array(
-                        "cYear" => $year,
-                        "pYear" => ($year-1),
-                        "readable" => $readable,
-
-                        "client" => $listOfClients,
-                        "targetValues" => $targetValues,
-
-                        "manualRolling" => $manualRolling,
-                        "rollingFCST" => $rollingFCST,
-                        "lastRollingFCST" => $lastRollingFCST,
-                        "clientRevenueCYear" => $clientRevenueCYear,
-                        "clientRevenuePYear" => $clientRevenuePYear,
-
-                        "executiveRF" => $executiveRF,
-                        "executiveRevenuePYear" => $executiveRevenuePYear,
-                        "executiveRevenueCYear" => $executiveRevenueCYear,
-
-                        "pending" => $pending,
-                        "RFvsTarget" => $RFvsTarget,
-                        "targetAchievement" => $targetAchievement,
-                    
-                        "currency" => $currency, 
-                        "value" => $value,
-                        "region" => $regionID,
-
-                        "currencyName" => $currencyName,
-                        "valueView" => $valueView,
-                        "currency" => $currencyName,
-                        "value" => $valueView,
-                        "fcstAmountByStage" => $fcstAmountByStage,
-                        "fcstAmountByStageEx" => $fcstAmountByStageEx,
-                    );
 
         return $rtr;
 
@@ -352,7 +327,7 @@ class VPMonth extends pAndR {
     public function subArrays($array1,$array2){
         $exit = array();
 
-        for ($a=0; $a <sizeof($array1) ; $a++) { 
+        for ($a=0; $a < sizeof($array1); $a++) { 
             $exit[$a] = $array1[$a] - $array2[$a];
         }
 
