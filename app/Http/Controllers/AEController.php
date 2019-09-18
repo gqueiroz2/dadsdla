@@ -36,10 +36,42 @@ class AEController extends Controller{
         $value = json_decode( base64_decode( Request::get('value') ));
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
+        $brandsPerClient = json_decode( base64_decode( Request::get('brandsPerClient') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
 
+
         $salesRepID = $salesRep->id;
+
+
+
+        for ($c=0; $c <sizeof($brandsPerClient) ; $c++) {
+            $saida[$c] = array();
+            $brandPerClient[$c] = "";
+            if($brandsPerClient[$c]){
+                for ($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++) {
+                    $brandsPerClient[$c][$p] = explode(";", $brandsPerClient[$c][$p]->brand);
+                }
+                for($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++){
+                    for ($b=0; $b <sizeof($brandsPerClient[$c][$p]) ; $b++) { 
+                        array_push($saida[$c], $brandsPerClient[$c][$p][$b]);
+                    }
+                }
+                $saida[$c] = array_unique($saida[$c]);
+                $saida[$c] = array_values($saida[$c]);
+                for ($s=0; $s <sizeof($saida[$c]); $s++) { 
+                    if ($s == (sizeof($saida[$c])-1)) {
+                        $brandPerClient[$c] .= $saida[$c][$s];
+                    }else{
+                        $brandPerClient[$c] .= $saida[$c][$s].";";
+                    }
+                }
+            }else{
+                $saida[$c] = false;
+                $brandPerClient[$c] = false;
+            }
+        }
+
 
 /*
         var_dump($regionID);
@@ -131,7 +163,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit);
+        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
 
 
         if ($bool == "Updated") {
