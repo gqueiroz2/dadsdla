@@ -16,9 +16,9 @@
 						<div class="col-sm">
 							<label>Sales Region</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
-								{{$render->region($region)}}							
+								{{$render->region($salesRegion)}}							
 							@else
-								{{$render->regionFiltered($region, $regionID, $special)}}
+								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
 						</div>
 
