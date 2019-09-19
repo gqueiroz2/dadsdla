@@ -133,6 +133,10 @@ class VPMonth extends pAndR {
                 for ($m=0; $m < 12; $m++) {
                     $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE')";
                     
+                    /*if ($listOfClients[$c]["clientID"] == 208) {
+                        var_dump($select[$c][$m]);
+                    }*/
+
                     $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE')";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);

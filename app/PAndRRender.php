@@ -49,6 +49,7 @@ class PAndRRender extends Render{
 
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
+        $brandsPerClient = $forRender["brandsPerClient"];
 
         echo "<input type='hidden' id='salesRep' name='salesRep' value='".base64_encode(json_encode($salesRep))."'>";
         echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
@@ -58,6 +59,7 @@ class PAndRRender extends Render{
         echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
         echo "<input type='hidden' id='user' name='user' value='".base64_encode(json_encode($userName))."'>";
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
+        echo "<input type='hidden' id='year' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerClient))."'>";
 
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>

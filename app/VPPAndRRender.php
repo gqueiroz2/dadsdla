@@ -9,9 +9,6 @@ use App\PAndRRender;
 class VPPAndRRender extends PAndRRender{
     
 	public function VP1($forRender){
-        
-        var_dump("VP 1");
-
         $current = intval( date('m') ) - 1;
         $currentM = intval( date('m') );
         $yearToDate = $this->dealsWithMonthYTD($current);

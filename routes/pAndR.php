@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('/','VPMonthController@post')
 										->name('VPMonthPost');
 		});
-		
+
 	});
 	Route::group(['prefix'=>'ajax'],function(){
 		Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion')

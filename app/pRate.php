@@ -31,7 +31,7 @@ class pRate extends Management{
 		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
 				 LEFT JOIN region r ON c.region_id = r.ID";
 		$order = " 1,2,5,4";
-		$result = $sql->select($con,$columns,$table,$join,$where,$order);
+		$result = $sql->larica($con,$columns,$table,$join,$where,$order);
 		$pRate = $sql->fetch($result,$from,$from);		
 		return $pRate;
 	}

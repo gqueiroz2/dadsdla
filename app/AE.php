@@ -13,13 +13,13 @@ use App\pRate;
 
 class AE extends pAndR{
     
-    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit){
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit,$brandPerClient){
         $sql = new sql();
         $sr = new salesRep();
         $tmp = explode("-", $date);
 
-        if($tmp && isset($tmp[2])){
-            $month = $tmp[2];
+        if($tmp && isset($tmp[1])){
+            $month = $tmp[1];
         }else{
             $month = 0;
         }
@@ -79,7 +79,7 @@ class AE extends pAndR{
 
             $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$salesRep,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
 
-            $updateFCSTClient = $this->updateFCSTClient($con,$salesRep,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted);
+            $updateFCSTClient = $this->updateFCSTClient($con,$salesRep,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted, $brandPerClient);
 
             return "Updated";
 
@@ -121,7 +121,7 @@ class AE extends pAndR{
 
             $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
 
-            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted);
+            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$splitted,$brandPerClient);
          
             return "Created";
         }
@@ -150,7 +150,7 @@ class AE extends pAndR{
         }
     }
 
-    public function updateFCSTClient($con,$salesRep,$manualEstimantion,$table,$list,$splitted){
+    public function updateFCSTClient($con,$salesRep,$manualEstimantion,$table,$list,$splitted,$brandPerClient){
 
         $sql = new sql();
 
@@ -175,7 +175,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
                     if ($con->query($update[$c][$m]) === true) {
                         
@@ -215,7 +215,7 @@ class AE extends pAndR{
         }
     }
 
-    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$splitted){
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$splitted,$brandPerClient){
 
         $sql = new sql();
 
@@ -227,7 +227,7 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        $columns = "(forecast_id,month,value,client_id)";
+        $columns = "(forecast_id,month,value,client_id,brand)";
         for ($c=0; $c <sizeof($list) ; $c++) {
             if ($splitted) {
                 if ($splitted[$c]->splitted) {
@@ -240,7 +240,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\")";
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
@@ -547,13 +547,7 @@ class AE extends pAndR{
 
         $rollingFCST = $manualEstimantionClient;
 
-        for ($c=0; $c <sizeof($rollingFCST) ; $c++) { 
-            $rollingFCST[$c][3] = $rollingFCST[$c][0] + $rollingFCST[$c][1] + $rollingFCST[$c][2];
-            $rollingFCST[$c][7] = $rollingFCST[$c][4] + $rollingFCST[$c][5] + $rollingFCST[$c][6];
-            $rollingFCST[$c][11] = $rollingFCST[$c][8] + $rollingFCST[$c][9] + $rollingFCST[$c][10];
-            $rollingFCST[$c][15] = $rollingFCST[$c][12] + $rollingFCST[$c][13] + $rollingFCST[$c][14];
-            $rollingFCST[$c][16] = $rollingFCST[$c][3] + $rollingFCST[$c][7] + $rollingFCST[$c][11] + $rollingFCST[$c][15];
-        }
+        $rollingFCST = $this->adjustFCST($rollingFCS);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
            
@@ -570,6 +564,8 @@ class AE extends pAndR{
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
 
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
+
+        $brandsPerClient = $this->getBrandsClient($con, $listOfClients, $salesRep);
 
         if ($value == 'gross') {
             $valueView = 'Gross';
@@ -612,6 +608,7 @@ class AE extends pAndR{
                         "value" => $valueView,
                         "fcstAmountByStage" => $fcstAmountByStage,
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                        "brandsPerClient" => $brandsPerClient,
                     );
 
         return $rtr;
@@ -870,6 +867,8 @@ class AE extends pAndR{
 
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
+        $brandsPerClient = $this->getBrandsClient($con, $listOfClients, $salesRep);
+
         if ($value == 'gross') {
             $valueView = 'Gross';
         }elseif($value == 'net'){
@@ -911,10 +910,28 @@ class AE extends pAndR{
                         "value" => $valueView,
                         "fcstAmountByStage" => $fcstAmountByStage,
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                        "brandsPerClient" => $brandsPerClient,
                     );
 
         return $rtr;
         
+    }
+
+    public function getBrandsClient($con,$clients,$salesRep){
+
+        $sql = new sql();
+
+        $from = array("brand");
+
+        for ($c=0; $c < sizeof($clients) ; $c++) { 
+            $select[$c] = "SELECT brand FROM sf_pr WHERE client_id = \"".$clients[$c]['clientID']."\" AND sales_rep_splitter_id = \"".$salesRep[0]["id"]."\" AND (stage != \"5\" AND stage != \"6\" AND stage != \"7\")";
+
+            $res[$c] = $con->query($select[$c]);
+
+            $saida[$c] = $sql->fetch($res[$c],$from,$from);
+        } 
+
+        return $saida;
     }
 
     public function addClosedFcst($rolling,$tmpRolling){
@@ -1310,7 +1327,7 @@ class AE extends pAndR{
 
         */
 
-        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id
+        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (sales_rep_splitter_id != sales_rep_owner_id)
@@ -1320,7 +1337,7 @@ class AE extends pAndR{
                   ";
 
         $resSF = $con->query($selectSF);
-        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id");
+        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
         $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
 
         if($oppid){
@@ -1332,7 +1349,7 @@ class AE extends pAndR{
                 }
             }
         }else{
-            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id
+            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (sales_rep_splitter_id = sales_rep_owner_id)
@@ -1342,7 +1359,7 @@ class AE extends pAndR{
                   ";
 
             $resSF = $con->query($selectSF);
-            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id");
+            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
             $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
 
             if($oppid){
