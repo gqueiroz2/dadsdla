@@ -115,6 +115,7 @@ class rankingBrand extends rank{
 						}elseif ($res[$y][$r]['brand'] == 'ONL') {
 							$check = true;
 							$sum += $res[$y][$r]['total'];
+							unset($res[$y][$r]);
 						}elseif ($res[$y][$r]['brand'] == 'ONL-DSS') {
 							$check = true;
 							$sum += $res[$y][$r]['total'];
@@ -132,19 +133,8 @@ class rankingBrand extends rank{
 
 					if ($check) {
 						$res[$y] = array_values($res[$y]);
-
-						$has = false;
-
-						for ($r=0; $r < sizeof($res[$y]); $r++) { 
-							if ($res[$y][$r]['brand'] == 'ONL') {
-								$has = true;
-								$res[$y][$r]['total'] = $sum;
-							}
-						}
-
-						if (!$has) {
-							array_push($res[$y], array('brand' => 'ONL', 'total' => $sum));
-						}
+						$aux = array("brandID" => "9" ,"brand" => "ONL", "total" => $sum);
+						array_push($res[$y], $aux);
 					}	
 				}
 				
@@ -189,7 +179,6 @@ class rankingBrand extends rank{
                                     $res[$y][$i]['total'] *= 1.0;
                                     
                                 }else{
-                                	
                                     $res[$y][$i]['total'] *= $pRate;
                                 }
                             }else{
@@ -230,6 +219,35 @@ class rankingBrand extends rank{
 
 		return $rtr;
 	}
+
+	public function sortDigitalBrands($brands){
+        
+        $ids = array();
+
+        for ($i=0; $i < sizeof($brands); $i++) { 
+            $ids[$i] = $brands[$i]['id'];
+        }
+
+        $ids = array_unique($ids);
+
+        sort($ids);
+
+        $rtr = array();
+
+        $c = 0;
+
+        while ($c < sizeof($brands)) {
+            for ($i=0; $i < sizeof($brands); $i++) { 
+                if ($brands[$i]['id'] == $ids[$c]) {
+                    array_push($rtr, $brands[$i]['brand']);
+                    $c++;
+                    break;
+                }
+            }   
+        }
+
+        return $rtr;
+    }
 
 	public function getValueColumn($values, $brand, $year, $column){
 		
