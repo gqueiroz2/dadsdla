@@ -12,6 +12,10 @@ use App\VPMonth;
 
 class VPMonthController extends Controller {
     
+    public function save(){
+        var_dump("expression");
+    }
+
     public function get(){
 
     	$db = new dataBase();
