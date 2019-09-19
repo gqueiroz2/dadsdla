@@ -179,7 +179,7 @@
 
 						var temp2 = parseFloat(0);
 
-						@for($c2=0;$c2<100;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
 						@endfor
 
@@ -199,7 +199,7 @@
 
 						var temp2 = parseFloat(0);
 						
-						@for($c2=0;$c2<100;$c2++)
+						@for($c2=0;$c2<sizeof($client);$c2++)
 							temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
 						@endfor
 

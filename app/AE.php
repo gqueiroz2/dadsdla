@@ -56,9 +56,7 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        var_dump($id);
-
-        if ( $id && !is_null($id) ) {
+        if ( $id && !is_null($id) && $submit == 0 ) {
             var_dump("IF");
             var_dump($date);
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 

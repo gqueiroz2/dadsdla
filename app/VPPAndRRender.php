@@ -10,8 +10,6 @@ class VPPAndRRender extends PAndRRender{
     
 	public function VP1($forRender){
         
-        var_dump("VP 1");
-
         $current = intval( date('m') ) - 1;
         $currentM = intval( date('m') );
         $yearToDate = $this->dealsWithMonthYTD($current);
@@ -111,13 +109,13 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>2018</td>";
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='3' style='width:15%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
                     echo "<td class='lightBlue' rowspan='2'>2018</td>";
                     echo "<td class='lightBlue' rowspan='2'style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='6' style='width:30%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue' colspan='6' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>2019</td>";
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>2018</td>";
-                    echo "<td class='lightBlue' colspan='2' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
+                    echo "<td class='lightBlue' colspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td style='height:20px;'>&nbsp</td>";
@@ -290,7 +288,7 @@ class VPPAndRRender extends PAndRRender{
         echo "</div>";
 
         echo "<div class='col table-responsive linked'>";
-            echo "<table class='temporario' id='table2' style='min-width:2600px; min-height:100%; width:100%;text-align:center; width:100%;'>";
+            echo "<table class='temporario' id='table2' style='min-width:2600px; min-height:100%; text-align:center; width:100%;'>";
                 
                 for ($c=0; $c < sizeof($client); $c++) {
                     if($c%2 == 0){
@@ -366,14 +364,17 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Proposals*/ 
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                ".number_format($fcstFullYearByClient[$c], 0, ".", ",")."
+                                    <input type='text' readonly='true' id='passClientRF-Fy-$c' 
+                                           value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /*Fcst*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
                                     <input type='text' id='clientRF-Fy-$c' 
                                            value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
-                                           style='width:100; border:none; font-weight:bold;
+                                           style='width:100%; border:none; font-weight:bold;
                                            background-color:transparent; text-align:center;'>
                              </td>";
 
