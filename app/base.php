@@ -338,6 +338,26 @@ class base extends Model{
 
     }
 
+    public function formatHour($from,$to,$string){
+        switch ($from) {
+            case 'hh:mm:ss':
+                switch ($to) {
+                    case 'hh:mm':
+                        
+                        $tmp = explode(":", $string);
+                        $hour = $tmp[0].":".$tmp[1];
+                        return $hour;
+
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
     public function formatData($from,$to,$string){
         switch ($from) {
             case 'mm/dd/aaaa':                

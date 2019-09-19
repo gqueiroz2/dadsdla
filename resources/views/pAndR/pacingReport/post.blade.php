@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'VP Month Report')
+@section('title', 'VP Report')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -26,12 +26,12 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				VP Month Report
+				Pacing Report
 			</div>
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
@@ -74,52 +74,17 @@
 			</div>
 		</div>
 	</form>
-	<br>
-
-	@if(session('error'))
-		<div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @else
-    	<div class="container-fluid">
-			<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
-			@csrf
-				<div class="row justify-content-end">
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col">
-						<label> &nbsp; </label>
-						<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-					</div>	
-				</div>
-
-				<div class="row mt-2 justify-content-end">
-					<div class="col" style="width: 100%;">
-						<center>
-							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
-						</center>
-					</div>
-				</div>
-			</form>
+	<div class="container-fluid">		
+		<div class="row justify-content-center mt-2">
+			<div class="col" style="width: 100%; padding-right: 2%;">
+				<center>
+					{{$render->pacingReport($brands)}}
+				</center>
+			</div>
 		</div>
+	</div>
 
-		<script type="text/javascript">
-			$(document).ready(function(){
 
-				<?php 
-					$aux = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
-				?>
 
-				@for($m=0; $m < sizeof($aux); $m++)
-					$("#rf-"+{{$m}}).change(function(){
-						alert("aqui");
-					});
-				@endfor
-			});
-		</script>
-
-    @endif
 
 @endsection

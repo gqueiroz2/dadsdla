@@ -141,7 +141,7 @@ class subMarketRanking extends rankingMarket {
 
 				$from = $infoQuery[0]['names'];
 				$values[$y] = $sql->fetch($values[$y], $from, $from);
-
+                
                 if (is_array($values[$y])) {
                     $size = sizeof($values[$y]);
                     $sum = 0;
@@ -156,6 +156,7 @@ class subMarketRanking extends rankingMarket {
                         }elseif ($values[$y][$r]['brand'] == 'ONL') {
                             $check = true;
                             $sum += $values[$y][$r]['total'];
+                            unset($values[$y][$r]);
                         }elseif ($values[$y][$r]['brand'] == 'ONL-DSS') {
                             $check = true;
                             $sum += $values[$y][$r]['total'];
@@ -170,11 +171,9 @@ class subMarketRanking extends rankingMarket {
                     if ($check) {
                         $values[$y] = array_values($values[$y]);
 
-                        for ($r=0; $r < sizeof($values[$y]); $r++) { 
-                            if ($values[$y][$r]['brand'] == 'ONL') {
-                                $values[$y][$r]['total'] = $sum;
-                            }
-                        }
+                        $aux = array("brandID" => "9" ,"brand" => "ONL", "total" => $sum);
+                        array_push($values[$y], $aux);
+                        
                     }   
                 }
 
