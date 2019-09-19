@@ -118,17 +118,48 @@
 	  	<div class="modal-dialog" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-	        		<h5 class="modal-title" id="exampleModalLabel">Título do modal</h5>
+	        		<h5 class="modal-title" id="exampleModalLabel">AE Submissions</h5>
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 	          			<span aria-hidden="true">&times;</span>
 	        		</button>
 	     		</div>
 	      		<div class="modal-body">
-	        		...
+	        		<table style="width: 100%;">
+		        		<tr>
+		        			<td class="lightBlue"><center> Sales Rep </center></td>
+		        			<td class="lightBlue"><center> Submitted Date </center></td>
+		        			<td class="lightBlue"><center> Submitted Time </center></td>
+		        		</tr>
+		        		<?php
+		        			if(isset($salesRepListOfSubmit) && $salesRepListOfSubmit){
+								for ($s=0; $s < sizeof($salesRepListOfSubmit); $s++) { 
+									
+									if($s%2==0){
+										$clr = "odd";
+									}else{
+										$clr = "even";
+									}
+
+									echo "<tr>";
+											echo "<td class='$clr'><center>"
+														.$salesRepListOfSubmit[$s]['salesRepName'].
+												 "</center></td>";
+											echo "<td class='$clr'><center>"
+														.$base->formatData("aaaa-mm-dd","dd/mm/aaaa",$salesRepListOfSubmit[$s]['lastModifyDate']).
+												 "</center></td>";
+											echo "<td class='$clr'><center>"
+														.$base->formatHour("hh:mm:ss","hh:mm",$salesRepListOfSubmit[$s]['lastModifyTime']).
+												 "</center></td>";
+									echo "</tr>";
+
+
+								}
+							}
+						?>
+					</table>
 	      		</div>
 	      		<div class="modal-footer">
-	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-	        		<button type="button" class="btn btn-primary">Salvar mudanças</button>
+	        		<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
 	      		</div>
 	    	</div>
 	  	</div>
@@ -186,6 +217,26 @@
 						temp2 = Comma(temp2);
 
 						$("#RF-Total-Fy").val(temp2);
+
+						temp2 = handleNumber(temp2);
+
+						var tmp1;
+						var tmp2;
+
+						@for($c2=0;$c2<sizeof($client);$c2++)
+							tmp1 = handleNumber($("#closed-Fy-"+{{$c2}}).val());
+							tmp2 = handleNumber($("#booking-Fy-"+{{$c2}}).val());
+							if (tmp1 > tmp2) {
+								temp2 += tmp1;
+							}else{
+								temp2 += tmp2;
+							}
+						@endfor
+
+						temp2 = Comma(temp2);
+
+						$("#TotalCy-Fy").val(temp2);
+
 
 					});
 					$("#clientRF-Cm-"+{{$c}}).change(function(){

@@ -9,7 +9,6 @@ use App\PAndRRender;
 class VPPAndRRender extends PAndRRender{
     
 	public function VP1($forRender){
-        
         $current = intval( date('m') ) - 1;
         $currentM = intval( date('m') );
         $yearToDate = $this->dealsWithMonthYTD($current);
@@ -206,7 +205,11 @@ class VPPAndRRender extends PAndRRender{
                           </td>";
                     /*Total CYear*/
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
-                                ".number_format($totalFullYear, 0, ".", ",")."                            
+                            <input type='text' readonly='true' id='TotalCy-Fy' 
+                                       value='".number_format($totalFullYear, 0, ".", ",")."' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center'>
+                                                            
                           </td>";
 
                     /*Total PYear*/
@@ -349,12 +352,18 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Closed*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; width:5.7%;'>
-                                ".number_format($closedFullYearByClient[$c], 0, ".", ",")."
+                                <input type='text' readonly='true' id='closed-Fy-$c' 
+                                           value='".number_format($closedFullYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /* Booked*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                ".number_format($bookingscYearByClient[$c], 0, ".", ",")."
+                                <input type='text' readonly='true' id='booking-Fy-$c' 
+                                           value='".number_format($bookingscYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /* % Booked Percentage*/                    

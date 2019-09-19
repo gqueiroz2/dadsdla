@@ -11,7 +11,7 @@ use App\pRate;
 use App\dataBase;
 use App\VP;
 use App\sql;
-
+use App\base;
 
 class VPController extends Controller
 {
@@ -39,6 +39,7 @@ class VPController extends Controller
         $pr = new pRate();
         $vp = new vp();
         $sql = new sql();
+        $base = new base();
 
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
@@ -51,12 +52,16 @@ class VPController extends Controller
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
 
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
+
+        $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
+        
+
         if($forRender){
             $client = $forRender['client'];
         }else{
             $client = false;
         }
 
-        return view('pAndR.VPView.post',compact('render','region','currency','forRender','client'));
+        return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
     }
 }

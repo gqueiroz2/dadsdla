@@ -56,7 +56,7 @@ class VPMonthController extends Controller {
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
         if (!$values) {
-            return back()->with("Error","Don't have a Forecast Saved");
+            return back()->with("error","Don't have a Forecast Saved");
         }
 
         $forRender = $values;

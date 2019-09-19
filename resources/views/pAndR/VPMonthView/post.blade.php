@@ -75,28 +75,51 @@
 		</div>
 	</form>
 	<br>
-	<div class="container-fluid">
-		<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
-		@csrf
-			<div class="row justify-content-end">
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col">
-					<label> &nbsp; </label>
-					<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-				</div>	
-			</div>
 
-			<div class="row mt-2 justify-content-end">
-				<div class="col" style="width: 100%;">
-					<center>
-						{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
-					</center>
+	@if(session('error'))
+		<div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @else
+    	<div class="container-fluid">
+			<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
+			@csrf
+				<div class="row justify-content-end">
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col"></div>
+					<div class="col">
+						<label> &nbsp; </label>
+						<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
+					</div>	
 				</div>
-			</div>
-		</form>
-	</div>
+
+				<div class="row mt-2 justify-content-end">
+					<div class="col" style="width: 100%;">
+						<center>
+							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
+						</center>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				<?php 
+					$aux = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+				?>
+
+				@for($m=0; $m < sizeof($aux); $m++)
+					$("#rf-"+{{$m}}).change(function(){
+						alert("aqui");
+					});
+				@endfor
+			});
+		</script>
+
+    @endif
 
 @endsection

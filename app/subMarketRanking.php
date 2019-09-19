@@ -13,6 +13,35 @@ use App\base;
 
 class subMarketRanking extends rankingMarket {
     
+    public function sortDigitalBrands($brands){
+        
+        $ids = array();
+
+        for ($i=0; $i < sizeof($brands); $i++) { 
+            $ids[$i] = $brands[$i]['id'];
+        }
+
+        $ids = array_unique($ids);
+
+        sort($ids);
+
+        $rtr = array();
+
+        $c = 0;
+
+        while ($c < sizeof($brands)) {
+            for ($i=0; $i < sizeof($brands); $i++) { 
+                if ($brands[$i]['id'] == $ids[$c]) {
+                    array_push($rtr, $brands[$i]['brand']);
+                    $c++;
+                    break;
+                }
+            }   
+        }
+
+        return $rtr;
+    }
+
     public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType){
 
     	$sql = new sql();
@@ -141,7 +170,7 @@ class subMarketRanking extends rankingMarket {
 
 				$from = $infoQuery[0]['names'];
 				$values[$y] = $sql->fetch($values[$y], $from, $from);
-
+                
                 if (is_array($values[$y])) {
                     $size = sizeof($values[$y]);
                     $sum = 0;
@@ -156,6 +185,7 @@ class subMarketRanking extends rankingMarket {
                         }elseif ($values[$y][$r]['brand'] == 'ONL') {
                             $check = true;
                             $sum += $values[$y][$r]['total'];
+                            unset($values[$y][$r]);
                         }elseif ($values[$y][$r]['brand'] == 'ONL-DSS') {
                             $check = true;
                             $sum += $values[$y][$r]['total'];
@@ -169,12 +199,8 @@ class subMarketRanking extends rankingMarket {
 
                     if ($check) {
                         $values[$y] = array_values($values[$y]);
-
-                        for ($r=0; $r < sizeof($values[$y]); $r++) { 
-                            if ($values[$y][$r]['brand'] == 'ONL') {
-                                $values[$y][$r]['total'] = $sum;
-                            }
-                        }
+                        $aux = array("brandID" => "9" ,"brand" => "ONL", "total" => $sum);
+                        array_push($values[$y], $aux);
                     }   
                 }
 
@@ -423,6 +449,32 @@ class subMarketRanking extends rankingMarket {
         return $res;
     }
 
+    public function checkArray($array, $value){
+        
+        if (sizeof($array) == 0) {
+            $rtr = 1;
+        }else{
+
+            $equal = false;
+
+            for ($i=0; $i < sizeof($array); $i++) { 
+            
+                if ($value['id'] == $array[$i]['id']) {
+                    $equal = true;
+                }
+            }
+
+            if (!$equal) {
+                $rtr = 1;  
+            }else{
+                $rtr = 0;
+            }
+        }
+
+        return $rtr;
+
+    }
+
     public function assemblerMarketBrand($values, $years, $brands){
         
         $mtx[0][0] = "Brand";
@@ -443,13 +495,16 @@ class subMarketRanking extends rankingMarket {
 
         for ($r=0; $r < sizeof($values); $r++) { 
             if (is_array($values[$r])) {
-                for ($r2=0; $r2 < sizeof($values[$r]); $r2++) { 
-                    if (!in_array($values[$r][$r2]['brand'], $brand)) {
-                        array_push($brand, $values[$r][$r2]['brand']);  
+                for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
+                    $aux = array("id" => $values[$r][$r2]['brandID'], "brand" => $values[$r][$r2]['brand']);
+                    if ($this->checkArray($brand, $aux)) {
+                        array_push($brand, $aux);
                     }
                 }
             }
         }
+
+        $brand = $this->sortDigitalBrands($brand);
 
         for ($b=0; $b < sizeof($brand); $b++) {
             for ($m=0; $m < 3; $m++) {
@@ -462,7 +517,7 @@ class subMarketRanking extends rankingMarket {
                     }
                 }elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
                     if ($res != "-") {
-                        $pClosed += $res;   
+                        $pClosed += $res;
                     }
                 }
 
@@ -501,7 +556,7 @@ class subMarketRanking extends rankingMarket {
                 array_push($mtx[$m], $res);
             }
         }
-        
+
         $total = array();
 
         if (sizeof($brands) > 1) {
