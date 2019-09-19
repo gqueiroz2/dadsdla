@@ -28,7 +28,7 @@ class VP extends pAndR{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
         }
 
-        var_dump($div);
+        //var_dump($div);
 
         $currentMonth = intval( date('m') );
 
@@ -346,6 +346,7 @@ class VP extends pAndR{
                                          AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
                                          AND (f.type_of_forecast = 'AE')
                                          AND (fc.month >= ".intval($currentMonth).")
+                                         AND (f.submitted = '1')
                                          GROUP BY salesRepID
                                  "; 
                     //echo "<pre>".($selectSum[$c])."</pre>";
