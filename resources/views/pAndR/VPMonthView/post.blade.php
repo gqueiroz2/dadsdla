@@ -104,6 +104,22 @@
 				</div>
 			</form>
 		</div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				<?php 
+					$aux = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+				?>
+
+				@for($m=0; $m < sizeof($aux); $m++)
+					$("#rf-"+{{$m}}).change(function(){
+						alert("aqui");
+					});
+				@endfor
+			});
+		</script>
+
     @endif
 
 @endsection
