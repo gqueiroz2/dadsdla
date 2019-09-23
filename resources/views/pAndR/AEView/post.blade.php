@@ -82,23 +82,38 @@
 	<div class="container-fluid">
 		<form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
-			<div class="row justify-content-end">
-				<div class="col-2">
+			<div class="row justify-content-between">
+				<div class="col-3">
 					<label> &nbsp;</label>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-						<label class="btn alert-primary active">
-						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
-						</label>
-						<label class="btn alert-success">
-							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
-						</label>
+					<input type="button" class="btn btn-primary" value="{{$sourceSave}}" style="width: 100%;">
+					<input type="text" name="sourceSave" value="{{$sourceSave}}">
+				</div>				
+				<div class="col-4" >
+					<div class="container-fluid">
+						<div class="row justify-content-end">
+							<div class="col">
+								<label> &nbsp;</label>
+								<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+									<label class="btn alert-primary active">
+									    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+									</label>
+															
+									<label class="btn alert-success">
+										<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+									</label>
+								</div>
+							</div>
+							<div class="col">
+								<label> &nbsp; </label>
+								<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="col-2">
-					<label> &nbsp; </label>
-					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
 				</div>	
 			</div>
+
+
 
 			<div class="row mt-2 justify-content-end">
 				<div class="col" style="width: 100%;">

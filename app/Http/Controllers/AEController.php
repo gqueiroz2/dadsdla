@@ -40,6 +40,8 @@ class AEController extends Controller{
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
 
+        $sourceSave = Request::get('sourceSave');
+
         $salesRepID = $salesRep->id;
 
         for ($c=0; $c < sizeof($brandsPerClient); $c++) {
@@ -119,7 +121,7 @@ class AEController extends Controller{
 
                 $error = "Cannot Submit, Manual Estimation does not match with Rolling FCST";
         
-                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error"));
+                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
 
             }
         }
