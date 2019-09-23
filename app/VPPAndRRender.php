@@ -64,7 +64,19 @@ class VPPAndRRender extends PAndRRender{
         $closedFullYearPercentage = $forRender["closedFullYearPercentage"];
         $bookingscYearPercentage = $forRender["bookingscYearPercentage"];
         $fcstFullYearPercentage = $forRender["fcstFullYearPercentage"];
+        $percentage = $forRender["percentage"];
 
+        $region = $forRender["region"];
+        $currency = $forRender["currency"];
+        $value = $forRender["value"];
+        $cYear = $forRender["cYear"];
+
+        echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
+        echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
+        echo "<input type='hidden' name='region' value='".base64_encode(json_encode($region))."'>";
+        echo "<input type='hidden' name='currency' value='".base64_encode(json_encode($currency))."'>";
+        echo "<input type='hidden' name='value' value='".base64_encode(json_encode($value))."'>";
+        echo "<input type='hidden' name='cYear' value='".base64_encode(json_encode($cYear))."'>";
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
@@ -108,13 +120,13 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>2018</td>";
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='3' style='width:15%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
                     echo "<td class='lightBlue' rowspan='2'>2018</td>";
                     echo "<td class='lightBlue' rowspan='2'style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='6' style='width:30%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>2019</td>";
+                    echo "<td class='lightBlue' colspan='6' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>2019</td>";
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>2018</td>";
-                    echo "<td class='lightBlue' colspan='2' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
+                    echo "<td class='lightBlue' colspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td style='height:20px;'>&nbsp</td>";
@@ -205,7 +217,11 @@ class VPPAndRRender extends PAndRRender{
                           </td>";
                     /*Total CYear*/
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
-                                ".number_format($totalFullYear, 0, ".", ",")."                            
+                            <input type='text' readonly='true' id='TotalCy-Fy' 
+                                       value='".number_format($totalFullYear, 0, ".", ",")."' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center'>
+                                                            
                           </td>";
 
                     /*Total PYear*/
@@ -287,7 +303,7 @@ class VPPAndRRender extends PAndRRender{
         echo "</div>";
 
         echo "<div class='col table-responsive linked'>";
-            echo "<table class='temporario' id='table2' style='min-width:2600px; min-height:100%; width:100%;text-align:center; width:100%;'>";
+            echo "<table class='temporario' id='table2' style='min-width:2600px; min-height:100%; text-align:center; width:100%;'>";
                 
                 for ($c=0; $c < sizeof($client); $c++) {
                     if($c%2 == 0){
@@ -348,12 +364,18 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Closed*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; width:5.7%;'>
-                                ".number_format($closedFullYearByClient[$c], 0, ".", ",")."
+                                <input type='text' readonly='true' id='closed-Fy-$c' 
+                                           value='".number_format($closedFullYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /* Booked*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                ".number_format($bookingscYearByClient[$c], 0, ".", ",")."
+                                <input type='text' readonly='true' id='booking-Fy-$c' 
+                                           value='".number_format($bookingscYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /* % Booked Percentage*/                    
@@ -363,14 +385,17 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Proposals*/ 
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                ".number_format($fcstFullYearByClient[$c], 0, ".", ",")."
+                                    <input type='text' readonly='true' id='passClientRF-Fy-$c' 
+                                           value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /*Fcst*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                    <input type='text' id='clientRF-Fy-$c' 
+                                    <input type='text' id='clientRF-Fy-$c' name='clientRF-Fy-$c' 
                                            value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
-                                           style='width:100; border:none; font-weight:bold;
+                                           style='width:100%; border:none; font-weight:bold;
                                            background-color:transparent; text-align:center;'>
                              </td>";
 

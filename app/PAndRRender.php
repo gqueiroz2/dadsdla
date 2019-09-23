@@ -1118,12 +1118,15 @@ class PAndRRender extends Render{
 
                         /*Proposals*/ 
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                ".number_format($fcstFullYearByClient[$c], 0, ".", ",")."
+                                    <input type='text' readonly='' id='clientRF-Fy-$c' 
+                                           value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
+                                           style='width:100; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /*Fcst*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                    <input type='text' id='clientRF-Fy-$c' 
+                                    <input type='text' id='clientRFManual-Fy-$c' 
                                            value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
                                            style='width:100; border:none; font-weight:bold;
                                            background-color:transparent; text-align:center;'>

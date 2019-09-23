@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPGet');
 			Route::post('/','VPController@post')
 										->name('VPPost');
+			Route::post('save','VPController@save')
+										->name('VPSave');
 		});
 
 		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
@@ -48,6 +50,9 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPMonthGet');
 			Route::post('/','VPMonthController@post')
 										->name('VPMonthPost');
+
+			Route::post('save','VPMonthController@save')
+										->name('VPMonthSave');
 		});
 
 	});

@@ -19,7 +19,7 @@ use Validator;
 class AEController extends Controller{
     
     public function save(){
-        $db = new dataBase(); 
+        $db = new dataBase();
         $sql = new sql();
         $pr = new pRate();
         $r = new region();
@@ -28,7 +28,7 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $excel = new excel();
 
-        $con = $db->openConnection("DLA");  
+        $con = $db->openConnection("DLA");
 
         $regionID = json_decode( base64_decode( Request::get('region') ));
         $salesRep = json_decode( base64_decode( Request::get('salesRep') ));
@@ -40,16 +40,15 @@ class AEController extends Controller{
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
 
+        $sourceSave = Request::get('sourceSave');
 
         $salesRepID = $salesRep->id;
 
-
-
-        for ($c=0; $c <sizeof($brandsPerClient) ; $c++) {
+        for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
             $brandPerClient[$c] = "";
             if($brandsPerClient[$c]){
-                for ($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++) {
+                for ($p=0; $p < sizeof($brandsPerClient[$c]); $p++) {
                     $brandsPerClient[$c][$p] = explode(";", $brandsPerClient[$c][$p]->brand);
                 }
                 for($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++){
@@ -71,7 +70,6 @@ class AEController extends Controller{
                 $brandPerClient[$c] = false;
             }
         }
-
 
 /*
         var_dump($regionID);
@@ -105,13 +103,11 @@ class AEController extends Controller{
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
-
         }
-        for ($c=0; $c < sizeof($client); $c++) { 
 
+        for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
             $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
-
             if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
                 $msg = "Incorrect value submited";
 
@@ -133,7 +129,7 @@ class AEController extends Controller{
 
                 $error = "Cannot Submit, Manual Estimation does not match with Rolling FCST";
         
-                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error"));
+                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
 
             }
         }
@@ -148,18 +144,21 @@ class AEController extends Controller{
             $manualEstimantionByClient[$c] = array_values($manualEstimantionByClient[$c]);
         }
 
-        //var_dump($manualEstimantionBySalesRep);
-        //var_dump($manualEstimantionByClient);
-
         /*
             kind,region,year,salesRep,currency,value,week,month
         */
         $today = $date;
 
+        if ($submit == "submit") {
+            $type = "salve";
+        }else{
+            $type = "save";
+        }
+
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
-        $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
+        $ID = $ae->generateID($con,$sql,$pr,$type,$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
@@ -192,8 +191,6 @@ class AEController extends Controller{
 
         $user = Request::session()->get('userName');
         $permission = Request::session()->get('userLevel');
-
-        //$checkForForecasts = $ae->checkForForecasts();
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
@@ -232,6 +229,7 @@ class AEController extends Controller{
         }
 
         $forRender = $tmp;
+        $sourceSave = $forRender['sourceSave'];
         $client = $tmp['client'];
         $tfArray = array();
         $odd = array();
@@ -239,7 +237,7 @@ class AEController extends Controller{
 
         $error = false;
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error"));
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
     }
 
 }
