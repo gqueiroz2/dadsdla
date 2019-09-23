@@ -47,7 +47,6 @@
     <div class="container-fluid fill px-4 d-table" style='margin-top:-10%;'>
         <div id="map" class="aligh-middle" >
             <center>
-		<img src="https://www.imagemhost.com.br/images/2019/09/04/whatsnew.jpg" style="max-width: 100%; margin-top: 15%; height: auto;">
             </center>
         </div> <!-- This one wants to be 100% height -->
     </div>

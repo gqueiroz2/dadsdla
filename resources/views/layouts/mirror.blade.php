@@ -107,17 +107,9 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-<<<<<<< HEAD
 								<a class="dropdown-item" href="#"> AE View </a>
 								<a class="dropdown-item" href="#"> VP View </a>
 								<a class="dropdown-item" href="#"> VP Month View </a>
-								{{-- <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a> --}}
-=======
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
-								<a class="dropdown-item" href="{{ route('VPGet') }}"> VP View </a>
-								<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> VP Month View </a>
-								 <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a>
->>>>>>> ea4a576bcff52464343c602daaaf0d238c1e0d29
 							</div>
 						</li>
 
