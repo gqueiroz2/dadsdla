@@ -51,7 +51,7 @@ class AE extends pAndR{
         $tableFCSTClient = "forecast_client";
         $tableFCSTSalesRep = "forecast_sales_rep";
 
-        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\" and submitted = \"0\"";
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
 
         $from = array("ID");
 
@@ -331,39 +331,15 @@ class AE extends pAndR{
             $currencyCheck = false;
         }else{
             $save = $save;
-            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
-            $currencyCheck = $temp["currencyCheck"];
-            $newCurrency = $temp["newCurrency"];
-            $oldCurrency = $temp["oldCurrency"];
-/*
-            if ($currencyID == $save['currency_id']) {
-                $currencyCheck = false;
-            }else{
-                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
-                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);
-                $currencyCheck = true;
-            }
-*/  
+            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
+            
+            $currencyCheck = $temp["currencyCheck"][0];
+            $newCurrency = $temp["newCurrency"][0];
+            $oldCurrency = $temp["oldCurrency"][0];
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
-
-            $valueCheck = $temp2["valueCheck"];
-            $multValue = $temp2["multValue"];
-
-            /*
-            if ($value ==  strtolower($save["type_of_value"])) {
-                $valueCheck = false;
-            }else{
-                $valueCheck = true;
-                $tmp = array($regionID);
-                $mult = $base->getAgencyComm($con,$tmp);
-                if ($value == "net") {
-                    $multValue = (100 - $mult)/100;
-                }elseif($value == "gross"){
-                    $multValue = 1/(1-($mult/100));
-                }
-            }  
-            */
+            $valueCheck = $temp2["valueCheck"][0];
+            $multValue = $temp2["multValue"][0];
 
         }
 
@@ -520,6 +496,10 @@ class AE extends pAndR{
                 }
             }
 
+            $rollingFCST = $this->addClosedFcst($rollingFCST,$tmpRollingFCST);
+
+            $rollingFCST = $this->adjustFCST($rollingFCST);
+
             $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -529,6 +509,8 @@ class AE extends pAndR{
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
+
+            $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -550,6 +532,8 @@ class AE extends pAndR{
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
+
+            $rollingFCST = $this->adjustFCST($rollingFCST);
             
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
@@ -560,7 +544,7 @@ class AE extends pAndR{
 
         $rollingFCST = $manualEstimantionClient;
 
-        $rollingFCST = $this->adjustFCST($rollingFCS);
+        $rollingFCST = $this->adjustFCST($rollingFCST);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
            

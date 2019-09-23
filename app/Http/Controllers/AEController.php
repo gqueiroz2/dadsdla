@@ -69,7 +69,6 @@ class AEController extends Controller{
             }
         }
 
-
 /*
         var_dump($regionID);
         var_dump($salesRepID);        
@@ -164,7 +163,7 @@ class AEController extends Controller{
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
+        /*$bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
 
 
         if ($bool == "Updated") {
@@ -179,7 +178,7 @@ class AEController extends Controller{
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }
+        }*/
 
     }
 

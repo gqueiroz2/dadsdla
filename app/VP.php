@@ -13,6 +13,52 @@ use App\sql;
 
 class VP extends pAndR{
 
+    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region){
+
+        $base = new base();
+        $sql = new sql();
+
+        $ID = $this->generateID($date,$cYear,$value,$currency,$region,$submit);
+
+        $time = date('H:i');
+        $fcstMonth = date('m');
+
+        $tmp = explode("-", $date);
+        $month = $tmp[1];
+    
+
+    }
+
+
+    public function generateID($date,$cYear,$value,$currency,$region,$submit){
+        $week = $this->weekOfMonth($date);
+
+        if ($submit == "save") {
+            $submitted = "SAV";
+        }else{
+            $submitted = "TRS";
+        }
+
+        $month = explode("-", $date)[1];
+
+        $id = "$submitted-".$region["name"]."-$cYear-$month-WEEK-$week-VP-".strtoupper($currency["name"])."-".strtoupper($value);
+
+        return $id;
+    }
+
+    public function weekOfMonth($date) {
+        $date = strtotime($date);
+        //Get the first day of the month.
+        $firstOfMonth = strtotime(date("Y-m-01", $date));
+        //Apply above formula.
+        if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
+        }else{
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+        }
+    }
+
+
 	public function base($con,$r,$pr,$cYear,$pYear){
     	$sql = new sql();
         $base = new base();
