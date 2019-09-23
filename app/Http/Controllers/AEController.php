@@ -222,6 +222,7 @@ class AEController extends Controller{
         }
 
         $forRender = $tmp;
+        $sourceSave = $forRender['sourceSave'];
         $client = $tmp['client'];
         $tfArray = array();
         $odd = array();
@@ -229,7 +230,7 @@ class AEController extends Controller{
 
         $error = false;
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error"));
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
     }
 
 }
