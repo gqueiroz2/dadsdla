@@ -49,8 +49,18 @@ class VPController extends Controller
         $time = date('H:i');
         $fcstMonth = date('m');
 
+        $month = $base->month;
+        $monthWQ = $base->monthWQ;
 
+        if ($value == "Gross") {
+            $value = "gross";
+        }else{
+            $value = "net";
+        }
 
+        $currency = $pr->getCurrency($con,array($currency))[0];
+
+        
     }
 
     public function get(){

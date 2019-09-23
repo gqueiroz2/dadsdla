@@ -18,11 +18,14 @@ class AE extends pAndR{
         $sr = new salesRep();
         $tmp = explode("-", $date);
 
+       
+
         if($tmp && isset($tmp[1])){
             $month = $tmp[1];
         }else{
             $month = 0;
         }
+
 
         if ($submit == "submit") {
             $submit = 1;
@@ -30,7 +33,6 @@ class AE extends pAndR{
             if ($region == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
-            var_dump($selectSubmit);
 
             $from = array("ID");
 
@@ -57,7 +59,7 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        if ( $id && !is_null($id) && $submit == 0 ) {
+        if ($id && !is_null($id) && $submit == 0 ) {
             var_dump("IF");
             var_dump($date);
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
@@ -302,7 +304,20 @@ class AE extends pAndR{
 
         $salesRepID = array($salesRepID);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" ORDER BY last_modify_date DESC";
+        $actualMonth = date('n');
+
+        $data = date('Y-m-d');
+
+        $week = $this->weekOfMonth($data);
+
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" AND month = \"$actualMonth\"";
+
+        if ($regionID == "1") {
+            $select .= "AND read_q = \"$week\"";
+        }
+
+
+        $select .= "ORDER BY last_modify_date DESC";
 
         $result = $con->query($select);
 
@@ -601,7 +616,19 @@ class AE extends pAndR{
         $currencyID = Request::get('currency');
         $value = Request::get('value');
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" ORDER BY last_modify_date DESC";
+        $actualMonth = date('n');
+
+        $data = date('Y-m-d');
+
+        $week = $this->weekOfMonth($data);
+
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" AND month = \"$actualMonth\"";
+
+        if ($regionID == "1") {
+            $select .= "AND read_q = \"$week\"";
+        }
+
+        $select .= "ORDER BY last_modify_date DESC";
 
         $result = $con->query($select);
 
