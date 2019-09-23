@@ -164,7 +164,6 @@ class AEController extends Controller{
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
 
-
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
             return back()->with("Success",$msg);

@@ -1287,6 +1287,8 @@ class AE extends pAndR{
 
     public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
         $soma = 0;
+
+        $splitted = array();
         for ($l=0; $l < sizeof($list); $l++) { 
             $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
         }        
@@ -1913,7 +1915,7 @@ class AE extends pAndR{
 
     	for ($c=0; $c < sizeof($clients); $c++) { 
     		  
-            for ($m=0; $m < sizeof($month); $m++) {     			
+            for ($m=0; $m < sizeof($month); $m++) {
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/
@@ -1990,6 +1992,9 @@ class AE extends pAndR{
     	$from = array("clientName","clientID");
     	$listYTD = $sql->fetch($resYTD,$from,$from);
     	$count = 0;
+
+        $list = array();
+
     	if($listSF){
             for ($sff=0; $sff < sizeof($listSF); $sff++) { 
                 $list[$count] = $listSF[$sff];

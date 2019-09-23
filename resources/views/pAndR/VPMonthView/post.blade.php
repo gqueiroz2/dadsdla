@@ -76,10 +76,16 @@
 	</form>
 	<br>
 
-	@if(session('error'))
-		<div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
+	@if(!$forRender)
+		<div class="col" style="width: 100%; padding-right: 2%;">
+			<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+				<span style="font-size:22px;">
+					<center>
+					There is no submissions of Forecast from AE yet!
+					</center>
+				</span>
+			</div>
+		</div>
     @else
     	<div class="container-fluid">
 			<form method="POST" action="{{ route('VPMonthSave') }}" runat="server"  onsubmit="ShowLoading()">

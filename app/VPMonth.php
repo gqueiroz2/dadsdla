@@ -11,6 +11,167 @@ use App\pRate;
 
 class VPMonth extends pAndR {
 
+    public function insertUpdate($con, $oppid, $region, $currency, $value, $user, $year, $read, $date, $time, $fcstMonth, $manualEstimation, $manualEstimantionByClient, $list, $submit, $brandPerClient){
+        
+        $sql = new sql();
+        $tmp = explode("-", $date);
+
+        if ($tmp && isset($tmp[1])) {
+            $month = $tmp[1];
+        }else{
+            $month = 0;
+        }
+
+        if ($submit == "submit") {
+            
+            $submit = 1;
+
+            $selectSubmit = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'AE'";
+
+            $from = array("ID");
+
+            $resultSubmit = $con->query($selectSubmit);
+            
+            $resSubmit = $sql->fetch($resultSubmit,$from,$from)[0]["ID"];
+
+            if ($resSubmit != null) {
+                return "Already Submitted";
+            }
+
+        }else{
+            $submit = 0;
+        }
+        
+        $tableFCST = "forecast";
+        $tableFCSTClient = "forecast_client";
+
+        $select = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'AE'";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        if ($id && !is_null($id) && $submit == 0) {
+
+            $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
+                                            last_modify_date = \"".$date."\", 
+                                            last_modify_time = \"".$time."\", 
+                                            oppid = \"".$oppid."\",
+                                            currency_id = \"".$currency['id']."\", 
+                                            year = \"".$year."\", 
+                                            type_of_value = \"".$value."\",
+                                            month = \"".$month."\" WHERE ID = \"".$id."\"";
+            
+            if($con->query($update) === true){
+
+            }else{
+                var_dump($con->error);
+                return false;
+            }
+
+            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+
+            return "Updated";
+
+        }else{
+            $columns = "(oppid, region_id, sales_rep_id, year,
+                         month, read_q, date_m, currency_id,
+                         type_of_value, last_modify_by,
+                         last_modify_date, last_modify_time,
+                         submitted, type_of_forecast
+                        )";
+
+            $salesRepID = null;
+
+            $values = "(
+                        \"".$oppid."\",
+                        \"".$region."\",\"".null."\",
+                        \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
+                        \"".$currency['id']."\",\"".$value."\",
+                        \"".$user."\",\"".$date."\",\"".$time."\",
+                        \"".$submit."\", \"V2\"
+                      )";
+
+              $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+
+              echo "<pre>".($insertFCST)."</pre>";
+
+            if ($con->query($insertFCST) === true) {
+                var_dump("TRUE");
+            }else{
+                var_dump("ELSE");
+                var_dump($con->error);
+                return false;
+            }
+
+              $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+        }
+    }
+
+    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient){
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        for ($c=0; $c < sizeof($list); $c++) { 
+            
+            $div = 1;
+            
+            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+
+                if ($con->query($update[$c][$m]) === true) {
+                    
+                }else{
+                    var_dump($con->error);
+                    return false;
+                }
+            }
+            
+        }
+    }
+
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient){
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        $columns = "(forecast_id,month,value,client_id,brand)";
+
+        for ($c=0; $c <sizeof($list) ; $c++) {
+            
+            $div = 1;
+
+            for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
+
+                $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
+
+                if ($con->query($insert[$c][$m]) === true) {
+                    
+                }else{
+                    var_dump($con->error);
+                    return false;
+                }
+            }
+        }
+    }
+
     public function baseSave($con, $region, $regionID, $currencyID, $year, $value, $target, $bookings, $manualEstimation){
         
         $base = new base();
@@ -41,7 +202,7 @@ class VPMonth extends pAndR {
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
 
-            $valueCheck = $temp2["valueCheck"];
+            $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
         }
 
@@ -288,7 +449,6 @@ class VPMonth extends pAndR {
 
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
-
         }
 
         $regionName = $region;
@@ -348,6 +508,8 @@ class VPMonth extends pAndR {
 
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear);
 
+        $today = date('Y-m-d');
+
         if ($save) {
             $select = array();
             $result = array();
@@ -364,13 +526,23 @@ class VPMonth extends pAndR {
                 $mul = 1;
 
                 for ($m=0; $m < 12; $m++) {
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
+
+                    $week = $this->weekOfMonth($today);
+
+                    $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0') AND read_q = (SELECT MAX(f2.read_q) FROM forecast) \" AND f.month = \"".($m+1)."\"";
                     
+                    $auxResult = $con->query($auxSelect);
+                    
+                    $auxFrom = array("f2.read_q");
+                    $auxSaida = $sql->fetch($auxResult, $from, $from);
+
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0') AND read_q = (SELECT MAX(f2.read_q) FROM forecast) \" AND f.month = \"".($m+1)."\"";
+
                     /*if ($listOfClients[$c]["clientID"] == 208) {
                         var_dump($select[$c][$m]);
                     }*/
 
-                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0') AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast)";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
@@ -1204,7 +1376,10 @@ class VPMonth extends pAndR {
         END CONTROL VALUES FUNCTIONS
     */
 
-    public function generateID($con,$sql,$pr,$kind,$region,$year,$currency,$value,$week,$month){
+    public function generateID($con,$kind,$region,$year,$currency,$value,$week,$month){
+
+        $pr = new pRate();
+        $sql = new sql();
 
         if($kind == "save"){
             $string = "SAV";
