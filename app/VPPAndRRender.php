@@ -64,7 +64,19 @@ class VPPAndRRender extends PAndRRender{
         $closedFullYearPercentage = $forRender["closedFullYearPercentage"];
         $bookingscYearPercentage = $forRender["bookingscYearPercentage"];
         $fcstFullYearPercentage = $forRender["fcstFullYearPercentage"];
+        $percentage = $forRender["percentage"];
 
+        $region = $forRender["region"];
+        $currency = $forRender["currency"];
+        $value = $forRender["value"];
+        $cYear = $forRender["cYear"];
+
+        echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
+        echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
+        echo "<input type='hidden' name='region' value='".base64_encode(json_encode($region))."'>";
+        echo "<input type='hidden' name='currency' value='".base64_encode(json_encode($currency))."'>";
+        echo "<input type='hidden' name='value' value='".base64_encode(json_encode($value))."'>";
+        echo "<input type='hidden' name='cYear' value='".base64_encode(json_encode($cYear))."'>";
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
@@ -381,7 +393,7 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Fcst*/
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
-                                    <input type='text' id='clientRF-Fy-$c' 
+                                    <input type='text' id='clientRF-Fy-$c' name='clientRF-Fy-$c' 
                                            value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
                                            background-color:transparent; text-align:center;'>

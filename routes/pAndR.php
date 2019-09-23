@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPGet');
 			Route::post('/','VPController@post')
 										->name('VPPost');
+			Route::post('save','VPController@save')
+										->name('VPSave');
 		});
 
 		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
