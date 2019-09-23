@@ -69,15 +69,6 @@ class AEController extends Controller{
             }
         }
 
-
-/*
-        var_dump($regionID);
-        var_dump($salesRepID);        
-        var_dump($currencyID);
-        var_dump($value);
-        var_dump($user);
-        var_dump($year);
-*/
         $date = date('Y-m-d');
         $time = date('H:i');
         $fcstMonth = date('m');
@@ -145,9 +136,6 @@ class AEController extends Controller{
             $manualEstimantionByClient[$c] = array_values($manualEstimantionByClient[$c]);
         }
 
-        //var_dump($manualEstimantionBySalesRep);
-        //var_dump($manualEstimantionByClient);
-
         /*
             kind,region,year,salesRep,currency,value,week,month
         */
@@ -174,7 +162,7 @@ class AEController extends Controller{
             return back()->with("Error",$msg);
         }else{
             $msg = "Error";
-            return back()->with("Error",$msg);
+            //return back()->with("Error",$msg);
         }
 
     }
@@ -189,8 +177,6 @@ class AEController extends Controller{
 
         $user = Request::session()->get('userName');
         $permission = Request::session()->get('userLevel');
-
-        //$checkForForecasts = $ae->checkForForecasts();
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
