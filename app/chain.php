@@ -159,14 +159,14 @@ class chain extends excel{
                         for ($y=0; $y < sizeof($year); $y++) { 
                             $delete[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
-                                                AND (brand_id != '8')                                            
+                                                AND (brand_id != 8)                                            
                                                 ";     
                             if($con->query($delete[$y])){
                             }
                             $delete2[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
                                                 AND (brand_id = '8')
-                                                AND (month > '5')                                           
+                                                AND (month > 5)                                           
                                                 ";     
                             if($con->query($delete2[$y])){
                             }

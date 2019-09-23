@@ -332,39 +332,15 @@ class AE extends pAndR{
         }else{
             $save = $save;
             $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
-            $currencyCheck = $temp["currencyCheck"];
-            $newCurrency = $temp["newCurrency"];
-            $oldCurrency = $temp["oldCurrency"];
-/*
-            if ($currencyID == $save['currency_id']) {
-                $currencyCheck = false;
-            }else{
-                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$cYear);
-                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$cYear);
-                $currencyCheck = true;
-            }
-*/  
+            
+            $currencyCheck = $temp[0]["currencyCheck"][0];
+            $newCurrency = $temp[0]["newCurrency"][0];
+            $oldCurrency = $temp[0]["oldCurrency"][0];
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
 
             $valueCheck = $temp2["valueCheck"];
-            $multValue = $temp2["multValue"];
-
-            /*
-            if ($value ==  strtolower($save["type_of_value"])) {
-                $valueCheck = false;
-            }else{
-                $valueCheck = true;
-                $tmp = array($regionID);
-                $mult = $base->getAgencyComm($con,$tmp);
-                if ($value == "net") {
-                    $multValue = (100 - $mult)/100;
-                }elseif($value == "gross"){
-                    $multValue = 1/(1-($mult/100));
-                }
-            }  
-            */
-
+            $multValue = $temp2["multValue"][0];
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
@@ -560,7 +536,7 @@ class AE extends pAndR{
 
         $rollingFCST = $manualEstimantionClient;
 
-        $rollingFCST = $this->adjustFCST($rollingFCS);
+        $rollingFCST = $this->adjustFCST($rollingFCST);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
            
@@ -666,14 +642,15 @@ class AE extends pAndR{
             $currencyCheck = false;
         }else{
             $save = $save;
-            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
+            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
             
-            $currencyCheck = $temp["currencyCheck"][0];
-            $newCurrency = $temp["newCurrency"][0];
-            $oldCurrency = $temp["oldCurrency"][0];
+            $currencyCheck = $temp[0]["currencyCheck"][0];
+            $newCurrency = $temp[0]["newCurrency"][0];
+            $oldCurrency = $temp[0]["oldCurrency"][0];
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
-            $valueCheck = $temp2["valueCheck"][0];
+
+            $valueCheck = $temp2["valueCheck"];
             $multValue = $temp2["multValue"][0];
         }
 
@@ -743,6 +720,8 @@ class AE extends pAndR{
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
         if ($save) {
+            $sourceSave = "LAST SAVED";
+
             $select = array();
             $result = array();
 
@@ -853,6 +832,7 @@ class AE extends pAndR{
             //$rollingFCST = $this->adjustFCST($rollingFCST);
 
         }else{
+            $sourceSave = "DISCOVERY CRM";
             $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -936,6 +916,7 @@ class AE extends pAndR{
                         "fcstAmountByStage" => $fcstAmountByStage,
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
+                        "sourceSave" => $sourceSave,
                     );
 
         return $rtr;
