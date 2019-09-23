@@ -1907,7 +1907,7 @@ class AE extends pAndR{
 
     	for ($c=0; $c < sizeof($clients); $c++) { 
     		  
-            for ($m=0; $m < sizeof($month); $m++) {     			
+            for ($m=0; $m < sizeof($month); $m++) {
     			/*
 						FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
     			*/

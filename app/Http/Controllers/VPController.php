@@ -102,7 +102,6 @@ class VPController extends Controller
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
 
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
-        
 
         if($forRender){
             $client = $forRender['client'];
