@@ -52,10 +52,10 @@ class VPController extends Controller
         $month = $base->month;
         $monthWQ = $base->monthWQ;
 
-        if ($value == "Gross") {
-            $value = "gross";
+        if ($value == "gross") {
+            $value = "Gross";
         }else{
-            $value = "net";
+            $value = "Net";
         }
 
         $currency = $pr->getCurrency($con,array($currency))[0];

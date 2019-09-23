@@ -26,6 +26,9 @@ class VP extends pAndR{
         $tmp = explode("-", $date);
         $month = $tmp[1];
     
+        $type = "V1";
+
+        var_dump($value);
 
     }
 
