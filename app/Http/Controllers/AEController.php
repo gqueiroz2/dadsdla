@@ -71,6 +71,14 @@ class AEController extends Controller{
             }
         }
 
+/*
+        var_dump($regionID);
+        var_dump($salesRepID);        
+        var_dump($currencyID);
+        var_dump($value);
+        var_dump($user);
+        var_dump($year);
+*/
         $date = date('Y-m-d');
         $time = date('H:i');
         $fcstMonth = date('m');
@@ -167,7 +175,7 @@ class AEController extends Controller{
             return back()->with("Error",$msg);
         }else{
             $msg = "Error";
-            //return back()->with("Error",$msg);
+            return back()->with("Error",$msg);
         }
 
     }
