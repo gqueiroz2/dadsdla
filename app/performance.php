@@ -45,12 +45,16 @@ class performance extends base{
     }    
 
     public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$value=null){
-        for ($s=0; $s < sizeof($salesRep); $s++) {
-            $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$value);
-            $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
-            $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
+
+        if (is_array($salesRep)) {
+            for ($s=0; $s < sizeof($salesRep); $s++) {
+                $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand[0],$salesRep[$s],$month,$value);
+                $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
+                $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
+            }   
+        }else{
+            $values = null;
         }
-        
         return $values;
     }
 
