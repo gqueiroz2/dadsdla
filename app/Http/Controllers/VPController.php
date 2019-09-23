@@ -57,11 +57,10 @@ class VPController extends Controller
         }else{
             $value = "net";
         }
-        var_dump($currency);
 
         $currency = $pr->getCurrency($con,array($currency))[0];
 
-        var_dump($currency);
+        
     }
 
     public function get(){

@@ -19,7 +19,7 @@ use Validator;
 class AEController extends Controller{
     
     public function save(){
-        $db = new dataBase(); 
+        $db = new dataBase();
         $sql = new sql();
         $pr = new pRate();
         $r = new region();
@@ -28,7 +28,7 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $excel = new excel();
 
-        $con = $db->openConnection("DLA");  
+        $con = $db->openConnection("DLA");
 
         $regionID = json_decode( base64_decode( Request::get('region') ));
         $salesRep = json_decode( base64_decode( Request::get('salesRep') ));
@@ -103,7 +103,7 @@ class AEController extends Controller{
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
         }
-        
+
         for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
             $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
@@ -152,15 +152,15 @@ class AEController extends Controller{
         $today = $date;
 
         if ($submit == "submit") {
-            $read = "salve";
+            $type = "salve";
         }else{
-            $read = "save";
+            $type = "save";
         }
 
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
-        $ID = $ae->generateID($con,$sql,$pr,$read,$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
+        $ID = $ae->generateID($con,$sql,$pr,$type,$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 

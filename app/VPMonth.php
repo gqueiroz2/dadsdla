@@ -11,13 +11,261 @@ use App\pRate;
 
 class VPMonth extends pAndR {
 
+    public function baseSave($con, $region, $regionID, $currencyID, $year, $value, $target, $bookings, $manualEstimation){
+        
+        $base = new base();
+        $sql = new sql();
+        $pr = new pRate();
+
+        $currency = $pr->getCurrencybyName($con,$currencyID)['id'];
+
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE type_of_forecast = 'AE' AND submitted = '0' ORDER BY last_modify_date DESC";
+
+        $result = $con->query($select);
+
+        $from = array("oppid","ID","type_of_value","currency_id");
+
+        $save = $sql->fetch($result,$from,$from);
+        
+        if (!$save) {
+            $save = false;
+            $valueCheck = false;
+            $currencyCheck = false;
+        }else{
+            $save = $save;
+            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$year);
+            
+            $currencyCheck = $temp[0]["currencyCheck"][0];
+            $newCurrency = $temp[0]["newCurrency"][0];
+            $oldCurrency = $temp[0]["oldCurrency"][0];
+
+            $temp2 = $base->adaptValue($value,$save,$regionID);
+
+            $valueCheck = $temp2["valueCheck"];
+            $multValue = $temp2["multValue"][0];
+        }
+
+        $regionName = $region;
+
+        $br = new brand();
+        $brand = $br->getBrandBinary($con);
+
+        $month = $base->getMonth();
+
+        $tmp = array($year);
+        $pRate = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
+
+        $tmp = array($currencyID);
+        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+
+        $readable = $this->monthAnalise($base);
+        $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
+
+        for ($b=0; $b < sizeof($brand); $b++) {
+            for ($m=0; $m < sizeof($month); $m++) {
+                if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    $table[$b][$m] = "digital";
+                }else{
+                    $table[$b][$m] = "ytd";
+                }
+                //pega colunas
+                $sum[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
+            }
+        }
+
+        for ($m=0; $m < sizeof($month); $m++) {
+            $lastYear[$m] = $this->generateValueWB($con,$sql,$regionID,($year-1),$month[$m][1], $this->generateColumns($value,"ytd") ,"ytd",$value)*$pRate;
+        }
+
+        $lastYear = $this->addQuartersAndTotalOnArray(array($lastYear))[0];
+
+        $targetValues = $this->addQuartersAndTotal($target);
+        
+        $clientRevenueCYear = $this->revenueByClient($con,$sql,$base,$pr,$regionID,$year,$month,$currency,$currencyID,$value,$listOfClients,$year);
+
+        $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
+
+        $clientRevenuePYear = $this->revenueByClient($con,$sql,$base,$pr,$regionID,($year-1),$month,$currency,$currencyID,$value,$listOfClients,$year);
+
+        $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
+
+        $tmp = $bookings;
+
+        $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
+
+        $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear);
+
+        if ($save) {
+            $select = array();
+            $result = array();
+
+            $from = "value";
+
+            for ($m=0; $m < 12; $m++) { 
+                $fPastRollingFCST[$m] = 0;
+            }
+
+            for ($c=0; $c < sizeof($listOfClients); $c++) {
+                
+                $mul = 1;
+
+                for ($m=0; $m < 12; $m++) {
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
+                    
+                    /*if ($listOfClients[$c]["clientID"] == 208) {
+                        var_dump($select[$c][$m]);
+                    }*/
+
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
+
+                    $result[$c][$m] = $con->query($select[$c][$m]);
+                    $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
+
+                    $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
+                    $pastSaida[$c][$m] = $sql->fetchSum($pastResult[$c][$m],$from);
+                }
+
+                if ($saida[$c]) {
+                    for ($m=0; $m < sizeof($saida[$c]); $m++) { 
+                        $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);
+
+                        $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
+                        $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
+
+                    }
+                }else{
+                    for ($m=0; $m < 12; $m++) { 
+                        $rollingFCST[$c][$m] = 0;
+
+                        $pastRollingFCST[$c][$m] = 0;
+                        $fPastRollingFCST[$m] = 0;
+                    }
+                }
+                
+                if ($valueCheck) {
+                    for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+
+                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
+                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
+                    }
+                }
+
+                if ($currencyCheck) {
+                    for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
+                        $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+
+                        $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                       
+                    }
+                }
+
+            }
+
+            $manualRolling = $manualEstimation;
+            $manualRolling = $this->addQuartersAndTotal($manualRolling);
+
+            $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
+
+            $fcstAmountByStage = $fcst['fcstAmountByStage'];
+
+            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
+            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
+
+            $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
+            $pastRollingFCST = $this->addQuartersAndTotalOnArray($pastRollingFCST);
+
+            $fPastRollingFCST = $this->addQuartersAndTotal($fPastRollingFCST);
+            
+            $lastRollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
+
+            $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$lastRollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
+
+            $tmp2 = $tmp1['fcstAmount'];
+
+            $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
+
+            $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
+
+            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+
+            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
+
+            $executiveRF = $this->consolidateAEFcst($rollingFCST);
+
+            if ($fPastRollingFCST[sizeof($fPastRollingFCST)-1] == 0) {
+                $fPastRollingFCST = $executiveRF;
+            }
+
+            $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
+            $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
+            $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+            $targetAchievement = $this->divArrays($executiveRF,$targetValues);
+
+            $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+
+            $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
+
+            $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
+
+            if ($value == 'gross') {
+                $valueView = 'Gross';
+            }elseif($value == 'net'){
+                $valueView = 'Net';
+            }else{
+                $valueView = 'Net Net';
+            }
+
+            $rtr = array(
+                            "cYear" => $year,
+                            "pYear" => ($year-1),
+                            "readable" => $readable,
+
+                            "client" => $listOfClients,
+                            "targetValues" => $targetValues,
+
+                            "manualRolling" => $manualRolling,
+                            "rollingFCST" => $rollingFCST,
+                            "lastRollingFCST" => $lastRollingFCST,
+                            "clientRevenueCYear" => $clientRevenueCYear,
+                            "clientRevenuePYear" => $clientRevenuePYear,
+
+                            "pastExecutiveRF" => $fPastRollingFCST,
+                            "executiveRF" => $executiveRF,
+                            "executiveRevenuePYear" => $executiveRevenuePYear,
+                            "executiveRevenueCYear" => $executiveRevenueCYear,
+
+                            "pending" => $pending,
+                            "RFvsTarget" => $RFvsTarget,
+                            "targetAchievement" => $targetAchievement,
+                        
+                            "currency" => $currency, 
+                            "value" => $value,
+                            "region" => $regionID,
+
+                            "currencyName" => $currencyName,
+                            "valueView" => $valueView,
+                            "currency" => $currencyName,
+                            "value" => $valueView,
+                            "fcstAmountByStage" => $fcstAmountByStage,
+                            "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                        );
+
+        }else{
+            $rtr = null;
+        }
+        
+        return $rtr;
+    }
+
     public function base($con, $region, $regionID, $currencyID, $year, $value){
         
         $base = new base();
         $sql = new sql();
         $pr = new pRate();
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE type_of_forecast = 'AE' ORDER BY last_modify_date DESC";
+        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE type_of_forecast = 'AE' AND submitted = '0' ORDER BY last_modify_date DESC";
         
         $result = $con->query($select);
 
@@ -30,30 +278,16 @@ class VPMonth extends pAndR {
             $valueCheck = false;
             $currencyCheck = false;
         }else{
-            $save = $save[0];
-            
-            if ($currencyID == $save['currency_id']) {
-                $currencyCheck = false;
-            }else{
-                $newCurrency = $pr->getPrateByCurrencyAndYear($con,$currencyID,$year);
-                $oldCurrency = $pr->getPrateByCurrencyAndYear($con,$save['currency_id'],$year);
-                $currencyCheck = true;
-            }
-            
-            if ($value ==  strtolower($save["type_of_value"])) {
-                $valueCheck = false;
-            }else{
-                
-                $valueCheck = true;
-                $tmp = array($regionID);
-                $mult = $base->getAgencyComm($con,$tmp);
+            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$year);
 
-                if ($value == "net") {
-                    $multValue = (100 - $mult)/100;
-                }elseif($value == "gross"){
-                    $multValue = 1/(1-($mult/100));
-                }
-            }
+            $currencyCheck = $temp['currencyCheck'][0];
+            $newCurrency = $temp['newCurrency'][0];
+            $oldCurrency = $temp['oldCurrency'][0];
+
+            $temp2 = $base->adaptValue($value,$save,$regionID);
+
+            $valueCheck = $temp2["valueCheck"][0];
+            $multValue = $temp2["multValue"][0];
 
         }
 
@@ -71,7 +305,6 @@ class VPMonth extends pAndR {
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        
         $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
 
         for ($b=0; $b < sizeof($brand); $b++) {
@@ -131,13 +364,13 @@ class VPMonth extends pAndR {
                 $mul = 1;
 
                 for ($m=0; $m < 12; $m++) {
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE')";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT MAX(f2.read_q) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
                     
                     /*if ($listOfClients[$c]["clientID"] == 208) {
                         var_dump($select[$c][$m]);
                     }*/
 
-                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE')";
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '0')";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
@@ -215,8 +448,13 @@ class VPMonth extends pAndR {
             $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
-            
+
             $executiveRF = $this->consolidateAEFcst($rollingFCST);
+
+            if ($fPastRollingFCST[sizeof($fPastRollingFCST)-1] == 0) {
+                $fPastRollingFCST = $executiveRF;
+            }
+
             $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
             $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
             $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
@@ -279,20 +517,6 @@ class VPMonth extends pAndR {
 
     }
 
-    public function divArrays($array1,$array2){
-        $exit = array();
-
-        for ($a=0; $a <sizeof($array1) ; $a++) { 
-            if ($array2[$a] != 0) {
-                $exit[$a] = ($array1[$a] / $array2[$a])*100;
-            }else{
-                $exit[$a] = 0;
-            }
-        }
-
-        return $exit;
-    }
-
     public function adjustFcstAmountByStageEx($fcstAmountByStageEx){
 
         $fcstAmountByStageEx[0][6] = 'Total';
@@ -328,6 +552,10 @@ class VPMonth extends pAndR {
         return $fcstAmountByStage;
     }
 
+    /*
+        START ARRAY FUNCTIONS
+    */
+
     public function subArrays($array1,$array2){
         $exit = array();
 
@@ -337,6 +565,37 @@ class VPMonth extends pAndR {
 
         return $exit;
     }
+
+    public function divArrays($array1,$array2){
+        $exit = array();
+
+        for ($a=0; $a <sizeof($array1) ; $a++) { 
+            if ($array2[$a] != 0) {
+                $exit[$a] = ($array1[$a] / $array2[$a])*100;
+            }else{
+                $exit[$a] = 0;
+            }
+        }
+
+        return $exit;
+    }
+
+    public function addQuartersAndTotalOnArray($array){
+        
+        for ($a=0; $a < sizeof($array); $a++) { 
+            $newArray[$a] = $this->addQuartersAndTotal($array[$a]);
+        }
+
+        return $newArray;
+    }
+
+    /*
+        END ARRAY FUNCTIONS
+    */
+
+    /*
+        START DATE BASED FUNCTIONS
+    */
 
     public function closedMonthEx($fcst,$booking){
         $date = date('n')-1;
@@ -364,28 +623,315 @@ class VPMonth extends pAndR {
         return $fcst;
     }
 
-    public function addLost($con,$clients,$fcstStages,$value){
+    public function matchMonthWithArray($monthOPP){
+        $base = new base();
 
-        $sql = new sql();
+        $month = $base->month;
+        $monthWQ = $base->monthWQ;
+        
+        for ($m=0; $m < sizeof($monthOPP); $m++) { 
+            for ($o=0; $o < sizeof($month); $o++) { 
+                if($monthOPP[$m] == $month[$o][1]){
+                    $seek[$m] = $month[$o][0];
+                    break;
+                }
+            }
 
-        if ($value == "gross") {
-            $sum = "gross_revenue";
-        }else{
-            $sum = "net_revenue";
+            for ($n=0; $n < sizeof($monthWQ); $n++) { 
+                if( $seek[$m] == strtoupper($monthWQ[$n]) ){
+                    $pivot[$m] = $n;
+                    break;
+                }
+            }
         }
-
-        for ($c=0; $c < sizeof($clients); $c++) { 
-            $select[$c] = "SELECT SUM($sum) AS value FROM sf_pr WHERE stage = \"6\" AND client_id = \"".$clients[$c]["clientID"]."\"";
-
-            $res = $con->query($select[$c]);
-
-            $result[$c] = $sql->fetchSum($res,"value");
-            
-            $fcstStages[$c][1][5] = $result[$c]['value'];
-        }
-
-        return $fcstStages;
+        return $pivot;
+        
     }
+
+    public function periodOfOpp($opp,$year){
+        if($opp){
+            for ($o=0; $o < sizeof($opp); $o++){                 
+                $period[$o] = $this->monthOPP($opp[$o],$year);       
+            }
+        }else{
+            $period = false;
+        }
+
+        return $period;
+    }
+
+    public function monthOPP($opp,$year){
+        
+        $start = intval( $opp['fromDate'] );
+        $end = intval( $opp['toDate'] );
+
+        $yearStart = intval( $opp['yearFrom'] );
+        $yearEnd = intval( $opp['yearTo'] );
+
+        if($yearStart == $yearEnd){
+            $month = array();
+            for ($m = $start; $m <= $end; $m++) { 
+                array_push($month, $m);
+            }   
+        }else{
+            $month = false;
+            if($year == $yearStart){
+                $month = array();
+                for ($m = $start; $m <= 12; $m++) { 
+                    array_push($month, $m);
+                }    
+            }else{
+                $month = array();
+                for ($m = 1; $m <= $end; $m++) { 
+                    array_push($month, $m);
+                }
+            }
+        }        
+
+        $month = $this->matchMonthWithArray($month);
+        
+        return $month;
+
+    }
+
+    public function monthAnalise($base){
+        
+        $month = date('M');
+
+        $tmp = false;
+        
+        for ($m=0; $m < sizeof($base->monthWQ); $m++) { 
+            if ($month == $base->monthWQ[$m]) {
+                $tmp = true;
+            }
+            
+            if ($tmp) {
+                $tfArray[$m] = "";
+                $odd[$m] = "odd";
+                $even[$m] = "rcBlue";
+                $manualEstimation[$m] = "background-color:#235490;";
+                $color[$m] = "color:white;";
+            }else{
+                $tfArray[$m] = "readonly='true'";
+                $odd[$m] = "oddGrey";
+                $even[$m] = "evenGrey";
+                $manualEstimation[$m] = "";
+                $color[$m] = "";
+            }
+        } 
+
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
+
+        return $rtr;
+    }
+
+    public function weekOfMonth($date) {
+        $date = strtotime($date);
+        //Get the first day of the month.
+        $firstOfMonth = strtotime(date("Y-m-01", $date));
+        //Apply above formula.
+        if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
+        }else{
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+        }
+    }
+
+    /*
+        END DATE BASED FUNCTIONS
+    */
+
+    /*
+        START FORECAST FUNCTIONS
+    */
+
+    public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$rollingFCST,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
+
+        if($currency == "USD"){
+            $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+        }
+
+        if($value == "gross"){
+            $fwColumn = "gross_revenue";
+            $sfColumn = $fwColumn;
+        }else{
+            $fwColumn = "net_revenue";
+            $sfColumn = $fwColumn;
+        }        
+
+        for ($c=0; $c < sizeof($clients); $c++) {
+            // PERIOD OF FCST , VALUES AND STAGE
+            $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$div); 
+            //var_dump($someFCST);
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+            
+            if($monthOPP[$c]){
+                $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
+                $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c]);
+            }else{
+                $shareSalesRep[$c] = false;
+                $fcst[$c] = false;
+            }
+            if($fcst[$c]){
+                $fcst[$c] = $this->adjustValues($fcst[$c]);
+                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
+                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP[$c]);
+                $fcstAmount[$c] = $this->adjustValuesForecastAmount($fcstAmount[$c]);
+            }else{
+                $fcstAmountByStage[$c] = false;
+                $fcstAmount[$c] = false;
+            }
+            
+        }
+
+        $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
+
+
+        return $rtr;        
+    }
+
+    public function makeFcstAmountByStageEx($fcstAmountByStage){
+        
+        $resp[0] = array('1','2','3','4','5','6');
+        $resp[1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
+
+        for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
+            
+            $resp[1][0] += $fcstAmountByStage[$c][1][0];
+            $resp[1][1] += $fcstAmountByStage[$c][1][1];
+            $resp[1][2] += $fcstAmountByStage[$c][1][2];
+            $resp[1][3] += $fcstAmountByStage[$c][1][3];
+            $resp[1][4] += $fcstAmountByStage[$c][1][4];
+            $resp[1][5] += $fcstAmountByStage[$c][1][5];
+        }
+
+        return $resp;
+    }
+
+    public function fcstAmount($fcst,$mOPP){
+        $base = new base();
+        $monthWQ = $base->monthWQ;
+        for ($m=0; $m < sizeof($monthWQ); $m++) { 
+            $fcstAmount[$m] = 0.0;
+        }
+       for ($m=0; $m < sizeof($mOPP); $m++) { 
+           for ($n=0; $n < sizeof($mOPP[$m]); $n++) { 
+                    
+               $fcstAmount[$mOPP[$m][$n]] += ($fcst[$m][$mOPP[$m][$n]]['value']);
+           }
+       }
+
+       return $fcstAmount;
+
+    }
+
+    public function fcstAmountByStage($fcst,$mOPP){
+
+        $stages = array( 0 => "1" , 1 => "2" , 2 => array("3a","3b") , 3 => "4" , 4 => "5" , 5 => "6" );
+        $stagesToView = array( 0 => "1" , 1 => "2" , 2 => "3" , 3 => "4" , 4 => "5" , 5 => "6" );
+        for ($s=0; $s < sizeof($stages); $s++) { 
+            $amountByStage[$s] = 0.0;
+        }
+
+        for ($s=0; $s < sizeof($stages); $s++) { 
+            if(isset($stages[$s]) && is_array($stages[$s])){                
+                for ($m=0; $m < sizeof($mOPP); $m++) { 
+                    for ($f=0; $f < sizeof($mOPP[$m]); $f++) { 
+                        if($fcst[$m][$mOPP[$m][$f]]['stage'] == "3a" ||
+                           $fcst[$m][$mOPP[$m][$f]]['stage'] == "3b"
+                        ){
+                            $amountByStage[$s] += $fcst[$m][$mOPP[$m][$f]]['value'];
+                        }
+                    }
+                }
+            }else{
+                for ($m=0; $m < sizeof($mOPP); $m++) { 
+                    for ($f=0; $f < sizeof($mOPP[$m]); $f++) { 
+                        if( $fcst[$m][$mOPP[$m][$f]]['stage'] == $stages[$s] ){
+                            $amountByStage[$s] += $fcst[$m][$mOPP[$m][$f]]['value'];
+                        }
+                    }
+                }
+            }
+        }
+
+        $rtr = array($stagesToView,$amountByStage);
+
+        return $rtr;
+
+    }
+
+    public function fillFCST($sFCST,$mOPP,$sRP){
+
+        $base = new base();
+
+        $monthWQ = $base->monthWQ;
+
+        for ($i=0; $i < sizeof($sFCST); $i++){
+            for ($m=0; $m < sizeof($monthWQ); $m++) { 
+                $fcst[$i][$m]['stage'] = false;
+                $fcst[$i][$m]['value'] = 0.0;
+            }
+        }
+
+        for ($i=0; $i < sizeof($sFCST); $i++){
+            
+            $factor = 1;
+
+            $adjustedValue = $sFCST[$i]['sumValue']*$factor;
+            for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
+                $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
+
+                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$i][$j] );
+                
+            }   
+
+        }
+        
+
+        return $fcst;
+    }
+
+    public function consolidateAEFcst($matrix){
+        $return = array();
+
+        $test = intval( date('n') );
+        //var_dump($matrix);
+
+        if ($test < 4) {
+            $test++;
+        }elseif ($test < 7) {
+            $test += 2;
+        }elseif ($test < 10) {
+            $test += 3;
+        }else{
+            $test += 4;
+        }
+
+        for ($m=0; $m < sizeof($matrix[0]); $m++) { 
+            $return[$m] = 0;
+        }
+
+        for ($c=0; $c < sizeof($matrix); $c++) { 
+            for ($m=0; $m < sizeof($matrix[$c]); $m++) { 
+                $return[$m] += $matrix[$c][$m];
+            }
+        }
+
+        //$return[16] = $return[3] + $return[7] + $return[11] + $return[15];        
+
+        return $return;
+    }
+
+    /*
+        END FORECAST FUNCTIONS
+    */
+
+    /*
+        START ROLLING FORECAST FUNCTIONS
+    */
 
     public function rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients){
 
@@ -492,6 +1038,37 @@ class VPMonth extends pAndR {
 
     }
 
+    /*
+        END ROLLING FORECAST FUNCTIONS
+    */
+
+    /*
+        START CONTROL VALUES FUNCTIONS
+    */
+
+    public function addLost($con,$clients,$fcstStages,$value){
+
+        $sql = new sql();
+
+        if ($value == "gross") {
+            $sum = "gross_revenue";
+        }else{
+            $sum = "net_revenue";
+        }
+
+        for ($c=0; $c < sizeof($clients); $c++) { 
+            $select[$c] = "SELECT SUM($sum) AS value FROM sf_pr WHERE stage = \"6\" AND client_id = \"".$clients[$c]["clientID"]."\"";
+
+            $res = $con->query($select[$c]);
+
+            $result[$c] = $sql->fetchSum($res,"value");
+            
+            $fcstStages[$c][1][5] = $result[$c]['value'];
+        }
+
+        return $fcstStages;
+    }
+
     public function addFcstWithBooking($booking,$fcst){
 
         for ($c=0; $c < sizeof($booking); $c++) { 
@@ -509,24 +1086,6 @@ class VPMonth extends pAndR {
         return $sum;
     }
 
-    public function makeFcstAmountByStageEx($fcstAmountByStage){
-        
-        $resp[0] = array('1','2','3','4','5','6');
-        $resp[1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
-
-        for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
-            
-            $resp[1][0] += $fcstAmountByStage[$c][1][0];
-            $resp[1][1] += $fcstAmountByStage[$c][1][1];
-            $resp[1][2] += $fcstAmountByStage[$c][1][2];
-            $resp[1][3] += $fcstAmountByStage[$c][1][3];
-            $resp[1][4] += $fcstAmountByStage[$c][1][4];
-            $resp[1][5] += $fcstAmountByStage[$c][1][5];
-        }
-
-        return $resp;
-    }
-
     public function addClosed($fcstAmountByStage,$rollingFCST){
 
         $fechado = date('n') - 1;
@@ -542,106 +1101,6 @@ class VPMonth extends pAndR {
             }
         }
         return $fcstAmountByStage;
-    }
-
-    public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$rollingFCST,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
-
-        if($currency == "USD"){
-            $div = 1;
-        }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
-        }
-
-        if($value == "gross"){
-            $fwColumn = "gross_revenue";
-            $sfColumn = $fwColumn;
-        }else{
-            $fwColumn = "net_revenue";
-            $sfColumn = $fwColumn;
-        }        
-
-        for ($c=0; $c < sizeof($clients); $c++) {
-            // PERIOD OF FCST , VALUES AND STAGE
-            $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$div); 
-            //var_dump($someFCST);
-            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
-            
-            if($monthOPP[$c]){
-                $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
-                $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c]);
-            }else{
-                $shareSalesRep[$c] = false;
-                $fcst[$c] = false;
-            }
-            if($fcst[$c]){
-                $fcst[$c] = $this->adjustValues($fcst[$c]);
-                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
-                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP[$c]);
-                $fcstAmount[$c] = $this->adjustValuesForecastAmount($fcstAmount[$c]);
-            }else{
-                $fcstAmountByStage[$c] = false;
-                $fcstAmount[$c] = false;
-            }
-            
-        }
-
-        $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
-
-
-        return $rtr;        
-    }
-
-    public function fcstAmount($fcst,$mOPP){
-        $base = new base();
-        $monthWQ = $base->monthWQ;
-        for ($m=0; $m < sizeof($monthWQ); $m++) { 
-            $fcstAmount[$m] = 0.0;
-        }
-       for ($m=0; $m < sizeof($mOPP); $m++) { 
-           for ($n=0; $n < sizeof($mOPP[$m]); $n++) { 
-                    
-               $fcstAmount[$mOPP[$m][$n]] += ($fcst[$m][$mOPP[$m][$n]]['value']);
-           }
-       }
-
-       return $fcstAmount;
-
-    }
-
-    public function fcstAmountByStage($fcst,$mOPP){
-
-        $stages = array( 0 => "1" , 1 => "2" , 2 => array("3a","3b") , 3 => "4" , 4 => "5" , 5 => "6" );
-        $stagesToView = array( 0 => "1" , 1 => "2" , 2 => "3" , 3 => "4" , 4 => "5" , 5 => "6" );
-        for ($s=0; $s < sizeof($stages); $s++) { 
-            $amountByStage[$s] = 0.0;
-        }
-
-        for ($s=0; $s < sizeof($stages); $s++) { 
-            if(isset($stages[$s]) && is_array($stages[$s])){                
-                for ($m=0; $m < sizeof($mOPP); $m++) { 
-                    for ($f=0; $f < sizeof($mOPP[$m]); $f++) { 
-                        if($fcst[$m][$mOPP[$m][$f]]['stage'] == "3a" ||
-                           $fcst[$m][$mOPP[$m][$f]]['stage'] == "3b"
-                        ){
-                            $amountByStage[$s] += $fcst[$m][$mOPP[$m][$f]]['value'];
-                        }
-                    }
-                }
-            }else{
-                for ($m=0; $m < sizeof($mOPP); $m++) { 
-                    for ($f=0; $f < sizeof($mOPP[$m]); $f++) { 
-                        if( $fcst[$m][$mOPP[$m][$f]]['stage'] == $stages[$s] ){
-                            $amountByStage[$s] += $fcst[$m][$mOPP[$m][$f]]['value'];
-                        }
-                    }
-                }
-            }
-        }
-
-        $rtr = array($stagesToView,$amountByStage);
-
-        return $rtr;
-
     }
 
     public function adjustValuesForecastAmount($fcst){
@@ -685,35 +1144,87 @@ class VPMonth extends pAndR {
         return $fcst;
     }
 
-    public function fillFCST($sFCST,$mOPP,$sRP){
+    public function addQuartersAndTotal($tgt){
+        //JAN,FEB,MAR
+        $tgtWQ[0] = $tgt[0];
+        $tgtWQ[1] = $tgt[1];
+        $tgtWQ[2] = $tgt[2];
 
-        $base = new base();
+        // Q1
+        $tgtWQ[3] = $tgtWQ[0]+$tgtWQ[1]+$tgtWQ[2];
 
-        $monthWQ = $base->monthWQ;
+        //APR,MAI,JUN
+        $tgtWQ[4] = $tgt[3];
+        $tgtWQ[5] = $tgt[4];
+        $tgtWQ[6] = $tgt[5];
 
-        for ($i=0; $i < sizeof($sFCST); $i++){
-            for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                $fcst[$i][$m]['stage'] = false;
-                $fcst[$i][$m]['value'] = 0.0;
+        // Q2
+        $tgtWQ[7] = $tgtWQ[4]+$tgtWQ[5]+$tgtWQ[6];
+
+        //JUL,AUG,SEP
+        $tgtWQ[8] = $tgt[6];
+        $tgtWQ[9] = $tgt[7];
+        $tgtWQ[10] = $tgt[8];
+
+        // Q3
+        $tgtWQ[11] = $tgtWQ[8]+$tgtWQ[9]+$tgtWQ[10];
+
+        //OCT,NOV,DEC
+        $tgtWQ[12] = $tgt[9];
+        $tgtWQ[13] = $tgt[10];
+        $tgtWQ[14] = $tgt[11];
+
+        // Q4
+        $tgtWQ[15] = $tgtWQ[12]+$tgtWQ[13]+$tgtWQ[14];  
+
+        $tgtWQ[16] = $tgtWQ[3]+$tgtWQ[7]+$tgtWQ[11]+$tgtWQ[15];  
+
+        return $tgtWQ;
+
+    }
+
+    public function mergeTarget($plan,$month){
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            $mergeTarget[$m] = 0.0;
+        }
+
+        for ($m=0; $m < sizeof($mergeTarget); $m++) { // SIZE OF MONTH
+            for ($c=0; $c < sizeof($plan); $c++) { //SIZE OF BRAND
+              $mergeTarget[$m] += $plan[$c][$m];                
             }
         }
 
-        for ($i=0; $i < sizeof($sFCST); $i++){
-            
-            $factor = 1;
+        $mergeTarget = $this->addQuartersAndTotal($mergeTarget);
 
-            $adjustedValue = $sFCST[$i]['sumValue']*$factor;
-            for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
-                $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
+        return $mergeTarget;
+    }
 
-                $fcst[$i][$mOPP[$i][$j]]['value'] = ( $adjustedValue * $sRP[$i][$j] );
-                
-            }   
+    /*
+        END CONTROL VALUES FUNCTIONS
+    */
 
+    public function generateID($con,$sql,$pr,$kind,$region,$year,$currency,$value,$week,$month){
+
+        if($kind == "save"){
+            $string = "SAV";
+        }else{
+            $string = "TRS";
         }
-        
+       
+        $value = strtoupper($value);
 
-        return $fcst;
+        $string .= "-".preg_replace('/\s+/', '', $region).
+                   "-".$year.
+                   "-".$month.                   
+                   "-WEEK-".$week.                   
+                   "-".preg_replace('/\s+/', '', $region).
+                   "-".$currency.
+                   "-".$value
+                   
+                ;
+
+        return $string;
     }
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
@@ -767,77 +1278,6 @@ class VPMonth extends pAndR {
         return $share;
     }
 
-    public function matchMonthWithArray($monthOPP){
-        $base = new base();
-
-        $month = $base->month;
-        $monthWQ = $base->monthWQ;
-        
-        for ($m=0; $m < sizeof($monthOPP); $m++) { 
-            for ($o=0; $o < sizeof($month); $o++) { 
-                if($monthOPP[$m] == $month[$o][1]){
-                    $seek[$m] = $month[$o][0];
-                    break;
-                }
-            }
-
-            for ($n=0; $n < sizeof($monthWQ); $n++) { 
-                if( $seek[$m] == strtoupper($monthWQ[$n]) ){
-                    $pivot[$m] = $n;
-                    break;
-                }
-            }
-        }
-        return $pivot;
-        
-    }
-
-    public function periodOfOpp($opp,$year){
-        if($opp){
-            for ($o=0; $o < sizeof($opp); $o++){                 
-                $period[$o] = $this->monthOPP($opp[$o],$year);       
-            }
-        }else{
-            $period = false;
-        }
-
-        return $period;
-    }
-
-    public function monthOPP($opp,$year){
-        
-        $start = intval( $opp['fromDate'] );
-        $end = intval( $opp['toDate'] );
-
-        $yearStart = intval( $opp['yearFrom'] );
-        $yearEnd = intval( $opp['yearTo'] );
-
-        if($yearStart == $yearEnd){
-            $month = array();
-            for ($m = $start; $m <= $end; $m++) { 
-                array_push($month, $m);
-            }   
-        }else{
-            $month = false;
-            if($year == $yearStart){
-                $month = array();
-                for ($m = $start; $m <= 12; $m++) { 
-                    array_push($month, $m);
-                }    
-            }else{
-                $month = array();
-                for ($m = 1; $m <= $end; $m++) { 
-                    array_push($month, $m);
-                }
-            }
-        }        
-
-        $month = $this->matchMonthWithArray($month);
-        
-        return $month;
-
-    }
-
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$div){
         
         $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid');
@@ -862,37 +1302,6 @@ class VPMonth extends pAndR {
 
         return $rev;
 
-    }
-
-    public function consolidateAEFcst($matrix){
-        $return = array();
-
-        $test = intval( date('n') );
-        //var_dump($matrix);
-
-        if ($test < 4) {
-            $test++;
-        }elseif ($test < 7) {
-            $test += 2;
-        }elseif ($test < 10) {
-            $test += 3;
-        }else{
-            $test += 4;
-        }
-
-        for ($m=0; $m < sizeof($matrix[0]); $m++) { 
-            $return[$m] = 0;
-        }
-
-        for ($c=0; $c < sizeof($matrix); $c++) { 
-            for ($m=0; $m < sizeof($matrix[$c]); $m++) { 
-                $return[$m] += $matrix[$c][$m];
-            }
-        }
-
-        //$return[16] = $return[3] + $return[7] + $return[11] + $return[15];        
-
-        return $return;
     }
 
     public function getBookingExecutive($con,$sql,$month,$region,$year,$value,$currency,$pr){
@@ -1054,108 +1463,12 @@ class VPMonth extends pAndR {
 
     }
 
-    public function monthAnalise($base){
-        
-        $month = date('M');
-
-        $tmp = false;
-        
-        for ($m=0; $m < sizeof($base->monthWQ); $m++) { 
-            if ($month == $base->monthWQ[$m]) {
-                $tmp = true;
-            }
-            
-            if ($tmp) {
-                $tfArray[$m] = "";
-                $odd[$m] = "odd";
-                $even[$m] = "rcBlue";
-                $manualEstimation[$m] = "background-color:#235490;";
-                $color[$m] = "color:white;";
-            }else{
-                $tfArray[$m] = "readonly='true'";
-                $odd[$m] = "oddGrey";
-                $even[$m] = "evenGrey";
-                $manualEstimation[$m] = "";
-                $color[$m] = "";
-            }
-        } 
-
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
-
-        return $rtr;
-    }
-
     private static function orderClient($a, $b){
         
         if ($a == $b)
             return 0;
         
         return ($a['clientName'] < $b['clientName']) ? -1 : 1;
-    }
-
-    public function addQuartersAndTotalOnArray($array){
-        
-        for ($a=0; $a < sizeof($array); $a++) { 
-            $newArray[$a] = $this->addQuartersAndTotal($array[$a]);
-        }
-
-        return $newArray;
-    }
-
-    public function addQuartersAndTotal($tgt){
-        //JAN,FEB,MAR
-        $tgtWQ[0] = $tgt[0];
-        $tgtWQ[1] = $tgt[1];
-        $tgtWQ[2] = $tgt[2];
-
-        // Q1
-        $tgtWQ[3] = $tgtWQ[0]+$tgtWQ[1]+$tgtWQ[2];
-
-        //APR,MAI,JUN
-        $tgtWQ[4] = $tgt[3];
-        $tgtWQ[5] = $tgt[4];
-        $tgtWQ[6] = $tgt[5];
-
-        // Q2
-        $tgtWQ[7] = $tgtWQ[4]+$tgtWQ[5]+$tgtWQ[6];
-
-        //JUL,AUG,SEP
-        $tgtWQ[8] = $tgt[6];
-        $tgtWQ[9] = $tgt[7];
-        $tgtWQ[10] = $tgt[8];
-
-        // Q3
-        $tgtWQ[11] = $tgtWQ[8]+$tgtWQ[9]+$tgtWQ[10];
-
-        //OCT,NOV,DEC
-        $tgtWQ[12] = $tgt[9];
-        $tgtWQ[13] = $tgt[10];
-        $tgtWQ[14] = $tgt[11];
-
-        // Q4
-        $tgtWQ[15] = $tgtWQ[12]+$tgtWQ[13]+$tgtWQ[14];  
-
-        $tgtWQ[16] = $tgtWQ[3]+$tgtWQ[7]+$tgtWQ[11]+$tgtWQ[15];  
-
-        return $tgtWQ;
-
-    }
-
-    public function mergeTarget($plan,$month){
-
-        for ($m=0; $m < sizeof($month); $m++) { 
-            $mergeTarget[$m] = 0.0;
-        }
-
-        for ($m=0; $m < sizeof($mergeTarget); $m++) { // SIZE OF MONTH
-            for ($c=0; $c < sizeof($plan); $c++) { //SIZE OF BRAND
-              $mergeTarget[$m] += $plan[$c][$m];                
-            }
-        }
-
-        $mergeTarget = $this->addQuartersAndTotal($mergeTarget);
-
-        return $mergeTarget;
     }
 
 }

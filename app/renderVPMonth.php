@@ -247,12 +247,12 @@ class renderVPMonth extends Render {
                     //echo "<div style='display:none;' id='totalTotalPP'><span >Total P.P. (%):   </span><input type='number' value='100' readonly='true' id='totalClients' style='display:;width:30%;text-align:right;'></div>";
             for ($m=0; $m < sizeof($this->month); $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='me-$m' name='me-$m' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
+                        echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='me-$m' name='manualEstimation-$m' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'></td>";
                     }else{
                         if ($m < $cMonth) {
-                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'><input type='text' name='manualEstimation-$m' name='me-$m' id='me-$m' readonly='true' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; text-align:center; font-weight:bold; background-color:transparent; ".$color2[$m]."'></td>";
+                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'><input type='text' name='manualEstimation-$m' name='manualEstimation-$m' id='me-$m' readonly='true' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; text-align:center; font-weight:bold; background-color:transparent; ".$color2[$m]."'></td>";
                         }else{
-                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'><input type='text' name='manualEstimation-$m' name='me-$m' id='me-$m' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; text-align:center; font-weight:bold; background-color:transparent; ".$color2[$m]."'></td>";
+                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'><input type='text' name='manualEstimation-$m' name='manualEstimation-$m' id='me-$m' value='".number_format($manualRolling[$m])."' style='width:100%; border:none; text-align:center; font-weight:bold; background-color:transparent; ".$color2[$m]."'></td>";
                         }
                     }
                 }
