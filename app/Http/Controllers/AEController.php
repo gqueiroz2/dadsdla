@@ -154,10 +154,16 @@ class AEController extends Controller{
         */
         $today = $date;
 
+        if ($submit == "submit") {
+            $read = "salve";
+        }else{
+            $read = "save";
+        }
+
         $read = $ae->weekOfMonth($today);
         $read = "0".$read;
 
-        $ID = $ae->generateID($con,$sql,$pr,"save",$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
+        $ID = $ae->generateID($con,$sql,$pr,$read,$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
