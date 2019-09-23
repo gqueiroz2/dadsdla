@@ -260,7 +260,6 @@ class AE extends pAndR{
         //Apply above formula.
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
-            # code...
         }else{
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
         }
