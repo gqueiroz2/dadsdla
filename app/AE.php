@@ -1298,6 +1298,8 @@ class AE extends pAndR{
 
     public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
         $soma = 0;
+
+        $splitted = array();
         for ($l=0; $l < sizeof($list); $l++) { 
             $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
         }        
@@ -2001,6 +2003,9 @@ class AE extends pAndR{
     	$from = array("clientName","clientID");
     	$listYTD = $sql->fetch($resYTD,$from,$from);
     	$count = 0;
+
+        $list = array();
+
     	if($listSF){
             for ($sff=0; $sff < sizeof($listSF); $sff++) { 
                 $list[$count] = $listSF[$sff];
