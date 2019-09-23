@@ -102,13 +102,11 @@ class AEController extends Controller{
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
-
         }
+        
         for ($c=0; $c < sizeof($client); $c++) { 
-
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
             $totalClient[$c] = $excel->fixExcelNumber(Request::get("totalClient-$c"));
-
             if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
                 $msg = "Incorrect value submited";
 
