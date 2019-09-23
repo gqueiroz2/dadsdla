@@ -82,23 +82,32 @@
         </div>
     @else
     	<div class="container-fluid">
-			<form method="POST" action="#" runat="server"  onsubmit="ShowLoading()">
+			<form method="POST" action="{{ route('VPMonthSave') }}" runat="server"  onsubmit="ShowLoading()">
 			@csrf
 				<div class="row justify-content-end">
 					<div class="col"></div>
 					<div class="col"></div>
 					<div class="col"></div>
-					<div class="col"></div>
+					<div class="col">
+						<label> &nbsp;</label>
+						<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+							<label class="btn alert-primary active">
+							    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+							</label>
+							<label class="btn alert-success">
+								<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+							</label>
+						</div>
+					</div>
 					<div class="col">
 						<label> &nbsp; </label>
-						<input type="submit" value="SAVE" class="btn btn-primary" style="width: 100%">		
-					</div>	
+						<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
+					</div>
 				</div>
-
 				<div class="row mt-2 justify-content-end">
 					<div class="col" style="width: 100%;">
 						<center>
-							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}	
+							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}
 						</center>
 					</div>
 				</div>
@@ -112,12 +121,65 @@
 					$aux = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 				?>
 
+				$("input[type=radio][name=options]").change(function(){
+					if (this.value == 'save') {
+						$("#button").val("Save");
+					}else{
+						$("#button").val("Submit");
+					}
+				});
+
 				@for($m=0; $m < sizeof($aux); $m++)
-					$("#rf-"+{{$m}}).change(function(){
-						alert("aqui");
+					$("#me-"+{{$m}}).change(function(){
+						if ($(this).val() ==  '') {
+							$this.val(0);
+						}
+
+						$(this).val(Comma(handleNumber($(this).val())));
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
+							var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
+							$("#me-3").val(value);
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+							var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-5").val()));
+							$("#me-7").val(value);
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+							var value = Comma(handleNumber($("#me-8").val())+handleNumber($("#me-9").val())+handleNumber($("#me-10").val()));
+							$("#me-11").val(value);
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+							var value = Comma(handleNumber($("#me-12").val())+handleNumber($("#me-13").val())+handleNumber($("#me-14").val()));
+							$("#me-15").val(value);
+						}
+
+						var total = Comma(handleNumber($("#me-3").val()) + handleNumber($("#me-7").val()) + handleNumber($("#me-11").val()) + handleNumber($("#me-15").val()));
+						
+						$("#total-manualEstimationTotal").val(total);
 					});
 				@endfor
 			});
+
+			//function to add commas to textboxes
+			function Comma(Num) {
+	        Num += '';
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+	        x = Num.split('.');
+	        x1 = x[0];
+	        x2 = x.length > 1 ? '.' + x[1] : '';
+	        var rgx = /(\d+)(\d{3})/;
+	        while (rgx.test(x1))
+	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	        return x1 + x2;
+	    }
+
+	    function handleNumber(number){
+			for (var i = 0; i < number.length; i++) {
+				number = number.replace(",","");
+			}
+			number = parseFloat(number);
+			return number;
+		}
+
 		</script>
 
     @endif

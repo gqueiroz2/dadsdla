@@ -40,16 +40,13 @@ class AEController extends Controller{
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
 
-
         $salesRepID = $salesRep->id;
 
-
-
-        for ($c=0; $c <sizeof($brandsPerClient) ; $c++) {
+        for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
             $brandPerClient[$c] = "";
             if($brandsPerClient[$c]){
-                for ($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++) {
+                for ($p=0; $p < sizeof($brandsPerClient[$c]); $p++) {
                     $brandsPerClient[$c][$p] = explode(";", $brandsPerClient[$c][$p]->brand);
                 }
                 for($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++){

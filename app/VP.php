@@ -506,7 +506,12 @@ class VP extends pAndR{
                                          WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
                                          AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
                                          AND (f.type_of_forecast = 'AE')
+<<<<<<< HEAD
                                          AND (fc.month >= ".intval($currentMonth).") $whereIn
+=======
+                                         AND (fc.month >= ".intval($currentMonth).")
+                                         AND (f.submitted = '1')
+>>>>>>> ea06ce9580af362a15460f7ce928cc94bd805f37
                                          GROUP BY salesRepID
                                  "; 
                     //echo "<pre>".($selectSum[$c])."</pre>";

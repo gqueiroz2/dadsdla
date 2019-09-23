@@ -50,6 +50,9 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPMonthGet');
 			Route::post('/','VPMonthController@post')
 										->name('VPMonthPost');
+
+			Route::post('save','VPMonthController@save')
+										->name('VPMonthSave');
 		});
 
 	});
