@@ -90,28 +90,52 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center mt-2">
-			@if($forRender)
-				<div class="col" style="width: 100%; padding-right: 2%;">
-					<center>
-						{{$render->VP1($forRender)}}
-					</center>
-				</div>
-			@else
-				<div class="col-8" style="width: 100%; padding-right: 2%;">
-					<div style="min-height: 100px;" class="alert alert-warning" role="alert">
-						<span style="font-size:22px;">
-							<center>
-							There is no submissions of Forecast from AE yet !
-							</center>
-						</span>
+
+		<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
+			@csrf
+			<div class="row justify-content-end">
+				<div class="col-2">
+					<label> &nbsp;</label>
+					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+						<label class="btn alert-primary active">
+						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+						</label>
+						<label class="btn alert-success">
+							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+						</label>
 					</div>
 				</div>
-			@endif
+				<div class="col-2">
+					<label> &nbsp; </label>
+					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
+				</div>	
+			</div>
+
+
+			<div class="row justify-content-center mt-2">
+				@if($forRender)
+
+						<div class="col" style="width: 100%; padding-right: 2%;">
+							<center>
+								{{$render->VP1($forRender)}}
+							</center>
+						</div>
+				@else
+					<div class="col-8" style="width: 100%; padding-right: 2%;">
+						<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+							<span style="font-size:22px;">
+								<center>
+								There is no submissions of Forecast from AE yet !
+								</center>
+							</span>
+						</div>
+					</div>
+				@endif
+					
 				
-			
+			</div>
 		</div>
-	</div>
+	</form>
 
 	<!-- Modal -->
 	<div class="modal fade" id="aeSubmissions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -194,8 +218,15 @@
 				}
 			}
 
-
 			$(document).ready(function(){
+				$("input[type=radio][name=options]").change(function(){
+					if (this.value == 'save') {
+						$("#button").val("Save");
+					}else{
+						$("#button").val("Submit");
+					}
+				});
+
 				@for($c=0;$c< sizeof($client);$c++)
 					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
 					

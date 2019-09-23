@@ -28,8 +28,6 @@ class VP extends pAndR{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
         }
 
-        //var_dump($div);
-
         $currentMonth = intval( date('m') );
 
     	$fcstInfo = $this->getForecast($con,$sql,$regionID);
@@ -65,15 +63,20 @@ class VP extends pAndR{
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
         $varAbsYTDByClient = $this->subArrays($bookingscYTDByClient,$bookingspYTDByClient);
 
-        $fcstcMonthByClient = $this->currentMonthByClient($con,$sql,"fcst",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
-        $bookingscMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
+        $fcstcMonthByClient = $this->currentMonthByClient($con,$sql,"fcst",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
+        
+        $tmp = $this->fcstMonths($con,$sql,$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
+
+        $percentage = $this->getPercentage($tmp);
+
+        $bookingscMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
         $totalcYearMonthByClient = $this->sumArrays($fcstcMonthByClient,$bookingscMonthByClient);
-        $bookingspMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
+        $bookingspMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
         $varAbsMonthByClient = $this->subArrays($totalcYearMonthByClient,$bookingspMonthByClient);
-        $closedFullYearByClient = $this->fullYearByClient($con,$sql,"fcstClosed",$regionID,$cYear,$listOfClients,false,$div,$value);
-        $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value);
-        $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value);
-        $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value);
+        $closedFullYearByClient = $this->fullYearByClient($con,$sql,"fcstClosed",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
+        $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+        $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
+        $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
         //$totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
         $totalFullYearByClient = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClient);
@@ -99,7 +102,6 @@ class VP extends pAndR{
 
         $closedFullYear = $this->consolidadeColumn($closedFullYearByClient);
         $fcstFullYear = $this->consolidadeColumn($fcstFullYearByClient);
-
 
         $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
         $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
@@ -166,7 +168,12 @@ class VP extends pAndR{
                         "bookingscYearPercentage" => $bookingscYearPercentage,
                         "fcstFullYearPercentage" => $fcstFullYearPercentage,
 
-                        "salesRepListOfSubmit" => $salesRepListOfSubmit
+                        "salesRepListOfSubmit" => $salesRepListOfSubmit,
+                        "percentage" => $percentage,
+                        "region" => $regionID,
+                        "currency" => $currencyID,
+                        "value" => $value,
+                        "cYear" => $cYear
 
                     );
 
@@ -292,15 +299,136 @@ class VP extends pAndR{
         return $sumRevenue;
     }
 
-    public function currentMonthByClient($con,$sql,$kind,$regionID,$year,$currentMonth,$listOfClients,$div,$value){
+    public function fcstMonths($con,$sql,$regionID,$year,$currentMonth,$listOfClients,$div,$value,$fcstInfo){
+
+        $tmp = array();
+
+        for ($f=0; $f <sizeof($fcstInfo); $f++) {
+            if ($f == 0) {
+                array_push($tmp, $fcstInfo[$f]);
+            }else{
+                $check = true;
+                for ($t=0; $t <sizeof($tmp) ; $t++) { 
+                    if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
+                        $check = false;
+                        break;
+                    }
+                }
+                if ($check) {
+                    array_push($tmp, $fcstInfo[$f]);
+                }
+            }
+        }
+
+        $fcstInfo = $tmp;
+
+        $from = array("value","month","client_id");
+
+        for ($f=0; $f <sizeof($fcstInfo); $f++) { 
+            for ($c=0; $c <sizeof($listOfClients); $c++) { 
+                $select[$f][$c] = "SELECT value, month, client_id FROM forecast_client WHERE (client_id = \"".$listOfClients[$c]['clientID']."\") AND (forecast_id = \"".$tmp[$f]['ID']."\")";
+
+                $res[$f][$c] = $con->query($select[$f][$c]);
+                $resp[$f][$c] = $sql->fetch($res[$f][$c],$from,$from);
+            }
+        }
+
+        $saida = array();
+
+
+        for ($f=0; $f <sizeof($resp); $f++) { 
+            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
+                if ($f == 0) {
+                    $saida[$c] = $resp[$f][$c];
+                }else{
+                    if ($saida[$c]) {
+                    }else{
+                        $saida[$c] = $resp[$f][$c];
+                    }
+                }
+            }
+        }
+
+        return $saida;
+    }
+
+    public function getPercentage($saida){
+
+        $date = date('n')-1;
+
+        for ($c=0; $c <sizeof($saida); $c++) {
+            if ($saida[$c]) {
+                $total[$c] = 0;
+                for ($m=0; $m <sizeof($saida[$c]); $m++) { 
+                    $saida[$c][$m]=floatval($saida[$c][$m]['value']);
+                    if ($m >= $date) {
+                        $total[$c] += $saida[$c][$m];
+                    }
+                }
+                for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
+                    if ($m >= $date) {
+                        if ($total[$c] != 0) {
+                            $percentage[$c][$m] = $saida[$c][$m]/$total[$c];
+                        }else{
+                            $percentage[$c][$m] = 0;
+                        }
+                    }else{
+                        $percentage[$c][$m] = 0;
+                    }
+                }
+            }else{
+                $total[$c] = false;
+                $percentage[$c] = false;
+            } 
+        }
+
+        return $percentage;
+    }
+
+
+    public function currentMonthByClient($con,$sql,$kind,$regionID,$year,$currentMonth,$listOfClients,$div,$value,$fcstInfo){
         switch ($kind) {
             case 'fcst':
+
+                $tmp = array();
+
+                for ($f=0; $f <sizeof($fcstInfo); $f++) {
+                    if ($f == 0) {
+                        array_push($tmp, $fcstInfo[$f]);
+                    }else{
+                        $check = true;
+                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
+                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
+                                $check = false;
+                                break;
+                            }
+                        }
+                        if ($check) {
+                            array_push($tmp, $fcstInfo[$f]);
+                        }
+                    }
+                }
+
+                $fcstInfo = $tmp;
+
+                $whereIn = "AND ( forecast_id IN (";
+
+                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
+                    if ($f==0) {
+                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
+                    }else{
+                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
+                    }
+                }
+                $whereIn .= "))";
+
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
                     $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
                                          FROM forecast_client
                                          WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (month = \"".$currentMonth."\")
-                                 ";   
+                                         AND (month = \"".$currentMonth."\") $whereIn
+                                 ";
+
                     $res[$c] = $con->query($selectSum[$c]);
 
                     $from = array("revenue");
@@ -332,11 +460,44 @@ class VP extends pAndR{
         return $sumRevenue;
     }
 
-    public function fullYearByClient($con,$sql,$kind,$regionID,$year,$listOfClients,$adjust=false,$div,$value){
+    public function fullYearByClient($con,$sql,$kind,$regionID,$year,$listOfClients,$adjust=false,$div,$value,$fcstInfo){
 
         $currentMonth = date('m');
         switch ($kind) {
             case 'fcst':
+
+                $tmp = array();
+
+                for ($f=0; $f <sizeof($fcstInfo); $f++) {
+                    if ($f == 0) {
+                        array_push($tmp, $fcstInfo[$f]);
+                    }else{
+                        $check = true;
+                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
+                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
+                                $check = false;
+                                break;
+                            }
+                        }
+                        if ($check) {
+                            array_push($tmp, $fcstInfo[$f]);
+                        }
+                    }
+                }
+
+                $fcstInfo = $tmp;
+
+                $whereIn = "AND ( fc.forecast_id IN (";
+
+                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
+                    if ($f==0) {
+                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
+                    }else{
+                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
+                    }
+                }
+                $whereIn .= "))";
+
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
                     $selectSum[$c] = "SELECT f.sales_rep_id AS 'salesRepID', 
                                              SUM(fc.value) AS 'revenue' 
@@ -345,8 +506,12 @@ class VP extends pAndR{
                                          WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
                                          AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
                                          AND (f.type_of_forecast = 'AE')
+<<<<<<< HEAD
+                                         AND (fc.month >= ".intval($currentMonth).") $whereIn
+=======
                                          AND (fc.month >= ".intval($currentMonth).")
                                          AND (f.submitted = '1')
+>>>>>>> ea06ce9580af362a15460f7ce928cc94bd805f37
                                          GROUP BY salesRepID
                                  "; 
                     //echo "<pre>".($selectSum[$c])."</pre>";
@@ -500,8 +665,8 @@ class VP extends pAndR{
                            FROM forecast f
                            LEFT JOIN sales_rep sr ON f.sales_rep_id = sr.ID
                            WHERE(region_id = \"".$regionID."\") 
-                           AND (submitted = '1')                          
-                           ORDER BY ID
+                           AND (submitted = '1')
+                           ORDER BY ID DESC
                   ";
         //echo "<pre>".($select)."</pre>";
         $res = $con->query($select);

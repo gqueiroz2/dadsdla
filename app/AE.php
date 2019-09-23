@@ -30,6 +30,7 @@ class AE extends pAndR{
             if ($region == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
+            var_dump($selectSubmit);
 
             $from = array("ID");
 
