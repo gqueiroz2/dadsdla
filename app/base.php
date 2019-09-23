@@ -509,23 +509,36 @@ class base extends Model{
 
     public function adaptValue($value,$save,$regionID,$type = false){
         
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
         if($type){
             $vall = "typeOfValue";
         }else{
             $vall = "type_of_value";
         }
 
+        $multValue = array();
+
+        for ($i=0; $i < sizeof($save); $i++) { 
+            $multValue[$i] = 0;
+        }
+
         for ($s=0; $s < sizeof($save); $s++) {
-            if ($value ==  strtolower($save[$s][$vall])) {
+            if ($value == strtolower($save[$s][$vall])) {
                 $valueCheck[$s] = false;
                 $multValue[$s] = false;
             }else{
+
                 $valueCheck[$s] = true;
+
                 $tmp = array($regionID);
-                $mult = $base->getAgencyComm($con,$tmp);
-                if ($value == "net") {
+                
+                $mult = $this->getAgencyComm($con,$tmp);
+                
+                if ($value == "Net") {
                     $multValue[$s] = (100 - $mult)/100;
-                }elseif($value == "gross"){
+                }elseif($value == "Gross"){
                     $multValue[$s] = 1/(1-($mult/100));
                 }
             }

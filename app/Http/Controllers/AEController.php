@@ -19,7 +19,7 @@ use Validator;
 class AEController extends Controller{
     
     public function save(){
-        $db = new dataBase(); 
+        $db = new dataBase();
         $sql = new sql();
         $pr = new pRate();
         $r = new region();
@@ -28,7 +28,7 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $excel = new excel();
 
-        $con = $db->openConnection("DLA");  
+        $con = $db->openConnection("DLA");
 
         $regionID = json_decode( base64_decode( Request::get('region') ));
         $salesRep = json_decode( base64_decode( Request::get('salesRep') ));
@@ -95,6 +95,7 @@ class AEController extends Controller{
             }
 
         }
+
         for ($c=0; $c < sizeof($client); $c++) { 
 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
