@@ -131,7 +131,7 @@ class VPMonthController extends Controller {
 
         $read = $vpMonth->weekOfMonth($today);
         $read = "0".$read;
-        var_dump($read);
+        var_dump($user);
         /*$ID = $vpMonth->generateID($con,$type,$rtr,$year,$currencyID,$value,$read,$fcstMonth);
 
         $currency = $pr->getCurrencybyName($con,$currencyID);
