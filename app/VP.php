@@ -12,7 +12,8 @@ use App\base;
 use App\sql;
 class VP extends pAndR{
     
-    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region){
+    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$clients){
+
         $base = new base();
         $sql = new sql();
         $ID = $this->generateID($date,$cYear,$value,$currency,$region,$submit);
@@ -27,12 +28,53 @@ class VP extends pAndR{
 
         $from = array("ID");
 
+        $read = $this->weekOfMonth($date);
+
         $res = $con->query($select);
 
-        $resp = $sql->fetch($res,$from,$from);
+        $resp = $sql->fetch($res,$from,$from)[0]["ID"];
+
+        if($submit == "submit") {
+            $submit = 1;
+            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\"";
+            if ($region == '1') {
+                $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $from = array("ID");
+
+            $resultSubmit = $con->query($selectSubmit);
+            
+            $resSubmit = $sql->fetch($resultSubmit,$from,$from)[0]["ID"];
+
+            if ($resSubmit != null) {
+                return "Already Submitted";
+            }
+        }else{
+            $submit = 0;
+        }
 
         if ($resp) {
-            var_dump("update");
+            $update = "UPDATE forecast SET read_q = \"".$read."\", 
+                                            last_modify_date = \"".$date."\", 
+                                            last_modify_time = \"".$time."\", 
+                                            oppid = \"".$ID."\",
+                                            currency_id = \"".$currency['id']."\", 
+                                            year = \"".$cYear."\", 
+                                            type_of_value = \"".$value."\",
+                                            month = \"".$month."\" WHERE ID = \"".$resp."\"";
+
+            if ($con->query($update) === true) {
+
+            }else{
+                $error = ($con->error);
+                return $error;
+            }
+
+            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update"); 
+
+            return $bool;
+
         }else{
             $columns = "(oppid,
                         region_id, sales_rep_id,
@@ -40,8 +82,121 @@ class VP extends pAndR{
                         currency_id, type_of_value,
                         last_modify_by, last_modify_date, last_modify_time,
                         submitted, type_of_forecast)";
-        } 
+   
+            $values = "(\"".$ID."\",
+                        \"".$region['id']."\",NULL,
+                        \"".$cYear."\", \"".$month."\", \"".$read."\", \"".$date."\",
+                        \"".$currency['id']."\", \"".$value."\",
+                        \"VP\", \"".$date."\", \"".$time."\",
+                        \"".$submit."\", \"V1\")";
+
+            $insert = "INSERT INTO forecast $columns VALUES $values";
+
+            if ($con->query($insert) === true) {
+
+            }else{
+                $error = ($con->error);
+                return $error;
+            }
+
+            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$region,$clients,"insert");  
+
+            return $bool;
+        }
+ 
     }
+
+    public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type){
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        for ($c=0; $c <sizeof($fcstValue); $c++) {
+            if ($percentage[$c]) {
+                for ($m=0; $m <sizeof($percentage[$c]) ; $m++) { 
+                    $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
+                }
+            }else{
+                for ($m=0; $m <12 ; $m++) { 
+                    $input[$c][$m] = 0;
+                }
+            }
+        }
+
+
+        switch ($type) {
+            case 'insert':
+
+                $columns = "(forecast_id,month,value,client_id,brand)";
+
+                for ($c=0; $c <sizeof($clients); $c++) { 
+                    for($m=0; $m <sizeof($input[$c]); $m++) { 
+                        $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",NULL)";
+                        if ($con->query($input[$c][$m]) === true) {
+
+                        }else{
+                            $error = ($con->error);
+                            return $error;
+                        }
+                    }
+                }
+                return "Saved";
+
+                break;
+            
+            case 'update':
+                for ($c=0; $c <sizeof($clients); $c++) { 
+                    for ($m=0; $m <sizeof($input[$c]); $m++) { 
+                        $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\"";
+
+                        if ($con->query($update[$c][$m]) === true) {
+
+                        }else{
+                            $error = ($con->error);
+                            return $error;
+                        }
+                    }
+                }
+                
+                return "Updated";
+
+                break;
+
+
+        }
+
+        for ($c=0; $c <sizeof($fcstValue); $c++) {
+            if ($percentage[$c]) {
+                for ($m=0; $m <sizeof($percentage[$c]) ; $m++) { 
+                    $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
+                }
+            }else{
+                for ($m=0; $m <12 ; $m++) { 
+                    $input[$c][$m] = 0;
+                }
+            }
+        }
+
+        $columns = "(forecast_id,month,value,client_id,brand)";
+
+        for ($c=0; $c <sizeof($clients); $c++) { 
+            for($m=0; $m <sizeof($input[$c]); $m++) { 
+                $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",NULL)";
+                if ($con->query($input[$c][$m]) === true) {
+                    var_dump("Foi");
+                }else{
+                    var_dump($con->error);
+                }
+            }
+        }
+
+
+    }
+
 
     public function generateID($date,$cYear,$value,$currency,$region,$submit){
         $week = $this->weekOfMonth($date);
@@ -115,7 +270,17 @@ class VP extends pAndR{
         $bookingspMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
         $varAbsMonthByClient = $this->subArrays($totalcYearMonthByClient,$bookingspMonthByClient);
         $closedFullYearByClient = $this->fullYearByClient($con,$sql,"fcstClosed",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
+
+        $id = $this->verifySaves($con,$sql,$regionID);
+
+        if ($id) {
+            $tmp = $this->getFcstFromDatabase();
+        }else{
+
+        }
+
         $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+        
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
@@ -199,6 +364,33 @@ class VP extends pAndR{
         return $rtr;
       
     }
+
+    public function getFcstFromDatabase(){
+
+    }
+
+    public function verifySaves($con,$sql,$regionID){
+        $date = date('Y-m-d');
+        $tmp = explode("-", $date);
+        $month = $tmp[1];
+
+        $from = array("ID");
+
+        $select = "SELECT ID from forecast WHERE month = \"".$month."\" AND type_of_forecast = \"V1\" AND submitted = \"0\" AND region_id = \"".$regionID."\"";
+
+        if ($regionID == 1) {
+            $week = $this->weekOfMonth($date);
+            $select .= " AND read_q = \"".$week."\"";
+        }
+
+        $res = $con->query($select);
+
+        $resp = $sql->fetch($res,$from,$from)[0]["ID"];
+
+        return $resp;
+
+    }
+
     public function salesRepListOfSubmit($fcstInfo){
         for ($f=0; $f < sizeof($fcstInfo); $f++) { 
             $array[$f]['salesRepID'] = $fcstInfo[$f]['salesRepID'];
