@@ -11,6 +11,7 @@ use App\salesRep;
 use App\base;
 use App\sql;
 class VP extends pAndR{
+    
     public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region){
         $base = new base();
         $sql = new sql();
@@ -21,8 +22,27 @@ class VP extends pAndR{
         $month = $tmp[1];
     
         $type = "V1";
-        var_dump($value);
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\" AND type_of_forecast = \"".$type."\"";
+
+        $from = array("ID");
+
+        $res = $con->query($select);
+
+        $resp = $sql->fetch($res,$from,$from);
+
+        if ($resp) {
+            var_dump("update");
+        }else{
+            $columns = "(oppid,
+                        region_id, sales_rep_id,
+                        year, month, read_q, date_m,
+                        currency_id, type_of_value,
+                        last_modify_by, last_modify_date, last_modify_time,
+                        submitted, type_of_forecast)";
+        } 
     }
+
     public function generateID($date,$cYear,$value,$currency,$region,$submit){
         $week = $this->weekOfMonth($date);
         if ($submit == "save") {
