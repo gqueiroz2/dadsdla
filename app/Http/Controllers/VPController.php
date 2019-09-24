@@ -62,7 +62,7 @@ class VPController extends Controller
 
         $region = $r->getRegion($con,array($region))[0];
 
-        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region);
+        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$time);
 
 
     }
