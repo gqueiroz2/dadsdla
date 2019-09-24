@@ -62,7 +62,17 @@ class VPController extends Controller
 
         $region = $r->getRegion($con,array($region))[0];
 
-        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region);
+        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$client);
+
+        if ($bool == "Saved") {
+            $msg = "Forecast Created";        
+            return back()->with("Success",$msg);
+        }elseif ($bool == "Updated") {
+            $msg = "Forecast Updated";        
+            return back()->with("Success",$msg);
+        }else{
+            return back()->with("Error",$bool);
+        }
 
 
     }
