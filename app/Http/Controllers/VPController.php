@@ -105,16 +105,25 @@ class VPController extends Controller
 
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
-
         $regionID = Request::get("region");
-
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',            
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $tmp = $vp->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear);
+/*
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
-
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
-
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
 
         if($forRender){
@@ -122,7 +131,7 @@ class VPController extends Controller
         }else{
             $client = false;
         }
-
-        return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
+*/
+        //return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
     }
 }

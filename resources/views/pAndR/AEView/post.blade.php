@@ -86,7 +86,7 @@
 				<div class="col-3">
 					<label> &nbsp;</label>
 					<input type="button" class="btn btn-primary" value="{{$sourceSave}}" style="width: 100%;">
-					<input type="text" name="sourceSave" value="{{$sourceSave}}">
+					<input type="text" name="sourceSave" value="{{$sourceSave}}" style="display: none;">
 				</div>				
 				<div class="col-4" >
 					<div class="container-fluid">

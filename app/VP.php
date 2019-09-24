@@ -365,8 +365,117 @@ class VP extends pAndR{
       
     }
 
-    public function getFcstFromDatabase(){
+    public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear){
+        $sr = new salesRep();        
+        $br = new brand();
+        $base = new base();    
+        $sql = new sql();
+        $reg = new region();
+       
+        $regionID = Request::get('region');
+        $currencyID = Request::get('currency');
+        $value = Request::get('value');
 
+        $actualMonth = date('n');
+
+        $data = date('Y-m-d');
+
+        $week = $this->weekOfMonth($data);
+
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted 
+                        FROM forecast 
+                        WHERE (submitted = \"0\" OR submitted = \"1\") 
+                        AND month = \"$actualMonth\" 
+                        AND year = \"$cYear\"
+                        AND type_of_forecast = \"V1\"
+                  ";
+
+        if ($regionID == "1") {
+            $select .= "AND read_q = \"$week\"";
+        }
+
+        $result = $con->query($select);
+
+        var_dump($select);
+
+        var_dump($result);
+
+        $from = array("oppid","ID","type_of_value","currency_id", "submitted");
+
+        $save = $sql->fetch($result,$from,$from);
+
+        var_dump($save);
+
+        if (!$save) {
+            $save = false;
+            $valueCheck = false;
+            $currencyCheck = false;
+        }else{
+            $submitted = 0;
+
+            for ($s=0; $s < sizeof($save); $s++) { 
+                if ($save[$s]['submitted'] == 1) {
+                    $submitted = 1;
+                }
+            }
+
+            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
+            
+            $currencyCheck = $temp[0]["currencyCheck"][0];
+            $newCurrency = $temp[0]["newCurrency"][0];
+            $oldCurrency = $temp[0]["oldCurrency"][0];
+
+            $temp2 = $base->adaptValue($value,$save,$regionID);
+
+            $valueCheck = $temp2["valueCheck"][0];
+            $multValue = $temp2["multValue"][0];
+        }
+
+        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
+
+        $brand = $br->getBrandBinary($con);
+        $month = $base->getMonth();
+
+        $tmp = array($cYear);
+        //valor da moeda para divisões
+        $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
+        
+        //nome da moeda pra view
+        $tmp = array($currencyID);
+        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+
+        $readable = $this->monthAnalise($base);
+
+    }
+
+    public function monthAnalise($base){
+        $month = date('M');
+
+        $tmp = false;
+
+        for ($m=0; $m <sizeof($base->monthWQ) ; $m++) { 
+            if ($month == $base->monthWQ[$m]) {
+                $tmp = true;
+            }
+
+            if ($tmp) {
+                $tfArray[$m] = "";
+                $odd[$m] = "odd";
+                $even[$m] = "rcBlue";
+                $manualEstimation[$m] = "background-color:#235490;";
+                $color[$m] = "color:white;";
+            }else{
+                $tfArray[$m] = "readonly='true'";
+                $odd[$m] = "oddGrey";
+                $even[$m] = "evenGrey";
+                $manualEstimation[$m] = "";
+                $color[$m] = "";
+            }
+        } 
+
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
+
+        return $rtr;
     }
 
     public function verifySaves($con,$sql,$regionID){
