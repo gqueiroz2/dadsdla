@@ -18,14 +18,11 @@ class AE extends pAndR{
         $sr = new salesRep();
         $tmp = explode("-", $date);
 
-       
-
         if($tmp && isset($tmp[1])){
             $month = $tmp[1];
         }else{
             $month = 0;
         }
-
 
         if ($submit == "submit") {
             $submit = 1;
@@ -310,18 +307,17 @@ class AE extends pAndR{
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" AND month = \"$actualMonth\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\"";
 
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
         }
 
-
         $select .= "ORDER BY last_modify_date DESC";
 
         $result = $con->query($select);
 
-        $from = array("oppid","ID","type_of_value","currency_id");
+        $from = array("oppid","ID","type_of_value","currency_id", "submitted");
 
         $save = $sql->fetch($result,$from,$from);
 
@@ -330,7 +326,14 @@ class AE extends pAndR{
             $valueCheck = false;
             $currencyCheck = false;
         }else{
-            $save = $save;
+            $submitted = 0;
+
+            for ($s=0; $s < sizeof($save); $s++) { 
+                if ($save[$s]['submitted'] == 1) {
+                    $submitted = 1;
+                }
+            }
+
             $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
             
             $currencyCheck = $temp["currencyCheck"][0];
@@ -409,6 +412,13 @@ class AE extends pAndR{
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
         if ($save) {
+
+            if ($submitted == 1) {
+                $sourceSave = "LAST SUBMITTED";                
+            }else{
+                $sourceSave = "LAST SAVED";
+            }
+
             $select = array();
             $result = array();
 
@@ -430,6 +440,9 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
+            $cYear = date(intval('Y'));
+            $cMonth = date(intval('n'));
+
             for ($c=0; $c <sizeof($listOfClients) ; $c++) {
                 if ($splitted) {
                     if ($splitted[$c]["splitted"]) {
@@ -441,8 +454,23 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxResult = $con->query($auxSelect);
+                $auxFrom = array("f2.read_q");
+                $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
+                
+                if (!$auxSaida) {
+                    if ($cMonth == 1) {
+                        $cMonth = 12;
+                        $forecastYear = $year-1;
+                    }else{
+                        $forecastYear = $year;
+                        $cMonth--;
+                    }
+                }
+
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
@@ -630,26 +658,33 @@ class AE extends pAndR{
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND submitted = \"0\" AND month = \"$actualMonth\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\"";
 
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
         }
 
         $select .= "ORDER BY last_modify_date DESC";
-
+        
         $result = $con->query($select);
 
-        $from = array("oppid","ID","type_of_value","currency_id");
+        $from = array("oppid","ID","type_of_value","currency_id", "submitted");
 
         $save = $sql->fetch($result,$from,$from);
-
+        
         if (!$save) {
             $save = false;
             $valueCheck = false;
             $currencyCheck = false;
         }else{
-            $save = $save;
+            $submitted = 0;
+
+            for ($s=0; $s < sizeof($save); $s++) { 
+                if ($save[$s]['submitted'] == 1) {
+                    $submitted = 1;
+                }
+            }
+
             $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
             
             $currencyCheck = $temp[0]["currencyCheck"][0];
@@ -658,7 +693,7 @@ class AE extends pAndR{
 
             $temp2 = $base->adaptValue($value,$save,$regionID);
 
-            $valueCheck = $temp2["valueCheck"];
+            $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
         }
 
@@ -686,8 +721,8 @@ class AE extends pAndR{
             $splitted = false;
         }
 
-        for ($b=0; $b <sizeof($brand); $b++) {
-            for ($m=0; $m <sizeof($month) ; $m++) {
+        for ($b=0; $b < sizeof($brand); $b++) {
+            for ($m=0; $m < sizeof($month); $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                     $table[$b][$m] = "digital";
                 }else{
@@ -728,7 +763,12 @@ class AE extends pAndR{
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
         if ($save) {
-            $sourceSave = "LAST SAVED";
+
+            if ($submitted == 1) {
+                $sourceSave = "LAST SUBMITTED";                
+            }else{
+                $sourceSave = "LAST SAVED";
+            }
 
             $select = array();
             $result = array();
@@ -751,7 +791,10 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
-            for ($c=0; $c <sizeof($listOfClients) ; $c++) {
+            $cYear = date(intval('Y'));
+            $cMonth = date(intval('n'));
+
+            for ($c=0; $c < sizeof($listOfClients); $c++) {
                 if ($splitted) {
                     if ($splitted[$c]["splitted"]) {
                         $mul = 2;
@@ -762,31 +805,45 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxResult = $con->query($auxSelect);
+                $auxFrom = array("f2.read_q");
+                $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
+                
+                if (!$auxSaida) {
+                    if ($cMonth == 1) {
+                        $cMonth = 12;
+                        $forecastYear = $year-1;
+                    }else{
+                        $forecastYear = $year;
+                        $cMonth--;
+                    }
+                }
+
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
 
-
                 if ($saida[$c]) {
-                    for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
+                    for ($m=0; $m < sizeof($saida[$c]); $m++) { 
                         $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);                
                     }
                 }else{
-                    for ($m=0; $m <12; $m++) { 
+                    for ($m=0; $m < 12; $m++) { 
                         $rollingFCST[$c][$m] = 0;
                     }
                 }
                 
                 if ($valueCheck) {
-                    for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+                    for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
                     }
                 }
 
                 if ($currencyCheck) {
-                    for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
+                    for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
                     }
                 }

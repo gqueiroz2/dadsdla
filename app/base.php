@@ -483,7 +483,7 @@ class base extends Model{
         }else{
             $curr = "currency_id";
         }
-
+ 
         for ($s=0; $s < sizeof($save); $s++) { 
             if ($currencyID == $save[$s][$curr]) {
                 $currencyCheck[$s] = false;
