@@ -24,6 +24,8 @@ class AE extends pAndR{
             $month = 0;
         }
 
+        $user = Request::session()->get('userName');
+
         if ($submit == "submit") {
             $submit = 1;
             $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
@@ -57,9 +59,8 @@ class AE extends pAndR{
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
         if ($id && !is_null($id) && $submit == 0 ) {
-            var_dump("IF");
-            var_dump($date);
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
+                                            last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
                                             oppid = \"".$oppid."\",
@@ -82,7 +83,6 @@ class AE extends pAndR{
             return "Updated";
 
         }else{
-            var_dump("ELSE");
 
             $columns = "(
                          oppid,
@@ -93,25 +93,21 @@ class AE extends pAndR{
                          submitted, type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
-            var_dump($date);
             $values = "(
                         \"".$oppid."\",
                         \"".$region."\",\"".$salesRepID."\",
                         \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
                         \"".$currency['id']."\",\"".$value."\",
-                        \"".$salesRep->salesRep."\",\"".$date."\",\"".$time."\",
+                        \"".$user."\",\"".$date."\",\"".$time."\",
                         \"".$submit."\", \"AE\"
                       )";
 
 
             $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
 
-            echo "<pre>".($insertFCST)."</pre>";
-
             if ($con->query($insertFCST) === true) {
-                var_dump("TRUE");
+
             }else{
-                var_dump("ELSE");
                 var_dump($con->error);
                 return false;
 
@@ -321,6 +317,7 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
 
+
         if (!$save) {
             $save = false;
             $valueCheck = false;
@@ -440,8 +437,8 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
-            $cYear = date(intval('Y'));
-            $cMonth = date(intval('n'));
+            $auxYear = date('Y');
+            $cMonth = date('n');
 
             for ($c=0; $c <sizeof($listOfClients) ; $c++) {
                 if ($splitted) {
@@ -454,23 +451,9 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
-                $auxResult = $con->query($auxSelect);
-                $auxFrom = array("f2.read_q");
-                $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
-                
-                if (!$auxSaida) {
-                    if ($cMonth == 1) {
-                        $cMonth = 12;
-                        $forecastYear = $year-1;
-                    }else{
-                        $forecastYear = $year;
-                        $cMonth--;
-                    }
-                }
 
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
@@ -534,11 +517,13 @@ class AE extends pAndR{
 
             $tmp2 = $tmp1['fcstAmount'];
 
+
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
+
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -679,6 +664,7 @@ class AE extends pAndR{
         }else{
             $submitted = 0;
 
+
             for ($s=0; $s < sizeof($save); $s++) { 
                 if ($save[$s]['submitted'] == 1) {
                     $submitted = 1;
@@ -791,8 +777,8 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
-            $cYear = date(intval('Y'));
-            $cMonth = date(intval('n'));
+            $auxYear = date('Y');
+            $cMonth = date(('n'));
 
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 if ($splitted) {
@@ -805,26 +791,13 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
-                $auxResult = $con->query($auxSelect);
-                $auxFrom = array("f2.read_q");
-                $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
-                
-                if (!$auxSaida) {
-                    if ($cMonth == 1) {
-                        $cMonth = 12;
-                        $forecastYear = $year-1;
-                    }else{
-                        $forecastYear = $year;
-                        $cMonth--;
-                    }
-                }
 
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
+
 
                 if ($saida[$c]) {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
@@ -835,7 +808,7 @@ class AE extends pAndR{
                         $rollingFCST[$c][$m] = 0;
                     }
                 }
-                
+
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
@@ -883,12 +856,13 @@ class AE extends pAndR{
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $tmp2 = $tmp1['fcstAmount'];
-
+            
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
+
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -1491,6 +1465,7 @@ class AE extends pAndR{
             
         }
 
+
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 
 
@@ -1622,7 +1597,6 @@ class AE extends pAndR{
 
         }
         
-
         return $fcst;
     }
 

@@ -54,6 +54,24 @@
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 				</div>			
 			</div>
+			<br>
+			<div class="row">
+				<center style="width: 100%;">
+					<div class="col-3">
+						@if(session('Success'))
+							<div class="alert alert-info">
+								{{session('Success')}}
+							</div>
+						@endif
+
+						@if(session('Error'))
+							<div class="alert alert-danger">
+								{{session('Error')}}
+							</div>
+						@endif
+					</div>
+				</center>
+			</div>
 		</div>
 	</form>
 

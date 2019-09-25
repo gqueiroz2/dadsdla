@@ -131,9 +131,9 @@ class VPMonthController extends Controller {
 
         $read = $vpMonth->weekOfMonth($today);
         $read = "0".$read;
-        var_dump($user);
-        /*$ID = $vpMonth->generateID($con,$type,$rtr,$year,$currencyID,$value,$read,$fcstMonth);
-
+        
+        $ID = $vpMonth->generateID($con,$type,$rtr,$year,$currencyID,$value,$read,$fcstMonth,$user);
+        
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient);
@@ -150,7 +150,7 @@ class VPMonthController extends Controller {
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }*/
+        }
     }
 
     public function get(){
@@ -195,7 +195,7 @@ class VPMonthController extends Controller {
         
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
-        $forRender = $values;
+        /*$forRender = $values;
         $client = $values['client'];
 
         $tfArray = array();
@@ -204,6 +204,6 @@ class VPMonthController extends Controller {
         
         $render = new renderVPMonth();
 
-        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));*/
     }
 }

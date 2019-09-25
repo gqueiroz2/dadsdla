@@ -82,12 +82,12 @@
 	<div class="container-fluid">
 		<form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
-			<div class="row justify-content-between">
-				<div class="col-3">
+			<div class="row justify-content-end">
+				<!--<div class="col-3">
 					<label> &nbsp;</label>
 					<input type="button" class="btn btn-primary" value="{{$sourceSave}}" style="width: 100%;">
 					<input type="text" name="sourceSave" value="{{$sourceSave}}" style="display: none;">
-				</div>				
+				</div>-->				
 				<div class="col-4" >
 					<div class="container-fluid">
 						<div class="row justify-content-end">

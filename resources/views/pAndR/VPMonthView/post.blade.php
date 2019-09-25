@@ -113,7 +113,7 @@
 				<div class="row mt-2 justify-content-end">
 					<div class="col" style="width: 100%;">
 						<center>
-							<input type='hidden' id='user' name='user' value="<?php base64_encode(json_encode($userName))?>">
+							<input type='hidden' id='user' name='user' value="{{base64_encode(json_encode($userName))}}">
 							{{ $render->assemble($forRender, $client, $tfArray, $odd, $even, $rtr) }}
 						</center>
 					</div>

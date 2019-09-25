@@ -24,6 +24,8 @@ class VP extends pAndR{
     
         $type = "V1";
 
+        $user = Request::session()->get('userName');
+
         $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\" AND type_of_forecast = \"".$type."\"";
 
         $from = array("ID");
@@ -56,6 +58,7 @@ class VP extends pAndR{
 
         if ($resp) {
             $update = "UPDATE forecast SET read_q = \"".$read."\", 
+                                            last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
                                             oppid = \"".$ID."\",
@@ -63,6 +66,7 @@ class VP extends pAndR{
                                             year = \"".$cYear."\", 
                                             type_of_value = \"".$value."\",
                                             month = \"".$month."\" WHERE ID = \"".$resp."\"";
+
 
             if ($con->query($update) === true) {
 
@@ -87,7 +91,7 @@ class VP extends pAndR{
                         \"".$region['id']."\",NULL,
                         \"".$cYear."\", \"".$month."\", \"".$read."\", \"".$date."\",
                         \"".$currency['id']."\", \"".$value."\",
-                        \"VP\", \"".$date."\", \"".$time."\",
+                        \"".$user."\", \"".$date."\", \"".$time."\",
                         \"".$submit."\", \"V1\")";
 
             $insert = "INSERT INTO forecast $columns VALUES $values";
@@ -99,7 +103,7 @@ class VP extends pAndR{
                 return $error;
             }
 
-            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$region,$clients,"insert");  
+            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert");  
 
             return $bool;
         }
@@ -127,7 +131,6 @@ class VP extends pAndR{
             }
         }
 
-
         switch ($type) {
             case 'insert':
 
@@ -136,6 +139,7 @@ class VP extends pAndR{
                 for ($c=0; $c <sizeof($clients); $c++) { 
                     for($m=0; $m <sizeof($input[$c]); $m++) { 
                         $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",NULL)";
+                        
                         if ($con->query($input[$c][$m]) === true) {
 
                         }else{
@@ -168,32 +172,6 @@ class VP extends pAndR{
 
 
         }
-
-        for ($c=0; $c <sizeof($fcstValue); $c++) {
-            if ($percentage[$c]) {
-                for ($m=0; $m <sizeof($percentage[$c]) ; $m++) { 
-                    $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
-                }
-            }else{
-                for ($m=0; $m <12 ; $m++) { 
-                    $input[$c][$m] = 0;
-                }
-            }
-        }
-
-        $columns = "(forecast_id,month,value,client_id,brand)";
-
-        for ($c=0; $c <sizeof($clients); $c++) { 
-            for($m=0; $m <sizeof($input[$c]); $m++) { 
-                $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",NULL)";
-                if ($con->query($input[$c][$m]) === true) {
-                    var_dump("Foi");
-                }else{
-                    var_dump($con->error);
-                }
-            }
-        }
-
 
     }
 
@@ -374,7 +352,7 @@ class VP extends pAndR{
     public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients){
         $sr = new salesRep();        
         $br = new brand();
-        $base = new base();    
+        $base = new base();
         $sql = new sql();
         $reg = new region();
        
