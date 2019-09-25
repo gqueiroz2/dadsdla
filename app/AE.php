@@ -440,7 +440,7 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
-            $cYear = date(intval('Y'));
+            $auxYear = date('Y');
             $cMonth = date(intval('n'));
 
             for ($c=0; $c <sizeof($listOfClients) ; $c++) {
@@ -454,7 +454,7 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$auxYear'";
                 $auxResult = $con->query($auxSelect);
                 $auxFrom = array("f2.read_q");
                 $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
@@ -462,9 +462,9 @@ class AE extends pAndR{
                 if (!$auxSaida) {
                     if ($cMonth == 1) {
                         $cMonth = 12;
-                        $forecastYear = $year-1;
+                        $forecastYear = $auxYear-1;
                     }else{
-                        $forecastYear = $year;
+                        $forecastYear = $auxYear;
                         $cMonth--;
                     }
                 }
@@ -791,7 +791,7 @@ class AE extends pAndR{
 
             $salesRepsOR .= ")";
 
-            $cYear = date(intval('Y'));
+            $auxYear = date('Y');
             $cMonth = date(intval('n'));
 
             for ($c=0; $c < sizeof($listOfClients); $c++) {
@@ -805,7 +805,7 @@ class AE extends pAndR{
                     $mul = 1;
                 }
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$auxYear'";
                 $auxResult = $con->query($auxSelect);
                 $auxFrom = array("f2.read_q");
                 $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
@@ -813,9 +813,9 @@ class AE extends pAndR{
                 if (!$auxSaida) {
                     if ($cMonth == 1) {
                         $cMonth = 12;
-                        $forecastYear = $year-1;
+                        $forecastYear = $auxYear-1;
                     }else{
-                        $forecastYear = $year;
+                        $forecastYear = $auxYear;
                         $cMonth--;
                     }
                 }
