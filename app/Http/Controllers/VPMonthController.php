@@ -138,7 +138,7 @@ class VPMonthController extends Controller {
 
         $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient);
 
-        /*if ($bool == "Updated") {
+        if ($bool == "Updated") {
             $msg = "Forecast Updated";
             return back()->with("Success",$msg);
         }elseif($bool == "Created"){
@@ -150,7 +150,7 @@ class VPMonthController extends Controller {
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }*/
+        }
     }
 
     public function get(){
@@ -195,7 +195,7 @@ class VPMonthController extends Controller {
         
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
-        $forRender = $values;
+        /*$forRender = $values;
         $client = $values['client'];
 
         $tfArray = array();
@@ -204,6 +204,6 @@ class VPMonthController extends Controller {
         
         $render = new renderVPMonth();
 
-        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));*/
     }
 }

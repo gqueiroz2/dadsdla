@@ -13,7 +13,7 @@ class renderVPMonth extends Render {
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function assemble($forRender,$client,$tfArray,$odd,$even,$regionName){
+    public function assemble($forRender,$client,$tfArray,$odd,$even,$regionName,$error = false){
         
         $cMonth = intval(date('m'));
 
@@ -70,6 +70,13 @@ class renderVPMonth extends Render {
                 <tr><th class='lightBlue'>".$regionName." - ".$currencyName."/".$valueView."</th></tr>
             </table>
         </div>";
+
+        /*if($error) {
+            echo "<br>";
+            echo "<div class=\"alert alert-danger\" style=\"width:50%;\">";
+                echo $error;
+            echo "</div>";
+        }*/
 
         echo "<br>";
 

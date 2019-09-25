@@ -352,7 +352,7 @@ class VP extends pAndR{
     public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients){
         $sr = new salesRep();        
         $br = new brand();
-        $base = new base();    
+        $base = new base();
         $sql = new sql();
         $reg = new region();
        
