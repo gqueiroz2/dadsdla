@@ -13,7 +13,7 @@ class renderVPMonth extends Render {
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-    public function assemble($forRender,$client,$tfArray,$odd,$even,$regionName){
+    public function assemble($forRender,$client,$tfArray,$odd,$even,$regionName,$error = false){
         
         $cMonth = intval(date('m'));
 
@@ -59,11 +59,10 @@ class renderVPMonth extends Render {
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
 
-        echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
+        echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
         echo "<input type='hidden' id='value' name='value' value='".base64_encode(json_encode($value))."'>";
         echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
-        echo "<input type='hidden' id='user' name='user' value='".base64_encode(json_encode($region))."'>";
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
 
         echo "<div class='table-responsive' style='zoom:80%;'>
@@ -71,6 +70,13 @@ class renderVPMonth extends Render {
                 <tr><th class='lightBlue'>".$regionName." - ".$currencyName."/".$valueView."</th></tr>
             </table>
         </div>";
+
+        /*if($error) {
+            echo "<br>";
+            echo "<div class=\"alert alert-danger\" style=\"width:50%;\">";
+                echo $error;
+            echo "</div>";
+        }*/
 
         echo "<br>";
 

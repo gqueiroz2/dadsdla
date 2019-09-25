@@ -13,7 +13,7 @@ class renderRanking extends Render {
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center>
                             <span style='font-size:18px;'> 
-                                <b> ".$names['name']." Ranking (IBMS) : (".$pRate[0]['name']."/".strtoupper($value).") </b>
+                                <b> ".$names['name']." Ranking (BKGS) : (".$pRate[0]['name']."/".strtoupper($value).") </b>
                             </span>
                         </center></th>";
             echo "</tr>";

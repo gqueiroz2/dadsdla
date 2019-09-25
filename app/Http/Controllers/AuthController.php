@@ -109,13 +109,13 @@ class AuthController extends Controller
 
 		$pwd = new password();
 		$bool = $pwd->requestToEmail($con, $email);
-/*
-		if ($bool) {
+
+		/*if ($bool) {
 			return back()->with('response',"E-mail send with success");
 		}else{
 			return back()->with('error', "E-mail doesn't send");
-		}
-*/
+		}*/
+
     }
 
     public function requestToChangePassword(){

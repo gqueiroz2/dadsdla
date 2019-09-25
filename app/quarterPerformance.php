@@ -203,8 +203,8 @@ class quarterPerformance extends performance {
 				$mtx[$t][$b][1][6] = "S2";
 				$mtx[$t][$b][1][7] = "Total";
 				$mtx[$t][$b][2][0] = "Target ".$year;
-				$mtx[$t][$b][3][0] = "Bookings ".$year;
-				$mtx[$t][$b][4][0] = "Var Abs";
+				$mtx[$t][$b][3][0] = "BKGS ".$year;
+				$mtx[$t][$b][4][0] = "Abs. Var.";
 				$mtx[$t][$b][5][0] = "Var(%)";
 			}
 
@@ -346,8 +346,8 @@ class quarterPerformance extends performance {
 		$mtxFinal[0][1][6] = "S2";
 		$mtxFinal[0][1][7] = "Total";
 		$mtxFinal[0][2][0] = "Target ".$year;
-		$mtxFinal[0][3][0] = "Bookings ".$year;
-		$mtxFinal[0][4][0] = "Var Abs";
+		$mtxFinal[0][3][0] = "BKGS ".$year;
+		$mtxFinal[0][4][0] = "Abs. Var.";
 		$mtxFinal[0][5][0] = "Var(%)";
 
 		for ($c=2; $c < sizeof($mtxFinal[0]); $c++) { 

@@ -30,6 +30,12 @@ class AEController extends Controller{
 
         $con = $db->openConnection("DLA");
 
+        $user = Request::session()->get('userName');
+        $permission = Request::session()->get('userLevel');
+
+        $region = $r->getRegion($con,null);
+        $currency = $pr->getCurrency($con,null);
+
         $regionID = json_decode( base64_decode( Request::get('region') ));
         $salesRep = json_decode( base64_decode( Request::get('salesRep') ));
         $currencyID = json_decode( base64_decode( Request::get('currency') ));
@@ -43,6 +49,9 @@ class AEController extends Controller{
         $sourceSave = Request::get('sourceSave');
 
         $salesRepID = $salesRep->id;
+
+
+
 
         for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
@@ -71,14 +80,6 @@ class AEController extends Controller{
             }
         }
 
-/*
-        var_dump($regionID);
-        var_dump($salesRepID);        
-        var_dump($currencyID);
-        var_dump($value);
-        var_dump($user);
-        var_dump($year);
-*/
         $date = date('Y-m-d');
         $time = date('H:i');
         $fcstMonth = date('m');
@@ -144,9 +145,7 @@ class AEController extends Controller{
             $manualEstimantionByClient[$c] = array_values($manualEstimantionByClient[$c]);
         }
 
-        /*
-            kind,region,year,salesRep,currency,value,week,month
-        */
+            //kind,region,year,salesRep,currency,value,week,month
         $today = $date;
 
         if ($submit == "submit") {
@@ -164,19 +163,18 @@ class AEController extends Controller{
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
 
-
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
-            return back()->with("Success",$msg);
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Success",$msg);
         }elseif($bool == "Created"){
             $msg = "Forecast Created";
-            return back()->with("Success",$msg);
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Success",$msg);
         }elseif ($bool == "Already Submitted") {
             $msg = "You already have submitted the Forecast";
-            return back()->with("Error",$msg);
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Error",$msg);
         }else{
             $msg = "Error";
-            return back()->with("Error",$msg);
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Error",$msg);
         }
 
     }

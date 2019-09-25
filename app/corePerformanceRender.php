@@ -16,7 +16,7 @@ class corePerformanceRender extends renderPerformance
     		}else{
 	    		echo "<div class='col-sm' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}
-    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - BKGS</th></tr></table>";
     		echo "</div>";
     	echo "</div>";
 	    for ($sg=0; $sg < sizeof($mtx["case1"]["value"]); $sg++) {
@@ -53,7 +53,7 @@ class corePerformanceRender extends renderPerformance
 		    			echo "<td class='smBlue'>".number_format($mtx["case1"]["totalPlanValueTier"][$sg][$t],0,".",",")."</td>";
 		    		echo "</tr>";
 		    		echo "<tr>";
-		    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+		    			echo "<td class='medBlue'> BKGS $cYear </td>";
 		    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 		    				echo "<td class='medBlue'>".number_format($mtx["case1"]["value"][$sg][$t][$q],0,".",",")."</td>";
 		    			}
@@ -93,7 +93,7 @@ class corePerformanceRender extends renderPerformance
     				echo "<td style='width:18%;' class='smBlue' >".number_format($mtx["case1"]["totalPlanTotalSG"][$sg],0,".",",")."</td>";
 	    		echo "</tr>";
 	    		echo "<tr>";
-		    		echo "<td class='medBlue'> Bkgs $cYear </td>";
+		    		echo "<td class='medBlue'> BKGS $cYear </td>";
 	    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 	    				echo "<td class='medBlue'>".number_format($mtx["case1"]["totalSG"][$sg][$q],0,".",",")."</td>";
 	    			}
@@ -152,7 +152,7 @@ class corePerformanceRender extends renderPerformance
 				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case1"]["totalPlanValueTier"][$t],0,".",",")."</td>";
 				    		echo "</tr>";
 				    		echo "<tr>";
-				    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    			echo "<td class='medBlue'> BKGS $cYear </td>";
 				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["values"][$t][$q],0,".",",")."</td>";
 				    			}
@@ -191,7 +191,7 @@ class corePerformanceRender extends renderPerformance
 		    				echo "<td class='smBlue' >".number_format($mtx["total"]["case1"]["dnTotalPlanValue"],0,".",",")."</td>";
 			    		echo "</tr>";
 			    		echo "<tr>";
-				    		echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    		echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case1"]["dnValue"][$q],0,".",",")."</td>";
 			    			}
@@ -228,7 +228,7 @@ class corePerformanceRender extends renderPerformance
     		}else{
 	    		echo "<div class='col-sm' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}
-    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - BKGS</th></tr></table>";
 	    	echo "</div>";
     	echo "</div>";
     	for ($sg=0; $sg < sizeof($mtx["salesGroup"]); $sg++) {
@@ -261,7 +261,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case2"]["totalPlanValueBrand"][$sg][$b],0,".",",")."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case2"]["value"][$sg][$b][$q],0,".",",")."</td>";
 			    			}
@@ -300,7 +300,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case2"]["dnTotalPlanValue"][$sg],0,".",",")."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case2"]["dnValue"][$sg][$q],0,".",",")."</td>";
 			    			}
@@ -352,7 +352,7 @@ class corePerformanceRender extends renderPerformance
 				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case2"]["totalPlanValueBrand"][$t],0,".",",")."</td>";
 				    		echo "</tr>";
 				    		echo "<tr>";
-				    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    			echo "<td class='medBlue'> BKGS $cYear </td>";
 				    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["values"][$t][$q],0,".",",")."</td>";
 				    			}
@@ -391,7 +391,7 @@ class corePerformanceRender extends renderPerformance
 		    				echo "<td class='smBlue' >".number_format($mtx["total"]["case2"]["dnTotalPlanValue"],0,".",",")."</td>";
 			    		echo "</tr>";
 			    		echo "<tr>";
-				    		echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    		echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["quarters"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case2"]["dnValue"][$q],0,".",",")."</td>";
 			    			}
@@ -423,7 +423,7 @@ class corePerformanceRender extends renderPerformance
 
     	echo "<div class='row' >";
     		echo "<div class='col-sm' style='width:100%;  margin-left:auto; margin-right: auto;'>";
-    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+    			echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - BKGS</th></tr></table>";
 	    		
 	    	echo "</div>";
     	echo "</div>";
@@ -458,7 +458,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case3"]["totalPlanValueTier"][$sg][$b])."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case3"]["values"][$sg][$b][$q])."</td>";
 			    			}
@@ -497,7 +497,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case3"]["dnTotalPlanValue"][$sg],0,".",",")."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case3"]["dnValue"][$sg][$q],0,".",",")."</td>";
 			    			}
@@ -551,7 +551,7 @@ class corePerformanceRender extends renderPerformance
 				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case3"]["totalPlanValueTier"][$t],0,".",",")."</td>";
 				    		echo "</tr>";
 				    		echo "<tr>";
-				    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    			echo "<td class='medBlue'> BKGS $cYear </td>";
 				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["values"][$t][$q],0,".",",")."</td>";
 				    			}
@@ -590,7 +590,7 @@ class corePerformanceRender extends renderPerformance
 		    				echo "<td class='smBlue' >".number_format($mtx["total"]["case3"]["dnTotalPlanValue"],0,".",",")."</td>";
 			    		echo "</tr>";
 			    		echo "<tr>";
-				    		echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    		echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case3"]["dnValue"][$q],0,".",",")."</td>";
 			    			}
@@ -621,7 +621,7 @@ class corePerformanceRender extends renderPerformance
     	$size = 84/sizeof($mtx["month"]);
     	echo "<div class='row' >";
 	    	echo "<div class='col-sm' style='width:100%; margin-left: auto; margin-right: auto;'>";
-	    		echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - IBMS</th></tr></table>";
+	    		echo "<table style='width:100%;' class='t1'><tr><th style='font-weight: bold; font-size:22px;' >".$mtx["region"]." - Core ".$mtx["year"]." (".$mtx["currency"]."/".$mtx["valueView"].") - BKGS</th></tr></table>";
 	    	echo "</div>";
     	echo "</div>";
 	    for ($sg=0; $sg < sizeof($mtx["salesGroup"]); $sg++) {
@@ -649,7 +649,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case4"]["totalPlanValueTier"][$sg][$b],0,".",",")."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case4"]["values"][$sg][$b][$q],0,".",",")."</td>";
 			    			}
@@ -688,7 +688,7 @@ class corePerformanceRender extends renderPerformance
 			    			echo "<td class='smBlue'>".number_format($mtx["case4"]["dnTotalPlanValue"][$sg])."</td>";
 		    			echo "</tr>";
 		    			echo "<tr>";
-			    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+			    			echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["case4"]["dnValue"][$sg][$q])."</td>";
 			    			}
@@ -739,7 +739,7 @@ class corePerformanceRender extends renderPerformance
 				    			echo "<td class='smBlue'>".number_format($mtx["total"]["case4"]["totalPlanValueTier"][$t],0,".",",")."</td>";
 				    		echo "</tr>";
 				    		echo "<tr>";
-				    			echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    			echo "<td class='medBlue'> BKGS $cYear </td>";
 				    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 				    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["values"][$t][$q],0,".",",")."</td>";
 				    			}
@@ -778,7 +778,7 @@ class corePerformanceRender extends renderPerformance
 		    				echo "<td class='smBlue' >".number_format($mtx["total"]["case4"]["dnTotalPlanValue"],0,".",",")."</td>";
 			    		echo "</tr>";
 			    		echo "<tr>";
-				    		echo "<td class='medBlue'> Bkgs $cYear </td>";
+				    		echo "<td class='medBlue'> BKGS $cYear </td>";
 			    			for ($q=0; $q <sizeof($mtx["month"]); $q++) { 
 			    				echo "<td class='medBlue'>".number_format($mtx["total"]["case4"]["dnValue"][$q],0,".",",")."</td>";
 			    			}

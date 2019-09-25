@@ -19,6 +19,8 @@ class quarterPerformanceRender extends Render {
 
 			echo "<tr><td>&nbsp;</td></tr>";
 
+
+
 			for ($t=0; $t < sizeof($mtx); $t++) { 
 
 				echo "<tr>";

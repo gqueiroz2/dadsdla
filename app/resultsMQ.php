@@ -52,9 +52,9 @@ class resultsMQ extends results{
 
         $matrix[0][0] = $brand[1];
         $matrix[1][0] = "$source $year";
-        $matrix[2][0] = "Bookings $year";
+        $matrix[2][0] = "BKGS $year";
         $matrix[3][0] = "Var(%)";
-        $matrix[4][0] = "Absolut Var.";
+        $matrix[4][0] = "Abs. Var.";
 
         for ($i = 1; $i <= sizeof($month); $i++) { 
 
@@ -119,9 +119,9 @@ class resultsMQ extends results{
             $quarter[$b][0][7] = "Total";
 
             $quarter[$b][1][0] = "$source $year";
-            $quarter[$b][2][0] = "Bookings $year";
+            $quarter[$b][2][0] = "BKGS $year";
             $quarter[$b][3][0] = "Var(%)";
-            $quarter[$b][4][0] = "Absolut Var.";
+            $quarter[$b][4][0] = "Abs. Var.";
 
             for ($l=1; $l < sizeof($matrix[$b]); $l++) { 
                 for ($m=1, $j=1; $m < sizeof($matrix[$b][$l])-1; $m+=3,$j++) {

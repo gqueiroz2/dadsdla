@@ -12,7 +12,7 @@ class renderMarketRanking extends Render {
             echo "<tr>";
             	echo "<th colspan='".sizeof($mtx)."' class='lightBlue'><center>";
                             echo "<span style='font-size:18px;'>";
-                                echo "<b> $region - Market Ranking (".strtoupper($names['source']).") : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
+                                echo "<b> $region - Market Ranking (BKGS) : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
 	                            if ($type != "sector") {
 	                            	echo "<span style='font-size:18px;'>";
 	                            		echo "<b> Refer to the brands: ".$names['brands']."</b></br>";

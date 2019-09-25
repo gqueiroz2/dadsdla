@@ -60,7 +60,7 @@ class resultsYoY extends results {
         $valuePastYearSum = 0;
 
         $matrix[0][0] = $brand[1];
-        $matrix[1][0] = "Bookings ".($year-1);
+        $matrix[1][0] = "BKGS ".($year-1);
         $matrix[2][0] = "$source $year";
         $matrix[3][0] = "Bookings $year";
         $matrix[4][0] = "Dif. 3° - 2°";
