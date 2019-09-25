@@ -120,8 +120,7 @@ class VPController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $tmp = $vp->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear);
-/*
+
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
@@ -131,7 +130,7 @@ class VPController extends Controller
         }else{
             $client = false;
         }
-*/
-        //return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
+
+        return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
     }
 }

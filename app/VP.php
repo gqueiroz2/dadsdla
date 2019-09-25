@@ -274,25 +274,27 @@ class VP extends pAndR{
         $id = $this->verifySaves($con,$sql,$regionID);
 
         if ($id) {
-            $tmp = $this->getFcstFromDatabase();
+            $fcstFullYearByClient = $this->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients);
+            $fcstFullYearByClientAE = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
         }else{
-
+            $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+            $fcstFullYearByClientAE = $fcstFullYearByClient;
         }
 
-        $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
         
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
         //$totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
         $totalFullYearByClient = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClient);
+        $totalFullYearByClientAE = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClientAE);
         $varAbsFullYearByClient = $this->subArrays($totalFullYearByClient,$bookingspYearByClient);
         $varPerFullYearByClient = $this->varPer($totalFullYearByClient,$bookingspYearByClient);
         $bookingscYTD = $this->consolidadeColumn($bookingscYTDByClient);
         $bookingspYTD = $this->consolidadeColumn($bookingspYTDByClient);
         $varAbsYTD = $this->subArrays(array($bookingscYTD),array($bookingspYTD))[0];
         $varPerYTD = $this->varPer(array($bookingscYTD),array($bookingspYTD))[0];
-        
+
         $fcstcMonth = $this->consolidadeColumn($fcstcMonthByClient);
         $bookingscMonth = $this->consolidadeColumn($bookingscMonthByClient);
         $totalcYearMonth = $this->consolidadeColumn($totalcYearMonthByClient);
@@ -303,6 +305,7 @@ class VP extends pAndR{
         $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
         $closedFullYear = $this->consolidadeColumn($closedFullYearByClient);
         $fcstFullYear = $this->consolidadeColumn($fcstFullYearByClient);
+        $fcstFullYearAE = $this->consolidadeColumn($fcstFullYearByClientAE);
         $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
         $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
         $bookedPercentageFullYear = $this->consolidadeColumn($bookedPercentageFullYearByClient);
@@ -359,13 +362,16 @@ class VP extends pAndR{
                         "region" => $regionID,
                         "currency" => $currencyID,
                         "value" => $value,
-                        "cYear" => $cYear
+                        "cYear" => $cYear,
+                        "fcstFullYearByClientAE" => $fcstFullYearByClientAE,
+                        "totalFullYearByClientAE" => $totalFullYearByClientAE,
+                        "fcstFullYearAE" => $fcstFullYearAE
                     );
         return $rtr;
       
     }
 
-    public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear){
+    public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients){
         $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
@@ -394,42 +400,25 @@ class VP extends pAndR{
             $select .= "AND read_q = \"$week\"";
         }
 
+        $select .= "ORDER BY ID DESC";
+
         $result = $con->query($select);
-
-        var_dump($select);
-
-        var_dump($result);
 
         $from = array("oppid","ID","type_of_value","currency_id", "submitted");
 
         $save = $sql->fetch($result,$from,$from);
 
-        var_dump($save);
+        $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
 
-        if (!$save) {
-            $save = false;
-            $valueCheck = false;
-            $currencyCheck = false;
-        }else{
-            $submitted = 0;
 
-            for ($s=0; $s < sizeof($save); $s++) { 
-                if ($save[$s]['submitted'] == 1) {
-                    $submitted = 1;
-                }
-            }
+        $currencyCheck = $temp["currencyCheck"][0];
+        $newCurrency = $temp["newCurrency"][0];
+        $oldCurrency = $temp["oldCurrency"][0];
 
-            $temp[0] = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
-            
-            $currencyCheck = $temp[0]["currencyCheck"][0];
-            $newCurrency = $temp[0]["newCurrency"][0];
-            $oldCurrency = $temp[0]["oldCurrency"][0];
+        $temp2 = $base->adaptValue($value,$save,$regionID);
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
-
-            $valueCheck = $temp2["valueCheck"][0];
-            $multValue = $temp2["multValue"][0];
-        }
+        $valueCheck = $temp2["valueCheck"][0];
+        $multValue = $temp2["multValue"][0];
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
 
@@ -446,6 +435,23 @@ class VP extends pAndR{
 
         $readable = $this->monthAnalise($base);
 
+        for ($c=0; $c <sizeof($listOfClients) ; $c++) { 
+            $selectClient[$c] = "SELECT SUM(value) AS value FROM forecast_client WHERE forecast_id = \"".$save[0]['ID']."\" AND client_id = \"".$listOfClients[$c]['clientID']."\"";
+            $res[$c] = $con->query($selectClient[$c]);
+
+            $resp[$c] = $sql->fetchSum($res[$c],"value")["value"];
+
+            if ($currencyCheck) {
+                $resp[$c] = (($resp[$c]*$newCurrency)/$oldCurrency);
+            }
+
+            if ($valueCheck) {
+                $resp[$c] = ($resp[$c]*$multValue);
+            }
+
+        }
+
+        return $resp;
     }
 
     public function monthAnalise($base){
@@ -485,7 +491,7 @@ class VP extends pAndR{
 
         $from = array("ID");
 
-        $select = "SELECT ID from forecast WHERE month = \"".$month."\" AND type_of_forecast = \"V1\" AND submitted = \"0\" AND region_id = \"".$regionID."\"";
+        $select = "SELECT ID from forecast WHERE month = \"".$month."\" AND type_of_forecast = \"V1\" AND region_id = \"".$regionID."\"";
 
         if ($regionID == 1) {
             $week = $this->weekOfMonth($date);

@@ -515,6 +515,7 @@ class base extends Model{
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
+
         if($type){
             $vall = "typeOfValue";
         }else{
@@ -539,9 +540,9 @@ class base extends Model{
                 
                 $mult = $this->getAgencyComm($con,$tmp);
                 
-                if ($value == "Net") {
+                if (strtolower($value) == "net") {
                     $multValue[$s] = (100 - $mult)/100;
-                }elseif($value == "Gross"){
+                }elseif(strtolower($value) == "gross"){
                     $multValue[$s] = 1/(1-($mult/100));
                 }
             }
