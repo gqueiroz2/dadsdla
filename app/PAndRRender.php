@@ -89,7 +89,7 @@ class PAndRRender extends Render{
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Target</td>";
             echo "</tr>";
             echo "<tr>";
-                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Roling Fcast ".$cYear."</span><br>";
+                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Rolling Fcast ".$cYear."</span><br>";
             echo "</tr>";
             echo "<tr>";
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Bookings</td>";
@@ -423,7 +423,7 @@ class PAndRRender extends Render{
                     echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span style='font-size:18px; '> ".$client[$c]['clientName']." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Roling Fcast ".$cYear." </td>";
+                    echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Rolling Fcast ".$cYear." </td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Manual Estimation";

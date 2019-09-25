@@ -26,7 +26,7 @@ class VPMonth extends pAndR {
             
             $submit = 1;
 
-            $selectSubmit = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'AE'";
+            $selectSubmit = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'V2'";
 
             $from = array("ID");
 
@@ -45,8 +45,8 @@ class VPMonth extends pAndR {
         $tableFCST = "forecast";
         $tableFCSTClient = "forecast_client";
 
-        $select = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'AE'";
-
+        $select = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'V2'";
+        
         $from = array("ID");
 
         $result = $con->query($select);
@@ -86,7 +86,7 @@ class VPMonth extends pAndR {
 
             $values = "(
                         \"".$oppid."\",
-                        \"".$region."\",\"".null."\",
+                        \"".$region."\",NULL,
                         \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
                         \"".$currency['id']."\",\"".$value."\",
                         \"".$user."\",\"".$date."\",\"".$time."\",
@@ -105,7 +105,7 @@ class VPMonth extends pAndR {
                 return false;
             }
 
-              $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
         }
     }
 
@@ -186,13 +186,13 @@ class VPMonth extends pAndR {
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND sales_rep_id = \"".null."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$year\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$year\" AND type_of_forecast = 'V1'";
 
         if ($regionID == "1") {
-            $select .= "AND read_q = \"$week\"";
+            $select .= " AND read_q = \"$week\"";
         }
 
-        $select .= "ORDER BY last_modify_date DESC";
+        $select .= " ORDER BY last_modify_date DESC";
 
         $result = $con->query($select);
 
@@ -286,36 +286,39 @@ class VPMonth extends pAndR {
                 $fPastRollingFCST[$m] = 0;
             }
 
-            $cYear = date(intval('Y'));
-            $cMonth = date(intval('n'));
+            $cYear = date('Y');
+            $cMonth = date('n');
 
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
                 $mul = 1;
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]." AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND (f2.type_of_forecast = 'V1') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
                 $auxResult = $con->query($auxSelect);
-                $auxFrom = array("f2.read_q");
-                $auxSaida = $sql->fetch($auxResult, $from, $from);
+                $auxFrom = array("read_q");
+                $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
 
                 if (!$auxSaida) {
                     if ($cMonth == 1) {
-                        $cMonth = 12;
+                        $forecastMonth = 12;
                         $forecastYear = $year-1;
                     }else{
                         $forecastYear = $year;
-                        $cMonth--;
+                        $forecastMonth = $cMonth-1;
                     }
+                }else{
+                    $forecastMonth = $cMonth;
                 }
 
                 for ($m=0; $m < 12; $m++) {
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND sales_rep_id = ".null." AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
                     
-                    /*if ($listOfClients[$c]["clientID"] == 208) {
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'V1') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear'";
+                    
+                    /*if ($listOfClients[$c]["clientID"] == 865) {
                         var_dump($select[$c][$m]);
                     }*/
 
-                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND sales_rep_id = ".null." AND (f2.submitted = '1') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.submitted = '1') AND (f2.type_of_forecast = 'V1') AND f2.read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear'";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
@@ -470,16 +473,14 @@ class VPMonth extends pAndR {
 
         $week = $this->weekOfMonth($data);
 
-        //$select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND sales_rep_id = \"".null."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$year\"";
-
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$year\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$year\" AND type_of_forecast = 'V1'";
 
         if ($regionID == "1") {
-            $select .= "AND read_q = \"2\"";
+            $select .= " AND read_q = \"$week\"";
         }
 
-        $select .= "ORDER BY last_modify_date DESC";
-
+        $select .= " ORDER BY last_modify_date DESC";
+        
         $result = $con->query($select);
 
         $from = array("oppid","ID","type_of_value","currency_id", "submitted");
@@ -580,37 +581,39 @@ class VPMonth extends pAndR {
                 $fPastRollingFCST[$m] = 0;
             }
             
-            $cYear = date(intval('Y'));
+            $cYear = date('Y');
             $cMonth = date('n');
             
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
                 $mul = 1;
 
-                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND (f2.type_of_forecast = 'AE') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
+                $auxSelect = "SELECT f2.read_q FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND (f2.type_of_forecast = 'V1') AND (f2.submitted = '$submitted') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year'";
                 $auxResult = $con->query($auxSelect);
                 $auxFrom = array("read_q");
                 $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
-                
+
                 if (!$auxSaida) {
                     if ($cMonth == 1) {
-                        $cMonth = 12;
+                        $forecastMonth = 12;
                         $forecastYear = $year-1;
                     }else{
                         $forecastYear = $year;
-                        $cMonth--;
+                        $forecastMonth = $cMonth-1;
                     }
+                }else{
+                    $forecastMonth = $cMonth;
                 }
-                
+
                 for ($m=0; $m < 12; $m++) {
 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND sales_rep_id = ".null." AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'V1') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear'";
                     
-                    /*if ($listOfClients[$c]["clientID"] == 208) {
+                    /*if ($listOfClients[$c]["clientID"] == 865) {
                         var_dump($select[$c][$m]);
                     }*/
 
-                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND sales_rep_id = ".null." AND (f2.submitted = '1') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$forecastYear'";
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.submitted = '1') AND (f2.type_of_forecast = 'V1') AND f2.read_q = (SELECT (MAX(f2.read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear'";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $pastResult[$c][$m] = $con->query($pastSelect[$c][$m]);
@@ -1444,7 +1447,7 @@ class VPMonth extends pAndR {
         END CONTROL VALUES FUNCTIONS
     */
 
-    public function generateID($con,$kind,$region,$year,$currency,$value,$week,$month){
+    public function generateID($con,$kind,$region,$year,$currency,$value,$week,$month,$user){
 
         $pr = new pRate();
         $sql = new sql();
@@ -1461,7 +1464,7 @@ class VPMonth extends pAndR {
                    "-".$year.
                    "-".$month.                   
                    "-WEEK-".$week.                   
-                   "-".preg_replace('/\s+/', '', $region).
+                   "-".preg_replace('/\s+/', '', $user).
                    "-".$currency.
                    "-".$value
                    

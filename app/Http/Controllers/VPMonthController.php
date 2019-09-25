@@ -131,14 +131,14 @@ class VPMonthController extends Controller {
 
         $read = $vpMonth->weekOfMonth($today);
         $read = "0".$read;
-        var_dump($user);
-        /*$ID = $vpMonth->generateID($con,$type,$rtr,$year,$currencyID,$value,$read,$fcstMonth);
-
+        
+        $ID = $vpMonth->generateID($con,$type,$rtr,$year,$currencyID,$value,$read,$fcstMonth,$user);
+        
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient);
 
-        if ($bool == "Updated") {
+        /*if ($bool == "Updated") {
             $msg = "Forecast Updated";
             return back()->with("Success",$msg);
         }elseif($bool == "Created"){

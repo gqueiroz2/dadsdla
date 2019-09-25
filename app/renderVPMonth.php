@@ -59,7 +59,7 @@ class renderVPMonth extends Render {
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
 
-        echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
+        echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
         echo "<input type='hidden' id='value' name='value' value='".base64_encode(json_encode($value))."'>";
         echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
