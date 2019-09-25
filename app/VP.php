@@ -23,6 +23,8 @@ class VP extends pAndR{
         $month = $tmp[1];
     
         $type = "V1";
+        
+        $user = Request::session()->get('userName');
 
         $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\" AND type_of_forecast = \"".$type."\"";
 
@@ -56,6 +58,7 @@ class VP extends pAndR{
 
         if ($resp) {
             $update = "UPDATE forecast SET read_q = \"".$read."\", 
+                                            last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
                                             oppid = \"".$ID."\",
@@ -87,7 +90,7 @@ class VP extends pAndR{
                         \"".$region['id']."\",NULL,
                         \"".$cYear."\", \"".$month."\", \"".$read."\", \"".$date."\",
                         \"".$currency['id']."\", \"".$value."\",
-                        \"VP\", \"".$date."\", \"".$time."\",
+                        \"".$user."\", \"".$date."\", \"".$time."\",
                         \"".$submit."\", \"V1\")";
 
             $insert = "INSERT INTO forecast $columns VALUES $values";
