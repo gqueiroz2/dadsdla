@@ -12,9 +12,61 @@ use App\dataBase;
 use App\VP;
 use App\sql;
 use App\base;
+use App\brand;
+use App\excel;
+use Validator;
 
 class VPController extends Controller
 {
+    public function save(){
+
+        $db = new dataBase(); 
+        $sql = new sql();
+        $pr = new pRate();
+        $r = new region();
+        $vp = new VP();
+        $base = new base();
+        $render = new PAndRRender();
+        $excel = new excel();
+
+        $con = $db->openConnection("DLA");  
+
+        $excel = new excel();
+
+        $client = json_decode(base64_decode(Request::get('client')));
+        $percentage = json_decode(base64_decode(Request::get('percentage')));
+        $region = json_decode(base64_decode(Request::get('region')));
+        $currency = json_decode(base64_decode(Request::get('currency')));
+        $value = json_decode(base64_decode(Request::get('value')));
+        $cYear = json_decode(base64_decode(Request::get('cYear')));
+        $submit = Request::get('options');
+
+        for ($p=0; $p <sizeof($percentage); $p++) { 
+            $totalFCST[$p] = $excel->fixExcelNumber(Request::get("clientRF-Fy-$p"));
+        }
+
+        $date = date('Y-m-d');
+        $time = date('H:i');
+        $fcstMonth = date('m');
+
+        $month = $base->month;
+        $monthWQ = $base->monthWQ;
+
+        if ($value == "Gross") {
+            $value = "gross";
+        }else{
+            $value = "net";
+        }
+
+        $currency = $pr->getCurrency($con,array($currency))[0];
+
+        $region = $r->getRegion($con,array($region))[0];
+
+        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region);
+
+
+    }
+
     public function get(){
 
     	$db = new dataBase();
