@@ -156,7 +156,7 @@ class base extends Model{
                             );
 
     public function TruncateName($form){
-        
+        /*
         if ($form == 'mini_header') {
             $newForm = "Header";
         }elseif ($form == 'cmaps') {
@@ -164,6 +164,9 @@ class base extends Model{
         }else{
             $newForm = "IBMS";
         }
+        */
+
+        $newForm = "BKGS";
 
         return $newForm;
     }
