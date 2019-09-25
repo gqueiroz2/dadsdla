@@ -71,6 +71,10 @@ class VPPAndRRender extends PAndRRender{
         $value = $forRender["value"];
         $cYear = $forRender["cYear"];
 
+        $totalFullYearByClientAE = $forRender["totalFullYearByClientAE"];
+        $fcstFullYearByClientAE = $forRender["fcstFullYearByClientAE"];
+        $fcstFullYearAE = $forRender["fcstFullYearAE"];
+
         echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
         echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' name='region' value='".base64_encode(json_encode($region))."'>";
@@ -205,7 +209,7 @@ class VPPAndRRender extends PAndRRender{
 
                     /*FCST AE*/                    
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
-                            ".number_format($fcstFullYear, 0, ".", ",")."
+                            ".number_format($fcstFullYearAE, 0, ".", ",")."
                         </td>";
                     
                     /*Manual Estimation*/
@@ -386,7 +390,7 @@ class VPPAndRRender extends PAndRRender{
                         /*Proposals*/ 
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
                                     <input type='text' readonly='true' id='passClientRF-Fy-$c' 
-                                           value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
+                                           value='".number_format($fcstFullYearByClientAE[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
                                            background-color:transparent; text-align:center;'>
                               </td>";
