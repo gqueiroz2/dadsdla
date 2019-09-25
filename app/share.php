@@ -12,9 +12,7 @@ use App\pRate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
-class share extends results
-{
-
+class share extends results{
 
     public function generateShare($con){
 
@@ -30,6 +28,7 @@ class share extends results
     	$year = array(Request::get('year'));
     	$brand = $base->handleBrand(Request::get('brand'));
     	$source = Request::get('source');
+
     	$salesRepGroup = Request::get('salesRepGroup');
     	$salesRep = Request::get('salesRep');
         $currency = Request::get('currency');
@@ -42,8 +41,7 @@ class share extends results
         }else{
             $div = $base->generateDiv($con,$pr,$region,$year,$currency);            
             $div = 1/$div;
-        }
-        
+        }     
 
 
         $tmp = array($currency);
@@ -285,7 +283,15 @@ class share extends results
         $mtx["salesRepView"] = $salesRepView;
         $mtx["region"] = $region;
         $mtx["year"] = $year;
-        $mtx["source"] = $source;
+
+        if($source == "CMAPS"){
+            $newSource = "CMAPS";
+        }else{
+            $newSource = "BKGS";
+        }
+
+
+        $mtx["source"] = $newSource;
         $mtx["salesRepAB"] = $salesRepAB;
 
         for ($m=0; $m <sizeof($values) ; $m++) { 

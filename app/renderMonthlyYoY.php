@@ -106,9 +106,9 @@ class renderMonthlyYoY extends Render{
 				$class = $thirdClass;
 			}
 
-			echo "<td $class> Bookings ".($year-1)."</td>";
+			echo "<td $class> BKGS ".($year-1)."</td>";
 			echo "<td $class> $source ".$year."</td>";
-			echo "<td $class> Bookings ".$year."</td>";
+			echo "<td $class> BKGS ".$year."</td>";
 		}
 
     }
@@ -225,9 +225,9 @@ class renderMonthlyYoY extends Render{
     			$class = $firstClass;
     		}
 
-    		echo "<td $class $style colspan='1'>Bookings ".($year-1)."</td>";
+    		echo "<td $class $style colspan='1'>BKGS ".($year-1)."</td>";
 			echo "<td $class $style colspan='1'>$source ".$year."</td>";
-			echo "<td $class $style colspan='1'>Bookings ".$year."</td>";
+			echo "<td $class $style colspan='1'>BKGS ".$year."</td>";
     	}
     }
 

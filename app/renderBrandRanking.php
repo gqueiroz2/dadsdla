@@ -16,7 +16,7 @@ class renderBrandRanking extends Render {
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center>
                             <span style='font-size:18px;'> 
-                                <b>$region - Brand Ranking (".strtoupper($names['source']).") : ($currency/$value)</b>
+                                <b>$region - Brand Ranking (BKGS) : ($currency/$value)</b>
                             </span>
                         </center></th>";
             echo "</tr>";

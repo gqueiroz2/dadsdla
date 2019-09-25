@@ -770,8 +770,7 @@ class performanceExecutive extends performance
         }else{
             $mtx["total"]["case3"]["dnTotalVarPrc"] = $mtx["total"]["case3"]["dnTotalValue"] / $mtx["total"]["case3"]["dnTotalPlanValue"]*100; 
         }
-
-
+        
         //case 2
         for ($q=0; $q <sizeof($mtx["quarters"]) ; $q++) { 
             $mtx["total"]["case2"]["dnPlanValue"][$q] = 0;

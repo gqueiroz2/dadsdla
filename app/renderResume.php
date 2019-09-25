@@ -8,12 +8,13 @@ use App\Render;
 class renderResume extends Render {
     
     public function assemble($salesRegion, $salesShow, $cYear, $currencyS, $valueS, $pYear, $matrix, $type){
-    	
+    	/*
         if ($type == "Digital") {
             $salesShow = "FREE WHEEL";
         }elseif($type == "DN"){
             $salesShow .= " + FW";
         }
+        */
 
     	echo "<table class='table table-bordered' style='width: 100%;'>";
     		echo "<tr>";

@@ -15,7 +15,7 @@ use App\digital;
 
 class resultsMonthlyYoY extends results{
 
-    public function lines($con, $currency, $months, $form, $brands, $year, $region, $value, $source){
+    public function lines( $con, $currency, $months, $form, $brands, $year, $region, $value, $source){
         
         $cYear = $year;
         $pYear = $year-1;
@@ -118,9 +118,9 @@ class resultsMonthlyYoY extends results{
     */
     public function assembler($valueCurrentYear, $target, $valuePastYear, $months, $year, $source){
 
-        $matrix[0][0] = "Bookings ".($year-1);
+        $matrix[0][0] = "BKGS ".($year-1);
         $matrix[1][0] = "$source $year";
-        $matrix[2][0] = "Bookings $year";
+        $matrix[2][0] = "BKGS $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) { 
 
@@ -137,9 +137,9 @@ class resultsMonthlyYoY extends results{
 
     public function assemblerDN($matrix, $pos, $months, $year, $source){
         
-        $currentMatrix[0][0] = "Bookings ".($year-1);
+        $currentMatrix[0][0] = "BKGS ".($year-1);
         $currentMatrix[1][0] = "$source $year";
-        $currentMatrix[2][0] = "Bookings $year";
+        $currentMatrix[2][0] = "BKGS $year";
 
         for ($i = 1; $i <= sizeof($months); $i++) {
 

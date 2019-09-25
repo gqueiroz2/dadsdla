@@ -70,11 +70,14 @@ class resultsResumeController extends Controller{
 			$salesRegion = $tmp['name'];
 		}
 
+		$salesShow = 'BKGS';
+
+		/*
 		if($salesRegion == 'Brazil'){
 			$salesShow = 'CMAPS';
 		}else{
 			$salesShow = 'IBMS';
-		}
+		}*/
 
 		$tmp = Request::get("brand");
 		$brandID = $base->handleBrand($tmp);
