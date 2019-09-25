@@ -156,7 +156,7 @@ class base extends Model{
                             );
 
     public function TruncateName($form){
-        
+        /*
         if ($form == 'mini_header') {
             $newForm = "Header";
         }elseif ($form == 'cmaps') {
@@ -164,6 +164,9 @@ class base extends Model{
         }else{
             $newForm = "IBMS";
         }
+        */
+
+        $newForm = "BKGS";
 
         return $newForm;
     }
@@ -483,7 +486,7 @@ class base extends Model{
         }else{
             $curr = "currency_id";
         }
-
+ 
         for ($s=0; $s < sizeof($save); $s++) { 
             if ($currencyID == $save[$s][$curr]) {
                 $currencyCheck[$s] = false;
@@ -512,6 +515,7 @@ class base extends Model{
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
+
         if($type){
             $vall = "typeOfValue";
         }else{
@@ -536,9 +540,9 @@ class base extends Model{
                 
                 $mult = $this->getAgencyComm($con,$tmp);
                 
-                if ($value == "Net") {
+                if (strtolower($value) == "net") {
                     $multValue[$s] = (100 - $mult)/100;
-                }elseif($value == "Gross"){
+                }elseif(strtolower($value) == "gross"){
                     $multValue[$s] = 1/(1-($mult/100));
                 }
             }

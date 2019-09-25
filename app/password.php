@@ -101,7 +101,7 @@ class password extends Model{
     }*/
 
     public function sendEmail($email, $token){
-        $mail = new PHPMailer(true);
+        /*$mail = new PHPMailer(true);
 
         try {
             //Server settings
@@ -110,8 +110,8 @@ class password extends Model{
             //$mail->Host       = 'dctmail.discovery.com';  // Specify main and backup SMTP servers
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            //$mail->Username   = 'lucio_cruz@discoverybrasil.com';                     // SMTP username
-            $mail->Username   = 'lucior.jr@gmail.com';                     // SMTP username
+            $mail->Username   = 'lucio_cruz@discoverybrasil.com';                     // SMTP username
+            //$mail->Username   = 'lucior.jr@gmail.com';                     // SMTP username
             $mail->Password   = '@Scudetto2809';                               // SMTP password
             $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
             $mail->Port       = 587;                                    // TCP port to connect to
@@ -140,11 +140,11 @@ class password extends Model{
             echo 'Message has been sent';
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
+        }*/
 
 
-        /*
-        $mail = new PHPMailer;
+        
+        $mail = new PHPMailer(true);
 
         $mail->isSMTP();
 
@@ -177,8 +177,6 @@ class password extends Model{
             echo "FOI";
             return true;
         }
-
-        */
     }
 
     public function requestToEmail($con, $email){

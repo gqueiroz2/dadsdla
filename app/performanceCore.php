@@ -503,7 +503,6 @@ class performanceCore extends performance
         }
 
         // Começou DN case2
-
         for ($sg=0; $sg <sizeof($mtx["salesGroup"]) ; $sg++) { 
    			for ($m=0; $m <sizeof($mtx["quarters"]) ; $m++) { 
    				$mtx["case2"]["dnPlanValue"][$sg][$m] = 0;

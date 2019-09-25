@@ -52,17 +52,27 @@ class VPController extends Controller
         $month = $base->month;
         $monthWQ = $base->monthWQ;
 
-        if ($value == "Gross") {
-            $value = "gross";
+        if ($value == "gross") {
+            $value = "Gross";
         }else{
-            $value = "net";
+            $value = "Net";
         }
 
         $currency = $pr->getCurrency($con,array($currency))[0];
 
         $region = $r->getRegion($con,array($region))[0];
 
-        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region);
+        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$client);
+
+        if ($bool == "Saved") {
+            $msg = "Forecast Created";        
+            return back()->with("Success",$msg);
+        }elseif ($bool == "Updated") {
+            $msg = "Forecast Updated";        
+            return back()->with("Success",$msg);
+        }else{
+            return back()->with("Error",$bool);
+        }
 
 
     }
@@ -95,18 +105,25 @@ class VPController extends Controller
 
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
-
         $regionID = Request::get("region");
-
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',            
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+
         $fcstInfo = $vp->getForecast($con,$sql,$regionID);
-
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
-
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
-        
 
         if($forRender){
             $client = $forRender['client'];

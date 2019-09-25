@@ -85,11 +85,8 @@
 				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
 				   AE Submissions
 				</button>
-
-
 			</div>
 		</div>
-
 
 		<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
 			@csrf
@@ -114,7 +111,6 @@
 
 			<div class="row justify-content-center mt-2">
 				@if($forRender)
-
 						<div class="col" style="width: 100%; padding-right: 2%;">
 							<center>
 								{{$render->VP1($forRender)}}
@@ -125,7 +121,7 @@
 						<div style="min-height: 100px;" class="alert alert-warning" role="alert">
 							<span style="font-size:22px;">
 								<center>
-								There is no submissions of Forecast from AE yet !
+								There is no submissions of Forecast from AE yet!
 								</center>
 							</span>
 						</div>

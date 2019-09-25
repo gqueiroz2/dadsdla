@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('requestToChangePassword') }}" runat="server"  onsubmit="ShowLoading()">
+                    <form method="POST" action="{{ route('forgotPasswordPost') }}" runat="server"  onsubmit="ShowLoading()">
                         @csrf
 
                         <div class="form-group row">
@@ -34,7 +34,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
+                                    {{ __('Send Email') }}
                                 </button>
                             </div>
                         </div>
