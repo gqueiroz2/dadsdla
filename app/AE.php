@@ -59,8 +59,6 @@ class AE extends pAndR{
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
         if ($id && !is_null($id) && $submit == 0 ) {
-            var_dump("IF");
-            var_dump($date);
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
                                             last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
@@ -85,7 +83,6 @@ class AE extends pAndR{
             return "Updated";
 
         }else{
-            var_dump("ELSE");
 
             $columns = "(
                          oppid,
@@ -96,7 +93,6 @@ class AE extends pAndR{
                          submitted, type_of_forecast)";
 
             $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
-            var_dump($date);
             $values = "(
                         \"".$oppid."\",
                         \"".$region."\",\"".$salesRepID."\",
@@ -109,12 +105,9 @@ class AE extends pAndR{
 
             $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
 
-            echo "<pre>".($insertFCST)."</pre>";
-
             if ($con->query($insertFCST) === true) {
-                var_dump("TRUE");
+
             }else{
-                var_dump("ELSE");
                 var_dump($con->error);
                 return false;
 
@@ -524,6 +517,7 @@ class AE extends pAndR{
 
             $tmp2 = $tmp1['fcstAmount'];
 
+
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
@@ -862,7 +856,7 @@ class AE extends pAndR{
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $tmp2 = $tmp1['fcstAmount'];
-
+            
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
@@ -1471,6 +1465,7 @@ class AE extends pAndR{
             
         }
 
+
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 
 
@@ -1602,7 +1597,6 @@ class AE extends pAndR{
 
         }
         
-
         return $fcst;
     }
 
