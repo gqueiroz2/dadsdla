@@ -416,14 +416,22 @@ class VPMonth extends pAndR {
                 $type = 'V1';
             }
 
+            $idSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            if ($regionID == "1") {
+                $idSelect .= "read_q = \"(SELECT (MAX(read_q)-1) FROM forecast WHERE month = \"".$cMonth."\")\"";
+            }
+            var_dump($idSelect);
+            
+
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
                 $mul = 1;
 
                 for ($m=0; $m < 12; $m++) {
                     
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' ORDER BY f2.ID LIMIT 1";
-                    
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f 
+                     WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND  forecast_id = \"".$idSaida[0]['id']."\" ORDER BY f2.ID LIMIT 1";
+
                     $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear' ORDER BY f2.ID LIMIT 1";
 
                     /*if ($listOfClients[$c]["clientID"] == 865) {
@@ -733,7 +741,7 @@ class VPMonth extends pAndR {
 
                 for ($m=0; $m < sizeof($month); $m++) { 
                 
-                    $idSelect = "SELECT ID FROM forecast ORDER BY ID DESC LIMIT 1";
+                    $idSelect = "SELECT ID FROM forecast WHERE region_id = \"".$regionID."\" ORDER BY ID DESC LIMIT 1";
                     $idResult = $con->query($idSelect);
                     $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
 
@@ -766,15 +774,26 @@ class VPMonth extends pAndR {
                 $type = 'V1';
             }
 
+            $idSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            if ($regionID == "1") {
+                $idSelect .= "read_q = \"(SELECT (MAX(read_q)-1) FROM forecast WHERE month = \"".$cMonth."\")\"";
+            }
+            // var_dump($idSelect);
+            $idResult = $con->query($idSelect);
+            $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
+
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
                 $mul = 1;
 
                 for ($m=0; $m < 12; $m++) {
 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' ORDER BY f2.ID LIMIT 1";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f 
+                     WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND  forecast_id = \"".$idSaida[0]['ID']."\"";
                     
-                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear' ORDER BY f2.ID LIMIT 1";
+                    $pastSelect[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear' AND f.forecast_id=\"".$idSaida[0]['ID']."\"";
+
+                    //var_dump($select[$c][$m]);
 
                     /*if ($listOfClients[$c]["clientID"] == 865) {
                         var_dump($select[$c][$m]);
@@ -836,7 +855,7 @@ class VPMonth extends pAndR {
                 }
 
             }
-
+            var_dump($manualRolling);
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
