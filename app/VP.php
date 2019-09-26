@@ -121,7 +121,7 @@ class VP extends pAndR{
 
         for ($c=0; $c <sizeof($fcstValue); $c++) {
             if ($percentage[$c]) {
-                for ($m=0; $m <sizeof($percentage[$c]) ; $m++) { 
+                for ($m=0; $m < sizeof($percentage[$c]); $m++) { 
                     $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
                 }
             }else{
@@ -226,12 +226,12 @@ class VP extends pAndR{
             $multValue = $temp2["multValue"];
         }
         for ($c=0; $c < sizeof($fcstInfo); $c++) { 
-            $adjust[$c]['salesRepID'] = $fcstInfo[$c]['salesRepID']; 
+            $adjust[$c]['salesRepID'] = $fcstInfo[$c]['salesRepID'];
             $adjust[$c]['checkCurrency'] = $currencyCheck[$c]; 
-            $adjust[$c]['newCurrency'] = $newCurrency[$c]; 
-            $adjust[$c]['oldCurrency'] = $oldCurrency[$c]; 
-            $adjust[$c]['checkValue'] = $valueCheck[$c]; 
-            $adjust[$c]['multValue'] = $multValue[$c]; 
+            $adjust[$c]['newCurrency'] = $newCurrency[$c];
+            $adjust[$c]['oldCurrency'] = $oldCurrency[$c];
+            $adjust[$c]['checkValue'] = $valueCheck[$c];
+            $adjust[$c]['multValue'] = $multValue[$c];
         }
         $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
         $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
