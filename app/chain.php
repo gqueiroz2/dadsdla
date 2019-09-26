@@ -794,7 +794,18 @@ class chain extends excel{
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
-    						}elseif($columns[$c] == 'io_start_date' ||
+    						}elseif($columns[$c] == 'agency_commission'){
+                                
+                                if(trim($spreadSheet[$s][$c]) == ""){
+                                    $temp = 0.0;
+                                }else{
+                                    $temp = trim($spreadSheet[$s][$c])/100;
+                                }
+
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+
+
+                            }elseif($columns[$c] == 'io_start_date' ||
                                     $columns[$c] == 'io_end_date' ||
                                     $columns[$c] == 'from_date' ||
                                 $columns[$c] == 'to_date'
@@ -1058,8 +1069,9 @@ class chain extends excel{
                                   'sales_rep_splitter',
                                   'client',
                                   'brand',
-                                  'opportunity_name',
+                                  'opportunity_name',                                  
                                   'agency',
+                                  'agency_commission',
                                   'stage',
                                   'fcst_category',
                                   'gross_revenue_currency',
@@ -1074,6 +1086,7 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'is_split'
+
 
                               );
 
@@ -1097,7 +1110,8 @@ class chain extends excel{
                                   'sales_rep_splitter_id',
                                   'is_split',
                                   'year_from',
-                                  'year_to'
+                                  'year_to',
+                                  'agency_commission'
 
                               );
 
@@ -1121,7 +1135,8 @@ class chain extends excel{
                                   'sales_rep_splitter_id',
                                   'is_split',
                                   'year_from',
-                                  'year_to'
+                                  'year_to',
+                                  'agency_commission'
                               );
 
     public $sfPandRColumns = array(
@@ -1144,7 +1159,8 @@ class chain extends excel{
                                   'sales_rep_splitter_id',
                                   'is_split',
                                   'year_from',
-                                  'year_to'
+                                  'year_to',
+                                  'agency_commission'
                               );      
 
 
