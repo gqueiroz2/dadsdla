@@ -486,7 +486,7 @@ class renderVPMonth extends Render {
 
             echo "<table id='table-$c' style='min-width:3000px; width:100%; text-align:center; overflow:auto; min-height: 180px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; display: none;' >";
                 
-                /* 
+                /*
 
                     START OF CLIENT NAME AND MONTHS
 

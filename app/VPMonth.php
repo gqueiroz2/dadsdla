@@ -64,6 +64,8 @@ class VPMonth extends pAndR {
                                             type_of_value = \"".$value."\",
                                             month = \"".$month."\" WHERE ID = \"".$id."\"";
             
+            echo "<pre>".($update)."</pre>";
+
             if($con->query($update) === true){
 
             }else{
@@ -95,9 +97,9 @@ class VPMonth extends pAndR {
                         \"".$submit."\", \"V2\"
                       )";
 
-              $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+            $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
 
-              echo "<pre>".($insertFCST)."</pre>";
+            echo "<pre>".($insertFCST)."</pre>";
 
             if ($con->query($insertFCST) === true) {
                 var_dump("TRUE");
@@ -109,23 +111,25 @@ class VPMonth extends pAndR {
 
             $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimation,$tableFCSTSalesRep);
             $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+
+            return "Created";
         }
     }
 
     public function updateFCSTSalesRep($con,$salesRep,$manualEstimantion,$table){
         $sql = new sql();
 
-        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep."\"";
-
+        $select = "SELECT ID FROM forecast WHERE type_of_forecast = 'V2' ORDER BY ID DESC LIMIT 1";
+        
         $from = array("ID");
 
         $result = $con->query($select);
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        for ($m=0; $m <sizeof($manualEstimantion) ; $m++) { 
+        for ($m=0; $m < sizeof($manualEstimantion); $m++) { 
             $update[$m] = "UPDATE $table SET value = \"".$manualEstimantion[$m]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\"";
-
+            
             if ($con->query($update[$m]) === true) {
             
             }else{
@@ -327,7 +331,8 @@ class VPMonth extends pAndR {
 
             $from = "value";
 
-            for ($m=0; $m < 12; $m++) { 
+            for ($m=0; $m < 12; $m++) {
+                $manualRolling[$m] = 0;
                 $fPastRollingFCST[$m] = 0;
             }
 
@@ -359,45 +364,32 @@ class VPMonth extends pAndR {
 
                 for ($m=0; $m < sizeof($month); $m++) { 
                 
-                    $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' ORDER BY f2.ID LIMIT 1";
+                    $idSelect = "SELECT ID FROM forecast ORDER BY ID DESC LIMIT 1";
+                    $idResult = $con->query($idSelect);
+                    $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
 
-                    $pastSelectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear' ORDER BY f2.ID LIMIT 1";
+                    $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' AND f.forecast_id = '".$idSaida[0]['ID']."'";
 
                     $resultV2[$m] = $con->query($selectV2[$m]);
-                    $pastResultV2[$m] = $con->query($pastSelectV2[$m]);
 
                     $saidaV2[$m] = $sql->fetchSum($resultV2[$m],$from);
-                    $pastSaidaV2[$m] = $sql->fetchSum($pastResultV2[$m],$from);
 
                     if ($saidaV2[$m]) {
-                    
                         $rollingFCSTV2[$m] = floatval($saidaV2[$m]['value']);
                         $manualRolling[$m] += $rollingFCSTV2[$m];
-                        $pastRollingFCST[$m] = floatval($pastSaidaV2[$m]['value']);
-                        $fPastRollingFCST[$m] += $pastRollingFCST[$m];
-                        
                     }else{
-                        
                         $rollingFCSTV2[$m] = 0;
                         $manualRolling[$m] = 0;
-                        $pastRollingFCST[$m] = 0;
-                        $fPastRollingFCST[$m] = 0;    
-                        
                     }
                     
                     if ($valueCheck) {
-                        
                         $rollingFCSTV2[$m] = $rollingFCSTV2[$m]*$multValue;
                         $manualRolling[$m] = $manualRolling[$m]*$multValue;
-                        $pastRollingFCST[$m] = $pastRollingFCST[$m]*$multValue;
-                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
                     }
 
                     if ($currencyCheck) {
                         $rollingFCSTV2[$m] = ($rollingFCSTV2[$m]*$newCurrency)/$oldCurrency;
                         $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
-                        $pastRollingFCST[$m] = ($pastRollingFCST[$m]*$newCurrency)/$oldCurrency;
-                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                          
                     }
 
                 }
@@ -429,12 +421,13 @@ class VPMonth extends pAndR {
 
                 if ($saida[$c]) {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
+                        
                         $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);
+                        $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
+                        $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
 
                         if ($type == "V1") {
                             $manualRolling[$m] += $rollingFCST[$c][$m];
-                            $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
-                            $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
                         }
 
                     }
@@ -442,11 +435,11 @@ class VPMonth extends pAndR {
                     for ($m=0; $m < 12; $m++) { 
 
                         $rollingFCST[$c][$m] = 0;
+                        $pastRollingFCST[$c][$m] = 0;
+                        $fPastRollingFCST[$m] = 0;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = 0;
-                            $pastRollingFCST[$c][$m] = 0;
-                            $fPastRollingFCST[$m] = 0;
                         }
                         
                     }
@@ -455,11 +448,11 @@ class VPMonth extends pAndR {
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
+                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = $manualRolling[$m]*$multValue;
-                            $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
-                            $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
                         }
    
                     }
@@ -468,11 +461,11 @@ class VPMonth extends pAndR {
                 if ($currencyCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
-                            $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
-                            $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                          
                         }
                     }
                 }
@@ -722,45 +715,31 @@ class VPMonth extends pAndR {
 
                 for ($m=0; $m < sizeof($month); $m++) { 
                 
-                    $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' ORDER BY f2.ID LIMIT 1";
+                    $idSelect = "SELECT ID FROM forecast ORDER BY ID DESC LIMIT 1";
+                    $idResult = $con->query($idSelect);
+                    $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
 
-                    $pastSelectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND f2.month = \"".$forecastMonth."\" AND f2.year = '$forecastYear' ORDER BY f2.ID LIMIT 1";
-
+                    $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' AND f.forecast_id = '".$idSaida[0]['ID']."'";
+                    var_dump($selectV2[$m]);
                     $resultV2[$m] = $con->query($selectV2[$m]);
-                    $pastResultV2[$m] = $con->query($pastSelectV2[$m]);
-
-                    $saidaV2[$m] = $sql->fetchSum($resultV2[$m],$from);
-                    $pastSaidaV2[$m] = $sql->fetchSum($pastResultV2[$m],$from);
+                    $saidaV2[$m] = $sql->fetchSum($resultV2[$m],$from);                    
 
                     if ($saidaV2[$m]) {
-                    
                         $rollingFCSTV2[$m] = floatval($saidaV2[$m]['value']);
                         $manualRolling[$m] += $rollingFCSTV2[$m];
-                        $pastRollingFCST[$m] = floatval($pastSaidaV2[$m]['value']);
-                        $fPastRollingFCST[$m] += $pastRollingFCST[$m];
-                        
                     }else{
-                        
                         $rollingFCSTV2[$m] = 0;
                         $manualRolling[$m] = 0;
-                        $pastRollingFCST[$m] = 0;
-                        $fPastRollingFCST[$m] = 0;    
-                        
                     }
                     
                     if ($valueCheck) {
-                        
                         $rollingFCSTV2[$m] = $rollingFCSTV2[$m]*$multValue;
                         $manualRolling[$m] = $manualRolling[$m]*$multValue;
-                        $pastRollingFCST[$m] = $pastRollingFCST[$m]*$multValue;
-                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
                     }
 
                     if ($currencyCheck) {
                         $rollingFCSTV2[$m] = ($rollingFCSTV2[$m]*$newCurrency)/$oldCurrency;
                         $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
-                        $pastRollingFCST[$m] = ($pastRollingFCST[$m]*$newCurrency)/$oldCurrency;
-                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                          
                     }
 
                 }
@@ -793,23 +772,22 @@ class VPMonth extends pAndR {
                 if ($saida[$c]) {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
                         $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);
+                        $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
+                        $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
 
                         if ($type == "V1") {
                             $manualRolling[$m] += $rollingFCST[$c][$m];
-                            $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
-                            $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
                         }
-
                     }
                 }else{
                     for ($m=0; $m < 12; $m++) { 
 
                         $rollingFCST[$c][$m] = 0;
+                        $pastRollingFCST[$c][$m] = 0;
+                        $fPastRollingFCST[$m] = 0;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = 0;
-                            $pastRollingFCST[$c][$m] = 0;
-                            $fPastRollingFCST[$m] = 0;
                         }
                         
                     }
@@ -818,24 +796,23 @@ class VPMonth extends pAndR {
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
+                        $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = $manualRolling[$m]*$multValue;
-                            $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
-                            $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;                        
                         }
-   
                     }
                 }
 
                 if ($currencyCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
                         $rollingFCST[$c][$m] = ($rollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
+                        $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;
 
                         if ($type == 'V1') {
                             $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
-                            $pastRollingFCST[$c][$m] = ($pastRollingFCST[$c][$m]*$newCurrency)/$oldCurrency;
-                            $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;                          
                         }
                     }
                 }
@@ -845,7 +822,7 @@ class VPMonth extends pAndR {
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
-
+            
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
@@ -870,12 +847,7 @@ class VPMonth extends pAndR {
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
 
-            if ($type == 'V1') {
-                $executiveRF = $this->consolidateAEFcst($rollingFCST);
-            }else{
-                $executiveRF = $rollingFCSTV2;
-                $executiveRF = $this->addQuartersAndTotal($executiveRF);
-            }
+            $executiveRF = $this->consolidateAEFcst($rollingFCST);
             
             if ($fPastRollingFCST[sizeof($fPastRollingFCST)-1] == 0) {
                 $fPastRollingFCST = $executiveRF;
@@ -1209,9 +1181,15 @@ class VPMonth extends pAndR {
                 $fcstAmountByStage[$c] = false;
                 $fcstAmount[$c] = false;
             }
-            
-        }
+        
+            if ($fcstAmountByStage[$c]) {
+                if ($fcstAmountByStage[$c][1][4] > 0) {
+                    var_dump("expression");
+                }
+            }
 
+        }
+        
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 
 
