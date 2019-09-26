@@ -536,7 +536,7 @@ class renderVPMonth extends Render {
                 echo "<tr>";
                     for ($m=0; $m < sizeof($this->month); $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($lastRollingFCST[$c][$m])."</td>";
+                            echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;' name='client-$c'>".number_format($lastRollingFCST[$c][$m])."</td>";
                         }else{
                             echo "<td class='$even[$m]'>".number_format($lastRollingFCST[$c][$m])."</td>";
                     
