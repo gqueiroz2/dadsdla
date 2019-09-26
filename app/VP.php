@@ -38,8 +38,8 @@ class VP extends pAndR{
 
         if($submit == "submit") {
             $submit = 1;
-            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\" AND oppid = \"".$ID."\"";
-            if ($region == '1') {
+            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\" AND region_id = \"".$region['id']."\"";
+            if ($region['id'] == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
 
