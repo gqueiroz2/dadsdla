@@ -1171,19 +1171,20 @@ class AE extends pAndR{
             $fechado += 3;
         }
 
-        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
+        for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
             }
 
-            for ($m=0; $m <$fechado ; $m++) {
+            for ($m=0; $m < $fechado; $m++) {
                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 || $m == 16) {
                 }else{
                     $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
                 }
             }
         }
+        
         return $fcstAmountByStage;
     }
 

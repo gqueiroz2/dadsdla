@@ -720,7 +720,7 @@ class VPMonth extends pAndR {
                     $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
 
                     $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.month = \"".($m+1)."\" AND (f2.type_of_forecast = '$type') AND f2.read_q = (SELECT MAX(read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$year' AND f.forecast_id = '".$idSaida[0]['ID']."'";
-                    var_dump($selectV2[$m]);
+                    //var_dump($selectV2[$m]);
                     $resultV2[$m] = $con->query($selectV2[$m]);
                     $saidaV2[$m] = $sql->fetchSum($resultV2[$m],$from);                    
 
@@ -1494,16 +1494,29 @@ class VPMonth extends pAndR {
 
         $fechado = date('n') - 1;
 
+        if ($fechado < 3) {
+        }elseif ($fechado < 6) {
+            $fechado ++;
+        }elseif ($fechado < 9) {
+            $fechado += 2;
+        }else{
+            $fechado += 3;
+        }
+
         for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
             }
 
-            for ($m=0; $m < $fechado; $m++) { 
-                $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
+            for ($m=0; $m < $fechado; $m++) {
+                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 || $m == 16) {
+                }else{
+                    $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
+                }
             }
         }
+        
         return $fcstAmountByStage;
     }
 
