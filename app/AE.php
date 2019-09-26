@@ -495,10 +495,6 @@ class AE extends pAndR{
 
             $tmpRollingFCST = $this->addFcstWithBooking($tmpRollingFCST,$toRollingFCST);//Meses fechados e abertos
 
-            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
-
-            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
-
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             for ($r=0; $r <sizeof($rollingFCST) ; $r++) { 
@@ -510,6 +506,10 @@ class AE extends pAndR{
             $rollingFCST = $this->addClosedFcst($rollingFCST,$tmpRollingFCST);
 
             $rollingFCST = $this->adjustFCST($rollingFCST);
+
+            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+            
+            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
             $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
@@ -540,13 +540,13 @@ class AE extends pAndR{
 
             $toRollingFCST = $fcst['fcstAmount'];
 
-            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
- 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
 
             $rollingFCST = $this->adjustFCST($rollingFCST);
+            
+            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
             
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
@@ -835,10 +835,6 @@ class AE extends pAndR{
 
             $tmpRollingFCST = $this->addFcstWithBooking($tmpRollingFCST,$toRollingFCST);//Meses fechados e abertos
 
-            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
-
-            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
-
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             for ($r=0; $r <sizeof($rollingFCST) ; $r++) { 
@@ -851,6 +847,10 @@ class AE extends pAndR{
 
             $rollingFCST = $this->adjustFCST($rollingFCST);
 
+            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
+            $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
+            
             $lastRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -880,14 +880,14 @@ class AE extends pAndR{
 
             $toRollingFCST = $fcst['fcstAmount'];
 
-            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
-
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
             $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
 
             $rollingFCST = $this->adjustFCST($rollingFCST);
             
+            $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
 
@@ -1162,14 +1162,26 @@ class AE extends pAndR{
 
         $fechado = date('n') - 1;
 
+        if ($fechado < 3) {
+        }elseif ($fechado < 6) {
+            $fechado ++;
+        }elseif ($fechado < 9) {
+            $fechado += 2;
+        }else{
+            $fechado += 3;
+        }
+
         for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
             }
 
-            for ($m=0; $m <$fechado ; $m++) { 
-                $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
+            for ($m=0; $m <$fechado ; $m++) {
+                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 || $m == 16) {
+                }else{
+                    $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
+                }
             }
         }
         return $fcstAmountByStage;
@@ -1965,6 +1977,7 @@ class AE extends pAndR{
                                 AND (year = \"".$year."\")
                                 ";
 
+
     			$res[$c][$m] = $con->query($select[$c][$m]);
                 $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
 
@@ -1978,6 +1991,7 @@ class AE extends pAndR{
                     $rev[$c][$m] += ( $revFW[$c][$m] );
                     
                 }
+
 
     		}
     	}
