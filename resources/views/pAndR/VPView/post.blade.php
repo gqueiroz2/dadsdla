@@ -223,6 +223,27 @@
 					}
 				});
 
+				$("#currencyName").css("height",$("#cYear").css("height"));
+				$(".col-c-1").css("width",$("#col-1").css("width"));
+				$(".col-c-2").css("width",$("#col-2").css("width"));
+				$(".col-c-3").css("width",$("#col-3").css("width"));
+				$(".col-c-4").css("width",$("#col-4").css("width"));
+				$(".col-c-5").css("width",$("#col-5").css("width"));
+				$(".col-c-6").css("width",$("#col-6").css("width"));
+				$(".col-c-7").css("width",$("#col-7").css("width"));
+				$(".col-c-8").css("width",$("#col-8").css("width"));
+				$(".col-c-9").css("width",$("#col-9").css("width"));
+				$(".col-c-10").css("width",$("#col-10").css("width"));
+				$(".col-c-11").css("width",$("#col-11").css("width"));
+				$(".col-c-12").css("width",$("#col-12").css("width"));
+				$(".col-c-13").css("width",$("#col-13").css("width"));
+				$(".col-c-14").css("width",$("#col-14").css("width"));
+				$(".col-c-15").css("width",$("#col-15").css("width"));
+				$(".col-c-16").css("width",$("#col-16").css("width"));
+				$(".col-c-17").css("width",$("#col-17").css("width"));
+				$(".col-c-18").css("width",$("#col-18").css("width"));
+				$(".col-c-19").css("width",$("#col-19").css("width"));
+
 				@for($c=0;$c< sizeof($client);$c++)
 					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
 					

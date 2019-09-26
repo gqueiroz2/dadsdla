@@ -314,7 +314,6 @@ class VPMonth extends pAndR {
                 }else{
                     $table[$b][$m] = "ytd";
                 }
-                //pega colunas
                 $sum[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
             }
         }
@@ -501,7 +500,6 @@ class VPMonth extends pAndR {
                 }
 
             }
-            var_dump($manualRolling);
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
