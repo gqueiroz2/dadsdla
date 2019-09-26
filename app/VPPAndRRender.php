@@ -347,7 +347,8 @@ class VPPAndRRender extends PAndRRender{
                                            value='".number_format($fcstcMonthByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; 
                                            font-weight:bold; 
-                                           background-color:transparent; text-align:center'>
+                                           background-color:transparent; text-align:center'
+                                           readonly='true'>
                               </td>";
 
                         /*TOTAL September BKG + FCST*/                        
