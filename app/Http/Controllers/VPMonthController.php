@@ -98,7 +98,6 @@ class VPMonthController extends Controller {
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
-
         }
 
         for ($c=0; $c < sizeof($client); $c++) { 
@@ -136,7 +135,7 @@ class VPMonthController extends Controller {
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient);
+        $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient, $totalClient);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";

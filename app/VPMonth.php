@@ -11,7 +11,7 @@ use App\pRate;
 
 class VPMonth extends pAndR {
 
-    public function insertUpdate($con, $oppid, $region, $currency, $value, $user, $year, $read, $date, $time, $fcstMonth, $manualEstimation, $manualEstimantionByClient, $list, $submit, $brandPerClient){
+    public function insertUpdate($con, $oppid, $region, $currency, $value, $user, $year, $read, $date, $time, $fcstMonth, $manualEstimation, $manualEstimantionByClient, $list, $submit, $brandPerClient, $totalClient){
         
         $sql = new sql();
         $tmp = explode("-", $date);
@@ -26,7 +26,11 @@ class VPMonth extends pAndR {
             
             $submit = 1;
 
-            $selectSubmit = "SELECT ID FROM forecast WHERE oppid = '$oppid' AND type_of_forecast = 'V2'";
+            $selectSubmit = "SELECT ID FROM forecast WHERE submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = 'V2' AND region_id = '$region'";
+
+            if ($region == '1') {
+                $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
+            }
 
             $from = array("ID");
 
@@ -74,7 +78,7 @@ class VPMonth extends pAndR {
             }
 
             $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,null,$manualEstimation,$tableFCSTSalesRep);
-            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient,$totalClient);
 
             return "Updated";
 
@@ -110,7 +114,7 @@ class VPMonth extends pAndR {
             }
 
             $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimation,$tableFCSTSalesRep);
-            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient);
+            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient, $totalClient);
 
             return "Created";
         }
@@ -166,7 +170,7 @@ class VPMonth extends pAndR {
         }
     }
 
-    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient){
+    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient,$totalClient){
 
         $sql = new sql();
 
@@ -182,8 +186,15 @@ class VPMonth extends pAndR {
             
             $div = 1;
             
-            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) { 
-                $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) {
+
+                if ($manualEstimantion[$c][$m] == 0 || $totalClient[$c] == 0) {
+                    $valueClient = 0;
+                }else{
+                    $valueClient = ($manualEstimantion[$c][$m]/$totalClient[$c])*100;
+                }
+
+                $update[$c][$m] = "UPDATE $table SET value = \"".($valueClient)."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
                 if ($con->query($update[$c][$m]) === true) {
                     
@@ -196,7 +207,7 @@ class VPMonth extends pAndR {
         }
     }
 
-    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient){
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient,$totalClient){
 
         $sql = new sql();
 
@@ -210,12 +221,19 @@ class VPMonth extends pAndR {
 
         $columns = "(forecast_id,month,value,client_id,brand)";
 
-        for ($c=0; $c <sizeof($list) ; $c++) {
+        for ($c=0; $c < sizeof($list); $c++) {
             
             $div = 1;
 
-            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) { 
-                $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
+            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) {
+
+                if ($manualEstimantion[$c][$m] == 0 || $totalClient[$c] == 0) {
+                    $valueClient = 0;
+                }else{
+                    $valueClient = ($manualEstimantion[$c][$m]/$totalClient[$c])*100;
+                }
+
+                $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($valueClient)."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
 
                 $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
