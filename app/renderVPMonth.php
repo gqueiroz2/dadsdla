@@ -87,7 +87,7 @@ class renderVPMonth extends Render {
         echo "<div class='col-2' style='padding-right:1px;'>";
         echo "<table class='' id='example' style='width:100%; text-align:center; min-height:244px;'>";
             echo "<tr>";
-                echo "<td class='darkBlue' style=' border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; height:40px; '>"."Brazil"."</td>";
+                echo "<td class='darkBlue' style=' border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; height:40px; '>".$regionName."</td>";
             echo "</tr>";
             echo "<tr>";
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Target</td>";
