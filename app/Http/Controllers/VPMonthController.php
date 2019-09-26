@@ -81,10 +81,7 @@ class VPMonthController extends Controller {
         $client = json_decode(base64_decode(Request::get('client')));
 
         for ($m=0; $m < sizeof($monthWQ); $m++) {
-            $target[$m] = $excel->fixExcelNumber(Request::get("target-$m"));
-            $bookings[$m] = $excel->fixExcelNumber(Request::get("bookingE-$m"));
             $manualEstimation[$m] = $excel->fixExcelNumber(Request::get("manualEstimation-$m"));
-
         }
 
         unset($manualEstimation[3]);
@@ -118,7 +115,6 @@ class VPMonthController extends Controller {
         $pr = new pRate();
 
         $vpMonth = new VPMonth();
-        $values = $vpMonth->baseSave($con, $rtr, $regionID, $currencyID, $year, $value, $target, $bookings, $manualEstimation);
 
         $today = $date;
 
