@@ -195,7 +195,7 @@ class VPMonthController extends Controller {
         
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
-        /*$forRender = $values;
+        $forRender = $values;
         $client = $values['client'];
 
         $tfArray = array();
@@ -204,6 +204,6 @@ class VPMonthController extends Controller {
         
         $render = new renderVPMonth();
 
-        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));*/
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
     }
 }
