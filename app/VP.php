@@ -861,15 +861,8 @@ class VP extends pAndR{
             $list[$cc] = $listCYTD[$d];
             $cc++;
         }
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-
-=======
->>>>>>> bd8c174c11f95ed54d2c28bb5265e7c30c2d46fa
-=======
->>>>>>> c6412c7b4e32d51d71c74df723d1369057873728
-        $list = $base->superUnique($list,'clientID');
+        
+	$list = $base->superUnique($list,'clientID');
         usort($list, array($this,'orderClient'));
         return $list;
     }
