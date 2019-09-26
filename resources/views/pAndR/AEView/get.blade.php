@@ -66,15 +66,13 @@
 			<div class="row">
 				<center style="width: 100%;">
 					<div class="col-3">
-						@if(session('Success'))
+						@if($typeMsg == "Success")
 							<div class="alert alert-info">
-								{{session('Success')}}
+								{{$msg}}
 							</div>
-						@endif
-
-						@if(session('Error'))
+						@elseif($typeMsg == "Error")
 							<div class="alert alert-danger">
-								{{session('Error')}}
+								{{$msg}}
 							</div>
 						@endif
 					</div>

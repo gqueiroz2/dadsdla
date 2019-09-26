@@ -81,10 +81,7 @@ class VPMonthController extends Controller {
         $client = json_decode(base64_decode(Request::get('client')));
 
         for ($m=0; $m < sizeof($monthWQ); $m++) {
-            $target[$m] = $excel->fixExcelNumber(Request::get("target-$m"));
-            $bookings[$m] = $excel->fixExcelNumber(Request::get("bookingE-$m"));
             $manualEstimation[$m] = $excel->fixExcelNumber(Request::get("manualEstimation-$m"));
-
         }
 
         unset($manualEstimation[3]);
@@ -98,7 +95,6 @@ class VPMonthController extends Controller {
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
             }
-
         }
 
         for ($c=0; $c < sizeof($client); $c++) { 
@@ -119,7 +115,6 @@ class VPMonthController extends Controller {
         $pr = new pRate();
 
         $vpMonth = new VPMonth();
-        $values = $vpMonth->baseSave($con, $rtr, $regionID, $currencyID, $year, $value, $target, $bookings, $manualEstimation);
 
         $today = $date;
 
@@ -136,7 +131,7 @@ class VPMonthController extends Controller {
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient);
+        $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient, $totalClient);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -195,7 +190,7 @@ class VPMonthController extends Controller {
         
         $values = $vpMonth->base($con, $rtr, $regionID, $currencyID, $year, $value);
 
-        /*$forRender = $values;
+        $forRender = $values;
         $client = $values['client'];
 
         $tfArray = array();
@@ -204,6 +199,6 @@ class VPMonthController extends Controller {
         
         $render = new renderVPMonth();
 
-        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));*/
+        return view('pAndR.VPMonthView.post',compact('render','region','currency', 'rtr', 'value', 'forRender', 'client', 'tfArray', 'odd', 'even'));
     }
 }
