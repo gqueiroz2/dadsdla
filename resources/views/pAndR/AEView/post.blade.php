@@ -134,6 +134,12 @@
     		$('.linked').scrollLeft($(this).scrollLeft());
 		});
 		$(document).ready(function(){
+			$(window).keydown(function(event){
+			    if(event.keyCode == 13) {
+				    event.preventDefault();
+				    return false;
+			    }
+			});
 			$("input[type=radio][name=options]").change(function(){
 				if (this.value == 'save') {
 					$("#button").val("Save");
