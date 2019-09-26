@@ -991,7 +991,7 @@ class AE extends pAndR{
             $date += 3;
         }
         for ($r=0; $r <sizeof($rolling) ; $r++) { 
-            for ($m=0; $m <sizeof($rolling[$m]) ; $m++) { 
+            for ($m=0; $m <sizeof($rolling[$r]) ; $m++) { 
                 if ($m < $date) {
                     $rolling[$r][$m] = $tmpRolling[$r][$m];
                 }
