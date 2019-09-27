@@ -12,7 +12,7 @@
     		background: #d9d9d9; 
 		}
 		::-webkit-scrollbar-thumb {
-			background: #666666; 
+			background: #666666;
 		}
 		::-webkit-scrollbar-thumb:hover {
 			background: #4d4d4d; 
@@ -113,8 +113,6 @@
 				</div>	
 			</div>
 
-
-
 			<div class="row mt-2 justify-content-end">
 				<div class="col" style="width: 100%;">
 					<center>
@@ -123,7 +121,6 @@
 				</div>
 			</div>
 
-			
 		</form>
 	</div>
 
@@ -141,12 +138,16 @@
 					$("#button").val("Submit");
 				}
 			});
+
+			ajaxSetup();
+
 			@for($c=0;$c<sizeof($client);$c++)
 				$("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
 			@endfor
 			@for($m=0;$m<16;$m++)
 				@for($c=0;$c<sizeof($client);$c++)
 					$("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
+
 						if ($(this).val() == '') {
 							$(this).val(0);
 						}
