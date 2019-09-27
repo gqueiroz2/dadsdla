@@ -47,7 +47,7 @@
     <div class="container-fluid fill px-4 d-table">
         <div id="map" class="aligh-middle" >
             <center>
-                <img src="\portalLogo.png" style="max-width: 80%; margin-top: 10%; height: auto;">
+                <img src="\portalLogo.png" style="max-width: 55%; margin-top: 10%; height: auto;">
             </center>
         </div> <!-- This one wants to be 100% height -->
     </div>

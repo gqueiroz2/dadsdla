@@ -14,6 +14,9 @@ Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
+		Route::post('fixCRM','dataManagementController@fixCRM')
+							->name('fixCRM');
+
 		Route::get('relationshipClient','relationshipController@relationshipClientGet')
 							->name('relationshipClientGet');
 		Route::post('relationshipClient','relationshipController@relationshipClientPost')

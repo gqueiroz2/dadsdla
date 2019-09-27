@@ -251,6 +251,23 @@
 									</div>
 								</div>
 							</form>
+
+
+							<div class="row">
+								<div class="col">
+									<center><span style="font-size: 18px;"> FIX SALES FORCE </span></center>
+								</div>
+							</div>
+							<form action="{{ route('fixCRM') }}" method="POST">
+							@csrf
+								<div class="row justify-content-end">          
+							 		<div class="col">		
+								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+									</div>
+								</div>
+							</form>
+
+
 						</div>
 					</div>
 				</div>

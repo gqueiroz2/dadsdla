@@ -19,7 +19,6 @@ Route::group(['middleware'=>'auth'],function(){
 });
 
 Route::get('dataCurrentThrough','RootController@dataCurrentThrough')->name("dataCurrentThrough");
-//echo route('home',['/']);
 
 Route::group(['prefix' => 'adsales'],function(){
 	Route::get('/','adSalesController@home')
