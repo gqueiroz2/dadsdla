@@ -66,6 +66,10 @@ Route::group(['prefix' => 'ajaxPAndR'], function(){
 	Route::post('changeVal', 'ajaxController@changeVal');
 	Route::post('reCalculateQuarterValues', 'ajaxController@reCalculateQuarterValues');
 	Route::post('reCalculateTotalVal', 'ajaxController@reCalculateTotalVal');
+	Route::post('verifyVal', 'ajaxController@verifyVal');
+	Route::post('splittedClients', 'ajaxController@splittedClients');
+	Route::post('transformVal', 'ajaxController@transformVal');
+	Route::post('number', 'ajaxController@number');
 });
 
 
