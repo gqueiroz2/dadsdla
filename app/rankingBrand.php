@@ -159,7 +159,7 @@ class rankingBrand extends rank{
 								
                                 if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
                                 	
-                                    $res[$y][$i]['total'] *= $pRate;
+                                    $res[$y][$i]['total'] /= $pRate;
                                 }else{
                                 	
                                     $res[$y][$i]['total'] /= 1.0;
@@ -167,7 +167,6 @@ class rankingBrand extends rank{
                             }elseif ($infoQuery[$b]['table'] == "ytd a") {
                             	
                                 if ($res[$y][$i]['brand'] != 'ONL' && $res[$y][$i]['brand'] != 'VIX') {
-                                	
                                     $res[$y][$i]['total'] *= $pRate;
                                 }else{
                                 	
@@ -189,7 +188,6 @@ class rankingBrand extends rank{
                             	}
                             }
 						}
-						//var_dump("-------------------------------------------------------------------");
 					}
 				}
 			}

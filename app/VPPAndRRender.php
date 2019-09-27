@@ -75,6 +75,9 @@ class VPPAndRRender extends PAndRRender{
         $fcstFullYearByClientAE = $forRender["fcstFullYearByClientAE"];
         $fcstFullYearAE = $forRender["fcstFullYearAE"];
 
+        $currencyName = $forRender["currencyName"];
+        $valueView = $forRender["valueView"];
+
         echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
         echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' name='region' value='".base64_encode(json_encode($region))."'>";
@@ -84,15 +87,14 @@ class VPPAndRRender extends PAndRRender{
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
-            echo "<table  style=' width:100%;  text-align:center;'>";
+            echo "<table id='table3' style=' width:100%;  text-align:center;'>";
                 echo "<tr>";
-                    echo "<td style='width:8%; height:40px;'><input type='text' id='myInput' onkeyup=\"myFunc()\" placeholder=\"Search for clients...\"></td>";
+                    echo "<td style='width:100%; height:40px;'><input type='text' id='myInput' onkeyup=\"myFunc()\" placeholder=\"Search for clients...\"></td>";
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:20px;' >&nbsp</td>";
+                    echo "<td class='lightBlue' rowspan='2' id='currencyName' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;' >$currencyName/$valueView</td>";
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='lightBlue' style='width:8%; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px; height:20px;'>&nbsp</td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:20px;' >Total</td>";
@@ -106,7 +108,7 @@ class VPPAndRRender extends PAndRRender{
             echo "</table>";
         echo "</div>";
         echo "<div class='col table-responsive linked'>";
-            echo "<table style=' min-width:2600px; width:100%; text-align:center; margin-right:10px;'>";
+            echo "<table id='table4' style=' min-width:2600px; width:100%; text-align:center; margin-right:10px;'>";
                 echo "<tr>";
                     echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; height:40px;' colspan='2'>Bookings YTD</td>";
                     echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;'> $yearToDate </td>";
@@ -120,7 +122,7 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' colspan='9'>Full Year</td>";
                 echo "</tr>";
                  echo "<tr>";
-                    echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; height:20px;'>2019</td>";
+                    echo "<td class='lightBlue' id='cYear' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; height:20px;'>2019</td>";
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>2018</td>";
                     echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
                     echo "<td>&nbsp</td>";
@@ -150,77 +152,77 @@ class VPPAndRRender extends PAndRRender{
                 echo "</tr>";
                 echo "<tr>";
                     /* Bookings YTD Current Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; height:20px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-1' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; height:20px; width:5%;'>
                             ".number_format($bookingscYTD, 0, ".", ",")."
                         </td>";
 
                     /* Bookings YTD Past Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-2' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%; '>
                             ".number_format($bookingspYTD, 0, ".", ",")."
                           </td>";
 
                     /* Bookings YTD Var YoY */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-3' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5%; '>
                             ".number_format($varAbsYTD, 0, ".", ",")."
                           </td>";
 
-                    echo "<td style='width:1%;'>&nbsp</td>";
+                    echo "<td id='col-4' style='width:1%;'>&nbsp</td>";
 
                     /* Bookings Current Month on Current Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-5' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; width:5%;'>
                             ".number_format($bookingscMonth, 0, ".", ",")."                            
                           </td>";
 
                     /* FCST Current Month on Current Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-6' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%; '>
                             ".number_format($fcstcMonth, 0, ".", ",")."                            
                           </td>";
 
                     /* Bookings Current Month on Current Year + FCST Current Month on Current Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-7' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%; '>
                             ".number_format($totalcYearMonth, 0, ".", ",")."                            
                           </td>";
 
                     /* Bookings Current Month on Past Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-8' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%; '>
                             ".number_format($bookingspMonth, 0, ".", ",")."                            
                           </td>";
 
                     /* VAR Bookings Current Month on Current Year -/ FCST Current Month on Current Year */
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-9' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;  width:5%;'>
                             ".number_format($varAbscMonth, 0, ".", ",")."                            
                           </td>";
 
-                    echo "<td style='width:1%;'>&nbsp</td>";
+                    echo "<td id='col-10' style='width:1%;'>&nbsp</td>";
 
                     /*Closed*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; width:5.7%;'>                            
+                    echo "<td class='medBlue' id='col-11' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 1px; width:5%; '>                            
                             ".number_format($closedFullYear, 0, ".", ",")."                            
                           </td>";
                     
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-12' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                             ".number_format($bookingscYear, 0, ".", ",")."                            
                             </td>";
 
                     /* % Booked*/                    
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-13' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                             ".number_format($bookingsOverclosed, 0, ".", ",")."%
                             </td>";
 
                     /*FCST AE*/                    
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-14' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                             ".number_format($fcstFullYearAE, 0, ".", ",")."
                         </td>";
                     
                     /*Manual Estimation*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-15' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                                 <input type='text' readonly='true' id='RF-Total-Fy' 
                                        value='".number_format($fcstFullYear, 0, ".", ",")."' 
                                        style=' border:none; font-weight:bold; 
                                        background-color:transparent; text-align:center'>
                           </td>";
                     /*Total CYear*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-16' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                             <input type='text' readonly='true' id='TotalCy-Fy' 
                                        value='".number_format($totalFullYear, 0, ".", ",")."' 
                                        style=' border:none; font-weight:bold; 
@@ -229,17 +231,17 @@ class VPPAndRRender extends PAndRRender{
                           </td>";
 
                     /*Total PYear*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-17' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                                 ".number_format($bookingspYear, 0, ".", ",")."
                           </td>";
 
                     /*Var Abs YoY*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-18' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
                                 ".number_format($varAbsFullYear, 0, ".", ",")."
                           </td>";
 
                     /*Var Per YoY*/
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5.7%;'>
+                    echo "<td class='medBlue' id='col-19' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5%;'>
                                 ".number_format($varPerFullYear, 0, ".", ",")."%
                           </td>";
 
@@ -300,7 +302,6 @@ class VPPAndRRender extends PAndRRender{
                     }
                     echo "<tr>";
                         echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:30px; width:100%;' id='parent-$c' >".$client[$c]['client']."</td>";
-                        echo "<td>&nbsp</td>";
                     echo "</tr>";
                 }
             echo "</table>";
@@ -319,55 +320,56 @@ class VPPAndRRender extends PAndRRender{
                     echo "<tr>";
 
                         /* Bookings YTD Current Year */
-                        echo "<td class='$class' id='child-$c' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; height:30px; width:5.7%;'>
+                        echo "<td class='$class col-c-1' id='child-$c' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; height:30px; '>
                                 ".number_format($bookingscYTDByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /* Bookings YTD Past Year */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($bookingspYTDByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /* Bookings YTD Var YoY */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-3' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; '>
                                 ".number_format($varAbsYTDByClient[$c], 0, ".", ",")."
                               </td>";
 
-                        echo "<td style='width:1%;'>&nbsp</td>";
+                        echo "<td class='col-c-4' >&nbsp</td>";
 
                         /* Bookings Current Month on Current Year */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; width:5.7%;'>
+                        echo "<td class='$class col-c-5' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; '>
                                 ".number_format($bookingscMonthByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /* FCST Current Month on Current Year */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-6' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                     <input type='text' id='clientRF-Cm-$c' 
                                            value='".number_format($fcstcMonthByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; 
                                            font-weight:bold; 
-                                           background-color:transparent; text-align:center'>
+                                           background-color:transparent; text-align:center'
+                                           readonly='true'>
                               </td>";
 
                         /*TOTAL September BKG + FCST*/                        
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-7' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($totalcYearMonthByClient[$c], 0, ".", ",")."
                             </td>";
 
                         /* Bookings Current Month on Past Year */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-8' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($bookingspMonthByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /* VAR Bookings Current Month on Current Year -/ FCST Current Month on Current Year */
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-9' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; '>
                                     ".number_format($varAbsMonthByClient[$c], 0, ".", ",")."
                               </td>";
 
-                        echo "<td style='width:1%;'>&nbsp</td>";
+                        echo "<td class='col-c-10'>&nbsp</td>";
 
                         /*Closed*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; width:5.7%;'>
+                        echo "<td class='$class col-c-11' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; '>
                                 <input type='text' readonly='true' id='closed-Fy-$c' 
                                            value='".number_format($closedFullYearByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
@@ -375,7 +377,7 @@ class VPPAndRRender extends PAndRRender{
                               </td>";
 
                         /* Booked*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-12' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 <input type='text' readonly='true' id='booking-Fy-$c' 
                                            value='".number_format($bookingscYearByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
@@ -383,12 +385,12 @@ class VPPAndRRender extends PAndRRender{
                               </td>";
 
                         /* % Booked Percentage*/                    
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-13' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($bookedPercentageFullYearByClient[$c], 0, ".", ",")."%
                               </td>";
 
                         /*Proposals*/ 
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-14' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                     <input type='text' readonly='true' id='passClientRF-Fy-$c' 
                                            value='".number_format($fcstFullYearByClientAE[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
@@ -396,7 +398,7 @@ class VPPAndRRender extends PAndRRender{
                               </td>";
 
                         /*Fcst*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-15' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                     <input type='text' id='clientRF-Fy-$c' name='clientRF-Fy-$c' 
                                            value='".number_format($fcstFullYearByClient[$c], 0, ".", ",")."' 
                                            style='width:100%; border:none; font-weight:bold;
@@ -404,22 +406,22 @@ class VPPAndRRender extends PAndRRender{
                              </td>";
 
                         /*Total CYear*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-16' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($totalFullYearByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /*Total PYear*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-17' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($bookingspYearByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /*Var Abs YoY*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; width:5.7%;'>
+                        echo "<td class='$class col-c-18' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
                                 ".number_format($varAbsFullYearByClient[$c], 0, ".", ",")."
                               </td>";
 
                         /*Var Per YoY*/
-                        echo "<td class='$class' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5.7%;'>";
+                        echo "<td class='$class col-c-19' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; '>";
                             if($varPerFullYearByClient[$c] > 0){
                                 echo number_format($varPerFullYearByClient[$c], 0, ".", ",")."%";
                             }else{

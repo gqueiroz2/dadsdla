@@ -761,21 +761,25 @@ class AE extends pAndR{
 
             $from = "value";
 
-            $from2 = array("sales_reps");
+            if ($regionID == "1") {
+                $from2 = array("sales_reps");
 
-            $select2 = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\"";
+                $select2 = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\"";
 
-            $result2 = $con->query($select2);
+                $result2 = $con->query($select2);
 
-            $salesReps = $sql->fetch($result2,$from2,$from2);
+                $salesReps = $sql->fetch($result2,$from2,$from2);
 
-            $salesRepsOR = "( f2.sales_rep_id = \"".$salesReps[0]['sales_reps']."\"";
+                $salesRepsOR = "( f2.sales_rep_id = \"".$salesReps[0]['sales_reps']."\"";
 
-            for ($s=1; $s < sizeof($salesReps) ; $s++) { 
-                $salesRepsOR .= " OR f2.sales_rep_id = \"".$salesReps[$s]['sales_reps']."\"";
+                for ($s=1; $s < sizeof($salesReps) ; $s++) { 
+                    $salesRepsOR .= " OR f2.sales_rep_id = \"".$salesReps[$s]['sales_reps']."\"";
+                }
+
+                $salesRepsOR .= ")";
+            }else{
+                $salesRepsOR = "sales_rep_id = \"".$salesRepID[0]."\"";
             }
-
-            $salesRepsOR .= ")";
 
             $auxYear = date('Y');
             $cMonth = date(('n'));

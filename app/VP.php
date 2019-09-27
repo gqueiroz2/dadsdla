@@ -294,6 +294,14 @@ class VP extends pAndR{
         $fcstFullYearPercentage = $this->varPer(array($fcstcMonth),array($totalFullYear))[0];
         $varAbsFullYear = $this->subArrays( array($totalFullYear) , array($bookingspYear) )[0];
         $varPerFullYear = $this->varPer(array($totalFullYear),array($bookingspYear))[0];
+
+        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+        if ($value == "gross") {
+            $valueView = "Gross";
+        }else{
+            $valueView = "Net";
+        }
+
         $rtr = array(   
                         "client" => $listOfClients,
                         "bookingscYTDByClient" => $bookingscYTDByClient,
@@ -343,7 +351,9 @@ class VP extends pAndR{
                         "cYear" => $cYear,
                         "fcstFullYearByClientAE" => $fcstFullYearByClientAE,
                         "totalFullYearByClientAE" => $totalFullYearByClientAE,
-                        "fcstFullYearAE" => $fcstFullYearAE
+                        "fcstFullYearAE" => $fcstFullYearAE,
+                        "currencyName" => $currencyName,
+                        "valueView" => $valueView
                     );
         return $rtr;
       
@@ -861,7 +871,8 @@ class VP extends pAndR{
             $list[$cc] = $listCYTD[$d];
             $cc++;
         }
-        $list = $base->superUnique($list,'clientID');
+        
+	$list = $base->superUnique($list,'clientID');
         usort($list, array($this,'orderClient'));
         return $list;
     }
