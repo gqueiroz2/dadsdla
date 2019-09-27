@@ -165,16 +165,20 @@ class AEController extends Controller{
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Success",$msg);
+            $typeMsg = "Success";
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }elseif($bool == "Created"){
             $msg = "Forecast Created";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Success",$msg);
+            $typeMsg = "Success";
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }elseif ($bool == "Already Submitted") {
             $msg = "You already have submitted the Forecast";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Error",$msg);
+            $typeMsg = "Error";
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }else{
             $msg = "Error";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'))->with("Error",$msg);
+            $typeMsg = "Error";
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }
 
     }
@@ -193,7 +197,10 @@ class AEController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-		return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user'));
+        $typeMsg = false;
+        $msg = "";
+
+		return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
     }
 
     public function post(){

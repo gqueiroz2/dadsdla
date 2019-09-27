@@ -21,7 +21,6 @@ class AuthController extends Controller
 
         $as->logout(route('logoutGet'));
 
-
     }
    
     public function permission(){

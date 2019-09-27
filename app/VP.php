@@ -38,8 +38,8 @@ class VP extends pAndR{
 
         if($submit == "submit") {
             $submit = 1;
-            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\"";
-            if ($region == '1') {
+            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\" AND region_id = \"".$region['id']."\"";
+            if ($region['id'] == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
 
@@ -121,7 +121,7 @@ class VP extends pAndR{
 
         for ($c=0; $c <sizeof($fcstValue); $c++) {
             if ($percentage[$c]) {
-                for ($m=0; $m <sizeof($percentage[$c]) ; $m++) { 
+                for ($m=0; $m < sizeof($percentage[$c]); $m++) { 
                     $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
                 }
             }else{
@@ -226,12 +226,12 @@ class VP extends pAndR{
             $multValue = $temp2["multValue"];
         }
         for ($c=0; $c < sizeof($fcstInfo); $c++) { 
-            $adjust[$c]['salesRepID'] = $fcstInfo[$c]['salesRepID']; 
+            $adjust[$c]['salesRepID'] = $fcstInfo[$c]['salesRepID'];
             $adjust[$c]['checkCurrency'] = $currencyCheck[$c]; 
-            $adjust[$c]['newCurrency'] = $newCurrency[$c]; 
-            $adjust[$c]['oldCurrency'] = $oldCurrency[$c]; 
-            $adjust[$c]['checkValue'] = $valueCheck[$c]; 
-            $adjust[$c]['multValue'] = $multValue[$c]; 
+            $adjust[$c]['newCurrency'] = $newCurrency[$c];
+            $adjust[$c]['oldCurrency'] = $oldCurrency[$c];
+            $adjust[$c]['checkValue'] = $valueCheck[$c];
+            $adjust[$c]['multValue'] = $multValue[$c];
         }
         $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
         $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
@@ -294,6 +294,14 @@ class VP extends pAndR{
         $fcstFullYearPercentage = $this->varPer(array($fcstcMonth),array($totalFullYear))[0];
         $varAbsFullYear = $this->subArrays( array($totalFullYear) , array($bookingspYear) )[0];
         $varPerFullYear = $this->varPer(array($totalFullYear),array($bookingspYear))[0];
+
+        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+        if ($value == "gross") {
+            $valueView = "Gross";
+        }else{
+            $valueView = "Net";
+        }
+
         $rtr = array(   
                         "client" => $listOfClients,
                         "bookingscYTDByClient" => $bookingscYTDByClient,
@@ -343,7 +351,9 @@ class VP extends pAndR{
                         "cYear" => $cYear,
                         "fcstFullYearByClientAE" => $fcstFullYearByClientAE,
                         "totalFullYearByClientAE" => $totalFullYearByClientAE,
-                        "fcstFullYearAE" => $fcstFullYearAE
+                        "fcstFullYearAE" => $fcstFullYearAE,
+                        "currencyName" => $currencyName,
+                        "valueView" => $valueView
                     );
         return $rtr;
       
@@ -861,7 +871,8 @@ class VP extends pAndR{
             $list[$cc] = $listCYTD[$d];
             $cc++;
         }
-        $list = $base->superUnique($list,'clientID');
+        
+	$list = $base->superUnique($list,'clientID');
         usort($list, array($this,'orderClient'));
         return $list;
     }
