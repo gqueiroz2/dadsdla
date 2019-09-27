@@ -860,7 +860,7 @@ class AE extends pAndR{
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $tmp2 = $tmp1['fcstAmount'];
-            
+
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
@@ -898,6 +898,7 @@ class AE extends pAndR{
             $lastRollingFCST = $rollingFCST;
             
         }
+        //var_dump($lastRollingFCST);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
            
@@ -1460,7 +1461,6 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
-            //var_dump($someFCST);
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
             if($monthOPP[$c]){
@@ -1481,7 +1481,6 @@ class AE extends pAndR{
             }
             
         }
-
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 
