@@ -245,4 +245,263 @@ class AEController extends Controller{
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
     }
 
+    /*
+    var editedValue = $(this).val();
+
+                        $.ajax({
+                            url:"/ajaxPAndR/changeVal",
+                            method:"POST",
+                            data:{editedValue},
+                            success: function(output){
+                                $("#clientRF-"+{{$c}}+"-"+{{$m}}).val(output);
+
+                                if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                    var firstValue = $("#clientRF-"+{{$c}}+"-0").val();
+                                    var secondValue = $("#clientRF-"+{{$c}}+"-1").val();
+                                    var thirdValue = $("#clientRF-"+{{$c}}+"-2").val();
+                                    var p = 3;
+                                }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                    var firstValue = $("#clientRF-"+{{$c}}+"-4").val();
+                                    var secondValue = $("#clientRF-"+{{$c}}+"-5").val();
+                                    var thirdValue = $("#clientRF-"+{{$c}}+"-6").val();
+                                    var p = 7;
+                                }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                    var firstValue = $("#clientRF-"+{{$c}}+"-8").val();
+                                    var secondValue = $("#clientRF-"+{{$c}}+"-9").val();
+                                    var thirdValue = $("#clientRF-"+{{$c}}+"-10").val();
+                                    var p = 11;
+                                }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                    var firstValue = $("#clientRF-"+{{$c}}+"-12").val();
+                                    var secondValue = $("#clientRF-"+{{$c}}+"-13").val();
+                                    var thirdValue = $("#clientRF-"+{{$c}}+"-14").val();
+                                    var p = 15;
+                                }
+
+                                $.ajax({
+                                    url:"/ajaxPAndR/reCalculateQuarterValues",
+                                    method:"POST",
+                                    data:{firstValue, secondValue, thirdValue},
+                                    success: function(output){
+                                        $("#clientRF-"+"{{$c}}"+"-"+p).val(output);
+
+                                        
+                                        
+                                    },
+                                    error: function(xhr, ajaxOptions,thrownError){
+                                        alert(xhr.status+" "+thrownError);
+                                    }
+                                });
+
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+    */
+
 }
+
+/*
+if ($(this).val() == '') {
+                            $(this).val(0);
+                        }
+                        $(this).val(Comma(handleNumber($(this).val())));
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
+                            $("#clientRF-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
+                            $("#clientRF-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
+                            $("#clientRF-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
+                            $("#clientRF-"+{{$c}}+"-15").val(value);
+                        }
+                        var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
+                        $("#totalClient-"+{{$c}}).val(totalClient);
+                        Temp3 = handleNumber(totalClient);
+                        if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') ) ) {
+                            $("#client-"+{{$c}}).css("background-color","red");
+                        }else{
+                            $("#client-"+{{$c}}).css("background-color","");
+                        }
+                        var rf = 0;
+                        @for($c2=0;$c2<sizeof($client);$c2++)
+                            if ($("#splitted-"+{{$c2}}).val() != false) {
+                                var mult = 0.5;
+                            }else{
+                                var mult = 1;
+                            }
+                            rf += (handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val())*mult);
+                        @endfor
+                        rf = Comma(rf);
+                        $("#rf-"+{{$m}}).val(rf);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                if ($("#splitted-"+{{$c2}}).val() != false) {
+                                    var mult = 0.5;
+                                }else{
+                                    var mult = 1;
+                                }
+                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-3").val())*mult);
+                            @endfor
+                            month = Comma(month);
+                            $("#rf-3").val(month);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                if ($("#splitted-"+{{$c2}}).val() != false) {
+                                    var mult = 0.5;
+                                }else{
+                                    var mult = 1;
+                                }
+                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-7").val())*mult);
+                            @endfor
+                            month = Comma(month);
+                            $("#rf-7").val(month);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                if ($("#splitted-"+{{$c2}}).val() != false) {
+                                    var mult = 0.5;
+                                }else{
+                                    var mult = 1;
+                                }
+                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-11").val())*mult);
+                            @endfor
+                            month = Comma(month);
+                            $("#rf-11").val(month);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                if ($("#splitted-"+{{$c2}}).val() != false) {
+                                    var mult = 0.5;
+                                }else{
+                                    var mult = 1;
+                                }
+                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-15").val())*mult);
+                            @endfor
+                            month = Comma(month);
+                            $("#rf-15").val(month);
+                        }
+                        var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
+                        $("#total-total").val(total);
+                        @for($c2=0;$c2<sizeof($client);$c2++)
+                            var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
+                            temp = Comma(temp*100);
+                            $("#totalPP2-"+{{$c2}}).val(temp);
+                            $("#totalPP3-"+{{$c2}}).val(temp);
+                        @endfor
+                        var value = handleNumber($(this).val());
+                        var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
+                        var tmp = value - PY;
+                        tmp = Comma(tmp);
+                        $("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-0").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-1").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-2").val()));
+                            $("#RFvsPY-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-4").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-5").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-6").val()));
+                            $("#RFvsPY-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-8").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-9").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-10").val()));
+                            $("#RFvsPY-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-12").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-13").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-14").val()));
+                            $("#RFvsPY-"+{{$c}}+"-15").val(value);
+                        }
+                        var Temp = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-15").val()));
+                        $("#totalRFvsPY-"+{{$c}}).val(Temp);
+                        var booking = handleNumber($("#bookingE-"+{{$m}}).val());
+                        var Temp2 = handleNumber($("#target-"+{{$m}}).val());
+                        rf = handleNumber(rf);
+                        var RFvsTarget = Comma(rf-Temp2);
+                        var pending = Comma(rf-booking);
+                        $("#pending-"+{{$m}}).val(pending);
+                        $("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
+                        if (Temp2 == 0) {
+                            var Temp3 = 0+"%";
+                        }else{
+                            var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
+                        }
+                        $("#achievement-"+{{$m}}).val(Temp3);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
+                            @endfor
+                            var target = handleNumber($("#target-0").val())+handleNumber($("#target-1").val())+handleNumber($("#target-2").val());
+                            var booking = handleNumber($("#bookingE-0").val())+handleNumber($("#bookingE-1").val())+handleNumber($("#bookingE-2").val());
+                            $("#pending-3").val(Comma(month-booking));
+                            var RFvsTargetQ = Comma(month-target);
+                            $("#RFvsTarget-3").val(RFvsTargetQ);
+                            if (target == 0) {
+                                var Temp3 = 0+"%";
+                            }else{
+                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+                            }
+                            $("#achievement-3").val(Temp3);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
+                            @endfor
+                            var target = handleNumber($("#target-4").val())+handleNumber($("#target-5").val())+handleNumber($("#target-6").val());
+                            var booking = handleNumber($("#bookingE-4").val())+handleNumber($("#bookingE-5").val())+handleNumber($("#bookingE-6").val());
+                            $("#pending-7").val(Comma(month-booking));
+                            var RFvsTargetQ = Comma(month-target);
+                            $("#RFvsTarget-7").val(RFvsTargetQ);
+                            if (target == 0) {
+                                var Temp3 = 0+"%";
+                            }else{
+                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+                            }
+                            $("#achievement-7").val(Temp3);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
+                            @endfor
+                            var target = handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val());
+                            var booking = handleNumber($("#bookingE-8").val())+handleNumber($("#bookingE-9").val())+handleNumber($("#bookingE-10").val());
+                            $("#pending-11").val(Comma(month-booking));
+                            var RFvsTargetQ = Comma(month-target);
+                            $("#RFvsTarget-11").val(RFvsTargetQ);
+                            if (target == 0) {
+                                var Temp3 = 0+"%";
+                            }else{
+                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+                            }
+                            $("#achievement-11").val(Temp3);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var month =0;
+                            @for($c2=0;$c2<sizeof($client);$c2++)
+                                month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
+                            @endfor
+                            var target = handleNumber($("#target-12").val())+handleNumber($("#target-13").val())+handleNumber($("#target-14").val());
+                            var booking = handleNumber($("#bookingE-12").val())+handleNumber($("#bookingE-13").val())+handleNumber($("#bookingE-14").val());
+                            $("#pending-15").val(Comma(month-booking));
+                            var RFvsTargetQ = Comma(month-target);
+                            $("#RFvsTarget-15").val(RFvsTargetQ);
+                            if (target == 0) {
+                                var Temp3 = 0+"%";
+                            }else{
+                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+                            }
+                            $("#achievement-15").val(Temp3);
+                        }
+                        var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
+                        var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
+                        var booking = handleNumber($("#bookingE-3").val()) + handleNumber($("#bookingE-7").val()) + handleNumber($("#bookingE-11").val()) + handleNumber($("#bookingE-15").val());
+                        $("#totalPending").val(Comma(RF-booking));
+                        $("#TotalRFvsTarget").val(Comma(RF-target));
+                        if (target == 0) {
+                            var Temp3 = 0+"%";
+                        }else{
+                            var Temp3 = Comma(((RF/target)*100).toFixed(2))+"%";
+                        }
+                        $("#totalAchievement").val(Temp3);
+*/

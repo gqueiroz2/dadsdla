@@ -62,4 +62,10 @@ Route::group(['middleware' => 'auth'],function(){
 	});
 });
 
+Route::group(['prefix' => 'ajaxPAndR'], function(){
+	Route::post('changeVal', 'ajaxController@changeVal');
+	Route::post('reCalculateQuarterValues', 'ajaxController@reCalculateQuarterValues');
+	Route::post('reCalculateTotalVal', 'ajaxController@reCalculateTotalVal');
+});
+
 
