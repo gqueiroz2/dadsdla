@@ -683,7 +683,6 @@ class AE extends pAndR{
 
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
-            $mult = $temp2["mult"];
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];

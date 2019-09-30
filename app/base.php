@@ -545,9 +545,12 @@ class base extends Model{
                 for ($c=0; $c <sizeof($listOfClients) ; $c++) { 
                     $select[$c] = "SELECT agency_commission FROM sf_pr WHERE client_id = \"".$listOfClients[$c]['clientID']."\" AND region_id = \"".$regionID."\"";
                     $res[$c] = $con->query($select[$c]);
-                    $resp[$c] = floatval($sql->fetch($res[$c],$from,$from)[0]['agency_commission'])*100;
-                    if (!$resp[$c]) {
+                    $resp[$c] = ($sql->fetch($res[$c],$from,$from)[0]['agency_commission']);
+                    
+                    if (is_null($resp[$c])) {
                         $resp[$c] = $mult;
+                    }else{
+                        $resp[$c] = floatval($resp[$c])*100;
                     }
 
                     if (strtolower($value) == "net") {
