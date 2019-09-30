@@ -608,7 +608,11 @@ class rank extends Model{
         for ($t=0; $t < sizeof($total); $t++) { 
             
             if (is_numeric($total[$t])) {
-                echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>"; 
+                if ($mtx[$t][0] == "VAR %") {
+                    echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";    
+                }else{
+                    echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+                }
             }else{
               if ($total[$t] != "-") {
                 echo "<td class='darkBlue center'> ".$total[$t]." </td>"; 

@@ -87,7 +87,7 @@ class rankingBrand extends rank{
 					}
 
 					$values[$y] = $sql->selectWithUnion($con, $where, $infoQuery, $infoQuery[0]['name'], $order_by, "ASC");
-
+					
 					for ($b=0; $b < sizeof($brands); $b++) { 
 						array_pop($infoQuery[$b]['colsValue']);
 					}
