@@ -405,6 +405,35 @@
 									</div>
 								</div>
 							</form>
+
+							<div class="row mt-3">
+								<div class="col">
+									<center><span style="font-size: 18px;"> FIX SALES FORCE </span></center>
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="col">
+									@if(session('CRMFixSuccess'))
+										<div class="alert alert-info">
+  											{{ session('CRMFixSuccess') }}
+										</div>
+									@endif
+
+									@if(session('CRMFixFail'))
+										<div class="alert alert-danger">
+  											{{ session('CRMFixFail') }}
+										</div>
+									@endif
+								</div>
+							</div>
+							<form action="{{ route('fixCRM') }}" method="POST">
+							@csrf
+								<div class="row justify-content-end">          
+							 		<div class="col">		
+								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

@@ -21,6 +21,54 @@ use App\pRate;
 use App\emailDivulgacao;
 
 class dataManagementController extends Controller{
+    
+    public function fixCRM(){
+        $db = new dataBase();
+        $sql = new sql();
+        $con = $db->openConnection("DLA");
+
+        $select = "SELECT oppid , gross_revenue , net_revenue , fcst_amount_gross , fcst_amount_net , COUNT(oppid) AS 'repeat'
+                   FROM sf_pr 
+                   GROUP BY oppid , gross_revenue , net_revenue , fcst_amount_gross , fcst_amount_net
+                  ";
+
+        $result = $con->query($select);
+
+        $from = array("oppid","gross_revenue","net_revenue","fcst_amount_gross","fcst_amount_net","repeat");
+
+        $toFix = $sql->fetch($result,$from,$from);
+
+        $cc = 0;
+
+        $updated = 0;
+        for ($f=0; $f < sizeof($toFix) ; $f++) { 
+            if($toFix[$f]['repeat'] > 0 && $toFix[$f]['repeat'] != 1){
+                $update[$cc] = "UPDATE sf_pr 
+                                    SET 
+                                        net_revenue = \"".($toFix[$f]['net_revenue']/$toFix[$f]['repeat'])."\",
+                                        fcst_amount_gross = \"".($toFix[$f]['fcst_amount_gross']/$toFix[$f]['repeat'])."\",
+                                        fcst_amount_net = \"".($toFix[$f]['fcst_amount_net']/$toFix[$f]['repeat'])."\"
+                                    WHERE(oppid = \"".$toFix[$f]['oppid']."\")
+                               ";
+                
+                if( $con->query($update[$cc]) === TRUE ){
+                    $updated ++;
+                }
+                $cc ++;
+            }
+        }
+
+        if($updated == $cc){
+            $rtr  = TRUE;
+        }else{
+            $rtr = FALSE;            
+        }
+
+        if($rtr){
+            return back()->with('CRMFixSuccess',"The sf_pr Table was succesfully updated :)");
+        }        
+    }
+
     public function home(){
     	return view('dataManagement.home');
     }

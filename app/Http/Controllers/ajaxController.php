@@ -876,4 +876,69 @@ class ajaxController extends Controller{
 
         $scr->renderSubAssembler($mtx, $total, $type, $years);
     }
+
+    public function changeVal(){
+        
+        $editedValue = Request::get("editedValue");
+
+        if ($editedValue == "") {
+            return 0;
+        }else{
+            $editedValue = $this->Comma($this->handleNumber($editedValue));
+            echo $editedValue;
+        }
+    }
+
+    public function reCalculateQuarterValues(){
+        
+        $firstValue = Request::get("firstValue");
+        $secondValue = Request::get("secondValue");
+        $thirdValue = Request::get("thirdValue");
+        
+        $firstValue = $this->handleNumber($firstValue);
+        $secondValue = $this->handleNumber($secondValue);
+        $thirdValue = $this->handleNumber($thirdValue);
+        
+        $res = $firstValue + $secondValue + $thirdValue;
+        
+        $res = $this->Comma($res);
+
+        echo $res;
+    }
+
+    public function reCalculateTotalVal(){
+        
+        $Q1 = Request::get("Q1");
+        $Q2 = Request::get("Q2");
+        $Q3 = Request::get("Q3");
+        $Q4 = Request::get("Q4");
+
+        $Q1 = $this->handleNumber($Q1);
+        $Q2 = $this->handleNumber($Q2);
+        $Q3 = $this->handleNumber($Q3);
+        $Q4 = $this->handleNumber($Q4);
+
+        $res = $Q1 + $Q2 + $Q3 + $Q4;
+
+        $res = $this->Comma($res);
+
+        echo $res;
+        
+    }
+
+    function handleNumber($number){
+
+        $number = str_replace(",", "", $number);
+
+        $number = doubleval($number);
+        
+        return $number;
+    }
+    
+    function Comma($Num) {
+     
+        $Num = number_format($Num);
+
+        return $Num;
+    }
 }
