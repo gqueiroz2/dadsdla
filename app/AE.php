@@ -317,6 +317,7 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
 
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if (!$save) {
             $save = false;
@@ -337,7 +338,7 @@ class AE extends pAndR{
             $newCurrency = $temp["newCurrency"][0];
             $oldCurrency = $temp["oldCurrency"][0];
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
 
@@ -359,7 +360,6 @@ class AE extends pAndR{
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if($regionName == "Brazil"){
             $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
@@ -471,7 +471,7 @@ class AE extends pAndR{
                 
                 if ($valueCheck) {
                     for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
-                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue[$c];
                     }
                 }
 
@@ -657,6 +657,8 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
         
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
+
         if (!$save) {
             $save = false;
             $valueCheck = false;
@@ -677,10 +679,11 @@ class AE extends pAndR{
             $newCurrency = $temp[0]["newCurrency"][0];
             $oldCurrency = $temp[0]["oldCurrency"][0];
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
 
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
+            $mult = $temp2["mult"];
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
@@ -699,7 +702,6 @@ class AE extends pAndR{
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if($regionName == "Brazil"){
             $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
@@ -815,7 +817,7 @@ class AE extends pAndR{
 
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
-                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue[$c];
                     }
                 }
 
@@ -860,7 +862,7 @@ class AE extends pAndR{
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$lastRollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $tmp2 = $tmp1['fcstAmount'];
-            
+
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
@@ -898,6 +900,7 @@ class AE extends pAndR{
             $lastRollingFCST = $rollingFCST;
             
         }
+        //var_dump($lastRollingFCST);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
            
@@ -1460,7 +1463,6 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
-            //var_dump($someFCST);
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
             if($monthOPP[$c]){
@@ -1481,7 +1483,6 @@ class AE extends pAndR{
             }
             
         }
-
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 

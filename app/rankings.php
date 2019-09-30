@@ -193,11 +193,9 @@ class rankings extends rank{
         $fun .= ");";
         eval($fun);
 
-        $total = $this->assemblerTotal($mtx, $years);
-
         //var_dump($mtx);
 
-        return array($mtx, $total);
+        return $mtx;
     }
 
     public function createNames2($type, $months, $years){
