@@ -100,11 +100,11 @@ class rankingBrandController extends Controller {
 
     	$aux['id'] = '13';
     	$aux['name'] = "DN";
-
+        
     	if (sizeof($brand) > 1) {
     		array_push($brand, $aux);
     	}
-
+        
         $names = $rb->createNames($type, $months, $rtr, $brands);
 
     	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names'));

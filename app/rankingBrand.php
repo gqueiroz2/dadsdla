@@ -87,7 +87,7 @@ class rankingBrand extends rank{
 					}
 
 					$values[$y] = $sql->selectWithUnion($con, $where, $infoQuery, $infoQuery[0]['name'], $order_by, "ASC");
-					
+
 					for ($b=0; $b < sizeof($brands); $b++) { 
 						array_pop($infoQuery[$b]['colsValue']);
 					}
@@ -294,7 +294,7 @@ class rankingBrand extends rank{
 	}
 
 	public function assembler($values, $years, $brands){
-
+		
 		$mtx[0][0] = "Brand";
 		$mtx[1][0] = "Booking ".$years[0];
 		$mtx[2][0] = "Target ".$years[0];

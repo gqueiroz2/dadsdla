@@ -9,7 +9,7 @@ use App\brand;
 
 class subBrandRanking extends rankingBrand {
     
-	public function getSubResults($con, $type, $regionID, $value, $months, $currency, $filter){
+	public function getSubResults($con, $type, $regionID, $value, $months, $currency, $filter, $brands){
 		
 		$cYear = intval(date('Y'));
 		$years = array($cYear, $cYear-1, $cYear-2);
@@ -27,13 +27,21 @@ class subBrandRanking extends rankingBrand {
         if ($filter != 'DN') {
             $brand = $b->getBrandID($con, $filter);
         }else{
-            $brands = $b->getBrand($con);
-            //var_dump($brand);
+            $onl = false;
+            $vix = false;
+
             $brand = array();
             $brand[0]['id'] = array();
 
-            for ($i=0; $i < sizeof($brands); $i++) { 
-                array_push($brand[0]['id'], $brands[$i]['id']);
+            for ($i=0; $i < sizeof($brands); $i++) {
+                if ($brands[$i][1] == 'ONL') {
+                    $onl = true;
+                }
+
+                if ($brands[$i][1] == 'VIX') {
+                    $vix = true;
+                }
+                array_push($brand[0]['id'], $brands[$i][0]);
             }
         }
         
@@ -46,43 +54,172 @@ class subBrandRanking extends rankingBrand {
         }else{
             $region = $tmp['name'];
         }
-
-        for ($y=0; $y < sizeof($years); $y++) {
-        	
-        	if ($filter == "VIX" || $filter == "ONL") {
-        		$table = "fw_digital";
-        	}elseif ($region == "Brazil") {
-				$table = "cmaps";
-			}else{
-				$table = "ytd";
-			}
-
-			$res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand);
+        
+        if ($filter != "DN") {
+            for ($y=0; $y < sizeof($years); $y++) {
             
-			if (is_array($res[$y])) {
-            	for ($r=0; $r < sizeof($res[$y]); $r++) {
-                    if ($table != "cmaps") {
-                        if ($currency[0]['name'] == "USD") {
-                            $pRate = 1.0;
+                if ($filter == "VIX" || $filter == "ONL") {
+                    $table = "fw_digital";
+                }elseif ($region == "Brazil") {
+                    $table = "cmaps";
+                }else{
+                    $table = "ytd";
+                }
+
+                $res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand);
+                
+                if (is_array($res[$y])) {
+                    for ($r=0; $r < sizeof($res[$y]); $r++) {
+                        if ($table != "cmaps") {
+                            if ($currency[0]['name'] == "USD") {
+                                $pRate = 1.0;
+                            }else{
+                                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                            }
+
+                            $res[$y][$r]['total'] *= $pRate;
                         }else{
-                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                            if ($currency[0]['name'] == "USD") {
+                                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                            }else{
+                                $pRate = 1.0;
+                            } 
+
+                            $res[$y][$r]['total'] /= $pRate;                       
+                        }
+                        
+                    }
+                }
+
+            }
+        }else{
+
+            for ($y=0; $y < sizeof($years); $y++) {
+                if ($region == "Brazil") {
+                    $table = "cmaps";
+                }else{
+                    $table = "ytd";
+                }
+
+                $res[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $brand);
+
+                if (is_array($res[$y])) {
+                    for ($r=0; $r < sizeof($res[$y]); $r++) {
+                        if ($table != "cmaps") {
+                            if ($currency[0]['name'] == "USD") {
+                                $pRate = 1.0;
+                            }else{
+                                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                            }
+
+                            $res[$y][$r]['total'] *= $pRate;
+                        }else{
+                            if ($currency[0]['name'] == "USD") {
+                                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                            }else{
+                                $pRate = 1.0;
+                            } 
+
+                            $res[$y][$r]['total'] /= $pRate;                       
+                        }
+                        
+                    }
+                }
+            }
+
+            if ($onl || $vix) {
+                for ($y=0; $y < sizeof($years); $y++) {
+                    
+                    $table = "fw_digital";
+
+                    $resDV = false;
+                    $resDO = false;
+
+                    if ($vix) {
+                        $tmp = array();
+                        $tmp[0] = array('id' => '9');
+
+                        $resDV = array();
+                        $resDV[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $tmp);   
+                    }
+
+                    if ($onl) {
+                        $tmp = array();
+                        $tmp[0] = array('id' => '10');
+
+                        $resDO = array();
+                        $resDO[$y] = $this->getSubValues($con, $table, $type, $regionID, $value, $years[$y], $months, $currency, $tmp);
+                    }
+
+                    if ($resDV[$y] && $resDO[$y]) {
+                        
+                        $size1 = sizeof($resDO[$y]);
+                        $size2 = sizeof($resDV[$y]);
+
+                        for ($r=0; $r < $size1; $r++) { 
+                            for ($r2=0; $r2 < $size2; $r2++) {
+                                if ($resDO[$y][$r][$type."ID"] == $resDV[$y][$r2][$type."ID"]) {
+                                    $resDV[$y][$r2]['total'] += $resDO[$y][$r]['total'];
+
+                                    unset($resDO[$y][$r]);
+                                    break;
+                                }
+                            }
                         }
 
-                        $res[$y][$r]['total'] *= $pRate;
-                    }else{
-                        if ($currency[0]['name'] == "USD") {
-                            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
-                        }else{
-                            $pRate = 1.0;
-                        } 
+                        $resDO[$y] = array_values($resDO[$y]);
 
-                        $res[$y][$r]['total'] /= $pRate;                       
+                        if (is_array($resDO)) {
+                            for ($r=0; $r < sizeof($resDO[$y]); $r++) { 
+                                array_push($resDV[$y], $resDO[$y][$r]);
+                            }   
+                        }
+
+                        usort($resDV[$y], array($this,'compare'));
+                        
+                        if (is_array($resDV[$y])) {
+                            for ($r=0; $r < sizeof($resDV[$y]); $r++) {
+                                if ($currency[0]['name'] == "USD") {
+                                    $pRate = 1.0;
+                                }else{
+                                    $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+                                } 
+
+                                $resDV[$y][$r]['total'] *= $pRate;
+                            }
+                        }
                     }
-                    
-            	}
-        	}
+
+                    if ($resDV[$y] && $res[$y]) {
+                        $size1 = sizeof($resDV[$y]);
+                        $size2 = sizeof($res[$y]);
+
+                        for ($r=0; $r < $size1; $r++) { 
+                            for ($r2=0; $r2 < $size2; $r2++) {
+                                if ($resDV[$y][$r][$type."ID"] == $res[$y][$r2][$type."ID"]) {
+                                    $res[$y][$r2]['total'] += $resDV[$y][$r]['total'];
+
+                                    unset($resDV[$y][$r]);
+                                    break;
+                                }
+                            }
+                        }
+
+                        $resDV[$y] = array_values($resDV[$y]);
+
+                        for ($r=0; $r < sizeof($resDV[$y]); $r++) { 
+                            array_push($res[$y], $resDV[$y][$r]);
+                        }
+
+                        usort($res[$y], array($this,'compare'));
+                    }elseif($resDV[$y] && !$res[$y]){
+                        $res[$y] = $resDV[$y];
+                    }
+                }   
+            }
 
         }
+    
 
         return $res;
 
@@ -105,7 +242,7 @@ class subBrandRanking extends rankingBrand {
         }elseif ($tableName == "fw_digital") {
             $value .= "_revenue";
             
-            if ($filter[0]['name'] == 'ONL') {
+            if ($filter[0]['id'] == '9') {
                 
                 $where = "WHERE (a.region_id = \"$region\") AND (year = \"$year\") AND (brand_id != \"10\") AND (month IN (";
                     for ($m=0; $m < sizeof($months); $m++) { 

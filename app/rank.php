@@ -81,7 +81,7 @@ class rank extends Model{
                 $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
             }
         }
-
+        
         if ($currency[0]['name'] == "USD") {
             $pRateDigital = 1.0;
         }else{

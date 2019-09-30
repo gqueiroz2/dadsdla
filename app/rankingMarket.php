@@ -200,10 +200,6 @@ class rankingMarket extends rank {
     	$mtx[$pos][0] = "Var (%)";$pos++;
     	$mtx[$pos][0] = "Var Abs.";$pos++;
 
-    	if ($type == "client") {
-			//$mtx[$pos][0] = "Class";$pos++;    		
-    	}
-
     	$mtx[$pos][0] = "Move";$pos++;
 
 		$types = array();
