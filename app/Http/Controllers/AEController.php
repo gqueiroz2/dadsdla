@@ -242,6 +242,14 @@ class AEController extends Controller{
 
         $error = false;
 
+        //lines of sales rep table
+        $pending = $forRender['pending'];
+        $RFvsTarget = $forRender['RFvsTarget'];
+
+        //lines of clients table
+        $rollingClients = $forRender['lastRollingFCST'];
+        $manual = $forRender['rollingFCST'];
+
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
     }
 
@@ -284,224 +292,1013 @@ class AEController extends Controller{
                                     success: function(output){
                                         $("#clientRF-"+"{{$c}}"+"-"+p).val(output);
 
-                                        
-                                        
+                                        var Q1 = $("#clientRF-"+{{$c}}+"-3").val();
+                                        var Q2 = $("#clientRF-"+{{$c}}+"-7").val();
+                                        var Q3 = $("#clientRF-"+{{$c}}+"-11").val();
+                                        var Q4 = $("#clientRF-"+{{$c}}+"-15").val();
+
+                                        $.ajax({
+                                            url:"/ajaxPAndR/reCalculateTotalVal",
+                                            method:"POST",
+                                            data:{Q1, Q2, Q3, Q4},
+                                            success: function(output) {
+                                                $("#totalClient-"+{{$c}}).val(output);
+
+                                                var totalClient = $("#totalClient-"+{{$c}}).val();
+                                                var total = $("#passTotal-"+{{$c}}).val();
+
+                                                $.ajax({
+                                                    url:"/ajaxPAndR/verifyVal",
+                                                    method:"POST",
+                                                    data:{totalClient, total},
+                                                    success: function(output){
+                                                        Temp3 = output;
+
+                                                        if (Temp3 == 1) {
+                                                            $("#client-"+{{$c}}).css("background-color","red");
+                                                        }else{
+                                                            $("#client-"+{{$c}}).css("background-color","");
+                                                        }
+
+                                                        var rf = 0;
+
+                                                        @for($c2=0;$c2<sizeof($client);$c2++)
+
+                                                            var splitted = $("#splitted-"+{{$c2}}).val();
+                                                            var client = $("#clientRF-"+{{$c2}}+"-"+{{$m}}).val();
+
+                                                            $.ajax({
+                                                                url:"/ajaxPAndR/splittedClients",
+                                                                method:"POST",
+                                                                data:{client, splitted},
+                                                                success: function(output){
+                                                                    rf += output;
+                                                                },
+                                                                error: function(xhr, ajaxOptions,thrownError){
+                                                                    alert(xhr.status+" "+thrownError);
+                                                                }
+                                                            });
+                                                        @endfor
+
+                                                        var transform = "Comma";
+                                                        
+                                                        $.ajax({
+                                                            url:"/ajaxPAndR/transformVal",
+                                                            method:"POST",
+                                                            data:{rf,transform},
+                                                            success: function(output){
+                                                                rf = output;
+
+                                                                $("#rf-"+{{$m}}).val(rf);
+                                                                
+                                                                if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                                                    var month = 0;
+                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+
+                                                                        var splitted = $("#splitted-"+{{$c2}}).val();
+                                                                        var client = $("#clientRF-"+{{$c2}}+"-3").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/splittedClients",
+                                                                            method:"POST",
+                                                                            data:{client, splitted},
+                                                                            success: function(output){
+                                                                                month += output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+                                                                    @endfor
+
+                                                                    $.ajax({
+                                                                        url:"/ajaxPAndR/transformVal",
+                                                                        method:"POST",
+                                                                        data:{month,transform},
+                                                                        success: function(output){
+                                                                            month = output;
+                                                                            $("#rf-3").val(month);
+                                                                        },
+                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                            alert(xhr.status+" "+thrownError);
+                                                                        }
+                                                                    });
+                                                                }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                                                    var month = 0;
+                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+
+                                                                        var splitted = $("#splitted-"+{{$c2}}).val();
+                                                                        var client = $("#clientRF-"+{{$c2}}+"-7").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/splittedClients",
+                                                                            method:"POST",
+                                                                            data:{client, splitted},
+                                                                            success: function(output){
+                                                                                month += output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+                                                                    @endfor
+
+                                                                    $.ajax({
+                                                                        url:"/ajaxPAndR/transformVal",
+                                                                        method:"POST",
+                                                                        data:{month,transform},
+                                                                        success: function(output){
+                                                                            month = output;
+                                                                            $("#rf-7").val(month);
+                                                                        },
+                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                            alert(xhr.status+" "+thrownError);
+                                                                        }
+                                                                    });
+                                                                }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                                                    var month = 0;
+                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+
+                                                                        var splitted = $("#splitted-"+{{$c2}}).val();
+                                                                        var client = $("#clientRF-"+{{$c2}}+"-11").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/splittedClients",
+                                                                            method:"POST",
+                                                                            data:{client, splitted},
+                                                                            success: function(output){
+                                                                                month += output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+                                                                    @endfor
+
+                                                                    $.ajax({
+                                                                        url:"/ajaxPAndR/transformVal",
+                                                                        method:"POST",
+                                                                        data:{month,transform},
+                                                                        success: function(output){
+                                                                            month = output;
+                                                                            $("#rf-11").val(month);
+                                                                        },
+                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                            alert(xhr.status+" "+thrownError);
+                                                                        }
+                                                                    });
+                                                                }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                                                    var month = 0;
+                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+
+                                                                        var splitted = $("#splitted-"+{{$c2}}).val();
+                                                                        var client = $("#clientRF-"+{{$c2}}+"-15").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/splittedClients",
+                                                                            method:"POST",
+                                                                            data:{client, splitted},
+                                                                            success: function(output){
+                                                                                month += output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+                                                                    @endfor
+
+                                                                    $.ajax({
+                                                                        url:"/ajaxPAndR/transformVal",
+                                                                        method:"POST",
+                                                                        data:{month,transform},
+                                                                        success: function(output){
+                                                                            month = output;
+                                                                            $("#rf-15").val(month);
+                                                                        },
+                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                            alert(xhr.status+" "+thrownError);
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                var Q1 = $("#rf-3").val();
+                                                                var Q2 = $("#rf-7").val();
+                                                                var Q3 = $("#rf-11").val();
+                                                                var Q4 = $("#rf-15").val();
+
+                                                                $.ajax({
+                                                                    url:"/ajaxPAndR/reCalculateTotalVal",
+                                                                    method:"POST",
+                                                                    data:{Q1, Q2, Q3, Q4},
+                                                                    success: function(output){
+                                                                        var total = output;
+                                                                        $("#total-total").val(total);
+
+                                                                        @for($c2=0;$c2<sizeof($client);$c2++)
+                                                                            
+                                                                            var firstValue = $("#totalClient-"+{{$c2}}).val();
+                                                                            var secondValue = total;
+                                                                            var op = "/";
+                                                                        
+                                                                            $.ajax({
+                                                                                url:"/ajaxPAndR/number",
+                                                                                method:"POST",
+                                                                                data:{firstValue, secondValue, op},
+                                                                                success: function (output) {
+                                                                                    var temp = output;
+                                                                                    temp *= 100;
+                                                                                    $.ajax({
+                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                        method:"POST",
+                                                                                        data:{temp,transform},
+                                                                                        success: function(output){
+                                                                                            temp = output;
+
+                                                                                            $("#totalPP2-"+{{$c2}}).val(temp);
+                                                                                            $("#totalPP3-"+{{$c2}}).val(temp);
+                                                                                        },
+                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                        }
+                                                                                    });
+                                                                                },
+                                                                                error: function(xhr, ajaxOptions,thrownError){
+                                                                                    alert(xhr.status+" "+thrownError);
+                                                                                }
+                                                                            });
+                                                                            
+                                                                        @endfor
+
+                                                                        var value = $("#clientRF-"+{{$c}}+"-"+{{$m}}).val();
+                                                                        transform = "handleNumber";
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/transformVal",
+                                                                            method:"POST",
+                                                                            data:{value,transform},
+                                                                            success: function(output){
+                                                                                value = output;
+
+                                                                                var PY = $("#PY-"+{{$c}}+"-"+{{$m}}).val();
+
+                                                                                $.ajax({
+                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                    method:"POST",
+                                                                                    data:{PY,transform},
+                                                                                    success: function(output){
+                                                                                        PY = output;
+
+                                                                                        var tmp = value - PY;
+
+                                                                                        transform = "Comma";
+
+                                                                                        $.ajax({
+                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                            method:"POST",
+                                                                                            data:{tmp,transform},
+                                                                                            success: function(output){
+                                                                                                tmp = output;
+
+                                                                                                $("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
+
+                                                                                                if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+
+                                                                                                    var firstValue = $("#RFvsPY-"+{{$c}}+"-0").val();
+                                                                                                    var secondValue = $("#RFvsPY-"+{{$c}}+"-1").val();
+                                                                                                    var thirdValue = $("#RFvsPY-"+{{$c}}+"-0").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue,thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsPY-"+{{$c}}+"-3").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+                                                                                                }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+
+                                                                                                    var firstValue = $("#RFvsPY-"+{{$c}}+"-4").val();
+                                                                                                    var secondValue = $("#RFvsPY-"+{{$c}}+"-5").val();
+                                                                                                    var thirdValue = $("#RFvsPY-"+{{$c}}+"-6").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue,thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsPY-"+{{$c}}+"-7").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+                                                                                                }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+
+                                                                                                    var firstValue = $("#RFvsPY-"+{{$c}}+"-8").val();
+                                                                                                    var secondValue = $("#RFvsPY-"+{{$c}}+"-9").val();
+                                                                                                    var thirdValue = $("#RFvsPY-"+{{$c}}+"-10").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue,thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsPY-"+{{$c}}+"-11").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+                                                                                                }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+
+                                                                                                    var firstValue = $("#RFvsPY-"+{{$c}}+"-12").val();
+                                                                                                    var secondValue = $("#RFvsPY-"+{{$c}}+"-13").val();
+                                                                                                    var thirdValue = $("#RFvsPY-"+{{$c}}+"-14").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue,thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsPY-"+{{$c}}+"-15").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+
+                                                                                                var Q1 = $("#RFvsPY-"+{{$c}}+"-3").val();
+                                                                                                var Q2 = $("#RFvsPY-"+{{$c}}+"-7").val();
+                                                                                                var Q3 = $("#RFvsPY-"+{{$c}}+"-11").val();
+                                                                                                var Q4 = $("#RFvsPY-"+{{$c}}+"-15").val();
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/reCalculateTotalVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{Q1,Q2,Q3,Q4},
+                                                                                                    success: function(output){
+                                                                                                        $("#totalRFvsPY-"+{{$c}}).val(output);
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                transform = "handleNumber";
+                                                                                                var booking = $("#bookingE-"+{{$m}}).val();
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{booking,transform},
+                                                                                                    success: function(output){
+                                                                                                        booking = output;
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                var Temp2 = $("#target-"+{{$m}}).val();
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{Temp2,transform},
+                                                                                                    success: function(output){
+                                                                                                        Temp2 = output;
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                transform = "handleNumber";
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{rf,transform},
+                                                                                                    success: function(output){
+                                                                                                        rf = output;
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                transform = "Comma";
+                                                                                                var RFvsTarget = (rf-Temp2);
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{RFvsTarget,transform},
+                                                                                                    success: function(output){
+                                                                                                        $("#RFvsTarget-"+{{$m}}).val(output);
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                var pending = (rf-booking);
+
+                                                                                                $.ajax({
+                                                                                                    url:"/ajaxPAndR/transformVal",
+                                                                                                    method:"POST",
+                                                                                                    data:{pending,transform},
+                                                                                                    success: function(output){
+                                                                                                        $("#pending-"+{{$m}}).val(output);
+                                                                                                    },
+                                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                                    }
+                                                                                                });
+
+                                                                                                if (Temp2 == 0) {
+                                                                                                    var Temp3 = 0+"%";
+                                                                                                }else{
+                                                                                                    var Temp3 = ((rf/Temp2)*100).toFixed(2);
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{Temp3,transform},
+                                                                                                        success: function(output){
+                                                                                                            Temp3 = output;
+                                                                                                            Temp3 = Temp3 + "%";
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+
+                                                                                                $("#achievement-"+{{$m}}).val(Temp3);
+
+                                                                                                if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+
+                                                                                                    var month = 0;
+                                                                                                    transform = "handleNumber";
+                                                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+                                                                                                        var aux = $("#clientRF-"+{{$c2}}+"-3").val();
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{aux,transform},
+                                                                                                            success: function(output){
+                                                                                                                month += output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+                                                                                                    @endfor
+
+                                                                                                    var firstValue = $("#target-0").val();
+                                                                                                    var secondValue = $("#target-1").val();
+                                                                                                    var thirdValue = $("#target-2").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var target = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var firstValue = $("#bookingE-0").val();
+                                                                                                    var secondValue = $("#bookingE-1").val();
+                                                                                                    var thirdValue = $("#bookingE-2").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var booking = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var aux = (month-booking);
+                                                                                                    transform = "Comma";
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{aux,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#pending-3").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var RFvsTargetQ = (month-target);              
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{RFvsTargetQ,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsTarget-3").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    if (target == 0) {
+                                                                                                        var Temp3 = 0+"%";
+                                                                                                    }else{
+                                                                                                        var Temp3 = ((month/target)*100).toFixed(2);
+
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{Temp3,transform},
+                                                                                                            success: function(output){
+                                                                                                                Temp3 = output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        Temp3 = Temp3 + "%";
+                                                                                                    }
+
+                                                                                                    $("#achievement-3").val(Temp3);
+                                                                                                }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+
+                                                                                                    var month = 0;
+                                                                                                    transform = "handleNumber";
+
+                                                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+                                                                                                        var aux = $("#clientRF-"+{{$c2}}+"-7").val();
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{aux,transform},
+                                                                                                            success: function(output){
+                                                                                                                month += output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+                                                                                                    @endfor
+
+                                                                                                    var firstValue = $("#target-4").val();
+                                                                                                    var secondValue = $("#target-5").val();
+                                                                                                    var thirdValue = $("#target-6").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var target = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var firstValue = $("#bookingE-4").val();
+                                                                                                    var secondValue = $("#bookingE-5").val();
+                                                                                                    var thirdValue = $("#bookingE-6").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var booking = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var aux = (month-booking);
+                                                                                                    transform = "Comma";
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{aux,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#pending-7").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var RFvsTargetQ = (month-target);              
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{RFvsTargetQ,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsTarget-7").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    if (target == 0) {
+                                                                                                        var Temp3 = 0+"%";
+                                                                                                    }else{
+                                                                                                        var Temp3 = ((month/target)*100).toFixed(2);
+
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{Temp3,transform},
+                                                                                                            success: function(output){
+                                                                                                                Temp3 = output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        Temp3 = Temp3 + "%";
+                                                                                                    }
+
+                                                                                                    $("#achievement-7").val(Temp3);
+
+                                                                                                }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+
+                                                                                                    var month = 0;
+                                                                                                    transform = "handleNumber";
+
+                                                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+                                                                                                        var aux = $("#clientRF-"+{{$c2}}+"-11").val();
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{aux,transform},
+                                                                                                            success: function(output){
+                                                                                                                month += output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+                                                                                                    @endfor
+
+                                                                                                    var firstValue = $("#target-8").val();
+                                                                                                    var secondValue = $("#target-9").val();
+                                                                                                    var thirdValue = $("#target-10").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var target = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var firstValue = $("#bookingE-8").val();
+                                                                                                    var secondValue = $("#bookingE-9").val();
+                                                                                                    var thirdValue = $("#bookingE-10").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var booking = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var aux = (month-booking);
+                                                                                                    transform = "Comma";
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{aux,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#pending-11").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var RFvsTargetQ = (month-target);              
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{RFvsTargetQ,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsTarget-11").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    if (target == 0) {
+                                                                                                        var Temp3 = 0+"%";
+                                                                                                    }else{
+                                                                                                        var Temp3 = ((month/target)*100).toFixed(2);
+
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{Temp3,transform},
+                                                                                                            success: function(output){
+                                                                                                                Temp3 = output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        Temp3 = Temp3 + "%";
+                                                                                                    }
+
+                                                                                                    $("#achievement-11").val(Temp3);
+                                                                                                }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+
+                                                                                                    var month = 0;
+                                                                                                    transform = "handleNumber";
+
+                                                                                                    @for($c2=0;$c2<sizeof($client);$c2++)
+                                                                                                        var aux = $("#clientRF-"+{{$c2}}+"-15").val();
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{aux,transform},
+                                                                                                            success: function(output){
+                                                                                                                month += output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+                                                                                                    @endfor
+
+                                                                                                    var firstValue = $("#target-12").val();
+                                                                                                    var secondValue = $("#target-13").val();
+                                                                                                    var thirdValue = $("#target-14").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var target = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var firstValue = $("#bookingE-12").val();
+                                                                                                    var secondValue = $("#bookingE-13").val();
+                                                                                                    var thirdValue = $("#bookingE-14").val();
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/reCalculateQuarterValues",
+                                                                                                        method:"POST",
+                                                                                                        data:{firstValue,secondValue, thirdValue},
+                                                                                                        success: function(output){
+                                                                                                            var booking = output;
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var aux = (month-booking);
+                                                                                                    transform = "Comma";
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{aux,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#pending-15").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    var RFvsTargetQ = (month-target);              
+
+                                                                                                    $.ajax({
+                                                                                                        url:"/ajaxPAndR/transformVal",
+                                                                                                        method:"POST",
+                                                                                                        data:{RFvsTargetQ,transform},
+                                                                                                        success: function(output){
+                                                                                                            $("#RFvsTarget-15").val(output);
+                                                                                                        },
+                                                                                                        error: function(xhr, ajaxOptions,thrownError){
+                                                                                                            alert(xhr.status+" "+thrownError);
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    if (target == 0) {
+                                                                                                        var Temp3 = 0+"%";
+                                                                                                    }else{
+                                                                                                        var Temp3 = ((month/target)*100).toFixed(2);
+
+                                                                                                        $.ajax({
+                                                                                                            url:"/ajaxPAndR/transformVal",
+                                                                                                            method:"POST",
+                                                                                                            data:{Temp3,transform},
+                                                                                                            success: function(output){
+                                                                                                                Temp3 = output;
+                                                                                                            },
+                                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                        Temp3 = Temp3 + "%";
+                                                                                                    }
+
+                                                                                                    $("#achievement-15").val(Temp3);
+                                                                                                }
+                                                                                            },
+                                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                                alert(xhr.status+" "+thrownError);
+                                                                                            }
+                                                                                        });
+                                                                                    },
+                                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                                        alert(xhr.status+" "+thrownError);
+                                                                                    }
+                                                                                });
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        var Q1 = $("#rf-3").val();
+                                                                        var Q2 = $("#rf-7").val();
+                                                                        var Q3 = $("#rf-11").val();
+                                                                        var Q4 = $("#rf-15").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/reCalculateTotalVal",
+                                                                            method:"POST",
+                                                                            data:{Q1,Q2,Q3,Q4},
+                                                                            success: function(output){
+                                                                                var RF = output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        var Q1 = $("#target-3").val();
+                                                                        var Q2 = $("#target-7").val();
+                                                                        var Q3 = $("#target-11").val();
+                                                                        var Q4 = $("#target-15").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/reCalculateTotalVal",
+                                                                            method:"POST",
+                                                                            data:{Q1,Q2,Q3,Q4},
+                                                                            success: function(output){
+                                                                                var target = output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        var Q1 = $("#bookingE-3").val();
+                                                                        var Q2 = $("#bookingE-7").val();
+                                                                        var Q3 = $("#bookingE-11").val();
+                                                                        var Q4 = $("#bookingE-15").val();
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/reCalculateTotalVal",
+                                                                            method:"POST",
+                                                                            data:{Q1,Q2,Q3,Q4},
+                                                                            success: function(output){
+                                                                                var booking = output;
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        var totalPending = (RF-booking);
+                                                                        transform = "Comma";
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/transformVal",
+                                                                            method:"POST",
+                                                                            data:{totalPending,transform},
+                                                                            success: function(output){
+                                                                                $("#totalPending").val(output);
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        var TotalRFvsTarget = (RF-target);
+
+                                                                        $.ajax({
+                                                                            url:"/ajaxPAndR/transformVal",
+                                                                            method:"POST",
+                                                                            data:{TotalRFvsTarget,transform},
+                                                                            success: function(output){
+                                                                                $("#TotalRFvsTarget").val(output);
+                                                                            },
+                                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                                alert(xhr.status+" "+thrownError);
+                                                                            }
+                                                                        });
+
+                                                                        if (target == 0) {
+                                                                            var Temp3 = 0+"%";
+                                                                        }else{
+
+                                                                            var Temp3 = ((RF/target)*100).toFixed(2);
+
+                                                                            $.ajax({
+                                                                                url:"/ajaxPAndR/transformVal",
+                                                                                method:"POST",
+                                                                                data:{Temp3,transform},
+                                                                                success: function(output){
+                                                                                    $("#TotalRFvsTarget").val(output);
+                                                                                },
+                                                                                error: function(xhr, ajaxOptions,thrownError){
+                                                                                    alert(xhr.status+" "+thrownError);
+                                                                                }
+                                                                            });
+
+                                                                            Temp3 = Temp3 + "%";
+                                                                            $("#totalAchievement").val(Temp3);
+                                                                        }
+                                                                    },
+                                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                                        alert(xhr.status+" "+thrownError);
+                                                                    }
+                                                                });
+
+                                                            },
+                                                            error: function(xhr, ajaxOptions,thrownError){
+                                                                alert(xhr.status+" "+thrownError);
+                                                            }
+                                                        });
+
+                                                    },
+                                                    error: function(xhr, ajaxOptions,thrownError){
+                                                        alert(xhr.status+" "+thrownError);
+                                                    }
+                                                });
+                                            },
+                                            error: function(xhr, ajaxOptions,thrownError){
+                                                alert(xhr.status+" "+thrownError);
+                                            }
+                                        });
                                     },
                                     error: function(xhr, ajaxOptions,thrownError){
                                         alert(xhr.status+" "+thrownError);
                                     }
                                 });
-
                             },
                             error: function(xhr, ajaxOptions,thrownError){
                                 alert(xhr.status+" "+thrownError);
                             }
                         });
+            
     */
 
 }
-
-/*
-if ($(this).val() == '') {
-                            $(this).val(0);
-                        }
-                        $(this).val(Comma(handleNumber($(this).val())));
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
-                            $("#clientRF-"+{{$c}}+"-3").val(value);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
-                            $("#clientRF-"+{{$c}}+"-7").val(value);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
-                            $("#clientRF-"+{{$c}}+"-11").val(value);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
-                            $("#clientRF-"+{{$c}}+"-15").val(value);
-                        }
-                        var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
-                        $("#totalClient-"+{{$c}}).val(totalClient);
-                        Temp3 = handleNumber(totalClient);
-                        if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') ) ) {
-                            $("#client-"+{{$c}}).css("background-color","red");
-                        }else{
-                            $("#client-"+{{$c}}).css("background-color","");
-                        }
-                        var rf = 0;
-                        @for($c2=0;$c2<sizeof($client);$c2++)
-                            if ($("#splitted-"+{{$c2}}).val() != false) {
-                                var mult = 0.5;
-                            }else{
-                                var mult = 1;
-                            }
-                            rf += (handleNumber($("#clientRF-"+{{$c2}}+"-"+{{$m}}).val())*mult);
-                        @endfor
-                        rf = Comma(rf);
-                        $("#rf-"+{{$m}}).val(rf);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                if ($("#splitted-"+{{$c2}}).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-3").val())*mult);
-                            @endfor
-                            month = Comma(month);
-                            $("#rf-3").val(month);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                if ($("#splitted-"+{{$c2}}).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-7").val())*mult);
-                            @endfor
-                            month = Comma(month);
-                            $("#rf-7").val(month);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                if ($("#splitted-"+{{$c2}}).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-11").val())*mult);
-                            @endfor
-                            month = Comma(month);
-                            $("#rf-11").val(month);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                if ($("#splitted-"+{{$c2}}).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+{{$c2}}+"-15").val())*mult);
-                            @endfor
-                            month = Comma(month);
-                            $("#rf-15").val(month);
-                        }
-                        var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
-                        $("#total-total").val(total);
-                        @for($c2=0;$c2<sizeof($client);$c2++)
-                            var temp = handleNumber($("#totalClient-"+{{$c2}}).val())/handleNumber($("#total-total").val());
-                            temp = Comma(temp*100);
-                            $("#totalPP2-"+{{$c2}}).val(temp);
-                            $("#totalPP3-"+{{$c2}}).val(temp);
-                        @endfor
-                        var value = handleNumber($(this).val());
-                        var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
-                        var tmp = value - PY;
-                        tmp = Comma(tmp);
-                        $("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-0").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-1").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-2").val()));
-                            $("#RFvsPY-"+{{$c}}+"-3").val(value);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-4").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-5").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-6").val()));
-                            $("#RFvsPY-"+{{$c}}+"-7").val(value);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-8").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-9").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-10").val()));
-                            $("#RFvsPY-"+{{$c}}+"-11").val(value);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-12").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-13").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-14").val()));
-                            $("#RFvsPY-"+{{$c}}+"-15").val(value);
-                        }
-                        var Temp = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-15").val()));
-                        $("#totalRFvsPY-"+{{$c}}).val(Temp);
-                        var booking = handleNumber($("#bookingE-"+{{$m}}).val());
-                        var Temp2 = handleNumber($("#target-"+{{$m}}).val());
-                        rf = handleNumber(rf);
-                        var RFvsTarget = Comma(rf-Temp2);
-                        var pending = Comma(rf-booking);
-                        $("#pending-"+{{$m}}).val(pending);
-                        $("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
-                        if (Temp2 == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
-                        }
-                        $("#achievement-"+{{$m}}).val(Temp3);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                month += handleNumber($("#clientRF-"+{{$c2}}+"-3").val());
-                            @endfor
-                            var target = handleNumber($("#target-0").val())+handleNumber($("#target-1").val())+handleNumber($("#target-2").val());
-                            var booking = handleNumber($("#bookingE-0").val())+handleNumber($("#bookingE-1").val())+handleNumber($("#bookingE-2").val());
-                            $("#pending-3").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-3").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-3").val(Temp3);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                month += handleNumber($("#clientRF-"+{{$c2}}+"-7").val());
-                            @endfor
-                            var target = handleNumber($("#target-4").val())+handleNumber($("#target-5").val())+handleNumber($("#target-6").val());
-                            var booking = handleNumber($("#bookingE-4").val())+handleNumber($("#bookingE-5").val())+handleNumber($("#bookingE-6").val());
-                            $("#pending-7").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-7").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-7").val(Temp3);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                month += handleNumber($("#clientRF-"+{{$c2}}+"-11").val());
-                            @endfor
-                            var target = handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val());
-                            var booking = handleNumber($("#bookingE-8").val())+handleNumber($("#bookingE-9").val())+handleNumber($("#bookingE-10").val());
-                            $("#pending-11").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-11").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-11").val(Temp3);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var month =0;
-                            @for($c2=0;$c2<sizeof($client);$c2++)
-                                month += handleNumber($("#clientRF-"+{{$c2}}+"-15").val());
-                            @endfor
-                            var target = handleNumber($("#target-12").val())+handleNumber($("#target-13").val())+handleNumber($("#target-14").val());
-                            var booking = handleNumber($("#bookingE-12").val())+handleNumber($("#bookingE-13").val())+handleNumber($("#bookingE-14").val());
-                            $("#pending-15").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-15").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-15").val(Temp3);
-                        }
-                        var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
-                        var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
-                        var booking = handleNumber($("#bookingE-3").val()) + handleNumber($("#bookingE-7").val()) + handleNumber($("#bookingE-11").val()) + handleNumber($("#bookingE-15").val());
-                        $("#totalPending").val(Comma(RF-booking));
-                        $("#TotalRFvsTarget").val(Comma(RF-target));
-                        if (target == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((RF/target)*100).toFixed(2))+"%";
-                        }
-                        $("#totalAchievement").val(Temp3);
-*/

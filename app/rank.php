@@ -471,12 +471,8 @@ class rank extends Model{
             $res[$type2[$t]->id] = $this->searchValue($type2[$t], $values[0], $type);
         }
 
-
         return $res;
-
-        
     }
-
 
     public function filterValues2($values, $type2, $type){
     
@@ -501,7 +497,7 @@ class rank extends Model{
         return $res;
     }
 
-    public function assemblerTotal($mtx, $years){
+    public function assemblerTotal($mtx, $years, $size){
 
         for ($l=0; $l < sizeof($mtx); $l++) { 
 
@@ -519,7 +515,7 @@ class rank extends Model{
                 $vec[$l] = "-";
             }       
 
-            for ($c=0; $c < sizeof($mtx[$l]); $c++) { 
+            for ($c=0; $c < $size; $c++) { 
                 
                 if ($c != 0 && substr($mtx[$l][0], 0, 3) == "Rev") {
                     if ($mtx[$l][$c] == "-") {

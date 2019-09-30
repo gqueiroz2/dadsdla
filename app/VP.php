@@ -213,6 +213,9 @@ class VP extends pAndR{
         }
         $currentMonth = intval( date('m') );
         $fcstInfo = $this->getForecast($con,$sql,$regionID);
+
+        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
+        
         if(!$fcstInfo){
             return false;
         }else{
@@ -221,7 +224,7 @@ class VP extends pAndR{
             $currencyCheck = $temp["currencyCheck"];
             $newCurrency = $temp["newCurrency"];
             $oldCurrency = $temp["oldCurrency"];
-            $temp2 = $base->adaptValue($value,$save,$regionID,true);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients,true);
             $valueCheck = $temp2["valueCheck"];
             $multValue = $temp2["multValue"];
         }
@@ -234,13 +237,12 @@ class VP extends pAndR{
             $adjust[$c]['multValue'] = $multValue[$c];
         }
         $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
-        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
         $varAbsYTDByClient = $this->subArrays($bookingscYTDByClient,$bookingspYTDByClient);
         $fcstcMonthByClient = $this->currentMonthByClient($con,$sql,"fcst",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
-        
+
         $tmp = $this->fcstMonths($con,$sql,$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
         $percentage = $this->getPercentage($tmp);
         $bookingscMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
@@ -259,7 +261,6 @@ class VP extends pAndR{
             $fcstFullYearByClientAE = $fcstFullYearByClient;
         }
 
-        
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value,$fcstInfo);
         $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
@@ -403,7 +404,7 @@ class VP extends pAndR{
         $newCurrency = $temp["newCurrency"][0];
         $oldCurrency = $temp["oldCurrency"][0];
 
-        $temp2 = $base->adaptValue($value,$save,$regionID);
+        $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
 
         $valueCheck = $temp2["valueCheck"][0];
         $multValue = $temp2["multValue"][0];
@@ -434,7 +435,7 @@ class VP extends pAndR{
             }
 
             if ($valueCheck) {
-                $resp[$c] = ($resp[$c]*$multValue);
+                $resp[$c] = ($resp[$c]*$multValue[$c]);
             }
 
         }
@@ -772,20 +773,25 @@ class VP extends pAndR{
                     //echo "<pre>".($selectSum[$c])."</pre>";
                     $res[$c] = $con->query($selectSum[$c]);
                     $from = array("salesRepID","revenue");
-                    $temp = $sql->fetch($res[$c],$from,$from)[0];
-                    $salesRepRev = $temp['salesRepID'];
-                    $sumRevenue[$c] = doubleval($temp['revenue']);
-                    for ($a=0; $a < sizeof($adjust); $a++) { 
-                        if($adjust[$a]["salesRepID"] == $salesRepRev){
-                            if($adjust[$a]['checkCurrency']){
-                                $sumRevenue[$c] = ($sumRevenue[$c]*$adjust[$a]['newCurrency'])/$adjust[$a]['oldCurrency'];
+                    $temp = $sql->fetch($res[$c],$from,$from);
+                    $sumRevenue[$c] = 0;
+                    if ($temp) {
+                        for ($t=0; $t <sizeof($temp); $t++) { 
+                            $salesRepRev[$t] = $temp[$t]['salesRepID'];
+                            $tmp[$c] = doubleval($temp[$t]['revenue']);
+                            for ($a=0; $a < sizeof($adjust); $a++) { 
+                                if($adjust[$a]["salesRepID"] == $salesRepRev[$t]){
+                                    if($adjust[$a]['checkCurrency']){
+                                        $tmp[$c] = ($tmp[$c]*$adjust[$a]['newCurrency'])/$adjust[$a]['oldCurrency'];
+                                    }
+                                    if($adjust[$a]['checkValue']){
+                                        $tmp[$c] = $tmp[$c]*$adjust[$a]['multValue'][$c];
+                                    }
+                                }
                             }
-                            if($adjust[$a]['checkValue']){
-                                $sumRevenue[$c] = $sumRevenue[$c]*$adjust[$a]['multValue'];
-                            }
+                            $sumRevenue[$c] += $tmp[$c];                    
                         }
-                    }                    
-                    
+                    }
                 }
                 break;
             case 'fcstClosed':

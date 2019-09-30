@@ -22,6 +22,37 @@ use App\base;
 
 class ajaxController extends Controller{
 
+    public function getAgencyByRegion(){
+        $a = new agency;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $region = Request::get("regionID");
+        $agency = $a->getAgencyByRegion($con,array($region));
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+
+
+    }
+
+    public function getClientByRegion(){
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        var_dump(Request::all());
+        /*
+        $region = Request::get("regionID");
+        $agency = $a->getAgencyByRegion($con,array($region));
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+        */
+
+
+    }
+
     public function secondaryFilterTitle(){        
         $type = Request::get('type');
         if($type == "agency"){
@@ -877,15 +908,60 @@ class ajaxController extends Controller{
         $scr->renderSubAssembler($mtx, $total, $type, $years);
     }
 
+    public function splittedClients(){
+        
+        $splitted = Request::get("splitted");
+        $client = Request::get("client");
+        
+        if ($splitted != 0) {
+            $mult = 0.5;
+        }else{
+            $mult = 1;
+        }
+
+        $res = ($this->handleNumber($client)*$mult);
+
+        echo $res;
+    }
+
+    public function transformVal(){
+        
+        $value = Request::get("rf");
+        $transform = Request::get("transform");
+
+        if ($transform == "Comma") {
+            $value = $this->Comma($value);            
+        }elseif ($transform == "handleNumber") {
+            $value = $this->handleNumber($value);
+        }
+
+        echo $value;
+    }
+
     public function changeVal(){
         
         $editedValue = Request::get("editedValue");
 
         if ($editedValue == "") {
-            return 0;
+            echo 0;
         }else{
             $editedValue = $this->Comma($this->handleNumber($editedValue));
             echo $editedValue;
+        }
+    }
+
+    public function verifyVal(){
+        
+        $totalClient = Request::get("totalClient");
+        $total = Request::get("total");
+
+        $totalClient = $this->handleNumber($totalClient);
+        $total = $this->handleNumber($total);
+
+        if (round($totalClient, 0) != round($total, 0)) {
+            echo 1;
+        }else{
+            echo -1;
         }
     }
 
@@ -926,7 +1002,38 @@ class ajaxController extends Controller{
         
     }
 
+    public function number(){
+        
+        $firstValue = Request::get("firstValue");
+        $secondValue = Request::get("secondValue");
+        $op = Request::get("op");
+
+        $firstValue = $this->handleNumber($firstValue);
+        $secondValue = $this->handleNumber($secondValue);
+
+        if ($op == "+") {
+            $res = $firstValue + $secondValue;
+        }elseif ($op == "-") {
+            # code...
+        }elseif ($op == "/") {
+            if ($firstValue == 0 || $secondValue == 0) {
+                $res = 0;
+            }else{
+                $res = $firstValue/$secondValue;
+            }
+        }elseif ($op == "*") {
+            # code...
+        }
+
+        echo $res;
+
+    }
+
     function handleNumber($number){
+
+        if ($number == "") {
+            return 0;
+        }
 
         $number = str_replace(",", "", $number);
 

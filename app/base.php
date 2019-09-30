@@ -510,7 +510,7 @@ class base extends Model{
 
     }
 
-    public function adaptValue($value,$save,$regionID,$type = false){
+    public function adaptValue($value,$save,$regionID,$listOfClients,$type = false){
         
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -525,31 +525,47 @@ class base extends Model{
         $multValue = array();
 
         for ($i=0; $i < sizeof($save); $i++) { 
-            $multValue[$i] = 0;
+            $multValue[$i] = array();
         }
 
         for ($s=0; $s < sizeof($save); $s++) {
             if ($value == strtolower($save[$s][$vall])) {
                 $valueCheck[$s] = false;
                 $multValue[$s] = false;
+                $mult = false;
             }else{
+                $from = array("agency_commission");
+
+                $sql = new sql();
+
+                $tmp = array($regionID);
+
+                $mult = $this->getAgencyComm($con,$tmp);
+                
+                for ($c=0; $c <sizeof($listOfClients) ; $c++) { 
+                    $select[$c] = "SELECT agency_commission FROM sf_pr WHERE client_id = \"".$listOfClients[$c]['clientID']."\" AND region_id = \"".$regionID."\"";
+                    $res[$c] = $con->query($select[$c]);
+                    $resp[$c] = floatval($sql->fetch($res[$c],$from,$from)[0]['agency_commission'])*100;
+                    if (!$resp[$c]) {
+                        $resp[$c] = $mult;
+                    }
+
+                    if (strtolower($value) == "net") {
+                        $multValue[$s][$c] = (100 - $resp[$c])/100;
+                    }elseif(strtolower($value) == "gross"){
+                        $multValue[$s][$c] = 1/(1-($resp[$c]/100));
+                    }
+
+                }
 
                 $valueCheck[$s] = true;
 
-                $tmp = array($regionID);
-                
-                $mult = $this->getAgencyComm($con,$tmp);
-                
-                if (strtolower($value) == "net") {
-                    $multValue[$s] = (100 - $mult)/100;
-                }elseif(strtolower($value) == "gross"){
-                    $multValue[$s] = 1/(1-($mult/100));
-                }
             }
         }
 
         $array = array("valueCheck" => $valueCheck,
-                       "multValue" => $multValue
+                       "multValue" => $multValue,
+                       "mult" => $mult
 
         );
 

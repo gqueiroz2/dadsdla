@@ -273,6 +273,8 @@ class VPMonth extends pAndR {
 
         $save = $sql->fetch($result,$from,$from);
         
+        $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
+
         if (!$save) {
             $save = false;
             $valueCheck = false;
@@ -285,10 +287,11 @@ class VPMonth extends pAndR {
             $newCurrency = $temp['newCurrency'][0];
             $oldCurrency = $temp['oldCurrency'][0];
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
 
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
+            $mult = $temp2["mult"];
         }
 
         $regionName = $region;
@@ -305,7 +308,6 @@ class VPMonth extends pAndR {
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
 
         for ($b=0; $b < sizeof($brand); $b++) {
             for ($m=0; $m < sizeof($month); $m++) {
@@ -408,8 +410,8 @@ class VPMonth extends pAndR {
                     }
                     
                     if ($valueCheck) {
-                        $rollingFCSTV2[$m] = $rollingFCSTV2[$m]*$multValue;
-                        $manualRolling[$m] = $manualRolling[$m]*$multValue;
+                        $rollingFCSTV2[$m] = $rollingFCSTV2[$m]*$mult;
+                        $manualRolling[$m] = $manualRolling[$m]*$mult;
                     }
 
                     if ($currencyCheck) {
@@ -466,10 +468,19 @@ class VPMonth extends pAndR {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
                         $rollingFCST[$c][$m] = floatval($saida[$c][$m]['value']);
                         $pastRollingFCST[$c][$m] = floatval($pastSaida[$c][$m]['value']);
-                        $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
+                        
+                        if ($valueCheck) {
+                            $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m]*$multValue[$c];
 
-                        if ($type == "V1") {
-                            $manualRolling[$m] += $rollingFCST[$c][$m];
+                            if ($type == "V1") {
+                                $manualRolling[$m] += $rollingFCST[$c][$m]*$multValue[$c];
+                            }
+                        }else{
+                            $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
+
+                            if ($type == "V1") {
+                                $manualRolling[$m] += $rollingFCST[$c][$m];
+                            }
                         }
                     }
                 }else{
@@ -488,8 +499,8 @@ class VPMonth extends pAndR {
                 
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
-                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
-                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue;
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue[$c];
+                        $pastRollingFCST[$c][$m] = $pastRollingFCST[$c][$m]*$multValue[$c];
                     }
                 }
 
@@ -504,14 +515,6 @@ class VPMonth extends pAndR {
 
             for ($m=0; $m < sizeof($month); $m++) { 
                 
-                if ($valueCheck) {
-                    $fPastRollingFCST[$m] = $fPastRollingFCST[$m]*$multValue;
-
-                    if ($type == 'V1') {
-                        $manualRolling[$m] = $manualRolling[$m]*$multValue;
-                    }
-                }
-
                 if ($currencyCheck) {
                     
                     $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;

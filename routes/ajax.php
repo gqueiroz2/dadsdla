@@ -14,6 +14,12 @@
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'ajax'],function(){
 
+		Route::group(['prefix'=>'adsales'],function(){
+			Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion');
+			Route::post('agencyByRegion','ajaxController@getAgencyByRegion');
+			Route::post('clientByRegion','ajaxController@getClientByRegion');
+		});
+
 		Route::post('yearOnFcst','ajaxController@yearOnFcst');
 
 		Route::post("agencyNumberByAgencyGroup","rankingController@agencyNumberByAgencyGroup");
