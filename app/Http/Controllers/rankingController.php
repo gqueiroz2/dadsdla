@@ -107,16 +107,16 @@ class rankingController extends Controller {
 
         $filterValues = $r->filterValues($values, $type2, $type);
         
-        $matrix = $r->assembler($values, $type2, $years, $type, $filterValues);
-        $mtx = $matrix[0];
-        $total = $matrix[1];
+        $mtx = $r->assembler($values, $type2, $years, $type, $filterValues);
 
         if ($nPos == 'All') {
             $size = sizeof($mtx[0]);
         }else{
             $size = ($nPos+1);
         }
-
+        
+        $total = $r->assemblerTotal($mtx, $years, $size);
+        
         $names = $r->createNames2($type, $months, $years);
 
         $render = new renderRanking();

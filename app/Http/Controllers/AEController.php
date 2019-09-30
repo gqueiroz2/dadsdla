@@ -242,6 +242,14 @@ class AEController extends Controller{
 
         $error = false;
 
+        //lines of sales rep table
+        $pending = $forRender['pending'];
+        $RFvsTarget = $forRender['RFvsTarget'];
+
+        //lines of clients table
+        $rollingClients = $forRender['lastRollingFCST'];
+        $manual = $forRender['rollingFCST'];
+
         return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
     }
 
