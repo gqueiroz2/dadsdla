@@ -13,6 +13,31 @@ class Render extends Model{
     
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
+    public function agencyForm(){
+        
+        echo "<select class='selectpicker' id='agency' name='agency[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
+    public function clientForm(){
+        echo "<select id='client' name='client' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
+    public function sectorForm(){
+        echo "<select id='sector' name='sector' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
+    public function categoryForm(){
+        echo "<select id='category' name='category' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
     public function savedFCST($con,$permission,$userName){
 
         $sql = new sql();
@@ -196,12 +221,27 @@ class Render extends Model{
        echo "</select>";
     }
 
-    public function year(){
-    	
+    public function sourceDataBase(){
+
+        $arraySource = array("CMAPS","IBMS/BTS","FW","SF");
+
+         echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select </option>";
+            for ($a=0; $a <sizeof($arraySource) ; $a++) {
+                echo "<option value='".$arraySource[$a]."'>".$arraySource[$a]."</option>";
+            }
+        echo "</select>";
+
+    }
+
+    public function year(){    	
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
-
     	echo "</select>";
+    }
+
+    public function piNumber(){
+        echo "<input type='text' class='form-control'>";
     }
 
     public function brand($brand){
