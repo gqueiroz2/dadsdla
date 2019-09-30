@@ -443,7 +443,7 @@ class dashboards extends rank{
             }
         }
 
-        $total = $this->assemblerTotal($mtx, $years);
+        $total = $this->assemblerTotal($mtx, $years, sizeof($mtx[0]));
 
         return array($mtx, $total);
     }

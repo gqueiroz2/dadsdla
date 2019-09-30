@@ -243,6 +243,7 @@ class AEController extends Controller{
         $error = false;
 
         //lines of sales rep table
+        $rollingSalesRep = $forRender['executiveRevenueCYear'];
         $pending = $forRender['pending'];
         $RFvsTarget = $forRender['RFvsTarget'];
 
