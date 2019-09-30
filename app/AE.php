@@ -317,6 +317,7 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
 
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if (!$save) {
             $save = false;
@@ -337,7 +338,7 @@ class AE extends pAndR{
             $newCurrency = $temp["newCurrency"][0];
             $oldCurrency = $temp["oldCurrency"][0];
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
 
@@ -359,7 +360,6 @@ class AE extends pAndR{
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if($regionName == "Brazil"){
             $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
@@ -471,7 +471,7 @@ class AE extends pAndR{
                 
                 if ($valueCheck) {
                     for ($m=0; $m <sizeof($rollingFCST[$c]) ; $m++) { 
-                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue[$c];
                     }
                 }
 
@@ -657,6 +657,8 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
         
+        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
+
         if (!$save) {
             $save = false;
             $valueCheck = false;
@@ -677,10 +679,11 @@ class AE extends pAndR{
             $newCurrency = $temp[0]["newCurrency"][0];
             $oldCurrency = $temp[0]["oldCurrency"][0];
 
-            $temp2 = $base->adaptValue($value,$save,$regionID);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
 
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
+            $mult = $temp2["mult"];
         }
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
@@ -699,7 +702,6 @@ class AE extends pAndR{
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
 
         $readable = $this->monthAnalise($base);
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if($regionName == "Brazil"){
             $splitted = $this->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
@@ -815,7 +817,7 @@ class AE extends pAndR{
 
                 if ($valueCheck) {
                     for ($m=0; $m < sizeof($rollingFCST[$c]); $m++) { 
-                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue;
+                        $rollingFCST[$c][$m] = $rollingFCST[$c][$m]*$multValue[$c];
                     }
                 }
 

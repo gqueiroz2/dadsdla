@@ -213,6 +213,9 @@ class VP extends pAndR{
         }
         $currentMonth = intval( date('m') );
         $fcstInfo = $this->getForecast($con,$sql,$regionID);
+
+        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
+        
         if(!$fcstInfo){
             return false;
         }else{
@@ -221,7 +224,7 @@ class VP extends pAndR{
             $currencyCheck = $temp["currencyCheck"];
             $newCurrency = $temp["newCurrency"];
             $oldCurrency = $temp["oldCurrency"];
-            $temp2 = $base->adaptValue($value,$save,$regionID,true);
+            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients,true);
             $valueCheck = $temp2["valueCheck"];
             $multValue = $temp2["multValue"];
         }
@@ -234,7 +237,6 @@ class VP extends pAndR{
             $adjust[$c]['multValue'] = $multValue[$c];
         }
         $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
-        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
@@ -402,7 +404,7 @@ class VP extends pAndR{
         $newCurrency = $temp["newCurrency"][0];
         $oldCurrency = $temp["oldCurrency"][0];
 
-        $temp2 = $base->adaptValue($value,$save,$regionID);
+        $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
 
         $valueCheck = $temp2["valueCheck"][0];
         $multValue = $temp2["multValue"][0];
@@ -433,7 +435,7 @@ class VP extends pAndR{
             }
 
             if ($valueCheck) {
-                $resp[$c] = ($resp[$c]*$multValue);
+                $resp[$c] = ($resp[$c]*$multValue[$c]);
             }
 
         }
@@ -783,7 +785,7 @@ class VP extends pAndR{
                                         $tmp[$c] = ($tmp[$c]*$adjust[$a]['newCurrency'])/$adjust[$a]['oldCurrency'];
                                     }
                                     if($adjust[$a]['checkValue']){
-                                        $tmp[$c] = $tmp[$c]*$adjust[$a]['multValue'];
+                                        $tmp[$c] = $tmp[$c]*$adjust[$a]['multValue'][$c];
                                     }
                                 }
                             }
