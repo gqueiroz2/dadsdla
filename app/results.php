@@ -117,13 +117,11 @@ class results extends base{
                 if (!$source) {
                     if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                         if ($brands[$b][1] == "FN") {
-                            if ($form == "cmaps" && $year == $cYear) {
+                            /*if ($form == "cmaps" && $year == $cYear) {
                                 $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }/*elseif ($year == 2019 && ($months[$m][1] < 6)) {
-                                $where[$b][$m] = $this->defineValues($con, "plan_by_brand", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear, "ACTUAL");
-                            }*/else{
+                            }else{*/
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }
+                            //}
                         }elseif ($form == "mini_header") {
                             if (($year == $cYear) && ($months[$m][1] < $cMonth)) {
                                 $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
@@ -154,6 +152,8 @@ class results extends base{
     public function defineValues($con, $table, $currency, $brand, $month, $year, $region, $value, $keyYear, $source=false){
 
         $p = new pRate();
+
+        $keyYear = date('Y');
 
         if ($table != "plan_by_brand" && $table != "digital") {
 
@@ -256,6 +256,7 @@ class results extends base{
 
             if($table == "digital"){
                 $table = "fw_digital";
+                $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
             }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
