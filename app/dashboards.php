@@ -14,8 +14,7 @@ class dashboards extends rank{
 		$sr = new subRankings();
 
 	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	/*DEFINIR SE PARA BRASIL PE[
-	   	GA CMAPS OU NAO*/
+	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
 	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
 
 	   	$table = "ytd";
@@ -443,7 +442,7 @@ class dashboards extends rank{
             }
         }
 
-        $total = $this->assemblerTotal($mtx, $years);
+        $total = $this->assemblerTotal($mtx, $years, sizeof($mtx[0]));
 
         return array($mtx, $total);
     }
