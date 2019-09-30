@@ -22,6 +22,37 @@ use App\base;
 
 class ajaxController extends Controller{
 
+    public function getAgencyByRegion(){
+        $a = new agency;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $region = Request::get("regionID");
+        $agency = $a->getAgencyByRegion($con,array($region));
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+
+
+    }
+
+    public function getClientByRegion(){
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        var_dump(Request::all());
+        /*
+        $region = Request::get("regionID");
+        $agency = $a->getAgencyByRegion($con,array($region));
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+        */
+
+
+    }
+
     public function secondaryFilterTitle(){        
         $type = Request::get('type');
         if($type == "agency"){
