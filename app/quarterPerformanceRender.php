@@ -58,11 +58,11 @@ class quarterPerformanceRender extends Render {
 							}elseif ($v >= 1 && $v <= 6) {
 								$style = "style='width: 15%'";
 								if ($c == 2 || $c == 3) {
-									echo "<td class='center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
+									echo "<td class='center'>".number_format($mtx[$t][$b][$c][$v],0,",",".")."</td>";	
 								}elseif ($c == 4) {
-									echo "<td class='rcBlue center'>".number_format($mtx[$t][$b][$c][$v])."</td>";	
+									echo "<td class='rcBlue center'>".number_format($mtx[$t][$b][$c][$v],0,",",".")."</td>";	
 								}elseif ($c == 5) {
-									echo "<td class='medBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$t][$b][$c][$v],0,",",".")." %</td>";
 								}else{
 									echo "<td class='lightGrey center' $style>".$mtx[$t][$b][$c][$v]."</td>";
 								}
@@ -70,9 +70,9 @@ class quarterPerformanceRender extends Render {
 								if ($c == 1) {
 									echo "<td class='darkBlue center'>".$mtx[$t][$b][$c][$v]."</td>";
 								}elseif ($c >= 2 && $c <= 4) {
-									echo "<td class='smBlue center'>".number_format($mtx[$t][$b][$c][$v])."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$t][$b][$c][$v],0,",",".")."</td>";
 								}else{
-									echo "<td class='darkBlue center'>".number_format($mtx[$t][$b][$c][$v])." %</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$t][$b][$c][$v],0,",",".")." %</td>";
 								}
 							}
 							
