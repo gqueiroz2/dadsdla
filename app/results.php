@@ -240,10 +240,6 @@ class results extends base{
 
             if($table == "digital"){
                 $table = "fw_digital";
-<<<<<<< HEAD
-                $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
-=======
->>>>>>> be42f012431629ea170a4883a065fe91646897af
             }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
