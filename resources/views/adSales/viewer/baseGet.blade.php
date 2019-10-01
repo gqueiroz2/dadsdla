@@ -34,6 +34,7 @@
                             @endif
                             {{$render->sourceDataBase()}}
                         </div>
+                        {{--
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> PI: </span></label>
                             @if($errors->has('brand'))
@@ -41,6 +42,7 @@
                             @endif
                             {{$render->piNumber($brand)}}
                         </div>
+                        --}}
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Year: </span></label>
                             @if($errors->has('year'))
