@@ -1353,11 +1353,13 @@ class AE extends pAndR{
         CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
 
         */
+        $date = date('n')-1;
 
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
-                        AND (year = \"".$year."\")                      
+                        AND (year = \"".$year."\") 
+                        AND (from_date > \"".$date."\")                 
                   ";
 
 
@@ -1767,7 +1769,7 @@ class AE extends pAndR{
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
-                            AND (from_date > \"".$date."\")
+                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")
                           ";
         }
         $res = $con->query($select);
@@ -2014,6 +2016,8 @@ class AE extends pAndR{
 
     public function listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID){
 
+        $date = date('n')-1;
+
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
@@ -2021,7 +2025,8 @@ class AE extends pAndR{
     				FROM sf_pr s
     				LEFT JOIN client c ON c.ID = s.client_id
     				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
-                    AND ( region_id = \"".$regionID."\") AND ( stage != \"6\") AND ( stage != \"5\")
+                    AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
     				ORDER BY 1
     	       ";   	
     	$resSF = $con->query($sf);

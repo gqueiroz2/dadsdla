@@ -240,7 +240,7 @@ class VP extends pAndR{
         
         $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
-        
+
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
         $varAbsYTDByClient = $this->subArrays($bookingscYTDByClient,$bookingspYTDByClient);
