@@ -567,7 +567,7 @@ class subBrandRanking extends rankingBrand {
 		return array($mtx, $total);
     }
 
-    public function renderSubAssembler($mtx, $total, $type, $brand){
+    public function renderSubAssembler($mtx, $total, $type, $brand, $brands){
     	
     	if ($type == "agency") {
 			$pos = 5;
@@ -579,6 +579,8 @@ class subBrandRanking extends rankingBrand {
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
                 if ($brand == "DN") {
+                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 1px solid white; color: black; !important'>";
+                }elseif (sizeof($brands) == 1) {
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 1px solid white; color: black; !important'>";
                 }else{
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";

@@ -110,7 +110,8 @@ class base extends Model{
 
     public $nameReps = array(
                 "EC1" => array("New York International"),
-                "EC2" => array("Venezuela","Panama","Dominican Republic","Ecuador")
+                "EC2" => array("Venezuela","Panama","Dominican Republic","Ecuador"),
+                "EC3" => array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","Dominican Republic","Ecuador","Bolivia","Puerto Rico","New York International","US Hispanic")
         );
 
     public $NameName = array(
