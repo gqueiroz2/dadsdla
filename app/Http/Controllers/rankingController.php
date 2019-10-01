@@ -103,7 +103,13 @@ class rankingController extends Controller {
 
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
-        $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years);
+        $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years, $type2);
+        
+        /*for ($i=0; $i < sizeof($values); $i++) { 
+            for ($j=0; $j < sizeof($values[$i]); $j++) { 
+                var_dump($values[$i][$j]);
+            }
+        }*/
 
         $filterValues = $r->filterValues($values, $type2, $type);
         

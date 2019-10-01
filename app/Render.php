@@ -180,9 +180,8 @@ class Render extends Model{
 
     public function regionFiltered($region,$regionFiltered,$special){
         $b = new base();
-
         $regions = $b->filteredRegion($regionFiltered,$special);
-
+        
         $temp = array();
 
         for ($r=0; $r <sizeof($regions) ; $r++) { 
@@ -191,11 +190,10 @@ class Render extends Model{
             }
         }
 
-        $temp = array_unique($temp);
+        $temp = array_values(array_unique($temp));
 
         $tempId = array(array());
         $tempName = array(array());
-
 
         for ($t=0; $t <sizeof($temp); $t++) {
             $tempId[$t] = array();

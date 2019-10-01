@@ -745,7 +745,7 @@ class ajaxController extends Controller{
         
         $mtx = $matrix[0];
         $total = $matrix[1];
-
+        
         if ($type == "agencyGroup") {
             $newType = "agency";
         }elseif ($type == "agency") {
@@ -768,10 +768,18 @@ class ajaxController extends Controller{
         $currency = Request::get("currency");
         $months = Request::get("months");
         $name = Request::get("name");
+        
+        $brands = Request::get("brands");
+
+        for ($i=0; $i < sizeof($brands); $i++) { 
+            if ($brands[$i][1] == "DN") {
+                unset($brands[$b]);
+            }
+        }
 
         $sbr = new subBrandRanking();
         
-        $res = $sbr->getSubResults($con, $type, $region, $value, $months, $currency, $name);
+        $res = $sbr->getSubResults($con, $type, $region, $value, $months, $currency, $name, $brands);
         
         $types = array();
 
@@ -789,7 +797,7 @@ class ajaxController extends Controller{
         $mtx = $matrix[0];
         $total = $matrix[1];
 
-        $sbr->renderSubAssembler($mtx, $total, $type, $name);
+        $sbr->renderSubAssembler($mtx, $total, $type, $name, $brands);
     }
 
     public function marketSubRanking(){

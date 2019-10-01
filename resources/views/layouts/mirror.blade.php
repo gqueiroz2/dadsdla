@@ -61,7 +61,6 @@
 			</button>
 			<?php $userName = Request::session()->get('userName'); ?>
 
-
 			@if($userName != null)
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
@@ -76,7 +75,7 @@
 								<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
 							</div>
 						</li>
-						@if($userLevel != 'SU' || $userLevel != 'L0' || $userLevel != 'L1' || $userLevel != 'L3' || $userLevel != 'L4')
+						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )						
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">

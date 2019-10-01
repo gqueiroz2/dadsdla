@@ -13,12 +13,12 @@ use App\base;
 
 class rankings extends rank{
 
-    public function getAllResults($con, $brands, $type, $region, $value, $currency, $months, $years){
+    public function getAllResults($con, $brands, $type, $region, $value, $currency, $months, $years, &$type2){
 
         if ($type == "agencyGroup") {
-            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "DESC", "agency");            
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, $type2, "DESC", "agency");            
         }else{
-            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, "DESC");    
+            $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, $type2, "DESC");    
         }
         
         return $res;
@@ -36,7 +36,7 @@ class rankings extends rank{
 
         if (is_array($values[$p])) {
             for ($v=0; $v < sizeof($values[$p]); $v++) { 
-                if ($values[$p][$v][$type] == $name) {
+                if ($values[$p][$v][$type."ID"] == $name) {
                     $pos = $v+1;
                     $ok = 1;
                 }
@@ -54,7 +54,7 @@ class rankings extends rank{
     }
 
     public function getValueByYear($name, $values, $year, $years, $type){
-
+        
         for ($y=0; $y < sizeof($years); $y++) { 
             if ($year == $years[$y]) {
                 $p = $y;
@@ -65,11 +65,7 @@ class rankings extends rank{
 
         if (is_array($values[$p])) {
             for ($v=0; $v < sizeof($values[$p]); $v++) { 
-                    if ($name == "Others") {
-                        //var_dump("name", $values[$p][$v][$type]);
-                        //var_dump("value", $values[$p][$v]["total"]);
-                    }
-                if ($values[$p][$v][$type] == $name) {
+                if ($values[$p][$v][$type."ID"] == $name) {
                     $rtr = $values[$p][$v]['total'];
                     $ok = 1;
                 }
@@ -86,15 +82,15 @@ class rankings extends rank{
     }
 
     public function checkColumn($mtx, $m, $type2, $t, $values, $years, $type, $p){
-        //var_dump($type2[$t]->name);
+        //var_dump($type2[$t]);
         if (substr($mtx[$m][0], 0, 3) == "Pos") {
             $var = substr($mtx[$m][0], 5);
 
-            $res = $this->checkOtherYearsPosition($type2[$t]->name, $values, $var, $years, $type);
+            $res = $this->checkOtherYearsPosition($type2[$t]->id, $values, $var, $years, $type);
         }elseif (substr($mtx[$m][0], 0, 3) == "Rev") {
             $var = substr($mtx[$m][0], 5);
 
-            $res = $this->getValueByYear($type2[$t]->name, $values, $var, $years, $type);
+            $res = $this->getValueByYear($type2[$t]->id, $values, $var, $years, $type);
         }elseif ($mtx[$m][0] == "VAR ABS.") {
             if ($mtx[$m-sizeof($years)][$p] == "-" && $mtx[$m-sizeof($years)+1][$p] == "-") {
                 $res = "-";
@@ -174,7 +170,7 @@ class rankings extends rank{
 
         for ($t=0; $t < sizeof($type2); $t++) { 
             if ($filterValues[$type2[$t]->id] == 1) {
-                for ($m=0; $m < sizeof($mtx); $m++) { 
+                for ($m=0; $m < sizeof($mtx); $m++) {
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
                 }
             }

@@ -100,7 +100,6 @@ class results extends base{
                 $table = "cmaps"; 
             }else{  
                 $table = "ytd"; 
-                //$table = "mini_header"; 
             }
         }else{
             $table = 'ytd';
@@ -112,28 +111,13 @@ class results extends base{
         
         $cMonth = intval(date('m'));
         $cYear = intval(date('Y'));
+
         for ($b=0; $b < sizeof($brands); $b++) { 
             for ($m=0; $m < sizeof($months); $m++) { 
                 if (!$source) {
                     if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
-                        if ($brands[$b][1] == "FN") {
-                            /*if ($form == "cmaps" && $year == $cYear) {
-                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }else{*/
-                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            //}
-                        }elseif ($form == "mini_header") {
-                            if (($year == $cYear) && ($months[$m][1] < $cMonth)) {
-                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }else{
-                                $where[$b][$m] = $this->defineValues($con, "mini_header", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }
-                        }elseif ($form == "cmaps") {
-                            if ($year == $cYear) {
-                                $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }else{
-                                $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
-                            }
+                        if ($form == "cmaps") {
+                            $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
                         }else{
                             $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
                         }
@@ -256,7 +240,10 @@ class results extends base{
 
             if($table == "digital"){
                 $table = "fw_digital";
-                $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
+<<<<<<< HEAD
+                $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+=======
+>>>>>>> be42f012431629ea170a4883a065fe91646897af
             }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);

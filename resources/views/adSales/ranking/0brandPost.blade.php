@@ -93,6 +93,7 @@
             var value = "{{$value}}";
             var currency = <?php echo json_encode($pRate); ?>;
             var region = "{{$region}}";
+            var brands = <?php echo json_encode($brands); ?>;
 
 			ajaxSetup();
 
@@ -106,7 +107,7 @@
                         $.ajax({
                             url: "/ajaxRanking/brandSubRanking",
                             method: "POST",
-                            data: {name, months, type, value, currency, region},
+                            data: {name, months, type, value, currency, region, brands},
                             success: function(output){
                                 $("#sub"+"{{$brand[$b]['name']}}").html(output);
                                 $("#sub"+"{{$brand[$b]['name']}}").css("display", "");

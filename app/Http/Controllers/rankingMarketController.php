@@ -99,7 +99,7 @@ class rankingMarketController extends Controller {
 
   	$render = new renderMarketRanking();
   	$names = $rm->createNames($type, $months, $rtr, $brands);
-
+    
   	return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
 	}
 

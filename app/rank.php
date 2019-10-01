@@ -10,6 +10,36 @@ use App\dataBase;
 
 class rank extends Model{
 
+    public function existInArray($array, $value, $type, $id=false){
+        
+        if ($id == true) {
+            $id = "ID";
+        }else{
+            $id = "";
+        }
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+            
+            if ($array[$a][$type.$id] == $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function existInSubArray($array, $value){
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+            
+            if ($array[$a]->id == $value->id) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function createPositions($first, $second, $third){
         
         if ($second == 0 && $third == 0) {
@@ -43,7 +73,7 @@ class rank extends Model{
         return array($brandsTV, $brandsDigital);
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $order_by=null, $leftName2=null, $secondaryFilter=false){
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, &$type2, $order_by=null, $leftName2=null, $secondaryFilter=false){
 
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];
@@ -70,7 +100,7 @@ class rank extends Model{
 
         if ($tableName == "cmaps") {
             if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
             }else{
                 $pRate = 1.0;
             }
@@ -78,14 +108,14 @@ class rank extends Model{
             if ($currency[0]['name'] == "USD") {
                 $pRate = 1.0;
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
             }
         }
-
+        
         if ($currency[0]['name'] == "USD") {
             $pRateDigital = 1.0;
         }else{
-            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
         }
 
         $as = "total";
@@ -216,10 +246,27 @@ class rank extends Model{
                                 }
                             }
                         }
-
+                        
                         $resD[$y] = array_values($resD[$y]);
-                        for ($r=0; $r < sizeof($resD[$y]); $r++) { 
-                            array_push($res[$y], $resD[$y][$r]);
+                        if (!is_null($type2)) {
+                            for ($r=0; $r < sizeof($resD[$y]); $r++) {
+                                
+                                $obj = (object) [
+                                    'id' => $resD[$y][$r][$type."ID"],
+                                    'name' => $resD[$y][$r][$type],
+                                    'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                                ];
+                                
+                                if ($this->existInSubArray($type2, $obj)) {
+                                    array_push($type2, $obj);   
+                                }
+
+                                array_push($res[$y], $resD[$y][$r]);
+                            }
+                        }else{
+                            for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                                array_push($res[$y], $resD[$y][$r]);
+                            }
                         }
 
                         usort($res[$y], array($this,'compare'));
@@ -300,7 +347,7 @@ class rank extends Model{
                 if ($tmpD) {
                     $resD[$y] = $sql->fetch($valuesD[$y], $from, $from);
                 }
-
+                
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
                         if ($tableName == "cmaps") {
@@ -333,8 +380,34 @@ class rank extends Model{
                             }
 
                             $resD[$y] = array_values($resD[$y]);
-                            for ($r=0; $r <sizeof($resD[$y]) ; $r++) { 
-                                array_push($res[$y], $resD[$y][$r]);
+
+                            if (!is_null($type2)) {
+                                for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+
+                                    if ($type == "agency") {
+                                        $obj = (object) [
+                                            'id' => $resD[$y][$r][$type."ID"],
+                                            'name' => $resD[$y][$r][$type],
+                                            'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                                        ];
+                                    }else{
+                                        
+                                        $obj = (object) [
+                                            'id' => $resD[$y][$r][$type."ID"],
+                                            'name' => $resD[$y][$r][$type]
+                                        ];
+                                    }
+                                    
+                                    if ($this->existInSubArray($type2, $obj)) {
+                                        array_push($type2, $obj);   
+                                    }
+
+                                    array_push($res[$y], $resD[$y][$r]);
+                                }
+                            }else{
+                                for ($r=0; $r < sizeof($resD[$y]); $r++) { 
+                                    array_push($res[$y], $resD[$y][$r]);
+                                }
                             }
 
                             usort($res[$y], array($this,'compare'));
@@ -344,11 +417,12 @@ class rank extends Model{
                             $resD[$y][$r]['total'] *= $pRateDigital;
                         }
                         $res[$y] = $resD[$y];
-                    }  
+                    }
                 }
             }
         }
 
+        
         return $res;
 
     }
@@ -466,7 +540,6 @@ class rank extends Model{
 
     public function filterValues($values, $type2, $type){
         
-
         for ($t=0; $t < sizeof($type2); $t++) {
             $res[$type2[$t]->id] = $this->searchValue($type2[$t], $values[0], $type);
         }
@@ -483,7 +556,7 @@ class rank extends Model{
         }
 
         for ($t=0; $t < sizeof($type2); $t++) {
-            for ($i=0; $i <sizeof($tmp); $i++) { 
+            for ($i=0; $i < sizeof($tmp); $i++) { 
                if ($tmp[$i][$type2[$t]->id] == 1) {
                    $res[$type2[$t]->id] = 1;
                    break;
@@ -547,7 +620,7 @@ class rank extends Model{
         
         for ($m=0; $m < $size; $m++) {
             echo "<tr>";
-          
+            
             if ($m == 0) {
               $color = "lightBlue";
             }elseif ($m%2 != 0) {
@@ -557,6 +630,7 @@ class rank extends Model{
             }
 
             for ($i=0; $i < sizeof($mtx); $i++) {
+                
                 if ($m == 0) {
                     echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                 }else {

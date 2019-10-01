@@ -252,10 +252,10 @@ class chain extends excel{
     public function multiplyByPRate($con,$region,$year,$value){
         $r = new region();
         $pr = new pRate();
-
+        $cYear = date('Y');
         if($value > 0){
             $regionID = $r->getIDRegion($con,array($region))[0]['id'];
-            $pRate = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+            $pRate = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
             $newValue = doubleval( bcdiv($value,$pRate,5) );
         }else{
             $newValue = $value;

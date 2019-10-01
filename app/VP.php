@@ -212,13 +212,14 @@ class VP extends pAndR{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
         }
         $currentMonth = intval( date('m') );
+
         $fcstInfo = $this->getForecast($con,$sql,$regionID);
 
-        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
         
         if(!$fcstInfo){
             return false;
         }else{
+            $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
             $save = $fcstInfo;
             $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear,true);
             $currencyCheck = $temp["currencyCheck"];
@@ -236,8 +237,10 @@ class VP extends pAndR{
             $adjust[$c]['checkValue'] = $valueCheck[$c];
             $adjust[$c]['multValue'] = $multValue[$c];
         }
-        $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
         
+        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
+        $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
+
         $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
         $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
         $varAbsYTDByClient = $this->subArrays($bookingscYTDByClient,$bookingspYTDByClient);
@@ -623,15 +626,33 @@ class VP extends pAndR{
         for ($f=0; $f <sizeof($resp); $f++) { 
             for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
                 if ($f == 0) {
-                    $saida[$c] = $resp[$f][$c];
+                    if ($resp[$f][$c]) {
+                        for ($m=0; $m<sizeof($resp[$f][$c]); $m++) { 
+                            $saida[$c][$m] = floatval($resp[$f][$c][$m]['value']);
+                        }
+                    }else{
+                        $saida[$c] = false;
+                    }
                 }else{
                     if ($saida[$c]) {
+                        if ($resp[$f][$c]) {
+                            for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
+                                $saida[$c][$m] += floatval($resp[$f][$c][$m]['value']);
+                            }
+                        }
                     }else{
-                        $saida[$c] = $resp[$f][$c];
+                        if ($resp[$f][$c]) {
+                            for ($m=0; $m<sizeof($resp[$f][$c]); $m++) { 
+                                $saida[$c][$m] = floatval($resp[$f][$c][$m]['value']);
+                            }
+                        }else{
+                            $saida[$c] = false;
+                        }
                     }
                 }
             }
         }
+
         return $saida;
     }
     public function getPercentage($saida){
@@ -640,7 +661,6 @@ class VP extends pAndR{
             if ($saida[$c]) {
                 $total[$c] = 0;
                 for ($m=0; $m <sizeof($saida[$c]); $m++) { 
-                    $saida[$c][$m]=floatval($saida[$c][$m]['value']);
                     if ($m >= $date) {
                         $total[$c] += $saida[$c][$m];
                     }

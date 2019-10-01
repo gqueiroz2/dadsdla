@@ -136,7 +136,7 @@ class subRankings extends rank{
 
         $res = $sql->fetch($values[$y], $from, $from);
         $resD = $sql->fetch($valuesD[$y], $from, $from);
-        
+       
         if (is_array($res)) {
             for ($r=0; $r < sizeof($res); $r++) { 
                 $res[$r]['total'] *= $pRate;
@@ -225,7 +225,7 @@ class subRankings extends rank{
 
         if (is_array($values[$p])) {
             for ($v=0; $v < sizeof($values[$p]); $v++) { 
-                if ($values[$p][$v][$type] == $name) {
+                if ($values[$p][$v][$type."ID"] == $name[$type."ID"]) {
                     $pos = $v+1;
                     $ok = 1;
                 }
@@ -251,7 +251,7 @@ class subRankings extends rank{
         if (is_array($values[$p])) {
             for ($v=0; $v < sizeof($values[$p]); $v++) { 
             
-                if ($values[$p][$v][$type] == $name) {
+                if ($values[$p][$v][$type."ID"] == $name[$type."ID"]) {
                     $rtr = $values[$p][$v]['total'];
                     $ok = 1;
                 }
@@ -298,7 +298,7 @@ class subRankings extends rank{
         }elseif ($mtx[$m][0] == "Agency group") {
             $res = $mtx[$m][$p]['agencyGroup'];
         }else{
-            $res = addslashes($name);
+            $res = addslashes($name[$type]);
         }
 
         return $res;
@@ -346,8 +346,8 @@ class subRankings extends rank{
         for ($y=0; $y < sizeof($sub); $y++) { 
             if (is_array($sub[$y])) {
                 for ($n=0; $n < sizeof($sub[$y]); $n++) { 
-                    if (!in_array($sub[$y][$n][$type2], $values)) {
-                        array_push($values, $sub[$y][$n][$type2]);
+                    if ($this->existInArray($values, $sub[$y][$n][$type2."ID"], $type2, true)) {
+                        array_push($values, $sub[$y][$n]);
                     }
                 }
             }

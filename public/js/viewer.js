@@ -77,7 +77,10 @@ $(document).ready(function(){
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       */
-      
+      $('#source').change(function(){
+
+      });
+
 
       $.ajax({
         url:"/ajax/adsales/salesRepByRegion",

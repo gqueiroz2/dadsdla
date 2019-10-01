@@ -11,10 +11,12 @@ class rankingChurn extends rank {
 
     public function getAllResults($con, $brands, $type, $regionID, $region, $value, $currency, $months, $years){
     	
+        $null = null;
+
 		if ($region == "Brazil") {
-    		$res = $this->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency);
+    		$res = $this->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null);
     	}else{
-			$res = $this->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency);    	
+			$res = $this->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null);    	
 		}
         
     	return $res;
