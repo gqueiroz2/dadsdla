@@ -596,14 +596,14 @@ class subMarketRanking extends rankingMarket {
         return ($s+1);
     }
 
-    public function checkColumn2($mtx, $m, $name, $values, $years, $p, $type, $s, $values2=null){
+    public function checkColumn2($mtx, $m, $name, $values, $years, $p, $type, $s, $values2, $id){
         
         if ($mtx[$m][0] == "Ranking") {
-            $res = $this->searchPos2($name, $values, $type, $s);
+            $res = $this->searchPos2($name, $values, $type, $s, $id);
         }elseif ($mtx[$m][0] == "Bookings ".$years[0]) {
-            $res = $this->searchValueByYear($name, $values, $type, 0);
+            $res = $this->searchValueByYear($name, $values, $type, 0, $id);
         }elseif ($mtx[$m][0] == "Bookings ".$years[1]) {
-            $res = $this->searchValueByYear($name, $values, $type, 1);
+            $res = $this->searchValueByYear($name, $values, $type, 1, $id);
         }elseif ($mtx[$m][0] == "Var (%)") {
             if ($mtx[$m-2][$p] == 0 || $mtx[$m-1][$p] == 0) {
                 $res = 0;
@@ -613,11 +613,11 @@ class subMarketRanking extends rankingMarket {
         }elseif ($mtx[$m][0] == "Var Abs.") {
             $res = $mtx[$m-3][$p] - $mtx[$m-2][$p];
         }elseif ($mtx[$m][0] == "Total ".$years[0]) {
-            $res = $this->searchValueByYear($name, $values2, $type, 0);
+            $res = $this->searchValueByYear($name, $values2, $type, 0, $id);
         }elseif ($mtx[$m][0] == "Total ".$years[1]) {
-            $res = $this->searchValueByYear($name, $values2, $type, 1);
+            $res = $this->searchValueByYear($name, $values2, $type, 1, $id);
         }else{
-            $res = $name;
+            $res = $name[$type];
         }
 
         return $res;
@@ -680,6 +680,7 @@ class subMarketRanking extends rankingMarket {
 
             return $mtx;
         }else{  
+
             $mtx[0][0] = "Ranking";
             $mtx[1][0] = "Client";
             $mtx[2][0] = "Bookings ".$years[0];
@@ -694,8 +695,8 @@ class subMarketRanking extends rankingMarket {
             for ($r=0; $r < sizeof($values); $r++) { 
                 if (is_array($values[$r])) {
                     for ($r2=0; $r2 < sizeof($values[$r]); $r2++) { 
-                        if (!in_array($values[$r][$r2][$typeF], $types)) {
-                            array_push($types, $values[$r][$r2][$typeF]);  
+                        if ($this->existInArray($types, $values[$r][$r2][$typeF."ID"], $typeF, true)) {
+                            array_push($types, $values[$r][$r2]); 
                         }
                     }
                 }
@@ -705,7 +706,7 @@ class subMarketRanking extends rankingMarket {
 
             for ($s=0; $s < $size; $s++) { 
                 for ($m=0; $m < sizeof($mtx); $m++) {
-                    array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesTotal));
+                    array_push($mtx[$m], $this->checkColumn2($mtx, $m, $types[$s], $values, $years, sizeof($mtx[$m]), $typeF, $s, $valuesTotal, true));
                 }
             }
             
