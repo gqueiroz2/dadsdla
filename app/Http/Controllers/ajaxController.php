@@ -745,7 +745,7 @@ class ajaxController extends Controller{
         
         $mtx = $matrix[0];
         $total = $matrix[1];
-
+        
         if ($type == "agencyGroup") {
             $newType = "agency";
         }elseif ($type == "agency") {
