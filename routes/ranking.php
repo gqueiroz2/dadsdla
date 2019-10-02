@@ -43,6 +43,13 @@ Route::group(['middleware' => 'auth'],function(){
 				->name('churnPost');
 	});
 
+	Route::group(['prefix'=>'new'],function(){
+		Route::get('/', 'rankingNewController@get')
+				->name('newGet');
+		Route::post('/', 'rankingNewController@post')
+				->name('newPost');
+	});
+
 });
 
 Route::group(['prefix' => 'ajaxRanking'], function(){
@@ -57,4 +64,5 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('brandSubRanking', 'ajaxController@brandSubRanking');
 	Route::post('marketSubRanking', 'ajaxController@marketSubRanking');
 	Route::post('churnSubRanking', 'ajaxController@churnSubRanking');
+	Route::post('newSubRanking', 'ajaxController@newSubRanking');
 });

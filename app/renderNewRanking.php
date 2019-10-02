@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class renderChurnRanking extends Render {
+class renderNewRanking extends Render {
     
     public function assembler($mtx, $total, $currency, $value, $type, $names, $region){
     	
@@ -12,7 +12,7 @@ class renderChurnRanking extends Render {
             echo "<tr>";
             	echo "<th colspan='".sizeof($mtx)."' class='lightBlue'><center>";
                             echo "<span style='font-size:18px;'>";
-                                echo "<b> $region - Churn Ranking (BKGS) : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
+                                echo "<b> $region - New Ranking (BKGS) : (".$currency[0]['name']."/".strtoupper($value).")</b></br>";
 	                            if ($type != "sector") {
 	                            	echo "<span style='font-size:18px;'>";
 	                            		echo "<b> Refer to the brands: ".$names['brands']."</b></br>";
@@ -72,13 +72,13 @@ class renderChurnRanking extends Render {
             for ($t=0; $t < sizeof($total); $t++) {
             	if (is_numeric($total[$t])) {
             		if ($type == "agency") {
-            			if ($t == 6) {
+            			if ($t == 5) {
             				echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
             			}else{
             				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
             			}
             		}else{
-        				if ($t == 5) {
+        				if ($t == 4) {
         					echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";	
         				}else{
         					echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";	
