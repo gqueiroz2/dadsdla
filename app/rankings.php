@@ -21,6 +21,10 @@ class rankings extends rank{
             $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, $type2, "DESC");    
         }
         
+        /*for ($r=0; $r < sizeof($res[0]); $r++) { 
+            var_dump($res[0][$r]);
+        }*/
+        
         return $res;
     }
 

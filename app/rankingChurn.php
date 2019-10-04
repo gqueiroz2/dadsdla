@@ -224,6 +224,10 @@ class rankingChurn extends rank {
 
     public function assembler($values, $nameValues, $valuesTotal, $years, $type){
 
+        /*for ($j=0; $j < sizeof($nameValues); $j++) { 
+            var_dump($j,$nameValues[$j]);
+        }*/
+
     	$mtx[0][0] = "Ranking";
     	$pos = 1;
     	
@@ -267,7 +271,7 @@ class rankingChurn extends rank {
                 for ($m=0; $m < sizeof($mtx); $m++) { 
                         
                     $res = $this->checkColumn($mtx, $m, $nameValues[$t], $values, $years, sizeof($mtx[$m]), $type, $cont, $valuesTotal, true);
-
+                    
                     if ($res == -1) {
                         break;
                     }else{

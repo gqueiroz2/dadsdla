@@ -963,6 +963,8 @@ class ajaxController extends Controller{
         }
         
         $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+
+        
     }
 
     public function splittedClients(){
