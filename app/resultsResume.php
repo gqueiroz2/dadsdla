@@ -161,16 +161,25 @@ class resultsResume extends results{
 	            					   AND ( year =  \" $cYear \")
 	                                   AND (region_id = \"".$regionID."\")
 	                                   AND (brand_id != '10')";
+	                $whereSalesPYear[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
+	            					   AND ( year =  \" $pYear \")
+	                                   AND (region_id = \"".$regionID."\")
+	                                   AND (brand_id != '10')";
 				}else{
 					$whereSales[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
 	            					   AND ( year =  \" $cYear \")
 	                                   AND (region_id = \"".$regionID."\")
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )";
+	                $whereSalesPYear[$m][$b] = "WHERE ( month = \"".$months[$m][1]."\" ) 
+	            					   AND ( year =  \" $pYear \")
+	                                   AND (region_id = \"".$regionID."\")
+	                                   AND (brand_id = \"".$brands[$b][0]."\" )";
+
 	            }
 /*
 				"WHERE (digital.month IN (".$months[$m][1]."))
 										  AND (digital.year IN ($cYear))
-										  AND (digital.brand_id IN (".$brands[$b][0]."))";*/
+										  AND (digital.brand_id IN (".$brands[$b][0]."))";
 
 				$whereSalesPYear[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
 									   AND ( year =  \" $pYear \")
@@ -219,7 +228,6 @@ class resultsResume extends results{
         	}
         }
 
-
         $salesCYear = $this->generateVector($con,$tableSales,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinSales,$whereSales);
 		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
 		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);
@@ -229,7 +237,7 @@ class resultsResume extends results{
 			$tableSales = 'ytd';
 		}
 
-		$previousYear = $this->generateVector($con,$tableActual,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereActual);
+		$previousYear = $this->generateVector($con,$tableSales,$regionID,$pYear,$months,$brands,$currencyID,$value,$joinSales,$whereSalesPYear);
 
 		$mtx["salesCYear"] = $salesCYear;
 		$mtx["target"] = $target;

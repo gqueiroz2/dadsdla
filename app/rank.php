@@ -28,6 +28,18 @@ class rank extends Model{
         return true;
     }
 
+    public function existInSubArray($array, $value){
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+            
+            if ($array[$a]->id == $value->id) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function createPositions($first, $second, $third){
         
         if ($second == 0 && $third == 0) {
@@ -88,7 +100,7 @@ class rank extends Model{
 
         if ($tableName == "cmaps") {
             if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
             }else{
                 $pRate = 1.0;
             }
@@ -96,14 +108,14 @@ class rank extends Model{
             if ($currency[0]['name'] == "USD") {
                 $pRate = 1.0;
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
             }
         }
         
         if ($currency[0]['name'] == "USD") {
             $pRateDigital = 1.0;
         }else{
-            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array($years[0]));
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
         }
 
         $as = "total";
@@ -245,7 +257,10 @@ class rank extends Model{
                                     'agencyGroup' => $resD[$y][$r]['agencyGroup'],
                                 ];
                                 
-                                array_push($type2, $obj);
+                                if ($this->existInSubArray($type2, $obj)) {
+                                    array_push($type2, $obj);   
+                                }
+
                                 array_push($res[$y], $resD[$y][$r]);
                             }
                         }else{
@@ -259,7 +274,18 @@ class rank extends Model{
                 }elseif(is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
+
+                        $obj = (object) [
+                            'id' => $resD[$y][$r][$type."ID"],
+                            'name' => $resD[$y][$r][$type],
+                            'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                        ];
+
+                        if ($this->existInSubArray($type2, $obj)) {
+                            array_push($type2, $obj);   
+                        }
                     }
+
                     $res[$y] = $resD[$y];
                 }
 
@@ -376,13 +402,17 @@ class rank extends Model{
                                             'agencyGroup' => $resD[$y][$r]['agencyGroup'],
                                         ];
                                     }else{
+                                        
                                         $obj = (object) [
                                             'id' => $resD[$y][$r][$type."ID"],
                                             'name' => $resD[$y][$r][$type]
                                         ];
                                     }
                                     
-                                    array_push($type2, $obj);
+                                    if ($this->existInSubArray($type2, $obj)) {
+                                        array_push($type2, $obj);   
+                                    }
+
                                     array_push($res[$y], $resD[$y][$r]);
                                 }
                             }else{
@@ -396,6 +426,23 @@ class rank extends Model{
                     }elseif(is_array($resD[$y])){
                         for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                             $resD[$y][$r]['total'] *= $pRateDigital;
+
+                            if ($type == "agency") {
+                                $obj = (object) [
+                                    'id' => $resD[$y][$r][$type."ID"],
+                                    'name' => $resD[$y][$r][$type],
+                                    'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                                ];   
+                            }else{
+                                $obj = (object) [
+                                    'id' => $resD[$y][$r][$type."ID"],
+                                    'name' => $resD[$y][$r][$type]
+                                ];
+                            }
+
+                            if ($this->existInSubArray($type2, $obj)) {
+                                array_push($type2, $obj);   
+                            }
                         }
                         $res[$y] = $resD[$y];
                     }

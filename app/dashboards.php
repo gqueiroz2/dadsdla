@@ -278,14 +278,15 @@ class dashboards extends rank{
 	    $brands = $this->getBrands($con);
 	    $months = $this->months;
 	    $cr = $p->getCurrency($con, array($currency));
-	    
+	    $null = null;
+
 	    if($kind == "root"){
 	    	if ($type == "agencyGroup") {
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency", $secondaryFilter);
-                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, "", "agency");
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter);
+                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency");
 	    	}else{
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, null, null, $secondaryFilter);
-                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr);
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter);
+                $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null);
 	    	}
             
             $filterValues = $sr->filterValues2($somekind, array($baseFilter), $type);

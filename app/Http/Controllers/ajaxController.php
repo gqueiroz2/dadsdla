@@ -18,6 +18,7 @@ use App\subRankings;
 use App\subBrandRanking;
 use App\subMarketRanking;
 use App\subChurnRanking;
+use App\subNewRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -745,7 +746,7 @@ class ajaxController extends Controller{
         
         $mtx = $matrix[0];
         $total = $matrix[1];
-
+        
         if ($type == "agencyGroup") {
             $newType = "agency";
         }elseif ($type == "agency") {
@@ -879,7 +880,7 @@ class ajaxController extends Controller{
             $val = "client";
         }
         
-        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);        
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
 
         if ($type == "client") {
             $filterType = "agency";
@@ -892,8 +893,8 @@ class ajaxController extends Controller{
         for ($v=0; $v < sizeof($values); $v++) { 
             if (is_array($values[$v])) {
                 for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-                    if (!in_array($values[$v][$v2][$filterType], $finalValues)) {
-                        array_push($finalValues, $values[$v][$v2][$filterType]);
+                    if ($scr->existInArray($finalValues, $values[$v][$v2][$filterType."ID"], $filterType, true)) {
+                        array_push($finalValues, $values[$v][$v2]);
                     }
                 }   
             }
@@ -914,6 +915,56 @@ class ajaxController extends Controller{
         $total = $matrix[1];
 
         $scr->renderSubAssembler($mtx, $total, $type, $years);
+    }
+
+    public function newSubRanking(){
+        
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $brands = Request::get("brands");
+        $name = Request::get("name");
+
+        $snr = new subNewRanking();
+
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1);
+
+        if ($type == "client") {
+            $val = "agency";
+        }else{
+            $val = "client";
+        }
+
+        $values = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
+
+        $finalValues = array();
+
+        for ($v=0; $v < sizeof($values); $v++) { 
+            if (is_array($values[$v])) {
+                for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                    if ($scr->existInArray($finalValues, $values[$v][$v2][$filterType."ID"], $filterType, true)) {
+                        array_push($finalValues, $values[$v][$v2]);
+                    }
+                }   
+            }
+        }
+
+        $base = new base();
+
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
+        }
+        
+        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+
+        
     }
 
     public function splittedClients(){

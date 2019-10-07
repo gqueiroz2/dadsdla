@@ -107,6 +107,21 @@ class agency extends Management{
         $to = array('id');
         $agencyID = $sql->fetch($res,$from,$to);
 
+        if (!$agencyID) {
+            $table = "fw_digital f";
+            $columns = "DISTINCT agency_id AS 'ID'";
+
+            $join = "LEFT JOIN client c ON c.ID = f.client_id";
+
+            $where = "WHERE c.ID IN (\"".addslashes($implodedClients)."\")";
+                    
+            $res = $sql->select($con,$columns,$table,$join,$where,1);
+                    
+            $from = array("ID");
+            $to = array('id');
+            $agencyID = $sql->fetch($res,$from,$to);            
+        }
+        
         return $agencyID;
     }
 

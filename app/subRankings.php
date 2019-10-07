@@ -129,14 +129,14 @@ class subRankings extends rank{
         $where = $sql->where($columns, $colsValue);
         $whereD = $sql->where($columnsD, $colsValueD);
         
-        $values[$y] = $sql->selectGroupBy2($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+        $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
         $valuesD[$y] = $sql->selectGroupBy($con, $tmpD, "fw_digital", $joinD, $whereD, "total", $name, "DESC");
 
         $from = $names;
 
         $res = $sql->fetch($values[$y], $from, $from);
         $resD = $sql->fetch($valuesD[$y], $from, $from);
-        
+       
         if (is_array($res)) {
             for ($r=0; $r < sizeof($res); $r++) { 
                 $res[$r]['total'] *= $pRate;
@@ -346,7 +346,7 @@ class subRankings extends rank{
         for ($y=0; $y < sizeof($sub); $y++) { 
             if (is_array($sub[$y])) {
                 for ($n=0; $n < sizeof($sub[$y]); $n++) { 
-                    if ($this->existInArray($values, $sub[$y][$n][$type2."ID"], $type2)) {
+                    if ($this->existInArray($values, $sub[$y][$n][$type2."ID"], $type2, true)) {
                         array_push($values, $sub[$y][$n]);
                     }
                 }

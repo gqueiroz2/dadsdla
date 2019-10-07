@@ -21,6 +21,10 @@ class rankings extends rank{
             $res = $this->getAllValues($con, "ytd", $type, $type, $brands, $region, $value, $years, $months, $currency, $type2, "DESC");    
         }
         
+        /*for ($r=0; $r < sizeof($res[0]); $r++) { 
+            var_dump($res[0][$r]);
+        }*/
+        
         return $res;
     }
 
@@ -170,7 +174,7 @@ class rankings extends rank{
 
         for ($t=0; $t < sizeof($type2); $t++) { 
             if ($filterValues[$type2[$t]->id] == 1) {
-                for ($m=0; $m < sizeof($mtx); $m++) { 
+                for ($m=0; $m < sizeof($mtx); $m++) {
                     array_push($mtx[$m], $this->checkColumn($mtx, $m, $type2, $t, $values, $years, $aux, sizeof($mtx[$m])));
                 }
             }

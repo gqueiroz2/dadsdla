@@ -8,16 +8,16 @@ use App\dataBase;
 use App\region;
 use App\pRate;
 use App\brand;
-use App\renderChurnRanking;
+use App\renderNewRanking;
 use App\rankings;
-use App\rankingChurn;
+use App\rankingNew;
 use Validator;
 
-class rankingChurnController extends Controller {
+class rankingNewController extends Controller {
     
     public function get(){
-		
-		$db = new dataBase();
+    	
+    	$db = new dataBase();
       	$con = $db->openConnection("DLA");
 
       	$region = new region();
@@ -29,14 +29,15 @@ class rankingChurnController extends Controller {
       	$b = new brand();
       	$brands = $b->getBrand($con);
 
-      	$render = new renderChurnRanking();
+      	$render = new renderNewRanking();
 
-      	return view("adSales.ranking.2churnGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
-	}
+      	return view("adSales.ranking.4newGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
 
-	public function post(){
+    }
 
-		$db = new dataBase();
+    public function post(){
+    	
+    	$db = new dataBase();
 	  	$con = $db->openConnection("DLA");
 
 	  	$validator = Validator::make(Request::all(),[
@@ -83,19 +84,26 @@ class rankingChurnController extends Controller {
 
 	  	$cYear = intval(date('Y'));
     	$pYear = $cYear - 1;
-	  	$years = array($cYear, $pYear, $pYear-1);
+	  	$years = array($cYear, $pYear);
 
-	  	$rc = new rankingChurn();
+	  	$rn = new rankingNew();
 
-	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-	  	
-	  	$finalValues = array();
+	  	$values = $rn->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
+
+	  	$months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) {
+            array_push($months2, $m);
+        }
+
+		$valuesTotal = $rn->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);
+
+		$finalValues = array();
 
 	  	if ($type != "agency" && $type != "client") {
             for ($r=0; $r < sizeof($values); $r++) {
                 if (is_array($values[$r])) {
                     for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
-                        if ($rc->existInArray($finalValues, $values[$r][$r2][$type], $type)) {
+                        if ($rn->existInArray($finalValues, $values[$r][$r2][$type], $type)) {
                             array_push($finalValues, $values[$r][$r2]);
                         }
                     }
@@ -105,31 +113,24 @@ class rankingChurnController extends Controller {
             for ($r=0; $r < sizeof($values); $r++) {
                 if (is_array($values[$r])) {
                     for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
-                        if ($rc->existInArray($finalValues, $values[$r][$r2][$type."ID"], $type, true)) {
+                        if ($rn->existInArray($finalValues, $values[$r][$r2][$type."ID"], $type, true)) {
                             array_push($finalValues, $values[$r][$r2]);  
                         }
                     }
                 }
             }
         }
-	  	
-        $months2 = array();
-        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
-            array_push($months2, $m);
-        }
 
-		$valuesTotal = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);
+	  	$matrix = $rn->assembler($values, $finalValues, $valuesTotal, $years, $type);
 
-		$matrix = $rc->assembler($values, $finalValues, $valuesTotal, $years, $type);
-
-		$mtx = $matrix[0];
+	  	$mtx = $matrix[0];
 		$total = $matrix[1];
 
-		$rName = $rc->TruncateRegion($rtr);
+		$rName = $rn->TruncateRegion($rtr);
 
-		$render = new renderChurnRanking();
-  		$names = $rc->createNames($type, $months, $rtr, $brands);
+		$render = new renderNewRanking();
+  		$names = $rn->createNames($type, $months, $rtr, $brands);
 
-  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
-	}
+  		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
+    }
 }

@@ -53,18 +53,18 @@ class renderResume extends Render {
 
     			echo "<tr>";
     				echo "<td class='$bck'> ".$matrix[$m]['month']." </td>";
-    				echo "<td class='$bck'> ".number_format( $matrix[$m]['sales'], 0, ".", ",")." </td>";
-    				echo "<td class='$bck'> ".number_format( $matrix[$m]['actual'], 0, ".", ",")." </td>";
-    				echo "<td class='$bck'> ".number_format( $matrix[$m]['target'], 0, ".", ",")." </td>";
-    				echo "<td class='$bck'> ".number_format( $matrix[$m]['corporate'], 0, ".", ",")." </td>";
+    				echo "<td class='$bck'> ".number_format( $matrix[$m]['sales'], 0, ",", ".")." </td>";
+    				echo "<td class='$bck'> ".number_format( $matrix[$m]['actual'], 0, ",", ".")." </td>";
+    				echo "<td class='$bck'> ".number_format( $matrix[$m]['target'], 0, ",", ".")." </td>";
+    				echo "<td class='$bck'> ".number_format( $matrix[$m]['corporate'], 0, ",", ".")." </td>";
     				//<td class="{{$bck}}">  {{ number_format( $matrix[$m]['pAndR']) }} </td>
 					//<td class="{{$bck}}">  {{ number_format( $matrix[$m]['finance']) }} </td>
-					echo "<td class='$bck'> ".number_format( $matrix[$m]['pYear'], 0, ".", ",")." </td>";
-					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesOverTarget'], 0, ".", ",")." % </td>";
-					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesOverCorporate'], 0, ".", ",")." % </td>";
+					echo "<td class='$bck'> ".number_format( $matrix[$m]['pYear'], 0, ",", ".")." </td>";
+					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesOverTarget'], 0, ",", ".")." % </td>";
+					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesOverCorporate'], 0, ",", ".")." % </td>";
 					//<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverPAndR']) }} </td>
 					//<td class="{{$bck}}">  {{ number_format( $matrix[$m]['salesOverFinance']) }} </td>
-					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesYoY'], 0, ".", ",")." % </td>";
+					echo "<td class='$bck'> ".number_format( $matrix[$m]['salesYoY'], 0, ",", ".")." % </td>";
     			echo "</tr>";
     		}
 
