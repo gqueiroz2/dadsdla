@@ -948,7 +948,7 @@ class ajaxController extends Controller{
         for ($v=0; $v < sizeof($values); $v++) { 
             if (is_array($values[$v])) {
                 for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-                    if ($scr->existInArray($finalValues, $values[$v][$v2][$filterType."ID"], $filterType, true)) {
+                    if ($snr->existInArray($finalValues, $values[$v][$v2][$val."ID"], $val, true)) {
                         array_push($finalValues, $values[$v][$v2]);
                     }
                 }   
@@ -962,149 +962,13 @@ class ajaxController extends Controller{
             array_push($months2, $m);
         }
         
-        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+        $valuesTotal = $snr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
 
+        $matrix = $snr->assembler($values, $finalValues, $valuesTotal, $years, $val);
         
-    }
-
-    public function splittedClients(){
+        $mtx = $matrix[0];
+        $total = $matrix[1];
         
-        $splitted = Request::get("splitted");
-        $client = Request::get("client");
-        
-        if ($splitted != 0) {
-            $mult = 0.5;
-        }else{
-            $mult = 1;
-        }
-
-        $res = ($this->handleNumber($client)*$mult);
-
-        echo $res;
-    }
-
-    public function transformVal(){
-        
-        $value = Request::get("rf");
-        $transform = Request::get("transform");
-
-        if ($transform == "Comma") {
-            $value = $this->Comma($value);            
-        }elseif ($transform == "handleNumber") {
-            $value = $this->handleNumber($value);
-        }
-
-        echo $value;
-    }
-
-    public function changeVal(){
-        
-        $editedValue = Request::get("editedValue");
-
-        if ($editedValue == "") {
-            echo 0;
-        }else{
-            $editedValue = $this->Comma($this->handleNumber($editedValue));
-            echo $editedValue;
-        }
-    }
-
-    public function verifyVal(){
-        
-        $totalClient = Request::get("totalClient");
-        $total = Request::get("total");
-
-        $totalClient = $this->handleNumber($totalClient);
-        $total = $this->handleNumber($total);
-
-        if (round($totalClient, 0) != round($total, 0)) {
-            echo 1;
-        }else{
-            echo -1;
-        }
-    }
-
-    public function reCalculateQuarterValues(){
-        
-        $firstValue = Request::get("firstValue");
-        $secondValue = Request::get("secondValue");
-        $thirdValue = Request::get("thirdValue");
-        
-        $firstValue = $this->handleNumber($firstValue);
-        $secondValue = $this->handleNumber($secondValue);
-        $thirdValue = $this->handleNumber($thirdValue);
-        
-        $res = $firstValue + $secondValue + $thirdValue;
-        
-        $res = $this->Comma($res);
-
-        echo $res;
-    }
-
-    public function reCalculateTotalVal(){
-        
-        $Q1 = Request::get("Q1");
-        $Q2 = Request::get("Q2");
-        $Q3 = Request::get("Q3");
-        $Q4 = Request::get("Q4");
-
-        $Q1 = $this->handleNumber($Q1);
-        $Q2 = $this->handleNumber($Q2);
-        $Q3 = $this->handleNumber($Q3);
-        $Q4 = $this->handleNumber($Q4);
-
-        $res = $Q1 + $Q2 + $Q3 + $Q4;
-
-        $res = $this->Comma($res);
-
-        echo $res;
-        
-    }
-
-    public function number(){
-        
-        $firstValue = Request::get("firstValue");
-        $secondValue = Request::get("secondValue");
-        $op = Request::get("op");
-
-        $firstValue = $this->handleNumber($firstValue);
-        $secondValue = $this->handleNumber($secondValue);
-
-        if ($op == "+") {
-            $res = $firstValue + $secondValue;
-        }elseif ($op == "-") {
-            # code...
-        }elseif ($op == "/") {
-            if ($firstValue == 0 || $secondValue == 0) {
-                $res = 0;
-            }else{
-                $res = $firstValue/$secondValue;
-            }
-        }elseif ($op == "*") {
-            # code...
-        }
-
-        echo $res;
-
-    }
-
-    function handleNumber($number){
-
-        if ($number == "") {
-            return 0;
-        }
-
-        $number = str_replace(",", "", $number);
-
-        $number = doubleval($number);
-        
-        return $number;
-    }
-    
-    function Comma($Num) {
-     
-        $Num = number_format($Num);
-
-        return $Num;
+        $snr->renderSubAssembler($mtx, $total, $val, $years);
     }
 }

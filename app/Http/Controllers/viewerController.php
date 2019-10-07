@@ -11,25 +11,25 @@ use App\pRate;
 
 class viewerController extends Controller{
     
-	public function baseGet(){
-		$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        public function baseGet(){
+        	$db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
-        $render = new Render();
+                $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+                $render = new Render();
 
-        $r = new region();
-        $region = $r->getRegion($con, NULL);
+                $r = new region();
+                $region = $r->getRegion($con, NULL);
 
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con); 
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
-        $b = new brand();
-        $brand = $b->getBrand($con);
+                $b = new brand();
+                $brand = $b->getBrand($con);
 
-        return view("adSales.viewer.baseGet",compact("render","years","region","currency","currencies","brand"));
-	}
+                return view("adSales.viewer.baseGet",compact("render","years","region","currency","currencies","brand"));
+        }
 
 
 	public function viewerPost(){
