@@ -41,8 +41,8 @@ class ajaxController extends Controller{
         $c = new client;
         $db = new dataBase();
         $con = $db->openConnection("DLA");
-        var_dump(Request::all());
-        /*
+        /*var_dump(Request::all());
+        
         $region = Request::get("regionID");
         $agency = $a->getAgencyByRegion($con,array($region));
 

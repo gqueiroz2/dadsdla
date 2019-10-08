@@ -25,11 +25,13 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
 
         $columns = $this->defineColumns($table,'first');
+        
         if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN"){
             $parametter = $table;
         }else{
             $parametter = false;
         }
+
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
 
         $into = $this->into($columns);      
@@ -253,6 +255,7 @@ class chain extends excel{
         $r = new region();
         $pr = new pRate();
         $cYear = date('Y');
+        //$cYear = $year;
         if($value > 0){
             $regionID = $r->getIDRegion($con,array($region))[0]['id'];
             $pRate = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
@@ -794,6 +797,7 @@ class chain extends excel{
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
+
     						}elseif($columns[$c] == 'agency_commission'){
                                 
                                 if(trim($spreadSheet[$s][$c]) == ""){
@@ -825,7 +829,7 @@ class chain extends excel{
                                 if($spreadSheet[$s][$c] == ''){
                                     $spreadSheetV2[$s][$columns[$c]] = 0.0;
                                 }else{
-                                    $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]));
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]), $table);
                                 }                            
                             }elseif($columns[$c] == "brand" && $table == "sf_pr"){
                                 
@@ -867,7 +871,7 @@ class chain extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
                                 }
-    						}else{	
+    						}else{
     							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
     						}
     					}
@@ -876,6 +880,7 @@ class chain extends excel{
 			}
 		}
 
+        
 		$spreadSheetV2 = array_values($spreadSheetV2);
 		return $spreadSheetV2;
 	}

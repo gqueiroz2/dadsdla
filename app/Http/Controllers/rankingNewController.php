@@ -89,7 +89,7 @@ class rankingNewController extends Controller {
 	  	$rn = new rankingNew();
 
 	  	$values = $rn->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-
+	  	
 	  	$months2 = array();
         for ($m=1; $m <= sizeof($base->getMonth()); $m++) {
             array_push($months2, $m);

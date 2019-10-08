@@ -275,14 +275,16 @@ class rank extends Model{
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
 
-                        $obj = (object) [
-                            'id' => $resD[$y][$r][$type."ID"],
-                            'name' => $resD[$y][$r][$type],
-                            'agencyGroup' => $resD[$y][$r]['agencyGroup'],
-                        ];
+                        if (!is_null($type2)) {
+                            $obj = (object) [
+                                'id' => $resD[$y][$r][$type."ID"],
+                                'name' => $resD[$y][$r][$type],
+                                'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                            ];
 
-                        if ($this->existInSubArray($type2, $obj)) {
-                            array_push($type2, $obj);   
+                            if ($this->existInSubArray($type2, $obj)) {
+                                array_push($type2, $obj);   
+                            }   
                         }
                     }
 
@@ -427,21 +429,23 @@ class rank extends Model{
                         for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                             $resD[$y][$r]['total'] *= $pRateDigital;
 
-                            if ($type == "agency") {
-                                $obj = (object) [
-                                    'id' => $resD[$y][$r][$type."ID"],
-                                    'name' => $resD[$y][$r][$type],
-                                    'agencyGroup' => $resD[$y][$r]['agencyGroup'],
-                                ];   
-                            }else{
-                                $obj = (object) [
-                                    'id' => $resD[$y][$r][$type."ID"],
-                                    'name' => $resD[$y][$r][$type]
-                                ];
-                            }
+                            if (!is_null($type2)) {
+                                if ($type == "agency") {
+                                    $obj = (object) [
+                                        'id' => $resD[$y][$r][$type."ID"],
+                                        'name' => $resD[$y][$r][$type],
+                                        'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                                    ];   
+                                }else{
+                                    $obj = (object) [
+                                        'id' => $resD[$y][$r][$type."ID"],
+                                        'name' => $resD[$y][$r][$type]
+                                    ];
+                                }
 
-                            if ($this->existInSubArray($type2, $obj)) {
-                                array_push($type2, $obj);   
+                                if ($this->existInSubArray($type2, $obj)) {
+                                    array_push($type2, $obj);   
+                                }   
                             }
                         }
                         $res[$y] = $resD[$y];

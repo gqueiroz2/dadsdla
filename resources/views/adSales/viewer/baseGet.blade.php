@@ -76,34 +76,6 @@
 
                     <div class="row">
                         <div class="col">
-                            <label class="labelLeft"><span class="bold"> Agency: </span></label>
-                            @if($errors->has('currency'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->agencyForm()}}
-                        </div>
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Client: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->clientForm()}}
-                        </div>                        
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Sector: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->sectorForm()}}
-                        </div>
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Category: </span></label>
-                            @if($errors->has('currency'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->categoryForm()}}                            
-                        </div>
-                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
                             @if($errors->has('currency'))
                                 <label style="color: red;">* Required</label>
@@ -128,7 +100,7 @@
 
         <div class="row justify-content-end mt-2">
             <div class="col" style="color: #0070c0;font-size: 22px">
-                <span style="float: right; margin-right: 2.5%;"> Data Current Through: DD-MMM-YY () </span>
+                <span style="float: right; margin-right: 2.5%;"> Data Current Through: DD-MM-YY (<?php echo date('d \/ m \/ y'); ?>) </span>
             </div>
 
             

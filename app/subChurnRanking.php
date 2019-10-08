@@ -16,8 +16,8 @@ class subChurnRanking extends rankingChurn {
 
     	$sql = new sql();
 
-    	$r = new region();                      
-                                
+    	$r = new region();
+
         $tmp = $r->getRegion($con,array($regionID));
 
         if(is_array($tmp)){
