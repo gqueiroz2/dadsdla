@@ -239,7 +239,7 @@ class Render extends Model{
     }
 
     public function piNumber(){
-        echo "<input type='text' class='form-control'>";
+        echo "<input type='text' name='PI' class='form-control'>";
     }
 
     public function brand($brand){

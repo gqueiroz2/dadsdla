@@ -16,5 +16,11 @@ class viewer extends Model{
 					}
 				}
 			}
+<<<<<<< HEAD
+=======
+		}
+
+>>>>>>> 2a5a9fa824a1a91342c96eb4a6b91f87851a0ad9
 	}
+
 }

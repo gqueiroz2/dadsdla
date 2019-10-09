@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+
 use App\base;
 use App\Render;
 use App\dataBase;
@@ -43,6 +44,7 @@ class viewerController extends Controller{
 	public function basePost(){
 
                 $render =  new baseRender();
+
 
                 $base = new base();
                 $months = $base->month;
@@ -91,8 +93,7 @@ class viewerController extends Controller{
                 var_dump(Request::all());
 
 
-                return view("adSales.viewer.basePost", compact("years","render", "salesR", "region","currency","currencies","brands","viewer","getMatrix"));
-
+                return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
 
 	}
 
