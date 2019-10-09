@@ -259,7 +259,7 @@ class VPMonth extends pAndR {
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND month = \"$actualMonth\" AND year = \"$year\" AND (type_of_forecast = 'V1' OR type_of_forecast = 'V1')";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND month = \"$actualMonth\" AND year = \"$year\" AND (type_of_forecast = 'V1' OR type_of_forecast = 'V2')";
 
         if ($regionID == "1") {
             $select .= " AND read_q = \"$week\"";
@@ -425,7 +425,7 @@ class VPMonth extends pAndR {
                 $type = 'V1';
             }
 
-            $idSelect = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            $idSelect = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted='1'";
             if ($regionID == "1") {
                 $idSelect .= " AND read_q = (SELECT (MAX(read_q)) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
             }
@@ -433,7 +433,7 @@ class VPMonth extends pAndR {
             $idResult = $con->query($idSelect);
             $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
 
-            $idPSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            $idPSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted='1'";
             if ($regionID == "1") {
                 $idPSelect .= " AND read_q = (SELECT (MAX(read_q)-1) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
             }

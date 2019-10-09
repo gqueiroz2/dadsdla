@@ -11,12 +11,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <form method="POST" action="{{ route('resultsResumePost') }}" runat="server"  onsubmit="ShowLoading()">
+                <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
                     @csrf
                     <div class="row">                        
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
+
                             @if($errors->has('region'))
                                 <label style="color: red;">* Required</label>
                             @endif
@@ -27,6 +28,8 @@
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
                         </div>
+
+
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
                             @if($errors->has('brand'))
