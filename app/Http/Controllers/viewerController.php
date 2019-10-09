@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\Render;
 use App\dataBase;
 use App\region;
@@ -37,7 +37,7 @@ class viewerController extends Controller{
 
 	public function basePost(){
 	
-                $db = new dataBase();
+                /*$db = new dataBase();
                 $con = $db->openConnection("DLA");
 
                 $years = array($cYear = intval(date('Y')), $cYear - 1);
@@ -57,9 +57,11 @@ class viewerController extends Controller{
 
                 $grossRevenue = 'gross_revenue_prate';
                 $netRevenue = 'net_revenue_prate';
-                $v = new viewer();
+                $v = new viewer();*/
 
-                return view("adSales.viewer.basePost", compact("years","render","region","currency","currencies","brand"));
+                var_dump(Request::all());
+
+                //return view("adSales.viewer.basePost", compact("years","render","region","currency","currencies","brand"));
 
 	}
 

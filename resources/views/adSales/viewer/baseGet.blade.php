@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <form method="POST" action="{{ route('resultsResumePost') }}" runat="server"  onsubmit="ShowLoading()">
+                <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
                     @csrf
                     <div class="row">                        
 
