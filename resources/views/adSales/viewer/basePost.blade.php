@@ -5,7 +5,7 @@
 @section('head')
     <script src="/js/viewer.js"></script>
     <?php include(resource_path('views/auth.php')); 
-    	var_dump("post");
+    	//var_dump("post");
      ?>
 @endsection
 
@@ -31,7 +31,7 @@
 
 					<div class="col">
 						<label class="labelLeft">Source: </label>
-							@if($errors->has('brand'))
+							@if($errors->has('sourceDataBase'))
 								<label style="color:red;">*Required</label>
 							@endif
 							{{$render->sourceDataBase()}}
@@ -39,9 +39,6 @@
 
 					<div>
 						<label class="labelLeft">PI: </label>
-						@if($errors->has('brand'))
-								<label style="color:red;">*Required</label>
-						@endif
 						{{$render->piNumber()}}
 					</div>
 

@@ -7,9 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\dataBase;
-use App\base;
 use App\region;
-use App\resultsMQ;
 use App\generateExcel;
 
 class excelController extends Controller{
@@ -39,20 +37,20 @@ class excelController extends Controller{
 
                 $value = Request::get("value");
 
-                $mq = new resultsMQ();
-
                 $ge = new generateExcel();
 
                 $values = $ge->selectDataMonth($con, $region, $year, $brands, $secondPos, $currency, $value);
-                //var_dump($values);
+                
 
-                $form = $mq->TruncateName($secondPos);
-
+                $form = $secondPos;
+                
         	$spreadsheet = new Spreadsheet();
                 $sheet = $spreadsheet->getActiveSheet();
 
-                $sheet = $ge->month($sheet, $values, $brands, $currency, $value, $year, $form, $salesRegion);
+                $numbers = $ge->formatValuesArray($value, $form);
                 
+                $sheet = $ge->month($sheet, $values, $brands, $currency, $value, $year, $form, $salesRegion, "month", $numbers);
+                //var_dump("expression");
                 $writer = new Xlsx($spreadsheet);
          
                 $filename = 'Results Month';
