@@ -41,9 +41,8 @@ class VPMonthController extends Controller {
         $user = json_decode(base64_decode(Request::get('user')));
         $year = json_decode(base64_decode(Request::get('year')));
         $percentage = json_decode(base64_decode(Request::get('percentage')));
-
         $brandsPerClient = json_decode(base64_decode(Request::get('brandsPerClient')));
-        
+
         /*for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
             $brandPerClient[$c] = "";
@@ -133,7 +132,7 @@ class VPMonthController extends Controller {
         
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
-        /*$bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient, $totalClient);
+        $bool = $vpMonth->insertUpdate($con,$ID,$regionID,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimation,$manualEstimantionByClient,$client,$submit,$brandsPerClient, $totalClient, $percentage);
 
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
@@ -147,7 +146,7 @@ class VPMonthController extends Controller {
         }else{
             $msg = "Error";
             return back()->with("Error",$msg);
-        }*/
+        }
     }
 
     public function get(){
