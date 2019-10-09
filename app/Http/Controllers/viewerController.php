@@ -42,49 +42,56 @@ class viewerController extends Controller{
 
 	public function basePost(){
 
-        $render =  new baseRender();
+                $render =  new baseRender();
 
-        $b = new base();
-        $months = $b->month;
-	
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
+                $base = new base();
+                $months = $base->month;
+        	
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-        $years = array($cYear = intval(date('Y')), $cYear - 1);
-        
-        $sr = new salesRep();
-        $salesRep = $sr->getSalesRep($con);
+                $years = array($cYear = intval(date('Y')), $cYear - 1);
+                
+                $sr = new salesRep();
+                $salesR = $sr->getSalesRep($con);
 
-        $r = new region();
-        $region = $r->getRegion($con, NULL);
+                $r = new region();
+                $region = $r->getRegion($con, NULL);
 
-        $b = new brand();
-        $brands = $b->getBrand($con);
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
-        $viewer = new viewer();
-        //$getMatix = $viewer->baseMatrix($con,$brands,$salesRep,$months,$grossRevenue,$netRevenue,$mapNumber);
+                $b = new brand();
+                $brands = $b->getBrand($con);
 
-        $salesRegion = Request::get("region");
+                $viewer = new viewer();
 
-        $source = Request::get("sourceDataBase");
+                $salesRegion = Request::get("region");
 
-        $month = Request::get("month");
+                $source = Request::get("sourceDataBase");
 
-        $piNumber = Request::get("PI");
+                $month = Request::get("month");
 
-        $tmp = Request::get("brand");
-        $brand = $base->handleBrand($tmp);
+                $piNumber = Request::get("PI");
 
-        $value = Request::get("value");
+                $tmp = Request::get("brand");
+                $brand = $base->handleBrand($tmp);
 
-        $year = Request::get("year");
+                $value = Request::get("value");
 
-        $salesCurrency = Request::get("currency");
+                $year = Request::get("year");
 
-        var_dump(Request::all());
+                $salesCurrency = Request::get("currency");
+
+                $salesRep = Request::get("salesRep");
+
+                $getMatrix = $viewer->matrix($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep);
 
 
-        return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                var_dump(Request::all());
+
+
+                return view("adSales.viewer.basePost", compact("years","render", "salesR", "region","currency","currencies","brands","viewer","getMatrix"));
 
 
 	}
