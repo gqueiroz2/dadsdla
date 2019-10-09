@@ -513,6 +513,23 @@ class VPMonth extends pAndR {
 
             }
 
+            $totalPMonth = array(0,0,0,0,0,0,0,0,0,0,0,0);
+            for ($c=0; $c<sizeof($saida); $c++) { 
+                for ($m=0; $m <sizeof($saida[$c]); $m++) { 
+                    $totalPMonth[$m] += $saida[$c][$m]['value'];
+                }
+            }
+            $percentage = array();
+            for ($c=0; $c <sizeof($saida); $c++) { 
+                for ($m=0; $m <sizeof($saida[$c]); $m++) {
+                    if ($totalPMonth[$m] != 0) {
+                        $percentage[$c][$m] = $saida[$c][$m]['value']/$totalPMonth[$m];
+                    }else{
+                        $percentage[$c][$m] = 0;
+                    }
+                }
+            }
+
             for ($m=0; $m < sizeof($month); $m++) { 
                 
                 if ($currencyCheck) {
@@ -607,6 +624,7 @@ class VPMonth extends pAndR {
                             "value" => $valueView,
                             "fcstAmountByStage" => $fcstAmountByStage,
                             "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                            "percentage" => $percentage
                         );
 
         }else{
@@ -1446,11 +1464,13 @@ class VPMonth extends pAndR {
             $select[$m] = "SELECT SUM($ytdColumn) AS sumValue
                                 FROM ytd
                                 WHERE  (month = \"".$month[$m][1]."\")
-                                AND (year = \"".$year."\")";
+                                AND (year = \"".$year."\")
+                                AND (sales_representant_office_id = \"".$region."\")";
 
             $selectFW[$m] = "SELECT SUM($fwColumn) AS sumValue 
                                 FROM fw_digital
                                 WHERE (month = \"".$month[$m][1]."\")
+                                AND (region_id = \"".$region."\")
                                 AND (year = \"".$year."\")";            
 
             $res[$m] = $con->query($select[$m]);
@@ -1470,12 +1490,26 @@ class VPMonth extends pAndR {
         return $rev;
     }
 
+    public function fixFW($con,$pr,$region,$year,$base){
+
+        $oldCurrency = $base->generateDiv($con,$pr,$region,array($year),'1');
+        $newCurrency = $base->generateDiv($con,$pr,$region,array(date('Y')),'1');
+
+        return $newCurrency/$oldCurrency;
+    }
+
     public function revenueByClient($con,$sql,$base,$pr,$regionID,$year,$month,$currency,$currencyID,$value,$clients,$cYear){
 
         if($currency == "USD"){
-            $div = 1;
+            if ($regionID == '1' && date('Y') != $year) {
+                $divDig = $this->fixFW($con,$pr,$regionID,$year,$base);
+            }else{
+                $div = 1;
+            }
         }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+
+            $divDig = $base->generateDiv($con,$pr,$regionID,array($cYear),$currency);
         }
 
         if($value == "gross"){
@@ -1502,6 +1536,7 @@ class VPMonth extends pAndR {
                                 WHERE (client_id = \"".$clients[$c]['clientID']."\")
                                 AND (month = \"".$month[$m][1]."\")                                    
                                 AND (year = \"".$year."\")
+                                AND (sales_representant_office_id = \"".$regionID."\")
 
                               ";
                 $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
@@ -1509,6 +1544,7 @@ class VPMonth extends pAndR {
                                 WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                 AND (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
+                                AND (region_id = \"".$regionID."\")
                                 ";
 
                 $res[$c][$m] = $con->query($select[$c][$m]);
@@ -1517,7 +1553,7 @@ class VPMonth extends pAndR {
                 $from = array("sumValue");
 
                 $rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
-                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;                    
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$divDig;                    
 
                 if(!is_null($revFW[$c][$m])){
                     $rev[$c][$m] += ($revFW[$c][$m]);

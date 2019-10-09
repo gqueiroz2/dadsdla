@@ -17,6 +17,7 @@
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
+
                             @if($errors->has('region'))
                                 <label style="color: red;">* Required</label>
                             @endif
@@ -27,6 +28,8 @@
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
                         </div>
+
+
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
                             @if($errors->has('brand'))
