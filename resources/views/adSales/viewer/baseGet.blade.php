@@ -32,7 +32,7 @@
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
-                            @if($errors->has('brand'))
+                            @if($errors->has('sourceDataBase'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->sourceDataBase()}}
@@ -40,9 +40,6 @@
                         
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> PI: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
                             {{$render->piNumber($brand)}}
                         </div>
                         

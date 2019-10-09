@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Validator;
 
 use App\base;
 use App\Render;
@@ -19,7 +20,6 @@ class viewerController extends Controller{
 
 	public function baseGet(){
 	
-
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
@@ -45,11 +45,26 @@ class viewerController extends Controller{
 
                 $render =  new baseRender();
 
-                $b = new base();
-                $months = $b->month;
+                $base = new base();
+                $months = $base->month;
         	
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
+
+                $validator = Validator::make(Request::all(),[
+                    'region' => 'required',
+                    'sourceDataBase' => 'required',
+                    'year' => 'required',
+                    'month' => 'required',
+                    'brand' => 'required',
+                    'salesRep' => 'required',
+                    'currency' => 'required',
+                    'value' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
+                }
 
                 $years = array($cYear = intval(date('Y')), $cYear - 1);
                 
@@ -61,6 +76,9 @@ class viewerController extends Controller{
 
                 $b = new brand();
                 $brands = $b->getBrand($con);
+
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
                 $viewer = new viewer();
                 //$getMatix = $viewer->baseMatrix($con,$brands,$salesRep,$months,$grossRevenue,$netRevenue,$mapNumber);
@@ -82,9 +100,9 @@ class viewerController extends Controller{
 
                 $salesCurrency = Request::get("currency");
 
-                var_dump(Request::all());
+                //var_dump(Request::all());
 
-                return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","salesCurrency","currencies","brands","viewer"));
 
 	}
 

@@ -565,7 +565,7 @@ class VPMonth extends pAndR {
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
-
+            
             $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);

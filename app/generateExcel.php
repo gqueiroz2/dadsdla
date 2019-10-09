@@ -10,15 +10,62 @@ use App\planByBrand;
 use App\ytd;
 use App\cmaps;
 use App\digital;
+use App\base;
 
 class generateExcel extends Model {
     
-	public function month($sheet, $mtx, $brands, $currency, $value, $year, $form, $region){
+	public function formatValuesArray($value, $table){
+		
+		if ($table == "TARGET" || $table == "CORPORATE" || $table == "ACTUAL") {
+			$rtr = array("revenue");
+		}elseif ($table == "ytd") {
+			$rtr = array($value."_revenue", $value."_revenue_prate");
+		}elseif($table == "cmaps"){
+			$rtr = array($value);
+		}else{
+			$rtr = array($value."_revenue");
+		}
 
+		return $rtr;
+	}
+
+	public function month($sheet, $mtx, $brands, $currency, $value, $year, $form, $region, $title, $values){
+
+		$head = $region."- ".ucfirst($title)." : BKGS - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
+
+		if ($mtx[0] && $mtx[1]) {
+			$sheet = $this->generateTV($sheet, $head, $mtx, $values);
+			$sheet->setTitle('TV');
+
+			$sheet->createSheet('Digital');
+
+			
+
+
+
+		}elseif ($mtx[0] && !$mtx[1]) {
+				
+		}
+
+		return $sheet;
+	}
+
+	public function inArray($array, $value){
+		
+		for ($a=0; $a < sizeof($array); $a++) { 
+			if ($value == $array[$a]) {
+				return 1;
+			}
+		}
+
+		return 0;
+
+	}
+
+	public function generateTV($sheet, $head, $mtx, $values){
+		
 		$startLetter = 'A';
 		$letter = $startLetter;
-
-		$head = $region."- Month : ".$form." - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
 
 		$sheet->setCellValue($letter.'1', $head);
 		$sheet->getStyle($letter.'1')->getFont()->setSize(20);
@@ -43,13 +90,61 @@ class generateExcel extends Model {
 		    ],
 		];
 
+		$bodyStyle = [
+		    'font' => [
+		        'bold' => true,
+		        'name' => 'Verdana',
+		        'size' => 7,
+		        'color' => array('rgb' => '000000')
+		    ],
+		    'alignment' => [
+		        'horizontal' => 'center',
+		        'vertical' => 'center',
+		        'wrapText' => true
+		    ],
+		];
+
+		$base = new base();
+		$months = $base->month;
+
+		$headNames = array();
+
 		foreach ($mtx[0][0] as $key => $val) {
+			array_push($headNames, $key);
+			
+			if ($key == "impression_duration") {
+				$key = "impression_duration (Seconds)";
+			}
+
             $sheet->setCellValue($letter.'3', $key);
             $sheet->getStyle($letter.'3')->applyFromArray($headStyle);
             $letter++;    
         }
 
         $letter = $startLetter;
+        $number = 4;
+        //var_dump($mtx[0]);
+        
+        for ($m=0; $m < sizeof($mtx[0]); $m++) {
+        	for ($v=0; $v < sizeof($mtx[0][$m]); $v++) {
+        		if ($this->inArray($values, $headNames[$v])) {
+        			$sheet->setCellValue($letter.$number, number_format($mtx[0][$m][$headNames[$v]]));	
+        		}else{
+
+        			if ($headNames[$v] == "month") {
+						$sheet->setCellValue($letter.$number, $months[$mtx[0][$m][$headNames[$v]]-1][2]);	        				
+        			}else{
+        				$sheet->setCellValue($letter.$number, $mtx[0][$m][$headNames[$v]]);	
+        			}
+        		}
+
+        		$sheet->getStyle($letter.$number)->applyFromArray($bodyStyle);	
+        		$letter++;
+        	}
+        	$number++;
+        	$letter = $startLetter;
+
+        }
 
 		return $sheet;
 	}

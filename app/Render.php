@@ -304,7 +304,7 @@ class Render extends Model{
 
     public function salesRep(){
     	echo "<select id='salesRep'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
-    		//echo "<option value=''> Select Region </option>";
+    		echo "<option value=''> Select Region </option>";
 
     	echo "</select>";	
 
