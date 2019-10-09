@@ -62,10 +62,16 @@ class base extends Model{
         return $rtr;
     }
 
-    public function removePercentageSymbol($per){
+    public function removePercentageSymbol($per, $table){
         $temp = explode("%", $per);
         $percen = floatval( $temp[0] );
-        $percentage = $percen/100;
+
+        if ($table == "fw_digital") {
+            $percentage = $percen;
+        }else{
+            $percentage = $percen/100;
+        }
+
         return $percentage;
     }
 

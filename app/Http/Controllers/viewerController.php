@@ -15,29 +15,28 @@ use App\cmaps;
 use App\baseRender;
 
 class viewerController extends Controller{
-    
+
 	public function baseGet(){
 	
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
 
-        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
-        $render = new baseRender();
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-        $r = new region();
-        $region = $r->getRegion($con, NULL);
+                $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+                $render = new Render();
 
+                $r = new region();
+                $region = $r->getRegion($con, NULL);
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con); 
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
-        $b = new brand();
-        $brand = $b->getBrand($con);
+                $b = new brand();
+                $brand = $b->getBrand($con);
 
-        $v = new viewer();
+                $v = new viewer();
 
-
-        return view("adSales.viewer.baseGet",compact("render","years","region","currency","currencies","brand"));
+                return view("adSales.viewer.baseGet",compact("render","years","region","currency","currencies","brand"));
 	}
 
 
@@ -58,9 +57,6 @@ class viewerController extends Controller{
 
         $r = new region();
         $region = $r->getRegion($con, NULL);
-
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con);
 
         $b = new brand();
         $brands = $b->getBrand($con);
@@ -89,6 +85,7 @@ class viewerController extends Controller{
 
 
         return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+
 
 	}
 

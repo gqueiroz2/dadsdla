@@ -91,13 +91,20 @@ class quarterPerformanceController extends Controller {
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $qp->TRuncateRegion($region);
 
-        $tiersFinal = array();
+        $tmpTiers = array("T1", "T2", "TOTH");
 
         for ($i=0; $i < sizeof($auxTiers); $i++) { 
-            
-            if (empty(!$auxTiers[$i])) {
-                array_push($tiersFinal, $tiers[$i]);
+            if (empty($auxTiers[$i])) {
+                unset($tmpTiers[$i]);
             }
+        }
+
+        $tmpTiers = array_values($tmpTiers);
+
+        $tiersFinal = array();
+        
+        for ($i=0; $i < sizeof($tmpTiers); $i++) { 
+            array_push($tiersFinal, $tmpTiers[$i]);
         }
 
         if (sizeof($brands) > 1) {

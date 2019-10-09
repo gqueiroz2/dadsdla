@@ -11,7 +11,7 @@ use App\sql;
 use App\base;
 
 class subNewRanking extends rankingNew {
-    
+
     public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType){
 
     	$sql = new sql();
@@ -238,4 +238,78 @@ class subNewRanking extends rankingNew {
 
     	return $res;
     }
+
+    public function renderSubAssembler($mtx, $total, $type, $years){
+        
+        echo "<div class='container-fluid'>";
+            echo "<div class='row mt-2 mb-2 justify-content-center'>";
+                echo "<div class='col'>";
+                    echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
+                    
+                    for ($m=0; $m < sizeof($mtx[0]); $m++) { 
+                        echo "<tr>";    
+                        
+                        if ($m == 0) {
+                            $color = 'lightBlue';
+                        }elseif ($m%2 == 0) {
+                            $color = 'medBlue';
+                        }else{
+                            $color = 'rcBlue';  
+                        }
+
+                        for ($n=0; $n < sizeof($mtx); $n++) { 
+                            
+                            if ($m == 0) {
+		            			echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+		            		}else{
+		            			if (is_numeric($mtx[$n][$m])) {
+		            				if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Var YTD (%)") {
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";
+		            				}elseif ($mtx[$n][0] == "Ranking") {
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." º</td>";
+		            				}else{
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+		            				}
+		            			}else{
+	                                echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
+		            			}
+		            		}
+                        }
+
+                        echo "</tr>";
+                    }
+
+                    	echo "<tr>";
+			            for ($t=0; $t < sizeof($total); $t++) {
+			            	if (is_numeric($total[$t])) {
+			            		if ($type == "agency") {
+			            			if ($t == 5) {
+			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+			            			}else{
+			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+			            			}
+			            		}elseif ($type == "client") {
+                                    if ($t == 4) {
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                    }else{
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                    }
+                                }else{
+                                    if ($t == 4) {
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                    }else{
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                    }
+			        			}
+			            	}else{
+			            		echo "<td class='darkBlue center'> ".$total[$t]." </td>";
+			            	}
+			            }
+		            	echo "</tr>";
+
+            	    echo "</table>";
+        	   echo "</div>";
+    	   echo "</div>";
+	   echo "</div>";
+	}
 }
