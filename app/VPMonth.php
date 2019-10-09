@@ -519,6 +519,8 @@ class VPMonth extends pAndR {
                     $totalPMonth[$m] += $saida[$c][$m]['value'];
                 }
             }
+            
+            //calcula a porcentagem que cada cliente tem em cada mes
             $percentage = array();
             for ($c=0; $c <sizeof($saida); $c++) { 
                 for ($m=0; $m <sizeof($saida[$c]); $m++) {
@@ -542,6 +544,9 @@ class VPMonth extends pAndR {
                 }
 
             }
+
+            $brandsPerClient = $this->brandsPerClient($con,$sql,$idSaida,$listOfClients);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
@@ -1648,6 +1653,24 @@ class VPMonth extends pAndR {
         $resp = $sql->fetch($res,$from,$from)[0]["ID"];
 
         return $resp;
+
+    }
+
+    public function brandsPerClient($con,$sql,$id,$listOfClients){
+        $from = array('brand');
+        $testSelect = "SELECT DISTINCT client_id FROM forecast_client WHERE forecast_id = \"".$id[0]["ID"]."\"";
+        $tRes = $con->query($testSelect);
+        $tResp = $sql->fetch($tRes,array('client_id'),array('client_id'));
+
+        for ($c=0; $c <sizeof($listOfClients); $c++) { 
+            $select[$c] = "SELECT DISTINCT brand FROM forecast_client WHERE forecast_id = \"".$id[0]["ID"]."\" AND client_id = \"".$listOfClients[$c]['clientID']."\"";
+            $res[$c] = $con->query($select[$c]);
+            $resp[$c] = $sql->fetch($res[$c],$from,$from);
+            if (!$resp[$c]) {
+                var_dump($listOfClients[$c]);
+            }
+        }
+
 
     }
 
