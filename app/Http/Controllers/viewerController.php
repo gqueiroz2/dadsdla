@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Validator;
 
 use App\base;
 use App\Render;
@@ -19,7 +20,6 @@ class viewerController extends Controller{
 
 	public function baseGet(){
 	
-
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
@@ -52,6 +52,21 @@ class viewerController extends Controller{
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
+                $validator = Validator::make(Request::all(),[
+                    'region' => 'required',
+                    'sourceDataBase' => 'required',
+                    'year' => 'required',
+                    'month' => 'required',
+                    'brand' => 'required',
+                    'salesRep' => 'required',
+                    'currency' => 'required',
+                    'value' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
+                }
+
                 $years = array($cYear = intval(date('Y')), $cYear - 1);
                 
                 $sr = new salesRep();
@@ -65,6 +80,9 @@ class viewerController extends Controller{
 
                 $b = new brand();
                 $brands = $b->getBrand($con);
+
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
                 $viewer = new viewer();
 
@@ -84,6 +102,7 @@ class viewerController extends Controller{
                 $year = Request::get("year");
 
                 $salesCurrency = Request::get("currency");
+
 
                 $salesRep = Request::get("salesRep");
 
