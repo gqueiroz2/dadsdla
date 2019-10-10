@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\dataBase;
 use App\region;
+use App\brand;
 use App\generateExcel;
 
 class excelController extends Controller{
@@ -24,8 +25,8 @@ class excelController extends Controller{
 
                 $year = Request::get("year");
 
-                $tmpBrands = Request::get("brand");
-                $brands = json_decode(base64_decode($tmpBrands));
+                $b = new brand();
+                $brands = $b->getBrand($con);
 
                 $firstPos = Request::get("firstPos");
                 $secondPos = Request::get("secondPos");
@@ -39,17 +40,18 @@ class excelController extends Controller{
 
                 $ge = new generateExcel();
 
-                $values = $ge->selectDataMonth($con, $region, $year, $brands, $secondPos, $currency, $value);
+                $values = $ge->selectData($con, $region, $year, $brands, $secondPos, $currency, $value);
+                $valuesPlan = $ge->selectData($con, $region, $year, $brands, $firstPos, $currency, $value);
                 
-
+                $plan = $firstPos;
                 $form = $secondPos;
                 
         	$spreadsheet = new Spreadsheet();
-                $sheet = $spreadsheet->getActiveSheet();
 
                 $numbers = $ge->formatValuesArray($value, $form);
+                $numbersPlan = $ge->formatValuesArray($value, $plan);
                 
-                $sheet = $ge->month($sheet, $values, $brands, $currency, $value, $year, $form, $salesRegion, "month", $numbers);
+                $sheet = $ge->month($spreadsheet, $values, $valuesPlan, $currency, $value, $year, $salesRegion, "month", $plan, $numbers, $numbersPlan);
                 //var_dump("expression");
                 $writer = new Xlsx($spreadsheet);
          

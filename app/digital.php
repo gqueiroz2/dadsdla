@@ -47,7 +47,7 @@ class digital extends Management {
         }
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
-
+        
         $from = array('client', 'agency', 'campaign', 'insertion_order', 'region', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage',
          'currency', 'placement', 'buy_type', 'content_targeting_set_name', $value.'_revenue', 'commission', 'brand', 'year');
 
