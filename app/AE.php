@@ -257,7 +257,7 @@ class AE extends pAndR{
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }
     }
 

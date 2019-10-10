@@ -195,7 +195,7 @@ class VP extends pAndR{
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }
     }
     public function base($con,$r,$pr,$cYear,$pYear){
@@ -211,11 +211,15 @@ class VP extends pAndR{
         }else{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
         }
+
+        $date = date('Y-m-d');
+
         $currentMonth = intval( date('m') );
 
-        $fcstInfo = $this->getForecast($con,$sql,$regionID);
+        $week = $this->weekOfMonth($date);
 
-        
+        $fcstInfo = $this->getForecast($con,$sql,$regionID,$currentMonth,$week);
+
         if(!$fcstInfo){
             return false;
         }else{
@@ -981,7 +985,8 @@ class VP extends pAndR{
         
         return ($a['client'] < $b['client']) ? -1 : 1;
     }
-    public function getForecast($con,$sql,$regionID){
+
+    public function getForecast($con,$sql,$regionID,$month,$week){
         $select = " SELECT f.ID AS 'ID',
                            f.oppid AS 'oppid',
                            f.region_id AS 'region_id',
@@ -1002,8 +1007,16 @@ class VP extends pAndR{
                            LEFT JOIN sales_rep sr ON f.sales_rep_id = sr.ID
                            WHERE(region_id = \"".$regionID."\") 
                            AND (submitted = '1')
-                           ORDER BY ID DESC
+                           AND (type_of_forecast = 'AE')
+                           AND (month = \"".date('m')."\")
                   ";
+
+        if ($regionID == "1") {
+            $select .= "AND (read_q = \"".$week."\")";
+        }
+
+        $select .= "ORDER BY ID DESC";
+
         //echo "<pre>".($select)."</pre>";
         $res = $con->query($select);
         //var_dump($res);
