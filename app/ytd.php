@@ -102,7 +102,6 @@ class ytd extends Management{
                  LEFT JOIN agency agc ON agc.ID = ytd.agency_id
                  LEFT JOIN currency c ON c.ID = ytd.campaign_currency_id";
 
-
         if (is_null($where)) {
             $where = "";
         }

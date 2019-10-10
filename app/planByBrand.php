@@ -58,7 +58,7 @@ class planByBrand extends Management{
                     b.name AS 'brand',
                     pbb.source AS 'source',
                     pbb.year AS 'year',
-                    pbb.type_of_revenue AS 'typeOfRevenue',
+                    pbb.type_of_revenue AS 'type_of_Revenue',
                     pbb.month AS 'month',
                     pbb.revenue AS 'revenue'
                     ";
@@ -69,7 +69,7 @@ class planByBrand extends Management{
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('id', 'region', 'currency', 'brand', 'source', 'year', 'typeOfRevenue', 'month', 'revenue');
+        $from = array('region', 'currency', 'brand', 'source', 'year', 'type_of_Revenue', 'month', 'revenue');
         $to = $from;
 
         $planByBrand = $sql->fetch($result,$from,$to);
