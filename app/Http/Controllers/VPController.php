@@ -121,8 +121,10 @@ class VPController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        $date = date('Y-m-d');
+        $fcstMonth = date('m');
 
-        $fcstInfo = $vp->getForecast($con,$sql,$regionID);
+        $fcstInfo = $vp->getForecast($con,$sql,$regionID,$fcstMonth,$date);
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
 

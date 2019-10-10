@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use App\region;
+use App\pacingReport;
 use App\pacingRender;
 use App\salesRep;
 use App\pRate;
@@ -15,33 +16,41 @@ class pacingReportController extends Controller{
 	public function get(){
 		
 		$db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $r = new region();
-        $sr = new salesRep();
-        $render = new pacingRender();
-        $pr = new pRate();
+                $con = $db->openConnection("DLA");
+                $r = new region();
+                $sr = new salesRep();
+                $render = new pacingRender();
+                $pr = new pRate();
 
-        $region = $r->getRegion($con,null);
-        $currency = $pr->getCurrency($con,null);
+                $region = $r->getRegion($con,null);
+                $currency = $pr->getCurrency($con,null);
 		
 		return view('pAndR.pacingReport.get',compact('render','region','currency'));
 	}
 
 	public function post(){
 		$db = new dataBase();
-        $con = $db->openConnection("DLA");
-        $r = new region();
-        $sr = new salesRep();
-        $render = new pacingRender();
-        $pr = new pRate();
-        $b = new brand();
+                $con = $db->openConnection("DLA");
+                $r = new region();
+                $sr = new salesRep();
+                $render = new pacingRender();
+                $pr = new pRate();
+                $b = new brand();
+                $pc = new pacingReport();
 
-        $brands = $b->getBrand($con);
+                $brands = $b->getBrand($con);
 
-        $region = $r->getRegion($con,null);
-        $currency = $pr->getCurrency($con,null);
+                $region = Request::get('region');
+                $year = Request::get('year');
+                $currency = Request::get('currency');
+                $value = Request::get('value');
 
-		return view('pAndR.pacingReport.post',compact('render','region','currency','brands'));
+                $forRender = $pc->base($con,$region,$year,$currency,$value,$brands,$pr);
+
+                $region = $r->getRegion($con,null);
+                $currency = $pr->getCurrency($con,null);
+
+                //return view('pAndR.pacingReport.post',compact('render','region','currency','brands'));
 	}
 
 }
