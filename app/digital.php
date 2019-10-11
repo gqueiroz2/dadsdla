@@ -46,6 +46,8 @@ class digital extends Management {
             $where = "";
         }
 
+        $order_by = "year";
+
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
         
         $from = array('client', 'agency', 'campaign', 'insertion_order', 'region', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage',
@@ -55,18 +57,20 @@ class digital extends Management {
 
         $digital = $sql->fetch($result, $from, $to);
 
-        $p = new pRate();
-
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
+        if (is_array($digital)) {
+            $p = new pRate();
+        
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(date('Y')));
+            }
+            
+            for ($d=0; $d < sizeof($digital); $d++) {
+                $digital[$d][$value.'_revenue'] *= $pRate;
+            }   
         }
-
-        for ($d=0; $d < sizeof($digital); $d++) { 
-            $digital[$d][$value.'_revenue'] /= $pRate;
-        }
-
+        
         return $digital;
     }
 

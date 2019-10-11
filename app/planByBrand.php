@@ -36,6 +36,8 @@ class planByBrand extends Management{
             $where = "";
         }
 
+        $order_by = "year";
+
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('id', 'region', 'currency', 'brand', 'source', 'year', 'typeOfRevenue', 'month', 'revenue');
@@ -74,16 +76,18 @@ class planByBrand extends Management{
 
         $planByBrand = $sql->fetch($result,$from,$to);
 
-        $p = new pRate();
+        if (is_array($planByBrand)) {
+            $p = new pRate();
 
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
-        }
-        
-        for ($p=0; $p < sizeof($planByBrand); $p++) { 
-            $planByBrand[$p]['revenue'] *= $pRate;
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(date('Y')));
+            }
+            
+            for ($p=0; $p < sizeof($planByBrand); $p++) { 
+                $planByBrand[$p]['revenue'] *= $pRate;
+            }   
         }
 
         return $planByBrand;

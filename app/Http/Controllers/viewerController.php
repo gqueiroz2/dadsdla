@@ -103,10 +103,9 @@ class viewerController extends Controller{
 
                 $salesCurrency = Request::get("currency");
 
-
                 $salesRep = Request::get("salesRep");
 
-                $getMatrix = $viewer->matrix($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep);
+                //$getMatrix = $viewer->matrix($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep);
 
 
                 var_dump(Request::all());
