@@ -1759,6 +1759,7 @@ class AE extends pAndR{
                                 AND ( stage != '6')
                                 AND ( stage != '7')
                                 AND (year_from = \"".$year."\")
+                                AND (year_to = \"".$year."\")
                                 AND (from_date > \"".$date."\")
                               "; 
 
@@ -1770,6 +1771,7 @@ class AE extends pAndR{
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
                             AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")
+                            AND (year_to = \"".$year."\")
                           ";
         }
         $res = $con->query($select);

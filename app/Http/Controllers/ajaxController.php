@@ -41,17 +41,13 @@ class ajaxController extends Controller{
         $c = new client;
         $db = new dataBase();
         $con = $db->openConnection("DLA");
-        /*var_dump(Request::all());
-        
+
         $region = Request::get("regionID");
-        $agency = $a->getAgencyByRegion($con,array($region));
+        $client = $c->getClientByRegion($con,array($region));
 
-        for ($a=0; $a < sizeof($agency); $a++) { 
-            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        for ($c=0; $c < sizeof($client); $c++) { 
+            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
         }
-        */
-
-
     }
 
     public function secondaryFilterTitle(){        
@@ -311,10 +307,31 @@ class ajaxController extends Controller{
 
             $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
 
-            echo "<option selected='true'>Select Sales Rep.</option>";
+            echo "<option selected='true' value=''>Select Sales Rep.</option>";
 
             for ($s=0; $s < sizeof($resp); $s++) { 
                 echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
+    public function getNewSalesRepByRegion(){
+        $regionID = Request::get('regionID');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
             }
         }
     }
@@ -529,6 +546,22 @@ class ajaxController extends Controller{
             echo "<option value=''> There is no Currency for this Region </option>";
         }
         //echo $regionID;
+    }
+
+    public function newSourceByRegion(){
+        $region = Request::get('regionID');
+
+
+        if ($region == 1) {
+            $source = array("CMAPS","IBMS/BTS","FW","SF");            
+        }else{
+            $arraySource = array("IBMS/BTS","FW","SF");
+        }
+
+        echo "<option value=''> Select </option>";
+        for ($s=0; $s < sizeof($source); $s++) { 
+            echo "<option value='".$source[$s]."'>".$source[$s]."</option>";
+        }
     }
 
     public function sourceByRegion(){

@@ -21,7 +21,7 @@ class Render extends Model{
     }
 
     public function clientForm(){
-        echo "<select id='client' name='client' style='width:100%;' class='form-control'>";
+        echo "<select class='selectpicker' id='client' name='client[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }
@@ -224,10 +224,7 @@ class Render extends Model{
         $arraySource = array("CMAPS","IBMS/BTS","FW","SF");
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select </option>";
-            for ($a=0; $a <sizeof($arraySource) ; $a++) {
-                echo "<option value='".$arraySource[$a]."'>".$arraySource[$a]."</option>";
-            }
+            echo "<option value=''> Select </option>";           
         echo "</select>";
 
     }
@@ -239,7 +236,7 @@ class Render extends Model{
     }
 
     public function piNumber(){
-        echo "<input type='text' name='PI' class='form-control'>";
+        echo "<input type='text' id='piNumber' name='PI' value='0' class='form-control' style='display: none;'>";
     }
 
     public function brand($brand){

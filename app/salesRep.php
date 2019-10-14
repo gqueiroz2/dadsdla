@@ -78,7 +78,6 @@ class salesRep extends Management{
 	public function getSalesRepStatus($con,$salesRep,$year){
 		$sql = new sql();
 		$from = array("status");
-		//var_dump($salesRep);
 		for ($s=0; $s <sizeof($salesRep) ; $s++) { 
 			$sqls[$s] = "SELECT status FROM sales_rep_status WHERE (sales_rep_id = '".$salesRep[$s]["id"]."') AND (year = '$year')";
 
@@ -87,7 +86,6 @@ class salesRep extends Management{
 			$salesStatus[$s] = $sql->fetch($result[$s],$from,$from)[0];
 
 		}
-
 
 		for ($s=0; $s <sizeof($salesStatus); $s++) { 
 			if ($salesStatus[$s]["status"] == 0) {

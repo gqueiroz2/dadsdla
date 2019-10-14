@@ -132,14 +132,14 @@ class excelController extends Controller{
                 $styles = $ge->getSheetStyles();
 
         	$spreadsheet = new Spreadsheet();
-
+                
                 $numbers = $ge->formatValuesArray($value, $form);
                 $numbersPlan = $ge->formatValuesArray($value, $plan);
                 
                 $sheet = $ge->month($spreadsheet, $styles, $values, $valuesPlan, $currency, $value, $years[0], $salesRegion, "month", $plan, $numbers, $numbersPlan);
                 
                 $writer = new Xlsx($spreadsheet);
-         
+                
                 $filename = 'Results Month';
          
                 header('Content-Type: application/vnd.ms-excel');
