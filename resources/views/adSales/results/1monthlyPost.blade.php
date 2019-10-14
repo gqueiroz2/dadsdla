@@ -59,7 +59,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('monthExcel') }}" runat="server">
+	<form method="POST" action="{{ route('monthExcel') }}" runat="server" onsubmit="ShowLoading()">
 		@csrf
 		<input type="hidden" name="regionExcel" value="{{$regionExcel}}">
 		<input type="hidden" name="yearExcel" value="{{$yearExcel}}">

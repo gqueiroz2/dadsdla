@@ -38,7 +38,7 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col">
+                        <div class="col" id="piNumberCol" style="display:none;">
                             <label class="labelLeft"><span class="bold"> PI: </span></label>
                             {{$render->piNumber($brand)}}
                         </div>
@@ -64,17 +64,34 @@
                             @endif
                             {{$render->brand($brand)}}
                         </div>
-                    
+                         
+                                            
+                    </div>
+
+                    <div class="row">
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->salesRep()}}
-                        </div>                        
-                    </div>
+                        </div>
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Agency:</span></label>
+                            @if($errors->has('agency'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->AgencyForm()}}
+                        </div>
 
-                    <div class="row">
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Client:</span></label>
+                            @if($errors->has('client'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->ClientForm()}}
+                        </div>
+
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
                             @if($errors->has('currency'))
@@ -100,7 +117,7 @@
 
         <div class="row justify-content-end mt-2">
             <div class="col" style="color: #0070c0;font-size: 22px">
-                <span style="float: right; margin-right: 2.5%;"> Data Current Through: DD-MM-YY (<?php echo date('d \/ m \/ y'); ?>) </span>
+                <span style="float: right; margin-right: 2.5%;"> Data Current Through: (<?php echo date('d/m/Y'); ?>) </span>
             </div>
 
             

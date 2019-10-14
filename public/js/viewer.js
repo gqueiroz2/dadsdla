@@ -77,13 +77,24 @@ $(document).ready(function(){
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       */
-      $('#source').change(function(){
+      $('#sourceDataBase').change(function(){
 
+        var sourceDataBase = $('#sourceDataBase').val();
+        if(sourceDataBase == "CMAPS"){
+          $('#piNumber').val("");
+          $('#piNumberCol').css("display", "block");
+          $('#piNumber').css("display", "block");
+
+        }else{
+          $('#piNumber').val("0");
+          $('#piNumberCol').css("display", "none");
+          $('#piNumber').css("display", "none");
+        }
       });
 
 
       $.ajax({
-        url:"/ajax/adsales/salesRepByRegion",
+        url:"/ajax/adsales/newSalesRepByRegion",
         method:"POST",
         data:{regionID},
         success: function(output){
@@ -111,13 +122,24 @@ $(document).ready(function(){
         method:"POST",
         data:{regionID},
         success: function(output){
-          $('#vlau').html(output).selectpicker("refresh");
+          $('#client').html(output).selectpicker("refresh");
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
       });
 
+      $.ajax({
+        url:"/ajax/adsales/sourceByRegion",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#sourceDataBase').html(output).selectpicker("refresh");
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
 
       /*
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
