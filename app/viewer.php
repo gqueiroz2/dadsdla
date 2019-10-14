@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class viewer extends Model{
 
+
 	public function getTables($con,$value,$month,$source,$piNumber=NULL,$brand,$year){
 
 		if ($source == 'cmaps'){ 
@@ -53,7 +54,7 @@ class viewer extends Model{
 		}elseif ($source == "sf"){
 			
 		}
-		
+
 	}
 
 }

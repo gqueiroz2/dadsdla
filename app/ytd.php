@@ -52,7 +52,7 @@ class ytd extends Management{
             $where = $sql->where($colNames, $values);
         }
 
-        $order_by = 10;
+        $order_by = "year";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
@@ -117,17 +117,19 @@ class ytd extends Management{
 
         $ytd = $sql->fetch($result, $from, $to);
 
-        $p = new pRate();
+        if (is_array($ytd)) {
+            $p = new pRate();
 
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
-        }
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
+            }
 
-        for ($y=0; $y < sizeof($ytd); $y++) { 
-            $ytd[$y][$value.'_revenue'] *= $pRate;
-            $ytd[$y][$value.'_revenue_prate'] *= $pRate;
+            for ($y=0; $y < sizeof($ytd); $y++) { 
+                $ytd[$y][$value.'_revenue'] *= $pRate;
+                $ytd[$y][$value.'_revenue_prate'] *= $pRate;
+            }   
         }
 
         return $ytd;

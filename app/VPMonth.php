@@ -1586,8 +1586,9 @@ class VPMonth extends pAndR {
             if ($regionID == '1' && date('Y') != $year) {
                 $divDig = $this->fixFW($con,$pr,$regionID,$year,$base);
             }else{
-                $div = 1;
+                $divDig = 1;
             }
+            $div = 1;
         }else{
             $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
 

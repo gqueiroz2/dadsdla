@@ -18,31 +18,33 @@ class excelController extends Controller{
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
-                $region = Request::get("region");
+                $region = Request::get("regionExcel");
                 $r = new region();
                 $salesRegion = $r->getRegion($con, array($region));
                 $salesRegion = $salesRegion[0]['name'];
 
-                $year = Request::get("year");
+                $year = Request::get("yearExcel");
+
+                $years = array($year, $year-1);
 
                 $b = new brand();
                 $brands = $b->getBrand($con);
 
-                $firstPos = Request::get("firstPos");
-                $secondPos = Request::get("secondPos");
+                $firstPos = Request::get("firstPosExcel");
+                $secondPos = Request::get("secondPosExcel");
 
-                $tmpCurrency = Request::get("currency");
+                $tmpCurrency = Request::get("currencyExcel");
                 $auxCurrency = json_decode(base64_decode($tmpCurrency));
                 $currency[0]['id'] = $auxCurrency[0]->id;
                 $currency[0]['name'] = $auxCurrency[0]->name;
 
-                $value = Request::get("value");
+                $value = Request::get("valueExcel");
 
                 $ge = new generateExcel();
-
-                $values = $ge->selectData($con, $region, $year, $brands, $secondPos, $currency, $value);
-                $valuesPlan = $ge->selectData($con, $region, $year, $brands, $firstPos, $currency, $value);
                 
+                $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value);
+                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value);
+
                 $plan = $firstPos;
                 $form = $secondPos;
                 
@@ -51,8 +53,8 @@ class excelController extends Controller{
                 $numbers = $ge->formatValuesArray($value, $form);
                 $numbersPlan = $ge->formatValuesArray($value, $plan);
                 
-                $sheet = $ge->month($spreadsheet, $values, $valuesPlan, $currency, $value, $year, $salesRegion, "month", $plan, $numbers, $numbersPlan);
-                //var_dump("expression");
+                $sheet = $ge->month($spreadsheet, $values, $valuesPlan, $currency, $value, $years[0], $salesRegion, "month", $plan, $numbers, $numbersPlan);
+                
                 $writer = new Xlsx($spreadsheet);
          
                 $filename = 'Results Month';

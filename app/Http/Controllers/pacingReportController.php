@@ -50,7 +50,7 @@ class pacingReportController extends Controller{
                 $region = $r->getRegion($con,null);
                 $currency = $pr->getCurrency($con,null);
 
-                //return view('pAndR.pacingReport.post',compact('render','region','currency','brands'));
+                return view('pAndR.pacingReport.post',compact('render','region','currency','brands','forRender'));
 	}
 
 }

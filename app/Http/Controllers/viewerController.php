@@ -103,7 +103,6 @@ class viewerController extends Controller{
 
                 $salesCurrency = Request::get("currency");
 
-
                 $salesRep = Request::get("salesRep");
 
                 $table = $viewer->getTables($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep,$db);

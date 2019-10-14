@@ -74,26 +74,26 @@ class cmaps extends Management{
 
         $table = "cmaps cm";
         $columns = "cm.ID AS 'id',
-                    sr.name AS 'salesRep',
+                    sr.name AS 'sales_rep',
                     cl.name AS 'client',
                     agc.name AS 'agency',
                     b.name AS 'brand',
                     cm.decode AS 'decode',
                     cm.year AS 'year',
                     cm.month AS 'month',
-                    cm.map_number AS 'mapNumber',
+                    cm.map_number AS 'map_number',
                     cm.package AS 'package',
                     cm.product AS 'product',
                     cm.segment AS 'segment',
-                    cm.pi_number AS 'piNumber',
+                    cm.pi_number AS 'pi_number',
                     cm.".$value." AS '".$value."',
                     cm.market AS 'market',
                     cm.discount AS 'discount',
-                    cm.client_cnpj AS 'clientCNPJ',
-                    cm.agency_cnpj AS 'agencyCNPJ',
-                    cm.media_type AS 'mediaType',
+                    cm.client_cnpj AS 'client_CNPJ',
+                    cm.agency_cnpj AS 'agency_CNPJ',
+                    cm.media_type AS 'media_type',
                     cm.log AS 'log',
-                    cm.ad_sales_support AS 'adSalesSupport',
+                    cm.ad_sales_support AS 'ad_Sales_Support',
                     cm.obs AS 'obs',
                     cm.sector AS 'sector',
                     cm.category AS 'category'
@@ -109,26 +109,30 @@ class cmaps extends Management{
              $where = "";
         }
 
+        $order_by = "year";
+
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'mapNumber',
-         'package', 'product', 'segment', 'piNumber', $value, 'market', 'discount', 'clientCNPJ', 'agencyCNPJ', 'mediaType',
-          'log', 'adSalesSupport', 'obs', 'sector', 'category');
+        $from = array('salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'map_number',
+         'package', 'product', 'segment', 'pi_number', $value, 'market', 'discount', 'client_CNPJ', 'agency_CNPJ', 'media_type',
+          'log', 'ad_Sales_Support', 'obs', 'sector', 'category');
 
         $to = $from;
 
         $cmaps = $sql->fetch($result, $from, $to);
         
-        $p = new pRate();
+        if (is_array($cmaps)) {
+            $p = new pRate();
 
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
-        }
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(date('Y')));
+            }else{
+                $pRate = 1.0;
+            }
 
-        for ($c=0; $c < sizeof($cmaps); $c++) { 
-            $cmaps[$c][$value] /= $pRate;
+            for ($c=0; $c < sizeof($cmaps); $c++) { 
+                $cmaps[$c][$value] /= $pRate;
+            }   
         }
 
         return $cmaps;

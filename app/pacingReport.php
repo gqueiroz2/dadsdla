@@ -23,6 +23,13 @@ class pacingReport extends Model
         $date = date('Y-m-d');
         $week = $this->weekOfMonth($date);
 
+        if ($value == "gross") {
+        	$valueView = "Gross";
+        }else{
+        	$valueView = "Net";
+        }
+
+
         $fcstInfo = $this->getForecast($con,$sql,$region,$currentMonth,$week);
 
         if (!$fcstInfo) {
@@ -55,8 +62,191 @@ class pacingReport extends Model
         	}
         }
 
-        var_dump($fcstValue);
+        //colocando quarter e total no fcst
+        $fcstValue = $this->makeQuarterAndTotal($fcstValue);
+
+ 		//pegando SAP ano atual e anterior
+        $actualCYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,"ACTUAL");
+        $actualPYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,($year-1),"ACTUAL");
+
+        //colocando quarter e total nos SAP's
+        $actualCYear = $this->makeQuarterAndTotal($actualCYear);
+        $actualPYear = $this->makeQuarterAndTotal($actualPYear);
+
+        //pegando Target e Corporate FCST
+        $corporate = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,"CORPORATE");
+        $target = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,"TARGET");
+
+        // adicionando quarter e total ao target e o fcst Corporate
+        $corporate = $this->makeQuarterAndTotal($corporate);
+        $target = $this->makeQuarterAndTotal($target);
+
+        //pegando booking do ano atual e ano passado
+        $bookingCYear = $this->getBooking($con,$sql,$pr,$brands,$year,$value,$currency,$region);
+        $bookingPYear = $this->getBooking($con,$sql,$pr,$brands,($year-1),$value,$currency,$region);
+
+        //adicionando quarter e total ...
+        $bookingCYear = $this->makeQuarterAndTotal($bookingCYear);
+        $bookingPYear = $this->makeQuarterAndTotal($bookingPYear);
+
+        //fazendo porcentagem conta é (x-y)/y
+        $prc1 = $this->makePrc($fcstValue,$bookingPYear);
+        $prc2 = $this->makePrc($fcstValue,$target);
+
+        //somando todos os brands para sumarizar no total
+        $totalFcstValue = $this->makeTotal($fcstValue);
+        $totalActualCYear = $this->makeTotal($actualCYear);
+        $totalActualPYear = $this->makeTotal($actualPYear);
+        $totalCorporate = $this->makeTotal($corporate);
+        $totalTarget = $this->makeTotal($target);
+        $totalBookingCYear = $this->makeTotal($bookingCYear);
+        $totalBookingPYear = $this->makeTotal($bookingPYear);
+
+
+        $totalPrc1 = $this->makePrcTotal($totalFcstValue,$totalBookingPYear);
+        $totalPrc2 = $this->makePrcTotal($totalFcstValue,$totalTarget);
+
+
+        $forRender = array("fcst" => $fcstValue,
+    						"SAPCYear" => $actualCYear,
+    						"SAPPYear" => $actualPYear,
+    						"corporate" => $corporate,
+    						"bookingCYear" => $bookingCYear,
+    						"bookingPYear" => $bookingPYear,
+    						"target" => $target,
+    						"prc1" => $prc1,
+    						"prc2" => $prc2,
+
+    						"totalFcstValue" => $totalFcstValue,
+    						"totalActualCYear" => $totalActualCYear,
+    						"totalActualPYear" => $totalActualPYear,
+    						"totalCorporate" => $totalCorporate,
+    						"totalTarget" => $totalTarget,
+    						"totalBookingCYear" => $totalBookingCYear,
+    						"totalBookingPYear" => $totalBookingPYear,
+    						"totalPrc1" => $totalPrc1,
+    						"totalPrc2" => $totalPrc2,
+
+    						"cYear" => $year,
+    						"pYear" => ($year-1),
+    						"currency" => $currency['name'],
+    						"value" => $valueView
+
+    						);
+	
+        return $forRender;
 	}
+
+	public function makePrcTotal($array1,$array2){
+		$out = array();
+		for ($m=0; $m <sizeof($array1); $m++) { 
+			if ($array2[$m] != 0) {
+				$out[$m] = (($array1[$m]-$array2[$m])/$array2[$m])*100;
+			}else{
+				$out[$m] = 0;
+			}
+		}
+
+		return $out;
+	}
+
+
+	public function makeTotal($array){
+		$out = array();
+
+		for ($m=0; $m <sizeof($array[0]); $m++) { 
+			$out[$m]=0;
+		}
+
+		for ($b=0; $b <sizeof($array); $b++) { 
+			for ($m=0; $m <sizeof($array[$b]); $m++) { 
+				$out[$m] += $array[$b][$m];
+			}
+		}
+		return $out;
+	}
+
+	public function makePrc($array1,$array2){
+		$out = array();
+		for ($b=0; $b <sizeof($array1); $b++) { 
+			for ($m=0; $m <sizeof($array1[$b]); $m++) { 
+				if ($array2[$b][$m] != 0) {
+					$out[$b][$m] = (($array1[$b][$m]-$array2[$b][$m])/$array2[$b][$m])*100;
+				}else{
+					$out[$b][$m] = 0;
+				}
+			}
+		}
+
+		return $out;
+	}
+
+	public function makeQuarterAndTotal($array){
+		$out = array();
+
+		for ($b=0; $b <sizeof($array); $b++) { 
+			for ($m=0; $m <17; $m++) { 
+				$out[$b][$m] = 0;
+			}
+		}
+
+		for ($b=0; $b <sizeof($array); $b++) { 
+			$out[$b][0] = $array[$b][0];
+			$out[$b][1] = $array[$b][1];
+			$out[$b][2] = $array[$b][2];
+			$out[$b][3] = $array[$b][0] + $array[$b][1] + $array[$b][2];
+			
+			$out[$b][4] = $array[$b][3];
+			$out[$b][5] = $array[$b][4];
+			$out[$b][6] = $array[$b][5];
+			$out[$b][7] = $array[$b][3] + $array[$b][4] + $array[$b][5];
+
+			$out[$b][8] = $array[$b][6];
+			$out[$b][9] = $array[$b][7];
+			$out[$b][10] = $array[$b][8];
+			$out[$b][11] = $array[$b][6] + $array[$b][7] + $array[$b][8];
+			
+			$out[$b][12] = $array[$b][9];
+			$out[$b][13] = $array[$b][10];
+			$out[$b][14] = $array[$b][11];
+			$out[$b][15] = $array[$b][9] + $array[$b][10] + $array[$b][11];
+			
+			$out[$b][16] = $out[$b][3] + $out[$b][7] + $out[$b][11] + $out[$b][15];
+		}
+
+
+		return $out;
+
+	}
+
+
+	public function getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,$type){
+		$from = array("revenue");
+
+		if ($value == "gross") {
+			$type_of_value = "GROSS";
+		}else{
+			$type_of_value = "NET";
+		}
+
+		if($currency['name'] == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array($year));
+        }
+
+		for ($b=0; $b <sizeof($brands); $b++) { 
+			for ($m=0; $m <12; $m++) { 
+				$select[$b][$m] = "SELECT revenue FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (type_of_revenue = \"".$type_of_value."\") AND (currency_id = \"4\")";
+				$res[$b][$m] = $con->query($select[$b][$m]);
+				$resp[$b][$m] = floatval($sql->fetch($res[$b][$m],$from,$from)[0]['revenue'])*$div;
+			}
+		}
+
+
+		return $resp;
+	}
+
 
 	public function getFcst($con,$sql,$pr,$brands,$valueCheck,$multValue,$currencyCheck,$newCurrency,$oldCurrency,$fcstInfo,$listOfClients,$lastYearBrand){
 
@@ -178,6 +368,43 @@ class pacingReport extends Model
 
 		return $resp;
 	}
+
+	public function getBooking($con,$sql,$pr,$brands,$year,$value,$currency,$region){
+		
+		if ($value == "gross") {
+			$col = "gross_revenue_prate";
+			$colFW = "gross_revenue";
+		}else{
+			$col = "net_revenue_prate"; 
+			$colFW = "net_revenue";
+		}
+
+		if($currency['name'] == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array($year));
+        }
+
+		for ($b=0; $b <sizeof($brands); $b++) { 
+			for ($m=0; $m <12; $m++){
+				if ($brands[$b]['name'] == 'ONL') {
+					//pegar ONL do FW
+					$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\")";
+				}elseif($brands[$b]['name'] == 'VIX'){
+					//pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
+					$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
+				}else{
+					$select[$b][$m] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
+				}
+
+				$res[$b][$m] = $con->query($select[$b][$m]);
+				$resp[$b][$m] = $sql->fetchSum($res[$b][$m], "value")['value']*$div;
+			}
+		}
+
+		return $resp;		
+	}
+
 
 	public function getBookingPerBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region){
 
