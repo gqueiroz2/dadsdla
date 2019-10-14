@@ -250,6 +250,8 @@ class pacingReport extends Model
 
 	public function getFcst($con,$sql,$pr,$brands,$valueCheck,$multValue,$currencyCheck,$newCurrency,$oldCurrency,$fcstInfo,$listOfClients,$lastYearBrand){
 
+		$checkNochannel=0;
+
 		$from = array("value","brand");
 
 		$saida = array();
@@ -267,6 +269,9 @@ class pacingReport extends Model
 				$res[$c][$m] = $con->query($select[$c][$m]);
 
 				$resp[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0];
+				$totalPrc[$c][$m] = 0;
+				$total[$c][$m] = 0;
+				$prcTemp[$c][$m] = array();
 
 				if ($resp[$c][$m] != null) {
 					
@@ -284,46 +289,79 @@ class pacingReport extends Model
 					
 					$resp[$c][$m]['brands'] = explode(";", $resp[$c][$m]['brand']);
 
+					if ($resp[$c][$m]['brand'] == 'NOCHANNELS' || $resp[$c][$m]['brand'] == '') {
+						$checkNochannel += $resp[$c][$m]['value'];
+					}
+
 					for ($b=0; $b <sizeof($resp[$c][$m]['brands']); $b++) { 
-						if ($resp[$c][$m]['brands'][$b] == 'ONL-G9') {
+						if ($resp[$c][$m]['brands'][$b] == 'ONL-G9' || $resp[$c][$m]['brands'][$b] == 'ONL-DSS') {
 							$resp[$c][$m]['brands'][$b] = 'ONL';
+						}elseif($resp[$c][$m]['brands'][$b] == 'NOCHANNELS'){
+							unset($resp[$c][$m]['brands'][$b]);
 						}
 					}
 
+					$resp[$c][$m]['brands'] = array_unique($resp[$c][$m]['brands']);
+					$resp[$c][$m]['brands'] = array_values($resp[$c][$m]['brands']);
+
 					if (sizeof($resp[$c][$m]['brands']) == 1) {
-						for ($b=0; $b <sizeof($brands) ; $b++) { 
-							if ($resp[$c][$m]['brand'] == $brands[$b]['name']) {
+						for ($b=0; $b <sizeof($brands); $b++) { 
+							if ($resp[$c][$m]['brands'][0] == $brands[$b]['name']) {
 								$saida[$b][$m] += $resp[$c][$m]['value'];
 							}
 						}
 					}else{
-						$total = 0;
-
 						for ($b1=0; $b1 <sizeof($resp[$c][$m]['brands']) ; $b1++) { 
 							for ($b2=0; $b2 <sizeof($brands); $b2++) { 
 								if ($resp[$c][$m]['brands'][$b1] == $brands[$b2]['name']) {
-									$total+= $lastYearBrand[$b2][$m];
+									$total[$c][$m]+= $lastYearBrand[$b2][$m];
 								}
 							}
 						}
-
 						for ($b1=0; $b1 <sizeof($resp[$c][$m]['brands']) ; $b1++) { 
 							for ($b2=0; $b2 <sizeof($brands); $b2++) { 
 								if ($resp[$c][$m]['brands'][$b1] == $brands[$b2]['name']) {
-									if ($total == 0) {
+									if ($total[$c][$m] == 0) {
 										$prc = 0;
 									}else{
-										$prc = $lastYearBrand[$b2][$m]/$total;
+										$prc = $lastYearBrand[$b2][$m]/$total[$c][$m];
 									}
+									$totalPrc[$c][$m] += $prc;
+									$prcTemp[$c][$m][$b1] = $prc;
+									//var_dump("Canal:".$resp[$c][$m]['brands'][$b1]);
+									//var_dump("Mes:".($m+1));
+									//var_dump("Total:".$total[$c][$m]);
+									//var_dump("Porcentagem:".$prc);
+									//var_dump("Resp:".$resp[$c][$m]["value"]);
 									$saida[$b2][$m] += $resp[$c][$m]['value']*$prc;
+									//var_dump("Saida:".$saida[$b2][$m]);
+									//var_dump("----------------------------------");
 								}
 							}
 						}
 					}
-
 				}
 			}
 		}
+
+		$temp = 0;
+
+
+		/*for ($c=0; $c <sizeof($resp); $c++) { 
+			for ($m=0; $m <sizeof($resp[$c]); $m++) { 
+				var_dump($resp[$c][$m]);
+				var_dump($prcTemp[$c][$m]);
+				var_dump("------------------------------------------------");
+			}
+		}*/
+
+		for ($b=0; $b <sizeof($saida); $b++) { 
+			for ($m=0; $m <sizeof($saida[$b]); $m++) { 
+				$temp += $saida[$b][$m];
+			}
+		}
+
+		$temp += $checkNochannel;
 
 		return $saida;
 	}

@@ -47,7 +47,7 @@ class pacingRender extends Render{
 
         echo "<div class='row'>";
         	echo "<div class='col linked table-responsive '>";
-            echo "<table style='width:100%; text-align:center; min-width:3000px;'>";
+            echo "<table style='width:100%; text-align:center; min-width:3000px;zoom:80%;'>";
         		echo "<tr>";
         			echo "<td class='dc' style='width:13%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px;'> $cYear - ($currency/$value)</td>";
             	for ($m=0; $m <sizeof($this->month); $m++) { 
@@ -67,7 +67,7 @@ class pacingRender extends Render{
             echo "<br>";
             echo "<div class='row'>";
                 echo "<div class='col linked table-responsive '>";
-            		echo "<table style='width:100%; text-align:center; min-width:3000px; '>";
+            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:80%;'>";
                         
                         /*
                             BOOKING ANO PASSADO
@@ -235,7 +235,7 @@ class pacingRender extends Render{
         echo "<br>";
         echo "<div class='row'>";
             echo "<div class='col linked table-responsive '>";
-                echo "<table style='width:100%; text-align:center; min-width:3000px; '>";
+                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:80%;'>";
                     
                     /*
                         BOOKING ANO PASSADO
