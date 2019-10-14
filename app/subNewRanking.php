@@ -10,14 +10,14 @@ use App\client;
 use App\sql;
 use App\base;
 
-class subChurnRanking extends rankingChurn {
-    
+class subNewRanking extends rankingNew {
+
     public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType){
 
     	$sql = new sql();
 
-    	$r = new region();
-
+    	$r = new region();                      
+                                
         $tmp = $r->getRegion($con,array($regionID));
 
         if(is_array($tmp)){
@@ -33,7 +33,7 @@ class subChurnRanking extends rankingChurn {
         }
 
         $cYear = intval(date('Y'));
-		$years = array($cYear, $cYear-1, $cYear-2);
+		$years = array($cYear, $cYear-1);
 
 		$brand = array();
 
@@ -240,7 +240,7 @@ class subChurnRanking extends rankingChurn {
     }
 
     public function renderSubAssembler($mtx, $total, $type, $years){
-
+        
         echo "<div class='container-fluid'>";
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
@@ -283,19 +283,19 @@ class subChurnRanking extends rankingChurn {
 			            for ($t=0; $t < sizeof($total); $t++) {
 			            	if (is_numeric($total[$t])) {
 			            		if ($type == "agency") {
-			            			if ($t == 5 || $t == 11) {
+			            			if ($t == 5) {
 			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
 			            			}else{
 			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
 			            			}
 			            		}elseif ($type == "client") {
-                                    if ($t == 6) {
+                                    if ($t == 4) {
                                         echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
                                     }else{
                                         echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
                                     }
                                 }else{
-                                    if ($t == 5) {
+                                    if ($t == 4) {
                                         echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
                                     }else{
                                         echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
@@ -312,5 +312,4 @@ class subChurnRanking extends rankingChurn {
     	   echo "</div>";
 	   echo "</div>";
 	}
-    
 }

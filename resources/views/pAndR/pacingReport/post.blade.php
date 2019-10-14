@@ -31,7 +31,7 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('pacingReportPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">		
 			<div class="row">
@@ -78,12 +78,17 @@
 		<div class="row justify-content-center mt-2">
 			<div class="col" style="width: 100%; padding-right: 2%;">
 				<center>
-					{{$render->pacingReport($brands)}}
+					{{$render->pacingReport($brands,$forRender)}}
 				</center>
 			</div>
 		</div>
 	</div>
 
+	<script>
+		$('.linked').scroll(function(){
+    		$('.linked').scrollLeft($(this).scrollLeft());
+		});
+	</script>
 
 
 

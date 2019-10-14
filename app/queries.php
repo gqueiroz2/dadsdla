@@ -158,7 +158,7 @@ class queries extends Model
 		return $brand;
 	}
 
-	public function getSalesRep($conn){
+	public function getSalesRep($con){
 
 		//posso passar região se for necessario para ter mais certeza na busca
 

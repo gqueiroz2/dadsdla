@@ -58,12 +58,16 @@ class renderVPMonth extends Render {
 
         $fcstAmountByStage = $forRender["fcstAmountByStage"];
         $fcstAmountByStageEx = $forRender["fcstAmountByStageEx"];
+        $percentage = $forRender["percentage"];
+        $brandsPerClient = $forRender["brandsPerClient"];
 
         echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
         echo "<input type='hidden' id='value' name='value' value='".base64_encode(json_encode($value))."'>";
         echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
+        echo "<input type='hidden' id='percentage' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
+        echo "<input type='hidden' id='brandsPerClient' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerClient))."'>";
 
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>
@@ -99,7 +103,7 @@ class renderVPMonth extends Render {
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Manual Estimation</span><br>";
             echo "</tr>";
             echo "<tr>";
-                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Past Rolling Fcast ".$cYear."</span><br>";
+                echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><span>Previous Rolling Fcast ".$cYear."</span><br>";
             echo "</tr>";
             echo "<tr>";
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Bookings</td>";

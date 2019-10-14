@@ -7,9 +7,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\dataBase;
-use App\base;
 use App\region;
-use App\resultsMQ;
+use App\brand;
 use App\generateExcel;
 
 class excelController extends Controller{
@@ -19,42 +18,45 @@ class excelController extends Controller{
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
-                $region = Request::get("region");
+                $region = Request::get("regionExcel");
                 $r = new region();
                 $salesRegion = $r->getRegion($con, array($region));
                 $salesRegion = $salesRegion[0]['name'];
 
-                $year = Request::get("year");
+                $year = Request::get("yearExcel");
 
-                $tmpBrands = Request::get("brand");
-                $brands = json_decode(base64_decode($tmpBrands));
+                $years = array($year, $year-1);
 
-                $firstPos = Request::get("firstPos");
-                $secondPos = Request::get("secondPos");
+                $b = new brand();
+                $brands = $b->getBrand($con);
 
-                $tmpCurrency = Request::get("currency");
+                $firstPos = Request::get("firstPosExcel");
+                $secondPos = Request::get("secondPosExcel");
+
+                $tmpCurrency = Request::get("currencyExcel");
                 $auxCurrency = json_decode(base64_decode($tmpCurrency));
                 $currency[0]['id'] = $auxCurrency[0]->id;
                 $currency[0]['name'] = $auxCurrency[0]->name;
 
-                $value = Request::get("value");
-
-                $mq = new resultsMQ();
+                $value = Request::get("valueExcel");
 
                 $ge = new generateExcel();
+                
+                $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value);
+                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value);
 
-                $values = $ge->selectDataMonth($con, $region, $year, $brands, $secondPos, $currency, $value);
-                //var_dump($values);
-
-                $form = $mq->TruncateName($secondPos);
-
+                $plan = $firstPos;
+                $form = $secondPos;
+                
         	$spreadsheet = new Spreadsheet();
-                $sheet = $spreadsheet->getActiveSheet();
-
-                $sheet = $ge->month($sheet, $values, $brands, $currency, $value, $year, $form, $salesRegion);
+                
+                $numbers = $ge->formatValuesArray($value, $form);
+                $numbersPlan = $ge->formatValuesArray($value, $plan);
+                
+                $sheet = $ge->month($spreadsheet, $values, $valuesPlan, $currency, $value, $years[0], $salesRegion, "month", $plan, $numbers, $numbersPlan);
                 
                 $writer = new Xlsx($spreadsheet);
-         
+                
                 $filename = 'Results Month';
          
                 header('Content-Type: application/vnd.ms-excel');

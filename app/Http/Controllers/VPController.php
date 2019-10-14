@@ -39,6 +39,7 @@ class VPController extends Controller
         $currency = json_decode(base64_decode(Request::get('currency')));
         $value = json_decode(base64_decode(Request::get('value')));
         $cYear = json_decode(base64_decode(Request::get('cYear')));
+        $clientBrands = json_decode(base64_decode(Request::get('clientBrands')));
         $submit = Request::get('options');
 
         for ($p=0; $p <sizeof($percentage); $p++) { 
@@ -62,7 +63,7 @@ class VPController extends Controller
 
         $region = $r->getRegion($con,array($region))[0];
 
-        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$client);
+        $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$client,$clientBrands);
 
         if ($bool == "Saved") {
             $msg = "Forecast Created";        
@@ -120,8 +121,10 @@ class VPController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
+        $date = date('Y-m-d');
+        $fcstMonth = date('m');
 
-        $fcstInfo = $vp->getForecast($con,$sql,$regionID);
+        $fcstInfo = $vp->getForecast($con,$sql,$regionID,$fcstMonth,$date);
         $forRender = $vp->base($con,$r,$pr,$cYear,$pYear);
         $salesRepListOfSubmit = $forRender["salesRepListOfSubmit"];
 

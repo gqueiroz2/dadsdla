@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col">
-			<form method="POST" action="{{ route('resultsMonthlyPost') }}" runat="server"  onsubmit="ShowLoading()">
+			<form method="POST" action="{{ route('resultsMonthlyPost') }}" runat="server" onsubmit="ShowLoading()">
 				@csrf
 				<div class="row">
 					<div class="col-sm">
@@ -22,7 +22,7 @@
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Year: </span></label>
-						{{$render->year($regionID)}}					
+						{{$render->year()}}					
 					</div>	
 
 					<div class="col-sm">
@@ -42,7 +42,7 @@
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
-						{{$render->currency($currency)}}
+						{{$render->currency()}}
 					</div>
 
 					<div class="col-sm">
@@ -59,15 +59,15 @@
 		</div>
 	</div>
 
-	<form method="POST" action="{{ route('monthExcel') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('monthExcel') }}" runat="server" onsubmit="ShowLoading()">
 		@csrf
-		<input type="hidden" name="region" value="{{$regionID}}">
-		<input type="hidden" name="year" value="{{$year}}">
-		<input type="hidden" name="brand" value="{{ base64_encode(json_encode($brandID)) }}">
-		<input type="hidden" name="firstPos" value="{{$firstPos}}">
-		<input type="hidden" name="secondPos" value="{{$secondPos}}">
-		<input type="hidden" name="currency" value="{{ base64_encode(json_encode($tmp)) }}">
-		<input type="hidden" name="value" value="{{$value}}">
+		<input type="hidden" name="regionExcel" value="{{$regionExcel}}">
+		<input type="hidden" name="yearExcel" value="{{$yearExcel}}">
+		<input type="hidden" name="brandExcel" value="{{ base64_encode(json_encode($brandExcel)) }}">
+		<input type="hidden" name="firstPosExcel" value="{{$firstPosExcel}}">
+		<input type="hidden" name="secondPosExcel" value="{{$secondPosExcel}}">
+		<input type="hidden" name="currencyExcel" value="{{ base64_encode(json_encode($currencyExcel)) }}">
+		<input type="hidden" name="valueExcel" value="{{$valueExcel}}">
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm"></div>

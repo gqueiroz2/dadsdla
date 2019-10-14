@@ -4,7 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class viewer extends Model
-{
-    //
+class viewer extends Model{
+
+	public function matrix($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep){
+		$from = ('revenue');
+
+		for ($m=0; $m <($month); $m++) { 
+			for ($b=0; $b <($brand); $b++) { 
+				for ($s=0; $s <($salesRep); $s++){ 
+					
+				}
+			}
+		}
+
+	}
+
 }

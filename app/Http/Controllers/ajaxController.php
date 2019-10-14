@@ -18,6 +18,7 @@ use App\subRankings;
 use App\subBrandRanking;
 use App\subMarketRanking;
 use App\subChurnRanking;
+use App\subNewRanking;
 use App\base;
 
 class ajaxController extends Controller{
@@ -40,17 +41,13 @@ class ajaxController extends Controller{
         $c = new client;
         $db = new dataBase();
         $con = $db->openConnection("DLA");
-        var_dump(Request::all());
-        /*
+
         $region = Request::get("regionID");
-        $agency = $a->getAgencyByRegion($con,array($region));
+        $client = $c->getClientByRegion($con,array($region));
 
-        for ($a=0; $a < sizeof($agency); $a++) { 
-            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        for ($c=0; $c < sizeof($client); $c++) { 
+            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
         }
-        */
-
-
     }
 
     public function secondaryFilterTitle(){        
@@ -312,8 +309,29 @@ class ajaxController extends Controller{
 
             echo "<option selected='true'>Select Sales Rep.</option>";
 
-            for ($s=0; $s <sizeof($resp) ; $s++) { 
+            for ($s=0; $s < sizeof($resp); $s++) { 
                 echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
+    public function getNewSalesRepByRegion(){
+        $regionID = Request::get('regionID');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
             }
         }
     }
@@ -528,6 +546,22 @@ class ajaxController extends Controller{
             echo "<option value=''> There is no Currency for this Region </option>";
         }
         //echo $regionID;
+    }
+
+    public function newSourceByRegion(){
+        $region = Request::get('regionID');
+
+
+        if ($region == 1) {
+            $source = array("CMAPS","IBMS/BTS","FW","SF");            
+        }else{
+            $arraySource = array("IBMS/BTS","FW","SF");
+        }
+
+        echo "<option value=''> Select </option>";
+        for ($s=0; $s < sizeof($source); $s++) { 
+            echo "<option value='".$source[$s]."'>".$source[$s]."</option>";
+        }
     }
 
     public function sourceByRegion(){
@@ -879,7 +913,7 @@ class ajaxController extends Controller{
             $val = "client";
         }
         
-        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);        
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
 
         if ($type == "client") {
             $filterType = "agency";
@@ -892,8 +926,8 @@ class ajaxController extends Controller{
         for ($v=0; $v < sizeof($values); $v++) { 
             if (is_array($values[$v])) {
                 for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-                    if (!in_array($values[$v][$v2][$filterType], $finalValues)) {
-                        array_push($finalValues, $values[$v][$v2][$filterType]);
+                    if ($scr->existInArray($finalValues, $values[$v][$v2][$filterType."ID"], $filterType, true)) {
+                        array_push($finalValues, $values[$v][$v2]);
                     }
                 }   
             }
@@ -916,144 +950,58 @@ class ajaxController extends Controller{
         $scr->renderSubAssembler($mtx, $total, $type, $years);
     }
 
-    public function splittedClients(){
+    public function newSubRanking(){
         
-        $splitted = Request::get("splitted");
-        $client = Request::get("client");
-        
-        if ($splitted != 0) {
-            $mult = 0.5;
+        $db = new dataBase();   
+        $con = $db->openConnection("DLA");
+
+        $type = Request::get("type");
+        $region = Request::get("region");
+        $value = Request::get("value");
+        $currency = Request::get("currency");
+        $months = Request::get("months");
+        $brands = Request::get("brands");
+        $name = Request::get("name");
+
+        $snr = new subNewRanking();
+
+        $cYear = intval(date('Y'));
+        $years = array($cYear, $cYear-1);
+
+        if ($type == "client") {
+            $val = "agency";
         }else{
-            $mult = 1;
+            $val = "client";
         }
 
-        $res = ($this->handleNumber($client)*$mult);
+        $values = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
 
-        echo $res;
-    }
+        $finalValues = array();
 
-    public function transformVal(){
-        
-        $value = Request::get("rf");
-        $transform = Request::get("transform");
-
-        if ($transform == "Comma") {
-            $value = $this->Comma($value);            
-        }elseif ($transform == "handleNumber") {
-            $value = $this->handleNumber($value);
-        }
-
-        echo $value;
-    }
-
-    public function changeVal(){
-        
-        $editedValue = Request::get("editedValue");
-
-        if ($editedValue == "") {
-            echo 0;
-        }else{
-            $editedValue = $this->Comma($this->handleNumber($editedValue));
-            echo $editedValue;
-        }
-    }
-
-    public function verifyVal(){
-        
-        $totalClient = Request::get("totalClient");
-        $total = Request::get("total");
-
-        $totalClient = $this->handleNumber($totalClient);
-        $total = $this->handleNumber($total);
-
-        if (round($totalClient, 0) != round($total, 0)) {
-            echo 1;
-        }else{
-            echo -1;
-        }
-    }
-
-    public function reCalculateQuarterValues(){
-        
-        $firstValue = Request::get("firstValue");
-        $secondValue = Request::get("secondValue");
-        $thirdValue = Request::get("thirdValue");
-        
-        $firstValue = $this->handleNumber($firstValue);
-        $secondValue = $this->handleNumber($secondValue);
-        $thirdValue = $this->handleNumber($thirdValue);
-        
-        $res = $firstValue + $secondValue + $thirdValue;
-        
-        $res = $this->Comma($res);
-
-        echo $res;
-    }
-
-    public function reCalculateTotalVal(){
-        
-        $Q1 = Request::get("Q1");
-        $Q2 = Request::get("Q2");
-        $Q3 = Request::get("Q3");
-        $Q4 = Request::get("Q4");
-
-        $Q1 = $this->handleNumber($Q1);
-        $Q2 = $this->handleNumber($Q2);
-        $Q3 = $this->handleNumber($Q3);
-        $Q4 = $this->handleNumber($Q4);
-
-        $res = $Q1 + $Q2 + $Q3 + $Q4;
-
-        $res = $this->Comma($res);
-
-        echo $res;
-        
-    }
-
-    public function number(){
-        
-        $firstValue = Request::get("firstValue");
-        $secondValue = Request::get("secondValue");
-        $op = Request::get("op");
-
-        $firstValue = $this->handleNumber($firstValue);
-        $secondValue = $this->handleNumber($secondValue);
-
-        if ($op == "+") {
-            $res = $firstValue + $secondValue;
-        }elseif ($op == "-") {
-            # code...
-        }elseif ($op == "/") {
-            if ($firstValue == 0 || $secondValue == 0) {
-                $res = 0;
-            }else{
-                $res = $firstValue/$secondValue;
+        for ($v=0; $v < sizeof($values); $v++) { 
+            if (is_array($values[$v])) {
+                for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+                    if ($snr->existInArray($finalValues, $values[$v][$v2][$val."ID"], $val, true)) {
+                        array_push($finalValues, $values[$v][$v2]);
+                    }
+                }   
             }
-        }elseif ($op == "*") {
-            # code...
         }
 
-        echo $res;
+        $base = new base();
 
-    }
-
-    function handleNumber($number){
-
-        if ($number == "") {
-            return 0;
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
         }
-
-        $number = str_replace(",", "", $number);
-
-        $number = doubleval($number);
         
-        return $number;
-    }
-    
-    function Comma($Num) {
-     
-        $Num = number_format($Num);
+        $valuesTotal = $snr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
 
-        return $Num;
+        $matrix = $snr->assembler($values, $finalValues, $valuesTotal, $years, $val);
+        
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+        
+        $snr->renderSubAssembler($mtx, $total, $val, $years);
     }
 }
