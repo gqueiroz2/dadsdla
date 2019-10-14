@@ -113,7 +113,7 @@ class cmaps extends Management{
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'map_number',
+        $from = array('sales_rep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'map_number',
          'package', 'product', 'segment', 'pi_number', $value, 'market', 'discount', 'client_CNPJ', 'agency_CNPJ', 'media_type',
           'log', 'ad_Sales_Support', 'obs', 'sector', 'category');
 

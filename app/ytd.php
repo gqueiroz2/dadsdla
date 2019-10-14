@@ -9,6 +9,24 @@ use App\pRate;
 
 class ytd extends Management{
 
+    public $campaign_sales_office;
+    public $sales_representant_office;
+    public $brand;
+    public $sales_rep;
+    public $client;
+    public $agency;
+    public $campaign_curency;
+    public $year;
+    public $month;
+    public $brand_feed;
+    public $client_product;
+    public $order_reference;
+    public $campaign_reference;
+    public $spot_duration;
+    public $impression_duration;
+    public $num_spot_impressions;
+    public $revenue;
+
     public function get($con, $colNames = null, $values = null){
 
         $sql = new sql();
@@ -76,7 +94,7 @@ class ytd extends Management{
 
         $columns = "ytd.ID AS 'id',
                     r.name AS 'campaign_sales_office',
-                    r.name AS 'sales_representant_office',
+                    r2.name AS 'sales_representant_office',
                     b.name AS 'brand',
                     sr.name AS 'sales_rep',
                     cl.name AS 'client',
@@ -91,8 +109,7 @@ class ytd extends Management{
                     ytd.spot_duration AS 'spot_duration',
                     ytd.impression_duration AS 'impression_duration',
                     ytd.num_spot AS 'num_spot',
-                    ytd.".$value."_revenue AS '".$value."_revenue',
-                    ytd.".$value."_revenue_prate AS '".$value."_revenue_prate'";
+                    ytd.".$value."_revenue_prate AS 'revenue'";
 
         $join = "LEFT JOIN region r ON r.ID = ytd.campaign_sales_office_id
                  LEFT JOIN region r2 ON r2.ID = ytd.sales_representant_office_id
@@ -110,8 +127,7 @@ class ytd extends Management{
 
         $from = array('campaign_sales_office', 'sales_representant_office', 'brand', 'sales_rep', 'client', 'agency', 'campaign_currency',
                       'year', 'month', 'brand_feed', 'client_product', 'order_reference', 'campaign_reference', 'spot_duration',
-                      'impression_duration', 'num_spot', $value.'_revenue', 
-                      $value.'_revenue_prate');
+                      'impression_duration', 'num_spot', 'revenue');
 
         $to = $from;
 
@@ -127,11 +143,10 @@ class ytd extends Management{
             }
 
             for ($y=0; $y < sizeof($ytd); $y++) { 
-                $ytd[$y][$value.'_revenue'] *= $pRate;
-                $ytd[$y][$value.'_revenue_prate'] *= $pRate;
-            }   
+                $ytd[$y]['revenue'] *= $pRate;
+            }
         }
-
+        
         return $ytd;
 
     }

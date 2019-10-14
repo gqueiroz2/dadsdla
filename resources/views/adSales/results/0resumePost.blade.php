@@ -40,20 +40,28 @@
 			</div>
 		</div>
 		
-		<div class="row justify-content-end mt-2">
-			<div class="col-sm"></div>
-			<div class="col-sm"></div>
-			<div class="col-sm"></div>
-			<div class="col-sm" style="color: #0070c0;font-size: 22px">
-				<span style="float: right;"> {{$rName}} - Summary : {{$salesShow}} - {{$cYear}} </span>
-			</div>
+		<form method="POST" action="{{ route('summaryExcel') }}" runat="server">
+			@csrf
+			<input type="hidden" name="regionExcel" value="{{$regionExcel}}">
+			<input type="hidden" name="brandExcel" value="{{ base64_encode(json_encode($brandExcel)) }}">
+			<input type="hidden" name="currencyExcel" value="{{ base64_encode(json_encode($currencyExcel)) }}">
+			<input type="hidden" name="valueExcel" value="{{$valueExcel}}">
 
-			<div class="col-sm">
-				<button type="button" class="btn btn-primary" style="width: 100%">
-					Generate Excel
-				</button>				
+			<div class="row justify-content-end mt-2">
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm" style="color: #0070c0;font-size: 22px">
+					<span style="float: right;"> {{$rName}} - Summary : {{$salesShow}} - {{$cYear}} </span>
+				</div>
+
+				<div class="col-sm">
+					<button type="submit" class="btn btn-primary" style="width: 100%">
+						Generate Excel
+					</button>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	
 	@for($t = 0; $t < sizeof($matrix); $t++)
