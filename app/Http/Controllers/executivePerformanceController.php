@@ -69,7 +69,7 @@ class executivePerformanceController extends Controller
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $currency = $pr->getCurrency($con,null);
         
-        $cYear = date('Y');
+        $cYear = Request::get('year');
 
         return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear'));
     }
