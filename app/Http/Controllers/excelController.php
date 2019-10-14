@@ -49,14 +49,14 @@ class excelController extends Controller{
                 $form = $secondPos;
                 
         	$spreadsheet = new Spreadsheet();
-
+                
                 $numbers = $ge->formatValuesArray($value, $form);
                 $numbersPlan = $ge->formatValuesArray($value, $plan);
                 
                 $sheet = $ge->month($spreadsheet, $values, $valuesPlan, $currency, $value, $years[0], $salesRegion, "month", $plan, $numbers, $numbersPlan);
                 
                 $writer = new Xlsx($spreadsheet);
-         
+                
                 $filename = 'Results Month';
          
                 header('Content-Type: application/vnd.ms-excel');
