@@ -434,8 +434,6 @@ class VPPAndRRender extends PAndRRender{
                 }
             echo "</table>";
         echo "</div>";
-
-           
         echo "</div>";
     }    
 

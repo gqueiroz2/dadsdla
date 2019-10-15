@@ -9,6 +9,7 @@ use App\brand;
 use App\salesRep;
 use App\base;
 use App\sql;
+use App\region;
 
 class pacingReport extends Model
 {
@@ -32,9 +33,7 @@ class pacingReport extends Model
 
         $fcstInfo = $this->getForecast($con,$sql,$region,$currentMonth,$week);
 
-        if (!$fcstInfo) {
-        	return false;
-        }else{
+        if($fcstInfo){
         	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$region);
             $save = $fcstInfo;
             $temp = $base->adaptCurrency($con,$pr,$save,$currency['id'],$year,true);
@@ -44,27 +43,41 @@ class pacingReport extends Model
             $temp2 = $base->adaptValue($value,$save,$region,$listOfClients,true);
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
+
+
+            //booking ano atual para o fcst
+	        $brandValue = $this->getBookingPerBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region);
+
+	        //booking do ano passando para calculo de porcentagem
+	        $brandsValueLastYear = $this->lastYearBrand($con,$sql,$pr,$brands,($year-1),$value,$currency,$region);
+
+	        //fcst dividido por canal e mes
+	        $fcstValue = $this->getFcst($con,$sql,$pr,$brands,$valueCheck,$multValue,$currencyCheck,$newCurrency,$oldCurrency,$fcstInfo,$listOfClients,$brandsValueLastYear);
+
+	        //juntando booking e fcst por mes e canal
+	        for ($b=0; $b <sizeof($brandValue); $b++) { 
+	        	for ($m=0; $m <sizeof($brandValue[$b]); $m++) { 
+	        		$fcstValue[$b][$m] += $brandValue[$b][$m];
+	        	}
+	        }
+
+	        //colocando quarter e total no fcst
+	        $fcstValue = $this->makeQuarterAndTotal($fcstValue);
+
+        }else{
+
+
+        	$fcstValue = false;
+        	$totalFcstValue = false;
+
+        	$prc1 = false;
+        	$prc2 = false;
+
+        	$totalPrc1 = false;
+        	$totalPrc2 = false;
         }
 
-        //booking ano atual para o fcst
-        $brandValue = $this->getBookingPerBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region);
-
-        //booking do ano passando para calculo de porcentagem
-        $brandsValueLastYear = $this->lastYearBrand($con,$sql,$pr,$brands,($year-1),$value,$currency,$region);
-
-        //fcst dividido por canal e mes
-        $fcstValue = $this->getFcst($con,$sql,$pr,$brands,$valueCheck,$multValue,$currencyCheck,$newCurrency,$oldCurrency,$fcstInfo,$listOfClients,$brandsValueLastYear);
-
-        //juntando booking e fcst por mes e canal
-        for ($b=0; $b <sizeof($brandValue); $b++) { 
-        	for ($m=0; $m <sizeof($brandValue[$b]); $m++) { 
-        		$fcstValue[$b][$m] += $brandValue[$b][$m];
-        	}
-        }
-
-        //colocando quarter e total no fcst
-        $fcstValue = $this->makeQuarterAndTotal($fcstValue);
-
+        
  		//pegando SAP ano atual e anterior
         $actualCYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,"ACTUAL");
         $actualPYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,($year-1),"ACTUAL");
@@ -90,11 +103,15 @@ class pacingReport extends Model
         $bookingPYear = $this->makeQuarterAndTotal($bookingPYear);
 
         //fazendo porcentagem conta é (x-y)/y
-        $prc1 = $this->makePrc($fcstValue,$bookingPYear);
-        $prc2 = $this->makePrc($fcstValue,$target);
+        if ($fcstInfo) {
+        	$prc1 = $this->makePrc($fcstValue,$bookingPYear);
+       		$prc2 = $this->makePrc($fcstValue,$target);
+			
+			//total FcstValue
+	        $totalFcstValue = $this->makeTotal($fcstValue);
+        }
 
         //somando todos os brands para sumarizar no total
-        $totalFcstValue = $this->makeTotal($fcstValue);
         $totalActualCYear = $this->makeTotal($actualCYear);
         $totalActualPYear = $this->makeTotal($actualPYear);
         $totalCorporate = $this->makeTotal($corporate);
@@ -102,9 +119,10 @@ class pacingReport extends Model
         $totalBookingCYear = $this->makeTotal($bookingCYear);
         $totalBookingPYear = $this->makeTotal($bookingPYear);
 
-
-        $totalPrc1 = $this->makePrcTotal($totalFcstValue,$totalBookingPYear);
-        $totalPrc2 = $this->makePrcTotal($totalFcstValue,$totalTarget);
+        if ($fcstInfo) {
+        	$totalPrc1 = $this->makePrcTotal($totalFcstValue,$totalBookingPYear);
+        	$totalPrc2 = $this->makePrcTotal($totalFcstValue,$totalTarget);
+        }
 
 
         $forRender = array("fcst" => $fcstValue,
@@ -221,25 +239,30 @@ class pacingReport extends Model
 
 
 	public function getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,$type){
+		$r = new region();
+
+		$base = new base();
+
 		$from = array("revenue");
 
 		if ($value == "gross") {
-			$type_of_value = "GROSS";
+			$tmp = $base->getAgencyComm($con,array($region))/100;
+			$mult = 1/(1-$tmp);
 		}else{
-			$type_of_value = "NET";
+			$mult = 1;
 		}
 
 		if($currency['name'] == "USD"){
             $div = 1.0;
         }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array($year));
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array(date('Y')));
         }
 
 		for ($b=0; $b <sizeof($brands); $b++) { 
 			for ($m=0; $m <12; $m++) { 
-				$select[$b][$m] = "SELECT revenue FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (type_of_revenue = \"".$type_of_value."\") AND (currency_id = \"4\")";
+				$select[$b][$m] = "SELECT revenue FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (type_of_revenue = \"NET\") AND (currency_id = \"4\")";
 				$res[$b][$m] = $con->query($select[$b][$m]);
-				$resp[$b][$m] = floatval($sql->fetch($res[$b][$m],$from,$from)[0]['revenue'])*$div;
+				$resp[$b][$m] = floatval($sql->fetch($res[$b][$m],$from,$from)[0]['revenue'])*$div*$mult;
 			}
 		}
 
@@ -432,7 +455,7 @@ class pacingReport extends Model
 		if($currency['name'] == "USD"){
             $div = 1.0;
         }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array($year));
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array(date('Y')));
         }
 
 		for ($b=0; $b <sizeof($brands); $b++) { 
