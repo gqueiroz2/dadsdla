@@ -9,6 +9,28 @@ use App\pRate;
 
 class planByBrand extends Management{
     
+    public function formatColumns($array, $months, $currency){
+        
+        $rtr = array();
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+            
+            $tmp = array('region' => $array[$a]['region'],
+                         'year' => $array[$a]['year'],
+                         'month' => $months[$array[$a]['month']-1][2],
+                         'brand' => $array[$a]['brand'],
+                         'source' => $array[$a]['source'],
+                         'currency' => $currency,
+                         'type_of_Revenue' => $array[$a]['type_of_Revenue'],
+                         'revenue' => $array[$a]['revenue']
+                        );
+            
+            array_push($rtr, $tmp);
+        }
+
+        return $rtr;
+    }
+
     public function get($con, $where = null, $order_by = 1){
         
         $sql = new sql();
@@ -36,7 +58,7 @@ class planByBrand extends Management{
             $where = "";
         }
 
-        $order_by = "year";
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
@@ -68,6 +90,8 @@ class planByBrand extends Management{
         $join = "LEFT JOIN region r ON r.ID = pbb.sales_office_id
                  LEFT JOIN currency c ON c.ID = pbb.currency_id
                  LEFT JOIN brand b ON b.id = pbb.brand_id";
+
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 

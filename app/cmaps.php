@@ -9,6 +9,45 @@ use App\pRate;
 
 class cmaps extends Management{
 
+    public function formatColumns($array, $months, $currency, $value){
+        
+        $rtr = array();
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+
+            $tmp = array('decode' => $array[$a]['decode'],
+                         'year' => $array[$a]['year'],
+                         'month' => $months[$array[$a]['month']-1][2],
+                         'map_number' => $array[$a]['map_number'],
+                         'sales_rep' => $array[$a]['sales_rep'],
+                         'package' => $array[$a]['package'],
+                         'client' => $array[$a]['client'],
+                         'product' => $array[$a]['product'],
+                         'segment' => $array[$a]['segment'],
+                         'agency' => $array[$a]['agency'],
+                         'brand' => $array[$a]['brand'],
+                         'pi_number' => $array[$a]['pi_number'],
+                         'currency' => $currency,
+                         'type_of_revenue' => strtoupper($value),
+                         'revenue' => $array[$a]['revenue'],
+                         'market' => $array[$a]['market'],
+                         'discount' => ($array[$a]['discount']/100),
+                         'client_CNPJ' => $array[$a]['client_CNPJ'],
+                         'agency_CNPJ' => $array[$a]['agency_CNPJ'],
+                         'media_type' => $array[$a]['media_type'],
+                         'log' => $array[$a]['log'],
+                         'ad_Sales_Support' => $array[$a]['ad_Sales_Support'],
+                         'obs' => $array[$a]['obs'],
+                         'sector' => $array[$a]['sector'],
+                         'category' => $array[$a]['category']
+                        );
+            
+            array_push($rtr, $tmp);
+        }
+
+        return $rtr;
+    }
+
     public function get($con, $colNames = null, $values = null, $order_by = 1){
         
         $sql = new sql();
@@ -55,6 +94,8 @@ class cmaps extends Management{
             $where = $sql->where($colNames, $values);
         }
 
+        $order_by = "year DESC";
+
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('id', 'salesRepGroup', 'salesRep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'mapNumber',
@@ -86,7 +127,7 @@ class cmaps extends Management{
                     cm.product AS 'product',
                     cm.segment AS 'segment',
                     cm.pi_number AS 'pi_number',
-                    cm.".$value." AS '".$value."',
+                    cm.".$value." AS 'revenue',
                     cm.market AS 'market',
                     cm.discount AS 'discount',
                     cm.client_cnpj AS 'client_CNPJ',
@@ -109,13 +150,12 @@ class cmaps extends Management{
              $where = "";
         }
 
-        $order_by = "year";
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
         $from = array('sales_rep', 'client', 'agency', 'brand', 'decode', 'year', 'month', 'map_number',
-         'package', 'product', 'segment', 'pi_number', $value, 'market', 'discount', 'client_CNPJ', 'agency_CNPJ', 'media_type',
-          'log', 'ad_Sales_Support', 'obs', 'sector', 'category');
+         'package', 'product', 'segment', 'pi_number', 'revenue', 'market', 'discount', 'client_CNPJ', 'agency_CNPJ', 'media_type', 'log', 'ad_Sales_Support', 'obs', 'sector', 'category');
 
         $to = $from;
 
@@ -131,7 +171,7 @@ class cmaps extends Management{
             }
 
             for ($c=0; $c < sizeof($cmaps); $c++) { 
-                $cmaps[$c][$value] /= $pRate;
+                $cmaps[$c]['revenue'] /= $pRate;
             }   
         }
 

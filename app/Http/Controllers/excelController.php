@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ytdExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\summaryExport;
 
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+use App\ytd;
+use App\cmaps;
+use App\digital;
+use App\planByBrand;
+
 use App\dataBase;
 use App\region;
 use App\brand;
+use App\base;
 use App\generateExcel;
 
 class excelController extends Controller{
@@ -44,6 +50,9 @@ class excelController extends Controller{
 
                 $years = array($year, $year-1);
 
+                $base = new base();
+                $months = $base->month;
+
                 $ge = new generateExcel();
 
                 if ($salesRegion == "Brazil") {
@@ -53,45 +62,30 @@ class excelController extends Controller{
                 }
 
                 $values = $ge->selectData($con, $region, $years, $brands, $form, $currency, $value);
-                //var_dump($values[0]);
-                return Excel::download(new ytdExport($values[0]), "Summary.xlsx");
-
-                /*$valuesPlan = array($ge->selectData($con, $region, $years, $brands, "TARGET", $currency, $value),
-                                    $ge->selectData($con, $region, $years, $brands, "CORPORATE", $currency, $value),
-                                    $ge->selectData($con, $region, $years, $brands, "ACTUAL", $currency, $value));
-
-
-                $finalValuesPlan = $valuesPlan[0][0];
-
-                for ($p=0; $p < sizeof($valuesPlan[1][0]); $p++) { 
-                        array_push($finalValuesPlan, $valuesPlan[1][0][$p]);
-                }
-
-                for ($p=0; $p < sizeof($valuesPlan[2][0]); $p++) { 
-                        array_push($finalValuesPlan, $valuesPlan[2][0][$p]);
+                
+                if ($form == "cmaps") {
+                        $cmaps = new cmaps();
+                        $values[0] = $cmaps->formatColumns($values[0], $months, $currency[0]['name'], $value);
+                }else{
+                        $ytd = new ytd();
+                        $values[0] = $ytd->formatColumns($values[0], $months, $currency[0]['name'], $value);
                 }
                 
-                /*$styles = $ge->getSheetStyles();
-
-                $spreadsheet = new Spreadsheet();
-
-                $numbers = $ge->formatValuesArray($value, $form);
-                $numbersPlan = $ge->formatValuesArray($value, "TARGET");*/
-
-                //return Excel::download(new );
-
-                //$sheet = $ge->summary($spreadsheet, $styles, $values, $finalValuesPlan, $currency, $value, $years[0], $salesRegion, "summary", array("TARGET", "CORPORATE", "ACTUAL"), $numbers, $numbersPlan);
-
-                /*$writer = new Xlsx($spreadsheet);
-         
-                $filename = 'Summary Month';
-         
-                header('Content-Type: application/vnd.ms-excel');
-                header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"'); 
-                header('Cache-Control: max-age=0');
+                $digital = new digital();
+                $values[1] = $digital->formatColumns($values[1], $months, $currency[0]['name'], $value);
                 
-                $writer->save('php://output'); // download file*/
+                $plan = array("TARGET", "CORPORATE", "ACTUAL");
 
+                $valuesPlan = $ge->selectData($con, $region, $years[0], $brands, $plan, $currency, $value);
+                
+                $planByBrand = new planByBrand();
+                $valuesPlan = $planByBrand->formatColumns($valuesPlan[0], $months, $currency[0]['name']);
+                
+                $final = array($form => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan);
+
+                $title = $salesRegion." - Summary.xlsx";                
+                
+                return Excel::download(new summaryExport($final, $salesRegion, $years[0]), $title);
         }
 
 	public function resultsMonth(){

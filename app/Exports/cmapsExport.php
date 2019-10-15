@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\ytd;
+use App\cmaps;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,10 +12,9 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
-
+class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+    
 	protected $collect;
-    protected $region;
     protected $year;
 
     protected $headStyle = [
@@ -38,18 +37,16 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
             ],
         ];
 
-	public function __construct($collect, $region, $year){
+	public function __construct($collect, $year){
 		$this->collect = $collect;
-        $this->region = $region;
         $this->year = $year;
 	}
 
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
-    {
-    	$collect = array($this->collect);
+    public function collection() {
+        $collect = array($this->collect);
 
         return collect($collect);
     }
@@ -57,29 +54,36 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     public function headings(): array{
     	
     	return [
-    		'Campaign Sales Office',
-    		'Sales Representant Office',
-    		'Year',
+    		'Decode',
+            'Year',
     		'Month',
-    		'Brand',
-    		'Brand Feed',
-    		'Sales Rep',
+    		'Map Number',
+            'Sales Rep',
+    		'Package',
     		'Client',
-    		'Client Product',
+    		'Product',
+    		'Segment',
     		'Agency',
-    		'Order Reference',
-    		'Campaign Reference',
-    		'Spot Duration',
-    		'Campaign Currency',
-    		'Impression Duration (seconds)',
-    		'Num of Spot Impressions',
+    		'Brand',
+    		'Pi Number',
+            'Currency',
     		'Type of Revenue',
-            'Revenue',
+    		'Revenue',
+    		'Market',
+            'Discount',
+    		'Client CNPJ',
+    		'Agency CNPJ',
+    		'Media Type',
+    		'Log',
+    		'Ad Sales Support',
+    		'OBS',
+    		'Sector',
+    		'Category',
     	];
     }
 
     public function title(): string{
-        return "YTD (".$this->year.") - ".$this->region;
+        return "Cmaps - ".$this->year;
     }
 
     /**
@@ -89,7 +93,7 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:R1";
+                $cellRange = "A1:X1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
             },
         ];
@@ -98,7 +102,8 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     public function columnFormats(): array{
         
         return [
-            'R' => '#,##0.00'
+            'O' => '#,##0.00',
+            'Q' => '#0%'
         ];
     }
 }

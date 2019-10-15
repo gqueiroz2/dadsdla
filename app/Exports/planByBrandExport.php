@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\ytd;
+use App\planByBrand;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -12,11 +12,12 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
-
+class planByBrandExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+    
 	protected $collect;
     protected $region;
     protected $year;
+    protected $plan;
 
     protected $headStyle = [
             'font' => [
@@ -47,9 +48,8 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
-    {
-    	$collect = array($this->collect);
+    public function collection() {
+        $collect = array($this->collect);
 
         return collect($collect);
     }
@@ -57,29 +57,19 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     public function headings(): array{
     	
     	return [
-    		'Campaign Sales Office',
-    		'Sales Representant Office',
+    		'Region',
     		'Year',
     		'Month',
     		'Brand',
-    		'Brand Feed',
-    		'Sales Rep',
-    		'Client',
-    		'Client Product',
-    		'Agency',
-    		'Order Reference',
-    		'Campaign Reference',
-    		'Spot Duration',
-    		'Campaign Currency',
-    		'Impression Duration (seconds)',
-    		'Num of Spot Impressions',
+    		'Source',
+    		'Currency',
     		'Type of Revenue',
-            'Revenue',
+    		'Revenue',
     	];
     }
 
     public function title(): string{
-        return "YTD (".$this->year.") - ".$this->region;
+        return "Plan By Brand (".$this->year.") - ".$this->region;
     }
 
     /**
@@ -89,7 +79,7 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:R1";
+                $cellRange = "A1:H1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
             },
         ];
@@ -98,7 +88,7 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     public function columnFormats(): array{
         
         return [
-            'R' => '#,##0.00'
+            'H' => '#,##0.00'
         ];
     }
 }

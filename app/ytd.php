@@ -9,23 +9,37 @@ use App\pRate;
 
 class ytd extends Management{
 
-    public $campaign_sales_office;
-    public $sales_representant_office;
-    public $brand;
-    public $sales_rep;
-    public $client;
-    public $agency;
-    public $campaign_curency;
-    public $year;
-    public $month;
-    public $brand_feed;
-    public $client_product;
-    public $order_reference;
-    public $campaign_reference;
-    public $spot_duration;
-    public $impression_duration;
-    public $num_spot_impressions;
-    public $revenue;
+    public function formatColumns($array, $months, $currency, $value){
+        
+        $rtr = array();
+
+        for ($a=0; $a < sizeof($array); $a++) { 
+
+            $tmp = array('campaign_sales_office' => $array[$a]['campaign_sales_office'], 
+                         'sales_representant_office' => $array[$a]['sales_representant_office'],
+                         'year' => $array[$a]['year'],
+                         'month' => $months[$array[$a]['month']-1][2],
+                         'brand' => $array[$a]['brand'],
+                         'brand_feed' => $array[$a]['brand_feed'],
+                         'sales_rep' => $array[$a]['sales_rep'],
+                         'client' => $array[$a]['client'],
+                         'client_product' => $array[$a]['client_product'],
+                         'agency' => $array[$a]['agency'],
+                         'order_reference' => $array[$a]['order_reference'],
+                         'campaign_reference' => $array[$a]['campaign_reference'],
+                         'spot_duration' => $array[$a]['spot_duration'],
+                         'campaign_currency' => $currency,
+                         'impression_duration' => $array[$a]['impression_duration'],
+                         'num_spot' => $array[$a]['num_spot'],
+                         'type_of_revenue' => strtoupper($value),
+                         'revenue' => $array[$a]['revenue']
+                        );
+            
+            array_push($rtr, $tmp);
+        }
+
+        return $rtr;
+    }
 
     public function get($con, $colNames = null, $values = null){
 
@@ -70,7 +84,7 @@ class ytd extends Management{
             $where = $sql->where($colNames, $values);
         }
 
-        $order_by = "year";
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
@@ -122,6 +136,8 @@ class ytd extends Management{
         if (is_null($where)) {
             $where = "";
         }
+
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
