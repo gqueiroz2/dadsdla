@@ -105,11 +105,10 @@ class viewerController extends Controller{
 
                 $salesRep = Request::get("salesRep");
 
-                //$getMatrix = $viewer->matrix($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep);
+                $table = $viewer->getTables($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep,$db);
 
 
                 var_dump(Request::all());
-
 
                 return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
 
