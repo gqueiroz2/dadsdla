@@ -823,6 +823,7 @@ class VP extends pAndR{
                 break;
             case 'fcstClosed':
                 $revenue = "gross_revenue";
+                var_dump($div);
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
                     $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
                                          FROM sf_pr

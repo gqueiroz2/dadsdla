@@ -43,18 +43,11 @@ class pacingRender extends Render{
             echo "</table>";
         echo "</div>";
 
-        echo "<div class='row'>";
-        	echo "<div class='col linked table-responsive '>";
-            echo "<table style='width:100%; text-align:center; min-width:3000px;zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
-        		
-            echo "</table>";
-        	echo "</div>";
-        echo "</div>";
 
         for ($b=0; $b <sizeof($brands) ; $b++) { 
-                echo "<div class='row mt-1'>";
+                echo "<div class='row mt-2'>";
                 echo "<div class='col-2'>";
-                    echo "<table style='width:100%; text-align:center; zoom:70%;'>";
+                    echo "<table style='width:100%; text-align:center; zoom:70%; font-size:18px;'>";
                         echo "<tr>";
                             echo "<td style='height:40px;'>&nbsp</td>";
                         echo "</tr>";
@@ -89,7 +82,7 @@ class pacingRender extends Render{
                     echo "</table>";
                 echo "</div>";
                 echo "<div class='col linked table-responsive '>";
-            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
+            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; font-size:18px;'>";
                         
                         echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
@@ -109,12 +102,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($bookingPYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
 
@@ -127,12 +120,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPPYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                         /*
@@ -142,12 +135,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($target[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($target[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($target[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                         /*
@@ -157,12 +150,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($fcst[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                         /*
@@ -174,12 +167,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($corporate[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                         /*
@@ -191,12 +184,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($bookingCYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                          /*
@@ -208,12 +201,12 @@ class pacingRender extends Render{
                         echo "<tr>";
                             for ($m=0; $m <sizeof($this->month); $m++) { 
                                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPCYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
                                 }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],2,',','.')."</td>";
+                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],2,',','.')."</td>";
+                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
                         echo "</tr>";
 
                         /*
@@ -256,9 +249,9 @@ class pacingRender extends Render{
             echo "</div>";
        	}
 
-        echo "<div class='row mt-1'>";
+        echo "<div class='row mt-2'>";
             echo "<div class='col-2'>";
-                echo "<table style='width:100%; text-align:center; zoom:70%;'>";
+                echo "<table style='width:100%; text-align:center; zoom:70%; font-size:18px;'>";
                     echo "<tr>";
                         echo "<td style='height:40px;'>&nbsp</td>";
                     echo "</tr>";
@@ -293,7 +286,7 @@ class pacingRender extends Render{
                 echo "</table>";
             echo "</div>";
             echo "<div class='col linked table-responsive '>";
-                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
+                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; font-size:18px;'>";
                     
                     echo "<tr>";
                     for ($m=0; $m <sizeof($this->month); $m++) { 
@@ -312,12 +305,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($totalBookingPYear[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],2,',','.')."</td>";
+                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
                     echo "</tr>";
 
 
@@ -330,12 +323,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualPYear[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],2,',','.')."</td>";
+                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                     /*
@@ -345,12 +338,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalTarget[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalTarget[$m],2,',','.')."</td>";
+                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalTarget[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                     /*
@@ -360,12 +353,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalFcstValue[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],2,',','.')."</td>";
+                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                     /*
@@ -377,12 +370,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalCorporate[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],2,',','.')."</td>";
+                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                     /*
@@ -394,12 +387,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalBookingCYear[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],2,',','.')."</td>";
+                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                      /*
@@ -411,12 +404,12 @@ class pacingRender extends Render{
                     echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualCYear[$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
                             }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],2,',','.')."</td>";
+                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],2,',','.')."</td>";
+                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
                     echo "</tr>";
 
                     /*
