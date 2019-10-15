@@ -29,6 +29,7 @@ class base extends Model{
                                     "Singapore" => 0,
                                     "London" => 0);
 
+
     public function superUnique($array,$key){
        $temp_array = [];
        foreach ($array as &$v) {

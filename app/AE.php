@@ -1464,8 +1464,9 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
-            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
@@ -1758,10 +1759,10 @@ class AE extends pAndR{
                                 AND ( stage != '5')
                                 AND ( stage != '6')
                                 AND ( stage != '7')
-                                AND (year_from = \"".$year."\")
+                                AND (year_from = \"".$year."\")                                
+                                AND (from_date > \"".$date."\")";/*
                                 AND (year_to = \"".$year."\")
-                                AND (from_date > \"".$date."\")
-                              "; 
+                              "; */
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
@@ -1770,13 +1771,13 @@ class AE extends pAndR{
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
-                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")
+                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")";/*
                             AND (year_to = \"".$year."\")
-                          ";
+                          ";*/
         }
+
         $res = $con->query($select);
         $rev = $sql->fetch($res,$from,$to);
-
 
         if ($rev) {
             for ($r=0; $r <sizeof($rev); $r++) { 
@@ -1784,8 +1785,122 @@ class AE extends pAndR{
             }
         }
 
+        /*
+            AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+        */
+        if($rev){
+            for ($r=0; $r < sizeof($rev); $r++) { 
+                if($rev[$r]['yearFrom'] != $rev[$r]['yearTo']){
+                    $fromArray = $this->makeMonths("from",$rev[$r]['fromDate']);
+                    $toArray = $this->makeMonths("to",$rev[$r]['toDate']);
+                    $fromShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearFrom'],$fromArray);
+                    $toShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearTo'],$toArray);
+                    $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
+
+                    $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                }                
+            }
+        }
+
         return $rev;
 
+    }
+
+    public function aggregateShare($from,$to){
+        $sum = 0.0;
+        $sumFrom = 0.0;
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $sum += $from[$f];
+            $sumFrom += $from[$f];
+        }        
+
+        for ($t=0; $t < sizeof($to); $t++) { 
+            $sum += $to[$t];
+        }
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $shareByMonth[$f] = $from[$f]/$sum;
+        } 
+
+        $share = $sumFrom/$sum;
+
+        return $share;
+        var_dump($share);
+
+
+    }
+
+    public function calculateRespectiveShare($con,$sql,$regionID,$value,$year,$month){
+        $pastYear = intval($year) - 1;
+
+        $from = array("amount");
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            /*
+                SE O ANO DO FORECAST FOR O ANO SEGUINTE VERIFICA SE O MES DE FORECAST É MENOR QUE O MES ATUAL, SE FOR MAIOR DIMINUI O ANO PASSADO PARA PEGAR O VALOR NO ANO ANTERIOR E NAO NO CORRENTE
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear--;
+                }
+            }
+
+            $select[$m] = "SELECT SUM(".$value."_revenue_prate) AS 'amount'
+                       FROM ytd
+                       WHERE (sales_representant_office_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $selectFW[$m] = "SELECT SUM(".$value."_revenue) AS 'amount'
+                       FROM fw_digital
+                       WHERE (region_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $result[$m] = $con->query($select[$m]);
+            $resultFW[$m] = $con->query($selectFW[$m]);
+            $shareTV[$m] = $sql->fetch($result[$m],$from,$from)[0];
+            $shareFW[$m] = $sql->fetch($resultFW[$m],$from,$from)[0];
+            $share[$m] = $shareTV[$m]['amount'] + $shareFW[$m]['amount'];
+
+            /*
+                RETORNA O VALOR DO ANO PASSADO AO VALOR INICIAL
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear++;
+                }
+            }
+        }
+
+        return $share;
+
+    }
+
+    public function makeMonths($param,$m){
+
+        $temp = intval($m);
+        $mm = array();
+
+        if($param == "from"){
+            while($temp <= 12){
+                array_push($mm, $temp);
+                $temp++;
+            }
+        }else{
+            $start = 1;
+            while($start <= $temp){
+                array_push($mm, $start);
+                $start++;
+            }
+        }
+
+        return $mm;
     }
 
     public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
