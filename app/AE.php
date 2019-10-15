@@ -1785,7 +1785,6 @@ class AE extends pAndR{
             }
         }
 
-        //var_dump($rev);
         /*
             AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
         */
