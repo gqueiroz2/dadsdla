@@ -37,27 +37,24 @@ class pacingRender extends Render{
         $totalPrc2 = $forRender['totalPrc2'];
 
 
-		 echo "<div class='table-responsive' style='zoom:80%;'>";
+		 echo "<div class='table-responsive' style='zoom:70%;'>";
             echo "<table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>";
                 echo "<tr><th class='lightBlue'> Pacing Report - $cYear - ($currency/$value) </th></tr>";
             echo "</table>";
         echo "</div>";
 
-        echo "<br>";
-
         echo "<div class='row'>";
         	echo "<div class='col linked table-responsive '>";
-            echo "<table style='width:100%; text-align:center; min-width:3000px;zoom:80%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
+            echo "<table style='width:100%; text-align:center; min-width:3000px;zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
         		
             echo "</table>";
         	echo "</div>";
         echo "</div>";
 
         for ($b=0; $b <sizeof($brands) ; $b++) { 
-            echo "<br>";
-            echo "<div class='row'>";
+                echo "<div class='row mt-1'>";
                 echo "<div class='col-2'>";
-                    echo "<table style='width:100%; text-align:center; zoom:80%;'>";
+                    echo "<table style='width:100%; text-align:center; zoom:70%;'>";
                         echo "<tr>";
                             echo "<td style='height:40px;'>&nbsp</td>";
                         echo "</tr>";
@@ -92,7 +89,7 @@ class pacingRender extends Render{
                     echo "</table>";
                 echo "</div>";
                 echo "<div class='col linked table-responsive '>";
-            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:80%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
+            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
                         
                         echo "<tr>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
@@ -259,10 +256,9 @@ class pacingRender extends Render{
             echo "</div>";
        	}
 
-        echo "<br>";
-        echo "<div class='row'>";
+        echo "<div class='row mt-1'>";
             echo "<div class='col-2'>";
-                echo "<table style='width:100%; text-align:center; zoom:80%;'>";
+                echo "<table style='width:100%; text-align:center; zoom:70%;'>";
                     echo "<tr>";
                         echo "<td style='height:40px;'>&nbsp</td>";
                     echo "</tr>";
@@ -297,7 +293,7 @@ class pacingRender extends Render{
                 echo "</table>";
             echo "</div>";
             echo "<div class='col linked table-responsive '>";
-                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:80%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
+                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>";
                     
                     echo "<tr>";
                     for ($m=0; $m <sizeof($this->month); $m++) { 
