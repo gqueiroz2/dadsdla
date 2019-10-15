@@ -272,6 +272,7 @@ class pacingReport extends Model
 				$totalPrc[$c][$m] = 0;
 				$total[$c][$m] = 0;
 				$prcTemp[$c][$m] = array();
+				$totalMonth[$m] = 0;
 
 				if ($resp[$c][$m] != null) {
 					
@@ -310,7 +311,7 @@ class pacingReport extends Model
 								$saida[$b][$m] += $resp[$c][$m]['value'];
 							}
 						}
-					}else{
+					}elseif(sizeof($resp[$c][$m]['brands']) > 1){
 						for ($b1=0; $b1 <sizeof($resp[$c][$m]['brands']) ; $b1++) { 
 							for ($b2=0; $b2 <sizeof($brands); $b2++) { 
 								if ($resp[$c][$m]['brands'][$b1] == $brands[$b2]['name']) {
@@ -338,6 +339,17 @@ class pacingReport extends Model
 									//var_dump("----------------------------------");
 								}
 							}
+						}
+					}else{
+						if ($resp[$c][$m]['value'] != 0) {
+							for ($b=0; $b <sizeof($lastYearBrand); $b++) { 
+								$totalMonth[$m] += $lastYearBrand[$b][$m];
+							}
+							for ($b=0; $b <sizeof($lastYearBrand); $b++) { 
+								$porcentagem[$b][$m] = $lastYearBrand[$b][$m]/$totalMonth[$m];
+								$saida[$b][$m] += $resp[$c][$m]['value']*$porcentagem[$b][$m];
+							}
+
 						}
 					}
 				}
