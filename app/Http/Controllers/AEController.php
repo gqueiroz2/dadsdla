@@ -50,9 +50,6 @@ class AEController extends Controller{
 
         $salesRepID = $salesRep->id;
 
-
-
-
         for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
             $brandPerClient[$c] = "";
