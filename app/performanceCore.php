@@ -36,7 +36,7 @@ class performanceCore extends performance
  		$value = Request::get('value');
         $tier = Request::get('tier');
 
-        $tmp = array($year);
+        $tmp = array(date('Y'));
         $tmp2 = array(date('Y'));
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$region,$tmp,$currency);

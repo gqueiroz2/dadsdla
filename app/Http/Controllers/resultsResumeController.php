@@ -138,7 +138,12 @@ class resultsResumeController extends Controller{
 			$names = array("TV", "Digital", "DN");
 		}
 		
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names'));
+		$regionExcel = $regionID;
+		$brandExcel = $brandID;
+		$currencyExcel = $tmp;
+		$valueExcel = $value;
+
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'brandExcel', 'currencyExcel', 'valueExcel'));
 
 	}
 

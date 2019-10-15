@@ -307,7 +307,7 @@ class ajaxController extends Controller{
 
             $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
 
-            echo "<option selected='true'>Select Sales Rep.</option>";
+            echo "<option selected='true' value=''>Select Sales Rep.</option>";
 
             for ($s=0; $s < sizeof($resp); $s++) { 
                 echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";

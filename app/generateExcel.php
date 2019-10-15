@@ -14,13 +14,18 @@ use App\base;
 use App\pRate;
 
 class generateExcel extends Model {
-    
+
+	public function ytdCollection(){
+		
+		return ytd::all();
+	}
+
 	public function formatValuesArray($value, $table){
 		
 		if ($table == "TARGET" || $table == "CORPORATE" || $table == "ACTUAL") {
 			$rtr = array("revenue");
 		}elseif ($table == "ytd") {
-			$rtr = array($value."_revenue", $value."_revenue_prate");
+			$rtr = array($value."_revenue_prate");
 		}elseif($table == "cmaps"){
 			$rtr = array($value, "discount");
 		}else{
@@ -42,8 +47,8 @@ class generateExcel extends Model {
 
 	}
 
-	public function month($spreadsheet, $mtx, $plan, $currency, $value, $year, $region, $title, $titlePlan, $values, $plans){
-
+	public function getSheetStyles(){
+		
 		$headStyle = [
 		    'font' => [
 		        'bold' => true,
@@ -78,14 +83,21 @@ class generateExcel extends Model {
 		    ],
 		];
 
+		$rtr['headStyle'] = $headStyle;
+		$rtr['bodyStyle'] = $bodyStyle;
+
+		return $rtr;
+	}
+
+	public function summary($spreadsheet, $styles, $mtx, $plan, $currency, $value, $year, $region, $title, $titlePlan, $values, $plans){
+		
 		$base = new base();
 		$months = $base->month;
 
-		
 		$head = $region." - ".ucfirst($title)." : BKGS - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setTitle('TV');
-		$sheet = $this->generateTV($sheet, $head, $mtx[0], $values, $headStyle, $bodyStyle, $months, $currency[0]['name']);
+		$sheet = $this->generateTV($sheet, $head, $mtx[0], $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
 
 		$spreadsheet->createSheet();
 
@@ -95,7 +107,42 @@ class generateExcel extends Model {
 		$spreadsheet->setActiveSheetIndex(1);
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setTitle('Digital');
-		$sheet = $this->generateDigital($sheet, $head, $mtx[1], $values, $headStyle, $bodyStyle, $months, $currency[0]['name']);
+		$sheet = $this->generateDigital($sheet, $head, $mtx[1], $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
+
+		$spreadsheet->createSheet();
+
+		$head = $region." - ".ucfirst($title)." : By Brand (".ucfirst($titlePlan[0]).", ".ucfirst($titlePlan[1])." and ".ucfirst($titlePlan[2]).") - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
+		$values = $this->formatValuesArray($value, $titlePlan);
+
+		$spreadsheet->setActiveSheetIndex(2);
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setTitle('Plan By Brand');
+		$sheet = $this->generatePlan($sheet, $head, $plan, $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
+
+		$spreadsheet->setActiveSheetIndex(0);
+
+		return $sheet;
+	}
+
+	public function month($spreadsheet, $styles, $mtx, $plan, $currency, $value, $year, $region, $title, $titlePlan, $values, $plans){
+
+		$base = new base();
+		$months = $base->month;
+		
+		$head = $region." - ".ucfirst($title)." : BKGS - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setTitle('TV');
+		$sheet = $this->generateTV($sheet, $head, $mtx[0], $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
+
+		$spreadsheet->createSheet();
+
+		$head = $region." - ".ucfirst($title)." : Digital - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
+		$values = $this->formatValuesArray($value, "digital");
+		
+		$spreadsheet->setActiveSheetIndex(1);
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setTitle('Digital');
+		$sheet = $this->generateDigital($sheet, $head, $mtx[1], $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
 
 		$spreadsheet->createSheet();
 
@@ -105,7 +152,7 @@ class generateExcel extends Model {
 		$spreadsheet->setActiveSheetIndex(2);
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setTitle('Plan By Brand');
-		$sheet = $this->generatePlan($sheet, $head, $plan[0], $values, $headStyle, $bodyStyle, $months, $currency[0]['name']);
+		$sheet = $this->generatePlan($sheet, $head, $plan[0], $values, $styles['headStyle'], $styles['bodyStyle'], $months, $currency[0]['name']);
 
 		$spreadsheet->setActiveSheetIndex(0);
 
@@ -128,6 +175,14 @@ class generateExcel extends Model {
 				
 				if ($key == "impression_duration") {
 					$key = "impression_duration (Seconds)";
+				}
+
+				if ($key == "gross_revenue_prate" || $key == "net_revenue_prate") {
+					if ($key == "gross_revenue_prate") {
+						$key = "gross_revenue";
+					}else{
+						$key = "net_revenue";
+					}
 				}
 
 	            $sheet->setCellValue($letter.'3', $key);
@@ -266,10 +321,11 @@ class generateExcel extends Model {
 
 	        $letter = $startLetter;
 	        $number = 4;
-
+	        var_dump("expression");
 	        for ($m=0; $m < sizeof($mtx); $m++) {
 	        	for ($v=0; $v < sizeof($mtx[$m]); $v++) {
 	        		if ($this->inArray($values, $headNames[$v])) {
+	        			var_dump($headNames[$v]);
 	    				$sheet->setCellValue($letter.$number, $mtx[$m][$headNames[$v]]);
 	    				$sheet->getStyle($letter.$number)->getNumberFormat()->setFormatCode('#,##0.00');
 	        		}else{

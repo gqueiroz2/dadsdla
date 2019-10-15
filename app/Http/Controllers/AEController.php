@@ -220,7 +220,7 @@ class AEController extends Controller{
             'year' => 'required',
             'currency' => 'required',
             'value' => 'required',
-            'salesRep' => 'required',
+            'salesRep' => 'required'
         ]);
 
         if ($validator->fails()) {

@@ -18,6 +18,8 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('month','excelController@resultsMonth')
 									->name('monthExcel');
 		
+		Route::post('summary','excelController@resultsSummary')
+									->name('summaryExcel');
 		});
 	});
 });
