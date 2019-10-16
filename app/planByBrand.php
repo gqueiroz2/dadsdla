@@ -8,28 +8,6 @@ use App\sql;
 use App\pRate;
 
 class planByBrand extends Management{
-    
-    public function formatColumns($array, $months, $currency){
-        
-        $rtr = array();
-
-        for ($a=0; $a < sizeof($array); $a++) { 
-            
-            $tmp = array('region' => $array[$a]['region'],
-                         'year' => $array[$a]['year'],
-                         'month' => $months[$array[$a]['month']-1][2],
-                         'brand' => $array[$a]['brand'],
-                         'source' => $array[$a]['source'],
-                         'currency' => $currency,
-                         'type_of_Revenue' => $array[$a]['type_of_Revenue'],
-                         'revenue' => $array[$a]['revenue']
-                        );
-            
-            array_push($rtr, $tmp);
-        }
-
-        return $rtr;
-    }
 
     public function get($con, $where = null, $order_by = 1){
         
@@ -70,7 +48,7 @@ class planByBrand extends Management{
         return $planByBrand;
     }
 
-    public function getWithFilter($con, $where, $currency, $region, $order_by = 1){
+    public function getWithFilter($con, $where, $currency, $region, $months, $order_by = 1){
         
         $sql = new sql();
 
@@ -95,7 +73,8 @@ class planByBrand extends Management{
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('region', 'currency', 'brand', 'source', 'year', 'type_of_Revenue', 'month', 'revenue');
+        $from = array('region', 'year', 'month', 'brand', 'source', 'revenue');
+
         $to = $from;
 
         $planByBrand = $sql->fetch($result,$from,$to);
@@ -109,7 +88,8 @@ class planByBrand extends Management{
                 $pRate = $p->getPRateByRegionAndYear($con,array($region),array(date('Y')));
             }
             
-            for ($p=0; $p < sizeof($planByBrand); $p++) { 
+            for ($p=0; $p < sizeof($planByBrand); $p++) {
+                $planByBrand[$p]['month'] = $months[$planByBrand[$p]['month']-1][2];
                 $planByBrand[$p]['revenue'] *= $pRate;
             }   
         }

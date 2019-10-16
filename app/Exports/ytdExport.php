@@ -11,12 +11,14 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
 
 	protected $collect;
-    protected $region;
-    protected $year;
+    protected $report;
+    protected $BKGS;
 
     protected $headStyle = [
             'font' => [
@@ -38,11 +40,11 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
             ],
         ];
 
-	public function __construct($collect, $region, $year){
-		$this->collect = $collect;
-        $this->region = $region;
-        $this->year = $year;
-	}
+	public function __construct($collect, $report, $BKGS = null){
+        $this->collect = $collect;
+        $this->report = $report;
+        $this->BKGS = $BKGS;
+    }
 
     /**
     * @return \Illuminate\Support\Collection
@@ -70,16 +72,18 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     		'Order Reference',
     		'Campaign Reference',
     		'Spot Duration',
-    		'Campaign Currency',
     		'Impression Duration (seconds)',
     		'Num of Spot Impressions',
-    		'Type of Revenue',
             'Revenue',
     	];
     }
 
     public function title(): string{
-        return "YTD (".$this->year.") - ".$this->region;
+        if (is_null($this->BKGS)) {
+            return "TV";
+        }else{
+            return $this->BKGS;
+        }
     }
 
     /**
@@ -89,8 +93,14 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:R1";
+                $cellRange = "A4:P4";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+                
+                $cell = "A1";
+                $event->sheet->setCellValue($cell, $this->report);
+                $event->sheet->getDelegate()->getStyle('A1')->getFont()->setSize(20)->setBold(true);
+
+                $event->sheet->getColumnDimension('A')->setAutoSize(false);
             },
         ];
     }
@@ -98,7 +108,11 @@ class ytdExport implements FromCollection, WithHeadings, WithTitle, WithEvents, 
     public function columnFormats(): array{
         
         return [
-            'R' => '#,##0.00'
+            'P' => '#,##0.00'
         ];
+    }
+
+    public function startCell(): string{
+        return 'A4';
     }
 }

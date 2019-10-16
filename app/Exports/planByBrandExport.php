@@ -11,13 +11,13 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class planByBrandExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+class planByBrandExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
     
 	protected $collect;
-    protected $region;
     protected $year;
-    protected $plan;
 
     protected $headStyle = [
             'font' => [
@@ -39,11 +39,10 @@ class planByBrandExport implements FromCollection, WithHeadings, WithTitle, With
             ],
         ];
 
-	public function __construct($collect, $region, $year){
-		$this->collect = $collect;
-        $this->region = $region;
-        $this->year = $year;
-	}
+	public function __construct($collect, $report){
+        $this->collect = $collect;
+        $this->report = $report;
+    }
 
     /**
     * @return \Illuminate\Support\Collection
@@ -62,14 +61,12 @@ class planByBrandExport implements FromCollection, WithHeadings, WithTitle, With
     		'Month',
     		'Brand',
     		'Source',
-    		'Currency',
-    		'Type of Revenue',
     		'Revenue',
     	];
     }
 
     public function title(): string{
-        return "Plan By Brand (".$this->year.") - ".$this->region;
+        return "Plan By Brand";
     }
 
     /**
@@ -79,8 +76,14 @@ class planByBrandExport implements FromCollection, WithHeadings, WithTitle, With
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:H1";
+                $cellRange = "A4:F4";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+                
+                $cell = "A1";
+                $event->sheet->setCellValue($cell, $this->report);
+                $event->sheet->getDelegate()->getStyle('A1')->getFont()->setSize(20)->setBold(true);
+
+                $event->sheet->getColumnDimension('A')->setAutoSize(false);
             },
         ];
     }
@@ -88,7 +91,11 @@ class planByBrandExport implements FromCollection, WithHeadings, WithTitle, With
     public function columnFormats(): array{
         
         return [
-            'H' => '#,##0.00'
+            'F' => '#,##0.00'
         ];
+    }
+
+    public function startCell(): string{
+        return 'A4';
     }
 }

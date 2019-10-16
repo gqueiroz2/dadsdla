@@ -8,7 +8,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('resultsResumePost') }}" runat="server"  onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('resultsResumePost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col-sm">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		
-		<form method="POST" action="{{ route('summaryExcel') }}" runat="server">
+		<form method="POST" action="{{ route('summaryExcel') }}" runat="server" onsubmit="ShowLoading()">
 			@csrf
 			<input type="hidden" name="regionExcel" value="{{$regionExcel}}">
 			<input type="hidden" name="brandExcel" value="{{ base64_encode(json_encode($brandExcel)) }}">
