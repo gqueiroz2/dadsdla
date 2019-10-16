@@ -120,14 +120,11 @@
 				</div>
 			</form>
 		</div>
-
 		<script type="text/javascript">
-			var aux = <?php echo json_encode($aux); ?>;
+			var aux = ['Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4'];
 			$(document).ready(function(){
 
-				<?php 
-					$aux = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
-				?>
+				
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
