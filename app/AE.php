@@ -517,6 +517,7 @@ class AE extends pAndR{
 
             $tmp2 = $tmp1['fcstAmount'];
 
+            $emptyCheck = $this->checkEmpty($tmp2);
 
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
@@ -539,6 +540,8 @@ class AE extends pAndR{
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $toRollingFCST = $fcst['fcstAmount'];
+
+            $emptyCheck = $this->checkEmpty($toRollingFCST);
 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
@@ -619,6 +622,7 @@ class AE extends pAndR{
                         "fcstAmountByStage" => $fcstAmountByStage,
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
+                        "emptyCheck" => $emptyCheck,
                     );
 
         return $rtr;
@@ -868,6 +872,7 @@ class AE extends pAndR{
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
+            $emptyCheck = $this->checkEmpty($tmp2);
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -892,6 +897,8 @@ class AE extends pAndR{
             $rollingFCST = $this->adjustFCST($rollingFCST);
             
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
+            $emptyCheck = $this->checkEmpty($toRollingFCST);
 
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
@@ -962,11 +969,35 @@ class AE extends pAndR{
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
                         "sourceSave" => $sourceSave,
+                        "emptyCheck" => $emptyCheck,
                     );
 
         return $rtr;
         
     }
+
+    public function checkEmpty($array){
+        $outArray = array();
+
+        for ($c=0; $c<sizeof($array); $c++) { 
+            if (!$array[$c]) {
+                $outArray[$c] = false;
+            }else{
+                $temp = 0;
+                for ($m=0; $m <sizeof($array[$c]);$m++) { 
+                    $temp += $array[$c][$m];
+                }    
+                if ($temp == 0) {
+                    $outArray[$c] = false;
+                }else{
+                    $outArray[$c] = true;
+                }
+            }
+        }
+
+        return $outArray;
+    }
+
 
     public function getBrandsClient($con,$clients,$salesRep){
 
