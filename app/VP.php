@@ -153,15 +153,38 @@ class VP extends pAndR{
                 break;
             
             case 'update':
+
+                $columns = "(forecast_id,month,value,client_id,brand)";
+
+
                 for ($c=0; $c <sizeof($clients); $c++) { 
-                    for ($m=0; $m <sizeof($input[$c]); $m++) { 
-                        $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\"";
+                    for ($m=0; $m <sizeof($input[$c]); $m++) {
 
-                        if ($con->query($update[$c][$m]) === true) {
+                        $selectUpdate[$c][$m] = "SELECT value FROM forecast_client WHERE client_id = \"".$clients[$c]->clientID."\"  AND forecast_id = \"".$id."\" AND month = \"".($m+1)."\"";
 
+                        $res[$c][$m] = $con->query($selectUpdate[$c][$m]);
+
+                        $resp[$c][$m] = $sql->fetch($res[$c][$m],array("value"),array("value"));
+
+                        if ($resp[$c][$m]) {
+
+                            $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\" AND forecast_id = \"".$id."\"";
+
+                            if ($con->query($update[$c][$m]) === true) {
+
+                            }else{
+                                $error = ($con->error);
+                                return $error;
+                            }
                         }else{
-                            $error = ($con->error);
-                            return $error;
+                            $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",\"".$clientBrands[$c]."\")";
+                        
+                            if ($con->query($input[$c][$m]) === true) {
+
+                            }else{
+                                $error = ($con->error);
+                                return $error;
+                            }
                         }
                     }
                 }
@@ -264,6 +287,11 @@ class VP extends pAndR{
             $fcstFullYearByClient = $this->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients);
             $fcstFullYearByClientAE = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
             $clientBrands = $this->fullYearByClient($con,$sql,"brand",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+            for ($c=0; $c <sizeof($fcstFullYearByClient); $c++) { 
+                if ($fcstFullYearByClient[$c] == 0 && $fcstFullYearByClientAE[$c] != 0) {
+                    $fcstFullYearByClient[$c] = $fcstFullYearByClientAE[$c];
+                }
+            }
         }else{
             $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
             $fcstFullYearByClientAE = $fcstFullYearByClient;
@@ -823,7 +851,6 @@ class VP extends pAndR{
                 break;
             case 'fcstClosed':
                 $revenue = "gross_revenue";
-                var_dump($div);
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
                     $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
                                          FROM sf_pr

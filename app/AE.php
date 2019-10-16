@@ -798,7 +798,7 @@ class AE extends pAndR{
 
 
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND f2.ID = \"".$save[0]['ID']."\"";
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
