@@ -122,9 +122,8 @@
 		</div>
 		<script type="text/javascript">
 			var aux = ['Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4'];
-			$(document).ready(function(){
 
-				
+			$(document).ready(function(){				
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
