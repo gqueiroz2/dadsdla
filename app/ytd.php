@@ -9,38 +9,6 @@ use App\pRate;
 
 class ytd extends Management{
 
-    public function formatColumns($array, $months, $currency, $value){
-        
-        $rtr = array();
-
-        for ($a=0; $a < sizeof($array); $a++) { 
-
-            $tmp = array('campaign_sales_office' => $array[$a]['campaign_sales_office'], 
-                         'sales_representant_office' => $array[$a]['sales_representant_office'],
-                         'year' => $array[$a]['year'],
-                         'month' => $months[$array[$a]['month']-1][2],
-                         'brand' => $array[$a]['brand'],
-                         'brand_feed' => $array[$a]['brand_feed'],
-                         'sales_rep' => $array[$a]['sales_rep'],
-                         'client' => $array[$a]['client'],
-                         'client_product' => $array[$a]['client_product'],
-                         'agency' => $array[$a]['agency'],
-                         'order_reference' => $array[$a]['order_reference'],
-                         'campaign_reference' => $array[$a]['campaign_reference'],
-                         'spot_duration' => $array[$a]['spot_duration'],
-                         'campaign_currency' => $currency,
-                         'impression_duration' => $array[$a]['impression_duration'],
-                         'num_spot' => $array[$a]['num_spot'],
-                         'type_of_revenue' => strtoupper($value),
-                         'revenue' => $array[$a]['revenue']
-                        );
-            
-            array_push($rtr, $tmp);
-        }
-
-        return $rtr;
-    }
-
     public function get($con, $colNames = null, $values = null){
 
         $sql = new sql();
@@ -100,7 +68,7 @@ class ytd extends Management{
         return $ytd;
     }
 
-    public function getWithFilter($con, $value, $currency, $region, $where, $order_by = 1){
+    public function getWithFilter($con, $value, $currency, $region, $where, $months, $order_by = 1){
         
         $sql = new sql();
 
@@ -113,7 +81,6 @@ class ytd extends Management{
                     sr.name AS 'sales_rep',
                     cl.name AS 'client',
                     agc.name AS 'agency',
-                    c.name AS 'campaign_currency',
                     ytd.year AS 'year',
                     ytd.month AS 'month',
                     ytd.brand_feed AS 'brand_feed',
@@ -130,8 +97,7 @@ class ytd extends Management{
                  LEFT JOIN brand b ON b.ID = ytd.brand_id
                  LEFT JOIN sales_rep sr ON sr.ID = ytd.sales_rep_id
                  LEFT JOIN client cl ON cl.ID = ytd.client_id
-                 LEFT JOIN agency agc ON agc.ID = ytd.agency_id
-                 LEFT JOIN currency c ON c.ID = ytd.campaign_currency_id";
+                 LEFT JOIN agency agc ON agc.ID = ytd.agency_id";
 
         if (is_null($where)) {
             $where = "";
@@ -141,9 +107,7 @@ class ytd extends Management{
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('campaign_sales_office', 'sales_representant_office', 'brand', 'sales_rep', 'client', 'agency', 'campaign_currency',
-                      'year', 'month', 'brand_feed', 'client_product', 'order_reference', 'campaign_reference', 'spot_duration',
-                      'impression_duration', 'num_spot', 'revenue');
+        $from = array('campaign_sales_office', 'sales_representant_office', 'year', 'month', 'brand', 'brand_feed', 'sales_rep', 'client', 'client_product', 'agency', 'order_reference', 'campaign_reference', 'spot_duration', 'impression_duration', 'num_spot', 'revenue');
 
         $to = $from;
 
@@ -158,7 +122,8 @@ class ytd extends Management{
                 $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
             }
 
-            for ($y=0; $y < sizeof($ytd); $y++) { 
+            for ($y=0; $y < sizeof($ytd); $y++) {
+                $ytd[$y]['month'] = $months[$ytd[$y]['month']-1][2];
                 $ytd[$y]['revenue'] *= $pRate;
             }
         }

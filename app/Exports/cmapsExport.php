@@ -11,11 +11,14 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
     
 	protected $collect;
-    protected $year;
+    protected $report;
+    protected $BKGS;
 
     protected $headStyle = [
             'font' => [
@@ -37,9 +40,10 @@ class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents
             ],
         ];
 
-	public function __construct($collect, $year){
+	public function __construct($collect, $report, $BKGS = null){
 		$this->collect = $collect;
-        $this->year = $year;
+        $this->report = $report;
+        $this->BKGS = $BKGS;
 	}
 
     /**
@@ -66,8 +70,6 @@ class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents
     		'Agency',
     		'Brand',
     		'Pi Number',
-            'Currency',
-    		'Type of Revenue',
     		'Revenue',
     		'Market',
             'Discount',
@@ -83,7 +85,11 @@ class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents
     }
 
     public function title(): string{
-        return "Cmaps - ".$this->year;
+        if (is_null($this->BKGS)) {
+            return "TV";
+        }else{
+            return $this->BKGS;
+        }
     }
 
     /**
@@ -93,8 +99,14 @@ class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:X1";
+                $cellRange = "A4:W4";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+                
+                $cell = "A1";
+                $event->sheet->setCellValue($cell, $this->report);
+                $event->sheet->getDelegate()->getStyle('A1')->getFont()->setSize(20)->setBold(true);
+
+                $event->sheet->getColumnDimension('A')->setAutoSize(false);
             },
         ];
     }
@@ -102,8 +114,12 @@ class cmapsExport implements FromCollection, WithHeadings, WithTitle, WithEvents
     public function columnFormats(): array{
         
         return [
-            'O' => '#,##0.00',
-            'Q' => '#0%'
+            'M' => '#,##0.00',
+            'O' => '#0%'
         ];
+    }
+
+    public function startCell(): string{
+        return 'A4';
     }
 }

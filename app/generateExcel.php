@@ -15,7 +15,7 @@ use App\pRate;
 
 class generateExcel extends Model {
 
-	public function selectData($con, $region, $years, $brands, $form, $currency, $value){
+	public function selectData($con, $region, $years, $brands, $form, $currency, $value, $months){
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			$brand_id[$b] = $brands[$b]['id'];
@@ -37,7 +37,7 @@ class generateExcel extends Model {
 
 			$p = new planByBrand();
 
-			$values = $p->getWithFilter($con, $where, $currency, $region);
+			$values = $p->getWithFilter($con, $where, $currency, $region, $months);
 
 		}elseif ($form == "ytd") {
 			
@@ -48,7 +48,7 @@ class generateExcel extends Model {
 
 			$y = new ytd();
 
-			$values = $y->getWithFilter($con, $value, $currency, $region, $where);
+			$values = $y->getWithFilter($con, $value, $currency, $region, $where, $months);
 
 		}else{
 
@@ -59,7 +59,7 @@ class generateExcel extends Model {
 
 			$c = new cmaps();
 
-			$values = $c->getWithFilter($con, $value, $region, $currency, $where);
+			$values = $c->getWithFilter($con, $value, $region, $currency, $where, $months);
 		}
 
 		if ($form != "TARGET" && $form != "CORPORATE" && $form != "ACTUAL" && !is_array($form)) {
@@ -70,7 +70,7 @@ class generateExcel extends Model {
 
 			$d = new digital();
 
-			$valuesDigital = $d->getWithFilter($con, $value, $where, $currency, $region);
+			$valuesDigital = $d->getWithFilter($con, $value, $where, $currency, $region, $months);
 
 		}else{
 			$valuesDigital = null;

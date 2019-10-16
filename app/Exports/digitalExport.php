@@ -11,12 +11,13 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison {
+class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
     
 	protected $collect;
-    protected $region;
-    protected $year;
+    protected $report;
 
     protected $headStyle = [
             'font' => [
@@ -38,11 +39,10 @@ class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEven
             ],
         ];
 
-	public function __construct($collect, $region, $year){
-		$this->collect = $collect;
-        $this->region = $region;
-        $this->year = $year;
-	}
+	public function __construct($collect, $report){
+        $this->collect = $collect;
+        $this->report = $report;
+    }
 
     /**
     * @return \Illuminate\Support\Collection
@@ -69,18 +69,16 @@ class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEven
     		'IO End Date',
     		'Agency Commission Percentage',
     		'Rep Commission Percentage',
-    		'Currency',
     		'Placement',
     		'Buy Type',
     		'Content Targeting Set Name',
     		'Ad Unit',
-    		'Type of Revenue',
             'Revenue',
     	];
     }
 
     public function title(): string{
-        return "Digital (".$this->year.") - ".$this->region;
+        return "Digital";
     }
 
     /**
@@ -90,8 +88,14 @@ class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEven
         
         return [
             AfterSheet::class => function(AfterSheet $event){
-                $cellRange = "A1:T1";
+                $cellRange = "A4:R4";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+                
+                $cell = "A1";
+                $event->sheet->setCellValue($cell, $this->report);
+                $event->sheet->getDelegate()->getStyle('A1')->getFont()->setSize(20)->setBold(true);
+
+                $event->sheet->getColumnDimension('A')->setAutoSize(false);
             },
         ];
     }
@@ -101,7 +105,11 @@ class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEven
         return [
             'L' => '#0%',
             'M' => '#0%',
-            'T' => '#,##0.00'
+            'R' => '#,##0.00'
         ];
+    }
+
+    public function startCell(): string{
+        return 'A4';
     }
 }

@@ -73,11 +73,11 @@ class resultsResume extends results{
   		                }
 					}else{
 					*/
-			        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-			        	                   AND (ytd.year IN ($cYear) )
-			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
-			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
-			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
+		        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
+		        	                   AND (ytd.year IN ($cYear) )
+		        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
+		        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
+		        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
 			        //}
 
 			        $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
@@ -94,6 +94,7 @@ class resultsResume extends results{
         		
 					$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
             					   AND (source  = \"TARGET\")
+            					   AND (year = $cYear)
                                    AND (type_of_revenue = \"".$tr."\")
                                    AND (sales_office_id = \"".$regionID."\")
                                    AND (currency_id = 4 )
@@ -101,16 +102,18 @@ class resultsResume extends results{
                                ";
 
 		            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
-		            					   AND ( source  = \"ACTUAL\" )
-		                                   AND ( type_of_revenue = \"".$tr."\" )
+		            					   AND (source  = \"ACTUAL\" )
+		            					   AND (year = $cYear)
+		                                   AND (type_of_revenue = \"".$tr."\" )
 		                                   AND (sales_office_id = \"".$regionID."\")
 		                                   AND (currency_id = 4 )
 		                                   AND (brand_id = \"".$brands[$b][0]."\" )
 		                               ";
 
 		            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
-		            					   AND ( source  = \"CORPORATE\" )
-		                                   AND ( type_of_revenue = \"".$tr."\" )
+		            					   AND (source  = \"CORPORATE\" )
+		            					   AND (year = $cYear)
+		                                   AND (type_of_revenue = \"".$tr."\" )
 		                                   AND (sales_office_id = \"".$regionID."\")  
 		                                   AND (currency_id = 4 )
 		                                   AND (brand_id = \"".$brands[$b][0]."\" )  
@@ -204,6 +207,7 @@ class resultsResume extends results{
         	for ($b=0; $b < sizeof($brands); $b++) { 
         		$whereTarget[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
             					   AND (source  = \"TARGET\")
+            					   AND (year = $cYear)
                                    AND (type_of_revenue = \"".$tr."\")
                                    AND (sales_office_id = \"".$regionID."\")
                                    AND (currency_id = 4 )
@@ -212,6 +216,7 @@ class resultsResume extends results{
 
 	            $whereActual[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
 	            					   AND ( source  = \"ACTUAL\" )
+	            					   AND (year = $cYear)
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")
 	                                   AND (currency_id = 4 )
@@ -220,6 +225,7 @@ class resultsResume extends results{
 
 	            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
 	            					   AND ( source  = \"CORPORATE\" )
+	            					   AND (year = $cYear)
 	                                   AND ( type_of_revenue = \"".$tr."\" )
 	                                   AND (sales_office_id = \"".$regionID."\")  
 	                                   AND (currency_id = 4 )

@@ -8,42 +8,8 @@ use App\sql;
 use App\pRate;
 
 class digital extends Management {
-    
-    public function formatColumns($array, $months, $currency, $value){
-        
-        $rtr = array();
 
-        for ($a=0; $a < sizeof($array); $a++) { 
-            
-            $tmp = array('year' => $array[$a]['year'],
-                         'month' => $months[$array[$a]['month']-1][2],
-                         'client' => $array[$a]['client'],
-                         'agency' => $array[$a]['agency'],
-                         'campaign' => $array[$a]['campaign'],
-                         'insertion_order' => $array[$a]['insertion_order'],
-                         'insertion_order_id' => $array[$a]['insertion_order_id'],
-                         'region' => $array[$a]['region'],
-                         'sales_rep' => $array[$a]['sales_rep'],
-                         'io_start_date' => $array[$a]['io_start_date'],
-                         'io_end_date' => $array[$a]['io_end_date'],
-                         'agency_commission_percentage' => $array[$a]['agency_commission_percentage'],
-                         'rep_commission_percentage' => $array[$a]['rep_commission_percentage'],
-                         'currency' => $currency,
-                         'placement' => $array[$a]['placement'],
-                         'buy_type' => $array[$a]['buy_type'],
-                         'content_targeting_set_name' => $array[$a]['content_targeting_set_name'],
-                         'ad_unit' => $array[$a]['ad_unit'],
-                         'type_of_revenue' => strtoupper($value),
-                         'revenue' => $array[$a]['revenue']
-                        );
-            
-            array_push($rtr, $tmp);
-        }
-
-        return $rtr;
-    }
-
-    public function getWithFilter($con, $value, $where, $currency, $region, $order_by = 1){
+    public function getWithFilter($con, $value, $where, $currency, $region, $months, $order_by = 1){
         
         $sql = new sql();
 
@@ -87,8 +53,7 @@ class digital extends Management {
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
         
-        $from = array('client', 'agency', 'sales_rep', 'campaign', 'insertion_order', 'insertion_order_id', 'region', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage',
-         'currency', 'placement', 'buy_type', 'content_targeting_set_name', 'ad_unit', 'month', 'revenue', 'commission', 'brand', 'year');
+        $from = array('year', 'month', 'client', 'agency', 'campaign', 'insertion_order', 'insertion_order_id', 'region', 'sales_rep', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage', 'placement', 'buy_type', 'content_targeting_set_name', 'ad_unit', 'revenue');
 
         $to = $from;
 
@@ -104,6 +69,7 @@ class digital extends Management {
             }
             
             for ($d=0; $d < sizeof($digital); $d++) {
+                $digital[$d]['month'] = $months[$digital[$d]['month']-1][2];
                 $digital[$d]['revenue'] *= $pRate;
             }   
         }
