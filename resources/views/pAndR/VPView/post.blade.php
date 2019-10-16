@@ -187,6 +187,7 @@
 
 	@if($forRender)
 		<script>
+			var client = <?php echo json_encode($client); ?>;
 
 			function myFunc(){
 				var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
@@ -244,10 +245,10 @@
 				$(".col-c-18").css("width",$("#col-18").css("width"));
 				$(".col-c-19").css("width",$("#col-19").css("width"));
 
-				@for($c=0;$c< sizeof($client);$c++)
-					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
+				for(var c=0;c<client.length;c++){
+					$("#child-"+c).css("height",$("#parent-"+c).css("height"));
 					
-					$("#clientRF-Fy-"+{{$c}}).change(function(){
+					$("#clientRF-Fy-"+c).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -258,9 +259,9 @@
 
 						var temp2 = parseFloat(0);
 
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
-						@endfor
+						for(var c2=0;c2<client.length;c2++){
+							temp2 += handleNumber($("#clientRF-Fy-"+c2).val());
+						}
 
 						temp2 = Comma(temp2);
 
@@ -271,15 +272,15 @@
 						var tmp1;
 						var tmp2;
 
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							tmp1 = handleNumber($("#closed-Fy-"+{{$c2}}).val());
-							tmp2 = handleNumber($("#booking-Fy-"+{{$c2}}).val());
+						for(var c2=0;c2<client.length;c2++){
+							tmp1 = handleNumber($("#closed-Fy-"+c2).val());
+							tmp2 = handleNumber($("#booking-Fy-"+c2).val());
 							if (tmp1 > tmp2) {
 								temp2 += tmp1;
 							}else{
 								temp2 += tmp2;
 							}
-						@endfor
+						}
 
 						temp2 = Comma(temp2);
 
@@ -287,7 +288,7 @@
 
 
 					});
-					$("#clientRF-Cm-"+{{$c}}).change(function(){
+					$("#clientRF-Cm-"+c).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -298,15 +299,15 @@
 
 						var temp2 = parseFloat(0);
 						
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
-						@endfor
+						for(var c2=0;c2<client.length;c2++){
+							temp2 += handleNumber($("#clientRF-Cm-"+c2).val());
+						}
 
 						temp2 = Comma(temp2);
 
 						$("#RF-Total-Cm").val(temp2);
 					});
-				@endfor
+				}
 			});
 
 			function handleNumber(number){

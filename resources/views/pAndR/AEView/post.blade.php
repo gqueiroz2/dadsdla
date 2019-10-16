@@ -148,9 +148,9 @@
                 $("#button").val("Submit");
             }
         });
-        @for($c=0;$c<sizeof($client);$c++)
-            $("#month-"+{{$c}}+"-0").css("height",$("#client-"+{{$c}}).css("height"));
-        @endfor
+        for(var c=0;c<client.length;c++){
+            $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
+        }
     </script>
 
     <script type="text/javascript">
