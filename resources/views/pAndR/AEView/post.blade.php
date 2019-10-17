@@ -17,6 +17,32 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #4d4d4d; 
         }
+
+
+        #loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
+
     </style>
 @endsection
 @section('content')
@@ -79,7 +105,7 @@
         </div>
     </form>
     <br>
-    <div class="container-fluid">
+    <div class="container-fluid" id="body" style="display: none;">
         <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
         @csrf
             <div class="row justify-content-end">
@@ -106,7 +132,6 @@
                             <div class="col">
                                 <label> &nbsp; </label>
                                 <input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">      
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,13 +149,14 @@
         </form>
     </div>
 
-    <div id="vlau"></div>
+    <div id="loading">
+        Processing Request...
+        <br>
+    </div>
 
     <script>
 
         var client = <?php echo json_encode($client); ?>;
-        console.log(client);
-        console.log(client.length);
 
         $('.linked').scroll(function(){
             $('.linked').scrollLeft($(this).scrollLeft());
@@ -363,6 +389,9 @@
                     });
                 @endfor
             @endfor
+
+            $("#loading").css('display',"none");
+            $("#body").css('display',"");
         });
     </script>
 
