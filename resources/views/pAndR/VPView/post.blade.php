@@ -212,6 +212,7 @@
 	  	</div>
 	</div>
 
+
 	@if($forRender)
 		<script>
 			var client = <?php echo json_encode($client); ?>;
