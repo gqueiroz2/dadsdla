@@ -14,6 +14,8 @@ use App\pRate;
 use App\sql;
 use App\resultsResume;
 
+use App\generateExcel;
+
 class resultsResumeController extends Controller{
     
 	public function get(){
@@ -71,13 +73,6 @@ class resultsResumeController extends Controller{
 		}
 
 		$salesShow = 'BKGS';
-
-		/*
-		if($salesRegion == 'Brazil'){
-			$salesShow = 'CMAPS';
-		}else{
-			$salesShow = 'IBMS';
-		}*/
 
 		$tmp = Request::get("brand");
 		$brandID = $base->handleBrand($tmp);
@@ -138,12 +133,39 @@ class resultsResumeController extends Controller{
 			$names = array("TV", "Digital", "DN");
 		}
 		
-		$regionExcel = $regionID;
-		$brandExcel = $brandID;
+		/*--Excel steps--*/
+
+		$ge = new generateExcel();
+
+		$years = array($cYear, $pYear);
+
+		if ($salesRegion == "Brazil") {
+                $form = "cmaps";
+        }else{
+                $form = "ytd";
+        }
+
+        $firstTable = $ge->selectData($con, $regionID, $years[0], $brandID, $form, $tmp, $value, $month);
+                
+        $secondTable = $ge->selectData($con, $regionID, $years[1], $brandID, "ytd", $tmp, $value, $month);
+
+        for ($p=0; $p < sizeof($secondTable[1]); $p++) { 
+                array_push($firstTable[1], $secondTable[1][$p]);
+        }
+
+        unset($secondTable[1]);
+
+        $plan = array("TARGET", "CORPORATE", "ACTUAL");
+        
+        $planTable = $ge->selectData($con, $regionID, $years[0], $brandID, $plan, $tmp, $value, $month);
+
+        $finalExcel = array($form => $firstTable[0], 'digital' => $firstTable[1], 'plan' => $planTable[0], 'pYtd' => $secondTable[0]);
+		$regionExcel = $salesRegion;
 		$currencyExcel = $tmp;
+		$yearExcel = $years;
 		$valueExcel = $value;
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'brandExcel', 'currencyExcel', 'valueExcel'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'finalExcel', 'valueExcel', 'plan'));
 
 	}
 

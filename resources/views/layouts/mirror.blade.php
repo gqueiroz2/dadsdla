@@ -21,7 +21,7 @@
 		</script>
 		<link href="/css/app.css" rel="stylesheet">
 		<link href="/css/root.css" rel="stylesheet">
-		<link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>        
+		<link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
 		<script src="/components/jquery/jquery.min.js"></script>        
 		<script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="/js/base.js"></script>

@@ -10,86 +10,29 @@ use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use App\ytd;
-use App\digital;
-use App\planByBrand;
-
-use App\dataBase;
-use App\region;
-use App\brand;
-use App\base;
-use App\generateExcel;
-
 class excelController extends Controller{
-    
-        /**
-        * @return \Illuminate\Support\Collection
-        */
 
         public function resultsSummary(){
-                
-                $db = new dataBase();
-                $con = $db->openConnection("DLA");
 
+                $title = Request::get("title");
                 $region = Request::get("regionExcel");
-                $r = new region();
-                $salesRegion = $r->getRegion($con, array($region));
-                $salesRegion = $salesRegion[0]['name'];
-
-                $b = new brand();
-                $brands = $b->getBrand($con);
-
-                $tmpCurrency = Request::get("currencyExcel");
-                $auxCurrency = json_decode(base64_decode($tmpCurrency));
-                $currency[0]['id'] = $auxCurrency[0]->id;
-                $currency[0]['name'] = $auxCurrency[0]->name;
-
+                $years = json_decode(base64_decode(Request::get("yearExcel")));
+                $currency = json_decode(base64_decode(Request::get("currencyExcel")));
+                $final = json_decode(base64_decode(json_encode(Request::get("finalExcel"))), true);
                 $value = Request::get("valueExcel");
-
-                $year = date('Y');
-
-                $years = array($year, $year-1);
-
-                $base = new base();
-                $months = $base->month;
-
-                $ge = new generateExcel();
-
-                if ($salesRegion == "Brazil") {
-                        $form = "cmaps";
-                }else{
-                        $form = "ytd";
-                }
-
-                $values = $ge->selectData($con, $region, $years[0], $brands, $form, $currency, $value, $months);
-                
-                $pValues = $ge->selectData($con, $region, $years[1], $brands, "ytd", $currency, $value, $months);
-
-                for ($p=0; $p < sizeof($pValues[1]); $p++) { 
-                        array_push($values[1], $pValues[1][$p]);
-                }
-
-                unset($pValues[1]);
-
-                $plan = array("TARGET", "CORPORATE", "ACTUAL");
-                
-                $valuesPlan = $ge->selectData($con, $region, $years[0], $brands, $plan, $currency, $value, $months);
-                
-                $final = array($form => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0], 'pYtd' => $pValues[0]);
-
-                $title = $salesRegion." - Summary.xlsx";                
+                $plan = json_decode(base64_decode(Request::get("planExcel")));
 
                 $plans = implode(",", $plan);
 
-                $report[0] = "$salesRegion - TV Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$plans.") Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[3] = "$salesRegion - TV Summary : BKGS - ".$years[1]." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[0] = "$region - TV Summary : BKGS - ".$years[0]." (".$currency[0]->name."/".strtoupper($value).")";
+                $report[1] = "$region - Digital Summary : BKGS - ".$years[0]." (".$currency[0]->name."/".strtoupper($value).")";
+                $report[2] = "$region - (".$plans.") Summary : BKGS - ".$years[0]." (".$currency[0]->name."/".strtoupper($value).")";
+                $report[3] = "$region - TV Summary : BKGS - ".$years[1]." (".$currency[0]->name."/".strtoupper($value).")";
 
                 $BKGS[0] = "TV - ".$years[0];
                 $BKGS[1] = "TV - ".$years[1];
 
-                return Excel::download(new summaryExport($final, $report, $salesRegion, $BKGS), $title);
+                return Excel::download(new summaryExport($final, $report, $region, $BKGS), $title);
         }
 
 	public function resultsMonth(){
