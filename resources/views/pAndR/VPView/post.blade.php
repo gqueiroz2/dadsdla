@@ -20,6 +20,29 @@
 		  margin-bottom: 12px; /* Add some space below the input */
 		  text-align: center;
 		}
+		#loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
     </style>
 @endsection
 @section('content')
@@ -75,63 +98,67 @@
 		</div>
 	</form>
 	<br>
-	<div class="container-fluid">
-		<div class="row justify-content-end">
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>				
-			<div class="col">				
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
-				   AE Submissions
-				</button>
-			</div>
-		</div>
-
-		<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
-			@csrf
+	<div id="body" style="display: none;">
+		<div class="container-fluid">
 			<div class="row justify-content-end">
-				<div class="col-2">
-					<label> &nbsp;</label>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-						<label class="btn alert-primary active">
-						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
-						</label>
-						<label class="btn alert-success">
-							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
-						</label>
-					</div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>				
+				<div class="col">				
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
+					   AE Submissions
+					</button>
 				</div>
-				<div class="col-2">
-					<label> &nbsp; </label>
-					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
-				</div>	
 			</div>
 
-
-			<div class="row justify-content-center mt-2">
-				@if($forRender)
-						<div class="col" style="width: 100%; padding-right: 2%;">
-							<center>
-								{{$render->VP1($forRender)}}
-							</center>
-						</div>
-				@else
-					<div class="col-8" style="width: 100%; padding-right: 2%;">
-						<div style="min-height: 100px;" class="alert alert-warning" role="alert">
-							<span style="font-size:22px;">
-								<center>
-								There is no submissions of Forecast from AE yet!
-								</center>
-							</span>
+			<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
+				@csrf
+				<div class="row justify-content-end">
+					<div class="col-2">
+						<label> &nbsp;</label>
+						<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+							<label class="btn alert-primary active">
+							    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+							</label>
+							<label class="btn alert-success">
+								<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+							</label>
 						</div>
 					</div>
-				@endif
-					
-				
-			</div>
+					<div class="col-2">
+						<label> &nbsp; </label>
+						<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
+					</div>	
+				</div>
+
+
+				<div class="row justify-content-center mt-2">
+					@if($forRender)
+							<div class="col" style="width: 100%; padding-right: 2%;">
+								<center>
+									{{$render->VP1($forRender)}}
+								</center>
+							</div>
+					@else
+						<div class="col-8" style="width: 100%; padding-right: 2%;">
+							<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+								<span style="font-size:22px;">
+									<center>
+									There is no submissions of Forecast from AE yet!
+									</center>
+								</span>
+							</div>
+						</div>
+					@endif
+				</div>		
+			</form>
 		</div>
-	</form>
+	</div>
+    <div id="loading">
+        Processing Request...
+        <br>
+    </div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="aeSubmissions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -185,6 +212,7 @@
 	  	</div>
 	</div>
 
+
 	@if($forRender)
 		<script>
 			var client = <?php echo json_encode($client); ?>;
@@ -216,6 +244,9 @@
 			}
 
 			$(document).ready(function(){
+				$("#loading").css('display',"none");
+            	$("#body").css('display',"");
+
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
 						$("#button").val("Save");

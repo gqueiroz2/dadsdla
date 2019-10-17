@@ -17,6 +17,32 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #4d4d4d; 
         }
+
+
+        #loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
+
     </style>
 @endsection
 @section('content')
@@ -79,7 +105,7 @@
         </div>
     </form>
     <br>
-    <div class="container-fluid">
+    <div class="container-fluid" id="body" style="display: none;">
         <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
         @csrf
             <div class="row justify-content-end">
@@ -106,7 +132,6 @@
                             <div class="col">
                                 <label> &nbsp; </label>
                                 <input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">      
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,13 +149,14 @@
         </form>
     </div>
 
-    <div id="vlau"></div>
+    <div id="loading">
+        Processing Request...
+        <br>
+    </div>
 
     <script>
 
         var client = <?php echo json_encode($client); ?>;
-        console.log(client);
-        console.log(client.length);
 
         $('.linked').scroll(function(){
             $('.linked').scrollLeft($(this).scrollLeft());
@@ -155,34 +181,34 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            for(var m=0;m<16;m++){
-                for(var c=0;c<client.length;c++){
-                    $("#clientRF-"+c+"-"+m).change(function(){
+            @for( $m=0;$m<16;$m++)
+                @for($c=0;$c< sizeof($client);$c++)
+                    $("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
                         if ($(this).val() == '') {
                             $(this).val(0);
                         }
                         alert("#clientRF-"+c+"-"+m);
                         $(this).val(Comma(handleNumber($(this).val())));
-                        if (m == 0 || m == 1 || m == 2 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+c+"-0").val())+handleNumber($("#clientRF-"+c+"-1").val())+handleNumber($("#clientRF-"+c+"-2").val()));
-                            $("#clientRF-"+c+"-3").val(value);
-                        }else if (m == 4 || m == 5 || m == 6 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+c+"-4").val())+handleNumber($("#clientRF-"+c+"-5").val())+handleNumber($("#clientRF-"+c+"-6").val()));
-                            $("#clientRF-"+c+"-7").val(value);
-                        }else if (m == 8 || m == 9 || m == 10 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+c+"-8").val())+handleNumber($("#clientRF-"+c+"-9").val())+handleNumber($("#clientRF-"+c+"-10").val()));
-                            $("#clientRF-"+c+"-11").val(value);
-                        }else if (m == 12 || m == 13 || m == 14 ) {
-                            var value = Comma(handleNumber($("#clientRF-"+c+"-12").val())+handleNumber($("#clientRF-"+c+"-13").val())+handleNumber($("#clientRF-"+c+"-14").val()));
-                            $("#clientRF-"+c+"-15").val(value);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
+                            $("#clientRF-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-"+{{$c}}+"-6").val()));
+                            $("#clientRF-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-"+{{$c}}+"-10").val()));
+                            $("#clientRF-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-"+{{$c}}+"-14").val()));
+                            $("#clientRF-"+{{$c}}+"-15").val(value);
                         }
-                        var totalClient = Comma(handleNumber($("#clientRF-"+c+"-3").val()) + handleNumber($("#clientRF-"+c+"-7").val()) + handleNumber($("#clientRF-"+c+"-11").val()) + handleNumber($("#clientRF-"+c+"-15").val()));
-                        $("#totalClient-"+c).val(totalClient);
+                        var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
+                        $("#totalClient-"+{{$c}}).val(totalClient);
                         Temp3 = handleNumber(totalClient);
-                        if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+c).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
-                            $("#client-"+c).css("background-color","red");
+                        if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
+                            $("#client-"+{{$c}}).css("background-color","red");
                         }else{
-                            $("#client-"+c).css("background-color","");
+                            $("#client-"+{{$c}}).css("background-color","");
                         }
                         var rf = 0;
                         for(var c2=0;c2<client.length;c2++){
@@ -191,11 +217,11 @@
                             }else{
                                 var mult = 1;
                             }
-                            rf += (handleNumber($("#clientRF-"+c2+"-"+m).val())*mult);
+                            rf += (handleNumber($("#clientRF-"+c2+"-"+{{$m}}).val())*mult);
                         }
                         rf = Comma(rf);
-                        $("#rf-"+m).val(rf);
-                        if (m == 0 || m == 1 || m == 2 ) {
+                        $("#rf-"+{{$m}}).val(rf);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 if ($("#splitted-"+c2).val() != false) {
@@ -207,7 +233,7 @@
                             }
                             month = Comma(month);
                             $("#rf-3").val(month);
-                        }else if (m == 4 || m == 5 || m == 6 ) {
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 if ($("#splitted-"+c2).val() != false) {
@@ -219,7 +245,7 @@
                             }
                             month = Comma(month);
                             $("#rf-7").val(month);
-                        }else if (m == 8 || m == 9 || m == 10 ) {
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 if ($("#splitted-"+c2).val() != false) {
@@ -231,7 +257,7 @@
                             }
                             month = Comma(month);
                             $("#rf-11").val(month);
-                        }else if (m == 12 || m == 13 || m == 14 ) {
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 if ($("#splitted-"+c2).val() != false) {
@@ -253,39 +279,39 @@
                             $("#totalPP3-"+c2).val(temp);
                         }
                         var value = handleNumber($(this).val());
-                        var PY = handleNumber($("#PY-"+c+"-"+m).val());
+                        var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
                         var tmp = value - PY;
                         tmp = Comma(tmp);
-                        $("#RFvsPY-"+c+"-"+m).val(tmp);
-                        if (m == 0 || m == 1 || m == 2 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+c+"-0").val())+handleNumber($("#RFvsPY-"+c+"-1").val())+handleNumber($("#RFvsPY-"+c+"-2").val()));
-                            $("#RFvsPY-"+c+"-3").val(value);
-                        }else if (m == 4 || m == 5 || m == 6 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+c+"-4").val())+handleNumber($("#RFvsPY-"+c+"-5").val())+handleNumber($("#RFvsPY-"+c+"-6").val()));
-                            $("#RFvsPY-"+c+"-7").val(value);
-                        }else if (m == 8 || m == 9 || m == 10 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+c+"-8").val())+handleNumber($("#RFvsPY-"+c+"-9").val())+handleNumber($("#RFvsPY-"+c+"-10").val()));
-                            $("#RFvsPY-"+c+"-11").val(value);
-                        }else if (m == 12 || m == 13 || m == 14 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-"+c+"-12").val())+handleNumber($("#RFvsPY-"+c+"-13").val())+handleNumber($("#RFvsPY-"+c+"-14").val()));
-                            $("#RFvsPY-"+c+"-15").val(value);
+                        $("#RFvsPY-"+{{$c}}+"-"+{{$m}}).val(tmp);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-0").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-1").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-2").val()));
+                            $("#RFvsPY-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-4").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-5").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-6").val()));
+                            $("#RFvsPY-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-8").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-9").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-10").val()));
+                            $("#RFvsPY-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-12").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-13").val())+handleNumber($("#RFvsPY-"+{{$c}}+"-14").val()));
+                            $("#RFvsPY-"+{{$c}}+"-15").val(value);
                         }
-                        var Temp = Comma(handleNumber($("#RFvsPY-"+c+"-3").val()) + handleNumber($("#RFvsPY-"+c+"-7").val()) + handleNumber($("#RFvsPY-"+c+"-11").val()) + handleNumber($("#RFvsPY-"+c+"-15").val()));
-                        $("#totalRFvsPY-"+c).val(Temp);
-                        var booking = handleNumber($("#bookingE-"+m).val());
-                        var Temp2 = handleNumber($("#target-"+m).val());
+                        var Temp = Comma(handleNumber($("#RFvsPY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-"+{{$c}}+"-15").val()));
+                        $("#totalRFvsPY-"+{{$c}}).val(Temp);
+                        var booking = handleNumber($("#bookingE-"+{{$m}}).val());
+                        var Temp2 = handleNumber($("#target-"+{{$m}}).val());
                         rf = handleNumber(rf);
                         var RFvsTarget = Comma(rf-Temp2);
                         var pending = Comma(rf-booking);
-                        $("#pending-"+m).val(pending);
-                        $("#RFvsTarget-"+m).val(RFvsTarget);
+                        $("#pending-"+{{$m}}).val(pending);
+                        $("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
                         if (Temp2 == 0) {
                             var Temp3 = 0+"%";
                         }else{
                             var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
                         }
-                        $("#achievement-"+m).val(Temp3);
-                        if (m == 0 || m == 1 || m == 2 ) {
+                        $("#achievement-"+{{$m}}).val(Temp3);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 month += handleNumber($("#clientRF-"+c2+"-3").val());
@@ -301,7 +327,7 @@
                                 var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
                             }
                             $("#achievement-3").val(Temp3);
-                        }else if (m == 4 || m == 5 || m == 6 ) {
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 month += handleNumber($("#clientRF-"+c2+"-7").val());
@@ -317,7 +343,7 @@
                                 var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
                             }
                             $("#achievement-7").val(Temp3);
-                        }else if (m == 8 || m == 9 || m == 10 ) {
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 month += handleNumber($("#clientRF-"+c2+"-11").val());
@@ -333,7 +359,7 @@
                                 var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
                             }
                             $("#achievement-11").val(Temp3);
-                        }else if (m == 12 || m == 13 || m == 14 ) {
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
                             for(var c2=0;c2<client.length;c2++){
                                 month += handleNumber($("#clientRF-"+c2+"-15").val());
@@ -362,8 +388,11 @@
                         }
                         $("#totalAchievement").val(Temp3);
                     });
-                }
-            }
+                @endfor
+            @endfor
+
+            $("#loading").css('display',"none");
+            $("#body").css('display',"");
         });
     </script>
 

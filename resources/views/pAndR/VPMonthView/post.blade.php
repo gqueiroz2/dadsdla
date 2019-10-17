@@ -20,6 +20,29 @@
 		  margin-bottom: 12px; /* Add some space below the input */
 		  text-align: center;
 		}
+		#loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
     </style>
 @endsection
 @section('content')
@@ -87,7 +110,7 @@
 			</div>
 		</div>
     @else
-    	<div class="container-fluid">
+    	<div class="container-fluid" id="body" style="display: none;">
 			<form method="POST" action="{{ route('VPMonthSave') }}" runat="server"  onsubmit="ShowLoading()">
 			@csrf
 				<div class="row justify-content-end">
@@ -120,10 +143,17 @@
 				</div>
 			</form>
 		</div>
+
+		<div id="loading">
+	        Processing Request...
+	        <br>
+	    </div>
 		<script type="text/javascript">
 			var aux = ['Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4'];
 
 			$(document).ready(function(){				
+				$("#loading").css('display',"none");
+            	$("#body").css('display',"");
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
@@ -133,23 +163,22 @@
 					}
 				});
 
-				for(var m=0; m < aux.length; m++){
-					$("#me-"+m).change(function(){
+				@for( $m=0;$m<16;$m++)
+					$("#me-"+{{$m}}).change(function(){
 						if ($(this).val() ==  '') {
 							$this.val(0);
 						}
-
 						$(this).val(Comma(handleNumber($(this).val())));
-						if (m == 0 || m == 1 || m == 2) {
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
 							var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
 							$("#me-3").val(value);
-						}else if (m == 4 || m == 5 || m == 6 ) {
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
 							var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-5").val()));
 							$("#me-7").val(value);
-						}else if (m == 8 || m == 9 || m == 10 ) {
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
 							var value = Comma(handleNumber($("#me-8").val())+handleNumber($("#me-9").val())+handleNumber($("#me-10").val()));
 							$("#me-11").val(value);
-						}else if (m == 12 || m == 13 || m == 14 ) {
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
 							var value = Comma(handleNumber($("#me-12").val())+handleNumber($("#me-13").val())+handleNumber($("#me-14").val()));
 							$("#me-15").val(value);
 						}
@@ -158,7 +187,7 @@
 						
 						$("#total-manualEstimationTotal").val(total);
 					});
-				}
+				@endfor
 			});
 
 			//function to add commas to textboxes
