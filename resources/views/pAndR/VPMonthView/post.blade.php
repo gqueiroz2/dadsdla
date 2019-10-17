@@ -133,23 +133,23 @@
 					}
 				});
 
-				for(var m=0; m < aux.length; m++){
-					$("#me-"+m).change(function(){
+				@for( $m=0;$m<16;$m++)
+					$("#me-"+{{$m}}).change(function(){
 						if ($(this).val() ==  '') {
 							$this.val(0);
 						}
 
 						$(this).val(Comma(handleNumber($(this).val())));
-						if (m == 0 || m == 1 || m == 2) {
+						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
 							var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
 							$("#me-3").val(value);
-						}else if (m == 4 || m == 5 || m == 6 ) {
+						}else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
 							var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-5").val()));
 							$("#me-7").val(value);
-						}else if (m == 8 || m == 9 || m == 10 ) {
+						}else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
 							var value = Comma(handleNumber($("#me-8").val())+handleNumber($("#me-9").val())+handleNumber($("#me-10").val()));
 							$("#me-11").val(value);
-						}else if (m == 12 || m == 13 || m == 14 ) {
+						}else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
 							var value = Comma(handleNumber($("#me-12").val())+handleNumber($("#me-13").val())+handleNumber($("#me-14").val()));
 							$("#me-15").val(value);
 						}
@@ -158,7 +158,7 @@
 						
 						$("#total-manualEstimationTotal").val(total);
 					});
-				}
+				@endfor
 			});
 
 			//function to add commas to textboxes
