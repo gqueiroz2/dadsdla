@@ -168,7 +168,6 @@
 						if ($(this).val() ==  '') {
 							$this.val(0);
 						}
-
 						$(this).val(Comma(handleNumber($(this).val())));
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
 							var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
