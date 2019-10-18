@@ -132,6 +132,7 @@ class cmaps extends Management{
 
             for ($c=0; $c < sizeof($cmaps); $c++) { 
                 $cmaps[$c]['month'] = $months[$cmaps[$c]['month']-1][2];
+                $cmaps[$c]['discount'] /= 100;
                 $cmaps[$c]['revenue'] /= $pRate;
             }   
         }

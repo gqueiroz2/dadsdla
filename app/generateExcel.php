@@ -18,7 +18,7 @@ class generateExcel extends Model {
 	public function selectData($con, $region, $years, $brands, $form, $currency, $value, $months){
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
-			$brand_id[$b] = $brands[$b][0];
+			$brand_id[$b] = $brands[$b]['id'];
 		}
 
 		array_push($brand_id, '13');

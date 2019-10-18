@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use App\digital;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
+class digitalExport implements FromArray, WithHeadings, WithTitle, WithEvents, WithColumnFormatting, WithStrictNullComparison, WithCustomStartCell, ShouldAutoSize {
     
 	protected $collect;
     protected $report;
@@ -44,13 +44,9 @@ class digitalExport implements FromCollection, WithHeadings, WithTitle, WithEven
         $this->report = $report;
     }
 
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection() {
-        $collect = array($this->collect);
+    public function array(): array {
 
-        return collect($collect);
+        return $this->collect;
     }
 
     public function headings(): array{

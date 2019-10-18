@@ -135,37 +135,17 @@ class resultsResumeController extends Controller{
 		
 		/*--Excel steps--*/
 
-		$ge = new generateExcel();
-
 		$years = array($cYear, $pYear);
 
-		if ($salesRegion == "Brazil") {
-                $form = "cmaps";
-        }else{
-                $form = "ytd";
-        }
-
-        $firstTable = $ge->selectData($con, $regionID, $years[0], $brandID, $form, $tmp, $value, $month);
-                
-        $secondTable = $ge->selectData($con, $regionID, $years[1], $brandID, "ytd", $tmp, $value, $month);
-
-        for ($p=0; $p < sizeof($secondTable[1]); $p++) { 
-                array_push($firstTable[1], $secondTable[1][$p]);
-        }
-
-        unset($secondTable[1]);
-
-        $plan = array("TARGET", "CORPORATE", "ACTUAL");
-        
-        $planTable = $ge->selectData($con, $regionID, $years[0], $brandID, $plan, $tmp, $value, $month);
-
-        $finalExcel = array($form => $firstTable[0], 'digital' => $firstTable[1], 'plan' => $planTable[0], 'pYtd' => $secondTable[0]);
-		$regionExcel = $salesRegion;
+		
+		$regionExcel = $regionID;
 		$currencyExcel = $tmp;
 		$yearExcel = $years;
 		$valueExcel = $value;
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'finalExcel', 'valueExcel', 'plan'));
+		$title = $salesRegion." - Summary.xlsx";
+
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'title'));
 
 	}
 

@@ -60,7 +60,16 @@ class resultsMQController extends Controller{
 
                 $region = $r->getRegion($con,false);
                 $currency = $pr->getCurrency($con,false);
+                
                 $regionID = Request::get('region');
+
+                $tmp = $r->getRegion($con,array($regionID));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{
+                        $salesRegion = $tmp['name'];
+                }
 
                 $brandTmp = Request::get('brand');
                 $brandID = $base->handleBrand($brandTmp);
@@ -83,21 +92,18 @@ class resultsMQController extends Controller{
 
                 $form = $mq->TruncateName($secondPos);
 
-                $salesRegion = $r->getRegion($con, array($regionID));
-
-                $salesRegion = $salesRegion[0]['name'];
-
                 $rName = $mq->TruncateRegion($salesRegion);
 
                 $regionExcel = $regionID;
                 $yearExcel = $year;
-                $brandExcel = $brandID;
                 $firstPosExcel = $firstPos;
                 $secondPosExcel = $secondPos;
                 $currencyExcel = $tmp;
                 $valueExcel = $value;
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'brandExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel'));
+                $title = $salesRegion." - Month.xlsx";
+
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 
 
