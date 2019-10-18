@@ -28,7 +28,7 @@ class AE extends pAndR{
 
         if ($submit == "submit") {
             $submit = 1;
-            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
+            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\" AND year = \"".$year."\"";
             if ($region == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
@@ -42,6 +42,22 @@ class AE extends pAndR{
             if ($resSubmit != null) {
                 return "Already Submitted";
             }
+
+            $selectVP = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND month = \"".intval($month)."\" AND submitted = \"1\" AND region_id = \"".$region."\" AND type_of_forecast = \"V1\"";
+
+            if ($region == '1') {
+                $selectVP .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $resultsVP = $con->query($selectVP);
+            
+            $resVP = $sql->fetch($resultsVP,$from,$from)[0]["ID"];
+
+
+            if ($resVP != null) {
+                return "Already Submitted";
+            }
+
         }else{
             $submit = 0;
         }
@@ -663,6 +679,10 @@ class AE extends pAndR{
         
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
+        if(sizeof($listOfClients) == 0){
+            return false;
+        }
+
         if (!$save) {
             $save = false;
             $valueCheck = false;
@@ -769,19 +789,28 @@ class AE extends pAndR{
             if ($regionID == "1") {
                 $from2 = array("sales_reps");
 
-                $select2 = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\"";
+                for ($c=0; $c <sizeof($listOfClients); $c++) { 
+                    $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\" AND client_id = \"".$listOfClients[$c]["clientID"]."\" AND stage != '5' AND stage != '6' AND stage != '7'";
 
-                $result2 = $con->query($select2);
+                    $result2[$c] = $con->query($select2[$c]);
 
-                $salesReps = $sql->fetch($result2,$from2,$from2);
+                    $salesReps[$c] = $sql->fetch($result2[$c],$from2,$from2);
 
-                $salesRepsOR = "( f2.sales_rep_id = \"".$salesReps[0]['sales_reps']."\"";
+                    if ($salesReps[$c]) {
+                        $salesRepsOR[$c] = "( f2.sales_rep_id = \"".$salesReps[$c][0]['sales_reps']."\"";
+        
+                        if (sizeof($salesReps[$c])>1) {
 
-                for ($s=1; $s < sizeof($salesReps) ; $s++) { 
-                    $salesRepsOR .= " OR f2.sales_rep_id = \"".$salesReps[$s]['sales_reps']."\"";
+                            for ($s=1; $s < sizeof($salesReps[$c]) ; $s++) { 
+                                $salesRepsOR[$c] .= " OR f2.sales_rep_id = \"".$salesReps[$c][$s]['sales_reps']."\"";
+                            }
+                        }
+
+                        $salesRepsOR[$c] .= ")";
+                    }else{
+                        $salesRepsOR[$c] = "";
+                    }
                 }
-
-                $salesRepsOR .= ")";
             }else{
                 $salesRepsOR = "sales_rep_id = \"".$salesRepID[0]."\"";
             }
@@ -802,7 +831,20 @@ class AE extends pAndR{
 
 
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND f2.ID = \"".$save[0]['ID']."\"";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                        AND f.month = \"".($m+1)."\" 
+                                        AND f2.month = \"".$cMonth."\"  
+                                        AND f2.year = \"".$cYear."\"";
+
+                    if ($regionID == "1") {
+                        $select[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
+                    }else{
+                        $select[$c][$m] .= " AND ".$salesRepsOR." ";
+                    }
+                    
+                    #echo "<pre>".$select[$c][$m]."</pre>";
+
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
