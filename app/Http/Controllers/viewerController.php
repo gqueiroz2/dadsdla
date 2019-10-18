@@ -15,6 +15,7 @@ use App\viewer;
 use App\salesRep;
 use App\cmaps;
 use App\baseRender;
+use App\sql;
 
 class viewerController extends Controller{
 
@@ -51,6 +52,8 @@ class viewerController extends Controller{
         	
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
+
+                $sql = new sql();
 
                 $validator = Validator::make(Request::all(),[
                     'region' => 'required',
@@ -105,12 +108,13 @@ class viewerController extends Controller{
 
                 $salesRep = Request::get("salesRep");
 
-                $table = $viewer->getTables($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep,$db);
+                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
 
+                var_dump($table);
 
-                var_dump(Request::all());
+                //var_dump(Request::all());
 
-                return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                //return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
 
 	}
 
