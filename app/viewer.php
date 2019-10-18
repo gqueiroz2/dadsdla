@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\base;
 class viewer extends Model{
 
 
 	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql){
+		$base = new base();
 /*
 		if ($source == "sf") {
 			$columns = array('brand','year_from','year_to','from_date','to_date','sales_rep_owner_id','sales_rep_splitter_id');
@@ -18,37 +19,66 @@ class viewer extends Model{
 			$where = "WHERE  $columns IN $variables";
 		}		
 */
-		var_dump($source);
-		
-		if ($source == 'cmaps'){
-			$select = "SELECT sr.name AS 'salesRep', c.pi_number, c.month,c.map_number,c.product,c.segment,c.market,c.media_type, b.name,a.name AS 'agency',cl.name AS 'client',c.log,c.ad_sales_support,c.category,c.sector, c.'$value' 
-						FROM sales_rep sr
-						LEFT JOIN cmaps c ON sr.ID = c.sales_rep_id
+
+		$brandString = $base->arrayToString($brand,true,0);
+
+		$monthString = $base->arrayToString($month,false,false);
+
+		if ($source == "CMAPS"/*'cmaps'*/){
+			$select = "SELECT sr.name AS 'salesRep', 
+			                  c.pi_number AS 'piNumber', 
+			                  c.month AS 'month',
+			                  c.map_number AS 'mapNumber',
+			                  c.product AS 'product',
+			                  c.segment AS 'segment',
+			                  c.market AS 'market',
+			                  c.media_type AS 'mediaType', 
+			                  b.name AS 'brand',
+			                  a.name AS 'agency',
+			                  cl.name AS 'client',
+			                  c.log AS 'log',
+			                  c.ad_sales_support AS 'adSalesRupport',
+			                  c.category AS 'category',
+			                  c.sector AS 'sector', 
+			                  c.".$value." AS revenue
+						FROM cmaps c
+						LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
 						LEFT JOIN brand b ON b.ID = c.brand_id
 						LEFT JOIN agency a ON c.agency_id = a.ID
 						LEFT JOIN client cl ON c.client_id = cl.ID
-						WHERE (c.brand_id IN ('$brand')) 
+						WHERE (c.brand_id IN ('$brandString')) 
 								AND (c.year = '$year') 
-								AND (c.month IN ('$month'))
+								AND (c.month IN ('$monthString'))
 						GROUP BY c.pi_number
 						ORDER BY c.month";
-
-		}elseif ($source == 'ibms/bts'){
-			$select = "SELECT sr.name, y.order_reference,y.month, y.campaign_reference,b.name, a.name AS 'agency',cl.name AS 'client',y.brand_feed,y.client_product,y.spot_duration,y.num_spot, y.impression_duration, y.'$value'_revenue
+		}elseif ($source == "IBMS/BTS"/*'ibms/bts'*/){
+			$select = "SELECT sr.name AS 'salesRepName', 
+			                  y.order_reference AS 'orderReference',
+			                  y.month AS 'month', 
+			                  y.campaign_reference AS 'campaignReference',
+			                  b.name AS 'brand', 
+			                  a.name AS 'agency',
+			                  cl.name AS 'client',
+			                  y.brand_feed AS 'feed',
+			                  y.client_product AS 'clientProduct',
+			                  y.spot_duration AS 'spotDuration',
+			                  y.num_spot AS 'numSpot', 
+			                  y.impression_duration AS 'impression_duration', 
+			                  y.".$value."_revenue AS 'revenue'
 						FROM ytd y 
 						LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
 						LEFT JOIN brand b ON b.ID = y.brand_id
 						LEFT JOIN agency a ON y.agency_id = a.ID
 						LEFT JOIN client cl ON y.client_id = cl.ID
 						LEFT JOIN currency c ON y.sales_representant_office_id = c.ID
-						WHERE (y.brand_id IN ('$brand'))
+						WHERE (y.brand_id IN ('$brandString'))
 								AND (y.year = '$year')
-								AND (y.month IN ('$month'))
+								AND (y.month IN ('$monthString'))
 						GROUP BY y.order_reference
 						ORDER BY y.month";
-
-
-		}elseif ($source == 'fw'){
+			
+			
+		}elseif ($source == "FW"/*'fw'*/){
 			$select = "SELECT sr.name,cl.name AS 'client',a.name AS 'agency',f.insertion_order,f.month, b.name AS 'brand', f.placement, f.campaign,r.name AS 'region',f.io_start_date,f.io_end_date,f.buy_type, f.ad_unit,f.'$value'_revenue,f.commission,f.insertion_order_id,f.rep_commission_percentage, f.agency_commission_percentage
 						FROM fw_digital f
 						LEFT JOIN sales_rep sr ON sr.ID = f.sales_rep_id
@@ -62,8 +92,7 @@ class viewer extends Model{
 								AND (f.month IN ('$month'))
 						GROUP BY f.insertion_order_id
 						ORDER BY f.month";
-
-		}elseif ($source == "sf"){
+		}elseif ($source == "SF"/*"sf"*/){
 			$select ="SELECT  sf.oppid,sf.sales_rep_owner_id,sf.sales_rep_splitter_id,sf.is_split,a.name AS 'agency',c.name AS 'client',sf.opportunity_name, sf.stage,sf.fcst_category,sf.success_probability,sf.from_date,sf.to_date,sf.year_from,sf.year_to, sf.brand, sf.'$value'_revenue+sf.fcst_amount_'$value', sf.agency_commission
 					FROM sf_pr sf
 					LEFT JOIN sales_rep sr ON sr.ID = sf.sales_rep_owner_id AND sr.ID = sf.sales_rep_splitter_id
@@ -74,9 +103,8 @@ class viewer extends Model{
 						AND (sf.year_to = '$year')
 					GROUP BY sf.oppid";
 		}
-
 		if(isset($select)){
-			var_dump($select);
+			echo "<pre>".($select)."</pre>";
 
 			$result = $con->query($select);
 		}
