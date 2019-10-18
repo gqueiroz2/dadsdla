@@ -93,14 +93,6 @@
 
 	<script type="text/javascript">
 
-		/*function ShowLoadingExcel(e) {
-				
-				return true;
-				// These 2 lines cancel form submission, so only use if needed.
-				//window.event.cancelBubble = true;
-				//e.stopPropagation();
-			}*/
-
 		$(document).ready(function() {
 
 			ajaxSetup();
