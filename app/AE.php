@@ -468,8 +468,20 @@ class AE extends pAndR{
                 }
 
 
-                for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
+                for ($m=0; $m <12 ; $m++) {
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                        AND f.month = \"".($m+1)."\" 
+                                        AND f2.month = \"".$cMonth."\"  
+                                        AND f2.year = \"".$cYear."\"
+                                        AND f2.submitted = \"".$submitted."\"";
+
+                    if ($regionID == "1") {
+                        $select[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
+                    }else{
+                        $select[$c][$m] .= " AND ".$salesRepsOR." ";
+                    }
+
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
@@ -835,7 +847,8 @@ class AE extends pAndR{
                                         WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
                                         AND f.month = \"".($m+1)."\" 
                                         AND f2.month = \"".$cMonth."\"  
-                                        AND f2.year = \"".$cYear."\"";
+                                        AND f2.year = \"".$cYear."\"
+                                        AND f2.submitted = \"".$submitted."\"";
 
                     if ($regionID == "1") {
                         $select[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
@@ -1431,6 +1444,7 @@ class AE extends pAndR{
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (year = \"".$year."\") 
                         AND (from_date > \"".$date."\")                 
                   ";
@@ -1471,6 +1485,7 @@ class AE extends pAndR{
         $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id != sales_rep_owner_id)
                         AND (stage != \"5\")                      
                         AND (stage != \"6\")                      
@@ -1493,6 +1508,7 @@ class AE extends pAndR{
             $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id = sales_rep_owner_id)
                         AND (stage != \"5\")                      
                         AND (stage != \"6\")                      
@@ -1828,6 +1844,7 @@ class AE extends pAndR{
                                 SELECT oppid, from_date , to_date, year_from, year_to, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                                 FROM sf_pr
                                 WHERE (client_id = \"".$clients['clientID']."\")
+                                AND (agency_id = \"".$clients['agencyID']."\")
                                 AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                                 AND ( stage != '5')
                                 AND ( stage != '6')
@@ -1842,6 +1859,7 @@ class AE extends pAndR{
                             SELECT oppid, from_date , to_date,year_from, year_to,stage , stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
+                            AND (agency_id = \"".$clients['agencyID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
                             AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")";/*
@@ -2020,6 +2038,7 @@ class AE extends pAndR{
                                             SELECT SUM($ytdColumn) AS sumValue
                                             FROM $table
                                             WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                            AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
                                             AND (sales_rep_id = \"".$salesRepID."\")
@@ -2030,6 +2049,7 @@ class AE extends pAndR{
                         $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                             FROM fw_digital
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                            AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
                                             AND (sales_rep_id = \"".$salesRepID."\")
@@ -2211,28 +2231,36 @@ class AE extends pAndR{
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID'
+    				   c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
     				FROM sf_pr s
-    				LEFT JOIN client c ON c.ID = s.client_id
+                    LEFT JOIN client c ON c.ID = s.client_id
+    				LEFT JOIN agency a ON a.ID = s.agency_id
     				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
                     AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
                     AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
     				ORDER BY 1
     	       ";   	
+        //var_dump($sf);
     	$resSF = $con->query($sf);
-    	$from = array("clientName","clientID");
+    	$from = array("clientName","clientID","agencyID","agencyName");
     	$listSF = $sql->fetch($resSF,$from,$from);
     	//GET FROM IBMS/BTS
     	$ytd = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID'
+    				   c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
     				FROM ytd y
     				LEFT JOIN client c ON c.ID = y.client_id
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    LEFT JOIN agency a ON a.ID = s.agency_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
     				AND (y.year = \"$cYear\" )
                     AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";
+        //var_dump($ytd);
     	$resYTD = $con->query($ytd);
     	$from = array("clientName","clientID");
     	$listYTD = $sql->fetch($resYTD,$from,$from);

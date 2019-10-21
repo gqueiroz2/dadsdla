@@ -187,7 +187,6 @@
                         if ($(this).val() == '') {
                             $(this).val(0);
                         }
-                        alert("#clientRF-"+c+"-"+m);
                         $(this).val(Comma(handleNumber($(this).val())));
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var value = Comma(handleNumber($("#clientRF-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-"+{{$c}}+"-2").val()));
