@@ -24,7 +24,7 @@ class viewer extends Model{
 
 		$monthString = $base->arrayToString($month,false,false);
 
-		if ($source == "CMAPS"/*'cmaps'*/){
+		if ($source == "CMAPS"){
 			$select = "SELECT sr.name AS 'salesRep', 
 			                  c.pi_number AS 'piNumber', 
 			                  c.month AS 'month',
@@ -51,7 +51,8 @@ class viewer extends Model{
 								AND (c.month IN ('$monthString'))
 						GROUP BY c.pi_number
 						ORDER BY c.month";
-		}elseif ($source == "IBMS/BTS"/*'ibms/bts'*/){
+
+		}elseif ($source == "IBMS/BTS"){
 			$select = "SELECT sr.name AS 'salesRepName', 
 			                  y.order_reference AS 'orderReference',
 			                  y.month AS 'month', 
@@ -78,8 +79,24 @@ class viewer extends Model{
 						ORDER BY y.month";
 			
 			
-		}elseif ($source == "FW"/*'fw'*/){
-			$select = "SELECT sr.name,cl.name AS 'client',a.name AS 'agency',f.insertion_order,f.month, b.name AS 'brand', f.placement, f.campaign,r.name AS 'region',f.io_start_date,f.io_end_date,f.buy_type, f.ad_unit,f.'$value'_revenue,f.commission,f.insertion_order_id,f.rep_commission_percentage, f.agency_commission_percentage
+		}elseif ($source == "FW"){
+			$select = "SELECT sr.name,cl.name AS 'client',
+							  a.name AS 'agency',
+							  f.insertion_order,
+							  f.month, 
+							  b.name AS 'brand',
+							  f.placement,
+							  f.campaign,
+							  r.name AS 'region',
+							  f.io_start_date,
+							  f.io_end_date,
+							  f.buy_type,
+							  f.ad_unit,
+							  f.".$value."_revenue,
+							  f.commission,
+							  f.insertion_order_id,
+							  f.rep_commission_percentage, 
+							  f.agency_commission_percentage
 						FROM fw_digital f
 						LEFT JOIN sales_rep sr ON sr.ID = f.sales_rep_id
 						LEFT JOIN brand b  ON b.ID = f.brand_id
@@ -92,10 +109,27 @@ class viewer extends Model{
 								AND (f.month IN ('$month'))
 						GROUP BY f.insertion_order_id
 						ORDER BY f.month";
-		}elseif ($source == "SF"/*"sf"*/){
-			$select ="SELECT  sf.oppid,sf.sales_rep_owner_id,sf.sales_rep_splitter_id,sf.is_split,a.name AS 'agency',c.name AS 'client',sf.opportunity_name, sf.stage,sf.fcst_category,sf.success_probability,sf.from_date,sf.to_date,sf.year_from,sf.year_to, sf.brand, sf.'$value'_revenue+sf.fcst_amount_'$value', sf.agency_commission
+
+		}elseif ($source == "SF"){
+			$select ="SELECT  sf.oppid,
+							  sf.sales_rep_owner_id,
+							  sf.sales_rep_splitter_id,
+							  sf.is_split,a.name AS 'agency',
+							  c.name AS 'client',
+							  sf.opportunity_name,
+							  sf.stage,
+							  sf.fcst_category,
+							  sf.success_probability,
+							  sf.from_date,
+							  sf.to_date,
+							  sf.year_from,
+							  sf.year_to,
+							  sf.brand,
+							  sf.".$value."_revenue+sf.fcst_amount_".$value.",
+							  sf.agency_commission
 					FROM sf_pr sf
-					LEFT JOIN sales_rep sr ON sr.ID = sf.sales_rep_owner_id AND sr.ID = sf.sales_rep_splitter_id
+					LEFT JOIN sales_rep sr ON sr.ID = sf.sales_rep_owner_id
+						AND sr.ID = sf.sales_rep_splitter_id
 					LEFT JOIN region r ON sf.region_id = r.ID
 					LEFT JOIN agency a ON sf.agency_id = a.ID
 					LEFT JOIN client c ON sf.client_id = c.ID
