@@ -25,6 +25,24 @@ class viewer extends Model{
 		$monthString = $base->arrayToString($month,false,false);
 
 		if ($source == "CMAPS"/*'cmaps'*/){
+			$from = array(
+		                'salesRep', 
+		                'piNumber', 
+		                'month',
+		                'mapNumber',
+		                'product',
+		                'segment',
+		                'market',
+		                'mediaType', 
+		                'brand',
+		                'agency',
+		                'client',
+		                'log',
+		                'adSalesRupport',
+		                'category',
+		                'sector', 
+		                'revenue');
+
 			$select = "SELECT sr.name AS 'salesRep', 
 			                  c.pi_number AS 'piNumber', 
 			                  c.month AS 'month',
@@ -49,9 +67,22 @@ class viewer extends Model{
 						WHERE (c.brand_id IN ('$brandString')) 
 								AND (c.year = '$year') 
 								AND (c.month IN ('$monthString'))
-						GROUP BY c.pi_number
 						ORDER BY c.month";
 		}elseif ($source == "IBMS/BTS"/*'ibms/bts'*/){
+			$from = array('salesRepName',
+				          'orderReference',
+                          'month', 
+         				  'campaignReference',
+                          'brand', 
+                          'agency',
+                          'client',
+                          'feed',
+                          'clientProduct',
+                          'spotDuration',
+                          'numSpot', 
+                          'impression_duration', 
+        				  'revenue');
+
 			$select = "SELECT sr.name AS 'salesRepName', 
 			                  y.order_reference AS 'orderReference',
 			                  y.month AS 'month', 
@@ -74,12 +105,43 @@ class viewer extends Model{
 						WHERE (y.brand_id IN ('$brandString'))
 								AND (y.year = '$year')
 								AND (y.month IN ('$monthString'))
-						GROUP BY y.order_reference
-						ORDER BY y.month";
-			
+						ORDER BY y.month";			
 			
 		}elseif ($source == "FW"/*'fw'*/){
-			$select = "SELECT sr.name,cl.name AS 'client',a.name AS 'agency',f.insertion_order,f.month, b.name AS 'brand', f.placement, f.campaign,r.name AS 'region',f.io_start_date,f.io_end_date,f.buy_type, f.ad_unit,f.'$value'_revenue,f.commission,f.insertion_order_id,f.rep_commission_percentage, f.agency_commission_percentage
+			$from = array('client',
+			              'agency',
+			              'insertionOrder',
+			              'month', 
+			              'brand',
+			              'placement',
+			              'campaign',
+			              'region',
+			              'ioStartDate',
+			              'ioEndDate',
+			              'buyType',
+			              'adUnit',
+			              'commission',
+			              'insertionOrderId',
+			              'repCommissionPercentage',
+			              'agencyCommissionPercentage',
+			              'revenue');
+			$select = "SELECT sr.name,cl.name AS 'client',
+			                  a.name AS 'agency',
+			                  f.insertion_order AS 'insertionOrder',
+			                  f.month AS 'month', 
+			                  b.name AS 'brand',
+			                  f.placement AS 'placement',
+			                  f.campaign AS 'campaign',
+			                  r.name AS 'region',
+			                  f.io_start_date AS 'ioStartDate',
+			                  f.io_end_date AS 'ioEndDate',
+			                  f.buy_type AS 'buyType',
+			                  f.ad_unit AS 'adUnit',
+			                  f.commission AS 'commission',
+			                  f.insertion_order_id AS 'insertionOrderId',
+			                  f.rep_commission_percentage AS 'repCommissionPercentage',
+			                  f.agency_commission_percentage AS 'agencyCommissionPercentage',
+			                  f.".$value."_revenue AS 'revenue'       
 						FROM fw_digital f
 						LEFT JOIN sales_rep sr ON sr.ID = f.sales_rep_id
 						LEFT JOIN brand b  ON b.ID = f.brand_id
@@ -90,10 +152,45 @@ class viewer extends Model{
 						WHERE (f.brand_id IN ('$brand'))
 								AND (f.year = '$year')
 								AND (f.month IN ('$month'))
-						GROUP BY f.insertion_order_id
 						ORDER BY f.month";
 		}elseif ($source == "SF"/*"sf"*/){
-			$select ="SELECT  sf.oppid,sf.sales_rep_owner_id,sf.sales_rep_splitter_id,sf.is_split,a.name AS 'agency',c.name AS 'client',sf.opportunity_name, sf.stage,sf.fcst_category,sf.success_probability,sf.from_date,sf.to_date,sf.year_from,sf.year_to, sf.brand, sf.'$value'_revenue+sf.fcst_amount_'$value', sf.agency_commission
+			$from = array(
+							  'oppid',
+			                  'salesRepOwner',
+			                  'salesRepSplitter',
+			                  'isSplit',
+			                  'agency',
+			                  'client',
+			                  'opportunityName', 
+			                  'stage',
+			                  'fcstCategory',
+			                  'success_probability',
+			                  'from_date',
+			                  'toDate',
+			                  'yearFrom',
+			                  'yearTo', 
+			                  'brand',
+			                  'agencyCommission',
+			                  'fcstAmount', 			                  
+			                  'revenue');
+			$select ="SELECT  sf.oppid AS 'oppid',
+			                  sf.sales_rep_owner_id AS 'salesRepOwner',
+			                  sf.sales_rep_splitter_id AS 'salesRepSplitter',
+			                  sf.is_split AS 'isSplit',
+			                  a.name AS 'agency',
+			                  c.name AS 'client',
+			                  sf.opportunity_name AS 'opportunityName', 
+			                  sf.stage AS 'stage',
+			                  sf.fcst_category AS 'fcstCategory',
+			                  sf.success_probability AS 'success_probability',
+			                  sf.from_date AS 'from_date',
+			                  sf.to_date AS 'toDate',
+			                  sf.year_from AS 'yearFrom',
+			                  sf.year_to AS 'yearTo', 
+			                  sf.brand AS 'brand',
+			                  sf.agency_commission AS 'agencyCommission',
+			                  sf.fcst_amount_".$value." AS 'fcstAmount, 			                  
+			                  sf.".$value."_revenue AS 'revenue',
 					FROM sf_pr sf
 					LEFT JOIN sales_rep sr ON sr.ID = sf.sales_rep_owner_id AND sr.ID = sf.sales_rep_splitter_id
 					LEFT JOIN region r ON sf.region_id = r.ID
@@ -105,8 +202,12 @@ class viewer extends Model{
 		}
 		if(isset($select)){
 			echo "<pre>".($select)."</pre>";
-
+			var_dump($source);
 			$result = $con->query($select);
+			var_dump($result);
+			$mtx = $sql->fetch($result,$from,$from);
+			var_dump($mtx);
+			
 		}
 
 	}
