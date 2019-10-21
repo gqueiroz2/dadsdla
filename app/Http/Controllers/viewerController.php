@@ -107,7 +107,9 @@ class viewerController extends Controller{
 
                 $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
 
-                var_dump($table);
+                $assemble = $viewer->assemble($table,$salesCurrency,$source);
+
+                //var_dump($table);
 
                 //var_dump(Request::all());
 

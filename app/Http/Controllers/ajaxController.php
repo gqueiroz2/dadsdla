@@ -555,8 +555,9 @@ class ajaxController extends Controller{
         if ($region == 1) {
             $source = array("CMAPS","IBMS/BTS","FW","SF");            
         }else{
-            $arraySource = array("IBMS/BTS","FW","SF");
+            $source = array("IBMS/BTS","FW","SF");
         }
+
 
         echo "<option value=''> Select </option>";
         for ($s=0; $s < sizeof($source); $s++) { 
