@@ -43,66 +43,71 @@ class viewerController extends Controller{
 
 
 	public function basePost(){
-        
-        $render =  new baseRender();
-        $base = new base();
-        $months = $base->month;
-	
-        $db = new dataBase();
-        $con = $db->openConnection("DLA");
+                $render =  new baseRender();
+                $base = new base();
+                $months = $base->month;
+        	
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-        $sql = new sql();
+                $sql = new sql();
 
-        $validator = Validator::make(Request::all(),[
-            'region' => 'required',
-            'sourceDataBase' => 'required',
-            'year' => 'required',
-            'month' => 'required',
-            'brand' => 'required',
-            'salesRep' => 'required',            
-        ]);
+                $validator = Validator::make(Request::all(),[
+                    'region' => 'required',
+                    'sourceDataBase' => 'required',
+                    'year' => 'required',
+                    'month' => 'required',
+                    'brand' => 'required',
+                    'salesRep' => 'required',
+                    'currency' => 'required',
+                    'value' => 'required',
+                ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
+                }
 
-        $years = array($cYear = intval(date('Y')), $cYear - 1);
-        
-        $sr = new salesRep();
-        $salesR = $sr->getSalesRep($con);
+                $years = array($cYear = intval(date('Y')), $cYear - 1);
+                
+                $r = new region();
+                $region = $r->getRegion($con, NULL);
 
-        $r = new region();
-        $region = $r->getRegion($con, NULL);
+                $b = new brand();
+                $brands = $b->getBrand($con);
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con); 
+                $currency = new pRate();
+                $currencies = $currency->getCurrency($con); 
 
-        $b = new brand();
-        $brands = $b->getBrand($con);
+                $viewer = new viewer();
 
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con); 
+                $salesRegion = Request::get("region");
 
-        $viewer = new viewer();
-        $salesRegion = Request::get("region");
-        $source = Request::get("sourceDataBase");
-        $month = Request::get("month");
-        $piNumber = Request::get("PI");
-        $brand = Request::get("brand");
-        $value = Request::get("value");
-        $year = Request::get("year");
-        $salesCurrency = Request::get("currency");
-        $salesRep = Request::get("salesRep");
-        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
-        var_dump($table);
+                $source = Request::get("sourceDataBase");
 
-        //$assemble = $viewer->assemble($table,$salesCurrency,$source);
+                $month = Request::get("month");
 
-        //var_dump($table);
+                $piNumber = Request::get("PI");
 
-        //var_dump(Request::all());
+                $tmp = Request::get("brand");
+                $brand = $base->handleBrand($tmp);
 
-        //return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                $value = Request::get("value");
+
+                $year = Request::get("year");
+
+                $salesCurrency = Request::get("currency");
+
+                $salesRep = Request::get("salesRep");
+
+                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
+
+                $assemble = $viewer->assemble($table,$salesCurrency,$source);
+
+                var_dump($table);
+
+                //var_dump(Request::all());
+
+                //return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
 
 	}
 
