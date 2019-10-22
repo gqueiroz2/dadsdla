@@ -242,7 +242,8 @@ class viewer extends Model{
 					LEFT JOIN region r ON sf.region_id = r.ID
 					LEFT JOIN agency a ON sf.agency_id = a.ID
 					LEFT JOIN client c ON sf.client_id = c.ID
-					WHERE (sf.year_from = '$year')";
+					WHERE (sf.year_from = '$year')
+							";
 						//AND (sf.year_to = '$year')";
 		}
 		
@@ -347,8 +348,8 @@ class viewer extends Model{
 					if ($mtx[$m]['grossRevenue']) {
 						$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue']);
 					}
-					if ($mtx[$m]['brand']) {
-						 
+					if ($mtx[$m]['agencyCommission']) {
+						 $mtx[$m]['agencyCommission'] = $mtx[$m]['agencyCommission']*100;
 					}
 
 
