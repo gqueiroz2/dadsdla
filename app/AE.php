@@ -185,7 +185,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\" AND agency_id = \"".$list[$c]->agencyID."\"";
 
                     if ($con->query($update[$c][$m]) === true) {
                         
@@ -237,7 +237,7 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        $columns = "(forecast_id,month,value,client_id,brand)";
+        $columns = "(forecast_id,month,value,client_id,brand,agency_id)";
         for ($c=0; $c <sizeof($list) ; $c++) {
             if ($splitted) {
                 if ($splitted[$c]->splitted) {
@@ -250,7 +250,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\",\"".$list[$c]->agencyID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
@@ -470,7 +470,8 @@ class AE extends pAndR{
 
                 for ($m=0; $m <12 ; $m++) {
                     $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
-                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\"
+                                        AND f.agency_id = \"".$listOfClients[$c]["agencyID"]."\"
                                         AND f.month = \"".($m+1)."\" 
                                         AND f2.month = \"".$cMonth."\"  
                                         AND f2.year = \"".$cYear."\"
@@ -1785,7 +1786,7 @@ class AE extends pAndR{
             $month = array();
             for ($m = $start; $m <= $end; $m++) { 
                 array_push($month, $m);
-            }   
+            }
         }else{
             $month = false;
             if($year == $yearStart){
@@ -1799,7 +1800,7 @@ class AE extends pAndR{
                     array_push($month, $m);
                 }
             }
-        }        
+        }
 
         $month = $this->matchMonthWithArray($month);
         
@@ -2183,13 +2184,16 @@ class AE extends pAndR{
                                 SELECT SUM($ytdColumn) AS sumValue
                                 FROM $table
                                 WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                 AND (month = \"".$month[$m][1]."\")                                    
                                 AND (year = \"".$year."\")
 
                               ";
+
                 $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                 FROM $tableFW
                                 WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                 AND (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
                                 ";
