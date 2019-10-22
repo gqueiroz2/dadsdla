@@ -23,6 +23,28 @@ use App\base;
 
 class ajaxController extends Controller{
 
+    public function brandBySource(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $b = new brand();
+        $brand = $b->getBrand($con);
+        $source = Request::get('source');
+
+        for ($b=0; $b < sizeof($brand); $b++) { 
+            if($source == "SF"){
+                echo "<option value='".$brand[$b]['id']."' selected='true'>".$brand[$b]['name']."</option>";
+            }else if($source == "FW"){
+                if($brand[$b]['type'] == "Non-Linear"){
+                   echo "<option value='".$brand[$b]['id']."' selected='true'>".$brand[$b]['name']."</option>";
+                }
+            }else{
+                if($brand[$b]['type'] == "Linear"){
+                   echo "<option value='".$brand[$b]['id']."' selected='true'>".$brand[$b]['name']."</option>"; 
+                }
+            }
+        }        
+    }
+
     public function getAgencyByRegion(){
         $a = new agency;
         $db = new dataBase();

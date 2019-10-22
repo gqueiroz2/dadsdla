@@ -224,7 +224,7 @@ class Render extends Model{
         $arraySource = array("CMAPS","IBMS/BTS","FW","SF");
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select </option>";           
+            echo "<option value=''> Select Region </option>";           
         echo "</select>";
 
     }
@@ -250,6 +250,13 @@ class Render extends Model{
     		}
     		
     	echo "</select>";
+    }
+
+    public function brandViewer(){
+
+        echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+            echo "<option selected='true' value=''> Select a Region </option>";               
+        echo "</select>";
     }
 
     public function brandPerformance(){

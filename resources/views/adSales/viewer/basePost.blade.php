@@ -12,11 +12,11 @@
 @section('content')
 
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col">
-				<form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
-					@csrf
-					<div class="row">                        
+        <div class="row">
+            <div class="col">
+                <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
+                    @csrf
+                    <div class="row">                        
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
@@ -65,7 +65,7 @@
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->brand($brand)}}
+                            {{$render->brandViewer()}}
                         </div>
                          
                                             
@@ -113,12 +113,21 @@
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
-        
+                    </div>
+                </form>
+            </div>
+        </div>
 
-				</form>
-			</div>
-		</div>
-	</div>
+        <div class="row justify-content-end mt-2">
+            <div class="col" style="color: #0070c0;font-size: 22px">
+                <span style="float: right; margin-right: 2.5%;"> Data Current Through: (<?php echo date('d/m/Y'); ?>) </span>
+            </div>
+
+            
+        </div>
+
+        <div id="vlau"></div>
+    </div>
 
 	<div class="row justify-content-end mt-2">
 		<div class="col" style="color: #0070c0; font-size:22px">
