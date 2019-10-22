@@ -43,6 +43,7 @@ class viewerController extends Controller{
 
 
 	public function basePost(){
+
                 $render =  new baseRender();
                 $base = new base();
                 $months = $base->month;

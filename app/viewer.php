@@ -208,7 +208,7 @@ class viewer extends Model{
 			                  'fcstCategory',			                  
 			                  'salesRepOwner',
 			                  'salesRepSplitter',
-			                  'success_probability',                 
+			                  'successProbability',                 
 			                  'agencyCommission',
 			                  'fcstAmountGross', 
 			                  'fcstAmountNet',
@@ -224,7 +224,7 @@ class viewer extends Model{
 			                  sf.opportunity_name AS 'opportunityName', 
 			                  sf.stage AS 'stage',
 			                  sf.fcst_category AS 'fcstCategory',
-			                  sf.success_probability AS 'success_probability',
+			                  sf.success_probability AS 'successProbability',
 			                  sf.from_date AS 'fromDate',
 			                  sf.to_date AS 'toDate',
 			                  sf.year_from AS 'yearFrom',
@@ -247,9 +247,7 @@ class viewer extends Model{
 						//AND (sf.year_to = '$year')";
 		}
 		
-			echo "<pre>".($select)."</pre>";
 			$result = $con->query($select);
-			var_dump($result);
 			$mtx = $sql->fetch($result,$from,$from);
 		
 
@@ -325,11 +323,25 @@ class viewer extends Model{
 					break;
 
 				case 'FW':
+					if ($mtx[$m]['month']) {
+						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+					}
 					
+					$mtx[$m]['ioStartDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioStartDate']);
 					
+					$mtx[$m]['ioEndDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioEndDate']);
+
+					/*if ($mtx[$m]['brand'] == 'ONL') {
+						$mtx[$m]['brand'] = "SELECT b.name
+											 FROM brand b
+											 WHERE (b.ID IN ('9,13,14,15,16'))
+											";
+					}*/
+					var_dump($mtx[$m]);
 					break;
 
 				case 'SF':
+
 					if ($mtx[$m]['fromDate']) {
 						$mtx[$m]['fromDate'] = $base->intToMonth(array($mtx[$m]['fromDate']))[0];
 					}
@@ -350,6 +362,9 @@ class viewer extends Model{
 					}
 					if ($mtx[$m]['agencyCommission']) {
 						 $mtx[$m]['agencyCommission'] = $mtx[$m]['agencyCommission']*100;
+					}
+					if ($mtx[$m]['successProbability']) {
+						$mtx[$m]['successProbability'] = $mtx[$m]['successProbability']/1;
 					}
 
 

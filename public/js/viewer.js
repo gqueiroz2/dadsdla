@@ -98,15 +98,21 @@ $(document).ready(function(){
 
 
         var sourceDataBase = $('#sourceDataBase').val();
-        if(sourceDataBase == "CMAPS"){
-          $('#piNumber').val("");
-          $('#piNumberCol').css("display", "block");
-          $('#piNumber').css("display", "block");
+        if(sourceDataBase == "CMAPS" || sourceDataBase == "SF"){
+          if(sourceDataBase == "CMAPS"){
+            $('#especificNumberName').html("PI:");
+          }else{
+            $('#especificNumberName').html("OPPID:");
+          }
+
+          $('#especificNumber').val("");
+          $('#especificNumberCol').css("display", "block");
+          $('#especificNumber').css("display", "block");
 
         }else{
-          $('#piNumber').val("0");
-          $('#piNumberCol').css("display", "none");
-          $('#piNumber').css("display", "none");
+          $('#especificNumber').val("0");
+          $('#especificNumberCol').css("display", "none");
+          $('#especificNumber').css("display", "none");
         }
       });
 
@@ -189,6 +195,9 @@ $(document).ready(function(){
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
       $('#value').empty().append("<option>Select Source</option>");
+      $('#especificNumber').val("0");
+      $('#especificNumberCol').css("display", "none");
+      $('#especificNumber').css("display", "none");
     }
 
 	});

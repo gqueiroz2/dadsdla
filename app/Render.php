@@ -235,8 +235,8 @@ class Render extends Model{
     	echo "</select>";
     }
 
-    public function piNumber(){
-        echo "<input type='text' id='piNumber' name='PI' value='0' class='form-control' style='display: none;'>";
+    public function especificNumber(){
+        echo "<input type='text' id='especificNumber' name='especificNumber' value='0' class='form-control' style='display: none;'>";
     }
 
     public function brand($brand){
