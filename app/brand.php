@@ -14,8 +14,8 @@ class brand extends Management{
 		
 		$sql = new sql();
 		$table = "brand";
-		$columns = "id,name";
-		$from = array('id','name');	
+		$columns = "id,name,type";
+		$from = array('id','name','type');	
 		$where = "WHERE sub_brand = '0'";//false;//"WHERE name != 'OTH'";
 
 		if($ID){
