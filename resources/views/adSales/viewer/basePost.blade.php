@@ -41,9 +41,9 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col" id="piNumberCol" style="display:none;">
-                            <label class="labelLeft"><span class="bold"> PI: </span></label>
-                            {{$render->piNumber($brand)}}
+                        <div class="col" id="especificNumberCol" style="display:none;">
+                            <label class="labelLeft"><span class="bold" id="especificNumberName"> PI: </span></label>
+                            {{$render->especificNumber($brand)}}
                         </div>
                         
                         <div class="col">
@@ -117,17 +117,6 @@
                 </form>
             </div>
         </div>
-
-        <div class="row justify-content-end mt-2">
-            <div class="col" style="color: #0070c0;font-size: 22px">
-                <span style="float: right; margin-right: 2.5%;"> Data Current Through: (<?php echo date('d/m/Y'); ?>) </span>
-            </div>
-
-            
-        </div>
-
-        <div id="vlau"></div>
-    </div>
 
 	<div class="row justify-content-end mt-2">
 		<div class="col" style="color: #0070c0; font-size:22px">
