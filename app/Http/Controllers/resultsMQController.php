@@ -103,6 +103,23 @@ class resultsMQController extends Controller{
 
                 $title = $salesRegion." - Month.xlsx";
 
+
+
+                /*var_dump("firstPosExcel");
+                var_dump($firstPosExcel);
+                var_dump("secondPosExcel");
+                var_dump($secondPosExcel);
+                var_dump("regionExcel");
+                var_dump($regionExcel);
+                var_dump("valueExcel");
+                var_dump($valueExcel);
+                var_dump("yearExcel");
+                var_dump($yearExcel);
+                var_dump("currencyExcel");
+                var_dump($currencyExcel);
+                var_dump("title");
+                var_dump($title);*/
+
                 return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 

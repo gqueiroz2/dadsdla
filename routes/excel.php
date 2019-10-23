@@ -20,6 +20,9 @@ Route::group(['middleware' => 'auth'],function(){
 
 		Route::post('month','excelController@resultsMonth')
 									->name('monthExcel');
+
+		Route::post('yoyMonth','excelController@resultsYoYMonth')
+									->name('yoyMonthExcel');
 		
 		Route::post('summary','excelController@resultsSummary')
 									->name('summaryExcel');
