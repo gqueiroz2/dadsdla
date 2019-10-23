@@ -14,6 +14,8 @@ use App\pRate;
 use App\sql;
 use App\resultsResume;
 
+use App\generateExcel;
+
 class resultsResumeController extends Controller{
     
 	public function get(){
@@ -71,13 +73,6 @@ class resultsResumeController extends Controller{
 		}
 
 		$salesShow = 'BKGS';
-
-		/*
-		if($salesRegion == 'Brazil'){
-			$salesShow = 'CMAPS';
-		}else{
-			$salesShow = 'IBMS';
-		}*/
 
 		$tmp = Request::get("brand");
 		$brandID = $base->handleBrand($tmp);
@@ -138,7 +133,19 @@ class resultsResumeController extends Controller{
 			$names = array("TV", "Digital", "DN");
 		}
 		
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names'));
+		/*--Excel steps--*/
+
+		$years = array($cYear, $pYear);
+
+		
+		$regionExcel = $regionID;
+		$currencyExcel = $tmp;
+		$yearExcel = $years;
+		$valueExcel = $value;
+
+		$title = $salesRegion." - Summary.xlsx";
+
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'title'));
 
 	}
 

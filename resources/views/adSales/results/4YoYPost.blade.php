@@ -7,6 +7,21 @@
 @endsection
 @section('content')
 
+	<form method="POST" action="{{ route('yoyMonthExcel') }}">
+		@csrf
+		<input type="hidden" name="firstPosExcel" value="<?php echo $firstPosExcel; ?>">
+		<input type="hidden" name="secondPosExcel" value="<?php echo $secondPosExcel; ?>">
+		<input type="hidden" name="thirdPosExcel" value="<?php echo $thirdPosExcel; ?>">
+		<input type="hidden" name="regionExcel" value="<?php echo $regionExcel; ?>">
+		<input type="hidden" name="valueExcel" value="<?php echo $valueExcel; ?>">
+		<input type="hidden" name="yearExcel" value="<?php echo base64_encode(json_encode($yearExcel)); ?>">
+		<input type="hidden" name="currencyExcel" value="<?php echo base64_encode(json_encode($currencyExcel)); ?>">
+		<input type="hidden" name="title" value="<?php echo $title; ?>">
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%">
+		
+		
+	</form>
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm">
@@ -95,6 +110,69 @@
 		</div>
 	</div>
 
+
+
 	<div id="vlau"></div>
 
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+
+			ajaxSetup();
+
+			$("#excel").click(function(event){
+
+				var firstPosExcel = "<?php echo $firstPosExcel; ?>";
+				var secondPosExcel = "<?php echo $secondPosExcel; ?>";
+				var thirdPosExcel = "<?php echo $thirdPosExcel; ?>";
+				var regionExcel = "<?php echo $regionExcel; ?>";
+				var valueExcel = "<?php echo $valueExcel; ?>";
+				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
+				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var title = "<?php echo $title; ?>";
+
+				var div = document.createElement('div');
+				var img = document.createElement('img');
+				img.src = '/loading_excel.gif';
+				div.innerHTML = "Generating Excel...<br/>";
+				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+				div.appendChild(img);
+				document.body.appendChild(div);
+
+				$.ajax({
+					xhrFields: {
+						responseType: 'blob',
+					},
+					url: "/generate/excel/yoyMonth",
+					type: "POST",
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel},
+					success: function(result, status, xhr){
+						alert("foi");
+						/*var disposition = xhr.getResponseHeader('content-disposition');
+				        var matches = /"([^"]*)"/.exec(disposition);
+				        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						// The actual download
+				        var blob = new Blob([result], {
+				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        });
+				        var link = document.createElement('a');
+				        link.href = window.URL.createObjectURL(blob);
+				        link.download = filename;
+
+				        document.body.appendChild(link);
+
+				        link.click();
+				        document.body.removeChild(link);*/
+				        document.body.removeChild(div);
+					},
+					error: function(xhr, ajaxOptions,thrownError){
+                        alert(xhr.status+" "+thrownError);
+				        document.body.removeChild(div);
+                    }
+				});
+			});
+
+		});
+	</script>
 @endsection

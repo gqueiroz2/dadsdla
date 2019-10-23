@@ -60,7 +60,16 @@ class resultsMQController extends Controller{
 
                 $region = $r->getRegion($con,false);
                 $currency = $pr->getCurrency($con,false);
+                
                 $regionID = Request::get('region');
+
+                $tmp = $r->getRegion($con,array($regionID));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{
+                        $salesRegion = $tmp['name'];
+                }
 
                 $brandTmp = Request::get('brand');
                 $brandID = $base->handleBrand($brandTmp);
@@ -83,13 +92,35 @@ class resultsMQController extends Controller{
 
                 $form = $mq->TruncateName($secondPos);
 
-                $salesRegion = $r->getRegion($con, array($regionID));
-
-                $salesRegion = $salesRegion[0]['name'];
-
                 $rName = $mq->TruncateRegion($salesRegion);
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'year', 'brandID', 'firstPos', 'secondPos', 'tmp'));
+                $regionExcel = $regionID;
+                $yearExcel = $year;
+                $firstPosExcel = $firstPos;
+                $secondPosExcel = $secondPos;
+                $currencyExcel = $tmp;
+                $valueExcel = $value;
+
+                $title = $salesRegion." - Month.xlsx";
+
+
+
+                /*var_dump("firstPosExcel");
+                var_dump($firstPosExcel);
+                var_dump("secondPosExcel");
+                var_dump($secondPosExcel);
+                var_dump("regionExcel");
+                var_dump($regionExcel);
+                var_dump("valueExcel");
+                var_dump($valueExcel);
+                var_dump("yearExcel");
+                var_dump($yearExcel);
+                var_dump("currencyExcel");
+                var_dump($currencyExcel);
+                var_dump("title");
+                var_dump($title);*/
+
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 
 
@@ -112,7 +143,6 @@ class resultsMQController extends Controller{
 	}
 
 	public function postQuarter(){
-
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
@@ -168,7 +198,16 @@ class resultsMQController extends Controller{
 
                 $rName = $mq->TruncateRegion($region);
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName'));
+                $regionExcel = $regionID;
+                $yearExcel = $year;
+                $firstPosExcel = $source;
+                $secondPosExcel = $form;
+                $currencyExcel = $pRate;
+                $valueExcel = $value;
+
+                $title = $rName." - Quarter.xlsx";
+
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','title'));
 
 	} 
 

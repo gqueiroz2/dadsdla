@@ -11,7 +11,7 @@ use App\pRate;
 
 class VPMonth extends pAndR {
 
-    public function insertUpdate($con, $oppid, $region, $currency, $value, $user, $year, $read, $date, $time, $fcstMonth, $manualEstimation, $manualEstimantionByClient, $list, $submit, $brandPerClient, $totalClient){
+    public function insertUpdate($con, $oppid, $region, $currency, $value, $user, $year, $read, $date, $time, $fcstMonth, $manualEstimation, $manualEstimantionByClient, $list, $submit, $brandPerClient, $totalClient, $percentage){
         
         $sql = new sql();
         $tmp = explode("-", $date);
@@ -56,7 +56,7 @@ class VPMonth extends pAndR {
 
         $result = $con->query($select);
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
-
+        
         if ($id && !is_null($id) && $submit == 0) {
 
             $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
@@ -78,7 +78,7 @@ class VPMonth extends pAndR {
             }
 
             $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,null,$manualEstimation,$tableFCSTSalesRep);
-            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient,$totalClient);
+            $updateFCSTClient = $this->updateFCSTClient($con,$oppid,$manualEstimation,$tableFCSTClient,$list,$brandPerClient,$totalClient,$percentage);
 
             return "Updated";
 
@@ -114,7 +114,7 @@ class VPMonth extends pAndR {
             }
 
             $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimation,$tableFCSTSalesRep);
-            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimantionByClient,$tableFCSTClient,$list,$brandPerClient, $totalClient);
+            $insertFCSTClient = $this->FCSTClient($con,$oppid,$manualEstimation,$tableFCSTClient,$list,$brandPerClient, $totalClient,$percentage);
 
             return "Created";
         }
@@ -170,7 +170,7 @@ class VPMonth extends pAndR {
         }
     }
 
-    public function updateFCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient,$totalClient){
+    public function updateFCSTClient($con,$oppid,$manualEstimation,$table,$list,$brandPerClient,$totalClient,$percentage){
 
         $sql = new sql();
 
@@ -181,18 +181,14 @@ class VPMonth extends pAndR {
         $result = $con->query($select);
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
-
+        
         for ($c=0; $c < sizeof($list); $c++) { 
-            
+                
             $div = 1;
             
-            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) {
+            for ($m=0; $m < sizeof($percentage[$c]); $m++) {
 
-                if ($manualEstimantion[$c][$m] == 0 || $totalClient[$c] == 0) {
-                    $valueClient = 0;
-                }else{
-                    $valueClient = ($manualEstimantion[$c][$m]/$totalClient[$c])*100;
-                }
+                $valueClient = $percentage[$c][$m] * $manualEstimation[$m];
 
                 $update[$c][$m] = "UPDATE $table SET value = \"".($valueClient)."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
 
@@ -207,7 +203,7 @@ class VPMonth extends pAndR {
         }
     }
 
-    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient,$totalClient){
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$brandPerClient,$totalClient,$percentage){
 
         $sql = new sql();
 
@@ -225,13 +221,9 @@ class VPMonth extends pAndR {
             
             $div = 1;
 
-            for ($m=0; $m < sizeof($manualEstimantion[$c]); $m++) {
+            for ($m=0; $m < sizeof($percentage[$c]); $m++) {
 
-                if ($manualEstimantion[$c][$m] == 0 || $totalClient[$c] == 0) {
-                    $valueClient = 0;
-                }else{
-                    $valueClient = ($manualEstimantion[$c][$m]/$totalClient[$c])*100;
-                }
+                $valueClient = $percentage[$c][$m] * $manualEstimantion[$m];
 
                 $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($valueClient)."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
 
@@ -245,6 +237,7 @@ class VPMonth extends pAndR {
                 }
             }
         }
+
     }
 
     public function base($con, $region, $regionID, $currencyID, $year, $value){
@@ -259,17 +252,17 @@ class VPMonth extends pAndR {
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE region_id = '$regionID' AND month = \"$actualMonth\" AND year = \"$year\" AND (type_of_forecast = 'V1' OR type_of_forecast = 'V1')";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted,type_of_forecast FROM forecast WHERE region_id = '$regionID' AND month = \"$actualMonth\" AND year = \"$year\" AND ((type_of_forecast = 'V1' AND submitted = '1') OR (type_of_forecast = 'V2'))";
 
         if ($regionID == "1") {
             $select .= " AND read_q = \"$week\"";
         }
 
-        $select .= " ORDER BY last_modify_date DESC";
+        $select .= " ORDER BY ID DESC";
         
         $result = $con->query($select);
 
-        $from = array("oppid","ID","type_of_value","currency_id");
+        $from = array("oppid","ID","type_of_value","currency_id","type_of_forecast","submitted");
 
         $save = $sql->fetch($result,$from,$from);
         
@@ -363,7 +356,7 @@ class VPMonth extends pAndR {
             $cYear = date('Y');
             $cMonth = date('n');
 
-            $auxSelect = "SELECT read_q FROM forecast WHERE (type_of_forecast = 'V2') AND (submitted = '1') AND read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND month = \"".$cMonth."\" AND year = '$year' ORDER BY ID DESC limit 1";
+            $auxSelect = "SELECT read_q FROM forecast WHERE (type_of_forecast = '".$save[0]["type_of_forecast"]."') AND (submitted = '1') AND read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND month = \"".$cMonth."\" AND year = '$year' ORDER BY ID DESC limit 1";
             $auxResult = $con->query($auxSelect);
             $auxFrom = array("read_q");
             $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
@@ -382,10 +375,11 @@ class VPMonth extends pAndR {
             }
             
             $id = $this->verifySaves($con,$sql,$regionID);
-
-            if ($id) {
+            $double = 0;
+            if (!is_null($id)) {
                 $type = 'V2';
-
+                $submit = $save[0]["submitted"];
+                
                 for ($m=0; $m < sizeof($month); $m++) { 
                 
                     $idSelect = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
@@ -393,9 +387,11 @@ class VPMonth extends pAndR {
                         $idSelect .= " AND read_q = (SELECT (MAX(read_q)) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
                     }
                     
+                    $idSelect .= " ORDER BY ID DESC";
+
                     $idResult = $con->query($idSelect);
                     $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
-
+                    
                     $selectV2[$m] = "SELECT SUM(value) AS value FROM forecast_sales_rep f WHERE f.month = \"".($m+1)."\" AND f.forecast_id = '".$idSaida[0]['ID']."'";
                     //var_dump($selectV2[$m]);
                     $resultV2[$m] = $con->query($selectV2[$m]);
@@ -421,19 +417,26 @@ class VPMonth extends pAndR {
 
                 }
 
+                if ($submit == "0") {
+                    $type = "V1";
+                    $submit = "1";
+                    $double = 1;
+                }
+
             }else{
                 $type = 'V1';
+                $submit = '1';
             }
 
-            $idSelect = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            $idSelect = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted=\"".$submit."\"";
             if ($regionID == "1") {
                 $idSelect .= " AND read_q = (SELECT (MAX(read_q)) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
             }
             
             $idResult = $con->query($idSelect);
             $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
-
-            $idPSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\"";
+            
+            $idPSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted='1'";
             if ($regionID == "1") {
                 $idPSelect .= " AND read_q = (SELECT (MAX(read_q)-1) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
             }
@@ -472,13 +475,13 @@ class VPMonth extends pAndR {
                         if ($valueCheck) {
                             $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m]*$multValue[$c];
 
-                            if ($type == "V1") {
+                            if ($type == "V1" && !$double) {
                                 $manualRolling[$m] += $rollingFCST[$c][$m]*$multValue[$c];
                             }
                         }else{
                             $fPastRollingFCST[$m] += $pastRollingFCST[$c][$m];
 
-                            if ($type == "V1") {
+                            if ($type == "V1" && !$double) {
                                 $manualRolling[$m] += $rollingFCST[$c][$m];
                             }
                         }
@@ -490,7 +493,7 @@ class VPMonth extends pAndR {
                         $pastRollingFCST[$c][$m] = 0;
                         $fPastRollingFCST[$m] = 0;
 
-                        if ($type == 'V1') {
+                        if ($type == 'V1' && !$double) {
                             $manualRolling[$m] = 0;
                         }
                         
@@ -513,18 +516,40 @@ class VPMonth extends pAndR {
 
             }
 
+            $totalPMonth = array(0,0,0,0,0,0,0,0,0,0,0,0);
+            for ($c=0; $c< sizeof($saida); $c++) { 
+                for ($m=0; $m <sizeof($saida[$c]); $m++) { 
+                    $totalPMonth[$m] += $saida[$c][$m]['value'];
+                }
+            }
+            
+            //calcula a porcentagem que cada cliente tem em cada mes
+            $percentage = array();
+            for ($c=0; $c < sizeof($saida); $c++) { 
+                for ($m=0; $m < sizeof($saida[$c]); $m++) {
+                    if ($totalPMonth[$m] != 0) {
+                        $percentage[$c][$m] = $saida[$c][$m]['value']/$totalPMonth[$m];
+                    }else{
+                        $percentage[$c][$m] = 0;
+                    }
+                }
+            }
+
             for ($m=0; $m < sizeof($month); $m++) { 
                 
                 if ($currencyCheck) {
                     
                     $fPastRollingFCST[$m] = ($fPastRollingFCST[$m]*$newCurrency)/$oldCurrency;
 
-                    if ($type == 'V1') {
+                    if ($type == 'V1' && !$double) {
                         $manualRolling[$m] = ($manualRolling[$m]*$newCurrency)/$oldCurrency;
                     }
                 }
 
             }
+
+            $brandsPerClient = $this->brandsPerClient($con,$sql,$idSaida,$listOfClients);
+
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
@@ -534,11 +559,23 @@ class VPMonth extends pAndR {
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
-            $pastRollingFCST = $this->addQuartersAndTotalOnArray($pastRollingFCST);
             
+            $pastRollingFCST = $this->addQuartersAndTotalOnArray($pastRollingFCST);
+
+            //executiveRevenueCYear
+
             $manualRolling = $this->addQuartersAndTotal($manualRolling);
+
+            $manualRolling = $this->addFcstWithBookingEx($executiveRevenueCYear,$manualRolling);
+
+            $manualRolling = $this->adjustFCSTEx($manualRolling);
+            
             $fPastRollingFCST = $this->addQuartersAndTotal($fPastRollingFCST);
             
+            $fPastRollingFCST = $this->addFcstWithBookingEx($executiveRevenueCYear,$fPastRollingFCST);
+
+            $fPastRollingFCST = $this->adjustFCSTEx($fPastRollingFCST);
+
             $lastRollingFCST = $this->rollingFCSTByClient($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients);//Ibms meses fechados e fw total
 
             $tmp1 = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$lastRollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
@@ -546,8 +583,10 @@ class VPMonth extends pAndR {
             $tmp2 = $tmp1['fcstAmount'];
 
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
-
+            
             $lastRollingFCST = $this->addFcstWithBooking($lastRollingFCST,$tmp2);
+
+            $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
             $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
 
@@ -556,8 +595,11 @@ class VPMonth extends pAndR {
             $executiveRF = $this->consolidateAEFcst($rollingFCST);
 
             $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
+
             $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
+
             $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+
             $targetAchievement = $this->divArrays($executiveRF,$targetValues);
 
             $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
@@ -573,6 +615,7 @@ class VPMonth extends pAndR {
             }else{
                 $valueView = 'Net Net';
             }
+
 
             $rtr = array(
                             "cYear" => $year,
@@ -607,6 +650,8 @@ class VPMonth extends pAndR {
                             "value" => $valueView,
                             "fcstAmountByStage" => $fcstAmountByStage,
                             "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                            "percentage" => $percentage,
+                            "brandsPerClient" => $brandsPerClient
                         );
 
         }else{
@@ -616,6 +661,31 @@ class VPMonth extends pAndR {
         return $rtr;
 
     }
+
+    public function adjustFCST($fcst){
+        for ($c=0; $c <sizeof($fcst) ; $c++) { 
+            $fcst[$c][3] = $fcst[$c][0] + $fcst[$c][1] + $fcst[$c][2];
+            $fcst[$c][7] = $fcst[$c][4] + $fcst[$c][5] + $fcst[$c][6];
+            $fcst[$c][11] = $fcst[$c][8] + $fcst[$c][9] + $fcst[$c][10];
+            $fcst[$c][15] = $fcst[$c][12] + $fcst[$c][13] + $fcst[$c][14];
+
+            $fcst[$c][16] = $fcst[$c][3] + $fcst[$c][7] + $fcst[$c][11] + $fcst[$c][15];
+        }
+
+        return $fcst;
+    }
+
+    public function adjustFCSTEx($fcst){
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+        return $fcst;
+    }
+
 
     public function adjustFcstAmountByStageEx($fcstAmountByStageEx){
 
@@ -833,7 +903,7 @@ class VPMonth extends pAndR {
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }
     }
 
@@ -1176,18 +1246,48 @@ class VPMonth extends pAndR {
     }
 
     public function addFcstWithBooking($booking,$fcst){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
 
         for ($c=0; $c < sizeof($booking); $c++) { 
             for ($f=0; $f < sizeof($booking[$c]); $f++) { 
-                
-                $sum[$c][$f] = $booking[$c][$f];
-                
-                if($fcst[$c]){
-                    $sum[$c][$f] += $fcst[$c][$f];
+                if ($f<$date) {
+                    $sum[$c][$f] = $booking[$c][$f];
+                }else{
+                    $sum[$c][$f] = $fcst[$c][$f];
                 }
-                
             }
         }        
+
+        return $sum;
+    }
+    public function addFcstWithBookingEx($booking,$fcst){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($f=0; $f < sizeof($booking); $f++) { 
+            if ($f<$date) {
+                $sum[$f] = $booking[$f];
+            }else{
+                $sum[$f] = $fcst[$f];
+            }
+        }
 
         return $sum;
     }
@@ -1446,11 +1546,13 @@ class VPMonth extends pAndR {
             $select[$m] = "SELECT SUM($ytdColumn) AS sumValue
                                 FROM ytd
                                 WHERE  (month = \"".$month[$m][1]."\")
-                                AND (year = \"".$year."\")";
+                                AND (year = \"".$year."\")
+                                AND (sales_representant_office_id = \"".$region."\")";
 
             $selectFW[$m] = "SELECT SUM($fwColumn) AS sumValue 
                                 FROM fw_digital
                                 WHERE (month = \"".$month[$m][1]."\")
+                                AND (region_id = \"".$region."\")
                                 AND (year = \"".$year."\")";            
 
             $res[$m] = $con->query($select[$m]);
@@ -1470,12 +1572,27 @@ class VPMonth extends pAndR {
         return $rev;
     }
 
+    public function fixFW($con,$pr,$region,$year,$base){
+
+        $oldCurrency = $base->generateDiv($con,$pr,$region,array($year),'1');
+        $newCurrency = $base->generateDiv($con,$pr,$region,array(date('Y')),'1');
+
+        return $newCurrency/$oldCurrency;
+    }
+
     public function revenueByClient($con,$sql,$base,$pr,$regionID,$year,$month,$currency,$currencyID,$value,$clients,$cYear){
 
         if($currency == "USD"){
+            if ($regionID == '1' && date('Y') != $year) {
+                $divDig = $this->fixFW($con,$pr,$regionID,$year,$base);
+            }else{
+                $divDig = 1;
+            }
             $div = 1;
         }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year));
+
+            $divDig = $base->generateDiv($con,$pr,$regionID,array($cYear),$currency);
         }
 
         if($value == "gross"){
@@ -1502,6 +1619,7 @@ class VPMonth extends pAndR {
                                 WHERE (client_id = \"".$clients[$c]['clientID']."\")
                                 AND (month = \"".$month[$m][1]."\")                                    
                                 AND (year = \"".$year."\")
+                                AND (sales_representant_office_id = \"".$regionID."\")
 
                               ";
                 $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
@@ -1509,6 +1627,7 @@ class VPMonth extends pAndR {
                                 WHERE (client_id = \"".$clients[$c]["clientID"]."\")
                                 AND (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
+                                AND (region_id = \"".$regionID."\")
                                 ";
 
                 $res[$c][$m] = $con->query($select[$c][$m]);
@@ -1517,7 +1636,7 @@ class VPMonth extends pAndR {
                 $from = array("sumValue");
 
                 $rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
-                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;                    
+                $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$divDig;                    
 
                 if(!is_null($revFW[$c][$m])){
                     $rev[$c][$m] += ($revFW[$c][$m]);
@@ -1614,5 +1733,21 @@ class VPMonth extends pAndR {
         return $resp;
 
     }
+
+    public function brandsPerClient($con,$sql,$id,$listOfClients){
+        $from = array('brand');
+
+        for ($c=0; $c <sizeof($listOfClients); $c++) { 
+            $select[$c] = "SELECT DISTINCT brand FROM forecast_client WHERE forecast_id = \"".$id[0]["ID"]."\" AND client_id = \"".$listOfClients[$c]['clientID']."\"";
+            $res[$c] = $con->query($select[$c]);
+            $resp[$c] = $sql->fetch($res[$c],$from,$from)[0]['brand'];
+            if (!$resp[$c]) {
+                $resp[$c] = "";
+            }
+        }
+
+        return $resp;
+    }
+
 
 }

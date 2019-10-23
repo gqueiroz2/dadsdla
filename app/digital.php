@@ -8,8 +8,8 @@ use App\sql;
 use App\pRate;
 
 class digital extends Management {
-    
-    public function getWithFilter($con, $value, $where, $currency, $region, $order_by = 1){
+
+    public function getWithFilter($con, $value, $where, $currency, $region, $months, $order_by = 1){
         
         $sql = new sql();
 
@@ -18,8 +18,10 @@ class digital extends Management {
         $columns = "d.ID AS 'id',
                     c.name AS 'client',
                     a.name AS 'agency',
+                    sr.name AS 'sales_rep',
                     d.campaign AS 'campaign',
                     d.insertion_order AS 'insertion_order',
+                    d.insertion_order_id AS 'insertion_order_id',
                     r.name AS 'region',
                     d.io_start_date AS 'io_start_date',
                     d.io_end_date AS 'io_end_date',
@@ -31,12 +33,13 @@ class digital extends Management {
                     d.content_targeting_set_name AS 'content_targeting_set_name',
                     d.ad_unit AS 'ad_unit',
                     d.month AS 'month',
-                    d.".$value."_revenue AS '".$value."_revenue',
+                    d.".$value."_revenue AS 'revenue',
                     d.commission AS 'commission',
                     b.name AS 'brand',
                     d.year AS 'year'";
 
-        $join = "LEFT JOIN client c ON c.ID = d.client_id
+        $join = "LEFT JOIN sales_rep sr ON sr.ID = d.sales_rep_id
+                 LEFT JOIN client c ON c.ID = d.client_id
                  LEFT JOIN agency a ON a.ID = d.agency_id
                  LEFT JOIN region r ON r.ID = d.region_id
                  LEFT JOIN currency cr ON cr.ID = d.currency_id
@@ -46,27 +49,31 @@ class digital extends Management {
             $where = "";
         }
 
-        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
+        $order_by = "year DESC";
 
-        $from = array('client', 'agency', 'campaign', 'insertion_order', 'region', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage',
-         'currency', 'placement', 'buy_type', 'content_targeting_set_name', $value.'_revenue', 'commission', 'brand', 'year');
+        $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
+        
+        $from = array('year', 'month', 'client', 'agency', 'campaign', 'insertion_order', 'insertion_order_id', 'region', 'sales_rep', 'io_start_date', 'io_end_date', 'agency_commission_percentage', 'rep_commission_percentage', 'placement', 'buy_type', 'content_targeting_set_name', 'ad_unit', 'revenue');
 
         $to = $from;
 
         $digital = $sql->fetch($result, $from, $to);
 
-        $p = new pRate();
-
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
+        if (is_array($digital)) {
+            $p = new pRate();
+        
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(date('Y')));
+            }
+            
+            for ($d=0; $d < sizeof($digital); $d++) {
+                $digital[$d]['month'] = $months[$digital[$d]['month']-1][2];
+                $digital[$d]['revenue'] *= $pRate;
+            }   
         }
-
-        for ($d=0; $d < sizeof($digital); $d++) { 
-            $digital[$d][$value.'_revenue'] /= $pRate;
-        }
-
+        
         return $digital;
     }
 

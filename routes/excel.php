@@ -15,9 +15,17 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
 
+		Route::post('quarter','excelController@resultsQuarter')
+									->name('quarterExcel');
+
 		Route::post('month','excelController@resultsMonth')
 									->name('monthExcel');
+
+		Route::post('yoyMonth','excelController@resultsYoYMonth')
+									->name('yoyMonthExcel');
 		
+		Route::post('summary','excelController@resultsSummary')
+									->name('summaryExcel');
 		});
 	});
 });

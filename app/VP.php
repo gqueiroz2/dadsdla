@@ -12,7 +12,7 @@ use App\base;
 use App\sql;
 class VP extends pAndR{
     
-    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$clients){
+    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$clients,$clientBrands){
 
         $base = new base();
         $sql = new sql();
@@ -75,7 +75,7 @@ class VP extends pAndR{
                 return $error;
             }
 
-            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update"); 
+            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update",$clientBrands); 
 
             return $bool;
 
@@ -103,14 +103,14 @@ class VP extends pAndR{
                 return $error;
             }
 
-            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert");  
+            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert",$clientBrands);  
 
             return $bool;
         }
  
     }
 
-    public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type){
+    public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type,$clientBrands){
         $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\"";
 
         $from = array("ID");
@@ -138,7 +138,7 @@ class VP extends pAndR{
 
                 for ($c=0; $c <sizeof($clients); $c++) { 
                     for($m=0; $m <sizeof($input[$c]); $m++) { 
-                        $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",NULL)";
+                        $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",\"".$clientBrands[$c]."\")";
                         
                         if ($con->query($input[$c][$m]) === true) {
 
@@ -153,15 +153,38 @@ class VP extends pAndR{
                 break;
             
             case 'update':
+
+                $columns = "(forecast_id,month,value,client_id,brand)";
+
+
                 for ($c=0; $c <sizeof($clients); $c++) { 
-                    for ($m=0; $m <sizeof($input[$c]); $m++) { 
-                        $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\"";
+                    for ($m=0; $m <sizeof($input[$c]); $m++) {
 
-                        if ($con->query($update[$c][$m]) === true) {
+                        $selectUpdate[$c][$m] = "SELECT value FROM forecast_client WHERE client_id = \"".$clients[$c]->clientID."\"  AND forecast_id = \"".$id."\" AND month = \"".($m+1)."\"";
 
+                        $res[$c][$m] = $con->query($selectUpdate[$c][$m]);
+
+                        $resp[$c][$m] = $sql->fetch($res[$c][$m],array("value"),array("value"));
+
+                        if ($resp[$c][$m]) {
+
+                            $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\" AND forecast_id = \"".$id."\"";
+
+                            if ($con->query($update[$c][$m]) === true) {
+
+                            }else{
+                                $error = ($con->error);
+                                return $error;
+                            }
                         }else{
-                            $error = ($con->error);
-                            return $error;
+                            $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",\"".$clientBrands[$c]."\")";
+                        
+                            if ($con->query($input[$c][$m]) === true) {
+
+                            }else{
+                                $error = ($con->error);
+                                return $error;
+                            }
                         }
                     }
                 }
@@ -195,7 +218,7 @@ class VP extends pAndR{
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }
     }
     public function base($con,$r,$pr,$cYear,$pYear){
@@ -211,11 +234,15 @@ class VP extends pAndR{
         }else{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
         }
+
+        $date = date('Y-m-d');
+
         $currentMonth = intval( date('m') );
 
-        $fcstInfo = $this->getForecast($con,$sql,$regionID);
+        $week = $this->weekOfMonth($date);
 
-        
+        $fcstInfo = $this->getForecast($con,$sql,$regionID,$currentMonth,$week);
+
         if(!$fcstInfo){
             return false;
         }else{
@@ -259,9 +286,16 @@ class VP extends pAndR{
         if ($id) {
             $fcstFullYearByClient = $this->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients);
             $fcstFullYearByClientAE = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+            $clientBrands = $this->fullYearByClient($con,$sql,"brand",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
+            for ($c=0; $c <sizeof($fcstFullYearByClient); $c++) { 
+                if ($fcstFullYearByClient[$c] == 0 && $fcstFullYearByClientAE[$c] != 0) {
+                    $fcstFullYearByClient[$c] = $fcstFullYearByClientAE[$c];
+                }
+            }
         }else{
             $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
             $fcstFullYearByClientAE = $fcstFullYearByClient;
+            $clientBrands = $this->fullYearByClient($con,$sql,"brand",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
         }
 
         $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
@@ -357,7 +391,8 @@ class VP extends pAndR{
                         "totalFullYearByClientAE" => $totalFullYearByClientAE,
                         "fcstFullYearAE" => $fcstFullYearAE,
                         "currencyName" => $currencyName,
-                        "valueView" => $valueView
+                        "valueView" => $valueView,
+                        "clientBrands" => $clientBrands
                     );
         return $rtr;
       
@@ -779,8 +814,8 @@ class VP extends pAndR{
                 }
                 $whereIn .= "))";
                 for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT f.sales_rep_id AS 'salesRepID', 
-                                             SUM(fc.value) AS 'revenue' 
+                    $selectSum[$c] = "SELECT f.sales_rep_id AS 'salesRepID',
+                                         SUM(fc.value) AS 'revenue' 
                                          FROM forecast_client fc
                                          JOIN forecast f ON f.ID = fc.forecast_id
                                          WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
@@ -842,7 +877,77 @@ class VP extends pAndR{
                     $sumRevenue[$c] += $tmp;                    
                 }
                 break;
-            
+            case 'brand':
+                $tmp = array();
+                for ($f=0; $f <sizeof($fcstInfo); $f++) {
+                    if ($f == 0) {
+                        array_push($tmp, $fcstInfo[$f]);
+                    }else{
+                        $check = true;
+                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
+                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
+                                $check = false;
+                                break;
+                            }
+                        }
+                        if ($check) {
+                            array_push($tmp, $fcstInfo[$f]);
+                        }
+                    }
+                }
+                $fcstInfo = $tmp;
+                $whereIn = "AND ( fc.forecast_id IN (";
+                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
+                    if ($f==0) {
+                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
+                    }else{
+                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
+                    }
+                }
+                $whereIn .= "))";
+                for ($c=0; $c < sizeof($listOfClients); $c++) { 
+                    $selectSum[$c] = "SELECT fc.brand AS 'brand'
+                                         FROM forecast_client fc
+                                         JOIN forecast f ON f.ID = fc.forecast_id
+                                         WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
+                                         AND (f.type_of_forecast = 'AE')
+                                         AND (fc.month >= ".intval($currentMonth).") $whereIn
+                                         AND (f.submitted = '1')
+                                 ";
+                    //echo "<pre>".($selectSum[$c])."</pre>";
+                    $res[$c] = $con->query($selectSum[$c]);
+                    $from = array("brand");
+                    $temp = $sql->fetch($res[$c],$from,$from);
+                    $sumRevenue[$c] = 0;
+                    $aux[$c] = array();
+                    if ($temp) {
+                        for ($t=0; $t <sizeof($temp) ; $t++) { 
+                            if ($temp[$t]['brand'] != "") {
+                                $var = explode(';', $temp[$t]['brand']);
+                                for ($v=0; $v <sizeof($var); $v++) { 
+                                    array_push($aux[$c], $var[$v]);
+                                }
+                            }
+                        }
+                    }
+                    $aux[$c] = array_unique($aux[$c]);
+                    $aux[$c] = array_values($aux[$c]);
+
+                    $sumRevenue[$c] = "";
+
+
+                    for ($a=0; $a<sizeof($aux[$c]); $a++) { 
+                        if ($a == 0) {
+                            $sumRevenue[$c] .= $aux[$c][$a];
+                        }else{
+                            $sumRevenue[$c] .= ";".$aux[$c][$a];
+                        }
+                    }
+                }
+
+
+                break;
+
             default:
                 # code...
                 break;
@@ -908,7 +1013,8 @@ class VP extends pAndR{
         
         return ($a['client'] < $b['client']) ? -1 : 1;
     }
-    public function getForecast($con,$sql,$regionID){
+
+    public function getForecast($con,$sql,$regionID,$month,$week){
         $select = " SELECT f.ID AS 'ID',
                            f.oppid AS 'oppid',
                            f.region_id AS 'region_id',
@@ -929,8 +1035,16 @@ class VP extends pAndR{
                            LEFT JOIN sales_rep sr ON f.sales_rep_id = sr.ID
                            WHERE(region_id = \"".$regionID."\") 
                            AND (submitted = '1')
-                           ORDER BY ID DESC
+                           AND (type_of_forecast = 'AE')
+                           AND (month = \"".date('m')."\")
                   ";
+
+        if ($regionID == "1") {
+            $select .= "AND (read_q = \"".$week."\")";
+        }
+
+        $select .= "ORDER BY ID DESC";
+
         //echo "<pre>".($select)."</pre>";
         $res = $con->query($select);
         //var_dump($res);

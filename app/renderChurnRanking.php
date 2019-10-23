@@ -72,13 +72,13 @@ class renderChurnRanking extends Render {
             for ($t=0; $t < sizeof($total); $t++) {
             	if (is_numeric($total[$t])) {
             		if ($type == "agency") {
-            			if ($t == 5 || $t == 11) {
+            			if ($t == 6) {
             				echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
             			}else{
             				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
             			}
             		}else{
-        				if ($t == 4 || $t == 10) {
+        				if ($t == 5) {
         					echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";	
         				}else{
         					echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";	

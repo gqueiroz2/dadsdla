@@ -20,6 +20,29 @@
 		  margin-bottom: 12px; /* Add some space below the input */
 		  text-align: center;
 		}
+		#loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
     </style>
 @endsection
 @section('content')
@@ -75,63 +98,67 @@
 		</div>
 	</form>
 	<br>
-	<div class="container-fluid">
-		<div class="row justify-content-end">
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>
-			<div class="col"></div>				
-			<div class="col">				
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
-				   AE Submissions
-				</button>
-			</div>
-		</div>
-
-		<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
-			@csrf
+	<div id="body" style="display: none;">
+		<div class="container-fluid">
 			<div class="row justify-content-end">
-				<div class="col-2">
-					<label> &nbsp;</label>
-					<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-						<label class="btn alert-primary active">
-						    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
-						</label>
-						<label class="btn alert-success">
-							<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
-						</label>
-					</div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>
+				<div class="col"></div>				
+				<div class="col">				
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
+					   AE Submissions
+					</button>
 				</div>
-				<div class="col-2">
-					<label> &nbsp; </label>
-					<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
-				</div>	
 			</div>
 
-
-			<div class="row justify-content-center mt-2">
-				@if($forRender)
-						<div class="col" style="width: 100%; padding-right: 2%;">
-							<center>
-								{{$render->VP1($forRender)}}
-							</center>
-						</div>
-				@else
-					<div class="col-8" style="width: 100%; padding-right: 2%;">
-						<div style="min-height: 100px;" class="alert alert-warning" role="alert">
-							<span style="font-size:22px;">
-								<center>
-								There is no submissions of Forecast from AE yet!
-								</center>
-							</span>
+			<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
+				@csrf
+				<div class="row justify-content-end">
+					<div class="col-2">
+						<label> &nbsp;</label>
+						<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+							<label class="btn alert-primary active">
+							    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
+							</label>
+							<label class="btn alert-success">
+								<input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
+							</label>
 						</div>
 					</div>
-				@endif
-					
-				
-			</div>
+					<div class="col-2">
+						<label> &nbsp; </label>
+						<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
+					</div>	
+				</div>
+
+
+				<div class="row justify-content-center mt-2">
+					@if($forRender)
+							<div class="col" style="width: 100%; padding-right: 2%;">
+								<center>
+									{{$render->VP1($forRender)}}
+								</center>
+							</div>
+					@else
+						<div class="col-8" style="width: 100%; padding-right: 2%;">
+							<div style="min-height: 100px;" class="alert alert-warning" role="alert">
+								<span style="font-size:22px;">
+									<center>
+									There is no submissions of Forecast from AE yet!
+									</center>
+								</span>
+							</div>
+						</div>
+					@endif
+				</div>		
+			</form>
 		</div>
-	</form>
+	</div>
+    <div id="loading">
+        Processing Request...
+        <br>
+    </div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="aeSubmissions" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -185,8 +212,18 @@
 	  	</div>
 	</div>
 
+
+	<script>
+		$(document).ready(function(){
+			$("#loading").css('display',"none");
+            $("#body").css('display',"");
+		});	
+	</script>
+
+
 	@if($forRender)
 		<script>
+			var client = <?php echo json_encode($client); ?>;
 
 			function myFunc(){
 				var input, filter, table1, table2, tr1, tr2, td1, td2, i, txtValue;
@@ -215,6 +252,8 @@
 			}
 
 			$(document).ready(function(){
+				
+
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
 						$("#button").val("Save");
@@ -244,10 +283,10 @@
 				$(".col-c-18").css("width",$("#col-18").css("width"));
 				$(".col-c-19").css("width",$("#col-19").css("width"));
 
-				@for($c=0;$c< sizeof($client);$c++)
-					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
+				for(var c=0;c<client.length;c++){
+					$("#child-"+c).css("height",$("#parent-"+c).css("height"));
 					
-					$("#clientRF-Fy-"+{{$c}}).change(function(){
+					$("#clientRF-Fy-"+c).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -258,9 +297,9 @@
 
 						var temp2 = parseFloat(0);
 
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							temp2 += handleNumber($("#clientRF-Fy-"+{{$c2}}).val());
-						@endfor
+						for(var c2=0;c2<client.length;c2++){
+							temp2 += handleNumber($("#clientRF-Fy-"+c2).val());
+						}
 
 						temp2 = Comma(temp2);
 
@@ -271,15 +310,15 @@
 						var tmp1;
 						var tmp2;
 
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							tmp1 = handleNumber($("#closed-Fy-"+{{$c2}}).val());
-							tmp2 = handleNumber($("#booking-Fy-"+{{$c2}}).val());
+						for(var c2=0;c2<client.length;c2++){
+							tmp1 = handleNumber($("#closed-Fy-"+c2).val());
+							tmp2 = handleNumber($("#booking-Fy-"+c2).val());
 							if (tmp1 > tmp2) {
 								temp2 += tmp1;
 							}else{
 								temp2 += tmp2;
 							}
-						@endfor
+						}
 
 						temp2 = Comma(temp2);
 
@@ -287,7 +326,7 @@
 
 
 					});
-					$("#clientRF-Cm-"+{{$c}}).change(function(){
+					$("#clientRF-Cm-"+c).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -298,15 +337,15 @@
 
 						var temp2 = parseFloat(0);
 						
-						@for($c2=0;$c2<sizeof($client);$c2++)
-							temp2 += handleNumber($("#clientRF-Cm-"+{{$c2}}).val());
-						@endfor
+						for(var c2=0;c2<client.length;c2++){
+							temp2 += handleNumber($("#clientRF-Cm-"+c2).val());
+						}
 
 						temp2 = Comma(temp2);
 
 						$("#RF-Total-Cm").val(temp2);
 					});
-				@endfor
+				}
 			});
 
 			function handleNumber(number){

@@ -10,101 +10,68 @@ use App\planByBrand;
 use App\ytd;
 use App\cmaps;
 use App\digital;
+use App\base;
+use App\pRate;
 
 class generateExcel extends Model {
-    
-	public function month($sheet, $mtx, $brands, $currency, $value, $year, $form, $region){
 
-		$startLetter = 'A';
-		$letter = $startLetter;
+	public function selectData($con, $region, $years, $brands, $form, $currency, $value, $months){
 
-		$head = $region."- Month : ".$form." - ".$year." (".$currency[0]['name']."/".strtoupper($value).")";
-
-		$sheet->setCellValue($letter.'1', $head);
-		$sheet->getStyle($letter.'1')->getFont()->setSize(20);
-
-		$headStyle = [
-		    'font' => [
-		        'bold' => true,
-		        'name' => 'Verdana',
-		        'size' => 7,
-		        'color' => array('rgb' => 'FFFFFF')
-		    ],
-		    'alignment' => [
-		        'horizontal' => 'center',
-		        'vertical' => 'center',
-		        'wrapText' => true
-		    ],
-		    'fill' => [
-		        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-		        'startColor' => [
-		            'argb' => '0070c0',
-		        ],
-		    ],
-		];
-
-		foreach ($mtx[0][0] as $key => $val) {
-            $sheet->setCellValue($letter.'3', $key);
-            $sheet->getStyle($letter.'3')->applyFromArray($headStyle);
-            $letter++;    
-        }
-
-        $letter = $startLetter;
-
-		return $sheet;
-	}
-
-	public function selectDataMonth($con, $region, $year, $brands, $form, $currency, $value){
-		
 		for ($b=0; $b < sizeof($brands); $b++) { 
-			$brand_id[$b] = $brands[$b][0];
+			$brand_id[$b] = $brands[$b]['id'];
 		}
+
+		array_push($brand_id, '13');
+		array_push($brand_id, '14');
+		array_push($brand_id, '15');
+		array_push($brand_id, '16');
 
 		$sql = new sql();
 
-		if ($form == "TARGET" || $form == "CORPORATE" || $form == "ACTUAL") {
+		if (($form == "TARGET" || $form == "CORPORATE" || $form == "ACTUAL") || is_array($form)) {
 
 			$cols = array("sales_office_id", "year", "brand_id", "source", "currency_id", "type_of_revenue");
-			$colsValue = array($region, $year, $brand_id, $form, $currency[0]['id'], $value);
+			$colsValue = array($region, $years, $brand_id, $form, '4', $value);
 
 			$where = $sql->where($cols, $colsValue);
 
 			$p = new planByBrand();
 
-			$values = $p->getWithFilter($con, $where, $currency, $region);
+			$values = $p->getWithFilter($con, $where, $currency, $region, $months);
 
 		}elseif ($form == "ytd") {
 			
 			$cols = array("sales_representant_office_id", "year", "brand_id");
-			$colsValue = array($region, $year, $brand_id);
+			$colsValue = array($region, $years, $brand_id);
 
 			$where = $sql->where($cols, $colsValue);
 
 			$y = new ytd();
 
-			$values = $y->getWithFilter($con, $value, $currency, $region, $where);
+			$values = $y->getWithFilter($con, $value, $currency, $region, $where, $months);
 
 		}else{
 
 			$cols = array("year", "brand_id");
-			$colsValue = array($year, $brand_id);
+			$colsValue = array($years, $brand_id);
 
 			$where = $sql->where($cols, $colsValue);
 
 			$c = new cmaps();
 
-			$values = $c->getWithFilter($con, $value, $region, $currency, $where);
+			$values = $c->getWithFilter($con, $value, $region, $currency, $where, $months);
 		}
 
-		if ($form != "TARGET" && $form != "CORPORATE" && $form != "ACTUAL") {
-			$cols = array("d.region_id", "year", "brand_id", "currency_id");
-			$colsValue = array($region, $year, $brand_id, $currency[0]['id']);
+		if ($form != "TARGET" && $form != "CORPORATE" && $form != "ACTUAL" && !is_array($form)) {
+			$cols = array("d.region_id", "year", "brand_id");
+			$colsValue = array($region, $years, $brand_id);
 
 			$where = $sql->where($cols, $colsValue);
 
 			$d = new digital();
 
-			$valuesDigital = $d->getWithFilter($con, $value, $where, $currency, $region);
+			$valuesDigital = $d->getWithFilter($con, $value, $where, $currency, $region, $months);
+
 		}else{
 			$valuesDigital = null;
 		}

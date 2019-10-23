@@ -87,6 +87,8 @@ class resultsYoYController extends Controller{
 
     	$render = new RenderYoY();
 
+        $regionID = $region;
+
         $region = $r->getRegion($con, array($region));
 
         if (sizeof($brands) > 1) {
@@ -97,7 +99,16 @@ class resultsYoYController extends Controller{
 
         $region = $region[0]['name'];
         $rName = $yoy->TRuncateRegion($region);
-        
-   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName'));
+
+        $regionExcel = $regionID;
+        $yearExcel = $year;
+        $firstPosExcel = $form;
+        $secondPosExcel = $source;
+        $thirdPosExcel = $form;
+        $currencyExcel = $pRate[0];
+        $valueExcel = $value;
+        $title = $form." - YoY.xlsx";
+
+   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','thirdPosExcel','currencyExcel','valueExcel','title'));
     }
 }

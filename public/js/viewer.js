@@ -6,6 +6,7 @@ $(document).ready(function(){
     ajaxSetup();
 
 		if (regionID != "") {
+      $('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
       $.ajax({ 
         url:"/ajax/adsales/yearByRegion",
         method:"POST",
@@ -77,13 +78,47 @@ $(document).ready(function(){
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       */
-      $('#source').change(function(){
+      $('#sourceDataBase').change(function(){
+        var source = $(this).val();
+        if(source != ""){
+          $.ajax({
+            url:"/ajax/adsales/brandBySource",
+            method:"POST",
+            data:{source},
+              success: function(output){
+                $('#brand').html(output).selectpicker('refresh');
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });
+        }else{
+          $('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
+        }
 
+
+        var sourceDataBase = $('#sourceDataBase').val();
+        if(sourceDataBase == "CMAPS" || sourceDataBase == "SF"){
+          if(sourceDataBase == "CMAPS"){
+            $('#especificNumberName').html("PI:");
+          }else{
+            $('#especificNumberName').html("OPPID:");
+          }
+
+          $('#especificNumber').val("");
+          $('#especificNumberCol').css("display", "block");
+          $('#especificNumber').css("display", "block");
+
+        }else{
+          $('#especificNumber').val("0");
+          $('#especificNumberCol').css("display", "none");
+          $('#especificNumber').css("display", "none");
+        }
       });
 
 
       $.ajax({
-        url:"/ajax/adsales/salesRepByRegion",
+        url:"/ajax/adsales/newSalesRepByRegion",
         method:"POST",
         data:{regionID},
         success: function(output){
@@ -111,13 +146,24 @@ $(document).ready(function(){
         method:"POST",
         data:{regionID},
         success: function(output){
-          $('#vlau').html(output).selectpicker("refresh");
+          $('#client').html(output).selectpicker("refresh");
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
       });
 
+      $.ajax({
+        url:"/ajax/adsales/sourceByRegion",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#sourceDataBase').html(output).selectpicker("refresh");
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
 
       /*
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -142,11 +188,16 @@ $(document).ready(function(){
 		}else{
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);
+      $('#brand').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
+      $('#sourceDataBase').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#currency').empty().append(option);
       $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
       $('#value').empty().append("<option>Select Source</option>");
+      $('#especificNumber').val("0");
+      $('#especificNumberCol').css("display", "none");
+      $('#especificNumber').css("display", "none");
     }
 
 	});

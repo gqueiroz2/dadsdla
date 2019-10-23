@@ -35,10 +35,16 @@ class performanceExecutive extends performance
         $tier = Request::get('tier');
 
 
-        $tmp = array($year);
+        $tmp = array(date('Y'));
+        $tmp2 = array(date('Y'));
  		//valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$region,$tmp,$currency);
-        $div = 1/$div;
+
+        if ($currency == '4' && $region == '1' && date('Y') != $year) {
+            $divDig = $this->fixFW($con,$pr,$region,$year,$base);
+        }else{
+            $divDig = $base->generateDiv($con,$pr,$region,$tmp2,$currency);
+        }
 
         if ($region == '6' || $region == '7') {
             array_push($salesRep, '15');
@@ -115,12 +121,20 @@ class performanceExecutive extends performance
             }
         }
 
-        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div);
+        $mtx = $this->assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$regionView,$yearView,$currency,$valueView,$div,$divDig);
 
         return $mtx;
     }
 
-    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div){
+    public function fixFW($con,$pr,$region,$year,$base){
+
+        $oldCurrency = $base->generateDiv($con,$pr,$region,array($year),'1');
+        $newCurrency = $base->generateDiv($con,$pr,$region,array(date('Y')),'1');
+
+        return $newCurrency/$oldCurrency;
+    }
+
+    public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div,$divDig){
         $base = new base();
 
         $tmp1["values"] = array();
@@ -137,13 +151,22 @@ class performanceExecutive extends performance
             }
         }
 
-        for ($b=0; $b <sizeof($brand); $b++) { 
-            for ($m=0; $m <sizeof($month); $m++) { 
-                for ($s=0; $s <sizeof($salesRep) ; $s++) { 
-                    $tmp[$s][$b][$m] = $values[$b][$m][$s]/$div; 
-                    $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]/$div; 
+        for ($b=0; $b <sizeof($brand); $b++) {
+            if($brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX'){
+                for ($m=0; $m <sizeof($month); $m++) { 
+                    for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                        $tmp[$s][$b][$m] = $values[$b][$m][$s]*$divDig; 
+                        $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]*$divDig; 
+                    }
                 }
-            }
+            }else{
+                for ($m=0; $m <sizeof($month); $m++) { 
+                    for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                        $tmp[$s][$b][$m] = $values[$b][$m][$s]*$div; 
+                        $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]*$div; 
+                    }
+                }
+            }    
         }
 
         $values = $tmp;

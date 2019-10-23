@@ -11,12 +11,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <form method="POST" action="{{ route('resultsResumePost') }}" runat="server"  onsubmit="ShowLoading()">
+                <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
                     @csrf
                     <div class="row">                        
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
+
                             @if($errors->has('region'))
                                 <label style="color: red;">* Required</label>
                             @endif
@@ -27,20 +28,19 @@
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
                         </div>
+
+
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
-                            @if($errors->has('brand'))
+                            @if($errors->has('sourceDataBase'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> PI: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->piNumber($brand)}}
+                        <div class="col" id="especificNumberCol" style="display:none;">
+                            <label class="labelLeft"><span class="bold" id="especificNumberName"> PI: </span></label>
+                            {{$render->especificNumber($brand)}}
                         </div>
                         
                         <div class="col">
@@ -62,47 +62,36 @@
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->brand($brand)}}
+                            {{$render->brandViewer()}}
                         </div>
-                    
+                         
+                                            
+                    </div>
+
+                    <div class="row">
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->salesRep()}}
-                        </div>                        
-                    </div>
+                        </div>
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Agency:</span></label>
+                            @if($errors->has('agency'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->AgencyForm()}}
+                        </div>
 
-                    <div class="row">
                         <div class="col">
-                            <label class="labelLeft"><span class="bold"> Agency: </span></label>
-                            @if($errors->has('currency'))
+                            <label class='labelLeft'><span class="bold">Client:</span></label>
+                            @if($errors->has('client'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->agencyForm()}}
+                            {{$render->ClientForm()}}
                         </div>
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Client: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->clientForm()}}
-                        </div>                        
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Sector: </span></label>
-                            @if($errors->has('brand'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->sectorForm()}}
-                        </div>
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Category: </span></label>
-                            @if($errors->has('currency'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->categoryForm()}}                            
-                        </div>
+
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
                             @if($errors->has('currency'))
@@ -128,7 +117,7 @@
 
         <div class="row justify-content-end mt-2">
             <div class="col" style="color: #0070c0;font-size: 22px">
-                <span style="float: right; margin-right: 2.5%;"> Data Current Through: DD-MMM-YY () </span>
+                <span style="float: right; margin-right: 2.5%;"> Data Current Through: (<?php echo date('d/m/Y'); ?>) </span>
             </div>
 
             

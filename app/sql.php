@@ -184,15 +184,32 @@ class sql extends Model{
         for ($i=0; $i < sizeof($columns); $i++) { 
             if ($i == sizeof($columns)-1) {
                 if (is_array($variables[$i])) {
-                    $tmp = implode(",", $variables[$i]);
-                    $where .= "($columns[$i] IN ($tmp))";
+                    
+                    $where .= "($columns[$i] IN (";
+
+                    for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                        if ($v == sizeof($variables[$i])-1) {
+                            $where .= "\"".$variables[$i][$v]."\"))";
+                        }else{
+                            $where .= "\"".$variables[$i][$v]."\",";
+                        }
+                    }
+                    
                 }else{
                     $where .= "($columns[$i] = \"$variables[$i]\")";
                 }
             }else{
                 if (is_array($variables[$i])) {
-                    $tmp = implode(",", $variables[$i]);
-                    $where .= "($columns[$i] IN ($tmp)) AND ";
+
+                    $where .= "($columns[$i] IN (";
+                    
+                    for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                        if ($v == sizeof($variables[$i])-1) {
+                            $where .= "\"".$variables[$i][$v]."\")) AND ";
+                        }else{
+                            $where .= "\"".$variables[$i][$v]."\",";
+                        }
+                    }
                 }else{
                     $where .= "($columns[$i] = \"$variables[$i]\") AND ";
                 }

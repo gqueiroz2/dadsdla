@@ -28,7 +28,7 @@ class AE extends pAndR{
 
         if ($submit == "submit") {
             $submit = 1;
-            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\"";
+            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\" AND year = \"".$year."\"";
             if ($region == '1') {
                 $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
             }
@@ -42,6 +42,22 @@ class AE extends pAndR{
             if ($resSubmit != null) {
                 return "Already Submitted";
             }
+
+            $selectVP = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND month = \"".intval($month)."\" AND submitted = \"1\" AND region_id = \"".$region."\" AND type_of_forecast = \"V1\"";
+
+            if ($region == '1') {
+                $selectVP .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $resultsVP = $con->query($selectVP);
+            
+            $resVP = $sql->fetch($resultsVP,$from,$from)[0]["ID"];
+
+
+            if ($resVP != null) {
+                return "Already Submitted";
+            }
+
         }else{
             $submit = 0;
         }
@@ -169,7 +185,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\"";
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\" AND agency_id = \"".$list[$c]->agencyID."\"";
 
                     if ($con->query($update[$c][$m]) === true) {
                         
@@ -221,7 +237,7 @@ class AE extends pAndR{
 
         $id = $sql->fetch($result,$from,$from)[0]["ID"];
 
-        $columns = "(forecast_id,month,value,client_id,brand)";
+        $columns = "(forecast_id,month,value,client_id,brand,agency_id)";
         for ($c=0; $c <sizeof($list) ; $c++) {
             if ($splitted) {
                 if ($splitted[$c]->splitted) {
@@ -234,7 +250,7 @@ class AE extends pAndR{
             }
             if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
-                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\")";
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\",\"".$list[$c]->agencyID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
 
@@ -257,7 +273,7 @@ class AE extends pAndR{
         if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
             return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth));
+            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
         }
     }
 
@@ -452,8 +468,21 @@ class AE extends pAndR{
                 }
 
 
-                for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
+                for ($m=0; $m <12 ; $m++) {
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\"
+                                        AND f.agency_id = \"".$listOfClients[$c]["agencyID"]."\"
+                                        AND f.month = \"".($m+1)."\" 
+                                        AND f2.month = \"".$cMonth."\"  
+                                        AND f2.year = \"".$cYear."\"
+                                        AND f2.submitted = \"".$submitted."\"";
+
+                    if ($regionID == "1") {
+                        $select[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
+                    }else{
+                        $select[$c][$m] .= " AND ".$salesRepsOR." ";
+                    }
+
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
@@ -517,6 +546,7 @@ class AE extends pAndR{
 
             $tmp2 = $tmp1['fcstAmount'];
 
+            $emptyCheck = $this->checkEmpty($tmp2);
 
             $lastRollingFCST = $this->addQuartersAndTotalOnArray($lastRollingFCST);
 
@@ -539,6 +569,8 @@ class AE extends pAndR{
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $toRollingFCST = $fcst['fcstAmount'];
+
+            $emptyCheck = $this->checkEmpty($toRollingFCST);
 
             $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
 
@@ -619,6 +651,7 @@ class AE extends pAndR{
                         "fcstAmountByStage" => $fcstAmountByStage,
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
+                        "emptyCheck" => $emptyCheck,
                     );
 
         return $rtr;
@@ -658,6 +691,10 @@ class AE extends pAndR{
         $save = $sql->fetch($result,$from,$from);
         
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
+
+        if(sizeof($listOfClients) == 0){
+            return false;
+        }
 
         if (!$save) {
             $save = false;
@@ -765,19 +802,28 @@ class AE extends pAndR{
             if ($regionID == "1") {
                 $from2 = array("sales_reps");
 
-                $select2 = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\"";
+                for ($c=0; $c <sizeof($listOfClients); $c++) { 
+                    $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps FROM sf_pr WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\" AND client_id = \"".$listOfClients[$c]["clientID"]."\" AND stage != '5' AND stage != '6' AND stage != '7'";
 
-                $result2 = $con->query($select2);
+                    $result2[$c] = $con->query($select2[$c]);
 
-                $salesReps = $sql->fetch($result2,$from2,$from2);
+                    $salesReps[$c] = $sql->fetch($result2[$c],$from2,$from2);
 
-                $salesRepsOR = "( f2.sales_rep_id = \"".$salesReps[0]['sales_reps']."\"";
+                    if ($salesReps[$c]) {
+                        $salesRepsOR[$c] = "( f2.sales_rep_id = \"".$salesReps[$c][0]['sales_reps']."\"";
+        
+                        if (sizeof($salesReps[$c])>1) {
 
-                for ($s=1; $s < sizeof($salesReps) ; $s++) { 
-                    $salesRepsOR .= " OR f2.sales_rep_id = \"".$salesReps[$s]['sales_reps']."\"";
+                            for ($s=1; $s < sizeof($salesReps[$c]) ; $s++) { 
+                                $salesRepsOR[$c] .= " OR f2.sales_rep_id = \"".$salesReps[$c][$s]['sales_reps']."\"";
+                            }
+                        }
+
+                        $salesRepsOR[$c] .= ")";
+                    }else{
+                        $salesRepsOR[$c] = "";
+                    }
                 }
-
-                $salesRepsOR .= ")";
             }else{
                 $salesRepsOR = "sales_rep_id = \"".$salesRepID[0]."\"";
             }
@@ -798,7 +844,21 @@ class AE extends pAndR{
 
 
                 for ($m=0; $m <12 ; $m++) { 
-                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" AND f.month = \"".($m+1)."\" AND $salesRepsOR AND (f2.submitted = '$submitted') AND (f2.type_of_forecast = 'AE') AND f2.read_q = (SELECT MAX(f2.read_q) FROM forecast) AND f2.month = \"".$cMonth."\" AND f2.year = '$cYear'";
+                    $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                        AND f.month = \"".($m+1)."\" 
+                                        AND f2.month = \"".$cMonth."\"  
+                                        AND f2.year = \"".$cYear."\"
+                                        AND f2.submitted = \"".$submitted."\"";
+
+                    if ($regionID == "1") {
+                        $select[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
+                    }else{
+                        $select[$c][$m] .= " AND ".$salesRepsOR." ";
+                    }
+                    
+                    #echo "<pre>".$select[$c][$m]."</pre>";
+
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
@@ -868,6 +928,7 @@ class AE extends pAndR{
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
+            $emptyCheck = $this->checkEmpty($tmp2);
 
             //$lastRollingFCST = $this->closedMonth($lastRollingFCST,$clientRevenueCYear);
             //$lastRollingFCST = $this->adjustFCST($lastRollingFCST);
@@ -892,6 +953,8 @@ class AE extends pAndR{
             $rollingFCST = $this->adjustFCST($rollingFCST);
             
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
+
+            $emptyCheck = $this->checkEmpty($toRollingFCST);
 
             //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
             //$rollingFCST = $this->adjustFCST($rollingFCST);
@@ -962,11 +1025,35 @@ class AE extends pAndR{
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
                         "sourceSave" => $sourceSave,
+                        "emptyCheck" => $emptyCheck,
                     );
 
         return $rtr;
         
     }
+
+    public function checkEmpty($array){
+        $outArray = array();
+
+        for ($c=0; $c<sizeof($array); $c++) { 
+            if (!$array[$c]) {
+                $outArray[$c] = false;
+            }else{
+                $temp = 0;
+                for ($m=0; $m <sizeof($array[$c]);$m++) { 
+                    $temp += $array[$c][$m];
+                }    
+                if ($temp == 0) {
+                    $outArray[$c] = false;
+                }else{
+                    $outArray[$c] = true;
+                }
+            }
+        }
+
+        return $outArray;
+    }
+
 
     public function getBrandsClient($con,$clients,$salesRep){
 
@@ -1358,6 +1445,7 @@ class AE extends pAndR{
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
                         WHERE (client_id = \"".$list['clientID']."\")
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (year = \"".$year."\") 
                         AND (from_date > \"".$date."\")                 
                   ";
@@ -1398,6 +1486,7 @@ class AE extends pAndR{
         $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id != sales_rep_owner_id)
                         AND (stage != \"5\")                      
                         AND (stage != \"6\")                      
@@ -1420,6 +1509,7 @@ class AE extends pAndR{
             $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id = sales_rep_owner_id)
                         AND (stage != \"5\")                      
                         AND (stage != \"6\")                      
@@ -1464,8 +1554,9 @@ class AE extends pAndR{
 
         for ($c=0; $c < sizeof($clients); $c++) {
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
-            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
             
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
@@ -1695,7 +1786,7 @@ class AE extends pAndR{
             $month = array();
             for ($m = $start; $m <= $end; $m++) { 
                 array_push($month, $m);
-            }   
+            }
         }else{
             $month = false;
             if($year == $yearStart){
@@ -1709,7 +1800,7 @@ class AE extends pAndR{
                     array_push($month, $m);
                 }
             }
-        }        
+        }
 
         $month = $this->matchMonthWithArray($month);
         
@@ -1754,27 +1845,31 @@ class AE extends pAndR{
                                 SELECT oppid, from_date , to_date, year_from, year_to, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                                 FROM sf_pr
                                 WHERE (client_id = \"".$clients['clientID']."\")
+                                AND (agency_id = \"".$clients['agencyID']."\")
                                 AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                                 AND ( stage != '5')
                                 AND ( stage != '6')
                                 AND ( stage != '7')
-                                AND (year_from = \"".$year."\")
-                                AND (from_date > \"".$date."\")
-                              "; 
+                                AND (year_from = \"".$year."\")                                
+                                AND (from_date > \"".$date."\")";/*
+                                AND (year_to = \"".$year."\")
+                              "; */
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
                             SELECT oppid, from_date , to_date,year_from, year_to,stage , stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
+                            AND (agency_id = \"".$clients['agencyID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
                             AND (stage != '5' && stage != '6' && stage != '7')
-                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")
-                          ";
+                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")";/*
+                            AND (year_to = \"".$year."\")
+                          ";*/
         }
+
         $res = $con->query($select);
         $rev = $sql->fetch($res,$from,$to);
-
 
         if ($rev) {
             for ($r=0; $r <sizeof($rev); $r++) { 
@@ -1782,8 +1877,122 @@ class AE extends pAndR{
             }
         }
 
+        /*
+            AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+        */
+        if($rev){
+            for ($r=0; $r < sizeof($rev); $r++) { 
+                if($rev[$r]['yearFrom'] != $rev[$r]['yearTo']){
+                    $fromArray = $this->makeMonths("from",$rev[$r]['fromDate']);
+                    $toArray = $this->makeMonths("to",$rev[$r]['toDate']);
+                    $fromShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearFrom'],$fromArray);
+                    $toShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearTo'],$toArray);
+                    $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
+
+                    $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                }                
+            }
+        }
+
         return $rev;
 
+    }
+
+    public function aggregateShare($from,$to){
+        $sum = 0.0;
+        $sumFrom = 0.0;
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $sum += $from[$f];
+            $sumFrom += $from[$f];
+        }        
+
+        for ($t=0; $t < sizeof($to); $t++) { 
+            $sum += $to[$t];
+        }
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $shareByMonth[$f] = $from[$f]/$sum;
+        } 
+
+        $share = $sumFrom/$sum;
+
+        return $share;
+        var_dump($share);
+
+
+    }
+
+    public function calculateRespectiveShare($con,$sql,$regionID,$value,$year,$month){
+        $pastYear = intval($year) - 1;
+
+        $from = array("amount");
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            /*
+                SE O ANO DO FORECAST FOR O ANO SEGUINTE VERIFICA SE O MES DE FORECAST É MENOR QUE O MES ATUAL, SE FOR MAIOR DIMINUI O ANO PASSADO PARA PEGAR O VALOR NO ANO ANTERIOR E NAO NO CORRENTE
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear--;
+                }
+            }
+
+            $select[$m] = "SELECT SUM(".$value."_revenue_prate) AS 'amount'
+                       FROM ytd
+                       WHERE (sales_representant_office_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $selectFW[$m] = "SELECT SUM(".$value."_revenue) AS 'amount'
+                       FROM fw_digital
+                       WHERE (region_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $result[$m] = $con->query($select[$m]);
+            $resultFW[$m] = $con->query($selectFW[$m]);
+            $shareTV[$m] = $sql->fetch($result[$m],$from,$from)[0];
+            $shareFW[$m] = $sql->fetch($resultFW[$m],$from,$from)[0];
+            $share[$m] = $shareTV[$m]['amount'] + $shareFW[$m]['amount'];
+
+            /*
+                RETORNA O VALOR DO ANO PASSADO AO VALOR INICIAL
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear++;
+                }
+            }
+        }
+
+        return $share;
+
+    }
+
+    public function makeMonths($param,$m){
+
+        $temp = intval($m);
+        $mm = array();
+
+        if($param == "from"){
+            while($temp <= 12){
+                array_push($mm, $temp);
+                $temp++;
+            }
+        }else{
+            $start = 1;
+            while($start <= $temp){
+                array_push($mm, $start);
+                $start++;
+            }
+        }
+
+        return $mm;
     }
 
     public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
@@ -1830,6 +2039,7 @@ class AE extends pAndR{
                                             SELECT SUM($ytdColumn) AS sumValue
                                             FROM $table
                                             WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                            AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
                                             AND (sales_rep_id = \"".$salesRepID."\")
@@ -1840,6 +2050,7 @@ class AE extends pAndR{
                         $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                             FROM fw_digital
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                            AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                             AND (month = \"".$month[$m][1]."\")
                                             AND (year = \"".$year."\")
                                             AND (sales_rep_id = \"".$salesRepID."\")
@@ -1973,13 +2184,16 @@ class AE extends pAndR{
                                 SELECT SUM($ytdColumn) AS sumValue
                                 FROM $table
                                 WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                 AND (month = \"".$month[$m][1]."\")                                    
                                 AND (year = \"".$year."\")
 
                               ";
+
                 $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                 FROM $tableFW
                                 WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                 AND (month = \"".$month[$m][1]."\")
                                 AND (year = \"".$year."\")
                                 ";
@@ -2021,28 +2235,36 @@ class AE extends pAndR{
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID'
+    				   c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
     				FROM sf_pr s
-    				LEFT JOIN client c ON c.ID = s.client_id
+                    LEFT JOIN client c ON c.ID = s.client_id
+    				LEFT JOIN agency a ON a.ID = s.agency_id
     				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
                     AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
                     AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
     				ORDER BY 1
     	       ";   	
+        //var_dump($sf);
     	$resSF = $con->query($sf);
-    	$from = array("clientName","clientID");
+    	$from = array("clientName","clientID","agencyID","agencyName");
     	$listSF = $sql->fetch($resSF,$from,$from);
     	//GET FROM IBMS/BTS
     	$ytd = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID'
+    				   c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
     				FROM ytd y
     				LEFT JOIN client c ON c.ID = y.client_id
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    LEFT JOIN agency a ON a.ID = s.agency_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
     				AND (y.year = \"$cYear\" )
                     AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";
+        //var_dump($ytd);
     	$resYTD = $con->query($ytd);
     	$from = array("clientName","clientID");
     	$listYTD = $sql->fetch($resYTD,$from,$from);

@@ -52,7 +52,7 @@ class ytd extends Management{
             $where = $sql->where($colNames, $values);
         }
 
-        $order_by = 10;
+        $order_by = "year DESC";
 
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
@@ -68,7 +68,7 @@ class ytd extends Management{
         return $ytd;
     }
 
-    public function getWithFilter($con, $value, $currency, $region, $where, $order_by = 1){
+    public function getWithFilter($con, $value, $currency, $region, $where, $months, $order_by = 1){
         
         $sql = new sql();
 
@@ -76,12 +76,11 @@ class ytd extends Management{
 
         $columns = "ytd.ID AS 'id',
                     r.name AS 'campaign_sales_office',
-                    r.name AS 'sales_representant_office',
+                    r2.name AS 'sales_representant_office',
                     b.name AS 'brand',
                     sr.name AS 'sales_rep',
                     cl.name AS 'client',
                     agc.name AS 'agency',
-                    c.name AS 'campaign_currency',
                     ytd.year AS 'year',
                     ytd.month AS 'month',
                     ytd.brand_feed AS 'brand_feed',
@@ -91,46 +90,44 @@ class ytd extends Management{
                     ytd.spot_duration AS 'spot_duration',
                     ytd.impression_duration AS 'impression_duration',
                     ytd.num_spot AS 'num_spot',
-                    ytd.".$value."_revenue AS '".$value."_revenue',
-                    ytd.".$value."_revenue_prate AS '".$value."_revenue_prate'";
+                    ytd.".$value."_revenue_prate AS 'revenue'";
 
         $join = "LEFT JOIN region r ON r.ID = ytd.campaign_sales_office_id
                  LEFT JOIN region r2 ON r2.ID = ytd.sales_representant_office_id
                  LEFT JOIN brand b ON b.ID = ytd.brand_id
                  LEFT JOIN sales_rep sr ON sr.ID = ytd.sales_rep_id
                  LEFT JOIN client cl ON cl.ID = ytd.client_id
-                 LEFT JOIN agency agc ON agc.ID = ytd.agency_id
-                 LEFT JOIN currency c ON c.ID = ytd.campaign_currency_id";
-
+                 LEFT JOIN agency agc ON agc.ID = ytd.agency_id";
 
         if (is_null($where)) {
             $where = "";
         }
 
+        $order_by = "year DESC";
+
         $result = $sql->select($con, $columns, $table, $join, $where, $order_by);
 
-        $from = array('campaign_sales_office', 'sales_representant_office', 'brand', 'sales_rep', 'client', 'agency', 'campaign_currency',
-                      'year', 'month', 'brand_feed', 'client_product', 'order_reference', 'campaign_reference', 'spot_duration',
-                      'impression_duration', 'num_spot', $value.'_revenue', 
-                      $value.'_revenue_prate');
+        $from = array('campaign_sales_office', 'sales_representant_office', 'year', 'month', 'brand', 'brand_feed', 'sales_rep', 'client', 'client_product', 'agency', 'order_reference', 'campaign_reference', 'spot_duration', 'impression_duration', 'num_spot', 'revenue');
 
         $to = $from;
 
         $ytd = $sql->fetch($result, $from, $to);
 
-        $p = new pRate();
+        if (is_array($ytd)) {
+            $p = new pRate();
 
-        if ($currency[0]['name'] == 'USD') {
-            $pRate = 1.0;
-        }else{
-            $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
+            if ($currency[0]['name'] == 'USD') {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array(intval(date('Y'))));
+            }
+
+            for ($y=0; $y < sizeof($ytd); $y++) {
+                $ytd[$y]['month'] = $months[$ytd[$y]['month']-1][2];
+                $ytd[$y]['revenue'] *= $pRate;
+            }
         }
-
-        for ($y=0; $y < sizeof($ytd); $y++) { 
-            $ytd[$y][$value.'_revenue'] *= $pRate;
-            $ytd[$y][$value.'_revenue_prate'] *= $pRate;
-        }
-
+        
         return $ytd;
 
     }

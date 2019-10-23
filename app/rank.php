@@ -274,7 +274,20 @@ class rank extends Model{
                 }elseif(is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                         $resD[$y][$r]['total'] *= $pRateDigital;
+
+                        if (!is_null($type2)) {
+                            $obj = (object) [
+                                'id' => $resD[$y][$r][$type."ID"],
+                                'name' => $resD[$y][$r][$type],
+                                'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                            ];
+
+                            if ($this->existInSubArray($type2, $obj)) {
+                                array_push($type2, $obj);   
+                            }   
+                        }
                     }
+
                     $res[$y] = $resD[$y];
                 }
 
@@ -415,6 +428,25 @@ class rank extends Model{
                     }elseif(is_array($resD[$y])){
                         for ($r=0; $r < sizeof($resD[$y]); $r++) { 
                             $resD[$y][$r]['total'] *= $pRateDigital;
+
+                            if (!is_null($type2)) {
+                                if ($type == "agency") {
+                                    $obj = (object) [
+                                        'id' => $resD[$y][$r][$type."ID"],
+                                        'name' => $resD[$y][$r][$type],
+                                        'agencyGroup' => $resD[$y][$r]['agencyGroup'],
+                                    ];   
+                                }else{
+                                    $obj = (object) [
+                                        'id' => $resD[$y][$r][$type."ID"],
+                                        'name' => $resD[$y][$r][$type]
+                                    ];
+                                }
+
+                                if ($this->existInSubArray($type2, $obj)) {
+                                    array_push($type2, $obj);   
+                                }   
+                            }
                         }
                         $res[$y] = $resD[$y];
                     }

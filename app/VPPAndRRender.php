@@ -77,6 +77,7 @@ class VPPAndRRender extends PAndRRender{
 
         $currencyName = $forRender["currencyName"];
         $valueView = $forRender["valueView"];
+        $clientBrands = $forRender["clientBrands"];
 
         echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
         echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
@@ -84,6 +85,7 @@ class VPPAndRRender extends PAndRRender{
         echo "<input type='hidden' name='currency' value='".base64_encode(json_encode($currency))."'>";
         echo "<input type='hidden' name='value' value='".base64_encode(json_encode($value))."'>";
         echo "<input type='hidden' name='cYear' value='".base64_encode(json_encode($cYear))."'>";
+        echo "<input type='hidden' name='clientBrands' value='".base64_encode(json_encode($clientBrands))."'>";
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
@@ -432,8 +434,6 @@ class VPPAndRRender extends PAndRRender{
                 }
             echo "</table>";
         echo "</div>";
-
-           
         echo "</div>";
     }    
 

@@ -91,22 +91,34 @@ class rankingChurnController extends Controller {
 	  	
 	  	$finalValues = array();
 
-	  	for ($v=0; $v < sizeof($values); $v++) {
-	  		if (is_array($values[$v])) {
-	  			for ($v2=0; $v2 < sizeof($values[$v]); $v2++) {
-		  			if (!in_array($values[$v][$v2][$type], $finalValues)) {
-	                    array_push($finalValues, $values[$v][$v2][$type]);
-	                }
-		  		}
-	  		}
-	  	}
+	  	if ($type != "agency" && $type != "client") {
+            for ($r=0; $r < sizeof($values); $r++) {
+                if (is_array($values[$r])) {
+                    for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
+                        if ($rc->existInArray($finalValues, $values[$r][$r2][$type], $type)) {
+                            array_push($finalValues, $values[$r][$r2]);
+                        }
+                    }
+                }
+            }
+        }else{
+            for ($r=0; $r < sizeof($values); $r++) {
+                if (is_array($values[$r])) {
+                    for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
+                        if ($rc->existInArray($finalValues, $values[$r][$r2][$type."ID"], $type, true)) {
+                            array_push($finalValues, $values[$r][$r2]);  
+                        }
+                    }
+                }
+            }
+        }
 	  	
         $months2 = array();
         for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
             array_push($months2, $m);
         }
 
-		$valuesTotal = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);	
+		$valuesTotal = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months2, $years);
 
 		$matrix = $rc->assembler($values, $finalValues, $valuesTotal, $years, $type);
 

@@ -21,7 +21,7 @@ class Render extends Model{
     }
 
     public function clientForm(){
-        echo "<select id='client' name='client' style='width:100%;' class='form-control'>";
+        echo "<select class='selectpicker' id='client' name='client[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }
@@ -224,10 +224,7 @@ class Render extends Model{
         $arraySource = array("CMAPS","IBMS/BTS","FW","SF");
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select </option>";
-            for ($a=0; $a <sizeof($arraySource) ; $a++) {
-                echo "<option value='".$arraySource[$a]."'>".$arraySource[$a]."</option>";
-            }
+            echo "<option value=''> Select Region </option>";           
         echo "</select>";
 
     }
@@ -238,8 +235,8 @@ class Render extends Model{
     	echo "</select>";
     }
 
-    public function piNumber(){
-        echo "<input type='text' class='form-control'>";
+    public function especificNumber(){
+        echo "<input type='text' id='especificNumber' name='especificNumber' value='0' class='form-control' style='display: none;'>";
     }
 
     public function brand($brand){
@@ -253,6 +250,13 @@ class Render extends Model{
     		}
     		
     	echo "</select>";
+    }
+
+    public function brandViewer(){
+
+        echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+            echo "<option selected='true' value=''> Select a Region </option>";               
+        echo "</select>";
     }
 
     public function brandPerformance(){
@@ -304,7 +308,7 @@ class Render extends Model{
 
     public function salesRep(){
     	echo "<select id='salesRep'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
-    		//echo "<option value=''> Select Region </option>";
+    		echo "<option value=''> Select Region </option>";
 
     	echo "</select>";	
 

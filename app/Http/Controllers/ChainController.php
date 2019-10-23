@@ -78,10 +78,10 @@ class ChainController extends Controller{
 		switch ($table) {
 			case 'ytd':
 				unset($spreadSheet[0]);
-				unset($spreadSheet[1]);		
-				unset($spreadSheet[2]);		
+				unset($spreadSheet[1]);
+				unset($spreadSheet[2]);
 				$spreadSheet = array_values($spreadSheet);
-				for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+				for ($s=0; $s < sizeof($spreadSheet); $s++) {
 					if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
 						$pivot = $s;
 					}
@@ -90,7 +90,7 @@ class ChainController extends Controller{
 				$spreadSheet = array_values($spreadSheet);
 				break;
             case 'ytdFN':
-                unset($spreadSheet[0]);                
+                unset($spreadSheet[0]);
                 $spreadSheet = array_values($spreadSheet);
                 //$table = "ytd";
                 break;
@@ -112,8 +112,9 @@ class ChainController extends Controller{
 				$spreadSheet = array_values($spreadSheet);
 				break;	
             case 'fw_digital':
+                var_dump($spreadSheet[0]);
                 unset($spreadSheet[0]);
-                unset($spreadSheet[1]);
+                //unset($spreadSheet[1]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
             case 'sf_pr':
@@ -129,7 +130,10 @@ class ChainController extends Controller{
 		}
 
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
-
+        /*for ($i=0; $i < sizeof($spreadSheet); $i++) { 
+            var_dump($spreadSheet[$i]);
+        }*/
+        
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }

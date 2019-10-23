@@ -41,8 +41,6 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('/', 'rankingChurnController@post')
 				->name('churnPost');
 	});
-});
-
 Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('typeByRegion', 'ajaxController@typeByRegion');
 	Route::post('firstPosYear', 'ajaxController@firstPosYear');
@@ -55,4 +53,6 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('brandSubRanking', 'ajaxController@brandSubRanking');
 	Route::post('marketSubRanking', 'ajaxController@marketSubRanking');
 	Route::post('churnSubRanking', 'ajaxController@churnSubRanking');
+	Route::post('newSubRanking', 'ajaxController@newSubRanking');
+});
 });
