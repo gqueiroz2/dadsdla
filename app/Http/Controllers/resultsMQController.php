@@ -185,10 +185,10 @@ class resultsMQController extends Controller{
                 $yearExcel = $year;
                 $firstPosExcel = $source;
                 $secondPosExcel = $form;
-                $currencyExcel = $tmp;
+                $currencyExcel = $pRate;
                 $valueExcel = $value;
 
-                $title = $rName." - Month.xlsx";
+                $title = $rName." - Quarter.xlsx";
 
                 return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','title'));
 

@@ -88,10 +88,6 @@ class excelController extends Controller{
                 return Excel::download(new summaryExport($final, $report, $salesRegion, $BKGS), $title);
         }
 
-        public function resultsQuarter(){
-                $this->resultsMonth();
-        }
-
 	public function resultsMonth(){
                 
                 $db = new dataBase();
@@ -120,9 +116,6 @@ class excelController extends Controller{
                 $secondPos = Request::get("secondPosExcel");
 
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
-
-                var_dump($tmp);
-                /*
                 $currency[0]['id'] = $tmp[0]->id;
                 $currency[0]['name'] = $tmp[0]->name;
                 $currency[0]['region'] = $tmp[0]->region;
@@ -145,10 +138,7 @@ class excelController extends Controller{
                 $report[2] = "$salesRegion - (".$firstPos.") Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
 
                 return Excel::download(new monthExport($final, $report, $salesRegion), $title);
-                */
 
 	}
-
-
 
 }
