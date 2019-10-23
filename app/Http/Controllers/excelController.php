@@ -97,6 +97,7 @@ class excelController extends Controller{
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
+                //id da região
                 $region = Request::get("regionExcel");
 
                 $r = new region();
@@ -108,6 +109,7 @@ class excelController extends Controller{
                         $salesRegion = $tmp['name'];
                 }
 
+                //ano consultado
                 $years = json_decode(base64_decode(Request::get("yearExcel")));
 
                 $base = new base();
@@ -116,24 +118,26 @@ class excelController extends Controller{
                 $b = new brand();
                 $brands = $b->getBrand($con);
 
+                //primeira posição (target ou corporate)
                 $firstPos = Request::get("firstPosExcel");
+                //segunda posição (booking ou cmaps)
                 $secondPos = Request::get("secondPosExcel");
 
+                //currency da pesquisa
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
 
-                var_dump($tmp);
-                /*
                 $currency[0]['id'] = $tmp[0]->id;
                 $currency[0]['name'] = $tmp[0]->name;
                 $currency[0]['region'] = $tmp[0]->region;
 
+                //gross ou net
                 $value = Request::get("valueExcel");
+                //nome do excel e do relatorio
                 $title = Request::get("title");
 
                 $ge = new generateExcel();
                 
                 $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
-                
                 $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
                 
                 $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
@@ -145,9 +149,63 @@ class excelController extends Controller{
                 $report[2] = "$salesRegion - (".$firstPos.") Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
 
                 return Excel::download(new monthExport($final, $report, $salesRegion), $title);
-                */
 
 	}
+
+        public function resultsYoYMonth(){
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+                $region = Request::get("regionExcel");
+
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{  
+                        $salesRegion = $tmp['name'];
+                }
+
+                //ano consultado
+                $years = json_decode(base64_decode(Request::get("yearExcel")));
+
+                $base = new base();
+                $months = $base->month;
+
+                $b = new brand();
+                $brands = $b->getBrand($con);
+
+                //primeira posição (target ou corporate)
+                $firstPos = Request::get("firstPosExcel");
+                //segunda posição (booking ou cmaps)
+                $secondPos = Request::get("secondPosExcel");
+
+                //currency da pesquisa
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+                $currency[0]['id'] = $tmp->id;
+                $currency[0]['name'] = $tmp->name;
+                $currency[0]['region'] = $tmp->region;
+
+                //gross ou net
+                $value = Request::get("valueExcel");
+                //nome do excel e do relatorio
+                $title = Request::get("title");
+
+                $ge = new generateExcel();
+                
+                $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
+                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
+                
+                $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
+
+                $title = $salesRegion." - Month.xlsx";
+
+                $report[0] = "$salesRegion - TV Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[2] = "$salesRegion - (".$firstPos.") Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+   
+        }
 
 
 
