@@ -88,10 +88,6 @@ class excelController extends Controller{
                 return Excel::download(new summaryExport($final, $report, $salesRegion, $BKGS), $title);
         }
 
-        public function resultsQuarter(){
-                $this->resultsMonth();
-        }
-
 	public function resultsMonth(){
                 
                 $db = new dataBase();
@@ -125,7 +121,6 @@ class excelController extends Controller{
 
                 //currency da pesquisa
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
-
                 $currency[0]['id'] = $tmp[0]->id;
                 $currency[0]['name'] = $tmp[0]->name;
                 $currency[0]['region'] = $tmp[0]->region;

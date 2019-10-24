@@ -73,9 +73,9 @@
 					<span style="float: right;"> {{$rName}} - Quarter : {{$form}} - {{$year}} </span>
 				</div>
 				<div class="col-sm-2">
-					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+					<button type="button" class="btn btn-primary" style="width: 100%">
 						Generate Excel
-					</button>
+					</button>				
 				</div>
 			</div>	
 
