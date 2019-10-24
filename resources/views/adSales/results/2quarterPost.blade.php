@@ -88,11 +88,7 @@
 			</div>
 		</div>
 	</div>
-	<?php
 
-		var_dump($currencyExcel);
-
-	?>
 	<script type="text/javascript">
 
 		$(document).ready(function() {
@@ -121,7 +117,7 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/quarter",
+					url: "/generate/excel/month",
 					type: "POST",
 					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel},
 					success: function(result, status, xhr){
@@ -145,6 +141,7 @@
 					},
 					error: function(xhr, ajaxOptions,thrownError){
                         alert(xhr.status+" "+thrownError);
+				        document.body.removeChild(div);
                     }
 				});
 			});
