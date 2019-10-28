@@ -101,6 +101,7 @@
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
 				var title = "<?php echo $title; ?>";
+				var name = "Month";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -116,7 +117,7 @@
 					},
 					url: "/generate/excel/month",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, name},
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

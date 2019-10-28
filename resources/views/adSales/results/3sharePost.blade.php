@@ -21,7 +21,6 @@
 
 	</style>
 
-
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
@@ -56,12 +55,12 @@
 					<div class="row justify-content-center">
 					
 						<div class="col-sm">
-                                                        <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
-                                                        @if($errors->has('salesRepGroup'))
-                                                                <label style="color: red;">* Required</label>
-                                                        @endif
-                                                        {{$render->salesRepGroup($salesRepGroup)}}
-                                                </div>
+                            <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
+                            @if($errors->has('salesRepGroup'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->salesRepGroup($salesRepGroup)}}
+                        </div>
 						
 						<div class="col-sm">
 							<label class='labelLeft'>Sales Rep:</label>
@@ -81,10 +80,18 @@
 						</div>
 					</div>
 				</form>
-				<div class="row justify-content-end">
-
+				<div class="row justify-content-end mt-2">
+					<div class="col-sm"></div>
+					<div class="col-sm"></div>
+					<div class="col-sm"></div>
 					<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 						<span style="float: right;"> {{$rName}} - Share : {{$mtx["source"]}} - {{$mtx["year"]}} </span>
+					</div>
+
+					<div class="col-sm">
+						<button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+							Generate Excel
+						</button>				
 					</div>
 				</div>
 			</div>
@@ -116,6 +123,62 @@
 	?>
 	
 	<script type="text/javascript">
+
+		$(document).ready(function() {
+
+			ajaxSetup();
+
+			$("#excel").click(function(event){
+
+				var sourceExcel = "<?php echo $sourceExcel; ?>";
+				var regionExcel = "<?php echo $regionExcel; ?>";
+				var valueExcel = "<?php echo $valueExcel; ?>";
+				var yearExcel = "<?php echo $yearExcel; ?>";
+				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var title = "<?php echo $title; ?>";
+
+				var div = document.createElement('div');
+				var img = document.createElement('img');
+				img.src = '/loading_excel.gif';
+				div.innerHTML = "Generating Excel...<br/>";
+				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+				div.appendChild(img);
+				document.body.appendChild(div);
+
+				$.ajax({
+					xhrFields: {
+						responseType: 'blob',
+					},
+					url: "/generate/excel/share",
+					type: "POST",
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, sourceExcel},
+					success: function(result, status, xhr){
+						var disposition = xhr.getResponseHeader('content-disposition');
+				        var matches = /"([^"]*)"/.exec(disposition);
+				        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						// The actual download
+				        var blob = new Blob([result], {
+				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        });
+				        var link = document.createElement('a');
+				        link.href = window.URL.createObjectURL(blob);
+				        link.download = filename;
+
+				        document.body.appendChild(link);
+
+				        link.click();
+				        document.body.removeChild(link);
+				        document.body.removeChild(div);
+					},
+					error: function(xhr, ajaxOptions,thrownError){
+                        alert(xhr.status+" "+thrownError);
+				        document.body.removeChild(div);
+                    }
+				});
+			});
+
+		});
 
 		google.charts.load('current', {'packages':['corechart']});
 

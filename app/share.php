@@ -133,7 +133,7 @@ class share extends results{
             $salesRepGroupView = "All";
         }else{
             $salesRepGroupView = "";
-            for ($sg=0; $sg <sizeof($salesGroup) ; $sg++) { 
+            for ($sg=0; $sg < sizeof($salesGroup); $sg++) { 
                 if ($sg == 0) {
                     $salesRepGroupView .= $salesGroup[$sg]["name"];
                 }else{
@@ -164,8 +164,8 @@ class share extends results{
             }
         }
 
-        for ($m=0; $m <sizeof($sourceBrand); $m++) { 
-            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) { 
+        for ($m=0; $m < sizeof($sourceBrand); $m++) { 
+            for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) { 
                 //procura tabela para fazer a consulta (digital e OTH são em tabelas diferentes)
                 $table[$m][$b] = $this->defineTable($sourceBrand[$m][$b]);
                 //gera as colunas para o Where
@@ -176,7 +176,7 @@ class share extends results{
 
         //$where = $this->createWhere($sql,$source,$region,$year,$brand,$salesRep,$month);
         for ($m=0; $m < sizeof($sourceBrand); $m++) { 
-            for ($b=0; $b <sizeof($sourceBrand[$m]) ; $b++) {
+            for ($b=0; $b < sizeof($sourceBrand[$m]); $b++) {
                 $values[$m][$b] = 0;
             }
         }

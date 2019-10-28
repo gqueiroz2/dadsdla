@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\summaryExport;
 use App\Exports\monthExport;
+use App\Exports\yoyExport;
+use App\Exports\shareExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -74,7 +76,6 @@ class excelController extends Controller{
                 
                 $final = array($form => $firstTable[0], 'digital' => $firstTable[1], 'plan' => $planTable[0], 'pYtd' => $secondTable[0]);
                 
-                
                 $plans = implode(",", $plan);
 
                 $report[0] = "$salesRegion - TV Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
@@ -88,7 +89,7 @@ class excelController extends Controller{
                 return Excel::download(new summaryExport($final, $report, $salesRegion, $BKGS), $title);
         }
 
-	public function resultsMonth(){
+	public function resultsMQ(){
                 
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
@@ -137,19 +138,21 @@ class excelController extends Controller{
                 
                 $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
 
-                $title = $salesRegion." - Month.xlsx";
+                $name = Request::get("name");
 
-                $report[0] = "$salesRegion - TV Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$firstPos.") Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[0] = "$salesRegion - TV $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[2] = "$salesRegion - (".$firstPos.") $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
 
                 return Excel::download(new monthExport($final, $report, $salesRegion), $title);
 
 	}
 
         public function resultsYoY(){
+
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
+
                 $region = Request::get("regionExcel");
 
                 $r = new region();
@@ -207,14 +210,103 @@ class excelController extends Controller{
 
                 $title = $salesRegion." - ".$title;
 
-                $report[0] = "$salesRegion - TV YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$secondPos.") YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $name = Request::get("name");
 
+                $report[0] = "$salesRegion - TV YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[2] = "$salesRegion - (".$secondPos.") YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
 
-                return Excel::download(new monthExport($final, $report, $salesRegion), $title);
+                return Excel::download(new yoyExport($final, $report, $salesRegion), $title);
         }
 
+        public function resultsShare(){
 
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+
+                $region = Request::get("regionExcel");
+
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{  
+                        $salesRegion = $tmp['name'];
+                }
+
+                //ano consultado
+                $years = Request::get("yearExcel");
+
+                $base = new base();
+                $months = $base->month;
+
+                $b = new brand();
+                $brands = $b->getBrand($con);
+
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+                $currency[0]['id'] = $tmp->id;
+                $currency[0]['name'] = $tmp->name;
+
+                //gross ou net
+                $value = Request::get("valueExcel");
+                //nome do excel e do relatorio
+                $title = Request::get("title");
+                $source = Request::get("sourceExcel");
+
+                $ge = new generateExcel();
+
+                if ($source == "IBMS") {
+                        $newSource = "ytd";
+                }
+
+                $values = $ge->selectData($con, $region, $years, $brands, $newSource, $currency, $value, $months);
+
+                $final = array($newSource => $values[0], 'digital' => $values[1]);                
+
+                $report[0] = "$salesRegion - TV Share : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital Share : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+
+                return Excel::download(new shareExport($final, $report, $salesRegion), $title);
+        }
+
+        public function performanceCore(){
+                
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+
+                $region = Request::get("regionExcel");
+
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{  
+                        $salesRegion = $tmp['name'];
+                }
+
+                //ano consultado
+                $years = Request::get("yearExcel");
+
+                $base = new base();
+                $months = $base->month;
+
+                $b = new brand();
+                $brands = $b->getBrand($con);
+
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+                $currency[0]['id'] = $tmp->id;
+                $currency[0]['name'] = $tmp->name;
+
+                //gross ou net
+                $value = Request::get("valueExcel");
+                //nome do excel e do relatorio
+                $title = Request::get("title");
+
+                $ge = new generateExcel();
+        }
 
 }

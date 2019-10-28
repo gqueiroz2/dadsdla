@@ -74,6 +74,15 @@ class corePerformanceController extends Controller{
                 $salesRepGroup = $sr->getSalesRepGroup($con,null);
                 $currency = $pr->getCurrency($con,null);
                 $cYear = $mtx["year"];
-                return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear'));
+
+                $regionExcel = Request::get("region");
+                
+                $currencyExcel['id'] = Request::get("currency");
+                $currencyExcel['name'] = $mtx['currency'];
+                $yearExcel = $mtx['year'];
+                $valueExcel = Request::get("value");
+                $title = $mtx['region']." - Performance Individual.xlsx";
+
+                return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear', 'regionExcel', 'yearExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 }
