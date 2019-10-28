@@ -33,6 +33,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('core','excelController@performanceCore')
 									->name('coreExcel');
 
+		Route::post('share','excelController@resultsShare')
+									->name('shareExcel');
+
 		});
 	});
 });

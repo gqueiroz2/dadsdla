@@ -272,6 +272,7 @@ class excelController extends Controller{
                 return Excel::download(new shareExport($final, $report, $salesRegion), $title);
         }
 
+
         public function performanceCore(){
                 
                 $db = new dataBase();
