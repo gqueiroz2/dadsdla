@@ -147,7 +147,7 @@ class excelController extends Controller{
 
 	}
 
-        public function resultsYoYMonth(){
+        public function resultsYoY(){
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
                 $region = Request::get("regionExcel");
@@ -189,17 +189,30 @@ class excelController extends Controller{
 
                 $ge = new generateExcel();
                 
-                $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
-                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
+                $values = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
+                $values2 = $ge->selectData($con, $region, ($years-1), $brands, $firstPos, $currency, $value, $months);
+                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
                 
-                $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
+                for ($v2=0; $v2 <sizeof($values2[0]); $v2++) {
+                        array_push($values[0], $values2[0][$v2]); 
+                }
 
-                $title = $salesRegion." - Month.xlsx";
+                for ($v2=0; $v2 <sizeof($values2[1]); $v2++) {
+                        array_push($values[1], $values2[1][$v2]); 
+                }
 
-                $report[0] = "$salesRegion - TV Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$firstPos.") Month : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-   
+                unset($values2);
+
+                $final = array($firstPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
+
+                $title = $salesRegion." - ".$title;
+
+                $report[0] = "$salesRegion - TV YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[2] = "$salesRegion - (".$secondPos.") YoY : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+
+
+                return Excel::download(new monthExport($final, $report, $salesRegion), $title);
         }
 
 
