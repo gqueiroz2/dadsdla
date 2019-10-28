@@ -27,6 +27,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('summary','excelController@resultsSummary')
 									->name('summaryExcel');
 
+		Route::post('share','excelController@resultsShare')
+									->name('shareExcel');
+
 		});
 	});
 });

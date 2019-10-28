@@ -94,13 +94,14 @@ class shareController extends Controller{
 
         $rName = $s->TruncateRegion($mtx["region"]);
 
-        $brandExcel = $brand;
+        $brandExcel = $base->handleBrand(Request::get('brand'));
         $regionExcel = Request::get('region');
         $yearExcel = Request::get('year');
         $monthExcel = Request::get('month');
         $sourceExcel = Request::get('source');
         $currencyExcel = Request::get('currency');
         $valueExcel = Request::get('value');
+        $salesRepExcel = Request::get('salesRep');
 
         return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx','rName'));
     }

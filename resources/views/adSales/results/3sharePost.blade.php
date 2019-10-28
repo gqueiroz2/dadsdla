@@ -56,12 +56,12 @@
 					<div class="row justify-content-center">
 					
 						<div class="col-sm">
-                                                        <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
-                                                        @if($errors->has('salesRepGroup'))
-                                                                <label style="color: red;">* Required</label>
-                                                        @endif
-                                                        {{$render->salesRepGroup($salesRepGroup)}}
-                                                </div>
+                            <label class='labelLeft'><span class="bold">Sales Rep Group:</span></label>
+                            @if($errors->has('salesRepGroup'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->salesRepGroup($salesRepGroup)}}
+                        </div>
 						
 						<div class="col-sm">
 							<label class='labelLeft'>Sales Rep:</label>

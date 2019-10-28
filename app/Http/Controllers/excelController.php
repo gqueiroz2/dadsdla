@@ -215,6 +215,10 @@ class excelController extends Controller{
                 return Excel::download(new monthExport($final, $report, $salesRegion), $title);
         }
 
+        public function resultsShare(){
+                
+        }
+
 
 
 }
