@@ -26,8 +26,13 @@ class ChainController extends Controller{
         	return back()->withErrors($validator)->withInput();
         }
 
-    	$table = Request::get('tableTruncate');   	
+    	$table = Request::get('tableTruncate'); 
 
+        if($table == 'bts' || $table == 'ytdFN'){
+            $table = 'ytd';
+        }
+
+        
     	$db = new dataBase();
 		
 		$connections = array('firstMatch','secondMatch','thirdMatch');
@@ -76,13 +81,28 @@ class ChainController extends Controller{
 		$spreadSheet = $i->base();
 
 		switch ($table) {
+            case 'bts':
+                unset($spreadSheet[0]);
+                //unset($spreadSheet[1]);
+                //unset($spreadSheet[2]);
+                $spreadSheet = array_values($spreadSheet);
+                for ($s=0; $s < sizeof($spreadSheet); $s++) {
+                    if( $spreadSheet[$s][0] == "Grand Total"){
+                        $pivot = $s;
+                    }
+                }
+                if(isset($pivot) && $pivot){
+                    unset($spreadSheet[$pivot]);
+                    $spreadSheet = array_values($spreadSheet);
+                }
+                break;
 			case 'ytd':
 				unset($spreadSheet[0]);
 				unset($spreadSheet[1]);
 				unset($spreadSheet[2]);
 				$spreadSheet = array_values($spreadSheet);
 				for ($s=0; $s < sizeof($spreadSheet); $s++) {
-					if($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == ''){
+					if( ($spreadSheet[$s][0] == "Total" && $spreadSheet[$s][1] == '' && $spreadSheet[$s][2] == '') || $spreadSheet[$s][0] == "Grand Total"){
 						$pivot = $s;
 					}
 				}

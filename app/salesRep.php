@@ -216,6 +216,25 @@ class salesRep extends Management{
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;
 	}
+
+	public function getNewSalesRep($con,$salesRepName=false){
+		$sql = new sql();
+		$table = "sales_rep sr";
+		$columns = "sr.ID AS 'id',
+				sr.name AS 'salesRep',	
+				srg.name AS 'salesRepGroup',
+				srg.ID AS 'salesRepGroupID',
+				r.name AS 'region'";
+		$where = "WHERE ( sr.name = \"".$salesRepName."\" )";
+		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				 LEFT JOIN region r ON r.ID = srg.region_id";
+		$order = "srg.ID,sr.name";
+		$res = $sql->select($con,$columns,$table,$join,$where,$order);
+		$from = array('salesRep','region');
+		$salesRep = $sql->fetch($res,$from,$from);
+    	return $salesRep;
+	}
+
 	public function getSalesRepByRegion($con,$region=false,$notIN = false, $year){
 		$sql = new sql();
 		$table = "sales_rep sr";

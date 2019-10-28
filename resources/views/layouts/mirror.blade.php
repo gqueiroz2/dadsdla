@@ -119,11 +119,67 @@
 								<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> VP Month View </a>
 								 <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing Report </a>
 							</div>
-						</li>
+						</li>					
 
 					</ul>    
 
+					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
+						<li class="right nav-item dropdown dropleft">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> Settings </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<form method="GET" action="{{ route('logoutGet') }}">
+								@csrf
+									<input type="submit" class="dropdown-item" value="Logout">
+								</form>
+								@if($userLevel == "SU")
+									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
+								@endif
+								<a class="dropdown-item" href="{{ route('relationshipGet') }}"> RelationShip </a>
+								<a class="dropdown-item" href="{{ route('dataCurrentThrough') }}"> Data Current Through </a>
+							</div>
+						</li>
+					</ul>
+
 					<ul class="navbar-nav mr-right" style="margin-right: 3%;">
+						<div class="container-fluid" style="border: 2px solid black; height: auto;">
+                            <div class="row">
+                            	<div class="col">                            		
+	                            	<span style="font-size: 10px;"> Bem-vindo {{$userName}}.</span>
+	                            </div>
+	                        </div><!--
+	                        <div class="row">
+                            	<div class="col">                            		
+	                            	<span style="font-size: 10px; font-weight: bold;">DLA & DNAP AdSales Reporting </span>
+	                            </div>
+	                        </div>-->
+	                        <div class="row">
+                            	<div class="col" style="margin-top: -5px !important;">                            		
+	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sale Portal | Data Current Throught: </span>
+	                            </div>	                            
+                        	</div>
+                        	<div class="row">
+                            	<div class="col" style="margin-top: -10px !important;">                            		
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 25/10/2019 </span>
+	                            </div>	                            
+                        	</div>
+                        	<div class="row">
+                            	<div class="col" style="margin-top: -10px !important;">                            		
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 25/10/2019 </span>
+	                            </div>	                            
+                        	</div>
+                        	<div class="row">
+                            	<div class="col" style="margin-top: -10px !important;">                            		
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 28/10/2019 </span>
+	                            </div>	                            
+                        	</div>
+                        	<div class="row">
+                            	<div class="col" style="margin-top: -10px !important;">                            		
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 24/10/2019 </span>
+	                            </div>	                            
+                        	</div>
+                        	
+                        </div>     
+{{--
 						<li class="nav-item dropdown dropleft">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -137,7 +193,7 @@
 								<a class="dropdown-item" href="{{ route('relationshipGet') }}"> RelationShip </a>
 								<a class="dropdown-item" href="{{ route('dataCurrentThrough') }}"> Data Current Through </a>
 							</div>
-						</li>
+						</li> --}}
 					</ul>    
 				</div>
 			@else
