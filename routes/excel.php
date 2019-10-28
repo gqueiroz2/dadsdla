@@ -15,17 +15,23 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
 
-		Route::post('quarter','excelController@resultsQuarter')
+		Route::post('summary','excelController@resultsSummary')
+								->name('summaryExcel');
+
+		Route::post('month','excelController@resultsMQ')
+									->name('monthExcel');
+
+		Route::post('quarter','excelController@resultsMQ')
 									->name('quarterExcel');
 
-		Route::post('month','excelController@resultsMonth')
-									->name('monthExcel');
+		Route::post('share','excelController@resultsShare')
+									->name('shareExcel');
 
 		Route::post('yoy','excelController@resultsYoY')
 									->name('yoyExcel');
-		
-		Route::post('summary','excelController@resultsSummary')
-									->name('summaryExcel');
+
+		Route::post('core','excelController@performanceCore')
+									->name('coreExcel');
 
 		Route::post('share','excelController@resultsShare')
 									->name('shareExcel');

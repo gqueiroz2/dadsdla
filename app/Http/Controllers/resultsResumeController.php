@@ -137,7 +137,6 @@ class resultsResumeController extends Controller{
 
 		$years = array($cYear, $pYear);
 
-		
 		$regionExcel = $regionID;
 		$currencyExcel = $tmp;
 		$yearExcel = $years;

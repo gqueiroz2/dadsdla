@@ -103,7 +103,6 @@ class resultsMQController extends Controller{
 
                 $title = $salesRegion." - Month.xlsx";
 
-
                 return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 
@@ -190,7 +189,7 @@ class resultsMQController extends Controller{
                 $currencyExcel = $pRate;
                 $valueExcel = $value;
 
-                $title = $rName." - Quarter.xlsx";
+                $title = $region." - Quarter.xlsx";
 
                 return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','title'));
 

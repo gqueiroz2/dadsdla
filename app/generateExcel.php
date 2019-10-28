@@ -7,6 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\sql;
 use App\planByBrand;
+use App\planBySales;
 use App\ytd;
 use App\cmaps;
 use App\digital;
@@ -43,6 +44,18 @@ class generateExcel extends Model {
 			$where = $sql->where($cols, $colsValue);
 
 			$p = new planByBrand();
+
+			$values = $p->getWithFilter($con, $where, $currency, $region, $months);
+
+		}elseif ($form == "sales") {
+			
+			$cols = array("region", "year", "brand_id", "currency_id", "type_of_revenue");
+
+			$colsValue = array($region, $years, $brand_id, $currency, $value);
+
+			$where = $sql->where($cols, $colsValue);
+
+			$p = new planBySales();
 
 			$values = $p->getWithFilter($con, $where, $currency, $region, $months);
 

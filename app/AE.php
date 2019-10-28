@@ -1,4 +1,4 @@
-<?php
+        <?php
 
 namespace App;
 
@@ -119,7 +119,7 @@ class AE extends pAndR{
                       )";
 
 
-            $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+            $insertFCST = " INSERT INTO $tableFCST $columns VALUES $values";
 
             if ($con->query($insertFCST) === true) {
 

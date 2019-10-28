@@ -84,7 +84,7 @@ class shareController extends Controller{
 
         $sb = sizeof($brand);
 
-        for ($b=0; $b <$sb ; $b++) { 
+        for ($b=0; $b < $sb; $b++) { 
             if ($brand[$b]['name'] == "OTH") {
                 unset($brand[$b]);
             }
@@ -94,15 +94,14 @@ class shareController extends Controller{
 
         $rName = $s->TruncateRegion($mtx["region"]);
 
-        $brandExcel = $base->handleBrand(Request::get('brand'));
         $regionExcel = Request::get('region');
         $yearExcel = Request::get('year');
-        $monthExcel = Request::get('month');
         $sourceExcel = Request::get('source');
-        $currencyExcel = Request::get('currency');
+        $currencyExcel['id'] = Request::get("currency");
+        $currencyExcel['name'] = $mtx['currency'];
         $valueExcel = Request::get('value');
-        $salesRepExcel = Request::get('salesRep');
+        $title = $mtx['region']." - Share.xlsx";
 
-        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx','rName'));
+        return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx','rName', 'regionExcel', 'yearExcel', 'sourceExcel', 'currencyExcel', 'valueExcel', 'title'));
     }
 }
