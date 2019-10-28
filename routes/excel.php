@@ -36,6 +36,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('share','excelController@resultsShare')
 									->name('shareExcel');
 
+		Route::post('rankingBrand','excelController@rankingBrand')
+									->name('rankingBrandExcel');
+
 		});
 	});
 });

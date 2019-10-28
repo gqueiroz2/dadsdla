@@ -111,7 +111,7 @@ class rankingBrandController extends Controller {
         $typeExcel = $type;
         $brandsExcel = $brands;
         $monthsExcel = $months;
-        $currencyExcel = $currency;
+        $currencyExcel = $pRate;
         $valueExcel = $value;
 
     	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names', 'regionExcel', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel'));

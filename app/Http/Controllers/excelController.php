@@ -323,6 +323,28 @@ class excelController extends Controller{
                 return Excel::download(new coreExport($final, $report, $salesRegion), $title);
         }
 
+
+        public function rankingBrand(){
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+
+                $region = Request::get("regionExcel");
+              
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{  
+                        $salesRegion = $tmp['name'];
+                }
+
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+
+                var_dump(Request::all());
+
+        }
         
 
 }
