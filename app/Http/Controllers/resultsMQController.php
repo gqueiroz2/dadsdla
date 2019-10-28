@@ -103,6 +103,7 @@ class resultsMQController extends Controller{
 
                 $title = $salesRegion." - Month.xlsx";
 
+
                 return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title'));
         }
 
@@ -126,7 +127,6 @@ class resultsMQController extends Controller{
 	}
 
 	public function postQuarter(){
-
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
@@ -166,6 +166,7 @@ class resultsMQController extends Controller{
                 $value = Request::get("value");
 
                 $form = Request::get("thirdPos");
+                $form2 = $form;
                 $source = strtoupper(Request::get("secondPos"));
 
                 $mq = new resultsMQ();
@@ -182,7 +183,16 @@ class resultsMQController extends Controller{
 
                 $rName = $mq->TruncateRegion($region);
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName'));
+                $regionExcel = $regionID;
+                $yearExcel = $year;
+                $firstPosExcel = $source;
+                $secondPosExcel = $form2;
+                $currencyExcel = $pRate;
+                $valueExcel = $value;
+
+                $title = $rName." - Quarter.xlsx";
+
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','title'));
 
 	} 
 

@@ -213,6 +213,14 @@
 	</div>
 
 
+	<script>
+		$(document).ready(function(){
+			$("#loading").css('display',"none");
+            $("#body").css('display',"");
+		});	
+	</script>
+
+
 	@if($forRender)
 		<script>
 			var client = <?php echo json_encode($client); ?>;
@@ -244,8 +252,7 @@
 			}
 
 			$(document).ready(function(){
-				$("#loading").css('display',"none");
-            	$("#body").css('display',"");
+				
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {

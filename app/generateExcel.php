@@ -17,14 +17,21 @@ class generateExcel extends Model {
 
 	public function selectData($con, $region, $years, $brands, $form, $currency, $value, $months){
 
+		$onlCheck = false;
+
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			$brand_id[$b] = $brands[$b]['id'];
+			if ($brand_id[$b] == 9) {
+				$onlCheck = true;
+			}
 		}
 
-		array_push($brand_id, '13');
-		array_push($brand_id, '14');
-		array_push($brand_id, '15');
-		array_push($brand_id, '16');
+		if ($onlCheck) {
+			array_push($brand_id, '13');
+			array_push($brand_id, '14');
+			array_push($brand_id, '15');
+			array_push($brand_id, '16');
+		}
 
 		$sql = new sql();
 

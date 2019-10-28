@@ -15,6 +15,7 @@ use App\viewer;
 use App\salesRep;
 use App\cmaps;
 use App\baseRender;
+use App\sql;
 
 class viewerController extends Controller{
 
@@ -44,13 +45,13 @@ class viewerController extends Controller{
 	public function basePost(){
 
                 $render =  new baseRender();
-
-
                 $base = new base();
                 $months = $base->month;
         	
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
+
+                $sql = new sql();
 
                 $validator = Validator::make(Request::all(),[
                     'region' => 'required',
@@ -69,14 +70,8 @@ class viewerController extends Controller{
 
                 $years = array($cYear = intval(date('Y')), $cYear - 1);
                 
-                $sr = new salesRep();
-                $salesR = $sr->getSalesRep($con);
-
                 $r = new region();
                 $region = $r->getRegion($con, NULL);
-
-                $currency = new pRate();
-                $currencies = $currency->getCurrency($con); 
 
                 $b = new brand();
                 $brands = $b->getBrand($con);
@@ -105,12 +100,15 @@ class viewerController extends Controller{
 
                 $salesRep = Request::get("salesRep");
 
-                $table = $viewer->getTables($con,$salesRegion,$source,$month,$piNumber,$brand,$value,$year,$salesCurrency,$salesRep,$db);
+                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
 
+                $assemble = $viewer->assemble($table,$salesCurrency,$source);
 
-                var_dump(Request::all());
+                var_dump($table);
 
-                return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                //var_dump(Request::all());
+
+                //return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
 
 	}
 

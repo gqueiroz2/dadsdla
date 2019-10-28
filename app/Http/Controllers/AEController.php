@@ -211,6 +211,8 @@ class AEController extends Controller{
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false);
+        $permission = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -227,7 +229,9 @@ class AEController extends Controller{
         $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear);
 
         if (!$tmp) {
-            return back()->with("Error","Don't have a Forecast Saved");
+            $msg = "Don't have a Forecast Saved";
+            $typeMsg = "Error";
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }
 
         $forRender = $tmp;

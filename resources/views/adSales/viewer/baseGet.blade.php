@@ -38,9 +38,9 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col" id="piNumberCol" style="display:none;">
-                            <label class="labelLeft"><span class="bold"> PI: </span></label>
-                            {{$render->piNumber($brand)}}
+                        <div class="col" id="especificNumberCol" style="display:none;">
+                            <label class="labelLeft"><span class="bold" id="especificNumberName"> PI: </span></label>
+                            {{$render->especificNumber($brand)}}
                         </div>
                         
                         <div class="col">
@@ -62,7 +62,7 @@
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->brand($brand)}}
+                            {{$render->brandViewer()}}
                         </div>
                          
                                             

@@ -79,6 +79,8 @@ class resultsMonthlyYoYController extends Controller{
 
     	$monthlyYoY = new resultsMonthlyYoY();
 
+        $form2 = $form;
+
     	//pegando valores das colunas das tabelas
         $lines = $monthlyYoY->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $regionID, $value, $source);
         
@@ -97,7 +99,16 @@ class resultsMonthlyYoYController extends Controller{
         $region = $r->getRegion($con, array($regionID))[0]['name'];
         $rName = $monthlyYoY->TRuncateRegion($region);
 
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName'));
+        $regionExcel = $regionID;
+        $yearExcel = $year;
+        $firstPosExcel = $form2;
+        $secondPosExcel = $source;
+        $thirdPosExcel = $form2;
+        $currencyExcel = $pRate[0];
+        $valueExcel = $value;
+        $title = $form." - YoY Month.xlsx";
+
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'thirdPosExcel', 'currencyExcel', 'valueExcel', 'title'));
 	}
 
 }

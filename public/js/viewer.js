@@ -6,6 +6,7 @@ $(document).ready(function(){
     ajaxSetup();
 
 		if (regionID != "") {
+      $('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
       $.ajax({ 
         url:"/ajax/adsales/yearByRegion",
         method:"POST",
@@ -78,17 +79,40 @@ $(document).ready(function(){
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       */
       $('#sourceDataBase').change(function(){
+        var source = $(this).val();
+        if(source != ""){
+          $.ajax({
+            url:"/ajax/adsales/brandBySource",
+            method:"POST",
+            data:{source},
+              success: function(output){
+                $('#brand').html(output).selectpicker('refresh');
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });
+        }else{
+          $('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
+        }
+
 
         var sourceDataBase = $('#sourceDataBase').val();
-        if(sourceDataBase == "CMAPS"){
-          $('#piNumber').val("");
-          $('#piNumberCol').css("display", "block");
-          $('#piNumber').css("display", "block");
+        if(sourceDataBase == "CMAPS" || sourceDataBase == "SF"){
+          if(sourceDataBase == "CMAPS"){
+            $('#especificNumberName').html("PI:");
+          }else{
+            $('#especificNumberName').html("OPPID:");
+          }
+
+          $('#especificNumber').val("");
+          $('#especificNumberCol').css("display", "block");
+          $('#especificNumber').css("display", "block");
 
         }else{
-          $('#piNumber').val("0");
-          $('#piNumberCol').css("display", "none");
-          $('#piNumber').css("display", "none");
+          $('#especificNumber').val("0");
+          $('#especificNumberCol').css("display", "none");
+          $('#especificNumber').css("display", "none");
         }
       });
 
@@ -164,11 +188,16 @@ $(document).ready(function(){
 		}else{
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);
+      $('#brand').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
+      $('#sourceDataBase').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#currency').empty().append(option);
       $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
       $('#value').empty().append("<option>Select Source</option>");
+      $('#especificNumber').val("0");
+      $('#especificNumberCol').css("display", "none");
+      $('#especificNumber').css("display", "none");
     }
 
 	});

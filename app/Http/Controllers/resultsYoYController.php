@@ -77,6 +77,8 @@ class resultsYoYController extends Controller{
     	$source = strtoupper(Request::get("secondPos"));
         $yoy = new resultsYoY();
 
+        $form2 = $form;
+
         //pegando valores das linhas das tabelas
         //pegando do banco as informações (nenhuma conta)
         $lines = $yoy->lines($con, $pRate, $base->getMonth(), $form, $brands, $year, $region, $value, $source);
@@ -86,6 +88,8 @@ class resultsYoYController extends Controller{
         //var_dump($matrix);
 
     	$render = new RenderYoY();
+
+        $regionID = $region;
 
         $region = $r->getRegion($con, array($region));
 
@@ -97,7 +101,16 @@ class resultsYoYController extends Controller{
 
         $region = $region[0]['name'];
         $rName = $yoy->TRuncateRegion($region);
-        
-   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName'));
+
+        $regionExcel = $regionID;
+        $yearExcel = $year;
+        $firstPosExcel = $form2;
+        $secondPosExcel = $source;
+        $thirdPosExcel = $form2;
+        $currencyExcel = $pRate[0];
+        $valueExcel = $value;
+        $title = $form." - YoY Brand.xlsx";
+
+   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','thirdPosExcel','currencyExcel','valueExcel','title'));
     }
 }

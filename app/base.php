@@ -9,6 +9,26 @@ use App\sql;
 
 class base extends Model{
 
+    public function arrayToString($array,$hasKey,$key){
+        $string = "";
+        if($hasKey){
+            for ($a=0; $a < sizeof($array); $a++) { 
+                $string .= "".$array[$a][0]."";
+                if($a != sizeof($array)-1){
+                    $string .= ",";
+                }
+            }
+        }else{
+            for ($a=0; $a < sizeof($array); $a++) { 
+                $string .= "".$array[$a]."";
+                if($a != sizeof($array)-1){
+                    $string .= ",";
+                }
+            }
+        }
+        return $string;
+    }
+
     protected $agencyComm = array("Argentina" => 7.5150,
                                     "Brazil" => 20.0000,
                                     "Mexico" => 0.9826,
