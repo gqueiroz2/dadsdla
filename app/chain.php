@@ -26,14 +26,14 @@ class chain extends excel{
 
         $columns = $this->defineColumns($table,'first');
         
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN"){
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts"){
             $parametter = $table;
         }else{
             $parametter = false;
         }
 
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-
+        
         $into = $this->into($columns);      
         
         if($table == "ytdFN"){
@@ -59,7 +59,7 @@ class chain extends excel{
             $complete = false;
         }
         return $complete;
-
+        
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -75,20 +75,36 @@ class chain extends excel{
 
         $columns = array_values($columns);
     	$columnsS = $this->defineColumns($table,'second');
+        
+        if($table == 'bts'){
+            $tempBase = 'bts';
+            $table = 'ytd';
+        }else{
+            $tempBase = false;
+        }
 
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
+
+        if($tempBase){
+            $table = 'bts';
+        }
 
         if($table == "fw_digital"){
             $current = $this->fixShareAccounts($current);
             $current = $this->createNetRevenueAndCommission($current);
             $current = $this->localCurrencyToDolar($con,$current,$year);
+        } 
+
+        if($table == "bts"){
+            $current = $this->fixShareAccountsBTS($con,$current);            
         }       
-        
+      
         $into = $this->into($columnsS);		
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
    		return $complete;
+        
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -101,7 +117,20 @@ class chain extends excel{
         $columnsS = $this->defineColumns($table,'second');
     	$columnsT = $this->defineColumns($table,'third');
     	$into = $this->into($columnsT);		
+
+        if($table == 'bts'){
+            $tempBase = 'bts';
+            $table = 'ytd';
+        }else{
+            $tempBase = false;
+        }
+
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$sCon,$table,$columnsS),$columnsS);
+
+        if($tempBase){
+            $table = 'bts';
+        }
+
     	if($table == 'mini_header'){
     		$orderReference = $this->getOrderReferences($current);
     		$cleanedValues = $this->cleanValues($current,$orderReference);
@@ -147,6 +176,30 @@ class chain extends excel{
 
             $table = "ytd";
 
+        }else if($table == "bts"){
+            if($year == "2019"){
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $delete[$y] = "DELETE FROM ytd 
+                                        WHERE(year = '".$year[$y]."')
+                                        AND (month > '9')
+                                  ";     
+                    if($con->query($delete[$y])){
+                    }
+                }
+            }else{
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $delete[$y] = "DELETE FROM ytd 
+                                        WHERE(year = '".$year[$y]."')
+                                        AND (brand_id = '8')       
+                                        AND (month > '9')                                 
+                                  ";     
+                    if($con->query($delete[$y])){
+                    }
+                }
+            }
+
+            $table = "ytd";
+
         }else{
             if($table == "ytd"){
                 if($truncate){
@@ -161,14 +214,17 @@ class chain extends excel{
                         for ($y=0; $y < sizeof($year); $y++) { 
                             $delete[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
-                                                AND (brand_id != 8)                                            
+                                                AND (brand_id != 8)   
+                                                AND (month < 10)                                         
                                                 ";     
                             if($con->query($delete[$y])){
                             }
                             $delete2[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
                                                 AND (brand_id = '8')
-                                                AND (month > 5)                                           
+                                                AND ( month > 5 ) 
+                                                AND ( month < 10 )
+
                                                 ";     
                             if($con->query($delete2[$y])){
                             }
@@ -211,17 +267,35 @@ class chain extends excel{
 
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
+
+        if($table == 'bts'){
+            $tempBase = 'bts';
+            $table = 'ytd';
+        }else{
+            $tempBase = false;
+        }
+
     	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
+
+        if($tempBase){
+            $table = 'bts';
+        }
+
     	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
 
         return $bool;
     }   
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
+        
+        if($table == 'bts'){
+            $table = 'ytd';
+        }
 
         $values = $this->values($spreadSheet,$columns);
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
+        //var_dump($ins);
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
@@ -266,7 +340,11 @@ class chain extends excel{
 
         return $newValue;
     }
-
+    public function splitRevenues($current){
+        for ($c=0; $c < sizeof($current); $c++) { 
+            var_dump($current[$c]);
+        }
+    }
     public function createNetRevenueAndCommission($current){
         for ($c=0; $c < sizeof($current); $c++) { 
             $current[$c]['commission'] = $current[$c]['gross_revenue']*$current[$c]['agency_commission_percentage'];
@@ -329,6 +407,79 @@ class chain extends excel{
             //}
                 
         }
+        return $current;
+
+    }
+
+    public function fixShareAccountsBTS($con,$current){
+        $sr = new salesRep(); 
+        $count = 0;
+        for ($c=0; $c < sizeof($current); $c++) { 
+            $temp = explode(",", $current[$c]['sales_rep']);
+            if(sizeof($temp) > 1){                
+                $newC = $current[$c];
+                $sales1 = trim($temp[0]);
+                $sales2 = trim($temp[1]);
+                $newC['sales_rep'] = $temp[1];
+                if(sizeof($temp) < 3){
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $current[$c]['net_revenue'] = $current[$c]['net_revenue']/2;
+                    $current[$c]['net_net_revenue'] = $current[$c]['net_net_revenue']/2;
+
+                    $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_prate']/2;
+                    $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue_prate']/2;
+                    $current[$c]['net_net_revenue_prate'] = $current[$c]['net_net_revenue_prate']/2;
+                    
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    $newC['net_revenue'] = $newC['net_revenue']/2;
+                    $newC['net_net_revenue'] = $newC['net_net_revenue']/2;
+
+                    $newC['gross_revenue_prate'] = $newC['gross_revenue_prate']/2;
+                    $newC['net_revenue_prate'] = $newC['net_revenue_prate']/2;
+                    $newC['net_net_revenue_prate'] = $newC['net_net_revenue_prate']/2;
+                }else{
+                    
+                    $salesArray = array();
+
+                    for ($t=0; $t < sizeof($temp); $t++){ 
+                      $somp = $sr->getNewSalesRep($con, trim($temp[$t]))[0];
+                      if($somp['region'] == $current[$c]['sales_representant_office']){
+                        array_push($salesArray, trim($temp[$t]) ) ;
+                      }
+                    }
+
+                    if(sizeof($salesArray) > 1){
+                        $current[$c]['sales_rep'] = $salesArray[0];
+                        $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                        $current[$c]['net_revenue'] = $current[$c]['net_revenue']/2;
+                        $current[$c]['net_net_revenue'] = $current[$c]['net_net_revenue']/2;
+
+                        $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_prate']/2;
+                        $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue_prate']/2;
+                        $current[$c]['net_net_revenue_prate'] = $current[$c]['net_net_revenue_prate']/2;
+                        
+                        $newC['sales_rep'] = $salesArray[1];
+
+                        $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                        $newC['net_revenue'] = $newC['net_revenue']/2;
+                        $newC['net_net_revenue'] = $newC['net_net_revenue']/2;
+
+                        $newC['gross_revenue_prate'] = $newC['gross_revenue_prate']/2;
+                        $newC['net_revenue_prate'] = $newC['net_revenue_prate']/2;
+                        $newC['net_net_revenue_prate'] = $newC['net_net_revenue_prate']/2;
+                    }else{
+                        $current[$c]['sales_rep'] = $salesArray[0];
+                    }
+                }
+
+
+                array_push($current, $newC);
+
+                $count ++;
+            }
+        }
+
         return $current;
 
     }
@@ -570,6 +721,7 @@ class chain extends excel{
                     }
                 }
 			}
+            
             if(!$rtr[0]){
                 var_dump($current);
             }
@@ -665,6 +817,11 @@ class chain extends excel{
 
     public function insertToNextTable($con,$table,$columns,$current,$into,$nextColumns){
     	$count = 0;
+
+        if($table == 'bts'){
+            $table = 'ytd';
+        }
+
     	for ($c=0; $c < sizeof($current); $c++) { 
     		if($nextColumns && ($table == 'cmaps')){
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
@@ -864,10 +1021,11 @@ class chain extends excel{
                             }elseif($columns[$c] == 'obs'){
                                 $spreadSheetV2[$s][$columns[$c]] = "OBS";
                             }elseif($columns[$c] == 'month'){
-                                if($table == "cmaps" || $table == "fw_digital"){
-                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
-                                }elseif($table == "ytdFN"){
+                                if( $table && ($table == "ytdFN") ){
+                                    //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+                                }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
+                                   $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
                                 }
@@ -956,6 +1114,23 @@ class chain extends excel{
     					break;
     			}
     			break;
+
+            case 'bts':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->ytdColumnsF;
+                        break;
+                    case 'second':
+                        return $this->ytdColumnsS;
+                        break;
+                    case 'third':
+                        return $this->ytdColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->ytdColumns;
+                        break;
+                }
+                break;
 
             case 'ytdFN':
                 switch ($recurrency) {

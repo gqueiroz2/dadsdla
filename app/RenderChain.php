@@ -50,6 +50,7 @@ class RenderChain extends Render{
     	echo "<select class='form-control' name='$name' data-width='100%'>";
     		echo "<option value=''> Select </option>";
     		echo "<option value='cmaps'> CMAPS </option>";
+            echo "<option value='bts'> BTS </option>";
             echo "<option value='ytdFN'> YTD FN </option>";
 			echo "<option value='ytd'> YTD </option>";
             echo "<option value='fw_digital'> FW Digital </option>";
