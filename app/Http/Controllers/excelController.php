@@ -6,6 +6,7 @@ use App\Exports\summaryExport;
 use App\Exports\monthExport;
 use App\Exports\yoyExport;
 use App\Exports\shareExport;
+use App\Exports\coreExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -196,11 +197,11 @@ class excelController extends Controller{
                 $values2 = $ge->selectData($con, $region, ($years-1), $brands, $firstPos, $currency, $value, $months);
                 $valuesPlan = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
                 
-                for ($v2=0; $v2 <sizeof($values2[0]); $v2++) {
+                for ($v2=0; $v2 < sizeof($values2[0]); $v2++) {
                         array_push($values[0], $values2[0][$v2]); 
                 }
 
-                for ($v2=0; $v2 <sizeof($values2[1]); $v2++) {
+                for ($v2=0; $v2 < sizeof($values2[1]); $v2++) {
                         array_push($values[1], $values2[1][$v2]); 
                 }
 
@@ -307,6 +308,19 @@ class excelController extends Controller{
                 $title = Request::get("title");
 
                 $ge = new generateExcel();
+
+                $values = $ge->selectData($con, $region, $years, $brands, "ytd", $currency, $value, $months);
+
+                $valuesPlan = $ge->selectData($con, $region, $years, $brands, "sales", $currency, $value, $months);
+
+                $final = array("ytd" => $values[0], 'digital' => $values[1], "sales" => $valuesPlan[0]);
+
+                $report[0] = "$salesRegion - TV Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $report[1] = "$salesRegion - Digital Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+
+                $report[2] = "$salesRegion - Plan by Sales Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+
+                return Excel::download(new coreExport($final, $report, $salesRegion), $title);
         }
 
 }
