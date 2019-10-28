@@ -165,17 +165,33 @@
 				document.body.appendChild(div);
 
 				$.ajax({
-					/*xhrFields: {
+					xhrFields: {
 						responseType: 'blob',
-					},*/
+					},
 					url: "/generate/excel/core",
 					type: "POST",
 					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title},
-					success: function (output) {
-						$("#vlau").html(output);
-						document.body.removeChild(div);
+					success: function(result, status, xhr){
+						var disposition = xhr.getResponseHeader('content-disposition');
+				        var matches = /"([^"]*)"/.exec(disposition);
+				        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						// The actual download
+				        var blob = new Blob([result], {
+				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        });
+				        var link = document.createElement('a');
+				        link.href = window.URL.createObjectURL(blob);
+				        link.download = filename;
+
+				        document.body.appendChild(link);
+
+				        link.click();
+				        document.body.removeChild(link);
+				        document.body.removeChild(div);
 					},
 					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
                         alert(xhr.status+" "+thrownError);
                     }
 				});

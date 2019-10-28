@@ -16,7 +16,7 @@ use App\pRate;
 
 class generateExcel extends Model {
 
-	public function selectData($con, $region, $years, $brands, $form, $currency, $value, $months){
+	public function selectDataResults($con, $region, $years, $brands, $form, $currency, $value, $months){
 
 		$onlCheck = false;
 
@@ -49,9 +49,9 @@ class generateExcel extends Model {
 
 		}elseif ($form == "sales") {
 			
-			$cols = array("region", "year", "brand_id", "currency_id", "type_of_revenue");
+			$cols = array("pbs.region_id", "year", "brand_id", "currency_id", "type_of_revenue");
 
-			$colsValue = array($region, $years, $brand_id, $currency, $value);
+			$colsValue = array($region, $years, $brand_id, '4', $value);
 
 			$where = $sql->where($cols, $colsValue);
 
@@ -82,7 +82,7 @@ class generateExcel extends Model {
 			$values = $c->getWithFilter($con, $value, $region, $currency, $where, $months);
 		}
 
-		if ($form != "TARGET" && $form != "CORPORATE" && $form != "ACTUAL" && !is_array($form)) {
+		if ($form != "TARGET" && $form != "CORPORATE" && $form != "ACTUAL" && !is_array($form) && $form != "sales") {
 			$cols = array("d.region_id", "year", "brand_id");
 			$colsValue = array($region, $years, $brand_id);
 

@@ -13,7 +13,7 @@ class planBySales extends Management{
         
         $sql = new sql();
 
-        $table = 'plan_by_sales pbb';
+        $table = 'plan_by_sales pbs';
 
         $columns = "pbs.ID AS 'id',
                     r.name AS 'region',
@@ -23,7 +23,7 @@ class planBySales extends Management{
                     pbs.year AS 'year',
                     pbs.type_of_revenue AS 'type_of_Revenue',
                     pbs.month AS 'month',
-                    pbs.revenue AS 'revenue'
+                    pbs.value AS 'revenue'
                     ";
 
         $join = "LEFT JOIN region r ON r.ID = pbs.region_id

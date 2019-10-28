@@ -61,9 +61,9 @@ class excelController extends Controller{
                         $form = "ytd";
                 }
 
-                $firstTable = $ge->selectData($con, $region, $years[0], $brand, $form, $currency, $value, $month);
+                $firstTable = $ge->selectDataResults($con, $region, $years[0], $brand, $form, $currency, $value, $month);
                         
-                $secondTable = $ge->selectData($con, $region, $years[1], $brand, "ytd", $currency, $value, $month);
+                $secondTable = $ge->selectDataResults($con, $region, $years[1], $brand, "ytd", $currency, $value, $month);
 
                 for ($p=0; $p < sizeof($secondTable[1]); $p++) { 
                         array_push($firstTable[1], $secondTable[1][$p]);
@@ -73,7 +73,7 @@ class excelController extends Controller{
 
                 $plan = array("TARGET", "CORPORATE", "ACTUAL");
                 
-                $planTable = $ge->selectData($con, $region, $years[0], $brand, $plan, $currency, $value, $month);
+                $planTable = $ge->selectDataResults($con, $region, $years[0], $brand, $plan, $currency, $value, $month);
                 
                 $final = array($form => $firstTable[0], 'digital' => $firstTable[1], 'plan' => $planTable[0], 'pYtd' => $secondTable[0]);
                 
@@ -134,8 +134,8 @@ class excelController extends Controller{
 
                 $ge = new generateExcel();
                 
-                $values = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
-                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
+                $values = $ge->selectDataResults($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
+                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
                 
                 $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
 
@@ -193,9 +193,9 @@ class excelController extends Controller{
 
                 $ge = new generateExcel();
                 
-                $values = $ge->selectData($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
-                $values2 = $ge->selectData($con, $region, ($years-1), $brands, $firstPos, $currency, $value, $months);
-                $valuesPlan = $ge->selectData($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
+                $values = $ge->selectDataResults($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
+                $values2 = $ge->selectDataResults($con, $region, ($years-1), $brands, $firstPos, $currency, $value, $months);
+                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
                 
                 for ($v2=0; $v2 < sizeof($values2[0]); $v2++) {
                         array_push($values[0], $values2[0][$v2]); 
@@ -262,7 +262,7 @@ class excelController extends Controller{
                         $newSource = "ytd";
                 }
 
-                $values = $ge->selectData($con, $region, $years, $brands, $newSource, $currency, $value, $months);
+                $values = $ge->selectDataResults($con, $region, $years, $brands, $newSource, $currency, $value, $months);
 
                 $final = array($newSource => $values[0], 'digital' => $values[1]);                
 
@@ -271,7 +271,6 @@ class excelController extends Controller{
 
                 return Excel::download(new shareExport($final, $report, $salesRegion), $title);
         }
-
 
         public function performanceCore(){
                 
@@ -310,9 +309,9 @@ class excelController extends Controller{
 
                 $ge = new generateExcel();
 
-                $values = $ge->selectData($con, $region, $years, $brands, "ytd", $currency, $value, $months);
+                $values = $ge->selectDataResults($con, $region, $years, $brands, "ytd", $currency, $value, $months);
 
-                $valuesPlan = $ge->selectData($con, $region, $years, $brands, "sales", $currency, $value, $months);
+                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, "sales", $currency, $value, $months);
 
                 $final = array("ytd" => $values[0], 'digital' => $values[1], "sales" => $valuesPlan[0]);
 
@@ -323,5 +322,7 @@ class excelController extends Controller{
 
                 return Excel::download(new coreExport($final, $report, $salesRegion), $title);
         }
+
+        
 
 }

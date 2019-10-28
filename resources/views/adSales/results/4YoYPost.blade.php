@@ -152,8 +152,8 @@
 				        document.body.removeChild(div);
 					},
 					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
                         alert(xhr.status+" "+thrownError);
-				        document.body.removeChild(div);
                     }
 				});
 			});
