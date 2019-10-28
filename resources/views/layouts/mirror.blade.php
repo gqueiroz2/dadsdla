@@ -141,7 +141,7 @@
 					</ul>
 
 					<ul class="navbar-nav mr-right" style="margin-right: 3%;">
-						<div class="container-fluid" style="border: 2px solid black; height: auto;">
+						<div class="container-fluid" style="height: auto;">
                             <div class="row">
                             	<div class="col">                            		
 	                            	<span style="font-size: 10px;"> Bem-vindo {{$userName}}.</span>
