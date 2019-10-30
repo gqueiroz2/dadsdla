@@ -341,8 +341,9 @@ class excelController extends Controller{
 
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
 
-
-                var_dump(Request::all());
+                for ($i=0; $i <5 ; $i++) { 
+                        var_dump(Request::all());
+                }
 
         }
         
