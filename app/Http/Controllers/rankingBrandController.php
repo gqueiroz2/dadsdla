@@ -107,6 +107,13 @@ class rankingBrandController extends Controller {
         
         $names = $rb->createNames($type, $months, $rtr, $brands);
 
-    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names'));
+        $regionExcel = $region;
+        $typeExcel = $type;
+        $brandsExcel = $brands;
+        $monthsExcel = $months;
+        $currencyExcel = $pRate;
+        $valueExcel = $value;
+
+    	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names', 'regionExcel', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel'));
     }
 }

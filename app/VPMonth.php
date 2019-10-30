@@ -265,7 +265,6 @@ class VPMonth extends pAndR {
         $from = array("oppid","ID","type_of_value","currency_id","type_of_forecast","submitted");
 
         $save = $sql->fetch($result,$from,$from);
-        
         $listOfClients = $this->listClientsByVPMonth($con,$sql,$year,$regionID);
 
         if (!$save) {
@@ -356,11 +355,11 @@ class VPMonth extends pAndR {
             $cYear = date('Y');
             $cMonth = date('n');
 
-            $auxSelect = "SELECT read_q FROM forecast WHERE (type_of_forecast = '".$save[0]["type_of_forecast"]."') AND (submitted = '1') AND read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND month = \"".$cMonth."\" AND year = '$year' ORDER BY ID DESC limit 1";
+            $auxSelect = "SELECT read_q FROM forecast WHERE (type_of_forecast = '".$save[0]["type_of_forecast"]."') AND (submitted = '1') AND read_q = (SELECT (MAX(read_q)-1) FROM forecast) AND month = \"".$cMonth."\" AND year = '$year' AND region_id = \"".$regionID."\" ORDER BY ID DESC limit 1";
+
             $auxResult = $con->query($auxSelect);
             $auxFrom = array("read_q");
             $auxSaida = $sql->fetch($auxResult, $auxFrom, $auxFrom);
-            
             if (!$auxSaida) {
                 if ($cMonth == 1) {
                     $forecastMonth = 12;
@@ -607,6 +606,8 @@ class VPMonth extends pAndR {
             $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
 
             $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
+
+            //$executiveRevenueCYear; é o booking
 
             if ($value == 'gross') {
                 $valueView = 'Gross';

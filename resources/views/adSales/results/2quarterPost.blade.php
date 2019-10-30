@@ -73,7 +73,7 @@
 					<span style="float: right;"> {{$rName}} - Quarter : {{$form}} - {{$year}} </span>
 				</div>
 				<div class="col-sm-2">
-					<button type="button" class="btn btn-primary" style="width: 100%">
+					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 						Generate Excel
 					</button>				
 				</div>
@@ -104,6 +104,7 @@
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
 				var title = "<?php echo $title; ?>";
+				var name = "Quarter";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -117,9 +118,9 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/month",
+					url: "/generate/excel/quarter",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, name},
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);
@@ -140,8 +141,8 @@
 				        document.body.removeChild(div);
 					},
 					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
                         alert(xhr.status+" "+thrownError);
-				        document.body.removeChild(div);
                     }
 				});
 			});

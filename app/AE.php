@@ -119,7 +119,7 @@ class AE extends pAndR{
                       )";
 
 
-            $insertFCST = "INSERT INTO $tableFCST $columns VALUES $values";
+            $insertFCST = " INSERT INTO $tableFCST $columns VALUES $values";
 
             if ($con->query($insertFCST) === true) {
 
@@ -845,7 +845,8 @@ class AE extends pAndR{
 
                 for ($m=0; $m <12 ; $m++) { 
                     $select[$c][$m] = "SELECT SUM(value) AS value FROM forecast_client f LEFT JOIN forecast f2 ON f.forecast_id = f2.ID 
-                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                        WHERE f.client_id = \"".$listOfClients[$c]["clientID"]."\"
+                                        AND f.agency_id = \"".$listOfClients[$c]["agencyID"]."\"
                                         AND f.month = \"".($m+1)."\" 
                                         AND f2.month = \"".$cMonth."\"  
                                         AND f2.year = \"".$cYear."\"
@@ -1718,7 +1719,6 @@ class AE extends pAndR{
 
         */        
 
-
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
             for ($m=0; $m < sizeof($monthOPP[$l]); $m++) { 
@@ -1742,6 +1742,9 @@ class AE extends pAndR{
                         $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
                         $amount[$l] += $share[$l][$m];
                     }
+                }else{
+                    $share[$l][$m] = 0;
+                    $amount[$l] += 0;
                 }
             }
 
@@ -1750,8 +1753,11 @@ class AE extends pAndR{
        
         for ($s=0; $s < sizeof($share); $s++) { 
             for ($t=0; $t < sizeof($share[$s]); $t++) { 
-               
-                $share[$s][$t] = $share[$s][$t] / ( $newAmount[$s] );
+                if ($newAmount[$s] == 0) {
+                    $share[$s][$t] = 0;
+                }else{
+                    $share[$s][$t] = $share[$s][$t] / ( $newAmount[$s] );
+                }
 
             }
         }        

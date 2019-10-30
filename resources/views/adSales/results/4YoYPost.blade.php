@@ -115,6 +115,7 @@
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
 				var title = "<?php echo $title; ?>";
+				var name = "Brand";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -130,7 +131,7 @@
 					},
 					url: "/generate/excel/yoy",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel, name},
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);
@@ -151,8 +152,8 @@
 				        document.body.removeChild(div);
 					},
 					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
                         alert(xhr.status+" "+thrownError);
-				        document.body.removeChild(div);
                     }
 				});
 			});
