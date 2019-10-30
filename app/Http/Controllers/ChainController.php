@@ -69,7 +69,7 @@ class ChainController extends Controller{
 
         if ($validator->fails()) {
         	return back()->withErrors($validator)->withInput();
-        }
+        } 
 
     	$db = new dataBase();
 		$chain = new chain();		
