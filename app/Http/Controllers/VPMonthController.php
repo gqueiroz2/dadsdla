@@ -83,14 +83,28 @@ class VPMonthController extends Controller {
 
         for ($m=0; $m < sizeof($monthWQ); $m++) {
             $manualEstimation[$m] = $excel->fixExcelNumber(Request::get("manualEstimation-$m"));
+            $booking[$m] = $excel->fixExcelNumber(Request::get("bookingE-$m"));
         }
+
 
         unset($manualEstimation[3]);
         unset($manualEstimation[7]);
         unset($manualEstimation[11]);
         unset($manualEstimation[15]);
 
+        unset($booking[3]);
+        unset($booking[7]);
+        unset($booking[11]);
+        unset($booking[15]);
+
         $manualEstimation = array_values($manualEstimation);
+        $booking = array_values($booking);
+
+
+        for ($m=0; $m <sizeof($booking) ; $m++) { 
+            $manualEstimation[$m] -= $booking[$m];
+        }
+
 
         for ($c=0; $c < sizeof($client); $c++) { 
             for ($m=0; $m < sizeof($monthWQ); $m++) { 

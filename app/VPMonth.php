@@ -769,19 +769,9 @@ class VPMonth extends pAndR {
     */
 
     public function closedMonthEx($fcst,$booking){
-        $date = date('n')-1;
 
-        if ($date < 3) {
-        }elseif ($date < 6) {
-            $date++;
-        }elseif ($date < 9) {
-            $date += 2;
-        }else{
-            $date += 3;
-        }
-
-        for ($m=0; $m < $date; $m++) {
-            $fcst[$m] = $booking[$m];
+        for ($m=0; $m < sizeof($fcst); $m++) {
+            $fcst[$m] += $booking[$m];
         }
 
         $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
@@ -1270,6 +1260,7 @@ class VPMonth extends pAndR {
 
         return $sum;
     }
+
     public function addFcstWithBookingEx($booking,$fcst){
         $date = date('n')-1;
 
@@ -1286,7 +1277,7 @@ class VPMonth extends pAndR {
             if ($f<$date) {
                 $sum[$f] = $booking[$f];
             }else{
-                $sum[$f] = $fcst[$f];
+                $sum[$f] = $fcst[$f]+$booking[$f];
             }
         }
 

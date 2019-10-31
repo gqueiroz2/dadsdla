@@ -499,22 +499,18 @@ class pacingReport extends Model
 
 		for ($b=0; $b <sizeof($brands); $b++) { 
 			for ($m=0; $m <12; $m++){
-				if ($m<$date) {
-					if ($brands[$b]['name'] == 'ONL') {
-						//pegar ONL do FW
-						$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\")";
-					}elseif($brands[$b]['name'] == 'VIX'){
-						//pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
-						$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
-					}else{
-						$select[$b][$m] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
-					}
-
-					$res[$b][$m] = $con->query($select[$b][$m]);
-					$resp[$b][$m] = $sql->fetchSum($res[$b][$m], "value")['value']*$div;
+				if ($brands[$b]['name'] == 'ONL') {
+					//pegar ONL do FW
+					$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\")";
+				}elseif($brands[$b]['name'] == 'VIX'){
+					//pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
+					$select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
 				}else{
-					$resp[$b][$m] = 0;
+					$select[$b][$m] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
 				}
+
+				$res[$b][$m] = $con->query($select[$b][$m]);
+				$resp[$b][$m] = $sql->fetchSum($res[$b][$m], "value")['value']*$div;
 			}
 		}
 

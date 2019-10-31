@@ -1133,7 +1133,7 @@ class AE extends pAndR{
 
         for ($c=0; $c <sizeof($fcst) ; $c++) { 
             for ($m=0; $m <$date ; $m++) { 
-                $fcst[$c][$m] = $booking[$c][$m];   
+                $fcst[$c][$m] += $booking[$c][$m];   
             }
         }
         return $fcst;
