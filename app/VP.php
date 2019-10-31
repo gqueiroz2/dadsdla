@@ -120,8 +120,11 @@ class VP extends pAndR{
         }
         $from = array("value","month");
 
+        $month = intval(date('n'))-1;
+
         for ($c=0; $c <sizeof($clients); $c++) {
             if (!$percentage[$c] && $totalFCST[$c] != 0) {
+                var_dump("eai");
                 $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") and (client_id = \"".$clients[$c]->clientID."\") group by month";
                 $res[$c] = $con->query($select[$c]);
                 $resp[$c] = $sql->fetch($res[$c],$from,$from);
@@ -130,7 +133,24 @@ class VP extends pAndR{
                     $res[$c] = $con->query($select[$c]);
                     $resp[$c] = $sql->fetch($res[$c],$from,$from);
                 }
-                
+
+                for ($m=0; $m <12 ; $m++) { 
+                    $tmp[$c][$m] = 0;
+                }
+
+                for ($r=0; $r <sizeof($resp[$c]) ; $r++) { 
+                    $tmp[$c][intval($resp[$c][$r]['month'])-1] += floatval($resp[$c][$r]['value']);
+                }
+                $total[$c] = 0;
+
+                for ($t=0; $t <sizeof($tmp[$c]); $t++) { 
+                    if ($t<$month) {
+                        $tmp[$c][$t] = 0;
+                    }else{
+                        $total[$c] += $tmp[$c][$t];
+                    }
+                }
+
             }
         }
 
