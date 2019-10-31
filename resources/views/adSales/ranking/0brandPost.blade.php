@@ -9,17 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{route('rankingBrandExcel')}}">
-					@csrf
-					<input type="hidden" name="region" value="{{$regionExcel}}">
-					<input type="hidden" name="type" value="{{$typeExcel}}">
-					<input type="hidden" name="brands" value="{{base64_encode(json_encode($brandsExcel))}}">
-					<input type="hidden" name="month" value="{{base64_encode(json_encode($monthsExcel))}}">
-					<input type="hidden" name="currency" value="{{base64_encode(json_encode($currencyExcel))}}">
-					<input type="hidden" name="value" value="{{$valueExcel}}">
-					<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">
-
-				</form>
+				
 				<form method="POST" action="{{ route('brandPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">

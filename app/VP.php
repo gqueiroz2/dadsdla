@@ -36,6 +36,8 @@ class VP extends pAndR{
 
         $resp = $sql->fetch($res,$from,$from)[0]["ID"];
 
+        $percentage = $this->fixPercentage($con,$sql,$percentage,$totalFCST,$cYear,$value,$clients,$region,$currency);
+
         if($submit == "submit") {
             $submit = 1;
             $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\" AND region_id = \"".$region['id']."\"";
@@ -57,7 +59,7 @@ class VP extends pAndR{
         }
 
         if ($resp) {
-            $update = "UPDATE forecast SET read_q = \"".$read."\", 
+            /*$update = "UPDATE forecast SET read_q = \"".$read."\", 
                                             last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
@@ -77,10 +79,10 @@ class VP extends pAndR{
 
             $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update",$clientBrands); 
 
-            return $bool;
+            return $bool;*/
 
         }else{
-            $columns = "(oppid,
+            /*$columns = "(oppid,
                         region_id, sales_rep_id,
                         year, month, read_q, date_m,
                         currency_id, type_of_value,
@@ -105,9 +107,33 @@ class VP extends pAndR{
 
             $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert",$clientBrands);  
 
-            return $bool;
+            return $bool;*/
         }
  
+    }
+
+    public function fixPercentage($con,$sql,$percentage,$totalFCST,$cYear,$value,$clients,$region,$currency){
+        if ($value == "Gross") {
+            $col = "gross_revenue";
+        }else{
+            $col = "net_revenue";
+        }
+        $from = array("value","month");
+
+        for ($c=0; $c <sizeof($clients); $c++) {
+            if (!$percentage[$c] && $totalFCST[$c] != 0) {
+                $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") and (client_id = \"".$clients[$c]->clientID."\") group by month";
+                $res[$c] = $con->query($select[$c]);
+                $resp[$c] = $sql->fetch($res[$c],$from,$from);
+                if (!$resp[$c]) {
+                    $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (sales_representant_office_id = \"".$region['id']."\") group by month";
+                    $res[$c] = $con->query($select[$c]);
+                    $resp[$c] = $sql->fetch($res[$c],$from,$from);
+                }
+                
+            }
+        }
+
     }
 
     public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type,$clientBrands){
@@ -121,7 +147,7 @@ class VP extends pAndR{
 
         for ($c=0; $c <sizeof($fcstValue); $c++) {
             if ($percentage[$c]) {
-                for ($m=0; $m < sizeof($percentage[$c]); $m++) { 
+                for ($m=0; $m < 12; $m++) { 
                     $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
                 }
             }else{
@@ -649,7 +675,16 @@ class VP extends pAndR{
             }
         }
         $fcstInfo = $tmp;
+
+        if ($value == "gross") {
+            $col = "gross_revenue";
+        }else{
+            $col = "net_revenue";
+        }
+
         $from = array("value","month","client_id");
+        $from2 = array($col, "month", "client_id");
+        $from3 = array("value","month");
         for ($f=0; $f <sizeof($fcstInfo); $f++) { 
             for ($c=0; $c <sizeof($listOfClients); $c++) { 
                 $select[$f][$c] = "SELECT value, month, client_id FROM forecast_client WHERE (client_id = \"".$listOfClients[$c]['clientID']."\") AND (forecast_id = \"".$tmp[$f]['ID']."\")";
@@ -657,28 +692,52 @@ class VP extends pAndR{
                 $resp[$f][$c] = $sql->fetch($res[$f][$c],$from,$from);
             }
         }
+
         $saida = array();
+
+        $vlau = array();
+
+        for ($f=0; $f <sizeof($resp); $f++) { 
+            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
+                for ($m=0; $m < 12; $m++) { 
+                    $vlau[$f][$c][$m] = 0;
+                }
+            }
+        }
+
+        for ($f=0; $f <sizeof($resp); $f++) { 
+            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
+                if ($resp[$f][$c]) {
+                    for ($m=0; $m <sizeof($resp[$f][$c]); $m++) { 
+                        $vlau[$f][$c][intval($resp[$f][$c][$m]['month'])-1] += floatval($resp[$f][$c][$m]['value']);
+                    }
+                }else{
+                    $vlau[$f][$c] = false;
+                }
+            }
+        }
+
         for ($f=0; $f <sizeof($resp); $f++) { 
             for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
                 if ($f == 0) {
-                    if ($resp[$f][$c]) {
-                        for ($m=0; $m<sizeof($resp[$f][$c]); $m++) { 
-                            $saida[$c][$m] = floatval($resp[$f][$c][$m]['value']);
+                    if ($vlau[$f][$c]) {
+                        for ($m=0; $m<sizeof($vlau[$f][$c]); $m++) { 
+                            $saida[$c][$m] = floatval($vlau[$f][$c][$m]);
                         }
                     }else{
                         $saida[$c] = false;
                     }
                 }else{
                     if ($saida[$c]) {
-                        if ($resp[$f][$c]) {
+                        if ($vlau[$f][$c]) {
                             for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                                $saida[$c][$m] += floatval($resp[$f][$c][$m]['value']);
+                                $saida[$c][$m] += floatval($vlau[$f][$c][$m]);
                             }
                         }
                     }else{
-                        if ($resp[$f][$c]) {
-                            for ($m=0; $m<sizeof($resp[$f][$c]); $m++) { 
-                                $saida[$c][$m] = floatval($resp[$f][$c][$m]['value']);
+                        if ($vlau[$f][$c]) {
+                            for ($m=0; $m<sizeof($vlau[$f][$c]); $m++) { 
+                                $saida[$c][$m] = floatval($vlau[$f][$c][$m]);
                             }
                         }else{
                             $saida[$c] = false;

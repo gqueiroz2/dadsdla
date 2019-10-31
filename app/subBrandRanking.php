@@ -603,12 +603,12 @@ class subBrandRanking extends rankingBrand {
 		        			}else{
 		        				if (is_numeric($mtx[$n][$m])) {
 		        					if ($n == $pos) {
-		        						echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";	
+		        						echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." %</td>";	
 		        					}else{
                                         if ($mtx[$n][$m] == 0) {
                                             echo "<td class='$color center'> - </td>";
                                         }else{
-                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." </td>";
                                         }
 		        					}
 		        				}else{
@@ -624,10 +624,10 @@ class subBrandRanking extends rankingBrand {
 
 		            for ($t=0; $t < sizeof($total); $t++) {
 		            	if ($t == $pos) {
-		            		echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+		            		echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";
 		            	}
 		            	elseif (is_numeric($total[$t])) {
-		            		echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+		            		echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";
 		            	}else{
 		            		echo "<td class='darkBlue center'> ".$total[$t]." </td>";
 		            	}

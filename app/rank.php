@@ -692,9 +692,9 @@ class rank extends Model{
                                 echo "<td class='$color center'> ".$mtx[$i][$m]." </td>";
                             }
                         }elseif ($mtx[$i][0] == "VAR %") {
-                            echo "<td class='$color center'> ".number_format($mtx[$i][$m])." %</td>";
+                            echo "<td class='$color center'> ".number_format($mtx[$i][$m],0,',','.')." %</td>";
                         }else{
-                            echo "<td class='$color center'> ".number_format($mtx[$i][$m])." </td>";
+                            echo "<td class='$color center'> ".number_format($mtx[$i][$m],0,',','.')." </td>";
                         }
                         
                     }
@@ -715,9 +715,9 @@ class rank extends Model{
             
             if (is_numeric($total[$t])) {
                 if ($mtx[$t][0] == "VAR %") {
-                    echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";    
+                    echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";    
                 }else{
-                    echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+                    echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";
                 }
             }else{
               if ($total[$t] != "-") {

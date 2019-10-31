@@ -42,9 +42,9 @@ class renderBrandRanking extends Render {
             		}else{
             			if (is_numeric($mtx[$n][$m])) {
             				if ($n >= 4 && $n <= 7) {
-            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";	
+            					echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." %</td>";	
             				}else{
-            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+            					echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." </td>";
             				}
             			}else{
             				if ($n == 0) {
