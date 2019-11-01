@@ -552,7 +552,7 @@ class VPMonth extends pAndR {
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
-            
+
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
@@ -1288,14 +1288,6 @@ class VPMonth extends pAndR {
 
         $fechado = date('n') - 1;
 
-        if ($fechado < 3) {
-        }elseif ($fechado < 6) {
-            $fechado ++;
-        }elseif ($fechado < 9) {
-            $fechado += 2;
-        }else{
-            $fechado += 3;
-        }
 
         for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
             if (!$fcstAmountByStage[$c]) {
@@ -1304,10 +1296,7 @@ class VPMonth extends pAndR {
             }
 
             for ($m=0; $m < $fechado; $m++) {
-                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 || $m == 16) {
-                }else{
-                    $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
-                }
+                $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
             }
         }
         

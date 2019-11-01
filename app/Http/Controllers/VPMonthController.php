@@ -82,8 +82,8 @@ class VPMonthController extends Controller {
         $client = json_decode(base64_decode(Request::get('client')));
 
         for ($m=0; $m < sizeof($monthWQ); $m++) {
-            $manualEstimation[$m] = $excel->fixExcelNumber(Request::get("manualEstimation-$m"));
-            $booking[$m] = $excel->fixExcelNumber(Request::get("bookingE-$m"));
+            $manualEstimation[$m] = $excel->fixExcelNumber( str_replace(".", "", Request::get("manualEstimation-$m")));
+            $booking[$m] = $excel->fixExcelNumber(str_replace(".", "", Request::get("bookingE-$m")));
         }
 
 

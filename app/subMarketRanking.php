@@ -747,14 +747,14 @@ class subMarketRanking extends rankingMarket {
                                 }else{
                                     if (is_numeric($mtx[$n][$m])) {
                                         if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Share Bookings ".$years[0] || $mtx[$n][0] == "Share Bookings ".$years[1] || $mtx[$n][0] == "% YoY") {
-                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";   
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." %</td>";   
                                         }elseif ($mtx[$n][0] == "Ranking") {
-                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m])."º</td>";
+                                            echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')."º</td>";
                                         }else{
                                             if ($mtx[$n][$m] == 0) {
                                                 echo "<td class='$color center'> - </td>";
                                             }else{
-                                                echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+                                                echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." </td>";
                                             }
                                             
                                         }
@@ -783,10 +783,10 @@ class subMarketRanking extends rankingMarket {
                             
                             for ($t=0; $t < sizeof($total); $t++) {
                                 if ($t == $pos || $t == $pos2 || $t == $pos3) {
-                                    echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+                                    echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";
                                 }
                                 elseif (is_numeric($total[$t])) {
-                                    echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+                                    echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";
                                 }else{
                                     echo "<td class='darkBlue center'> ".$total[$t]." </td>";
                                 }

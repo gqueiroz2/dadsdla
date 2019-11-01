@@ -264,11 +264,11 @@ class subChurnRanking extends rankingChurn {
 		            		}else{
 		            			if (is_numeric($mtx[$n][$m])) {
 		            				if ($mtx[$n][0] == "Var (%)" || $mtx[$n][0] == "Var YTD (%)") {
-		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." %</td>";
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." %</td>";
 		            				}elseif ($mtx[$n][0] == "Ranking") {
-		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." º</td>";
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." º</td>";
 		            				}else{
-		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m])." </td>";
+		            					echo "<td class='$color center'> ".number_format($mtx[$n][$m],0,',','.')." </td>";
 		            				}
 		            			}else{
 	                                echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
@@ -284,21 +284,21 @@ class subChurnRanking extends rankingChurn {
 			            	if (is_numeric($total[$t])) {
 			            		if ($type == "agency") {
 			            			if ($t == 5 || $t == 11) {
-			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";
+			            				echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";
 			            			}else{
-			            				echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";
+			            				echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";
 			            			}
 			            		}elseif ($type == "client") {
                                     if ($t == 6) {
-                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";   
                                     }else{
-                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";    
                                     }
                                 }else{
                                     if ($t == 5) {
-                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." %</td>";   
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." %</td>";   
                                     }else{
-                                        echo "<td class='darkBlue center'> ".number_format($total[$t])." </td>";    
+                                        echo "<td class='darkBlue center'> ".number_format($total[$t],0,',','.')." </td>";    
                                     }
 			        			}
 			            	}else{
