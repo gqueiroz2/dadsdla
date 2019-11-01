@@ -77,7 +77,7 @@ class pacingReport extends Model
         	$totalPrc2 = false;
         }
 
-        
+
  		//pegando SAP ano atual e anterior
         $actualCYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,$year,"ACTUAL");
         $actualPYear = $this->getPlan($con,$pr,$sql,$brands,$value,$currency,$region,($year-1),"ACTUAL");
@@ -292,6 +292,8 @@ class pacingReport extends Model
 				$res[$c][$m] = $con->query($select[$c][$m]);
 
 				$resp[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0];
+
+
 				$totalPrc[$c][$m] = 0;
 				$total[$c][$m] = 0;
 				$prcTemp[$c][$m] = array();
@@ -299,10 +301,6 @@ class pacingReport extends Model
 
 				if ($resp[$c][$m] != null) {
 					
-					if ($resp[$c][$m]['brand'] == "") {
-						break;
-					}
-
 					if ($currencyCheck) {
 						$resp[$c][$m]['value'] = ($resp[$c][$m]['value']/$oldCurrency)*$newCurrency;
 					}
@@ -320,7 +318,7 @@ class pacingReport extends Model
 					for ($b=0; $b <sizeof($resp[$c][$m]['brands']); $b++) { 
 						if ($resp[$c][$m]['brands'][$b] == 'ONL-G9' || $resp[$c][$m]['brands'][$b] == 'ONL-DSS') {
 							$resp[$c][$m]['brands'][$b] = 'ONL';
-						}elseif($resp[$c][$m]['brands'][$b] == 'NOCHANNELS'){
+						}elseif($resp[$c][$m]['brands'][$b] == 'NOCHANNELS' || $resp[$c][$m]['brands'][$b] == ''){
 							unset($resp[$c][$m]['brands'][$b]);
 						}
 					}
@@ -380,7 +378,6 @@ class pacingReport extends Model
 		}
 
 		$temp = 0;
-
 
 		/*for ($c=0; $c <sizeof($resp); $c++) { 
 			for ($m=0; $m <sizeof($resp[$c]); $m++) { 

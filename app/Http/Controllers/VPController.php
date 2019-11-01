@@ -43,7 +43,7 @@ class VPController extends Controller
         $submit = Request::get('options');
 
         for ($p=0; $p <sizeof($percentage); $p++) { 
-            $totalFCST[$p] = $excel->fixExcelNumber(Request::get("clientRF-Fy-$p"));
+            $totalFCST[$p] = $excel->fixExcelNumber(str_replace(".", "", Request::get("clientRF-Fy-$p")));
         }
 
         $date = date('Y-m-d');
@@ -65,7 +65,7 @@ class VPController extends Controller
 
         $bool = $vp->saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$client,$clientBrands);
 
-        /*if ($bool == "Saved") {
+        if ($bool == "Saved") {
             $msg = "Forecast Created";        
             return back()->with("Success",$msg);
         }elseif ($bool == "Updated") {
@@ -73,7 +73,7 @@ class VPController extends Controller
             return back()->with("Success",$msg);
         }else{
             return back()->with("Error",$bool);
-        }*/
+        }
 
 
     }

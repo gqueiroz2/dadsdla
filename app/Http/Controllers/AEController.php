@@ -99,9 +99,11 @@ class AEController extends Controller{
 
         for ($c=0; $c < sizeof($client); $c++) { 
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(Request::get("fcstClient-$c-$m"));
+                $manualEstimantionByClient[$c][$m] = $excel->fixExcelNumber(str_replace(".", "", Request::get("fcstClient-$c-$m")));
             }
         }
+
+
 
         for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));

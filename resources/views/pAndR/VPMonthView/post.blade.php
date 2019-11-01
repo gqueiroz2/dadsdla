@@ -166,7 +166,7 @@
 				@for( $m=0;$m<16;$m++)
 					$("#me-"+{{$m}}).change(function(){
 						if ($(this).val() ==  '') {
-							$this.val(0);
+							$(this).val(0);
 						}
 						$(this).val(Comma(handleNumber($(this).val())));
 						if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2) {
@@ -186,32 +186,71 @@
 						var total = Comma(handleNumber($("#me-3").val()) + handleNumber($("#me-7").val()) + handleNumber($("#me-11").val()) + handleNumber($("#me-15").val()));
 						
 						$("#total-manualEstimationTotal").val(total);
+
+
 					});
 				@endfor
+
+				$("#total-manualEstimationTotal").change(function(){
+					if ($(this).val() ==  '') {
+						$(this).val(0);
+					}
+					
+					$(this).val(Comma(handleNumber($(this).val())));
+
+					var mult = handleNumber($(this).val()) - handleNumber($("#totalBookingE").val());
+
+					if (mult>0) {
+
+						var date = {{(intval(date('n'))-1)}};
+
+				        if (date < 3) {
+				        }else if (date < 7) {
+				            date ++;
+				        }else if (date < 11) {
+				            date += 2;
+				        }else{
+				            date += 3;
+				        }
+
+				        var total = parseFloat(0);
+
+				        for (var i =date;i<16 ; i++) {
+				        	if (i == 3 || i == 7 || i == 11 || i == 15) {
+				        	}else{
+				        		total += handleNumber($("#rf-"+i).val());
+				        	}
+				        }
+				        for (var i = date+1 ;i<16 ; i++) {
+				        	if (i == 3 || i == 7 || i == 11 || i == 15) {
+				        	}else{
+				        		var temp = (mult*(handleNumber($("#rf-"+i).val())/total));
+				        		temp += '';
+				        		temp = parseFloat(temp.replace('.',','));
+				        		$("#me-"+i).val(Comma(temp + handleNumber($("#bookingE-"+i).val())));
+				        	}
+				        }
+
+				        var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
+						$("#me-3").val(value);
+						var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-5").val()));
+						$("#me-7").val(value);
+						var value = Comma(handleNumber($("#me-8").val())+handleNumber($("#me-9").val())+handleNumber($("#me-10").val()));
+						$("#me-11").val(value);
+						var value = Comma(handleNumber($("#me-12").val())+handleNumber($("#me-13").val())+handleNumber($("#me-14").val()));
+						$("#me-15").val(value);
+					}else{
+						for (var i = 0; i < 16; i++) {
+							$("#me-"+i).val($("#rf-"+i).val());
+						}
+
+						$(this).val($("#total-total").val());
+					}
+				});
+
 			});
 
-			//function to add commas to textboxes
-			function Comma(Num) {
-	        Num += '';
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-	        x = Num.split('.');
-	        x1 = x[0];
-	        x2 = x.length > 1 ? '.' + x[1] : '';
-	        var rgx = /(\d+)(\d{3})/;
-	        while (rgx.test(x1))
-	            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-	        return x1 + x2;
-	    }
 
-	    function handleNumber(number){
-			for (var i = 0; i < number.length; i++) {
-				number = number.replace(",","");
-			}
-			number = parseFloat(number);
-			return number;
-		}
 
 		</script>
 

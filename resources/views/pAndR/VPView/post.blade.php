@@ -283,10 +283,10 @@
 				$(".col-c-18").css("width",$("#col-18").css("width"));
 				$(".col-c-19").css("width",$("#col-19").css("width"));
 
-				for(var c=0;c<client.length;c++){
-					$("#child-"+c).css("height",$("#parent-"+c).css("height"));
+				@for($c=0;$c<sizeof($client);$c++)
+					$("#child-"+{{$c}}).css("height",$("#parent-"+{{$c}}).css("height"));
 					
-					$("#clientRF-Fy-"+c).change(function(){
+					$("#clientRF-Fy-"+{{$c}}).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -294,6 +294,19 @@
 						var temp = handleNumber($(this).val());
 
 						$(this).val(Comma(temp));
+
+
+					
+						var vlau1 = handleNumber($("#closed-Fy-"+{{$c}}).val());
+						var vlau2 = handleNumber($("#booking-Fy-"+{{$c}}).val());
+
+						if (vlau1>vlau2) {
+							var totalClient = vlau1 + temp;
+						}else{
+							var totalClient = vlau2 + temp;
+						}
+
+						$("#totalClient-Fy-"+{{$c}}).val(Comma(totalClient));
 
 						var temp2 = parseFloat(0);
 
@@ -313,11 +326,13 @@
 						for(var c2=0;c2<client.length;c2++){
 							tmp1 = handleNumber($("#closed-Fy-"+c2).val());
 							tmp2 = handleNumber($("#booking-Fy-"+c2).val());
+
 							if (tmp1 > tmp2) {
 								temp2 += tmp1;
 							}else{
 								temp2 += tmp2;
 							}
+
 						}
 
 						temp2 = Comma(temp2);
@@ -325,8 +340,22 @@
 						$("#TotalCy-Fy").val(temp2);
 
 
+						var abs = handleNumber(temp2) - handleNumber($("#target").val());
+						var prc = (handleNumber(temp2) / handleNumber($("#target").val()))*100; 
+
+						prc += '';
+
+						prc = prc.replace(".",",");
+						prc = parseFloat(prc);
+
+						prc = prc.toFixed(0);
+
+						$("#varABS").val("$: "+Comma(abs));
+						$("#varPRC").val("%: "+Comma(prc));
+
+
 					});
-					$("#clientRF-Cm-"+c).change(function(){
+					$("#clientRF-Cm-"+{{$c}}).change(function(){
 						if ($(this).val() == "") {
 							$(this).val(0);
 						}
@@ -345,36 +374,10 @@
 
 						$("#RF-Total-Cm").val(temp2);
 					});
-				}
+				@endfor
 			});
 
-			function handleNumber(number){
-				console.log(number);
-				if(number == null){
-					number = 0.0;
-				}else{
-					for (var i = 0; i < number.length/3; i++) {
-						number = number.replace(",","");
-					}
 
-					number = parseFloat(number);
-				}
-				
-				return number;
-			}
-
-		  	function Comma(Num) { //function to add commas to textboxes
-		        Num += '';
-		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-		        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
-		        x = Num.split('.');
-		        x1 = x[0];
-		        x2 = x.length > 1 ? '.' + x[1] : '';
-		        var rgx = /(\d+)(\d{3})/;
-		        while (rgx.test(x1))
-		            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-		        return x1 + x2;
-		    }
 
 		    $('.linked').scroll(function(){
 

@@ -51,7 +51,6 @@ $(document).ready(function(){
 });
 
 function handleNumber(number){
-
   for (var i = 0; i < number.length/3; i++) {
     number = number.replace(".","");
   }

@@ -59,7 +59,7 @@ class VP extends pAndR{
         }
 
         if ($resp) {
-            /*$update = "UPDATE forecast SET read_q = \"".$read."\", 
+            $update = "UPDATE forecast SET read_q = \"".$read."\", 
                                             last_modify_by = \"".$user."\",
                                             last_modify_date = \"".$date."\", 
                                             last_modify_time = \"".$time."\", 
@@ -79,10 +79,10 @@ class VP extends pAndR{
 
             $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update",$clientBrands); 
 
-            return $bool;*/
+            return $bool;
 
         }else{
-            /*$columns = "(oppid,
+            $columns = "(oppid,
                         region_id, sales_rep_id,
                         year, month, read_q, date_m,
                         currency_id, type_of_value,
@@ -107,7 +107,7 @@ class VP extends pAndR{
 
             $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert",$clientBrands);  
 
-            return $bool;*/
+            return $bool;
         }
  
     }
@@ -122,14 +122,21 @@ class VP extends pAndR{
 
         $month = intval(date('n'))-1;
 
+        $whereIn = "month IN (\"".($month+1)."\"";
+
+        for ($m=($month+1); $m <12; $m++) { 
+            $whereIn .= ",\"".($m+1)."\"";
+        }
+        $whereIn .= ")";
+
+
         for ($c=0; $c <sizeof($clients); $c++) {
             if (!$percentage[$c] && $totalFCST[$c] != 0) {
-                var_dump("eai");
-                $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") and (client_id = \"".$clients[$c]->clientID."\") group by month";
+                $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (client_id = \"".$clients[$c]->clientID."\") AND $whereIn  group by month";
                 $res[$c] = $con->query($select[$c]);
                 $resp[$c] = $sql->fetch($res[$c],$from,$from);
                 if (!$resp[$c]) {
-                    $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (sales_representant_office_id = \"".$region['id']."\") group by month";
+                    $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (sales_representant_office_id = \"".$region['id']."\") AND $whereIn group by month";
                     $res[$c] = $con->query($select[$c]);
                     $resp[$c] = $sql->fetch($res[$c],$from,$from);
                 }
@@ -150,10 +157,13 @@ class VP extends pAndR{
                         $total[$c] += $tmp[$c][$t];
                     }
                 }
-
+                for ($t=0; $t <sizeof($tmp[$c]) ; $t++) { 
+                    $percentage[$c][$t] = $tmp[$c][$t]/$total[$c];
+                }
             }
         }
 
+        return $percentage;
     }
 
     public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type,$clientBrands){
@@ -379,6 +389,11 @@ class VP extends pAndR{
         $varAbsFullYear = $this->subArrays( array($totalFullYear) , array($bookingspYear) )[0];
         $varPerFullYear = $this->varPer(array($totalFullYear),array($bookingspYear))[0];
 
+        $target = $this->getTarget($con,$sql,$pr,$regionID,$currencyID,$value,$cYear);
+
+        $varABS = $this->var($totalFullYear,$target,"ABS");
+        $varPRC = $this->var($totalFullYear,$target,"PRC");
+
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
         if ($value == "gross") {
             $valueView = "Gross";
@@ -438,11 +453,59 @@ class VP extends pAndR{
                         "fcstFullYearAE" => $fcstFullYearAE,
                         "currencyName" => $currencyName,
                         "valueView" => $valueView,
-                        "clientBrands" => $clientBrands
+                        "clientBrands" => $clientBrands,
+                        "target" => $target,
+                        "varABS" => $varABS,
+                        "varPRC" => $varPRC
                     );
         return $rtr;
       
     }
+
+    public function var($totalFullYear,$target,$type){
+        switch ($type) {
+            case 'ABS':
+                $return = $totalFullYear - $target;
+                break;
+            case 'PRC':
+                if ($target != 0) {
+                    $return = ($totalFullYear/$target)*100;
+                }else{
+                    $return = 0;
+                }
+                break;
+            default:
+                $return = 0;
+                # code...
+                break;
+        }
+
+        return $return;
+    }
+
+    public function getTarget($con,$sql,$pr,$regionID,$currencyID,$value,$year){
+
+        if ($value == "gross") {
+            $value = "GROSS";
+        }else{
+            $value = "NET";
+        }
+
+        if ($currencyID != 4) {
+            $div = $pr->getPrateByCurrencyAndYear($con,$currencyID,$year);
+        }else{
+            $div = 1;
+        }
+
+        $select = "SELECT SUM(revenue) AS value FROM plan_by_brand WHERE (source = \"TARGET\") AND (year = \"$year\") AND (sales_office_id = \"$regionID\") AND (type_of_revenue = \"$value\") AND (currency_id = '4')";
+
+        $res = $con->query($select);
+
+        $resp = $sql->fetch($res,array('value'),array('value'))[0]['value']*$div;
+
+        return $resp;
+    }
+
 
     public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients){
         $sr = new salesRep();        

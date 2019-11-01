@@ -70,6 +70,7 @@ class VPPAndRRender extends PAndRRender{
         $currency = $forRender["currency"];
         $value = $forRender["value"];
         $cYear = $forRender["cYear"];
+        $pYear = $cYear-1;
 
         $totalFullYearByClientAE = $forRender["totalFullYearByClientAE"];
         $fcstFullYearByClientAE = $forRender["fcstFullYearByClientAE"];
@@ -79,6 +80,10 @@ class VPPAndRRender extends PAndRRender{
         $valueView = $forRender["valueView"];
         $clientBrands = $forRender["clientBrands"];
 
+        $target = $forRender["target"];
+        $varABS = $forRender["varABS"];
+        $varPRC = $forRender["varPRC"];
+
         echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
         echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
         echo "<input type='hidden' name='region' value='".base64_encode(json_encode($region))."'>";
@@ -86,6 +91,7 @@ class VPPAndRRender extends PAndRRender{
         echo "<input type='hidden' name='value' value='".base64_encode(json_encode($value))."'>";
         echo "<input type='hidden' name='cYear' value='".base64_encode(json_encode($cYear))."'>";
         echo "<input type='hidden' name='clientBrands' value='".base64_encode(json_encode($clientBrands))."'>";
+        echo "<input type='hidden' id='target' name='target' value='".number_format($target,0,',','.')."'>";
 
         echo "<div class='row'>";
         echo "<div class='col-2'>";
@@ -124,17 +130,19 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' colspan='9'>Full Year</td>";
                 echo "</tr>";
                  echo "<tr>";
-                    echo "<td class='lightBlue' id='cYear' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; height:20px;'>2019</td>";
-                    echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>2018</td>";
-                    echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
+                    echo "<td class='lightBlue' id='cYear' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; height:20px;'>$cYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. $pYear</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>2019</td>";
-                    echo "<td class='lightBlue' rowspan='2'>2018</td>";
-                    echo "<td class='lightBlue' rowspan='2'style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. 2018</td>";
+                    echo "<td class='lightBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>$cYear</td>";
+                    echo "<td class='lightBlue2' rowspan='2'>$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2'style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. $pYear</td>";
                     echo "<td>&nbsp</td>";
-                    echo "<td class='lightBlue' colspan='6' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>2019</td>";
-                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>2018</td>";
-                    echo "<td class='lightBlue' colspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var 2019/2018</td>";
+                    echo "<td class='lightBlue' colspan='5' style=' border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>$cYear</td>";
+                    echo "<td class='lightBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Target: ".number_format($target,0,",",".")."</td>";
+                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;'>Var $cYear/$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var $cYear/Target</td>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td style='height:20px;'>&nbsp</td>";
@@ -149,8 +157,6 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>Manual Estimation</td>";
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>Total</td>";
                     echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>Total</td>";
-                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>\$</td>";
-                    echo "<td class='lightBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>%</td>";
                 echo "</tr>";
                 echo "<tr>";
                     /* Bookings YTD Current Year */
@@ -237,14 +243,17 @@ class VPPAndRRender extends PAndRRender{
                                 ".number_format($bookingspYear, 0, ",", ".")."
                           </td>";
 
-                    /*Var Abs YoY*/
+                    /*Var Abs CYear and PYear*/
                     echo "<td class='medBlue' id='col-18' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; width:5%;'>
-                                ".number_format($varAbsFullYear, 0, ",", ".")."
+                                \$: ".number_format($varAbsFullYear, 0, ",", ".")."
                           </td>";
 
-                    /*Var Per YoY*/
+                    /*Var Abs CYear and Target*/
                     echo "<td class='medBlue' id='col-19' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; width:5%;'>
-                                ".number_format($varPerFullYear, 0, ",", ".")."%
+                                <input type='text' readonly='true' id='varABS' 
+                                       value='\$: ".number_format($varABS,0,",",".")."' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center'>
                           </td>";
 
                 echo "</tr>";
@@ -283,9 +292,19 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>
                                 100%
                           </td>";
+
                     echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>&nbsp</td>";
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>&nbsp</td>";
-                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'>&nbsp</td>";
+
+                    /*Var Prc CYear and PYear*/
+                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'> %: ".number_format($varPerFullYear, 0, ",", ".")."%
+                    </td>";
+                    /*Var PRC CYear and Target*/
+                    echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'> 
+                            <input type='text' readonly='true' id='varPRC' 
+                                       value='%: ".number_format($varPRC,0,",",".")."%' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center'>
+                    </td>";
                 echo "</tr>";
             echo "</table>";
         echo "</div>";
@@ -409,7 +428,10 @@ class VPPAndRRender extends PAndRRender{
 
                         /*Total CYear*/
                         echo "<td class='$class col-c-16' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; '>
-                                ".number_format($totalFullYearByClient[$c], 0, ",", ".")."
+                                <input type='text' readonly='true' id='totalClient-Fy-$c' 
+                                           value='".number_format($totalFullYearByClient[$c], 0, ",", ".")."' 
+                                           style='width:100%; border:none; font-weight:bold;
+                                           background-color:transparent; text-align:center;'>
                               </td>";
 
                         /*Total PYear*/
