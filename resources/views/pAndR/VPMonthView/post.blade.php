@@ -104,7 +104,7 @@
 			<div style="min-height: 100px;" class="alert alert-warning" role="alert">
 				<span style="font-size:22px;">
 					<center>
-					There is no submissions of Forecast from AE yet!
+					There is no submissions of Forecast from VP View yet!
 					</center>
 				</span>
 			</div>
@@ -187,6 +187,23 @@
 						
 						$("#total-manualEstimationTotal").val(total);
 
+						for (var i = 0; i <16; i++) {
+							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
+
+							if (handleNumber($("#target-"+i).val()) != 0) {
+								$("#achievement-"+i).val(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100 )+"%");
+							}else{
+								$("#achievement-"+i).val(0+"%") ;
+							}
+						}
+
+						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
+						if (  handleNumber($("#totalTarget").val()) != 0) {
+							$("#totalAchievement").val(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100)+"%");
+						}else{
+							$("#totalAchievement").val(Comma(0+"%"));
+						}
+
 
 					});
 				@endfor
@@ -199,15 +216,14 @@
 					$(this).val(Comma(handleNumber($(this).val())));
 
 					var mult = handleNumber($(this).val()) - handleNumber($("#totalBookingE").val());
-
 					if (mult>0) {
 
 						var date = {{(intval(date('n'))-1)}};
 
 				        if (date < 3) {
-				        }else if (date < 7) {
+				        }else if (date < 6) {
 				            date ++;
-				        }else if (date < 11) {
+				        }else if (date < 9) {
 				            date += 2;
 				        }else{
 				            date += 3;
@@ -221,30 +237,68 @@
 				        		total += handleNumber($("#rf-"+i).val());
 				        	}
 				        }
-				        for (var i = date+1 ;i<16 ; i++) {
+				        var test = parseFloat(0);
+				        for (var i = date ;i<16 ; i++) {
 				        	if (i == 3 || i == 7 || i == 11 || i == 15) {
 				        	}else{
-				        		var temp = (mult*(handleNumber($("#rf-"+i).val())/total));
+				        		var prc = (handleNumber($("#rf-"+i).val())/total);
+				        		var temp = (mult*prc);
 				        		temp += '';
 				        		temp = parseFloat(temp.replace('.',','));
 				        		$("#me-"+i).val(Comma(temp + handleNumber($("#bookingE-"+i).val())));
 				        	}
 				        }
 
+
 				        var value = Comma(handleNumber($("#me-0").val())+handleNumber($("#me-1").val())+handleNumber($("#me-2").val()));
 						$("#me-3").val(value);
-						var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-5").val()));
+						var value = Comma(handleNumber($("#me-4").val())+handleNumber($("#me-5").val())+handleNumber($("#me-6").val()));
 						$("#me-7").val(value);
 						var value = Comma(handleNumber($("#me-8").val())+handleNumber($("#me-9").val())+handleNumber($("#me-10").val()));
 						$("#me-11").val(value);
 						var value = Comma(handleNumber($("#me-12").val())+handleNumber($("#me-13").val())+handleNumber($("#me-14").val()));
 						$("#me-15").val(value);
+
+						for (var i = 0; i <16; i++) {
+							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
+
+							if (handleNumber($("#target-"+i).val()) != 0) {
+								$("#achievement-"+i).val(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val())) *100).toFixed(0)+"%");
+							}else{
+								$("#achievement-"+i).val(Comma(0+"%")) ;
+							}
+						}
+
+						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
+						if (  handleNumber($("#totalTarget").val()) != 0) {
+							$("#totalAchievement").val(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0)+"%");
+						}else{
+							$("#totalAchievement").val(Comma(0+"%"));
+						}
+
 					}else{
 						for (var i = 0; i < 16; i++) {
 							$("#me-"+i).val($("#rf-"+i).val());
 						}
 
 						$(this).val($("#total-total").val());
+
+						for (var i = 0; i <16; i++) {
+							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
+
+							if (handleNumber($("#target-"+i).val()) != 0) {
+								$("#achievement-"+i).val( Comma( (handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0)+"%");
+							}else{
+								$("#achievement-"+i).val(0+"%") ;
+							}
+						}
+
+						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
+						if ( handleNumber($("#totalTarget").val()) != 0) {
+							$("#totalAchievement").val(Comma((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0)+"%");
+						}else{
+							$("#totalAchievement").val(Comma(0+"%"));
+						}
 					}
 				});
 
