@@ -226,7 +226,7 @@ class resultsResume extends results{
 	            $whereCorporate[$m][$b] = "WHERE ( plan_by_brand.month IN (".$months[$m][1].") ) 
 	            					   AND ( source  = \"CORPORATE\" )
 	            					   AND (year = $cYear)
-	                                   AND (type_of_revenue = \"".$tr."\" OR type_of_revenue = \"".$tr." REVENUE\")
+	                                   AND (type_of_revenue = \"".$tr."\" OR type_of_revenue = \"".$tr." REVENUE\")z
 	                                   AND (sales_office_id = \"".$regionID."\")  
 	                                   AND (currency_id = 4 )
 	                                   AND (brand_id = \"".$brands[$b][0]."\" )  
