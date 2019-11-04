@@ -961,7 +961,7 @@ class VP extends pAndR{
                                          FROM forecast_client fc
                                          JOIN forecast f ON f.ID = fc.forecast_id
                                          WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast))
+                                         AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast where year = ".$year." and month = ".intval($currentMonth)." and region_id = ".$regionID."))
                                          AND (f.type_of_forecast = 'AE')
                                          AND (fc.month >= ".intval($currentMonth).") $whereIn
                                          AND (f.submitted = '1')
