@@ -247,7 +247,7 @@ class rankingBrand extends rank{
         return $rtr;
     }
 
-	public function getValueColumn($values, $brand, $year, $column){
+	public function getValueColumn($values, $brand, $column, $year){
 		
 		if (is_array($values[$column][$year])) {
 			for ($b=0; $b < sizeof($values[$column][$year]); $b++) { 
@@ -270,7 +270,7 @@ class rankingBrand extends rank{
 			$res = $this->getValueColumn($values, $brand, 1, 0);
 		}elseif ($mtx[$m][0] == "%(Booking / Target)") {
 			$val1 = $this->getValueColumn($values, $brand, 0, 0);
-			$val2 = $this->getValueColumn($values, $brand, 1, 0);
+			$val2 = $this->getValueColumn($values, $brand, 0, 1);
 
 			if ($val1 != "-" && $val2 != "-") {
 				$res = ($val1 / $val2)*100;
@@ -279,7 +279,7 @@ class rankingBrand extends rank{
 			}
 		}elseif ($mtx[$m][0] == "(Booking - Target)") {
 			$val1 = $this->getValueColumn($values, $brand, 0, 0);
-			$val2 = $this->getValueColumn($values, $brand, 1, 0);
+			$val2 = $this->getValueColumn($values, $brand, 0, 1);
 
 			if ($val1 != "-" && $val2 != "-") {
 				$res = $val1 - $val2;

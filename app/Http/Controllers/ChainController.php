@@ -148,7 +148,7 @@ class ChainController extends Controller{
                 $spreadSheet = $dg->excelToBase($spreadSheet);
                 break;		
 		}
-
+        
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
         /*for ($i=0; $i < sizeof($spreadSheet); $i++) { 
             var_dump($spreadSheet[$i]);
