@@ -7,6 +7,7 @@ use App\Exports\monthExport;
 use App\Exports\yoyExport;
 use App\Exports\shareExport;
 use App\Exports\coreExport;
+use App\Exports\rankingBrandExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -325,6 +326,7 @@ class excelController extends Controller{
 
 
         public function rankingBrand(){
+
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
 
@@ -341,11 +343,21 @@ class excelController extends Controller{
 
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
 
-                for ($i=0; $i <5 ; $i++) { 
-                        var_dump(Request::all());
-                }
+                $currency[0]['id'] = $tmp[0]->id;
+                $currency[0]['name'] = $tmp[0]->name;
+                $currency[0]['region'] = $tmp[0]->region;
 
+                //var_dump(Request::all());
+
+                $type = Request::get("typeExcel");
+
+                $months = json_decode(base64_decode(Request::get("monthsExcel")));
+
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
+                $title = Request::get("title");
+
+                //var_dump(new rankingBrandExport("Exports.Views.rankingBrandExport", $brands));
+                return Excel::download(new rankingBrandExport("exports.rankingBrandExport", $brands), $title);
         }
-        
-
 }
