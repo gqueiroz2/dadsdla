@@ -9,7 +9,6 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				
 				<form method="POST" action="{{ route('brandPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
@@ -70,8 +69,18 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Brand Ranking </div>
+			</div>
+			<div class="col-sm">
+				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+					Generate Excel
+				</button>
 			</div>
 		</div>
 	</div>
@@ -123,6 +132,60 @@
                     }
                 });
             @endfor
+
+            $("#excel").click(function(event){
+
+				var regionExcel = <?php echo $regionExcel; ?>;
+				var valueExcel = "<?php echo $valueExcel; ?>";
+				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var typeExcel = "<?php echo $typeExcel; ?>";
+				var monthsExcel = "<?php echo base64_encode(json_encode($monthsExcel)); ?>";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
+				var title = "<?php echo $title; ?>";
+
+				var div = document.createElement('div');
+				var img = document.createElement('img');
+				img.src = '/loading_excel.gif';
+				div.innerHTML = "Generating Excel...<br/>";
+				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+				div.appendChild(img);
+				document.body.appendChild(div);
+
+				$.ajax({
+					xhrFields: {
+						responseType: 'blob',
+					},
+					url: "/generate/excel/rankingBrand",
+					type: "POST",
+					data: {regionExcel, valueExcel, currencyExcel, typeExcel,  monthsExcel, brandsExcel, title},
+					/*success: function(output){
+						$("#vlau").html(output);
+					},*/
+					success: function(result, status, xhr){
+						var disposition = xhr.getResponseHeader('content-disposition');
+				        var matches = /"([^"]*)"/.exec(disposition);
+				        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						// The actual download
+				        var blob = new Blob([result], {
+				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        });
+				        var link = document.createElement('a');
+				        link.href = window.URL.createObjectURL(blob);
+				        link.download = filename;
+
+				        document.body.appendChild(link);
+
+				        link.click();
+				        document.body.removeChild(link);
+				        document.body.removeChild(div);
+					},
+					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
+                        alert(xhr.status+" "+thrownError);
+                    }
+				});
+			});
 		});
 	</script>
 

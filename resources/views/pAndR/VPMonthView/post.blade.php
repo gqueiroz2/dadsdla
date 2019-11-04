@@ -191,15 +191,15 @@
 							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
 
 							if (handleNumber($("#target-"+i).val()) != 0) {
-								$("#achievement-"+i).val(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100 )+"%");
+								$("#achievement-"+i).val( Comma(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0))+"%");
 							}else{
 								$("#achievement-"+i).val(0+"%") ;
 							}
 						}
 
 						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
-						if (  handleNumber($("#totalTarget").val()) != 0) {
-							$("#totalAchievement").val(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100)+"%");
+						if ( handleNumber($("#totalTarget").val()) != 0) {
+							$("#totalAchievement").val(Comma(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0))+"%");
 						}else{
 							$("#totalAchievement").val(Comma(0+"%"));
 						}
@@ -263,15 +263,15 @@
 							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
 
 							if (handleNumber($("#target-"+i).val()) != 0) {
-								$("#achievement-"+i).val(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val())) *100).toFixed(0)+"%");
+								$("#achievement-"+i).val( Comma(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0))+"%");
 							}else{
-								$("#achievement-"+i).val(Comma(0+"%")) ;
+								$("#achievement-"+i).val(0+"%") ;
 							}
 						}
 
 						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
-						if (  handleNumber($("#totalTarget").val()) != 0) {
-							$("#totalAchievement").val(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0)+"%");
+						if ( handleNumber($("#totalTarget").val()) != 0) {
+							$("#totalAchievement").val(Comma(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0))+"%");
 						}else{
 							$("#totalAchievement").val(Comma(0+"%"));
 						}
@@ -287,17 +287,17 @@
 							$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
 
 							if (handleNumber($("#target-"+i).val()) != 0) {
-								$("#achievement-"+i).val( Comma( (handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0)+"%");
+								$("#achievement-"+i).val( Comma(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0))+"%");
 							}else{
-								$("#achievement-"+i).val(0+"%") ;
+								$("#achievement-"+i).val(Comma(0)+"%") ;
 							}
 						}
 
 						$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
 						if ( handleNumber($("#totalTarget").val()) != 0) {
-							$("#totalAchievement").val(Comma((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0)+"%");
+							$("#totalAchievement").val(Comma(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0))+"%");
 						}else{
-							$("#totalAchievement").val(Comma(0+"%"));
+							$("#totalAchievement").val(Comma(0)+"%");
 						}
 					}
 				});
