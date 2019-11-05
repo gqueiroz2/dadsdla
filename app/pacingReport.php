@@ -33,8 +33,6 @@ class pacingReport extends Model
 
         $fcstInfo = $this->getForecast($con,$sql,$region,$currentMonth,$week);
 
-        var_dump($fcstInfo);
-
         if($fcstInfo){
         	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$region);
             $save = $fcstInfo;

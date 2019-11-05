@@ -15,7 +15,7 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'pAndR'],function(){
 
 
-		Route::group(['prefix'=>'pacingReport'],function(){
+		Route::group(['prefix'=>'Pacing'],function(){
 			
 			Route::get('/','pacingReportController@get')
 										->name('pacingReportGet');
