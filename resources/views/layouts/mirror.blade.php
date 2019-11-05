@@ -158,22 +158,22 @@
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 29/10/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 01/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 25/10/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 01/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 28/10/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 01/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 24/10/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 01/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	
