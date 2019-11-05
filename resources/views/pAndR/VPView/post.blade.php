@@ -347,7 +347,7 @@
 						prc = prc.toFixed(0);
 
 						$("#varABS").val("Var Abs "+cYear+"/Target: "+Comma(abs));
-						$("#varPRC").val("Var Prc "+cYear+"/Target: "+Comma(prc)+"%");
+						$("#varPRC").val("Var (%) "+cYear+"/Target: "+Comma(prc)+"%");
 
 
 						var abs2 = handleNumber(temp2) - handleNumber($("#totalPYear").val());
@@ -360,8 +360,8 @@
 
 						prc2 = prc2.toFixed(0);
 
-						$("#varABS2").val("$: "+Comma(abs2));
-						$("#varPRC2").val("%: "+Comma(prc2)+"%");
+						$("#varABS2").val(Comma(abs2));
+						$("#varPRC2").val(Comma(prc2)+"%");
 
 
 					});

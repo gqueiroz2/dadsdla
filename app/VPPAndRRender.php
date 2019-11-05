@@ -143,21 +143,27 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;' > &nbsp </td>";
                     echo "<td>&nbsp</td>";
 
-                    echo "<td class='newBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>Target: ".number_format($target,0,",",".")."</td>";
+                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>&nbsp</td>";
+                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>&nbsp</td>";
+                    echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>Target: ".number_format($target,0,",",".")."</td>";
                 
-                    echo "<td class='newBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>
+
+                     echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>
+                        <input type='text' readonly='true' id='varPRC' 
+                                       value='Var (%) $cYear/Target: ".number_format($varPRC,0,",",".")."%' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center; color:white; width:100%;'>
+                    </td>";
+
+                    echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>
                         <input type='text' readonly='true' id='varABS' 
                                        value='Var Abs $cYear/Target: ".number_format($varABS,0,",",".")."' 
                                        style=' border:none; font-weight:bold; 
                                        background-color:transparent; text-align:center; color:white; width:100%;'>
                     </td>";
                 
-                    echo "<td class='newBlue' colspan='3' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>
-                        <input type='text' readonly='true' id='varPRC' 
-                                       value='Var Prc $cYear/Target: ".number_format($varPRC,0,",",".")."%' 
-                                       style=' border:none; font-weight:bold; 
-                                       background-color:transparent; text-align:center; color:white; width:100%;'>
-                    </td>";
+                   
                 
                 echo "</tr>";
                 echo "<tr>";
@@ -171,7 +177,8 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td>&nbsp</td>";
                     echo "<td class='lightBlue' colspan='6' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>$cYear</td>";
                     echo "<td class='lightBlue2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>$pYear</td>";
-                    echo "<td class='lightBlue' colspan='2' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:10%;'>Var $cYear/$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var Abs $cYear/$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var (%) $cYear/$pYear</td>";
                     //echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var $cYear/Target</td>";
                 echo "</tr>";
                 echo "<tr>";
@@ -279,14 +286,14 @@ class VPPAndRRender extends PAndRRender{
                     /*Var Abs CYear and PYear*/
                     echo "<td class='medBlue' id='col-18' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px; width:5%;'> 
                                     <input type='text' readonly='true' id='varABS2' 
-                                       value='\$: ".number_format($varAbsFullYear, 0, ",", ".")."' 
+                                       value='".number_format($varAbsFullYear, 0, ",", ".")."' 
                                        style=' border:none; font-weight:bold; 
                                        background-color:transparent; text-align:center; width:100%;'>
                     </td>";
                     
                     echo "<td class='medBlue' id='col-19' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 0px; width:5%;'> 
                                     <input type='text' readonly='true' id='varPRC2' 
-                                       value='%: ".number_format($varPerFullYear, 0, ",", ".")."%' 
+                                       value='".number_format($varPerFullYear, 0, ",", ".")."%' 
                                        style=' border:none; font-weight:bold; 
                                        background-color:transparent; text-align:center; width:100%;'>
                     </td>";

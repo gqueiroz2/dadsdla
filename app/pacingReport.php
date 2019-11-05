@@ -33,6 +33,8 @@ class pacingReport extends Model
 
         $fcstInfo = $this->getForecast($con,$sql,$region,$currentMonth,$week);
 
+        var_dump($fcstInfo);
+
         if($fcstInfo){
         	$listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$region);
             $save = $fcstInfo;
@@ -541,9 +543,7 @@ class pacingReport extends Model
         if ($regionID == "1") {
         	$select .= "AND read_q =\"".$week."\"";
         }
-        
         $select .= " ORDER BY ID DESC";
-
         //echo "<pre>".($select)."</pre>";
         $res = $con->query($select);
         //var_dump($res);
