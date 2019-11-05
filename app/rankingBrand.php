@@ -100,7 +100,7 @@ class rankingBrand extends rank{
 
 				$from = $infoQuery[0]['names'];
 				$res[$y] = $sql->fetch($values[$y], $from, $from);
-				
+
 				if (is_array($res[$y])) {
 					$size = sizeof($res[$y]);
 					$sum = 0;
@@ -312,7 +312,6 @@ class rankingBrand extends rank{
 		$closedP = 0;
 		$targetP = 0;
 		$pClosedP = 0;
-		
 		for ($b=0; $b < sizeof($brands); $b++) {
 			for ($m=0; $m < 4; $m++) {
 				$res = $this->checkBrandColumn($brands[$b][1], $mtx, $m, $years, $values);
@@ -335,6 +334,7 @@ class rankingBrand extends rank{
 			}
 			
 		}
+
 
 		for ($b=0; $b < sizeof($brands); $b++) {
 			for ($m=4; $m < 7; $m++) { 
@@ -367,6 +367,7 @@ class rankingBrand extends rank{
 			}
 		}
 
+
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			for ($m=7; $m < sizeof($mtx); $m++) {
 				$res = $this->checkBrandColumn($brands[$b][1], $mtx, $m, $years, $values);
@@ -374,6 +375,8 @@ class rankingBrand extends rank{
 				array_push($mtx[$m], $res);
 			}
 		}
+
+
 
 		if (sizeof($brands) > 1) {
 			array_push($mtx[0], "DN");
