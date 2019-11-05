@@ -134,6 +134,7 @@ class performanceExecutive extends performance
     }
 
     public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div,$divDig){
+
         $base = new base();
 
         $tmp1["values"] = array();
