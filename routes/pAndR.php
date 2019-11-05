@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('pacingReportPost');
 		});
 
-		Route::group(['prefix'=>'VPReport'],function(){
+		Route::group(['prefix'=>'AdvertisersAdjust'],function(){
 			
 			Route::get('/','VPController@get')
 										->name('VPGet');
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'],function(){
 
 		});
 
-		Route::group(['prefix'=>'VPMonthReport'],function(){
+		Route::group(['prefix'=>'MonthAdjust'],function(){
 			
 			Route::get('/','VPMonthController@get')
 										->name('VPMonthGet');

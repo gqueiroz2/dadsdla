@@ -170,6 +170,12 @@ th{
     color: white;   
 }
 
+.newBlue{
+    font-weight: bold;
+    background-color: #0047b3;
+    color: white;   
+}
+
 .medBlue{
    font-weight: bold;
    background-color:  #c3d8ef;

@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'VP Report')
+@section('title', 'Advertisers Adjust')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -49,7 +49,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				VP Report
+				Advertisers Adjust
 			</div>
 		</div>
 	</div>
@@ -100,21 +100,16 @@
 	<br>
 	<div id="body" style="display: none;">
 		<div class="container-fluid">
-			<div class="row justify-content-end">
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>
-				<div class="col"></div>				
-				<div class="col">				
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
-					   AE Submissions
-					</button>
-				</div>
-			</div>
 
 			<form method="POST" action="{{ route('VPSave') }}" runat="server"  onsubmit="ShowLoading()">
 				@csrf
 				<div class="row justify-content-end">
+					<div class="col-2">
+						<label> &nbsp;</label>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
+						   AE Submissions
+						</button>
+					</div>
 					<div class="col-2">
 						<label> &nbsp;</label>
 						<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
@@ -252,7 +247,8 @@
 			}
 
 			$(document).ready(function(){
-				
+					
+				var cYear = {{$cYear}};
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
@@ -350,8 +346,22 @@
 
 						prc = prc.toFixed(0);
 
-						$("#varABS").val("$: "+Comma(abs));
-						$("#varPRC").val("%: "+Comma(prc));
+						$("#varABS").val("Var Abs "+cYear+"/Target: "+Comma(abs));
+						$("#varPRC").val("Var Prc "+cYear+"/Target: "+Comma(prc)+"%");
+
+
+						var abs2 = handleNumber(temp2) - handleNumber($("#totalPYear").val());
+						var prc2 = (handleNumber(temp2) / handleNumber($("#totalPYear").val()))*100; 
+
+						prc2 += '';
+
+						prc2 = prc2.replace(".",",");
+						prc2 = parseFloat(prc2);
+
+						prc2 = prc2.toFixed(0);
+
+						$("#varABS2").val("$: "+Comma(abs2));
+						$("#varPRC2").val("%: "+Comma(prc2)+"%");
 
 
 					});

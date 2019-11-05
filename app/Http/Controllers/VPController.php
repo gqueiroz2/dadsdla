@@ -134,6 +134,6 @@ class VPController extends Controller
             $client = false;
         }
 
-        return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','salesRepListOfSubmit'));
+        return view('pAndR.VPView.post',compact('base','render','region','currency','forRender','client','cYear','salesRepListOfSubmit'));
     }
 }
