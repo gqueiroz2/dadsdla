@@ -132,7 +132,8 @@ class performanceExecutive extends performance
     }
 
     public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div,$divDig){
-
+  
+  
         setlocale(LC_ALL, "en_US.utf8");
         $uN = iconv("utf-8", "ascii//TRANSLIT", Request::session()->get('userName'));
         $db = new dataBase();
