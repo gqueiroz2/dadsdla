@@ -54,6 +54,8 @@
 		</div>
 	</div>
 
+	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
+
 	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">		
@@ -334,6 +336,7 @@
 
 		</script>
 
+    @endif
     @endif
 
 @endsection

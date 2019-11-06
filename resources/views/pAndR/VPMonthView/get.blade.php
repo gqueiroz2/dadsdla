@@ -12,6 +12,7 @@
 			</div>
 		</div>
 	</div>
+	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
@@ -75,5 +76,5 @@
 		</div>
 	</form>
 
-
+	@endif
 @endsection

@@ -53,6 +53,7 @@
 			</div>
 		</div>
 	</div>
+	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
@@ -206,7 +207,6 @@
 	    	</div>
 	  	</div>
 	</div>
-
 
 	<script>
 		$(document).ready(function(){
@@ -397,6 +397,8 @@
 			
 
 		</script>
+	@endif
+
 	@endif
 
 @endsection

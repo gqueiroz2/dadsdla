@@ -30,6 +30,7 @@
 			</div>
 		</div>
 	</div>
+	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('pacingReportPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
@@ -90,6 +91,6 @@
 		});
 	</script>
 
-
+	@endif
 
 @endsection

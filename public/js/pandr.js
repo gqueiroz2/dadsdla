@@ -3,7 +3,6 @@ $(document).ready(function(){
     var regionID = $(this).val();
     ajaxSetup();
     if (regionID != "") {
-        
       $.ajax({
         url:"/ajax/adsales/currencyByRegion",
         method:"POST",
@@ -15,25 +14,26 @@ $(document).ready(function(){
           alert(xhr.status+" "+thrownError);
         }
       });
-
-      $.ajax({
-        url:"/ajax/salesRepByRegion",
-        method:"POST",
-        data:{regionID},
-        success: function(output){
-          $('#salesRep').html(output);
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      })
-
+      
       $.ajax({ 
         url:"/ajax/yearOnFcst",
         method:"POST",
         data:{regionID},
         success: function(output){
-          $('#year').html(output);          
+          $('#year').html(output);
+          var year = $("#year").val();
+          $.ajax({
+            url:"/ajax/salesRepByRegionPandR",
+            method:"POST",
+            data:{regionID,year},
+            success: function(output){
+              $('#salesRep').html(output);
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          })         
+        
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
