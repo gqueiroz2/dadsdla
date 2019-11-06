@@ -541,9 +541,7 @@ class pacingReport extends Model
         if ($regionID == "1") {
         	$select .= "AND read_q =\"".$week."\"";
         }
-        
         $select .= " ORDER BY ID DESC";
-
         //echo "<pre>".($select)."</pre>";
         $res = $con->query($select);
         //var_dump($res);

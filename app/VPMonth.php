@@ -431,17 +431,23 @@ class VPMonth extends pAndR {
             if ($regionID == "1") {
                 $idSelect .= " AND read_q = (SELECT (MAX(read_q)) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
             }
-            
+
             $idResult = $con->query($idSelect);
             $idSaida = $sql->fetch($idResult, array("ID"), array("ID"));
-            
-            $idPSelect = "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted='1'";
+            $idPSelect = "";
             if ($regionID == "1") {
-                $idPSelect .= " AND read_q = (SELECT (MAX(read_q)-1) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
+                $idPSelect .= "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\" AND submitted='1' AND read_q = (SELECT (MAX(read_q)-1) FROM forecast WHERE year = \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".$cMonth."\" AND region_id = \"".$regionID."\")";
+            }else{
+                $idPSelect .= "SELECT ID FROM forecast WHERE year= \"".$year."\" AND type_of_forecast = \"".$type."\" AND month = \"".($cMonth-1)."\" AND region_id = \"".$regionID."\" AND submitted='1'";
             }
             
+
             $idPResult = $con->query($idPSelect);
             $idPSaida = $sql->fetch($idPResult, array("ID"), array("ID"));
+
+            if (!$idPSaida) {
+                $idPSaida = $idSaida;
+            }
 
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 
@@ -1660,7 +1666,21 @@ class VPMonth extends pAndR {
         $resYTD = $con->query($ytd);
         $from = array("clientName","clientID");
         $listYTD = $sql->fetch($resYTD,$from,$from);
-        
+
+        $forecast = "SELECT DISTINCT c.name AS 'clientName',
+            c.ID AS 'clientID'
+            FROM forecast_client f
+            LEFT JOIN client c ON c.ID = f.client_id
+            LEFT JOIN forecast f2 ON f2.ID = f.forecast_id
+                WHERE (f2.year = \"$year\")
+                AND (f2.region_id = \"$regionID\")
+                ORDER BY 1
+        ";
+
+        $resFcst = $con->query($forecast);
+        $from = array("clientName","clientID");
+        $listFcst = $sql->fetch($resFcst,$from,$from);
+
         $count = 0;
         if($listSF){
             for ($sff=0; $sff < sizeof($listSF); $sff++) { 
@@ -1671,6 +1691,13 @@ class VPMonth extends pAndR {
         if($listYTD){
             for ($y=0; $y < sizeof($listYTD); $y++) { 
                 $list[$count] = $listYTD[$y];
+                $count ++;
+            }
+        }
+
+        if ($listFcst) {
+            for ($f=0; $f < sizeof($listFcst); $f++) { 
+                $list[$count] = $listFcst[$f];
                 $count ++;
             }
         }

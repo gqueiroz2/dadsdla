@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'VP Report')
+@section('title', 'Pacing')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -26,7 +26,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Pacing Report
+				Pacing 
 			</div>
 		</div>
 	</div>
