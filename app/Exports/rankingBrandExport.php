@@ -2,21 +2,37 @@
 
 namespace App\Exports;
 
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class rankingBrandExport implements FromView {
+class rankingBrandExport implements FromArray, WithMultipleSheets {
 
-	protected $view;
-	protected $data;
+	protected $sheets;
+	protected $labels;
 
-	public function __construct($view, $data){
-		$this->view = $view;
-	    $this->data = $data;
+	public function __construct(array $sheets, $labels){
+		$this->sheets = $sheets;
+		$this->labels = $labels;
 	}
 
-    public function view(): View{
-        
-    	return view($this->view, $this->data);
+    public function array(): array {
+
+        return $this->sheets;
     }
+
+    public function sheets(): array{
+    	
+    	$sheets = array();
+    	array_push($sheets, new allBrandsExport($this->labels[0], $this->sheets));
+
+    	$names = array("region" => $this->sheets['region'], 'currency' => $this->sheets['currency'], 'value' => $this->sheets['value']);
+
+		for ($b=0; $b < sizeof($this->sheets['brand']); $b++) { 
+			array_push($sheets, new brandExport($this->labels[1],$this->sheets['brandsMtx'][$b], $this->sheets['brandsTotal'][$b], $this->sheets['type'], $this->sheets['brand'][$b][1], $names));
+		}
+
+    	return $sheets;
+    	
+    }
+
 }

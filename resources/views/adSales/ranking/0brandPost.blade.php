@@ -155,7 +155,7 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/rankingBrand",
+					url: "/generate/excel/brand",
 					type: "POST",
 					data: {regionExcel, valueExcel, currencyExcel, typeExcel,  monthsExcel, brandsExcel, title},
 					/*success: function(output){

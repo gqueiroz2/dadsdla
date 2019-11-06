@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
 
+		//results excel
 		Route::post('summary','excelController@resultsSummary')
 								->name('summaryExcel');
 
@@ -33,11 +34,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('core','excelController@performanceCore')
 									->name('coreExcel');
 
-		Route::post('share','excelController@resultsShare')
-									->name('shareExcel');
-
-		Route::post('rankingBrand','excelController@rankingBrand')
-									->name('rankingBrandExcel');
+		//ranking excel
+		Route::post('brand','rankingExcelController@brand')
+									->name('brandExcel');
 
 		});
 	});

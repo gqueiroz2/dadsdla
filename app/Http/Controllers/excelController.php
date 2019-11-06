@@ -7,7 +7,6 @@ use App\Exports\monthExport;
 use App\Exports\yoyExport;
 use App\Exports\shareExport;
 use App\Exports\coreExport;
-use App\Exports\rankingBrandExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -324,40 +323,4 @@ class excelController extends Controller{
                 return Excel::download(new coreExport($final, $report, $salesRegion), $title);
         }
 
-
-        public function rankingBrand(){
-
-                $db = new dataBase();
-                $con = $db->openConnection("DLA");
-
-                $region = Request::get("regionExcel");
-              
-                $r = new region();
-                $tmp = $r->getRegion($con,array($region));
-
-                if(is_array($tmp)){
-                        $salesRegion = $tmp[0]['name'];
-                }else{  
-                        $salesRegion = $tmp['name'];
-                }
-
-                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
-
-                $currency[0]['id'] = $tmp[0]->id;
-                $currency[0]['name'] = $tmp[0]->name;
-                $currency[0]['region'] = $tmp[0]->region;
-
-                //var_dump(Request::all());
-
-                $type = Request::get("typeExcel");
-
-                $months = json_decode(base64_decode(Request::get("monthsExcel")));
-
-                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
-
-                $title = Request::get("title");
-
-                //var_dump(new rankingBrandExport("Exports.Views.rankingBrandExport", $brands));
-                return Excel::download(new rankingBrandExport("exports.rankingBrandExport", $brands), $title);
-        }
 }
