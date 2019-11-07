@@ -38,26 +38,6 @@ class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
         ],
     ];
 
-    protected $bodyHeadStyle = [
-        'font' => [
-            'bold' => true,
-            'name' => 'Verdana',
-            'size' => 10,
-            'color' => array('rgb' => 'FFFFFF')
-        ],
-        'alignment' => [
-            'horizontal' => 'center',
-            'vertical' => 'center',
-            'wrapText' => true
-        ],
-        'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => '0070c0',
-            ],
-        ],
-    ];
-
     protected $lineBodyPair = [
         'font' => [
             'bold' => true,
@@ -148,7 +128,7 @@ class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
             AfterSheet::class => function(AfterSheet $event){
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
+                
                 if ($this->dataType == "agency") {
                 	$letter = "H";
                 }else{
@@ -156,7 +136,8 @@ class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
                 }
 
                 $cellRange = "A2:".$letter."2";
-                $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyHeadStyle);
+                $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(10);
 
                 for ($d=0; $d < sizeof($this->data[0]); $d++) { 
                 	$cellRange = "A".($d+3).":".$letter.($d+3);

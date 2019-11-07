@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\base;
+use App\brand;
+use App\region;
+use App\dataBase;
+
+use App\resultsResume;
+use App\resultsMQ;
+
 use App\Exports\summaryExport;
 use App\Exports\monthExport;
-use App\Exports\yoyExport;
-use App\Exports\shareExport;
-use App\Exports\coreExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use App\generateExcel;
-use App\dataBase;
-use App\region;
-use App\brand;
-use App\base;
-
-class excelController extends Controller{
+class resultsExcelController extends Controller{
 
         public function resultsSummary(){
 
@@ -53,41 +52,110 @@ class excelController extends Controller{
                 $base = new base();
                 $month = $base->getMonth();
 
-                $ge = new generateExcel();
+                $resume = new resultsResume();
 
-                if ($salesRegion == "Brazil") {
-                        $form = "cmaps";
+                $currentMonth = intval(date('m'));
+
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
+                $cYear = intval(date('Y') );
+                $pYear = $cYear - 1;
+
+                if (empty($brands[0])) {
+                        $Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $region, $currency[0]['id'], $salesRegion);
+
+                        $matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
+
+                        $DN = $resume->grouper(null,$Digital);
+
+                        $matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+
+                        $data = array('Digital' => $matrixDigital, 'DN' => $matrixDN);
+                        $auxData = array("Digital", "DN");
+                }
+
+                elseif (empty($brands[1])) {
+                        $TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $region, $currency[0]['id'], $salesRegion);
+
+                        $matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);   
+
+                        $DN = $resume->grouper($TV,null);
+
+                        $matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+
+                        $data = array('TV' => $matrixTV, 'DN' => $matrixDN);
+                        $auxData = array("TV", "DN");
                 }else{
-                        $form = "ytd";
-                }
+                        $TV = $resume->generateVectorsTV($con, $brands[0], $month, $currentMonth, $value, $cYear, $pYear, $region, $currency[0]['id'], $salesRegion);
 
-                $firstTable = $ge->selectDataResults($con, $region, $years[0], $brand, $form, $currency, $value, $month);
+                        $matrixTV = $resume->assembler($month,$TV["salesCYear"],$TV["actual"],$TV["target"],$TV["corporate"]/*$pAndR,$finance*/,$TV["previousYear"]);
                         
-                $secondTable = $ge->selectDataResults($con, $region, $years[1], $brand, "ytd", $currency, $value, $month);
+                        $Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $region, $currency[0]['id'], $salesRegion);
 
-                for ($p=0; $p < sizeof($secondTable[1]); $p++) { 
-                        array_push($firstTable[1], $secondTable[1][$p]);
+                        $matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
+
+                        $DN = $resume->grouper($TV,$Digital);
+
+                        $matrixDN = $resume->assembler($month,$DN["salesCYear"],$DN["actual"],$DN["target"],$DN["corporate"]/*$pAndR,$finance*/,$DN["previousYear"]);
+
+                        $data = array('TV' => $matrixTV, 'Digital' => $matrixDigital, 'DN' => $matrixDN);
+                        $auxData = array("TV", "Digital", "DN");
                 }
 
-                unset($secondTable[1]);
+                $data['currency'] = $currency;
+                $data['region'] = $salesRegion;
+                $data['value'] = $value;
+                $data['year'] = $cYear;
 
-                $plan = array("TARGET", "CORPORATE", "ACTUAL");
+                $labels = "exports.results.summary.summaryExport";
+
+                return Excel::download(new summaryExport($data, $labels, $auxData), $title);
+        }
+
+        public function resultsMonth(){
                 
-                $planTable = $ge->selectDataResults($con, $region, $years[0], $brand, $plan, $currency, $value, $month);
-                
-                $final = array($form => $firstTable[0], 'digital' => $firstTable[1], 'plan' => $planTable[0], 'pYtd' => $secondTable[0]);
-                
-                $plans = implode(",", $plan);
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
 
-                $report[0] = "$salesRegion - TV Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$plans.") Summary : BKGS - ".$years[0]." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[3] = "$salesRegion - TV Summary : BKGS - ".$years[1]." (".$currency[0]['name']."/".strtoupper($value).")";
+                //id da região
+                $region = Request::get("regionExcel");
 
-                $BKGS[0] = "TV - ".$years[0];
-                $BKGS[1] = "TV - ".$years[1];
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
 
-                return Excel::download(new summaryExport($final, $report, $salesRegion, $BKGS), $title);
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{
+                        $salesRegion = $tmp['name'];
+                }
+
+                //ano consultado
+                $years = json_decode(base64_decode(Request::get("yearExcel")));
+
+                $base = new base();
+                $months = $base->month;
+
+                //primeira posição (target ou corporate)
+                $firstPos = Request::get("firstPosExcel");
+                //segunda posição (booking ou cmaps)
+                $secondPos = Request::get("secondPosExcel");
+
+                //currency da pesquisa
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+                $currency[0]['id'] = $tmp[0]->id;
+                $currency[0]['name'] = $tmp[0]->name;
+                $currency[0]['region'] = $tmp[0]->region;
+
+                //gross ou net
+                $value = Request::get("valueExcel");
+
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
+                //nome do excel e do relatorio
+                $title = Request::get("title");
+                var_dump($brands);
+                //return Excel::download(new monthExport($final, $report, $salesRegion), $title);
+
         }
 
 	public function resultsMQ(){

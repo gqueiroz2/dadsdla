@@ -155,12 +155,9 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/brand",
+					url: "/generate/excel/ranking/brand",
 					type: "POST",
 					data: {regionExcel, valueExcel, currencyExcel, typeExcel,  monthsExcel, brandsExcel, title},
-					/*success: function(output){
-						$("#vlau").html(output);
-					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

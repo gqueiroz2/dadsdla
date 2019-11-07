@@ -55,7 +55,6 @@
 			</div>
 		</div>
 	</div>
-	<div id="vlau"></div>
 	@for($t = 0; $t < sizeof($matrix); $t++)
 		<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
 			<div class="row mt-2">
@@ -65,6 +64,8 @@
 			</div>
 		</div>
 	@endfor
+
+	<div id="vlau"></div>
 
 	<script type="text/javascript">
 
@@ -78,6 +79,7 @@
 				var valueExcel = "<?php echo $valueExcel; ?>";
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
 				var title = "<?php echo $title; ?>";
 
 				var div = document.createElement('div');
@@ -92,9 +94,12 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/summary",
+					url: "/generate/excel/results/summary",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, brandsExcel, title},
+					/*success: function(output){
+						$("#vlau").html(output);
+					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

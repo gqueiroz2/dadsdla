@@ -16,7 +16,6 @@ class rankingBrandExport implements FromArray, WithMultipleSheets {
 	}
 
     public function array(): array {
-
         return $this->sheets;
     }
 

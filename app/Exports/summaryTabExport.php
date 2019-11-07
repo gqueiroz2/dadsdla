@@ -9,10 +9,12 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
+class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
     
     protected $view;
 	protected $data;
+	protected $tab;
+	protected $headInfo;
 
 	protected $headStyle = [
         'font' => [
@@ -25,12 +27,6 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
             'horizontal' => 'center',
             'vertical' => 'center',
             'wrapText' => true
-        ],
-        'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => '0070c0',
-            ],
         ],
     ];
 
@@ -94,13 +90,16 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
         ],
     ];
 
-	public function __construct($view, $data){
+    public function __construct($view, $data, $tab, $headInfo){
 		$this->view = $view;
 	    $this->data = $data;
+	    $this->tab = $tab;
+	    $this->headInfo = $headInfo;
 	}
 
-    public function view(): View{
-    	return view($this->view, ['data' => $this->data]);
+	public function view(): View{
+
+    	return view($this->view, ['data' => $this->data, 'tab' => $this->tab, 'headInfo' => $this->headInfo]);
     }
 
     /**
@@ -115,24 +114,26 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
 
                 $cellRange = "A2:I2";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(10);
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(8);
 
-                for ($b=0; $b < sizeof($this->data['brand']); $b++) { 
-                	$cellRange = "A".($b+3).":I".($b+3);
-                	if (($b+3) % 2 == 0) {
+                $letter = "I";
+
+                for ($d=0; $d < sizeof($this->data); $d++) { 
+                	$cellRange = "A".($d+3).":".$letter.($d+3);
+                	if (($d+3) % 2 == 0) {
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
                 	}else{
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
                 	}
                 }
 
-                $cellRange = "A".(sizeof($this->data['brand'])+2).":I".(sizeof($this->data['brand'])+2);
+                $cellRange = "A".(sizeof($this->data)+2).":".$letter.(sizeof($this->data)+2);
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
             },
         ];
     }
 
     public function title(): string{
-        return "ranking brand";
+        return "summary - ".$this->tab;
     }
 }
