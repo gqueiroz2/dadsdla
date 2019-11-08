@@ -593,7 +593,7 @@ class VPMonth extends pAndR {
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
-            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$pRate);
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
 
@@ -1219,7 +1219,7 @@ class VPMonth extends pAndR {
         START CONTROL VALUES FUNCTIONS
     */
 
-    public function addLost($con,$clients,$fcstStages,$value){
+    public function addLost($con,$clients,$fcstStages,$value,$div){
 
         $sql = new sql();
 
@@ -1236,7 +1236,7 @@ class VPMonth extends pAndR {
 
             $result[$c] = $sql->fetchSum($res,"value");
             
-            $fcstStages[$c][1][5] = $result[$c]['value'];
+            $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
         return $fcstStages;

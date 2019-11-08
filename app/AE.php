@@ -370,7 +370,6 @@ class AE extends pAndR{
         $tmp = array($cYear);
         //valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
-        
         //nome da moeda pra view
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -591,7 +590,7 @@ class AE extends pAndR{
 
         $rollingFCST = $this->adjustFCST($rollingFCST);
 
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
         $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
@@ -965,7 +964,7 @@ class AE extends pAndR{
         }
         //var_dump($lastRollingFCST);
 
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
         $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
@@ -1096,7 +1095,7 @@ class AE extends pAndR{
     }
 
 
-    public function addLost($con,$clients,$fcstStages,$value){
+    public function addLost($con,$clients,$fcstStages,$value,$div){
 
         $sql = new sql();
 
@@ -1113,7 +1112,7 @@ class AE extends pAndR{
 
             $result[$c] = $sql->fetchSum($res,"value");
             
-            $fcstStages[$c][1][5] = $result[$c]['value'];
+            $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
         return $fcstStages;
