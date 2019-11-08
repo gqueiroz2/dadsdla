@@ -130,7 +130,7 @@ class resultsExcelController extends Controller{
                 }
 
                 //ano consultado
-                $years = json_decode(base64_decode(Request::get("yearExcel")));
+                $year = json_decode(base64_decode(Request::get("yearExcel")));
 
                 $base = new base();
                 $months = $base->month;
@@ -153,9 +153,17 @@ class resultsExcelController extends Controller{
 
                 //nome do excel e do relatorio
                 $title = Request::get("title");
-                var_dump($brands);
-                //return Excel::download(new monthExport($final, $report, $salesRegion), $title);
+                
+                $mq = new resultsMQ();
+                $lines = $mq->lines($con,$currency,$months,$secondPos,$brands,$year,$region,$value,$firstPos);
 
+                $mtx = $mq->assembler($con,$brands,$lines,$months,$year,$firstPos);
+
+                $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $salesRegion, 'year' => $year, 'value' => $value);
+
+                $label = "exports.results.month.monthExport";
+
+                return Excel::download(new monthExport($data, $label), $title);
         }
 
 	public function resultsMQ(){
