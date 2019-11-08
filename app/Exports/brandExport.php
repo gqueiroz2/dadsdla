@@ -8,8 +8,10 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
+class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting, WithStrictNullComparison {
     
 	protected $view;
 	protected $data;
@@ -156,5 +158,24 @@ class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
 
     public function title(): string{
         return "ranking brand - ".$this->dataBrand;
+    }
+
+    public function columnFormats(): array{
+        
+        if ($this->dataType == "agency") {
+            return [
+                'C' => '#,##0.00_-',
+                'D' => '#,##0.00_-',
+                'E' => '#,##0.00_-',
+                'F' => '#0%'
+            ];
+        }else{
+            return [
+                'B' => '#,##0.00_-',
+                'C' => '#,##0.00_-',
+                'D' => '#,##0.00_-',
+                'E' => '#0%'
+            ];
+        }
     }
 }

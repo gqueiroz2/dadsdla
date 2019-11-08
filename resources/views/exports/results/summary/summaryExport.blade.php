@@ -40,56 +40,56 @@
 			<tr>
 				<td style="border:1px solid #FFFFFF">{{$data[$m]['month']}}</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['sales'], 0, ",", ".")}}
+					{{$data[$m]['sales']}}
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['actual'], 0, ",", ".")}}
+					{{$data[$m]['actual']}}
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['target'], 0, ",", ".")}}
+					{{$data[$m]['target']}}
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['corporate'], 0, ",", ".")}}
+					{{$data[$m]['corporate']}}
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['pYear'], 0, ",", ".")}}
+					{{$data[$m]['pYear']}}
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['salesOverTarget'], 0, ",", ".")}} %
+					{{$data[$m]['salesOverTarget']/100}} 
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['salesOverCorporate'], 0, ",", ".")}} %
+					{{$data[$m]['salesOverCorporate']/100}} 
 				</td>
 				<td style="border:1px solid #FFFFFF">
-					{{number_format($data[$m]['salesYoY'], 0, ",", ".")}} %
+					{{$data[$m]['salesYoY']/100}} 
 				</td>
 			</tr>
 		@else
 			<tr>
 				<td>{{$data[$m]['month']}}</td>
 				<td>
-					{{number_format($data[$m]['sales'], 0, ",", ".")}}
+					{{$data[$m]['sales']}}
 				</td>
 				<td>
-					{{number_format($data[$m]['actual'], 0, ",", ".")}}
+					{{$data[$m]['actual']}}
 				</td>
 				<td>
-					{{number_format($data[$m]['target'], 0, ",", ".")}}
+					{{$data[$m]['target']}}
 				</td>
 				<td>
-					{{number_format($data[$m]['corporate'], 0, ",", ".")}}
+					{{$data[$m]['corporate']}}
 				</td>
 				<td>
-					{{number_format($data[$m]['pYear'], 0, ",", ".")}}
+					{{$data[$m]['pYear']}}
 				</td>
 				<td>
-					{{number_format($data[$m]['salesOverTarget'], 0, ",", ".")}} %
+					{{$data[$m]['salesOverTarget']/100}}
 				</td>
 				<td>
-					{{number_format($data[$m]['salesOverCorporate'], 0, ",", ".")}} %
+					{{$data[$m]['salesOverCorporate']/100}}
 				</td>
 				<td>
-					{{number_format($data[$m]['salesYoY'], 0, ",", ".")}} %
+					{{$data[$m]['salesYoY']/100}}
 				</td>
 			</tr>
 		@endif

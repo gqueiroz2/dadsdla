@@ -17,9 +17,9 @@
                 @else
                     @if(is_numeric($data['mtx'][$n][$m]))
                         @if($n >= 4 && $n <= 7)
-                            <td>{{number_format($data['mtx'][$n][$m],0,',','.')}} %</td>
+                            <td>{{$data['mtx'][$n][$m]/100}}</td>
                         @else
-                            <td>{{number_format($data['mtx'][$n][$m],0,',','.')}}</td>  
+                            <td>{{$data['mtx'][$n][$m]}}</td>  
                         @endif
                     @else
                         <td>{{$data['mtx'][$n][$m]}}</td>

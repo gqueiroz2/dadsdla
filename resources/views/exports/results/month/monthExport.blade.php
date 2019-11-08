@@ -17,31 +17,31 @@
 					@if($n == 3)
 						@if($o == 13)
 							<td style="background-color: #143052; color: #FFFFFF;font-weight: bold;">
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}} %
+								{{$data['mtx'][$m][$n][$o]/100}}
 							</td>
 						@else
 							<td style="background-color: #dce6f1">
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}} %
+								{{$data['mtx'][$m][$n][$o]/100}}
 							</td>
 						@endif
 					@elseif($n == 4)
 						@if($o == 13)
 							<td style="background-color: #0f243e; color: #FFFFFF;font-weight: bold;">
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}}
+								{{$data['mtx'][$m][$n][$o]}}
 							</td>
 						@else
 							<td style="background-color: #c3d8ef">
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}}
+								{{$data['mtx'][$m][$n][$o]}}
 							</td>
 						@endif
 					@else
 						@if($o == 13)
 							<td style="background-color: #143052; color: #FFFFFF;font-weight: bold;">
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}}
+								{{$data['mtx'][$m][$n][$o]}}
 							</td>
 						@else
 							<td>
-								{{number_format($data['mtx'][$m][$n][$o], 0, ",", ".")}}
+								{{$data['mtx'][$m][$n][$o]}}
 							</td>
 						@endif
 					@endif
