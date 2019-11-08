@@ -179,9 +179,7 @@
                     $("#button").val("Submit");
                 }
             });
-            for(var c=0;c<client.length;c++){
-                $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
-            }
+
             
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($client);$c++)
@@ -392,8 +390,11 @@
                 @endfor
             @endfor
 
-            $("#loading").css('display',"none");
             $("#body").css('display',"");
+            for(var c=0;c<client.length;c++){
+                $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
+            }
+            $("#loading").css('display',"none");
         });
     </script>
 
