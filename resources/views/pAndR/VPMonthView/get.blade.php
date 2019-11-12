@@ -5,13 +5,7 @@
     <script src="/js/pandr.js"></script>
 @endsection
 @section('content')
-	<div class="container-fluid">
-		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Month Adjust
-			</div>
-		</div>
-	</div>
+	
 	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('VPMonthPost') }}" runat="server"  onsubmit="ShowLoading()">
@@ -75,6 +69,13 @@
 			</div>
 		</div>
 	</form>
+	<div class="container-fluid">
+		<div class="row justify-content-end mt-2">
+			<div class="col-3" style="color: #0070c0;font-size: 25px;">
+				Month Adjust
+			</div>
+		</div>
+	</div>
 
 	@endif
 @endsection

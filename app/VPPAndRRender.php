@@ -83,6 +83,9 @@ class VPPAndRRender extends PAndRRender{
         $target = $forRender["target"];
         $varABS = $forRender["varABS"];
         $varPRC = $forRender["varPRC"];
+        /*echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>
+                        
+                    </td>";*/
 
         echo "<input type='hidden' name='percentage' value='".base64_encode(json_encode($percentage))."'>";
         echo "<input type='hidden' name='client' value='".base64_encode(json_encode($client))."'>";
@@ -100,10 +103,13 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td style='width:100%; height:40px;'><input type='text' id='myInput' onkeyup=\"myFunc()\" placeholder=\"Search for clients...\"></td>";
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px;' >&nbsp</td>";
-                echo "</tr>";
-                echo "<tr>";
-                    echo "<td class='lightBlue' rowspan='2' id='currencyName' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;' >$currencyName/$valueView</td>";
+                    echo "<td class='lightBlue' rowspan='2' id='currencyName' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;' >
+                        <input type='text' readonly='true' id='varPRC' 
+                                       value='(%) Target: ".number_format($varPRC,0,",",".")."%' 
+                                       style=' border:none; font-weight:bold; 
+                                       background-color:transparent; text-align:center; color:white; width:100%;'>
+
+                    </td>";
                 echo "</tr>";
                 echo "<tr>";
                 echo "</tr>";
@@ -133,40 +139,6 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;' colspan='9'>Full Year</td>";
                 echo "</tr>";
                 echo "<tr>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px; height:40px;' colspan='2'>&nbsp</td>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'> &nbsp </td>";
-                    echo "<td>&nbsp</td>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;' colspan='4'> &nbsp </td>";
-                    /*
-                        CURRENT MONTH
-                    */
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;' > &nbsp </td>";
-                    echo "<td>&nbsp</td>";
-
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>&nbsp</td>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>&nbsp</td>";
-                    echo "<td class='newBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>&nbsp</td>";
-                    echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;'>Target: ".number_format($target,0,",",".")."</td>";
-                
-
-                     echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 0px 1px 0px;'>
-                        <input type='text' readonly='true' id='varPRC' 
-                                       value='Var (%) $cYear/Target: ".number_format($varPRC,0,",",".")."%' 
-                                       style=' border:none; font-weight:bold; 
-                                       background-color:transparent; text-align:center; color:white; width:100%;'>
-                    </td>";
-
-                    echo "<td class='newBlue' colspan='2' style='border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;'>
-                        <input type='text' readonly='true' id='varABS' 
-                                       value='Var Abs $cYear/Target: ".number_format($varABS,0,",",".")."' 
-                                       style=' border:none; font-weight:bold; 
-                                       background-color:transparent; text-align:center; color:white; width:100%;'>
-                    </td>";
-                
-                   
-                
-                echo "</tr>";
-                echo "<tr>";
                     echo "<td class='lightBlue' id='cYear' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; height:20px;'>$cYear</td>";
                     echo "<td class='lightBlue2' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;'>$pYear</td>";
                     echo "<td class='lightBlue2' rowspan='2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var. $pYear</td>";
@@ -177,8 +149,8 @@ class VPPAndRRender extends PAndRRender{
                     echo "<td>&nbsp</td>";
                     echo "<td class='lightBlue' colspan='6' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>$cYear</td>";
                     echo "<td class='lightBlue2' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>$pYear</td>";
-                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var Abs $cYear/$pYear</td>";
-                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var (%) $cYear/$pYear</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var Abs</td>";
+                    echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; width:5%;'>Var %</td>";
                     //echo "<td class='lightBlue' rowspan='2' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>Var $cYear/Target</td>";
                 echo "</tr>";
                 echo "<tr>";

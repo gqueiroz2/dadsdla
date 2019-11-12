@@ -962,7 +962,6 @@ class AE extends pAndR{
             $lastRollingFCST = $rollingFCST;
             
         }
-        //var_dump($lastRollingFCST);
 
         $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
@@ -970,6 +969,7 @@ class AE extends pAndR{
 
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
+        $executiveRF = $this->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
@@ -989,6 +989,8 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+
+
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -1030,6 +1032,32 @@ class AE extends pAndR{
 
         return $rtr;
         
+    }
+
+    public function addBookingRollingFCST($fcst,$booking){
+        $date = intval(date('n'))-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($d=$date; $d <sizeof($fcst); $d++) {
+            $fcst[$d] += $booking[$d];
+        }
+
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+        return $fcst;
     }
 
     public function checkEmpty($array){

@@ -23,13 +23,7 @@
     </style>
 @endsection
 @section('content')
-	<div class="container-fluid">
-		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Pacing 
-			</div>
-		</div>
-	</div>
+	
 	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('pacingReportPost') }}" runat="server"  onsubmit="ShowLoading()">
@@ -75,6 +69,13 @@
 			</div>
 		</div>
 	</form>
+	<div class="container-fluid">
+		<div class="row justify-content-end mt-2">
+			<div class="col-3" style="color: #0070c0;font-size: 25px;">
+				Pacing 
+			</div>
+		</div>
+	</div>
 	<div class="container-fluid">		
 		<div class="row justify-content-center mt-2">
 			<div class="col" style="width: 100%; padding-right: 2%;">

@@ -46,13 +46,7 @@
     </style>
 @endsection
 @section('content')
-	<div class="container-fluid">
-		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Advertisers Adjust
-			</div>
-		</div>
-	</div>
+	
 	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
 	<form method="POST" action="{{ route('VPPost') }}" runat="server"  onsubmit="ShowLoading()">
@@ -98,6 +92,13 @@
 			</div>
 		</div>
 	</form>
+	<div class="container-fluid">
+		<div class="row justify-content-end mt-2">
+			<div class="col-3" style="color: #0070c0;font-size: 25px;">
+				Advertisers Adjust {{$forRender["currencyName"].'/'.$forRender["valueView"]}}
+			</div>
+		</div>
+	</div>
 	<br>
 	<div id="body" style="display: none;">
 		<div class="container-fluid">
@@ -106,13 +107,11 @@
 				@csrf
 				<div class="row justify-content-end">
 					<div class="col-2">
-						<label> &nbsp;</label>
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#aeSubmissions" style="width: 100%;">
 						   AE Submissions
 						</button>
 					</div>
 					<div class="col-2">
-						<label> &nbsp;</label>
 						<div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
 							<label class="btn alert-primary active">
 							    <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
@@ -123,7 +122,6 @@
 						</div>
 					</div>
 					<div class="col-2">
-						<label> &nbsp; </label>
 						<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">		
 					</div>	
 				</div>
@@ -341,13 +339,12 @@
 
 						prc += '';
 
-						prc = prc.replace(".",",");
 						prc = parseFloat(prc);
 
-						prc = prc.toFixed(0);
+						prc = Math.round(prc);
 
 						$("#varABS").val("Var Abs "+cYear+"/Target: "+Comma(abs));
-						$("#varPRC").val("Var (%) "+cYear+"/Target: "+Comma(prc)+"%");
+						$("#varPRC").val("(%) Target: "+Comma(prc)+"%");
 
 
 						var abs2 = handleNumber(temp2) - handleNumber($("#totalPYear").val());
@@ -355,10 +352,9 @@
 
 						prc2 += '';
 
-						prc2 = prc2.replace(".",",");
 						prc2 = parseFloat(prc2);
 
-						prc2 = prc2.toFixed(0);
+						prc2 = Math.round(prc2);
 
 						$("#varABS2").val(Comma(abs2));
 						$("#varPRC2").val(Comma(prc2)+"%");

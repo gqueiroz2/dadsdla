@@ -5,13 +5,7 @@
     <script src="/js/pandr.js"></script>
 @endsection
 @section('content')
-	<div class="container-fluid">
-		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Account Executive Report
-			</div>
-		</div>
-	</div>
+	
 
 	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
@@ -80,6 +74,13 @@
 			</div>
 		</div>
 	</form>
+	<div class="container-fluid">
+		<div class="row justify-content-end mt-2">
+			<div class="col-3" style="color: #0070c0;font-size: 25px;">
+				Account Executive Report
+			</div>
+		</div>
+	</div>
 	<div id="vlau">
 		
 	</div>

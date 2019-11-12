@@ -46,13 +46,7 @@
     </style>
 @endsection
 @section('content')
-	<div class="container-fluid">
-		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Month Adjust
-			</div>
-		</div>
-	</div>
+	
 
 	@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 
@@ -99,6 +93,13 @@
 			</div>
 		</div>
 	</form>
+	<div class="container-fluid">
+		<div class="row justify-content-end mt-2">
+			<div class="col-3" style="color: #0070c0;font-size: 25px;">
+				Month Adjust
+			</div>
+		</div>
+	</div>
 	<br>
 
 	@if(!$forRender)
@@ -154,8 +155,8 @@
 			var aux = ['Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4'];
 
 			$(document).ready(function(){				
-				$("#loading").css('display',"none");
-            	$("#body").css('display',"");
+				
+				
 
 				$("input[type=radio][name=options]").change(function(){
 					if (this.value == 'save') {
@@ -329,6 +330,20 @@
 						}
 					}
 				});
+            	$("#body").css('display',"");
+
+				$("#linha-1-1").css("height",$("#linha-2-1").css("height"));
+				$("#linha-1-2").css("height",$("#linha-2-2").css("height"));
+				$("#linha-1-3").css("height",$("#linha-2-3").css("height"));
+				$("#linha-1-4").css("height",$("#linha-2-4").css("height"));
+				$("#linha-1-5").css("height",$("#linha-2-5").css("height"));
+				$("#linha-1-6").css("height",$("#linha-2-6").css("height"));
+				$("#linha-1-7").css("height",$("#linha-2-7").css("height"));
+				$("#linha-1-8").css("height",$("#linha-2-8").css("height"));
+				$("#linha-1-9").css("height",$("#linha-2-9").css("height"));
+				$("#linha-1-10").css("height",$("#linha-2-10").css("height"));
+
+				$("#loading").css('display',"none");
 
 			});
 

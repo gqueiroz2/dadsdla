@@ -298,6 +298,7 @@ class VPMonth extends pAndR {
 
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+        $currencyPlan = $pr->getCurrency($con,$tmp)[0];
 
         $readable = $this->monthAnalise($base);
 
@@ -613,6 +614,9 @@ class VPMonth extends pAndR {
 
             $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
+            $tmp = $this->getPlan($con,$pr,$sql,$value,$currencyPlan,$regionID,$cYear,"CORPORATE");
+
+            $corporateFcst = $this->addQuartersAndTotal($tmp);
             //$executiveRevenueCYear; é o booking
 
             if ($value == 'gross') {
@@ -658,7 +662,8 @@ class VPMonth extends pAndR {
                             "fcstAmountByStage" => $fcstAmountByStage,
                             "fcstAmountByStageEx" => $fcstAmountByStageEx,
                             "percentage" => $percentage,
-                            "brandsPerClient" => $brandsPerClient
+                            "brandsPerClient" => $brandsPerClient,
+                            "corporateFcst" => $corporateFcst
                         );
 
         }else{
@@ -667,6 +672,33 @@ class VPMonth extends pAndR {
 
         return $rtr;
 
+    }
+
+    public function getPlan($con,$pr,$sql,$value,$currency,$region,$year,$type){
+        $r = new region();
+
+        $base = new base();
+
+        if ($value == "gross") {
+            $tmp = $base->getAgencyComm($con,array($region))/100;
+            $mult = 1/(1-$tmp);
+        }else{
+            $mult = 1;
+        }
+
+        if($currency['name'] == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array(date('Y')));
+        }
+
+        for ($m=0; $m <12; $m++) { 
+            $select[$m] = "SELECT SUM(revenue) as value FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (type_of_revenue = \"NET\") AND (currency_id = \"4\")";
+            $res[$m] = $con->query($select[$m]);
+            $resp[$m] = floatval($sql->fetchSum($res[$m],"value")['value'])*$div*$mult;
+        }
+
+        return $resp;
     }
 
     public function adjustFCST($fcst){
