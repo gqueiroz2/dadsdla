@@ -140,14 +140,14 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
     public function columnFormats(): array{
         
         return [
-            'B' => '#,##0.00',
-            'C' => '#,##0.00',
-            'D' => '#,##0.00',
+            'B' => '#,##0',
+            'C' => '#,##0',
+            'D' => '#,##0',
             'E' => '#0%',
             'F' => '#0%',
             'G' => '#0%',
             'H' => '#0%',
-            'I' => '#,##0.00',
+            'I' => '#,##0',
         ];
     }
 }

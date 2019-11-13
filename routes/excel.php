@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'],function(){
 				Route::post('month','resultsExcelController@resultsMonth')
 											->name('monthExcel');
 
-				Route::post('quarter','resultsExcelController@resultsMQ')
+				Route::post('quarter','resultsExcelController@resultsQuarter')
 											->name('quarterExcel');
 
 				Route::post('share','resultsExcelController@resultsShare')

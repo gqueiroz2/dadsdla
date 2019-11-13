@@ -164,16 +164,16 @@ class brandExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
         
         if ($this->dataType == "agency") {
             return [
-                'C' => '#,##0.00_-',
-                'D' => '#,##0.00_-',
-                'E' => '#,##0.00_-',
+                'C' => '#,##0',
+                'D' => '#,##0',
+                'E' => '#,##0',
                 'F' => '#0%'
             ];
         }else{
             return [
-                'B' => '#,##0.00_-',
-                'C' => '#,##0.00_-',
-                'D' => '#,##0.00_-',
+                'B' => '#,##0',
+                'C' => '#,##0',
+                'D' => '#,##0',
                 'E' => '#0%'
             ];
         }

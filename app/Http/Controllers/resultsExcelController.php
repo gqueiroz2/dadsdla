@@ -12,6 +12,7 @@ use App\resultsMQ;
 
 use App\Exports\summaryExport;
 use App\Exports\monthExport;
+use App\Exports\quarterExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -166,7 +167,7 @@ class resultsExcelController extends Controller{
                 return Excel::download(new monthExport($data, $label), $title);
         }
 
-	public function resultsMQ(){
+	public function resultsQuarter(){
                 
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
@@ -184,7 +185,7 @@ class resultsExcelController extends Controller{
                 }
 
                 //ano consultado
-                $years = json_decode(base64_decode(Request::get("yearExcel")));
+                $year = Request::get("yearExcel");
 
                 $base = new base();
                 $months = $base->month;
@@ -205,23 +206,23 @@ class resultsExcelController extends Controller{
 
                 //gross ou net
                 $value = Request::get("valueExcel");
+
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
                 //nome do excel e do relatorio
                 $title = Request::get("title");
 
-                $ge = new generateExcel();
+                $mq = new resultsMQ();
                 
-                $values = $ge->selectDataResults($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
-                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
-                
-                $final = array($secondPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
+                $lines = $mq->lines($con,$currency,$months,$secondPos,$brands,$year,$region,$value,$firstPos);
 
-                $name = Request::get("name");
+                $matrix = $mq->assemblerQuarters($con,$brands,$lines,$months,$year,$firstPos);
 
-                $report[0] = "$salesRegion - TV $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$firstPos.") $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
+                $data = array("mtx" => $matrix, "currency" => $currency, "value" => $value, "year" => $year, "form" => $firstPos, "region" => $salesRegion);
 
-                return Excel::download(new monthExport($final, $report, $salesRegion), $title);
+                $label = "exports.results.quarter.quarterExport";
+
+                return Excel::download(new quarterExport($data, $label), $title);
 
 	}
 
