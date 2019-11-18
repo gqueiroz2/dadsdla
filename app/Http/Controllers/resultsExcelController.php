@@ -271,6 +271,7 @@ class resultsExcelController extends Controller{
 
                 //criando matriz que será renderizada     
                 $matrix = $yoy->assemblers($brands, $lines, $months, $years, $secondPos);
+                unset($matrix[sizeof($matrix)-1]);
                 
                 $data = array("mtx" => $matrix, "currency" => $currency, "value" => $value, "year" => $years, "form" => $firstPos, "region" => $salesRegion);
 
@@ -278,8 +279,9 @@ class resultsExcelController extends Controller{
 
                 //nome do excel e do relatorio
                 $title = Request::get("title");
+                //var_dump($matrix);
 
-                //return Excel::download(new yoyExport($final, $report, $salesRegion), $title);
+                return Excel::download(new yoyBrandExport($data,$label),$title);
         }
 
         public function resultsShare(){

@@ -53,7 +53,7 @@
 						</div>	
 
 						<div class="col-sm-2">
-							<label> Valrankingue </label>
+							<label> Value </label>
 							{{ $render->value() }}
 						</div>
 

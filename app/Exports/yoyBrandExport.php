@@ -23,7 +23,7 @@ class yoyBrandExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheets = [
-            new yoyBrandTabExport($this->label, $this->sheets)
+            new yoyBrandTabExport($this->labels, $this->sheets)
         ];
 
         return $sheets;
