@@ -9,10 +9,12 @@ use App\dataBase;
 
 use App\resultsResume;
 use App\resultsMQ;
+use App\resultsYoY;
 
 use App\Exports\summaryExport;
 use App\Exports\monthExport;
 use App\Exports\quarterExport;
+use App\Exports\yoyBrandExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -223,10 +225,9 @@ class resultsExcelController extends Controller{
                 $label = "exports.results.quarter.quarterExport";
 
                 return Excel::download(new quarterExport($data, $label), $title);
-
 	}
 
-        public function resultsYoY(){
+        public function resultsYoYBrand(){
 
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
@@ -242,14 +243,13 @@ class resultsExcelController extends Controller{
                         $salesRegion = $tmp['name'];
                 }
 
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+                
                 //ano consultado
                 $years = json_decode(base64_decode(Request::get("yearExcel")));
 
                 $base = new base();
                 $months = $base->month;
-
-                $b = new brand();
-                $brands = $b->getBrand($con);
 
                 //primeira posição (target ou corporate)
                 $firstPos = Request::get("firstPosExcel");
@@ -258,43 +258,28 @@ class resultsExcelController extends Controller{
 
                 //currency da pesquisa
                 $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
-
-                $currency[0]['id'] = $tmp->id;
-                $currency[0]['name'] = $tmp->name;
-                $currency[0]['region'] = $tmp->region;
+                
+                $currency[0]['id'] = $tmp[0]->id;
+                $currency[0]['name'] = $tmp[0]->name;
+                $currency[0]['region'] = $tmp[0]->region;
 
                 //gross ou net
                 $value = Request::get("valueExcel");
+                
+                $yoy = new resultsYoY();
+                $lines = $yoy->lines($con, $currency, $months, $firstPos, $brands, $years, $region, $value, $secondPos);
+
+                //criando matriz que será renderizada     
+                $matrix = $yoy->assemblers($brands, $lines, $months, $years, $secondPos);
+                
+                $data = array("mtx" => $matrix, "currency" => $currency, "value" => $value, "year" => $years, "form" => $firstPos, "region" => $salesRegion);
+
+                $label = "exports.results.yoy.brand.brandExport";
+
                 //nome do excel e do relatorio
                 $title = Request::get("title");
 
-                $ge = new generateExcel();
-                
-                $values = $ge->selectDataResults($con, $region, $years, $brands, $firstPos, $currency, $value, $months);
-                $values2 = $ge->selectDataResults($con, $region, ($years-1), $brands, $firstPos, $currency, $value, $months);
-                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, $secondPos, $currency, $value, $months);
-                
-                for ($v2=0; $v2 < sizeof($values2[0]); $v2++) {
-                        array_push($values[0], $values2[0][$v2]); 
-                }
-
-                for ($v2=0; $v2 < sizeof($values2[1]); $v2++) {
-                        array_push($values[1], $values2[1][$v2]); 
-                }
-
-                unset($values2);
-
-                $final = array($firstPos => $values[0], 'digital' => $values[1], 'plan' => $valuesPlan[0]);
-
-                $title = $salesRegion." - ".$title;
-
-                $name = Request::get("name");
-
-                $report[0] = "$salesRegion - TV YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[2] = "$salesRegion - (".$secondPos.") YoY $name : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-
-                return Excel::download(new yoyExport($final, $report, $salesRegion), $title);
+                //return Excel::download(new yoyExport($final, $report, $salesRegion), $title);
         }
 
         public function resultsShare(){

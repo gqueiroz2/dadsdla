@@ -107,10 +107,11 @@ class resultsYoYController extends Controller{
         $firstPosExcel = $form2;
         $secondPosExcel = $source;
         $thirdPosExcel = $form2;
-        $currencyExcel = $pRate[0];
+        $currencyExcel = $pRate;
         $valueExcel = $value;
+        $brandsExcel = $brands;
         $title = $form." - YoY Brand.xlsx";
 
-   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','thirdPosExcel','currencyExcel','valueExcel','title'));
+   	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','thirdPosExcel','currencyExcel','valueExcel','title', 'brandsExcel'));
     }
 }

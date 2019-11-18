@@ -116,12 +116,9 @@
 			</div>
 		</div>
 	</div>
-
-	<?php
-
-
-	?>
 	
+	<div id="vlau"></div>
+
 	<script type="text/javascript">
 
 		$(document).ready(function() {
