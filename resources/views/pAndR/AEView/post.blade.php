@@ -156,31 +156,33 @@
 
     <script>
 
-        var client = <?php echo json_encode($client); ?>;
-
-        $('.linked').scroll(function(){
-            $('.linked').scrollLeft($(this).scrollLeft());
-        });
-        $(window).keydown(function(event){
-            if(event.keyCode == 13) {
-                event.preventDefault();
-                return false;
-            }
-        });
-        $("input[type=radio][name=options]").change(function(){
-            if (this.value == 'save') {
-                $("#button").val("Save");
-            }else{
-                $("#button").val("Submit");
-            }
-        });
-        for(var c=0;c<client.length;c++){
-            $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
-        }
+        
     </script>
 
     <script type="text/javascript">
         $(document).ready(function(){
+            var client = <?php echo json_encode($client); ?>;
+
+            $('.linked').scroll(function(){
+                $('.linked').scrollLeft($(this).scrollLeft());
+            });
+            $(window).keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+            $("input[type=radio][name=options]").change(function(){
+                if (this.value == 'save') {
+                    $("#button").val("Save");
+                }else{
+                    $("#button").val("Submit");
+                }
+            });
+            for(var c=0;c<client.length;c++){
+                $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
+            }
+            
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($client);$c++)
                     $("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){

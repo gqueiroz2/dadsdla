@@ -464,7 +464,6 @@ class ajaxController extends Controller{
         $userLevel = Request::session()->get('userLevel');
         $special = Request::session()->get('special');
 
-
         if (!is_null($special) && $regionIDUser != $regionID[0]) {
             if($salesRepGroup){
                 for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
@@ -477,9 +476,16 @@ class ajaxController extends Controller{
             }
         }else{
             if ($userLevel == "L3" || $userLevel == "L4") {
+
                 $groupID = Request::session()->get('userSalesRepGroupID');
                 $groupName = Request::session()->get('userSalesRepGroup');
+
+                $ier = date('Y');
                 echo "<option value='".$groupID."' selected='true'>".$groupName."</option>";
+
+                if( Request::session()->get('userName') == "João Romano" && $ier == 2019 ){
+                    echo "<option value='4' selected='true'>PME</option>";
+                }
             }else{
                 if($salesRepGroup){
                     for ($s=0; $s < sizeof($salesRepGroup); $s++) { 
@@ -524,7 +530,10 @@ class ajaxController extends Controller{
                         $check = true;
                     }
                 }else{
-                    if($salesRep[$s]["salesRep"] == $userName){
+                    setlocale(LC_ALL, "en_US.utf8");
+                    $output = iconv("utf-8", "ascii//TRANSLIT", $userName);
+                    if( strpos($salesRep[$s]["salesRep"], $output)  !== false){
+                    //if($salesRep[$s]["salesRep"] == $userName){
                         echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
                         $check = true;
                     }

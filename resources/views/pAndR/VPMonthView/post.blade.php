@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'VP Month Report')
+@section('title', 'Month Adjust')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -49,7 +49,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				VP Month Report
+				Month Adjust
 			</div>
 		</div>
 	</div>
@@ -104,7 +104,7 @@
 			<div style="min-height: 100px;" class="alert alert-warning" role="alert">
 				<span style="font-size:22px;">
 					<center>
-					There is no submissions of Forecast from VP View yet!
+					There is no submissions of Forecast from Advertisers Adjust yet!
 					</center>
 				</span>
 			</div>
@@ -204,6 +204,31 @@
 							$("#totalAchievement").val(Comma(0+"%"));
 						}
 
+						var mult = handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalBookingE").val());
+							if (mult<0) {
+								for (var i = 0; i < 16; i++) {
+								$("#me-"+i).val($("#rf-"+i).val());
+							}
+
+							$(this).val($("#total-total").val());
+
+							for (var i = 0; i <16; i++) {
+								$("#RFvsTarget-"+i).val( Comma(handleNumber($("#me-"+i).val()) - handleNumber($("#target-"+i).val())) );
+
+								if (handleNumber($("#target-"+i).val()) != 0) {
+									$("#achievement-"+i).val( Comma(((handleNumber($("#me-"+i).val())/handleNumber($("#target-"+i).val()))*100).toFixed(0))+"%");
+								}else{
+									$("#achievement-"+i).val(Comma(0)+"%") ;
+								}
+							}
+
+							$("#TotalRFvsTarget").val(Comma(handleNumber($("#total-manualEstimationTotal").val()) - handleNumber($("#totalTarget").val())) );
+							if ( handleNumber($("#totalTarget").val()) != 0) {
+								$("#totalAchievement").val(Comma(((handleNumber($("#total-manualEstimationTotal").val()) / handleNumber($("#totalTarget").val()))*100).toFixed(0))+"%");
+							}else{
+								$("#totalAchievement").val(Comma(0)+"%");
+							}
+						}
 
 					});
 				@endfor
@@ -216,6 +241,7 @@
 					$(this).val(Comma(handleNumber($(this).val())));
 
 					var mult = handleNumber($(this).val()) - handleNumber($("#totalBookingE").val());
+					alert(mult);
 					if (mult>0) {
 
 						var date = {{(intval(date('n'))-1)}};
