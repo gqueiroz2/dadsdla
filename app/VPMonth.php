@@ -627,6 +627,17 @@ class VPMonth extends pAndR {
                 $valueView = 'Net Net';
             }
 
+            $fff = array("val");
+
+            $closedQuery = "SELECT SUM(".$value."_revenue) AS val FROM sf_pr WHERE(region_id = \"".$regionID."\") AND (stage = '5')";
+            var_dump($multValue[$c]);
+            var_dump($closedQuery);
+
+            $res = $con->query($closedQuery);
+
+            $clos = $sql->fetch($res,$fff,$fff);
+
+            var_dump($clos);
 
             $rtr = array(
                             "cYear" => $year,
@@ -1323,7 +1334,6 @@ class VPMonth extends pAndR {
     }
 
     public function addClosed($fcstAmountByStage,$rollingFCST){
-
         $fechado = date('n') - 1;
 
 

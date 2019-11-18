@@ -155,7 +155,7 @@
 	                        </div>-->
 	                        <div class="row">
                             	<div class="col" style="margin-top: -5px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sale Portal | Data Current Throught: </span>
+	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">

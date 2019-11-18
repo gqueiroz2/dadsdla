@@ -257,7 +257,6 @@ class AE extends pAndR{
                     if ($con->query($insert[$c][$m]) === true) {
                         
                     }else{
-                        var_dump($con->error);
                         return false;
                     }
                 }
