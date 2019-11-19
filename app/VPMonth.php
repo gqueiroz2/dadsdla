@@ -558,6 +558,8 @@ class VPMonth extends pAndR {
 
             $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$listOfClients,$rollingFCST,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
 
+            //var_dump($fcst);
+
             $fcstAmountByStage = $fcst['fcstAmountByStage'];
 
             $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
@@ -630,14 +632,10 @@ class VPMonth extends pAndR {
             $fff = array("val");
 
             $closedQuery = "SELECT SUM(".$value."_revenue) AS val FROM sf_pr WHERE(region_id = \"".$regionID."\") AND (stage = '5')";
-            var_dump($multValue[$c]);
-            var_dump($closedQuery);
 
             $res = $con->query($closedQuery);
 
             $clos = $sql->fetch($res,$fff,$fff);
-
-            var_dump($clos);
 
             $rtr = array(
                             "cYear" => $year,
@@ -1282,6 +1280,16 @@ class VPMonth extends pAndR {
             $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
+        for ($c=0; $c < sizeof($clients); $c++) { 
+            $select[$c] = "SELECT SUM($sum) AS value FROM sf_pr WHERE stage = \"5\" AND client_id = \"".$clients[$c]["clientID"]."\"";
+
+            $res = $con->query($select[$c]);
+
+            $result[$c] = $sql->fetchSum($res,"value");
+            
+            $fcstStages[$c][1][4] = $result[$c]['value']*$div;
+        }
+
         return $fcstStages;
     }
 
@@ -1347,7 +1355,7 @@ class VPMonth extends pAndR {
                 $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
             }
         }
-        
+
         return $fcstAmountByStage;
     }
 
