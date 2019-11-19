@@ -100,7 +100,7 @@ class viewer extends Model{
 									AND (cl.ID IN ($clientString))
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
-						
+
 				
 			}else{
 
@@ -138,6 +138,8 @@ class viewer extends Model{
 									AND (a.ID IN ($agencyString))
 									AND (cl.ID IN ($clientString))
 							ORDER BY c.month";
+
+					echo "<pre>$select</pre>";
 
 			}
 
