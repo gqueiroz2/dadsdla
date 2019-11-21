@@ -112,7 +112,7 @@ class resultsYoYController extends Controller{
         $brandsExcel = $brands;
         $title = $form." - YoY Brand.xlsx";
 
-        var_dump($matrix);
+        //var_dump($matrix);
 
    	    return view("adSales.results.4YoYPost", compact('render', 'salesRegion', 'brand', 'form', 'year', 'value', 'pRate', 'matrix','brands', 'region','rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','thirdPosExcel','currencyExcel','valueExcel','title', 'brandsExcel'));
     }

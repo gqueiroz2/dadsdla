@@ -245,6 +245,8 @@ class resultsExcelController extends Controller{
 
                 $brands = json_decode(base64_decode(Request::get("brandsExcel")));
                 
+                unset($brands[sizeof($brands)-1]);
+
                 //ano consultado
                 $years = json_decode(base64_decode(Request::get("yearExcel")));
 
@@ -271,9 +273,8 @@ class resultsExcelController extends Controller{
 
                 //criando matriz que será renderizada     
                 $matrix = $yoy->assemblers($brands, $lines, $months, $years, $secondPos);
-                unset($matrix[sizeof($matrix)-1]);
                 
-                $data = array("mtx" => $matrix, "currency" => $currency, "value" => $value, "year" => $years, "form" => $firstPos, "region" => $salesRegion);
+                $data = array("mtx" => $matrix, "currency" => $currency, "value" => $value, "year" => $years, "form" => $firstPos, "region" => $salesRegion, "brands" => $brands);
 
                 $label = "exports.results.yoy.brand.brandExport";
 
