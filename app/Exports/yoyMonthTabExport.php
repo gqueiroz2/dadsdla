@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class yoyMonthTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
+class yoyMonthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
     
     protected $view;
 	protected $data;
@@ -59,14 +59,13 @@ class yoyMonthTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
     */
     public function registerEvents(): array{
 
-
     	return [
     		AfterSheet::class => function(AfterSheet $event){
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*13)+2); $dm++) { 
-                    $cellRange = "B".$dm.":M".$dm;
+                    $cellRange = "A".$dm.":M".$dm;
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->BodyCenter);
                 }
             }
@@ -89,6 +88,5 @@ class yoyMonthTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
             "L" => "#,##0",
             "M" => "#,##0"
         ];
-
     }
 }

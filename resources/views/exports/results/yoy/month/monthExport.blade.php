@@ -1,6 +1,6 @@
 <table>
 	<tr>
-		<th colspan="13" style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
+		<th colspan="10" style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 			{{$data['region']}} - Year Over Year : BKGS - {{$data['year']}} ({{strtoupper($data['currency'][0]['name'])}}/{{strtoupper($data['value'])}})
 		</th>
 	</tr>
@@ -12,16 +12,16 @@
 			<td style="background-color: #0070c0;">&nbsp;</td>
 			@for($m = $i, $k = 0; $m < ($i+3); $m++, $k++)
 				@if($k == 1)
-					<td colspan="3" style="background-color: #004b84; font-weight: bold; color: #FFFFFF">
+					<td colspan="3" style="background-color: #004b84; font-weight: bold; color: #FFFFFF;">
 						{{$data['months'][$m][0]}}
 					</td>
 				@else
-					<td colspan="3" style="background-color: #0070c0; font-weight: bold; color: #FFFFFF">
+					<td colspan="3" style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 						{{$data['months'][$m][0]}}
 					</td>	
 				@endif
 			@endfor
-			<td colspan="3" style="background-color: #0f243e; font-weight: bold; color: #FFFFFF">
+			<td colspan="3" style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
 				Q{{($j+1)}}
 			</td>
 		</tr>
@@ -29,33 +29,33 @@
 			<td style="background-color: #0070c0;">&nbsp;</td>
 			@for($m = 0, $k = 0; $m <= 3; $m++, $k++)
 				@if($k == 1)
-					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']-1}}
 					</td>
-					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF;">
 						{{$data['form']}} {{$data['year']}}
 					</td>
-					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #004b84; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']}}
 					</td>
 				@elseif($k == 3)
-					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']-1}}
 					</td>
-					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
 						{{$data['form']}} {{$data['year']}}
 					</td>
-					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']}}
 					</td>
 				@else
-					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']-1}}
 					</td>
-					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 						{{$data['form']}} {{$data['year']}}
 					</td>
-					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF">
+					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 						BKGS {{$data['year']}}
 					</td>
 				@endif

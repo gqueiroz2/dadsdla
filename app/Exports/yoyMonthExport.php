@@ -23,8 +23,8 @@ class yoyMonthExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheets = [
-            new yoyMonthTabExport($this->labels[0], $this->sheets)
-            //new yoySemesterTabExport($this->labels[1], $this->sheets['mtx'][1])
+            new yoyMonthTabExport($this->labels[0], $this->sheets),
+            new yoySemesterTabExport($this->labels[1], $this->sheets)
         ];
 
         return $sheets;
