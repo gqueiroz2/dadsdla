@@ -27,8 +27,11 @@ Route::group(['middleware' => 'auth'],function(){
 				Route::post('share','resultsExcelController@resultsShare')
 											->name('shareExcel');
 
-				Route::post('yoy','resultsExcelController@resultsYoY')
-											->name('yoyExcel');
+				Route::post('yoyBrand','resultsExcelController@resultsYoYBrand')
+											->name('yoyBrandExcel');
+
+				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
+											->name('yoyMonthExcel');
 			});
 
 			Route::group(['prefix'=>'ranking'], function(){

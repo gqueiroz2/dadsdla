@@ -50,6 +50,8 @@ class AEController extends Controller{
 
         $salesRepID = $salesRep->id;
 
+        $currentMonth = intval(date('m')) -1;
+
         for ($c=0; $c < sizeof($brandsPerClient); $c++) {
             $saida[$c] = array();
             $brandPerClient[$c] = "";
@@ -103,7 +105,50 @@ class AEController extends Controller{
             }
         }
 
+        $holder = $manualEstimantionByClient;
 
+        for ($c=0; $c < sizeof($client); $c++) { 
+            
+            unset($holder[$c][3]);
+            unset($holder[$c][7]);
+            unset($holder[$c][11]);
+            unset($holder[$c][15]);
+
+            $holder[$c] = array_values($holder[$c]);
+        }
+
+        $somaSeTemFcst = 0.0;
+
+        for ($h=0; $h < sizeof($holder); $h++) { 
+            for ($i=0; $i < sizeof($holder[$i]); $i++) { 
+                if($i >= $currentMonth){
+                    $somaSeTemFcst += $holder[$h][$i];
+                }
+            }
+        }
+
+        if($somaSeTemFcst <= 0 ){
+            $msg = "No FCST Value to Submit";
+
+            if ($value == "Gross") {
+                $value = "gross";
+            }else{
+                $value = "net";
+            }
+
+            $forRender = $ae->baseSaved($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
+
+            $region = $r->getRegion($con,false);
+            $currency = $pr->getCurrency($con,false);
+
+            $client = $forRender['client'];
+            $tfArray = array();
+            $odd = array();
+            $even = array();
+            $error = "Cannot Submit, There is no forecast on CRM Discovery (Sales Force)";
+        
+            return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
+        }
 
         for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumber(Request::get("passTotal-$c"));
@@ -144,7 +189,6 @@ class AEController extends Controller{
             $manualEstimantionByClient[$c] = array_values($manualEstimantionByClient[$c]);
         }
 
-            //kind,region,year,salesRep,currency,value,week,month
         $today = $date;
 
         if ($submit == "submit") {
@@ -235,7 +279,7 @@ class AEController extends Controller{
 
             $msg = "Don't have a Forecast Saved";
             $typeMsg = "Error";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/                                                                                                        
         }
 
         $forRender = $tmp;

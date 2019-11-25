@@ -170,7 +170,7 @@ class renderMonthlyYoY extends Render{
 
     	$source = strtolower($source);
         $source = ucfirst($source);
-    	
+    	￼
     	echo "<table style='width: 100%; zoom:90%; font-size: 16px;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");

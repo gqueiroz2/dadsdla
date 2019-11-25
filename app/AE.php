@@ -14,6 +14,7 @@ use App\pRate;
 class AE extends pAndR{
     
     public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$list,$splitted,$submit,$brandPerClient){
+        
         $sql = new sql();
         $sr = new salesRep();
         $tmp = explode("-", $date);
@@ -199,6 +200,7 @@ class AE extends pAndR{
     }
 
     public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$table){
+        $currentMonth = intval(date('m')) -1;
 
         $sql = new sql();
 
@@ -218,7 +220,7 @@ class AE extends pAndR{
 
             if ($con->query($insert[$m]) === true) {
       
-           }else{
+            }else{
                 var_dump($con->error);
                 return false;
             }
@@ -226,7 +228,7 @@ class AE extends pAndR{
     }
 
     public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$splitted,$brandPerClient){
-
+        $currentMonth = intval(date('m')) -1;
         $sql = new sql();
 
         $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
@@ -253,6 +255,8 @@ class AE extends pAndR{
                     $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\",\"".$list[$c]->agencyID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
+
+                    //var_dump($insert[$c][$m]);
 
                     if ($con->query($insert[$c][$m]) === true) {
                         
@@ -657,7 +661,8 @@ class AE extends pAndR{
     }
 
     public function baseLoad($con,$r,$pr,$cYear,$pYear){
-    	$sr = new salesRep();        
+    	
+        $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
         $sql = new sql();
@@ -768,7 +773,7 @@ class AE extends pAndR{
 
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
-        
+
         $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
 
         $clientRevenueCYearTMP = $clientRevenueCYear;
@@ -1030,7 +1035,7 @@ class AE extends pAndR{
                     );
 
         return $rtr;
-        
+
     }
 
     public function addBookingRollingFCST($fcst,$booking){
@@ -2290,15 +2295,14 @@ class AE extends pAndR{
     				FROM ytd y
     				LEFT JOIN client c ON c.ID = y.client_id
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
-                    LEFT JOIN agency a ON a.ID = s.agency_id
+                    LEFT JOIN agency a ON a.ID = y.agency_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
     				AND (y.year = \"$cYear\" )
                     AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";
-        //var_dump($ytd);
     	$resYTD = $con->query($ytd);
-    	$from = array("clientName","clientID");
+    	$from = array("clientName","clientID","agencyID","agencyName");
     	$listYTD = $sql->fetch($resYTD,$from,$from);
     	$count = 0;
 

@@ -16,6 +16,7 @@ use App\salesRep;
 use App\cmaps;
 use App\baseRender;
 use App\sql;
+use App\agency;
 
 class viewerController extends Controller{
 
@@ -26,6 +27,7 @@ class viewerController extends Controller{
 
                 $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
                 $render = new Render();
+                $bRender = new baseRender();
 
                 $r = new region();
                 $region = $r->getRegion($con, NULL);
@@ -38,15 +40,18 @@ class viewerController extends Controller{
 
                 $v = new viewer();
 
-                return view("adSales.viewer.baseGet",compact("render","years","region","currency","currencies","brand"));
+                return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand"));
 	}
 
 
 	public function basePost(){
 
-                $render =  new baseRender();
+                $render =  new Render();
+                $bRender = new baseRender();
                 $base = new base();
                 $months = $base->month;
+                $viewer = new viewer();
+
         	
                 $db = new dataBase();
                 $con = $db->openConnection("DLA");
@@ -69,46 +74,83 @@ class viewerController extends Controller{
                 }
 
                 $years = array($cYear = intval(date('Y')), $cYear - 1);
-                
+                $salesRegion = Request::get("region");
                 $r = new region();
-                $region = $r->getRegion($con, NULL);
+
+                $region = $r->getRegion($con,null);
+                $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+
 
                 $b = new brand();
                 $brands = $b->getBrand($con);
 
-                $currency = new pRate();
-                $currencies = $currency->getCurrency($con); 
+                
+                $salesCurrency = Request::get("currency");
+                $p = new pRate();
+                $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name']; 
 
-                $viewer = new viewer();
+                //var_dump($currencies);
 
-                $salesRegion = Request::get("region");
 
                 $source = Request::get("sourceDataBase");
 
                 $month = Request::get("month");
 
-                $piNumber = Request::get("PI");
+                $especificNumber = Request::get("especificNumber");
 
-                $tmp = Request::get("brand");
-                $brand = $base->handleBrand($tmp);
+                if (!is_null($especificNumber) ) {
+                    $checkEspecificNumber = true;
+                }else{
+                    $checkEspecificNumber = false;
+                }                
 
                 $value = Request::get("value");
 
                 $year = Request::get("year");
 
-                $salesCurrency = Request::get("currency");
-
                 $salesRep = Request::get("salesRep");
 
-                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql);
+                $agency = Request::get("agency");
+               /*$a = new agency();
+                $agencies = $a->getAgency($con,array($agency))[0]['name'];*/
 
-                $assemble = $viewer->assemble($table,$salesCurrency,$source);
+                //var_dump($agencies);
 
-                var_dump($table);
+                $client = Request::get("client");
 
-                //var_dump(Request::all());
+                //var_dump($salesCurrency);
 
-                //return view("adSales.viewer.basePost", compact("years","render", "salesRep", "region","currency","currencies","brands","viewer"));
+                $check = false;
+
+                $brand = Request::get("brand");
+
+                for ($b=0; $b <sizeof($brand); $b++) { 
+                    if ($brand[$b] == 9){
+                        $check = true;
+                    }
+                }
+                if ($check) {
+                    array_push($brand, "13");
+                    array_push($brand, "14");
+                    array_push($brand, "15");
+                    array_push($brand, "16");
+                }
+
+
+                //var_dump($salesCurrency);
+
+                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
+
+                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion);
+
+                $mtx = $viewer->assemble($table,$total,$salesCurrency,$source,$con,$salesRegion,$currencies);
+
+               //var_dump(Request::all());
+
+                //var_dump($table);
+                
+
+                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions",'year','total'));
 
 	}
 

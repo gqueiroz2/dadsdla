@@ -13,14 +13,14 @@ class base extends Model{
         $string = "";
         if($hasKey){
             for ($a=0; $a < sizeof($array); $a++) { 
-                $string .= "".$array[$a][0]."";
+                $string .= "'".$array[$a][0]."'";
                 if($a != sizeof($array)-1){
                     $string .= ",";
                 }
             }
         }else{
             for ($a=0; $a < sizeof($array); $a++) { 
-                $string .= "".$array[$a]."";
+                $string .= "'".$array[$a]."'";
                 if($a != sizeof($array)-1){
                     $string .= ",";
                 }

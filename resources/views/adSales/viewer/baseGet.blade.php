@@ -39,7 +39,7 @@
                         </div>
                         
                         <div class="col" id="especificNumberCol" style="display:none;">
-                            <label class="labelLeft"><span class="bold" id="especificNumberName"> PI: </span></label>
+                            <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
                             {{$render->especificNumber($brand)}}
                         </div>
                         

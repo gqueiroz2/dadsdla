@@ -83,8 +83,7 @@
 					Generate Excel
 				</button>				
 			</div>
-		</div>	
-
+		</div>
 	</div>
 
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
@@ -94,8 +93,6 @@
 			</div>
 		</div>
 	</div>
-
-
 
 	<div id="vlau"></div>
 
@@ -107,15 +104,15 @@
 
 			$("#excel").click(function(event){
 
+				var regionExcel = "<?php echo $regionExcel; ?>";
+				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
 				var firstPosExcel = "<?php echo $firstPosExcel; ?>";
 				var secondPosExcel = "<?php echo $secondPosExcel; ?>";
 				var thirdPosExcel = "<?php echo $thirdPosExcel; ?>";
-				var regionExcel = "<?php echo $regionExcel; ?>";
-				var valueExcel = "<?php echo $valueExcel; ?>";
-				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var valueExcel = "<?php echo $valueExcel; ?>";
 				var title = "<?php echo $title; ?>";
-				var name = "Brand";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -129,9 +126,12 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/yoy",
+					url: "/generate/excel/results/yoyBrand",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel, name},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel, brandsExcel},
+					/*success: function(output){
+						$("#vlau").html(output);
+					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

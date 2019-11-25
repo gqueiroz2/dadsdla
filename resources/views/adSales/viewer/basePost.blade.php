@@ -42,8 +42,8 @@
                         </div>
                         
                         <div class="col" id="especificNumberCol" style="display:none;">
-                            <label class="labelLeft"><span class="bold" id="especificNumberName"> PI: </span></label>
-                            {{$render->especificNumber($brand)}}
+                            <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
+                            {{$render->especificNumber($brands)}}
                         </div>
                         
                         <div class="col">
@@ -100,7 +100,7 @@
                             @if($errors->has('currency'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->currency($currency)}}
+                            {{$render->currency($currencies)}}
                         </div>
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
@@ -118,11 +118,20 @@
             </div>
         </div>
 
-	<div class="row justify-content-end mt-2">
-		<div class="col" style="color: #0070c0; font-size:22px">
-			<span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
-		</div>
+    	<div class="row justify-content-end mt-2">
+    		<div class="col" style="color: #0070c0; font-size:22px">
+    			<span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
+    		</div>
+    	</div>
 
-	</div>
+    </div>
+
+        <div class="container-fluid">
+            <div class=" row justify-content-center mt-2">
+                <div class="col">
+                    {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
+                </div>
+            </div>
+        </div>
 
 @endsection

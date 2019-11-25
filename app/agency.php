@@ -363,7 +363,7 @@ class agency extends Management{
         $where = "";
 
         if($agencyID){
-            $agencyIDS = implode(",", $agencyID);
+            $agencyIDS = implode(/*",",*/ $agencyID);
             $where .= "WHERE a.ID IN ('$agencyIDS')";
         }
 
