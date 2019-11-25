@@ -14,30 +14,30 @@
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
-
-		Route::post('summary','excelController@resultsSummary')
+			Route::group(['prefix'=>'results'], function(){
+				Route::post('summary','resultsExcelController@resultsSummary')
 								->name('summaryExcel');
 
-		Route::post('month','excelController@resultsMQ')
-									->name('monthExcel');
+				Route::post('month','resultsExcelController@resultsMonth')
+											->name('monthExcel');
 
-		Route::post('quarter','excelController@resultsMQ')
-									->name('quarterExcel');
+				Route::post('quarter','resultsExcelController@resultsQuarter')
+											->name('quarterExcel');
 
-		Route::post('share','excelController@resultsShare')
-									->name('shareExcel');
+				Route::post('share','resultsExcelController@resultsShare')
+											->name('shareExcel');
 
-		Route::post('yoy','excelController@resultsYoY')
-									->name('yoyExcel');
+				Route::post('yoy','resultsExcelController@resultsYoY')
+											->name('yoyExcel');
+			});
+
+			Route::group(['prefix'=>'ranking'], function(){
+				Route::post('brand','rankingExcelController@brand')
+									->name('brandExcel');
+			});
 
 		Route::post('core','excelController@performanceCore')
 									->name('coreExcel');
-
-		Route::post('share','excelController@resultsShare')
-									->name('shareExcel');
-
-		Route::post('rankingBrand','excelController@rankingBrand')
-									->name('rankingBrandExcel');
 
 		});
 	});

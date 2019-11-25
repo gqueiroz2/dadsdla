@@ -21,7 +21,7 @@ class resultsMQ extends results{
                 $lines[$l] = $this->matchBrandMonth($con, $currency, $form, $brands, $months, $year, $region, $value, $year, $source);
             }
         }
-
+        
         return $lines;
 
     }
@@ -62,8 +62,8 @@ class resultsMQ extends results{
             $matrix[1][$i] = $target[$i-1];
             $matrix[2][$i] = $valueCurrentYear[$i-1];
             
-            if($matrix[1][$i] > 0){
-                $matrix[3][$i] = ( $matrix[2][$i] / $matrix[1][$i] )*100;
+            if($matrix[2][$i] > 0){
+                $matrix[3][$i] = ( $matrix[1][$i] / $matrix[2][$i] )*100;
             }else{
                 $matrix[3][$i] = 0.0;
             }

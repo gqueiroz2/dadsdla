@@ -298,6 +298,7 @@ class VPMonth extends pAndR {
 
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+        $currencyPlan = $pr->getCurrency($con,$tmp)[0];
 
         $readable = $this->monthAnalise($base);
 
@@ -593,7 +594,7 @@ class VPMonth extends pAndR {
 
             $lastRollingFCST = $this->adjustFCST($lastRollingFCST);
 
-            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+            $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$pRate);
 
             $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage);
 
@@ -613,6 +614,9 @@ class VPMonth extends pAndR {
 
             $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
+            $tmp = $this->getPlan($con,$pr,$sql,$value,$currencyPlan,$regionID,$cYear,"CORPORATE");
+
+            $corporateFcst = $this->addQuartersAndTotal($tmp);
             //$executiveRevenueCYear; é o booking
 
             if ($value == 'gross') {
@@ -623,6 +627,17 @@ class VPMonth extends pAndR {
                 $valueView = 'Net Net';
             }
 
+            $fff = array("val");
+
+            $closedQuery = "SELECT SUM(".$value."_revenue) AS val FROM sf_pr WHERE(region_id = \"".$regionID."\") AND (stage = '5')";
+            var_dump($multValue[$c]);
+            var_dump($closedQuery);
+
+            $res = $con->query($closedQuery);
+
+            $clos = $sql->fetch($res,$fff,$fff);
+
+            var_dump($clos);
 
             $rtr = array(
                             "cYear" => $year,
@@ -658,7 +673,8 @@ class VPMonth extends pAndR {
                             "fcstAmountByStage" => $fcstAmountByStage,
                             "fcstAmountByStageEx" => $fcstAmountByStageEx,
                             "percentage" => $percentage,
-                            "brandsPerClient" => $brandsPerClient
+                            "brandsPerClient" => $brandsPerClient,
+                            "corporateFcst" => $corporateFcst
                         );
 
         }else{
@@ -667,6 +683,33 @@ class VPMonth extends pAndR {
 
         return $rtr;
 
+    }
+
+    public function getPlan($con,$pr,$sql,$value,$currency,$region,$year,$type){
+        $r = new region();
+
+        $base = new base();
+
+        if ($value == "gross") {
+            $tmp = $base->getAgencyComm($con,array($region))/100;
+            $mult = 1/(1-$tmp);
+        }else{
+            $mult = 1;
+        }
+
+        if($currency['name'] == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currency['id']),array(date('Y')));
+        }
+
+        for ($m=0; $m <12; $m++) { 
+            $select[$m] = "SELECT SUM(revenue) as value FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (type_of_revenue = \"NET\") AND (currency_id = \"4\")";
+            $res[$m] = $con->query($select[$m]);
+            $resp[$m] = floatval($sql->fetchSum($res[$m],"value")['value'])*$div*$mult;
+        }
+
+        return $resp;
     }
 
     public function adjustFCST($fcst){
@@ -1219,7 +1262,7 @@ class VPMonth extends pAndR {
         START CONTROL VALUES FUNCTIONS
     */
 
-    public function addLost($con,$clients,$fcstStages,$value){
+    public function addLost($con,$clients,$fcstStages,$value,$div){
 
         $sql = new sql();
 
@@ -1236,7 +1279,7 @@ class VPMonth extends pAndR {
 
             $result[$c] = $sql->fetchSum($res,"value");
             
-            $fcstStages[$c][1][5] = $result[$c]['value'];
+            $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
         return $fcstStages;
@@ -1291,7 +1334,6 @@ class VPMonth extends pAndR {
     }
 
     public function addClosed($fcstAmountByStage,$rollingFCST){
-
         $fechado = date('n') - 1;
 
 

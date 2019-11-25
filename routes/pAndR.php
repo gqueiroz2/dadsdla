@@ -57,8 +57,8 @@ Route::group(['middleware' => 'auth'],function(){
 
 	});
 	Route::group(['prefix'=>'ajax'],function(){
-		Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion')
-									->name('salesRepByRegion');
+		Route::post('salesRepByRegionPandR','ajaxController@salesRepByRegionFiltered')
+									->name('salesRepByRegionPandR');
 	});
 });
 

@@ -232,11 +232,9 @@ class results extends base{
 
             $as = "sum";
 
-
             if ($table != "digital") {
                 $where = $sql->where($columns, $columnsValue);
-            }
-            
+            }            
 
             if($table == "digital"){
                 $table = "fw_digital";

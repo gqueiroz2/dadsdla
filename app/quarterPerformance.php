@@ -104,7 +104,7 @@ class quarterPerformance extends performance {
 
 		//var_dump($salesRepGroup);
 		//var_dump($planValues);
-		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div);
+		$mtx = $this->assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div, $value);
 
 		if (sizeof($brands) > 1) {
 			array_push($mtx[0], $this->assemblerDN($mtx[0], $year));
@@ -133,7 +133,36 @@ class quarterPerformance extends performance {
 		return $brandsTiers;
 	}
 
-	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div){
+	public function assembler($values, $planValues, $salesRep, $months, $brands, $tiers, $year, $div, $value){
+
+		setlocale(LC_ALL, "en_US.utf8");
+        $uN = iconv("utf-8", "ascii//TRANSLIT", Request::session()->get('userName'));
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
+        $base = new base();
+
+
+        $valueFix = strtolower($value);
+        $from = array('revenue');
+
+        for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+            for ($b=0; $b <sizeof($brands); $b++) {
+                for ($m=0; $m <sizeof($months); $m++) { 
+                    if( ($salesRep[$s]['id'] == 131) && ($m > 5) && ($brands[$b][1] == 'ONL' || $brands[$b][1] == 'VIX') ){
+                        if( $brands[$b][1] == "ONL"){
+                            $select[$b][$m] = "SELECT SUM(".$valueFix."_revenue) AS revenue FROM fw_digital WHERE (region_id = 1) AND(year = '$year') AND (brand_id != '10') AND (month = '".($m+1)."')";
+                        }elseif($brands[$b][1] == "VIX"){
+                            $select[$b][$m] = "SELECT SUM(".$valueFix."_revenue) AS revenue FROM fw_digital WHERE (region_id = 1) AND(year = '$year') AND (brand_id = '10') AND (month = '".($m+1)."')";
+                        }
+                        $result[$b][$m] = $con->query($select[$b][$m]);
+                        $kaplau = doubleval($sql->fetch($result[$b][$m],$from,$from)[0]['revenue']);
+                        $values[$b][$m][$s] = $kaplau;
+                    }                    
+                }                
+            }
+        }
+
 
 		//separando as marcas por tiers
 		$brandsTiers = array(0, 1, 2);
@@ -143,7 +172,7 @@ class quarterPerformance extends performance {
 		for ($b=0; $b <sizeof($values) ; $b++) { 
 			for ($m=0; $m <sizeof($values[$b]) ; $m++) { 
 				for ($s=0; $s <sizeof($values[$b][$m]) ; $s++) {
-					if ($salesRep[$s]['id'] != 131) {
+					if ($salesRep[$s]['id'] != 131 || $uN == 'Joao Romano') {
 						$values[$b][$m][$s] = $values[$b][$m][$s]*$div;
 						$planValues[$b][$m][$s] = $planValues[$b][$m][$s]*$div;
 					}else{

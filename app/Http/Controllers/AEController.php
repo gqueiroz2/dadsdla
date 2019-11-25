@@ -231,9 +231,11 @@ class AEController extends Controller{
         $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear);
 
         if (!$tmp) {
+            /*
+
             $msg = "Don't have a Forecast Saved";
             $typeMsg = "Error";
-            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+            return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/
         }
 
         $forRender = $tmp;

@@ -19,6 +19,7 @@ use App\generateExcel;
 class resultsResumeController extends Controller{
     
 	public function get(){
+
 		$base = new base();
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -36,6 +37,7 @@ class resultsResumeController extends Controller{
 	}
 
 	public function post(){
+
 		$sql = new sql();
 		$base = new base();
         $db = new dataBase();
@@ -141,10 +143,11 @@ class resultsResumeController extends Controller{
 		$currencyExcel = $tmp;
 		$yearExcel = $years;
 		$valueExcel = $value;
+		$brandsExcel = $brands;
 
 		$title = $salesRegion." - Summary.xlsx";
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'title'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'title', 'brandsExcel'));
 
 	}
 

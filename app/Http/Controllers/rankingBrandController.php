@@ -113,7 +113,7 @@ class rankingBrandController extends Controller {
         $monthsExcel = $months;
         $currencyExcel = $pRate;
         $valueExcel = $value;
-        $title = "teste.xlsx";
+        $title = "ranking brands (".$rtr.").xlsx";
 
     	return view("adSales.ranking.0brandPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'mtx', 'rName', 'rtr', 'names', 'regionExcel', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'title'));
     }

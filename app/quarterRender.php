@@ -37,8 +37,7 @@ class quarterRender extends Render
 									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 0, ".", ",")." %</td>";
 								}elseif ($l == 4) {
 									echo "<td class='darkBlue center'>".number_format($mtx[$b][$l][$v], 0, ".", ",")."</td>";
-								}
-								else{
+								}else{
 									echo "<td class='smBlue center'>".number_format($mtx[$b][$l][$v], 0, ".", ",")."</td>";
 								}
 								

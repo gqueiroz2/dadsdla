@@ -8,45 +8,27 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 class summaryExport implements FromArray, WithMultipleSheets {
     
 	protected $sheets;
-    protected $report;
-    protected $region;
-    protected $BKGS;
+    protected $auxSheets;
+    protected $labels;
 
-	public function __construct(array $sheets, $report, $region, $BKGS){
+	public function __construct(array $sheets, $labels, $auxSheets){
 		$this->sheets = $sheets;
-        $this->report = $report;
-        $this->region = $region;
-        $this->BKGS = $BKGS;
+        $this->labels = $labels;
+        $this->auxSheets = $auxSheets;
 	}
 
     public function array(): array {
-
         return $this->sheets;
     }
 
     public function sheets(): array{
     	
-    	if ($this->region == "Brazil") {
-    		
-    		$sheets = [
-	    		new cmapsExport($this->sheets['cmaps'], $this->report[0], $this->BKGS[0]),
-                new ytdExport($this->sheets['pYtd'], $this->report[3], $this->BKGS[1]),
-	    		new digitalExport($this->sheets['digital'], $this->report[1]),
-	    		new planByBrandExport($this->sheets['plan'], $this->report[2])
-	    	];
+        $sheets = array();
 
-    	}else{
-    		
-    		$sheets = [
-	    		new ytdExport($this->sheets['ytd'], $this->report[0], $this->BKGS[0]),
-                new ytdExport($this->sheets['pYtd'], $this->report[3], $this->BKGS[1]),
-	    		new digitalExport($this->sheets['digital'], $this->report[1]),
-	    		new planByBrandExport($this->sheets['plan'], $this->report[2])
-	    	];
-	    	
-    	}
+        for ($a=0; $a < sizeof($this->auxSheets); $a++) { 
+            array_push($sheets, new summaryTabExport($this->labels, $this->sheets[$this->auxSheets[$a]], $this->auxSheets[$a], $this->sheets));
+        }
 
-    	return $sheets;
-    	
+    	return $sheets;    	
     }
 }

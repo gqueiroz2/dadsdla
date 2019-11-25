@@ -257,7 +257,6 @@ class AE extends pAndR{
                     if ($con->query($insert[$c][$m]) === true) {
                         
                     }else{
-                        var_dump($con->error);
                         return false;
                     }
                 }
@@ -370,7 +369,6 @@ class AE extends pAndR{
         $tmp = array($cYear);
         //valor da moeda para divisões
         $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
-        
         //nome da moeda pra view
         $tmp = array($currencyID);
         $currency = $pr->getCurrency($con,$tmp)[0]["name"];
@@ -591,7 +589,7 @@ class AE extends pAndR{
 
         $rollingFCST = $this->adjustFCST($rollingFCST);
 
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
         $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
@@ -676,7 +674,7 @@ class AE extends pAndR{
 
         $week = $this->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
 
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
@@ -963,14 +961,14 @@ class AE extends pAndR{
             $lastRollingFCST = $rollingFCST;
             
         }
-        //var_dump($lastRollingFCST);
 
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value);
+        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
         $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
 
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
+        $executiveRF = $this->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
@@ -990,6 +988,8 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+
+
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -1031,6 +1031,32 @@ class AE extends pAndR{
 
         return $rtr;
         
+    }
+
+    public function addBookingRollingFCST($fcst,$booking){
+        $date = intval(date('n'))-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($d=$date; $d <sizeof($fcst); $d++) {
+            $fcst[$d] += $booking[$d];
+        }
+
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+        return $fcst;
     }
 
     public function checkEmpty($array){
@@ -1096,7 +1122,7 @@ class AE extends pAndR{
     }
 
 
-    public function addLost($con,$clients,$fcstStages,$value){
+    public function addLost($con,$clients,$fcstStages,$value,$div){
 
         $sql = new sql();
 
@@ -1113,7 +1139,7 @@ class AE extends pAndR{
 
             $result[$c] = $sql->fetchSum($res,"value");
             
-            $fcstStages[$c][1][5] = $result[$c]['value'];
+            $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
         return $fcstStages;

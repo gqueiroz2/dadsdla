@@ -3,7 +3,6 @@ $(document).ready(function(){
     var regionID = $(this).val();
     ajaxSetup();
     if (regionID != "") {
-        
       $.ajax({
         url:"/ajax/adsales/currencyByRegion",
         method:"POST",
@@ -15,25 +14,26 @@ $(document).ready(function(){
           alert(xhr.status+" "+thrownError);
         }
       });
-
-      $.ajax({
-        url:"/ajax/salesRepByRegion",
-        method:"POST",
-        data:{regionID},
-        success: function(output){
-          $('#salesRep').html(output);
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      })
-
+      
       $.ajax({ 
         url:"/ajax/yearOnFcst",
         method:"POST",
         data:{regionID},
         success: function(output){
-          $('#year').html(output);          
+          $('#year').html(output);
+          var year = $("#year").val();
+          $.ajax({
+            url:"/ajax/salesRepByRegionPandR",
+            method:"POST",
+            data:{regionID,year},
+            success: function(output){
+              $('#salesRep').html(output);
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          })         
+        
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
@@ -51,21 +51,23 @@ $(document).ready(function(){
 });
 
 function handleNumber(number){
+  number = number.replace(",",";");
+
   for (var i = 0; i < number.length/3; i++) {
     number = number.replace(".","");
   }
+  number = number.replace(";",".");
   
   number = parseFloat(number);
-  
+
+  number = Math.round(number);
+
   return number;
 }
 
   function Comma(Num) { //function to add commas to textboxes
       Num += '';
-      Num = Num.replace('.', ''); Num = Num.replace('.', ''); Num = Num.replace('.', '');
-      Num = Num.replace('.', ''); Num = Num.replace('.', ''); Num = Num.replace('.', '');
-      Num = Num.replace('.', ''); Num = Num.replace('.', ''); Num = Num.replace('.', '');
-      x = Num.split(',');
+      x = Num.split('.');
       x1 = x[0];
       x2 = x.length > 1 ? ',' + x[1] : '';
       var rgx = /(\d+)(\d{3})/;

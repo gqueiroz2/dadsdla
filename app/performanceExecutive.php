@@ -89,9 +89,7 @@ class performanceExecutive extends performance
             for ($m=0; $m <sizeof($month) ; $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
                     $table[$b][$m] = "fw_digital";
-                }/*elseif($brand[$b][1] == "FN" && $m<5){
-                    $table[$b][$m] = false;
-                }*/else{
+                }else{
                     $table[$b][$m] = "ytd";
                 }
                 //pega colunas
@@ -134,6 +132,13 @@ class performanceExecutive extends performance
     }
 
     public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$region,$year,$currency,$valueView,$div,$divDig){
+  
+  
+        setlocale(LC_ALL, "en_US.utf8");
+        $uN = iconv("utf-8", "ascii//TRANSLIT", Request::session()->get('userName'));
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
 
         $base = new base();
 
@@ -169,19 +174,27 @@ class performanceExecutive extends performance
             }    
         }
 
+        $valueFix = strtolower($valueView);
+        $from = array('revenue');
+
         for ($s=0; $s <sizeof($salesRep) ; $s++) { 
             for ($b=0; $b <sizeof($brand); $b++) {
                 for ($m=0; $m <sizeof($month); $m++) { 
                     if( ($salesRep[$s]['id'] == 131) && ($m > 5) && ($brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX') ){
-                        for ($soul=0; $soul <sizeof($salesRep) ; $soul++) { 
-                            if($salesRep[$s]['id'] != $salesRep[$soul]['id']){
-                                $tmp[$s][$b][$m] += $tmp[$soul][$b][$m];
-                            }
+                        if( $brand[$b][1] == "ONL"){
+                            $select[$b][$m] = "SELECT SUM(".$valueFix."_revenue) AS revenue FROM fw_digital WHERE (region_id = 1) AND(year = '$year') AND (brand_id != '10') AND (month = '".($m+1)."')";
+                        }elseif($brand[$b][1] == "VIX"){
+                            $select[$b][$m] = "SELECT SUM(".$valueFix."_revenue) AS revenue FROM fw_digital WHERE (region_id = 1) AND(year = '$year') AND (brand_id = '10') AND (month = '".($m+1)."')";
                         }
-                    }
+                        $result[$b][$m] = $con->query($select[$b][$m]);
+                        $kaplau = doubleval($sql->fetch($result[$b][$m],$from,$from)[0]['revenue'])*$divDig;
+                        $tmp[$s][$b][$m] = $kaplau;
+                    }                    
                 }                
             }
         }
+
+        //var_dump($tmp);
 
         $values = $tmp;
         $planValues = $tmp_2;
@@ -558,7 +571,7 @@ class performanceExecutive extends performance
                 $mtx["case3"]["dnVarPrc"][$s][$m] = 0;
                 for ($t=0; $t <sizeof($mtx["tier"]) ; $t++) { 
                     $mtx["case3"]["dnValue"][$s][$m] += $mtx["case3"]["values"][$s][$t][$m]; 
-                    if($salesRep[$s]['id'] != 131){
+                    if($salesRep[$s]['id'] != 131 || $uN == "Joao Romano"){
                         $mtx["case3"]["dnPlanValue"][$s][$m] += $mtx["case3"]["planValues"][$s][$t][$m];     
                     }
                     $mtx["case3"]["dnVarAbs"][$s][$m] += $mtx["case3"]["varAbs"][$s][$t][$m]; 
@@ -652,7 +665,7 @@ class performanceExecutive extends performance
         }
 
         for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) {
-            if ($salesRep[$sg]['id'] != 131) {
+            if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                 for ($b=0; $b <sizeof($mtx["brand"]); $b++) {
                     for ($m=0; $m <sizeof($mtx["month"]) ; $m++) { 
                         $mtx["total"]["case4"]["values"][$b][$m] += $mtx["case4"]["values"][$sg][$b][$m];
@@ -719,7 +732,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case4"]["dnPlanValue"][$m] = 0;
             $mtx["total"]["case4"]["dnValue"][$m] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) {
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case4"]["dnPlanValue"][$m] += $mtx["case4"]["dnPlanValue"][$sg][$m];
                     $mtx["total"]["case4"]["dnValue"][$m] += $mtx["case4"]["dnValue"][$sg][$m];
                 }
@@ -736,7 +749,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case4"]["totalValueTier"][$b] = 0;
             $mtx["total"]["case4"]["totalPlanValueTier"][$b] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) {
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case4"]["totalValueTier"][$b] += $mtx["case4"]["totalValueTier"][$sg][$b];
                     $mtx["total"]["case4"]["totalPlanValueTier"][$b] += $mtx["case4"]["totalPlanValueTier"][$sg][$b];
                 }
@@ -770,7 +783,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case3"]["dnPlanValue"][$m] = 0;
             $mtx["total"]["case3"]["dnValue"][$m] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) {
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case3"]["dnPlanValue"][$m] += $mtx["case3"]["dnPlanValue"][$sg][$m];
                     $mtx["total"]["case3"]["dnValue"][$m] += $mtx["case3"]["dnValue"][$sg][$m];
                 }
@@ -819,7 +832,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case2"]["dnPlanValue"][$q] = 0;
             $mtx["total"]["case2"]["dnValue"][$q] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) { 
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case2"]["dnPlanValue"][$q] += $mtx["case2"]["dnPlanValue"][$sg][$q];
                     $mtx["total"]["case2"]["dnValue"][$q] += $mtx["case2"]["dnValue"][$sg][$q];
                 }
@@ -836,7 +849,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case2"]["totalValueBrand"][$b] = 0;
             $mtx["total"]["case2"]["totalPlanValueBrand"][$b] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) { 
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case2"]["totalValueBrand"][$b] += $mtx["case2"]["totalValueBrand"][$sg][$b];
                     $mtx["total"]["case2"]["totalPlanValueBrand"][$b] += $mtx["case2"]["totalPlanValueBrand"][$sg][$b];
                 }
@@ -871,7 +884,7 @@ class performanceExecutive extends performance
             $mtx["total"]["case1"]["dnPlanValue"][$q] = 0;
             $mtx["total"]["case1"]["dnValue"][$q] = 0;
             for ($sg=0; $sg <sizeof($mtx["salesRep"]) ; $sg++) { 
-                if ($salesRep[$sg]['id'] != 131) {
+                if ($salesRep[$sg]['id'] != 131 || $uN == "Joao Romano") {
                     $mtx["total"]["case1"]["dnPlanValue"][$q] += $mtx["case1"]["totalPlanSG"][$sg][$q];
                     $mtx["total"]["case1"]["dnValue"][$q] += $mtx["case1"]["totalSG"][$sg][$q];
                 }

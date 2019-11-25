@@ -54,6 +54,7 @@ class salesRep extends Management{
         $reps = array_values($reps);
         return $reps;
 	}
+	
 	public function getSalesRepStatus($con,$salesRep,$year){
 		$sql = new sql();
 		$from = array("status");
@@ -71,6 +72,7 @@ class salesRep extends Management{
 		$salesRep = array_values($salesRep);
 		return $salesRep;
 	}
+	
 	public function getSalesRepGroupById($con,$id){
 		$sql = new sql();
 		$table = "sales_rep_group srg";
@@ -95,6 +97,7 @@ class salesRep extends Management{
 		$salesRepGroup = $sql->fetch($res,$from,$from);
     	return $salesRepGroup;
 	}
+	
 	public function getSalesRepById($con,$id){
 		$sql = new sql();
 		$table = "sales_rep sr";
@@ -124,6 +127,7 @@ class salesRep extends Management{
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;
 	}
+
 	public function getSalesRepGroup($con,$region){
 		$sql = new sql();
 		$table = "sales_rep_group srg";
@@ -141,6 +145,7 @@ class salesRep extends Management{
 		$salesRepGroup = $sql->fetch($res,$from,$from);
     	return $salesRepGroup;
 	}
+	
 	public function addSalesRepGroup($con){
 		$sql = new sql();
 		$region = Request::get('region');

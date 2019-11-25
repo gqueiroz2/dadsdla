@@ -46,13 +46,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-end mt-2">
-            <div class="col-3" style="color: #0070c0;font-size: 25px;">
-                Account Executive Report
-            </div>
-        </div>
-    </div>
+    
 
     <form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()" onkeydown="return event.key != 'Enter';">
         @csrf
@@ -104,6 +98,13 @@
             </div>
         </div>
     </form>
+    <div class="container-fluid">
+        <div class="row justify-content-end mt-2">
+            <div class="col-3" style="color: #0070c0;font-size: 25px;">
+                Account Executive Report
+            </div>
+        </div>
+    </div>
     <br>
     <div class="container-fluid" id="body" style="display: none;">
         <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
@@ -118,7 +119,6 @@
                     <div class="container-fluid">
                         <div class="row justify-content-end">
                             <div class="col">
-                                <label> &nbsp;</label>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
                                     <label class="btn alert-primary active">
                                         <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
@@ -130,7 +130,6 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <label> &nbsp; </label>
                                 <input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">      
                             </div>
                         </div>
@@ -179,9 +178,7 @@
                     $("#button").val("Submit");
                 }
             });
-            for(var c=0;c<client.length;c++){
-                $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
-            }
+
             
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($client);$c++)
@@ -220,54 +217,32 @@
                             }
                             rf += (handleNumber($("#clientRF-"+c2+"-"+{{$m}}).val())*mult);
                         }
+                        rf += handleNumber($("#bookingE-"+{{$m}}).val());
+                        rf = Math.round(rf);
                         rf = Comma(rf);
                         $("#rf-"+{{$m}}).val(rf);
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                if ($("#splitted-"+c2).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+c2+"-3").val())*mult);
-                            }
+                            month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
+                            month = Math.round(month);
                             month = Comma(month);
                             $("#rf-3").val(month);
                         }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                if ($("#splitted-"+c2).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+c2+"-7").val())*mult);
-                            }
+                            month = handleNumber($("#rf-4").val()) + handleNumber($("#rf-5").val()) + handleNumber($("#rf-6").val());
+                            month = Math.round(month);
                             month = Comma(month);
                             $("#rf-7").val(month);
                         }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                if ($("#splitted-"+c2).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+c2+"-11").val())*mult);
-                            }
+                            month = handleNumber($("#rf-8").val()) + handleNumber($("#rf-9").val()) + handleNumber($("#rf-10").val());
+                            month = Math.round(month);
                             month = Comma(month);
                             $("#rf-11").val(month);
                         }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                if ($("#splitted-"+c2).val() != false) {
-                                    var mult = 0.5;
-                                }else{
-                                    var mult = 1;
-                                }
-                                month += (handleNumber($("#clientRF-"+c2+"-15").val())*mult);
-                            }
+                            month = handleNumber($("#rf-12").val()) + handleNumber($("#rf-13").val()) + handleNumber($("#rf-14").val());
+                            month = Math.round(month);
                             month = Comma(month);
                             $("#rf-15").val(month);
                         }
@@ -392,8 +367,11 @@
                 @endfor
             @endfor
 
-            $("#loading").css('display',"none");
             $("#body").css('display',"");
+            for(var c=0;c<client.length;c++){
+                $("#month-"+c+"-0").css("height",$("#client-"+c).css("height"));
+            }
+            $("#loading").css('display',"none");
         });
     </script>
 

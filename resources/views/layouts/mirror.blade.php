@@ -116,9 +116,11 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>
-								<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
-								<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
-								 <a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
+								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
+									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
+									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
+									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
+								@endif
 							</div>
 						</li>					
 
@@ -154,27 +156,27 @@
 	                        </div>-->
 	                        <div class="row">
                             	<div class="col" style="margin-top: -5px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sale Portal | Data Current Throught: </span>
+	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 12/11/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 18/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 08/11/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 14/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 07/11/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 18/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 07/11/2019 </span>
+	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 13/11/2019 </span>
 	                            </div>	                            
                         	</div>
                         	

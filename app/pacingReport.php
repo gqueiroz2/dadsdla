@@ -242,6 +242,12 @@ class pacingReport extends Model
 		$r = new region();
 
 		$base = new base();
+		
+		var_dump($value);
+		var_dump($currency);
+		var_dump($region);
+		var_dump($year);
+		var_dump($type);
 
 		$from = array("revenue");
 

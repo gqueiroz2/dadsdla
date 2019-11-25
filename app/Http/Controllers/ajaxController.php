@@ -503,6 +503,65 @@ class ajaxController extends Controller{
         
     }
 
+    public function salesRepByRegionFiltered(){
+        $db = new dataBase();
+        $con = $db->openConnection('DLA');
+        $sr = new salesRep();
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');        
+        $userLevel = Request::session()->get('userLevel');
+        $special = Request::session()->get('special');
+        $salesRepGroupID = $sr->getSalesRepGroup($con,array($regionID));
+        for ($s=0; $s <sizeof($salesRepGroupID); $s++) { 
+            $salesRepGroupID[$s] = $salesRepGroupID[$s]['id'];
+        }
+
+        $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
+        $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+        
+        if ($salesRep) {
+            echo "<option selected='true' value=''>Select Sales Rep.</option>";
+        }
+
+        if ($userLevel == "L4") {
+            $userName = Request::session()->get('userName');
+            $performanceName = Request::session()->get('performanceName');
+            $check = false;            
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                if (!is_null($performanceName)) {
+                    if($salesRep[$s]["salesRep"] == $performanceName){
+                        echo "<option value='".$salesRep[$s]["id"]."' > ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }else{
+                    setlocale(LC_ALL, "en_US.utf8");
+                    $output = iconv("utf-8", "ascii//TRANSLIT", $userName);
+                    if( strpos($salesRep[$s]["salesRep"], $output)  !== false){
+                    //if($salesRep[$s]["salesRep"] == $userName){
+                        echo "<option value='".$salesRep[$s]["id"]."' > ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }
+            }
+            if (!$check) {
+                echo "<option value=''> Sales Rep Not Found </option>";
+            }
+        }else{
+
+            if($salesRep){
+                for ($s=0; $s < sizeof($salesRep); $s++) { 
+                    echo "<option value='".$salesRep[$s]["id"]."'>"
+                        .$salesRep[$s]["salesRep"].
+                    "</option>";
+                }
+            }else{
+                echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+            }
+        }
+    }
+
+
     public function salesRepBySalesRepGroup(){
         $db = new dataBase();
         $con = $db->openConnection('DLA');

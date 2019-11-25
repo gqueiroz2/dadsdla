@@ -10,6 +10,7 @@ use Session;
 class AuthController extends Controller
 {
     public function loginGet(){
+
     	return view('auth.login');
     }
 
@@ -30,6 +31,7 @@ class AuthController extends Controller
 
     public function autenticate(){
     	$user = new User();
+        
     	$db = new dataBase();
 
     	$con = $db->openConnection('DLA');

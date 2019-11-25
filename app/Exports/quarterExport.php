@@ -5,9 +5,9 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class monthExport implements FromArray, WithMultipleSheets {
+class quarterExport implements FromArray, WithMultipleSheets {
     
-	protected $sheets;
+    protected $sheets;
     protected $label;
 
     public function __construct(array $sheets, $label){
@@ -22,7 +22,7 @@ class monthExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheets = [
-            new monthTabExport($this->label, $this->sheets)
+            new quarterTabExport($this->label, $this->sheets)
         ];
 
     	return $sheets;

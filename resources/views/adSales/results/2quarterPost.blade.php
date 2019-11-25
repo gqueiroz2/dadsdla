@@ -89,6 +89,8 @@
 		</div>
 	</div>
 
+	<div id="vlau"></div>
+
 	<script type="text/javascript">
 
 		$(document).ready(function() {
@@ -101,10 +103,10 @@
 				var secondPosExcel = "<?php echo $secondPosExcel; ?>";
 				var regionExcel = "<?php echo $regionExcel; ?>";
 				var valueExcel = "<?php echo $valueExcel; ?>";
-				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
+				var yearExcel = "<?php echo $yearExcel; ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
 				var title = "<?php echo $title; ?>";
-				var name = "Quarter";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -118,9 +120,12 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/quarter",
+					url: "/generate/excel/results/quarter",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, name},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, brandsExcel},
+					/*success: function(output){
+						$("#vlau").html(output);
+					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);
