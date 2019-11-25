@@ -29,6 +29,9 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('yoyBrand','resultsExcelController@resultsYoYBrand')
 											->name('yoyBrandExcel');
+
+				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
+											->name('yoyMonthExcel');
 			});
 
 			Route::group(['prefix'=>'ranking'], function(){
