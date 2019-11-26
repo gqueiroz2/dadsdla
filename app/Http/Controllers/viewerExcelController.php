@@ -20,8 +20,6 @@ class viewerExcelController extends Controller{
 
 
     public function viewerBase(){
-    	$viewer = new viewer();
-
 	    $db =  new dataBase();
 	    $con = $db->openConnection("DLA");
 
@@ -50,6 +48,8 @@ class viewerExcelController extends Controller{
 
 
 	    $value = Request::get("valueExcel");
+
+	    $viewer = new viewer();
 
 	    $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
 

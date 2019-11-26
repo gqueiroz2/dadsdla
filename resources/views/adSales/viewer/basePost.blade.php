@@ -1,6 +1,6 @@
 @extends('layouts.mirror')
 
-@section('title', '@')
+@section('title', 'Base Viewer')
 
 @section('head')
     <script src="/js/viewer.js"></script>
@@ -138,7 +138,6 @@
             </div>
     	</div>
 
-
     </div>
 
         <div class="container-fluid">
@@ -148,6 +147,76 @@
                 </div>
             </div>
         </div>
+        
+        <div id="vlau"></div>
+
+        <script type="text/javascript">
+            
+            $(document).ready(function(){
+
+                ajaxSetup();
+
+                $('#excel').click(function(event){
+
+                    var regionExcel = "<?php echo $regionExcel; ?>";
+                    var sourceExcel = "<?php echo $sourceExcel; ?>";
+                    var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
+                    var monthExcel = "<?php echo base64_encode(json_encode($monthExcel)); ?>";
+                    var brandExcel = "<?php echo base64_encode(json_encode($brandExcel)); ?>";
+                    var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
+                    var agencyExcel = "<?php echo base64_encode(json_encode($agencyExcel)); ?>";
+                    var clientExcel = "<?php echo base64_encode(json_encode($clientExcel)); ?>";
+                    var currencyExcel = "<?php echo  base64_encode(json_encode($currencyExcel)); ?>";
+                    var valueExcel = "<?php echo $valueExcel; ?>";
+                    var title = "<?php echo $title; ?>";
+
+                    var div = document.createElement('div');
+                    var img = document.createElement('img');
+                    img.src = '/loading_excel.gif';
+                    div.innerHTML ="Generating Excel...</br>";
+                    div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+                    div.appendChild(img);
+                    document.body.appendChild(div);
+
+                    $.ajax({
+                        xhrFields: {
+                            responseType: 'blob',
+                        },
+                        url: "/generate/excel/viewer/base",
+                        type: "POST",
+                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title},
+                        /*success: function(output){
+                            $("#vlau").html(output);
+                        },*/
+                        success: function(result,status,xhr){
+                            var disposition = xhr.getResponseHeader('content-disposition');
+                            var matches = /"([^"])"/.exec(disposition);
+                            var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                            //download
+                            var blob = new Blob([result], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+
+                            document.body.appendChild(link);
+
+                            link.click();
+                            document.body.removeChild(link);
+                            document.body.removeChild(div);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            document.body.removeChild(div);
+                            alert(xhr.status+" "+thrownError);
+                        }
+                    });
+
+                });
+            });
+
+        </script>
 
 
 
