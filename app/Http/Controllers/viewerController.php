@@ -111,10 +111,6 @@ class viewerController extends Controller{
                 $salesRep = Request::get("salesRep");
 
                 $agency = Request::get("agency");
-               /*$a = new agency();
-                $agencies = $a->getAgency($con,array($agency))[0]['name'];*/
-
-                //var_dump($agencies);
 
                 $client = Request::get("client");
 

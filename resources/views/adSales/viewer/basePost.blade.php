@@ -119,10 +119,25 @@
         </div>
 
     	<div class="row justify-content-end mt-2">
-    		<div class="col" style="color: #0070c0; font-size:22px">
-    			<span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
-    		</div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div> 
+            <div class="col-sm-4" style="color: #0070c0; font-size:22px">
+                    <span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
+            </div>
+
+            <div class="col-sm-2">
+                <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                    Generate Excel
+                </button>               
+            </div>
     	</div>
+
 
     </div>
 
@@ -133,5 +148,7 @@
                 </div>
             </div>
         </div>
+
+
 
 @endsection

@@ -39,6 +39,11 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('core','excelController@performanceCore')
 									->name('coreExcel');
 
+		Route::group(['prefix'=>'viewer'], function(){
+			Route::post('base', 'viewerExcelController@viewerBase')
+										->name('baseExcel');
+		});
+
 		});
 	});
 });
