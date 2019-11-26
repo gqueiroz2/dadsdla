@@ -661,7 +661,8 @@ class AE extends pAndR{
     }
 
     public function baseLoad($con,$r,$pr,$cYear,$pYear){
-    	$sr = new salesRep();        
+    	
+        $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
         $sql = new sql();

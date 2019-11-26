@@ -10,11 +10,13 @@ use App\dataBase;
 use App\resultsResume;
 use App\resultsMQ;
 use App\resultsYoY;
+use App\resultsMonthlyYoY;
 
 use App\Exports\summaryExport;
 use App\Exports\monthExport;
 use App\Exports\quarterExport;
 use App\Exports\yoyBrandExport;
+use App\Exports\yoyMonthExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -269,6 +271,7 @@ class resultsExcelController extends Controller{
                 $value = Request::get("valueExcel");
                 
                 $yoy = new resultsYoY();
+
                 $lines = $yoy->lines($con, $currency, $months, $firstPos, $brands, $years, $region, $value, $secondPos);
 
                 //criando matriz que será renderizada     
@@ -282,7 +285,67 @@ class resultsExcelController extends Controller{
                 $title = Request::get("title");
                 //var_dump($matrix);
 
-                return Excel::download(new yoyBrandExport($data,$label),$title);
+                return Excel::download(new yoyBrandExport($data, $label), $title);
+        }
+
+        public function resultsYoYMonth(){
+
+                $db = new dataBase();
+                $con = $db->openConnection("DLA");
+
+                $region = Request::get("regionExcel");
+
+                $r = new region();
+                $tmp = $r->getRegion($con,array($region));
+
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{  
+                        $salesRegion = $tmp['name'];
+                }
+
+                $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+                
+                //unset($brands[sizeof($brands)-1]);
+
+                //ano consultado
+                $years = json_decode(base64_decode(Request::get("yearExcel")));
+
+                $base = new base();
+                $months = $base->month;
+
+                //primeira posição (target ou corporate)
+                $firstPos = Request::get("firstPosExcel");
+                //segunda posição (booking ou cmaps)
+                $secondPos = Request::get("secondPosExcel");
+
+                //currency da pesquisa
+                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+                
+                $currency[0]['id'] = $tmp[0]->id;
+                $currency[0]['name'] = $tmp[0]->name;
+                $currency[0]['region'] = $tmp[0]->region;
+
+                //gross ou net
+                $value = Request::get("valueExcel");
+                
+                $monthlyYoY = new resultsMonthlyYoY();
+
+                //pegando valores das colunas das tabelas
+                $lines = $monthlyYoY->lines($con, $currency, $months, $firstPos, $brands, $years, $region, $value, $secondPos);
+
+                //criando matriz que será renderizada     
+                $matrix = $monthlyYoY->assemblers($brands, $lines, $months, $years, $secondPos);
+                
+                $data = array("mtx" => $matrix[0], "quarter" => $matrix[1], "currency" => $currency, "value" => $value, "year" => $years, "form" => $secondPos, "region" => $salesRegion, "brands" => $brands, "months" => $months);
+
+                $labels = array("exports.results.yoy.month.monthExport", "exports.results.yoy.month.semesterExport");
+
+                //nome do excel e do relatorio
+                $title = Request::get("title");
+                //var_dump($matrix[1]);
+
+                return Excel::download(new yoyMonthExport($data, $labels), $title);
         }
 
         public function resultsShare(){

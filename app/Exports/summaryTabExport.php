@@ -138,7 +138,7 @@ class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
         return "summary - ".$this->tab;
     }
 
-     public function columnFormats(): array{
+    public function columnFormats(): array{
         
         return [
             'B' => '#,##0',

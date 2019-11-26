@@ -205,7 +205,7 @@ class AEController extends Controller{
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
-/*
+
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
             $typeMsg = "Success";
@@ -223,7 +223,7 @@ class AEController extends Controller{
             $typeMsg = "Error";
             return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }
-*/
+
     }
 
     public function get(){
