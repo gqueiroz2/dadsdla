@@ -21,6 +21,7 @@ class rankingMarket extends rank {
 		}
     	
         return $res;
+        
     }
 
     public function searchPos($name, $values, $type, $cont, $id){

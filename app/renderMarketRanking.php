@@ -3,9 +3,46 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\region;
+use App\rank;
 
 class renderMarketRanking extends Render {
     
+    public function search($brands, $type, $regionID, $region, $value, $currency, $months, $years, $sector=false){
+        
+        $null = null;
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $r = new rankingMarket();
+
+        if ($region == "Brazil") {
+            $res = $r->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null, "DESC");
+        }else{
+            $res = $r->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null, "DESC");   
+        }
+
+        $names = array();
+
+        for ($r=0; $r < sizeof($res); $r++) { 
+            for ($r2=0; $r2 < sizeof($res[$r]); $r2++) { 
+                array_push($names, $res[$r][$r2][$type]);
+            }
+        }
+
+        $names = array_values(array_unique($names));
+
+        echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+
+            for ($n=0; $n < sizeof($names); $n++) { 
+                echo "<option value='".$names[$n]."' >".$names[$n]."</option>";
+            }
+
+        echo "</select>";
+
+    }
+
     public function assembler($mtx, $total, $currency, $value, $type, $names, $region){
     	
     	echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
