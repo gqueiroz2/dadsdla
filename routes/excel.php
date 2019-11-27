@@ -37,6 +37,9 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::group(['prefix'=>'ranking'], function(){
 				Route::post('brand','rankingExcelController@brand')
 									->name('brandExcel');
+
+				Route::post('market','rankingExcelController@market')
+									->name('marketExcel');
 			});
 
 		Route::post('core','excelController@performanceCore')

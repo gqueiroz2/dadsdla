@@ -47,7 +47,7 @@ class subMarketRanking extends rankingMarket {
     	$sql = new sql();
 
     	$r = new region();
-                                
+
         $tmp = $r->getRegion($con,array($regionID));
 
         $p = new pRate();
