@@ -96,8 +96,6 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND (a.ID IN ($agencyString))
-									AND (cl.ID IN ($clientString))
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
 
@@ -135,11 +133,9 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND (a.ID IN ($agencyString))
-									AND (cl.ID IN ($clientString))
 							ORDER BY c.month";
 
-					echo "<pre>$select</pre>";
+					//echo "<pre>$select</pre>";
 
 			}
 
@@ -441,11 +437,13 @@ class viewer extends Model{
 
 
 
-	public function assemble($mtx,$total,$salesCurrency,$source,$con,$salesRegion,$currencies){
+	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies){
 		$base = new base();
 		$p = new pRate();
 		
 		$year = date('Y');
+
+		$pRate = 1.0;
 
 		//var_dump($salesCurrency);
 
@@ -453,7 +451,7 @@ class viewer extends Model{
 
 		for ($m=0; $m <sizeof($mtx); $m++) { 		
 			
-			if ($currencies == 'USD') {
+			/*if ($currencies == 'USD') {
 				if ($source == 'CMAPS') {
 					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 				}else{
@@ -465,7 +463,7 @@ class viewer extends Model{
 				}else{
 					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 				}
-			}
+			}*/
 
 			switch ($source) {
 				case 'CMAPS':

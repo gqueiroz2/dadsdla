@@ -111,10 +111,6 @@ class viewerController extends Controller{
                 $salesRep = Request::get("salesRep");
 
                 $agency = Request::get("agency");
-               /*$a = new agency();
-                $agencies = $a->getAgency($con,array($agency))[0]['name'];*/
-
-                //var_dump($agencies);
 
                 $client = Request::get("client");
 
@@ -145,12 +141,24 @@ class viewerController extends Controller{
 
                 $mtx = $viewer->assemble($table,$total,$salesCurrency,$source,$con,$salesRegion,$currencies);
 
+                $regionExcel = $regions;
+                $sourceExcel = $source;
+                $yearExcel = $year;
+                $monthExcel = $month;
+                $brandExcel = $brand;
+                $salesRepExcel = $salesRep;
+                $agencyExcel = $agency;
+                $clientExcel = $client;
+                $currencyExcel = $currencies;
+                $valueExcel = $value;
+                $title = $source." - Viewer Base.xlsx";
+
                //var_dump(Request::all());
 
                 //var_dump($table);
                 
 
-                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions",'year','total'));
+                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel","title"));
 
 	}
 
