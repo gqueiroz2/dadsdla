@@ -40,6 +40,12 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('market','rankingExcelController@market')
 									->name('marketExcel');
+
+				Route::post('churn','rankingExcelController@churn')
+									->name('churnExcel');
+
+				Route::post('new','rankingExcelController@new')
+									->name('newExcel');
 			});
 
 		Route::post('core','excelController@performanceCore')

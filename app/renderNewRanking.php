@@ -6,6 +6,76 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderNewRanking extends Render {
     
+    public function checkNew($cont, $values, $name, $type, $years){
+        
+        $bool = -1;
+        $bool2 = -1;
+
+        if (is_array($values[0])) {
+            for ($v=0; $v < sizeof($values[0]); $v++) { 
+                if ($values[0][$v][$type] == $name[$type]) {
+                    $bool = 0;
+                    if ($values[0][$v]['total'] > 0) {
+                        $bool = 1;
+                    }else{
+                        $bool = 2;
+                    }
+                }
+            }   
+        }
+
+        if (is_array($values[1])) {
+            for ($v=0; $v < sizeof($values[1]); $v++) { 
+                if ($values[1][$v][$type] == $name[$type]) {
+                    $bool2 = 1;
+                }
+            }
+        }
+
+        if ($bool == 1 && $bool2 == -1) {
+            return $cont;
+        }else{
+            return -1;
+        }
+    }
+
+    public function search($brands, $type, $regionID, $region, $value, $currency, $months, $years, $sector=false){
+        
+        $null = null;
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $r = new rankingMarket();
+
+        if ($region == "Brazil") {
+            $res = $r->getAllValues($con, "cmaps", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null, "DESC");
+        }else{
+            $res = $r->getAllValues($con, "ytd", $type, $type, $brands, $regionID, $value, $years, $months, $currency, $null, "DESC");   
+        }
+
+        $names = array();
+
+        for ($r=0; $r < sizeof($res); $r++) { 
+            for ($r2=0; $r2 < sizeof($res[$r]); $r2++) { 
+                array_push($names, $res[$r][$r2][$type]);
+            }
+        }
+
+        $names = array_values(array_unique($names));
+        var_dump($names);
+        /*echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+
+            for ($n=0; $n < sizeof($names); $n++) { 
+                if ($this->checkNew($c = 1, $res, $names[$n], $type, $years) != -1) {
+                    echo "<option value='".$names[$n]."' >".$names[$n]."</option>";   
+                }
+            }
+
+        echo "</select>";*/
+
+    }
+
     public function assembler($mtx, $total, $currency, $value, $type, $names, $region){
     	
     	echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";

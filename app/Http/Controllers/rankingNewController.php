@@ -131,6 +131,33 @@ class rankingNewController extends Controller {
 		$render = new renderNewRanking();
   		$names = $rn->createNames($type, $months, $rtr, $brands);
 
-  		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
+  		$regionExcel = $region;
+	    $regionNameFilter = $rtr;
+	    $typeExcel = $type;
+	    $brandsExcel = $brands;
+	    $monthsExcel = $months;
+	    $currencyExcel = $pRate;
+	    $valueExcel = $value;
+	    $yearsExcel = $years;
+	    
+	    if ($type == "sector") {
+
+	      $namesExcel = array();
+
+	      for ($v=0; $v < sizeof($values); $v++) { 
+	        for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
+	          array_push($namesExcel, $values[$v][$v2][$type]);
+	        }
+	      }
+
+	      $namesExcel = array_values(array_unique($namesExcel));
+	      
+	    }else{
+	      $namesExcel = null;
+	    }
+
+	    $title = "ranking market (".$rtr.").xlsx";
+
+  		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
     }
 }

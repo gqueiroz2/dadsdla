@@ -11,12 +11,12 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting, WithStrictNullComparison {
+class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting, WithStrictNullComparison {
     
     protected $view;
 	protected $data;
 	protected $dataTotal;	
-	protected $dataMarket;
+	protected $dataChurn;
 	protected $names;
 
 	protected $headStyle = [
@@ -99,27 +99,17 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
         ],
     ];
 
-    public function __construct($view, $data, $dataTotal, $dataMarket, $names){
+    public function __construct($view, $data, $dataTotal, $dataChurn, $names){
 		$this->view = $view;
 	    $this->data = $data;
 	    $this->dataTotal = $dataTotal;
-	    $this->dataMarket = $dataMarket;
+	    $this->dataChurn = $dataChurn;
 	    $this->names = $names;
 	}
 
 	public function view(): View{
 
-		if ($this->names['type'] == "client") {
-			$pos[0] = 3;
-			$pos[1] = 4;
-			$pos[2] = 5;
-		}else{
-			$pos[0] = 4;
-			$pos[1] = 9;
-			$pos[2] = -1;
-		}
-
-    	return view($this->view, ['data' => $this->data, 'dataTotal' => $this->dataTotal, 'dataMarket' => $this->dataMarket, 'names' => $this->names, "pos" => $pos]);
+    	return view($this->view, ['data' => $this->data, 'dataTotal' => $this->dataTotal, 'dataChurn' => $this->dataChurn, 'names' => $this->names]);
     }
 
     /**
@@ -133,9 +123,9 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
                 if ($this->names['type'] == "client") {
-                    $letter = "G";
+                    $letter = "L";
                 }else{
-                    $letter = "H";
+                    $letter = "K";
                 }
 
                 $cellRange = "A2:".$letter."2";
@@ -162,7 +152,7 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
     	$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýýþÿŔŕ?';
    		$b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuuyybyRr-';
 
-   		$nome = strtr($this->dataMarket, utf8_decode($a), $b);
+   		$nome = strtr($this->dataChurn, utf8_decode($a), $b);
    		$nome = preg_replace("/[^0-9a-zA-Z\.\s+]+/",'',$nome);
 
    		if(strlen($nome) > 30){
@@ -171,28 +161,32 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 			$nome = substr($nome, 0, $i);
    		}
 
-   		return $nome;
+   		return $nome;   
     }
 
     public function columnFormats(): array{
 
         if ($this->names['type'] == "client") {
             return [
-                'B' => '#,##0',
-                'C' => '#,##0',
-                'D' => '#0%',
-                'E' => '#0%',
-                'F' => '#0%',
-                'G' => '#,##0'
+                'D' => '#,##0',
+                'E' => '#,##0',
+                'F' => '#,##0',
+                'G' => '#0%',
+                'H' => '#,##0',
+                'I' => '#,##0',
+                'J' => '#,##0',
+                'K' => '#,##0'
             ];
         }else{
             return [
                 'C' => '#,##0',
                 'D' => '#,##0',
-                'E' => '#0%',
-                'F' => '#,##0',
-                'G' => '#,##0',
-                'H' => '#,##0'
+                'E' => '#,##0',
+                'F' => '#0%',
+                'H' => '#,##0',
+                'I' => '#,##0',
+                'I' => '#,##0',
+                'J' => '#,##0'
             ];
         }
     }
