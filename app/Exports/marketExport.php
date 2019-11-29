@@ -132,7 +132,7 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                if ($this->names['type'] == "client") {
+                if ($this->names['val'] == "agency") {
                     $letter = "G";
                 }else{
                     $letter = "H";
@@ -159,11 +159,8 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
     public function title(): string{
 
-    	$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýýþÿŔŕ?';
-   		$b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuuyybyRr-';
-
-   		$nome = strtr($this->dataMarket, utf8_decode($a), $b);
-   		$nome = preg_replace("/[^0-9a-zA-Z\.\s+]+/",'',$nome);
+    	setlocale(LC_ALL, 'pt_BR');
+        $nome = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $this->dataMarket ) );
 
    		if(strlen($nome) > 30){
    			$i = strpos($nome, " ");
@@ -176,16 +173,8 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
     public function columnFormats(): array{
 
-        if ($this->names['type'] == "client") {
-            return [
-                'B' => '#,##0',
-                'C' => '#,##0',
-                'D' => '#0%',
-                'E' => '#0%',
-                'F' => '#0%',
-                'G' => '#,##0'
-            ];
-        }else{
+        if ($this->names['val'] == "agency") {
+            
             return [
                 'C' => '#,##0',
                 'D' => '#,##0',
@@ -193,6 +182,15 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 'F' => '#,##0',
                 'G' => '#,##0',
                 'H' => '#,##0'
+            ];
+        }else{
+            return [
+                /*'C' => '#,##0',
+                'D' => '#,##0',
+                'E' => '#0%',
+                'F' => '#,##0',
+                'G' => '#,##0',
+                'H' => '#,##0'*/
             ];
         }
     }

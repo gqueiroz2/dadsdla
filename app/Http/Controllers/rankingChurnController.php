@@ -155,7 +155,7 @@ class rankingChurnController extends Controller {
 	      $namesExcel = null;
 	    }
 
-	    $title = "ranking market (".$rtr.").xlsx";
+	    $title = "ranking churn (".$rtr.").xlsx";
 	    
   		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
 	}

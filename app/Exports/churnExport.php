@@ -149,11 +149,8 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
 
     public function title(): string{
 
-    	$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýýþÿŔŕ?';
-   		$b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuuyybyRr-';
-
-   		$nome = strtr($this->dataChurn, utf8_decode($a), $b);
-   		$nome = preg_replace("/[^0-9a-zA-Z\.\s+]+/",'',$nome);
+    	setlocale(LC_ALL, 'pt_BR');
+        $nome = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $this->dataChurn ) );
 
    		if(strlen($nome) > 30){
    			$i = strpos($nome, " ");
@@ -161,12 +158,12 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
 			$nome = substr($nome, 0, $i);
    		}
 
-   		return $nome;   
+   		return $nome;
     }
 
     public function columnFormats(): array{
 
-        if ($this->names['type'] == "client") {
+        if ($this->names['val'] == "client") {
             return [
                 'D' => '#,##0',
                 'E' => '#,##0',

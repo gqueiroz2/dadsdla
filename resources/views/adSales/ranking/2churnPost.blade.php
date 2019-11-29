@@ -71,7 +71,7 @@
 		<div class="row justify-content-end mt-2">
 			@if($type != "sector")
 				<div class="col-sm">
-					{{$render->search($brandsExcel, $typeExcel, $regionExcel, $regionNameFilter, $valueExcel, $currencyExcel, $monthsExcel, $yearsExcel)}}
+					{{$render->search($mtx, $type)}}
 				</div>
 				<div class="col-sm">
 					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">

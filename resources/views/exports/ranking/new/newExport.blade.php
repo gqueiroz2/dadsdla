@@ -3,7 +3,7 @@
 		<th colspan="{{sizeof($data)}}">
 			<span>
 				<b>
-					{{$names['region']}} - Churn ({{$names['val']}} - {{$dataChurn}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
+					{{$names['region']}} - New ({{$names['val']}} - {{$dataNew}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
 				</b>
 			</span>
 		</th>
@@ -31,19 +31,19 @@
 		@for($t = 0; $t < sizeof($dataTotal); $t++)
 			@if(is_numeric($dataTotal[$t]))
 				@if($names['val'] == "agency")
-					@if($t == 6 || $t == 11)
+					@if($t == 5)
 						<td>{{$dataTotal[$t]/100}}</td>
 					@else
 						<td>{{$dataTotal[$t]}}</td>
 					@endif
 				@elseif($names['val'] == "client")
-					@if($t == 5)
+					@if($t == 4)
 						<td>{{$dataTotal[$t]/100}}</td>
 					@else
 						<td>{{$dataTotal[$t]}}</td>
 					@endif
 				@else
-					@if($t == 5)
+					@if($t == 4)
 						<td>{{$dataTotal[$t]/100}}</td>
 					@else
 						<td>{{$dataTotal[$t]}}</td>
