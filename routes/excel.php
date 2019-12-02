@@ -37,10 +37,24 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::group(['prefix'=>'ranking'], function(){
 				Route::post('brand','rankingExcelController@brand')
 									->name('brandExcel');
+
+				Route::post('market','rankingExcelController@market')
+									->name('marketExcel');
+
+				Route::post('churn','rankingExcelController@churn')
+									->name('churnExcel');
+
+				Route::post('new','rankingExcelController@new')
+									->name('newExcel');
 			});
 
 		Route::post('core','excelController@performanceCore')
 									->name('coreExcel');
+
+		Route::group(['prefix'=>'viewer'], function(){
+			Route::post('base', 'viewerExcelController@viewerBase')
+										->name('baseExcel');
+		});
 
 		});
 	});

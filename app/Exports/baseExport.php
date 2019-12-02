@@ -5,8 +5,8 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class yoyMonthExport implements FromArray, WithMultipleSheets {
-    
+class baseExport implements FromArray, WithMultipleSheets {
+
     protected $sheets;
     protected $labels;
 
@@ -23,8 +23,7 @@ class yoyMonthExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheets = [
-            new yoyMonthTabExport($this->labels[0], $this->sheets),
-            new yoySemesterTabExport($this->labels[1], $this->sheets)
+            new baseTabExport($this->labels, $this->sheets)
         ];
 
         return $sheets;

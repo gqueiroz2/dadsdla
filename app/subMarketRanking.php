@@ -47,7 +47,7 @@ class subMarketRanking extends rankingMarket {
     	$sql = new sql();
 
     	$r = new region();
-                                
+
         $tmp = $r->getRegion($con,array($regionID));
 
         $p = new pRate();
@@ -741,7 +741,7 @@ class subMarketRanking extends rankingMarket {
                                 $color = 'rcBlue';  
                             }
 
-                            for ($n=0; $n < sizeof($mtx); $n++) { 
+                            for ($n=0; $n < sizeof($mtx); $n++) {
                                 if ($m == 0) { 
                                     echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
                                 }else{

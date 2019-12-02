@@ -69,12 +69,44 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Market Ranking </div>
-			</div>
+			@if($type != "sector")
+				<div class="col-sm">
+					{{$render->search($mtx, $type)}}
+				</div>
+				<div class="col-sm">
+					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+						Generate Excel
+					</button>
+				</div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+					<div style="float: right;"> 
+						{{$rName}} - {{ucfirst($type)}} Market Ranking 
+					</div>
+				</div>
+			@else
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+					<div style="float: right;"> 
+						{{$rName}} - {{ucfirst($type)}} Market Ranking 
+					</div>
+				</div>
+				<div class="col-sm">
+					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+						Generate Excel
+					</button>
+				</div>
+			@endif
 		</div>
 	</div>
-
+	
 	<div class="container-fluid">
 		<div class="row mt-2 justify-content-center">
 			<div class="col">
@@ -122,6 +154,70 @@
                     }
                 });
             @endfor
+
+            $("#excel").click(function(event){
+            	
+            	var regionExcel = "{{$regionExcel}}";
+				var typeExcel = "{{$typeExcel}}";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
+				var monthsExcel = "<?php echo base64_encode(json_encode($monthsExcel)); ?>";
+				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+	            var valueExcel = "{{$valueExcel}}";
+	            var yearsExcel = "<?php echo base64_encode(json_encode($yearsExcel)); ?>";
+
+	            var names = "";
+	            if("{{$type}}" == "sector"){
+	            	names = "<?php echo base64_encode(json_encode($namesExcel)); ?>"
+	            }else{
+	            	names = $("#namesExcel").val();
+	            }
+
+	            var title = "<?php echo $title; ?>";
+
+	            var div = document.createElement('div');
+				var img = document.createElement('img');
+				img.src = '/loading_excel.gif';
+				div.innerHTML = "Generating Excel...<br/>";
+				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+				div.appendChild(img);
+				document.body.appendChild(div);
+
+				$.ajax({
+					xhrFields: {
+						responseType: 'blob',
+					},
+					url: "/generate/excel/ranking/market",
+					type: "POST",
+					data: {regionExcel, typeExcel, brandsExcel, monthsExcel, currencyExcel, valueExcel, yearsExcel, names, title},
+					success: function(result, status, xhr){
+						var disposition = xhr.getResponseHeader('content-disposition');
+				        var matches = /"([^"]*)"/.exec(disposition);
+				        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						// The actual download
+				        var blob = new Blob([result], {
+				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        });
+				        var link = document.createElement('a');
+				        link.href = window.URL.createObjectURL(blob);
+				        link.download = filename;
+
+				        document.body.appendChild(link);
+
+				        link.click();
+				        document.body.removeChild(link);
+				        document.body.removeChild(div);
+					},
+					/*success: function(output) {
+						$('#vlau').html(output);
+					},*/
+					error: function(xhr, ajaxOptions,thrownError){
+						document.body.removeChild(div);
+                        alert(xhr.status+" "+thrownError);
+                    }
+
+				});
+            });
 		});
 	</script>
 
