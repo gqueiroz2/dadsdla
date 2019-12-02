@@ -57,7 +57,6 @@ class renderMonthlyYoY extends Render{
 	*as cores são sempre essas 3 e são determinadas pelo numero da coluna
 	*/
 	public function renderHead($months, $size, $index, $firstColor, $secondColor, $thirdColor){
-		
 		$firstClass = "class='center ".$firstColor."'";
 		$secondClass = "class='center ".$secondColor."'";
 		$thirdClass = "class='center ".$thirdColor."'";
@@ -76,7 +75,6 @@ class renderMonthlyYoY extends Render{
 		}
 
 		echo "<td colspan='3' $thirdClass>Q".($index+1)."</td>";
-
 	}
 
 	/*
@@ -272,7 +270,6 @@ class renderMonthlyYoY extends Render{
 			}else{
 				$class = $fourthClass;
 			}
-
 			//feito calculo dos quarters 3 e 4 para formar o segundo semestre
 			if ($ok) {
 				echo "<td $class colspan='1'>".number_format(($quarter[2][$j][$brandPos+1]+$quarter[3][$j][$brandPos+1]), 0, ".", ",")."</td>";
@@ -290,7 +287,6 @@ class renderMonthlyYoY extends Render{
 			}else{
 				$class = $fourthClass;
 			}
-
 			//feito calculo de todos os quarters
 			if ($ok) {
 				echo "<td $class colspan='1'>".number_format(

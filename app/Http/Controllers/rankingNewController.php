@@ -156,7 +156,7 @@ class rankingNewController extends Controller {
 	      $namesExcel = null;
 	    }
 
-	    $title = "ranking market (".$rtr.").xlsx";
+	    $title = "ranking new (".$rtr.").xlsx";
 
   		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
     }

@@ -16,9 +16,13 @@ use App\subMarketRanking;
 use App\rankingChurn;
 use App\subChurnRanking;
 
+use App\rankingNew;
+use App\subNewRanking;
+
 use App\Exports\rankingBrandExport;
 use App\Exports\rankingMarketExport;
 use App\Exports\rankingChurnExport;
+use App\Exports\rankingNewExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -373,5 +377,145 @@ class rankingExcelController extends Controller {
 
     public function new(){
         
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $region = Request::get("regionExcel");
+
+        $r = new region();
+        $tmp = $r->getRegion($con,array($region));
+
+        if(is_array($tmp)){
+            $salesRegion = $tmp[0]['name'];
+        }else{  
+            $salesRegion = $tmp['name'];
+        }
+
+        $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+        $currency[0]['id'] = $tmp[0]->id;
+        $currency[0]['name'] = $tmp[0]->name;
+        $currency[0]['region'] = $tmp[0]->region;
+
+        $type = Request::get("typeExcel");
+
+        $months = json_decode(base64_decode(Request::get("monthsExcel")));
+
+        $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
+        $value = Request::get("valueExcel");
+        
+        $years = json_decode(base64_decode(Request::get("yearsExcel")));
+
+        $rn = new rankingNew();
+
+        $values = $rn->getAllResults($con, $brands, $type, $region, $salesRegion, $value, $currency, $months, $years);
+        
+        $finalValues = array();
+
+        if ($type != "agency" && $type != "client") {
+            for ($r=0; $r < sizeof($values); $r++) {
+                if (is_array($values[$r])) {
+                    for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
+                        if ($rn->existInArray($finalValues, $values[$r][$r2][$type], $type)) {
+                            array_push($finalValues, $values[$r][$r2]);
+                        }
+                    }
+                }
+            }
+        }else{
+            for ($r=0; $r < sizeof($values); $r++) {
+                if (is_array($values[$r])) {
+                    for ($r2=0; $r2 < sizeof($values[$r]); $r2++) {
+                        if ($rn->existInArray($finalValues, $values[$r][$r2][$type."ID"], $type, true)) {
+                            array_push($finalValues, $values[$r][$r2]);  
+                        }
+                    }
+                }
+            }
+        }
+
+        $base = new Base();
+        $months2 = array();
+        for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+            array_push($months2, $m);
+        }
+
+        $valuesTotal = $rn->getAllResults($con, $brands, $type, $region, $salesRegion, $value, $currency, $months2, $years);
+
+        $matrix = $rn->assembler($values, $finalValues, $valuesTotal, $years, $type);
+
+        $mtx = $matrix[0];
+        $total = $matrix[1];
+
+        $headNames = $rn->createNames($type, $months, $salesRegion, $brands);
+
+        if ($type == "sector") {
+            $names = json_decode(base64_decode(Request::get("names")));
+        }else{
+            $names = Request::get("names");
+        }
+
+        $data = array('mtx' => $mtx, 'total' => $total, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brands' => $brands, 'type' => $type, 'headNames' => $headNames, 'type' => $type, 'years' => $years);
+
+        if (!is_null($names)) {
+            $snr = new subNewRanking();
+
+            if ($type == "client") {
+                $val = "agency";
+            }else{
+                $val = "client";
+            }
+
+            for ($n=0; $n < sizeof($names); $n++) { 
+                $subValues[$n] = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n], $val);   
+            }
+
+            if ($type == "client") {
+                $filterType = "agency";
+            }else{
+                $filterType = "client";
+            }
+
+            $subFinalValues = array();
+
+            for ($n=0; $n < sizeof($names); $n++) { 
+                for ($v=0; $v < sizeof($subValues[$n]); $v++) { 
+                    if (is_array($subValues[$n][$v])) {
+                        for ($v2=0; $v2 < sizeof($subValues[$n][$v]); $v2++) { 
+                            if ($snr->existInArray($subFinalValues, $subValues[$n][$v][$v2][$filterType."ID"], $filterType, true)) {
+                                array_push($subFinalValues, $subValues[$n][$v][$v2]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $cYear = intval(date('Y'));
+            $subYears = array($cYear, $cYear-1, $cYear-2);
+
+            $base = new base();
+
+            $subMonths2 = array();
+            for ($m=1; $m <= sizeof($base->getMonth()); $m++) { 
+                array_push($subMonths2, $m);
+            }
+
+            for ($n=0; $n < sizeof($names); $n++) { 
+                $subValuesTotal[$n] = $snr->getSubResults($con, $type, $region, $value, $subMonths2, $brands, $currency, $names[$n], $val);
+
+                $subMatrix[$n] = $snr->assembler($subValues[$n], $subFinalValues, $subValuesTotal[$n], $subYears, $filterType);
+
+                $subMtx[$n] = $subMatrix[$n][0];
+                $subTotal[$n] = $subMatrix[$n][1];
+            }
+
+            $data = array('mtx' => $mtx, 'total' => $total, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brands' => $brands, 'type' => $type, 'subMtx' => $subMtx, 'subTotal' => $subTotal, 'headNames' => $headNames, 'new' => $names, 'type' => $type, 'val' => $val, 'years' => $years);
+        }
+
+        $title = Request::get("title");
+
+        $labels = array("exports.ranking.new.allNewExport", "exports.ranking.new.newExport");
+        return Excel::download(new rankingNewExport($data, $labels), $title);
     }
 }

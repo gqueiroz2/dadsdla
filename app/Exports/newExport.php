@@ -9,11 +9,15 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
+class newExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting, WithStrictNullComparison {
     
     protected $view;
 	protected $data;
+	protected $dataTotal;	
+	protected $dataNew;
+	protected $names;
 
 	protected $headStyle = [
         'font' => [
@@ -95,13 +99,17 @@ class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle,
         ],
     ];
 
-    public function __construct($view, $data){
+    public function __construct($view, $data, $dataTotal, $dataNew, $names){
 		$this->view = $view;
 	    $this->data = $data;
+	    $this->dataTotal = $dataTotal;
+	    $this->dataNew = $dataNew;
+	    $this->names = $names;
 	}
 
-    public function view(): View{
-    	return view($this->view, ['data' => $this->data]);
+	public function view(): View{
+
+    	return view($this->view, ['data' => $this->data, 'dataTotal' => $this->dataTotal, 'dataNew' => $this->dataNew, 'names' => $this->names]);
     }
 
     /**
@@ -114,84 +122,65 @@ class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle,
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                $pos = 2;
-
-                if ($this->data['type'] != "sector") {
-                	$cellRange = "A".$pos;
-                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-                	$pos++;
-
-                	$cellRange = "A".$pos;
-                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-                	$pos++;
-
-                    $val = 4;
+                if ($this->names['type'] == "client") {
+                    $letter = "H";
                 }else{
-                	$cellRange = "A".$pos;
-                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-                	$pos++;
-
-                    $val = 3;
+                    $letter = "I";
                 }
 
-                if ($this->data['type'] == "agency") {
-                	$letter = "L";
-                }else{
-                	$letter = "K";
-                }
-
-                $cellRange = "A".$pos.":".$letter.$pos;
+                $cellRange = "A2:".$letter."2";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(10);
 
-                for ($b=0; $b < sizeof($this->data['mtx'][0]); $b++) { 
-                	$cellRange = "A".($b+($pos+1)).":".$letter.($b+($pos+1));
-                	if (($b+($pos+1)) % 2 == 0) {
+                for ($d=0; $d < sizeof($this->data[0]); $d++) { 
+                	$cellRange = "A".($d+3).":".$letter.($d+3);
+                	if (($d+3) % 2 == 0) {
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
                 	}else{
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
                 	}
                 }
 
-                $cellRange = "A".(sizeof($this->data['mtx'][0])+$val).":".$letter.(sizeof($this->data['mtx'][0])+$val);
+                $cellRange = "A".(sizeof($this->data[0])+2).":".$letter.(sizeof($this->data[0])+2);
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
             },
         ];
     }
 
     public function title(): string{
-        return "ranking churn";
+
+    	setlocale(LC_ALL, 'pt_BR');
+        $nome = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $this->dataNew ) );
+
+   		if(strlen($nome) > 30){
+   			$i = strpos($nome, " ");
+
+			$nome = substr($nome, 0, $i);
+   		}
+
+   		return $nome;   
     }
 
     public function columnFormats(): array{
 
-    	if ($this->data['type'] == "agency") {
-
-    		return [
-	            'D' => '#,##0',
-	            'E' => '#,##0',
-	            'F' => '#,##0',
-	            'G' => '#0%',
-	            'H' => '#,##0',
-	            'I' => '#,##0',
-	            'J' => '#,##0',
-	            'K' => '#,##0'
-        	];
-    	}else{
-
-    		return [
-	            'C' => '#,##0',
-	            'D' => '#,##0',
-	            'E' => '#,##0',
-	            'F' => '#0%',
-	            'G' => '#,##0',
-	            'H' => '#,##0',
-	            'I' => '#,##0',
-	            'K' => '#,##0'
-        	];
-    	}
+        if ($this->names['type'] == "client") {
+            return [
+                'D' => '#,##0',
+                'D' => '#,##0',
+                'F' => '#0%',
+                'G' => '#,##0',
+                'G' => '#,##0',
+                'I' => '#,##0'
+            ];
+        }else{
+            return [
+                'C' => '#,##0',
+                'D' => '#,##0',
+                'E' => '#0%',
+                'F' => '#,##0',
+                'G' => '#,##0',
+                'H' => '#,##0'
+            ];
+        }
     }
 }

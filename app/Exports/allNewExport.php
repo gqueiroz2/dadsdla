@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
+class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
     
     protected $view;
 	protected $data;
@@ -138,9 +138,9 @@ class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle,
                 }
 
                 if ($this->data['type'] == "agency") {
-                	$letter = "L";
+                	$letter = "J";
                 }else{
-                	$letter = "K";
+                	$letter = "I";
                 }
 
                 $cellRange = "A".$pos.":".$letter.$pos;
@@ -163,7 +163,7 @@ class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle,
     }
 
     public function title(): string{
-        return "ranking churn";
+        return "ranking new";
     }
 
     public function columnFormats(): array{
@@ -173,24 +173,20 @@ class allChurnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle,
     		return [
 	            'D' => '#,##0',
 	            'E' => '#,##0',
-	            'F' => '#,##0',
-	            'G' => '#0%',
+	            'F' => '#0%',
+	            'G' => '#,##0',
 	            'H' => '#,##0',
-	            'I' => '#,##0',
-	            'J' => '#,##0',
-	            'K' => '#,##0'
+	            'I' => '#,##0'
         	];
     	}else{
 
     		return [
 	            'C' => '#,##0',
 	            'D' => '#,##0',
-	            'E' => '#,##0',
-	            'F' => '#0%',
+	            'E' => '#0%',
+	            'F' => '#,##0',
 	            'G' => '#,##0',
-	            'H' => '#,##0',
-	            'I' => '#,##0',
-	            'K' => '#,##0'
+	            'H' => '#,##0'
         	];
     	}
     }
