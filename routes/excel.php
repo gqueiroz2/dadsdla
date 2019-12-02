@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('coreExcel');
 
 		Route::group(['prefix'=>'viewer'], function(){
-			Route::post('base', 'viewerExcelController@viewerBase')
+			Route::post('vBase', 'viewerExcelController@viewerBase')
 										->name('baseExcel');
 		});
 

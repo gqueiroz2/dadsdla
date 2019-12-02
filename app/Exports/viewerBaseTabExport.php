@@ -8,15 +8,16 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle{
+class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
 
 	protected $view;
 	protected $data;
 
 	protected $headStyle = [
 		'font' => [
-			'bold' => true;
+			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 12,
 			'color' => array('rgb'=> 'FFFFF')
@@ -28,15 +29,43 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 		],
 	];
 
-	protected $bodyCenter = [
+	protected $linePair = [
 		'font' => [
+			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 10,
+			'color' => array('rgb' => '0000000')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
 			'vertical' => 'center',
 			'wrapText' => true
+		],
+		'fill' => [
+			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+			'startColor' => [
+				'argb' => 'f9fbfd',
+			],
+		],
+	];
+
+	protected $lineOdd = [
+		'font' => [
+			'bold' => true,
+			'name' => 'Verdana',
+			'size' => 10,
+			'color' => array('rgb' => '0000000')
+		],
+		'alignment' => [
+			'horizontal' => 'center',
+			'vertical' => 'center',
+			'wrapText' => true
+		],
+		'fill' => [
+			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+			'startColor' => [
+				'argb' => 'c3d8ef',
+			],
 		],
 	];
 
@@ -60,11 +89,31 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 				$cellRange = 'A1';
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-				
-			}
-		]
+				$cellRange = 'A2:N2';
+				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+				$event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(9);
+
+				$letter = 'N';
+
+				for ($d=0; $d < sizeof($this->$data); $d++) { 
+					$cellRange = "A".($d+3).":".$letter.($d+3);
+					if (($d+3) % 2 == 0) {
+						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);	
+					}else{
+						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
+					}
+				}								
+			},
+		];
 	}
 
+	public function columnFormats(): array{
+
+		return[
+			'K' => '#0%',
+			'N' => '#,##0'
+		];
+	}
 }
 
 

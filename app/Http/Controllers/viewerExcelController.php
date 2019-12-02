@@ -8,6 +8,7 @@ use App\region;
 use App\dataBase;
 use App\viewer;
 use App\pRate;
+use App\sql;
 
 use Illuminate\Support\Facades\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,12 +17,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\Exports\baseExport;
 
-class viewerExcelController extends Controller{
-
+class viewerExcelController extends Controller {
 
     public function viewerBase(){
 	    $db =  new dataBase();
 	    $con = $db->openConnection("DLA");
+
+	    $sql = new sql();
 
 	    $region = Request::get("regionExcel");
 
@@ -43,27 +45,33 @@ class viewerExcelController extends Controller{
 	    $client = json_decode(base64_decode(Request::get("clientExcel")));
 
 	    $currency = Request::get("currencyExcel");
-	    /*$p = new pRate();
-        $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name']; */
-
+	    $p = new pRate();
+        $currencies = $p->getCurrency($con,array($currency))[0]['name'];
 
 	    $value = Request::get("valueExcel");
 
+	    $especificNumber = Request::get("especificNumber");
+
+        if (!is_null($especificNumber) ) {
+            $checkEspecificNumber = true;
+        }else{
+            $checkEspecificNumber = false;
+        }
+
 	    $viewer = new viewer();
 
-	    $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
+	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$value,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region);
 
-        $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
+        $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
 
-        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $regions, 'source' => $source, 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
+        $data = array('mtx' => $mtx, 'currency' => $currencies, 'region' => $regions, 'source' => $source, 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
         $label = "exports.viewer.base.baseExport";
 
 	    $title = Request::get("title");
-
+	    //var_dump(new baseExport($data,$label));
 	    return Excel::download(new baseExport($data,$label),$title);
-
     }
 }
