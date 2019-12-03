@@ -69,7 +69,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 		],
 	];
 
-	public function __construct($view,$data){
+	public function __construct($view, $data){
 		$this->view = $view;
 		$this->data = $data;
 	}
@@ -95,14 +95,14 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 				$letter = 'N';
 
-				for ($d=0; $d < sizeof($this->$data); $d++) { 
+				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 					$cellRange = "A".($d+3).":".$letter.($d+3);
 					if (($d+3) % 2 == 0) {
-						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);	
+						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
 					}else{
 						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 					}
-				}								
+				}
 			},
 		];
 	}

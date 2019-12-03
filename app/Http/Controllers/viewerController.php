@@ -153,8 +153,7 @@ class viewerController extends Controller{
                 $clientExcel = $client;
                 $currencyExcel = $currencies;
                 $valueExcel = $value;
-                $title = $source." - Viewer Base.xlsx";
-
+                $title = $source." - Viewer Base.xlsx";                
                //var_dump(Request::all());
 
                 //var_dump($table);

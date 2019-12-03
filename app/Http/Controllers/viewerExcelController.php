@@ -27,9 +27,6 @@ class viewerExcelController extends Controller {
 
 	    $region = Request::get("regionExcel");
 
-	    $r =  new region();
-	    $regions = $r->getRegion($con,array($region))[0]['name'];
-
 	    $source = Request::get("sourceExcel");
 
 	    $year = json_decode(base64_decode(Request::get("yearExcel")));
@@ -45,11 +42,8 @@ class viewerExcelController extends Controller {
 	    $client = json_decode(base64_decode(Request::get("clientExcel")));
 
 	    $currency = Request::get("currencyExcel");
-	    $p = new pRate();
-        $currencies = $p->getCurrency($con,array($currency))[0]['name'];
-
 	    $value = Request::get("valueExcel");
-
+	    
 	    $especificNumber = Request::get("especificNumber");
 
         if (!is_null($especificNumber) ) {
@@ -62,16 +56,16 @@ class viewerExcelController extends Controller {
 
 	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$value,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currency,$region);
 
-        $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
+        $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currency);
 
-        $data = array('mtx' => $mtx, 'currency' => $currencies, 'region' => $regions, 'source' => $source, 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
+        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
         $label = "exports.viewer.base.baseExport";
-
+        
 	    $title = Request::get("title");
-	    //var_dump(new baseExport($data,$label));
-	    return Excel::download(new baseExport($data,$label),$title);
+	    
+	    return Excel::download(new baseExport($data, $label), $title);
     }
 }

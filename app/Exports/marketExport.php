@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting, WithStrictNullComparison {
+class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
     
     protected $view;
 	protected $data;
@@ -132,10 +132,10 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                if ($this->names['val'] == "agency") {
-                    $letter = "G";
-                }else{
+                if ($this->names['type'] == "agency") {
                     $letter = "H";
+                }else{
+                    $letter = "G";
                 }
 
                 $cellRange = "A2:".$letter."2";
@@ -173,15 +173,14 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
     public function columnFormats(): array{
 
-        if ($this->names['val'] == "agency") {
-            
+        if ($this->names['type'] == "client") {
             return [
+                /*'B' => '#,##0',
                 'C' => '#,##0',
-                'D' => '#,##0',
+                'D' => '#0%',
                 'E' => '#0%',
-                'F' => '#,##0',
-                'G' => '#,##0',
-                'H' => '#,##0'
+                'F' => '#0%0',
+                'G' => '#,##0'*/
             ];
         }else{
             return [
