@@ -20,12 +20,40 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 12,
-			'color' => array('rgb'=> 'FFFFF')
+			'color' => array('rgb' => 'FFFFF')
+		],
+		'alignment' => [
+			'horizontal' => 'left',
+			'vertical' => 'center',
+			'wrapText' => true
+		],
+	];
+
+	protected $indexStyle = [
+		'font' => [
+			'bold' => true,
+			'name' => 'Verdana',
+			'size' => 10,
+			'color' => array('rgb' => '0000000')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
-			'ventical' => 'center',
-			'wrapText' => 'true'
+			'vertical' => 'center',
+			'wrapText' => true
+		],
+	]; 
+
+	protected $totalStyle = [
+		'font' => [
+			'bold' => true,
+			'name' => 'Verdana',
+			'size' => 10,
+			'color' => array('rgb' => 'FFFFF')
+		],
+		'alignment' => [
+			'horizontal' => 'center',
+			'vertical' => 'center',
+			'wrapText' => true
 		],
 	];
 
@@ -90,13 +118,15 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
 				$cellRange = 'A2:N2';
-				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-				$event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(9);
+				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
+
+				$cellRange = 'A3:N3';
+				$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 				$letter = 'N';
 
 				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-					$cellRange = "A".($d+3).":".$letter.($d+3);
+					$cellRange = "A".($d+4).":".$letter.($d+4);
 					if (($d+3) % 2 == 0) {
 						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
 					}else{

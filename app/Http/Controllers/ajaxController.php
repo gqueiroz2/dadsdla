@@ -108,7 +108,7 @@ class ajaxController extends Controller{
                 $showName = "agency";
 
                 $sql = "SELECT DISTINCT a.ID AS 'agencyID',
-                               a.name AS 'agency'
+                                        a.name AS 'agency'
                             FROM ytd y
                             LEFT JOIN agency a ON a.ID = y.agency_id
                             WHERE (sales_representant_office_id = \"".$regionID."\" )

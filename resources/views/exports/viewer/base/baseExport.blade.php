@@ -25,7 +25,7 @@
 			@for($t=0;$t < sizeof($data['total']); $t++)
 				<td style="background-color: #0f243e;">Total</td>
 				<td style="background-color: #0f243e;" colspan="9"></td>
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['averageDiscount']}}%</td>
+				<td style="background-color: #0f243e;">{{$data['total'][$t]['averageDiscount']/100}}</td>
 				<td style="background-color: #0f243e;" colspan="2"></td>
 				@if($data['value'] == 'gross')
 					<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
@@ -47,7 +47,7 @@
 					<td style="background-color: #FFFFFF;">{{$data['mtx'][$m]['product']}}</td>
 					<td style="background-color: #FFFFFF;">{{$data['mtx'][$m]['segment']}}</td>
 					<td style="background-color: #FFFFFF;">{{$data['mtx'][$m]['mediaType']}}</td>
-					<td style="background-color: #FFFFFF;">{{$data['mtx'][$m]['discount']}}</td>
+					<td style="background-color: #FFFFFF;">{{$data['mtx'][$m]['discount']/100}}</td>
 					<td style="background-color: #FFFFFF;">{{ucwords(strtolower($data['mtx'][$m]['sector']))}}</td>
 					<td style="background-color: #FFFFFF;">{{ucwords(strtolower($data['mtx'][$m]['category']))}}</td>
 					@if($data['value'] == 'gross')
@@ -68,7 +68,7 @@
 					<td>{{$data['mtx'][$m]['product']}}</td>
 					<td>{{$data['mtx'][$m]['segment']}}</td>
 					<td>{{$data['mtx'][$m]['mediaType']}}</td>
-					<td>{{$data['mtx'][$m]['discount']}}</td>
+					<td>{{$data['mtx'][$m]['discount']/100}}</td>
 					<td>{{ucwords(strtolower($data['mtx'][$m]['sector']))}}</td>
 					<td>{{ucwords(strtolower($data['mtx'][$m]['category']))}}</td>
 					@if($data['value'] == 'gross')
