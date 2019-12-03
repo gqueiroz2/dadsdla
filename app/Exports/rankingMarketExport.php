@@ -23,7 +23,7 @@ class rankingMarketExport implements FromArray, WithMultipleSheets {
     	
     	$sheets = array();
 
-    	array_push($sheets, new allMarketExport($this->labels[0], $this->sheets));
+    	//array_push($sheets, new allMarketExport($this->labels[0], $this->sheets));
 
     	if (is_array($this->sheets['subMtx'])) {
     		$names = array("region" => $this->sheets['region'], "currency" => $this->sheets['currency'], 'value' => $this->sheets['value'], "head" => $this->sheets['headNames'], 'type' => $this->sheets['type'], 'years' => $this->sheets['years'], 'val' => $this->sheets['val']);

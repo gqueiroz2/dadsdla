@@ -154,6 +154,8 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
                 $cellRange = "A".(sizeof($this->data[0])+2).":".$letter.(sizeof($this->data[0])+2);
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
+
+                //$event->sheet->getStyle("C3")->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
             },
         ];
     }
@@ -174,24 +176,33 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
     public function columnFormats(): array{
 
-        if ($this->names['type'] == "agency") {
-            return [
+        return [
                 'C' => '#,##0',
-                /*'D' => '#,##0',
+                'D' => '#,##0',
                 'E' => '#0%',
                 'F' => '#,##0',
                 'G' => '#,##0',
-                'H' => '#,##0'*/
+                'H' => '#,##0'
+            ];
+
+        /*if ($this->names['type'] == "agency") {
+            return [
+                'C' => '#,##0',
+                'D' => '#,##0',
+                'E' => '#0%',
+                'F' => '#,##0',
+                'G' => '#,##0',
+                'H' => '#,##0'
             ];
         }else{
             return [
-                /*'B' => '#,##0',
+                'B' => '#,##0',
                 'C' => '#,##0',
                 'D' => '#0%',
                 'E' => '#0%',
                 'F' => '#0%0',
-                'G' => '#,##0'*/
+                'G' => '#,##0'
             ];
-        }
+        }*/
     }
 }
