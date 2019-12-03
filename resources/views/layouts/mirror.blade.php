@@ -121,7 +121,15 @@
 									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
 								@endif
 							</div>
-						</li>					
+						</li>	
+
+						<li class="nav-item dropdown">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
+								<!--<a class="dropdown-item" href="#"> Insights </a>-->
+							</div>
+						</li>				
 
 					</ul>    
 
@@ -212,6 +220,28 @@
 		@else
 			@yield('contentLogout')
 		@endif
+
+		<div id="troll"></div>
+
+
+
+		<script type="text/javascript">
+
+			var userName = "<?php echo Request::session()->get('userName') ;?>";
+			var userRegion = "<?php echo Request::session()->get('userRegion') ;?>";
+			var userEmail= "<?php echo Request::session()->get('userEmail') ;?>";
+			var date = "<?php echo date("Y-m-d");?>";
+			var hour = "<?php echo date("Y-m-d");?>";
+			var url = "<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>";
+			var shortUrl = "<?php echo $_SERVER['PHP_SELF'] ;?>";
+			var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
+			ajaxSetup();
+			analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
+
+
+
+		</script>
+
 
 		<script type="text/javascript">
 			function ShowLoading(e) {

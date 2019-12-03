@@ -5,6 +5,21 @@ function ajaxSetup(){
 	});
 }
 
+function analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1){
+	$.ajax({
+		url:"/analytics/base",
+		method:"POST",
+		data:{userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1},
+		success: function(output){
+			$('#troll').html(output);
+			console.log("Saved");
+		},
+		error: function(xhr, ajaxOptions,thrownError){
+			alert(xhr.status+""+thrownError);
+		}
+	});
+}
+
 function getSubLevelGroupByRegion(regionID){
 	$.ajax({
 		url:"/dataManagement/ajax/subLevelGroupByRegion",

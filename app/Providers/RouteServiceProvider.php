@@ -68,6 +68,7 @@ class RouteServiceProvider extends ServiceProvider
                             require base_path('routes/dashboards.php');
                             require base_path('routes/relationShip.php');
                             require base_path('routes/viewer.php');
+                            require base_path('routes/analytics.php');
                      });
 /*
         Route::middleware('web')
