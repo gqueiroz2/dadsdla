@@ -156,19 +156,16 @@ class renderMonthlyYoY extends Render{
 				echo "<td $class>".number_format($quarter[$i][$brandPos+1], 0, ".", ",")."</td>";	
 			}else{
 				echo "<td $firstClass>".number_format($quarter[$i][$brandPos+1], 0, ".", ",")."</td>";	
-			}
-			
+			}	
 		}
-
     }
-
 
     //aqui começa a renderização do modal, os parametros passados ja foram explicados nas funções da tabela principal
     public function assembleModal($brands, $quarters, $year, $source){
 
     	$source = strtolower($source);
         $source = ucfirst($source);
-    	￼
+
     	echo "<table style='width: 100%; zoom:90%; font-size: 16px;'>";
 	    	echo "<tr>";
 	    		$this->renderModalHeader("dc", "darkBlue");
