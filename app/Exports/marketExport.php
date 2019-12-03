@@ -10,12 +10,13 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
     
     protected $view;
 	protected $data;
-	protected $dataTotal;	
+	protected $dataTotal;
 	protected $dataMarket;
 	protected $names;
 
@@ -109,7 +110,7 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
 	public function view(): View{
 
-		if ($this->names['type'] == "client") {
+		if ($this->names['val'] == "client") {
 			$pos[0] = 3;
 			$pos[1] = 4;
 			$pos[2] = 5;
@@ -173,7 +174,16 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
 
     public function columnFormats(): array{
 
-        if ($this->names['type'] == "client") {
+        if ($this->names['type'] == "agency") {
+            return [
+                'C' => '#,##0',
+                /*'D' => '#,##0',
+                'E' => '#0%',
+                'F' => '#,##0',
+                'G' => '#,##0',
+                'H' => '#,##0'*/
+            ];
+        }else{
             return [
                 /*'B' => '#,##0',
                 'C' => '#,##0',
@@ -181,15 +191,6 @@ class marketExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 'E' => '#0%',
                 'F' => '#0%0',
                 'G' => '#,##0'*/
-            ];
-        }else{
-            return [
-                /*'C' => '#,##0',
-                'D' => '#,##0',
-                'E' => '#0%',
-                'F' => '#,##0',
-                'G' => '#,##0',
-                'H' => '#,##0'*/
             ];
         }
     }

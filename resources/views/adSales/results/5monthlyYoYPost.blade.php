@@ -110,7 +110,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="table-responsive">
-						{{ $render->assembleModal($brands, $matrix[1], $year, $source) }}
+						{{$render->assembleModal($brands, $matrix[1], $year, $source)}}
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -119,6 +119,7 @@
 			</div>
 		</div>	
 	</div>
+	
 	<script type="text/javascript">
 
 		$(document).ready(function() {

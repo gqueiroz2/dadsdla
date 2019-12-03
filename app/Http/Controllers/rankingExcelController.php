@@ -225,8 +225,8 @@ class rankingExcelController extends Controller {
         $data = array('mtx' => $mtx, 'total' => $total, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brands' => $brands, 'type' => $type, 'subMtx' => $subMtx, 'subTotal' => $subTotal, 'headNames' => $headNames, 'market' => $names, 'type' => $type, 'val' => $val, 'years' => $years);
 
         $labels = array("exports.ranking.market.allMarketExport", "exports.ranking.market.marketExport");
-
-        return Excel::download(new rankingMarketExport($data, $labels), $title);
+        
+        //return Excel::download(new rankingMarketExport($data, $labels), $title);
     }
 
     public function churn(){

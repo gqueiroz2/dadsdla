@@ -26,7 +26,7 @@
 							@if($data[$n][$m] == 0)
 								<td> - </td>
 							@else
-								<td>{{$data[$n][$m]}}</td>
+								<td>{{($data[$n][$m])}}</td>
 							@endif
 						@endif
 					@else
