@@ -47,7 +47,7 @@ class analyticsController extends Controller{
 
 		$boolean = $at->insertBase($con,$userID,$regionID,$ipV1,$date,$hour,$url,$shortUrl);
 
-		var_dump($boolean);
+		//var_dump($boolean);
 
     }
 }
