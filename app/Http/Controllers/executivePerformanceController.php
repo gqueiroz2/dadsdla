@@ -71,6 +71,15 @@ class executivePerformanceController extends Controller
         
         $cYear = Request::get('year');
 
-        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear'));
+        $regionExcel = Request::get("region");
+                
+        $currencyExcel['id'] = Request::get("currency");
+        $currencyExcel['name'] = $mtx['currency'];
+        $yearExcel = $mtx['year'];
+        $valueExcel = Request::get("value");
+        $salesRepExcel = $mtx['salesRep'];
+        $title = $mtx['region']." - Performance Individual.xlsx";
+
+        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel', 'currencyExcel','yearExcel', 'valueExcel','salesRepExcel','title'));
     }
 }
