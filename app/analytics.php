@@ -41,18 +41,7 @@ class analytics extends Model{
 
     }
 
-	public function insertBase($con,$userID,$regionID,$ip,$date,$hour,$url,$shortUrl){
-		/*
-		var_dump($userID);
-    	var_dump($regionID);
-    	var_dump($ip);
-
-    	var_dump($date);
-    	var_dump($hour);
-    	var_dump($url);
-    	var_dump($shortUrl);
-		*/
-
+	public function insertBase($con,$userID,$regionID,$ip,$date,$hour,$url,$shortUrl){		
     	$ins = "INSERT INTO analytics (user_id,region_id,day,hour,url,short_url,ip) VALUES (\"".$userID."\",\"".$regionID."\",\"".$date."\",\"".$hour."\",\"".$url."\",\"".$shortUrl."\",\"".$ip."\")";
 
     	$bool = false;
@@ -60,6 +49,7 @@ class analytics extends Model{
     		$bool = true;
     	}else{
     		var_dump($con->error);
+    		var_dump($ins);
     	}
 
     	return $bool;

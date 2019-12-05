@@ -12,7 +12,7 @@ function analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1){
 		data:{userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1},
 		success: function(output){
 			$('#troll').html(output);
-			console.log("Saved");
+			console.log("Following");
 		},
 		error: function(xhr, ajaxOptions,thrownError){
 			alert(xhr.status+""+thrownError);

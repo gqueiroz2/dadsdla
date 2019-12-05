@@ -231,7 +231,7 @@
 			var userRegion = "<?php echo Request::session()->get('userRegion') ;?>";
 			var userEmail= "<?php echo Request::session()->get('userEmail') ;?>";
 			var date = "<?php echo date("Y-m-d");?>";
-			var hour = "<?php echo date("Y-m-d");?>";
+			var hour = "<?php echo date("G:s");?>";
 			var url = "<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>";
 			var shortUrl = "<?php echo $_SERVER['PHP_SELF'] ;?>";
 			var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
