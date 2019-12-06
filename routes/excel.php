@@ -51,13 +51,18 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('rankingExcel');
 			});
 
-		Route::post('core','excelController@performanceCore')
-									->name('coreExcel');
+			Route::group(['prefix'=>'performance'],function(){
+				Route::post('core','performanceExcelController@performanceCore')
+											->name('coreExcel');
 
-		Route::group(['prefix'=>'viewer'], function(){
-			Route::post('vBase', 'viewerExcelController@viewerBase')
-										->name('baseExcel');
-		});
+				Route::post('executive','performanceExcelController@performanceExecutive')
+												->name('executiveExcel');
+			});
+				
+			Route::group(['prefix'=>'viewer'], function(){
+				Route::post('vBase', 'viewerExcelController@viewerBase')
+											->name('baseExcel');
+			});
 
 		});
 	});
