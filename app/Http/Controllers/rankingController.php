@@ -104,12 +104,6 @@ class rankingController extends Controller {
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years, $type2);
-        
-        /*for ($i=0; $i < sizeof($values); $i++) { 
-            for ($j=0; $j < sizeof($values[$i]); $j++) { 
-                var_dump($values[$i][$j]);
-            }
-        }*/
 
         $filterValues = $r->filterValues($values, $type2, $type);
         
@@ -129,11 +123,23 @@ class rankingController extends Controller {
 
         $rName = $r->TruncateRegion($rtr);
 
-        //var_dump("region",$rName);
-
         $subR = new subRankings();
         
-        return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName'));
+        $regionExcel = $region;
+        $typeExcel = $type;
+        $type2Excel = base64_encode(json_encode($temp));
+        $brandsExcel = $brands;
+        $monthsExcel = $months;
+        $firstFormExcel = $firstForm;
+        $secondFormExcel = $secondForm;
+        $thirdFormExcel = $thirdForm;
+        $currencyExcel = $pRate;
+        $nPosExcel = $nPos;
+        $valueExcel = $value;
+
+        $title = "ranking (".$rtr.").xlsx";        
+
+        return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName', 'regionExcel', 'typeExcel', 'type2Excel', 'brandsExcel', 'firstFormExcel', 'secondFormExcel', 'thirdFormExcel', 'currencyExcel', 'monthsExcel', 'nPosExcel', 'valueExcel', 'title'));
 
     }
 }

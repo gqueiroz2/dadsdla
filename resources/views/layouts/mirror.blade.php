@@ -1,3 +1,10 @@
+<?php 
+
+	use App\base;
+
+	$bs = new base();
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -166,6 +173,10 @@
 	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
 	                            </div>	                            
                         	</div>
+                        	
+                        	{{ $bs->sources() }}
+
+                        	<!--
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
 	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 29/10/2019 </span>
@@ -186,6 +197,7 @@
 	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 24/10/2019 </span>
 	                            </div>	                            
                         	</div>
+                        	-->
                         	
                         </div>     
 {{--
@@ -238,7 +250,7 @@
 			ajaxSetup();
 			analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
 
-
+			
 
 		</script>
 

@@ -139,6 +139,20 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
                 	}else{
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
                 	}
+
+                    if ($this->names['type'] == "client") {
+                        $cell = $event->sheet->getCell("G".($d+3))->getValue();
+
+                        if (is_numeric($cell)) {
+                            $event->sheet->getCell("G".($d+3))->setValue($cell/100);
+                        }
+                    }else{
+                        $cell = $event->sheet->getCell("F".($d+3))->getValue();
+
+                        if (is_numeric($cell)) {
+                            $event->sheet->getCell("F".($d+3))->setValue($cell/100);
+                        }
+                    }
                 }
 
                 $cellRange = "A".(sizeof($this->data[0])+2).":".$letter.(sizeof($this->data[0])+2);
@@ -149,8 +163,10 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
 
     public function title(): string{
 
-    	setlocale(LC_ALL, 'pt_BR');
-        $nome = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $this->dataChurn ) );
+    	$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýýþÿŔŕ?';
+        $b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuuyybyRr-';
+        $nome = strtr($this->dataChurn, utf8_decode($a), $b);
+        $nome = preg_replace("/[^0-9a-zA-Z\.\s+]+/",'',$nome);
 
    		if(strlen($nome) > 30){
    			$i = strpos($nome, " ");
@@ -163,7 +179,7 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
 
     public function columnFormats(): array{
 
-        if ($this->names['val'] == "client") {
+        if ($this->names['type'] == "client") {
             return [
                 'D' => '#,##0',
                 'E' => '#,##0',
@@ -180,8 +196,8 @@ class churnExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, Wi
                 'D' => '#,##0',
                 'E' => '#,##0',
                 'F' => '#0%',
+                'G' => '#,##0',
                 'H' => '#,##0',
-                'I' => '#,##0',
                 'I' => '#,##0',
                 'J' => '#,##0'
             ];

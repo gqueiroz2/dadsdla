@@ -9,6 +9,64 @@ use App\sql;
 
 class base extends Model{
 
+    public function sourceABVtoComplete($parametter){
+
+        switch ($parametter) {
+            case 'CMAPS':
+                return "CMAPS";
+                break;
+
+            case 'FW':
+                return "FreeWheel";
+                break;
+
+            case 'SF':
+                return "Discovery CRM";
+                break;
+
+            default:
+                return "BTS";
+                break;
+        }
+
+    }
+
+    public function sources(){
+        $db = new dataBase();
+        $base = new base();
+        $con = $db->openConnection("DLA");
+
+        $sql = new sql();
+
+        $select = "SELECT * FROM sources_date";
+
+        $res = $con->query($select);
+
+        $from = array("source","current_throught");
+
+        $list = $sql->fetch($res,$from,$from);
+
+        for ($l=0; $l < sizeof($list); $l++) { 
+            echo "<div class='row mt-1'>";
+                echo "<div class='col' style='margin-top: -10px !important;'>";                                 
+                    echo "<div class='container-fluid'>";
+                        echo "<div class='row mt-1'>";                       
+                            
+                            echo "<div class='col-8' style='font-size:10px !important;'>";
+                                echo "<span >".$this->sourceABVtoComplete($list[$l]['source'])."</span>";
+                            echo "</div>";
+
+                            echo "<div class='col-4' style='float:right;font-size:10px !important;'>";
+                                echo "<span >".$this->formatData('aaaa-mm-dd','dd/mm/aaaa',$list[$l]['current_throught'])."</span>";
+                            echo "</div>";
+
+                        echo "</div>";
+                    echo "</div>";
+                echo "</div>";                              
+            echo "</div>";    
+        }
+    }
+
     public function arrayToString($array,$hasKey,$key){
         $string = "";
         if($hasKey){

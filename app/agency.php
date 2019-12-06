@@ -90,6 +90,8 @@ class agency extends Management{
 
         $clientIDs = $sql->fetch($result,$fr,$fr)[0];
 
+        $implodedClients = "";
+
         if($clientIDs){
             $implodedClients = implode(",", $clientIDs);
         }
