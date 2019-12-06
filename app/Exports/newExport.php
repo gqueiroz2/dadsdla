@@ -123,7 +123,7 @@ class newExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, With
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
                 if ($this->names['type'] == "client") {
-                    $letter = "H";
+                    $letter = "J";
                 }else{
                     $letter = "I";
                 }
@@ -139,6 +139,21 @@ class newExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, With
                 	}else{
                 		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
                 	}
+
+                    if ($this->names['type'] != "client") {
+                        $cell = $event->sheet->getCell("E".($d+3))->getValue();
+
+                        if (is_numeric($cell)) {
+                            $event->sheet->getCell("E".($d+3))->setValue($cell/100);
+                        }
+                    }else{
+                        $cell = $event->sheet->getCell("E".($d+3))->getValue();
+
+                        if (is_numeric($cell)) {
+                            $event->sheet->getCell("E".($d+3))->setValue($cell/100);
+                        }
+                    }
+
                 }
 
                 $cellRange = "A".(sizeof($this->data[0])+2).":".$letter.(sizeof($this->data[0])+2);
@@ -149,8 +164,10 @@ class newExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, With
 
     public function title(): string{
 
-    	setlocale(LC_ALL, 'pt_BR');
-        $nome = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $this->dataNew ) );
+    	$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýýþÿŔŕ?';
+        $b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuuyybyRr-';
+        $nome = strtr($this->dataNew, utf8_decode($a), $b);
+        $nome = preg_replace("/[^0-9a-zA-Z\.\s+]+/",'',$nome);
 
    		if(strlen($nome) > 30){
    			$i = strpos($nome, " ");
@@ -166,10 +183,10 @@ class newExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, With
         if ($this->names['type'] == "client") {
             return [
                 'D' => '#,##0',
-                'D' => '#,##0',
+                'E' => '#,##0',
                 'F' => '#0%',
                 'G' => '#,##0',
-                'G' => '#,##0',
+                'H' => '#,##0',
                 'I' => '#,##0'
             ];
         }else{

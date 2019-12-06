@@ -1,14 +1,9 @@
 @extends('layouts.mirror')
-
 @section('title', 'Base Viewer')
-
 @section('head')
     <script src="/js/viewer.js"></script>
-    <?php include(resource_path('views/auth.php')); 
-    	//var_dump("post");
-     ?>
+    <?php include(resource_path('views/auth.php'));?>
 @endsection
-
 @section('content')
 
 	<div class="container-fluid">
@@ -79,6 +74,7 @@
                             @endif
                             {{$render->salesRep()}}
                         </div>
+                        
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
                             @if($errors->has('agency'))
@@ -128,7 +124,7 @@
             <div class="col-sm"></div>
             <div class="col-sm"></div> 
             <div class="col-sm-4" style="color: #0070c0; font-size:22px">
-                    <span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
+                <span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
             </div>
 
             <div class="col-sm-2">
@@ -137,11 +133,10 @@
                 </button>               
             </div>
     	</div>
-
     </div>
 
         <div class="container-fluid">
-            <div class=" row justify-content-center mt-2">
+            <div class="row justify-content-center mt-2">
                 <div class="col">
                     {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
                 </div>
@@ -166,7 +161,7 @@
                     var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
                     var agencyExcel = "<?php echo base64_encode(json_encode($agencyExcel)); ?>";
                     var clientExcel = "<?php echo base64_encode(json_encode($clientExcel)); ?>";
-                    var currencyExcel = "<?php echo  base64_encode(json_encode($currencyExcel)); ?>";
+                    var currencyExcel = "<?php echo $currencyExcel; ?>";
                     var valueExcel = "<?php echo $valueExcel; ?>";
                     var title = "<?php echo $title; ?>";
 
@@ -182,7 +177,7 @@
                         xhrFields: {
                             responseType: 'blob',
                         },
-                        url: "/generate/excel/viewer/base",
+                        url: "/generate/excel/viewer/vBase",
                         type: "POST",
                         data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title},
                         /*success: function(output){
@@ -190,7 +185,7 @@
                         },*/
                         success: function(result,status,xhr){
                             var disposition = xhr.getResponseHeader('content-disposition');
-                            var matches = /"([^"])"/.exec(disposition);
+                            var matches = /"([^"]*)"/.exec(disposition);
                             var filename = (matches != null && matches[1] ? matches[1] : title);
 
                             //download
@@ -217,7 +212,4 @@
             });
 
         </script>
-
-
-
 @endsection

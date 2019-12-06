@@ -77,6 +77,8 @@ class viewerController extends Controller{
                 $salesRegion = Request::get("region");
                 $r = new region();
 
+                //var_dump($salesRegion);
+
                 $region = $r->getRegion($con,null);
                 $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
@@ -139,7 +141,7 @@ class viewerController extends Controller{
 
                 $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion);
 
-                $mtx = $viewer->assemble($table,$total,$salesCurrency,$source,$con,$salesRegion,$currencies);
+                $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
 
                 $regionExcel = $regions;
                 $sourceExcel = $source;
@@ -151,13 +153,11 @@ class viewerController extends Controller{
                 $clientExcel = $client;
                 $currencyExcel = $currencies;
                 $valueExcel = $value;
-                $title = $source." - Viewer Base.xlsx";
-
+                $title = $source." - Viewer Base.xlsx";                
                //var_dump(Request::all());
 
                 //var_dump($table);
                 
-
                 return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel","title"));
 
 	}

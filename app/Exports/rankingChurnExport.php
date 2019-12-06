@@ -25,7 +25,7 @@ class rankingChurnExport implements FromArray, WithMultipleSheets {
 
     	array_push($sheets, new allChurnExport($this->labels[0], $this->sheets));
 
-    	if (is_array($this->sheets['subMtx'])) {
+    	if (isset($this->sheets['subMtx'])) {
     		$names = array("region" => $this->sheets['region'], "currency" => $this->sheets['currency'], 'value' => $this->sheets['value'], "head" => $this->sheets['headNames'], 'type' => $this->sheets['type'], 'years' => $this->sheets['years'], 'val' => $this->sheets['val']);
 
 	    	for ($i=0; $i < sizeof($this->sheets['subMtx']); $i++) { 

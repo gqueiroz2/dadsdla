@@ -23,7 +23,7 @@ class baseExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheet = [
-            new viewerBaseTabExport($this->labels, $this->sheets)
+            new executiveTabExport($this->labels, $this->sheets)
         ];
 
         return $sheet;

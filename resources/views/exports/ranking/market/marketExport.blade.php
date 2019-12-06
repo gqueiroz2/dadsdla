@@ -19,14 +19,14 @@
 				@for($n = 0; $n < sizeof($data); $n++)
 					@if(is_numeric($data[$n][$m]))
 						@if($data[$n][0] == "Var (%)" || $data[$n][0] == "Share Bookings ".$names['years'][0] || $data[$n][0] == "Share Bookings ".$names['years'][1] || $data[$n][0] == "% YoY")
-							<td>{{$data[$n][$m]/100}}</td>
+							<td>{{round($data[$n][$m])}}</td>
 						@elseif($data[$n][0] == "Ranking")
 							<td>{{$data[$n][$m]}}º</td>
 						@else
 							@if($data[$n][$m] == 0)
 								<td> - </td>
 							@else
-								<td>{{$data[$n][$m]}}</td>
+								<td>{{round($data[$n][$m])}}</td>
 							@endif
 						@endif
 					@else
@@ -40,9 +40,13 @@
 			<tr>
 				@for($t=0; $t < sizeof($dataTotal); $t++)
 					@if($t == $pos[0] || $t == $pos[1] || $t == $pos[2])
-						<td>{{$dataTotal[$t]/100}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@else
-						<td>{{$dataTotal[$t]}}</td>
+						@if(is_numeric($dataTotal[$t]))
+							<td>{{round($dataTotal[$t])}}</td>
+						@else
+							<td>{{$dataTotal[$t]}}</td>
+						@endif
 					@endif
 				@endfor
 			</tr>

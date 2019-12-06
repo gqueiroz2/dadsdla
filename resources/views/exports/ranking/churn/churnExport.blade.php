@@ -14,11 +14,11 @@
 			@for($n = 0; $n < sizeof($data); $n++)
 				@if(is_numeric($data[$n][$m]))
 					@if($data[$n][0] == "Var (%)" || $data[$n][0] == "Var YTD (%)")
-						<td>{{$data[$n][$m]/100}}</td>
+						<td>{{round($data[$n][$m])}}</td>
 					@elseif($data[$n][0] == "Ranking")
 						<td>{{$data[$n][$m]}}º</td>
 					@else
-						<td>{{$data[$n][$m]}}</td>
+						<td>{{round($data[$n][$m])}}</td>
 					@endif
 				@else
 					<td>{{$data[$n][$m]}}</td>
@@ -32,21 +32,21 @@
 			@if(is_numeric($dataTotal[$t]))
 				@if($names['val'] == "agency")
 					@if($t == 6 || $t == 11)
-						<td>{{$dataTotal[$t]/100}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@else
 						<td>{{$dataTotal[$t]}}</td>
 					@endif
 				@elseif($names['val'] == "client")
 					@if($t == 5)
-						<td>{{$dataTotal[$t]/100}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@else
-						<td>{{$dataTotal[$t]}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@endif
 				@else
 					@if($t == 5)
-						<td>{{$dataTotal[$t]/100}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@else
-						<td>{{$dataTotal[$t]}}</td>
+						<td>{{round($dataTotal[$t])}}</td>
 					@endif
 				@endif
 			@else

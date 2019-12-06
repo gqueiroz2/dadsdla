@@ -445,13 +445,13 @@ class viewer extends Model{
 
 		$pRate = 1.0;
 
-		//var_dump($salesCurrency);
+		//var_dump($salesRegion);
 
-		//var_dump($mtx);
+		//var_dump($currencies);
 
 		for ($m=0; $m <sizeof($mtx); $m++) { 		
 			
-			/*if ($currencies == 'USD') {
+			if ($currencies == 'USD') {
 				if ($source == 'CMAPS') {
 					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 				}else{
@@ -463,7 +463,7 @@ class viewer extends Model{
 				}else{
 					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 				}
-			}*/
+			}
 
 			switch ($source) {
 				case 'CMAPS':

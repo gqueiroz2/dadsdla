@@ -19,10 +19,14 @@ use App\subChurnRanking;
 use App\rankingNew;
 use App\subNewRanking;
 
+use App\rankings;
+use App\subRankings;
+
 use App\Exports\rankingBrandExport;
 use App\Exports\rankingMarketExport;
 use App\Exports\rankingChurnExport;
 use App\Exports\rankingNewExport;
+use App\Exports\rankingExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -516,6 +520,105 @@ class rankingExcelController extends Controller {
         $title = Request::get("title");
 
         $labels = array("exports.ranking.new.allNewExport", "exports.ranking.new.newExport");
+
         return Excel::download(new rankingNewExport($data, $labels), $title);
+    }
+
+    public function ranking(){
+        
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $region = Request::get("regionExcel");
+
+        $r = new region();
+        $tmp = $r->getRegion($con,array($region));
+
+        if(is_array($tmp)){
+            $salesRegion = $tmp[0]['name'];
+        }else{  
+            $salesRegion = $tmp['name'];
+        }
+
+        $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
+
+        $currency[0]['id'] = $tmp[0]->id;
+        $currency[0]['name'] = $tmp[0]->name;
+        $currency[0]['region'] = $tmp[0]->region;
+
+        $type = Request::get("typeExcel");
+        
+        $tmp = json_decode(base64_decode(Request::get("type2Excel")));
+
+        for ($t=0; $t < sizeof($tmp); $t++) {
+            $type2[$t] = json_decode(base64_decode($tmp[$t]));
+        }
+
+        $nPos = Request::get("nPosExcel");
+
+        $months = json_decode(base64_decode(Request::get("monthsExcel")));
+
+        $brands = json_decode(base64_decode(Request::get("brandsExcel")));
+
+        $value = Request::get("valueExcel");
+
+        $firstForm = Request::get("firstFormExcel");
+        $secondForm = Request::get("secondFormExcel");
+        $thirdForm = Request::get("thirdFormExcel");
+
+        $r = new rankings();
+
+        $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
+
+        $values = $r->getAllResults($con, $brands, $type, $region, $value, $currency, $months, $years, $type2);
+
+        $filterValues = $r->filterValues($values, $type2, $type);
+
+        $mtx = $r->assembler($values, $type2, $years, $type, $filterValues);
+
+        if ($nPos == 'All') {
+            $size = sizeof($mtx[0]);
+        }else{
+            $size = ($nPos+1);
+        }
+
+        $total = $r->assemblerTotal($mtx, $years, $size);
+        
+        $head = $r->createNames2($type, $months, $years);
+
+        $data = array("region" => $salesRegion, "currency" => $currency, "type" => $type, "nPos" => $size, "months" => $months, "brands" => $brands, "value" => $value, "firstForm" => $firstForm, "secondForm" => $secondForm, "thirdForm" => $thirdForm, "years" => $years, "mtx" => $mtx, "total" => $total, "names" => $head);
+
+        $labels = array("exports.ranking.ranking.allRankingExport");
+
+        $names = Request::get("names");
+
+        if (!is_null($names)) {
+            $sr = new subRankings();
+
+            for ($n=0; $n < sizeof($names); $n++) {
+                $subValues[$n] = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $names[$n]);
+
+                $matrix =  $sr->assembler($subValues[$n], $years, $type);
+
+                $subMtx[$n] = $matrix[0];
+                $subTotal[$n] = $matrix[1];
+
+                if ($type == "agencyGroup") {
+                    $subType = "agency";
+                }elseif ($type == "agency") {
+                    $subType = "client";
+                }else{
+                    $subType = "agency";
+                }
+            }
+
+            $data = array("region" => $salesRegion, "currency" => $currency, "type" => $type, "nPos" => $size, "months" => $months, "brands" => $brands, "value" => $value, "firstForm" => $firstForm, "secondForm" => $secondForm, "thirdForm" => $thirdForm, "years" => $years, "mtx" => $mtx, "total" => $total, "names" => $head, "subMtx" => $subMtx, "subTotal" => $subTotal, "subType" => $subType, "type2" => $names);
+
+            $labels = array("exports.ranking.ranking.allRankingExport", "exports.ranking.ranking.rankingExport");
+        }
+
+        $title = Request::get("title");
+        
+        return Excel::download(new rankingExport($data, $labels), $title);
     }
 }

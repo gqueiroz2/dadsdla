@@ -7,8 +7,25 @@ use App\rank;
 
 class renderRanking extends Render {
     
+    public function search($mtx, $type){
+
+        if ($type != "agency") {
+            $p = 3;
+        }else{
+            $p = 4;
+        }
+
+        echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+
+            for ($m=1; $m < sizeof($mtx[$p]); $m++) { 
+                echo "<option value='".$mtx[$p][$m]."'>".$mtx[$p][$m]."</option>";
+            }
+
+        echo "</select>";
+
+    }
+
     public function assemble($mtx, $names, $pRate, $value, $total, $size, $type){
-        
     	 echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";
             echo "<tr>";
             	echo "<th colspan='15' class='lightBlue'><center>

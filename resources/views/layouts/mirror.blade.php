@@ -1,3 +1,10 @@
+<?php 
+
+	use App\base;
+
+	$bs = new base();
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -122,7 +129,15 @@
 									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
 								@endif
 							</div>
-						</li>					
+						</li>	
+
+						<li class="nav-item dropdown">
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
+								<!--<a class="dropdown-item" href="#"> Insights </a>-->
+							</div>
+						</li>				
 
 					</ul>    
 
@@ -159,6 +174,10 @@
 	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
 	                            </div>	                            
                         	</div>
+                        	
+                        	{{ $bs->sources() }}
+
+                        	<!--
                         	<div class="row">
                             	<div class="col" style="margin-top: -10px !important;">                            		
 	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 02/12/2019 </span>
@@ -179,6 +198,7 @@
 	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 04/12/2019 </span>
 	                            </div>	                            
                         	</div>
+                        	-->
                         	
                         </div>     
 {{--
@@ -213,6 +233,28 @@
 		@else
 			@yield('contentLogout')
 		@endif
+
+		<div id="troll"></div>
+
+
+
+		<script type="text/javascript">
+
+			var userName = "<?php echo Request::session()->get('userName') ;?>";
+			var userRegion = "<?php echo Request::session()->get('userRegion') ;?>";
+			var userEmail= "<?php echo Request::session()->get('userEmail') ;?>";
+			var date = "<?php echo date("Y-m-d");?>";
+			var hour = "<?php echo date("G:s");?>";
+			var url = "<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>";
+			var shortUrl = "<?php echo $_SERVER['PHP_SELF'] ;?>";
+			var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
+			ajaxSetup();
+			analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
+
+			
+
+		</script>
+
 
 		<script type="text/javascript">
 			function ShowLoading(e) {
