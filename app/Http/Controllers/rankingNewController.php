@@ -144,13 +144,9 @@ class rankingNewController extends Controller {
 
 	      $namesExcel = array();
 
-	      for ($v=0; $v < sizeof($values); $v++) { 
-	        for ($v2=0; $v2 < sizeof($values[$v]); $v2++) { 
-	          array_push($namesExcel, $values[$v][$v2][$type]);
-	        }
+	      for ($m=1; $m < sizeof($mtx[1]); $m++) { 
+	        array_push($namesExcel, $mtx[1][$m]);
 	      }
-
-	      $namesExcel = array_values(array_unique($namesExcel));
 	      
 	    }else{
 	      $namesExcel = null;

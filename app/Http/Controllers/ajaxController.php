@@ -861,7 +861,6 @@ class ajaxController extends Controller{
         $months = Request::get("months");
         $years = Request::get("years");
         $name = Request::get("name");
-        $pos = Request::get("pos");
 
         $sr = new subRankings();
 
