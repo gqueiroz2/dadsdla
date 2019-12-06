@@ -46,6 +46,9 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('new','rankingExcelController@new')
 									->name('newExcel');
+
+				Route::post('ranking','rankingExcelController@ranking')
+									->name('rankingExcel');
 			});
 
 		Route::post('core','excelController@performanceCore')
