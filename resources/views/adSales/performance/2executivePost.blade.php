@@ -155,7 +155,7 @@
 				var currencyExcel = "<?php echo $currencyExcel; ?>";
 				var yearExcel = "<?php echo $yearExcel; ?>";
 				var valueExcel = "<?php echo $valueExcel; ?>";
-				var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel;)) ?>";
+				var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
 				var title = "<?php echo $title; ?>";
 
 				var div = document.createElement('div');
