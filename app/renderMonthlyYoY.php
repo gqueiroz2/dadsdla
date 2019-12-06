@@ -1,6 +1,4 @@
-<?php
-
-namespace App;
+mespace App;
 
 use Illuminate\Database\Eloquent\Model;				
 use App\Render;
