@@ -10,6 +10,7 @@ use App\base;
 class RootController extends Controller{
 
     public function test(){
+        
         $db = new dataBase();
         $base = new base();
         $con = $db->openConnection("DLA");

@@ -17,13 +17,59 @@
 
 
 @section('content')
+
 @if($userLevel == 'SU')
 	<div class="container-fluid">
 		<div class="row justify-content-center">
 			<div class="col-sm-6">
-				<div class="card">
+				<div class="card mt-5">
 					<div class="card-header">
-						<span> Data Management </span>	
+						<center>
+							<span style="font-size: 16px; font-weight: bold;"> Insert New Info  </span>	
+						</center>
+					</div>
+					<div class="card-body">
+						<div class="container-fluid">
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('chain') }}" style="color: white">
+											Insert (BTS/FW/SF/CMAPS)
+										</a>
+									</button>
+								</div>
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insertPlanByBrandGet') }}" style="color: white">
+											Insert (Corporate/Actual/Target)
+										</a>
+									</button>	
+								</div>
+							</div>
+
+							<div class="row justify-content-center mt-2">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insertPlanBySalesGet') }}" style="color: white">
+											Insert Target by Sales Rep
+										</a>
+									</button>	
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+
+				<div class="card mt-5">
+					<div class="card-header">
+						<center>
+							<span style="font-size: 16px; font-weight: bold;"> Data Management </span>	
+						</center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -35,6 +81,8 @@
 										</a>
 									</button>	
 								</div>
+							</div>
+							<div class="row justify-content-center mt-2">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="user">
 										<a style="color: white;" href="{{ route('dataManagementUserGet') }}">
@@ -52,6 +100,8 @@
 										</a>
 									</button>	
 								</div>
+							</div>
+							<div class="row justify-content-center mt-2">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="salesrepresentative"> 
 										<a style="color: white;" href="{{ route('dataManagementSalesRepGet') }}">
@@ -59,9 +109,8 @@
 										</a>
 									</button>	
 								</div>
-							</div>
-				
-
+							</div>				
+							{{--
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
@@ -70,6 +119,10 @@
 										</a>
 									</button>	
 								</div>
+							</div>
+							--}}
+
+							<div class="row justify-content-center mt-2">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
 										<a style="color: white;" href="{{ route('dataManagementBrandGet') }}">
@@ -87,6 +140,9 @@
 										</a>
 									</button>	
 								</div>	
+							</div>
+
+							<div class="row justify-content-center mt-2">
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
 										<a style="color: white;" href="{{ route('dataManagementClientGet') }}">
@@ -96,46 +152,9 @@
 								</div>															
 							</div>
 
-							{{--
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('clientAgencyExcel') }}" style="color: white">
-											Agency/Client From Excel
-										</a>
-									</button>	
-								</div>
-							</div>
-							--}}
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('chain') }}" style="color: white">
-											Chain
-										</a>
-									</button>
-								</div>
-							</div>
-
-
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('insertPlanByBrandGet') }}" style="color: white">
-											Plan By Brand Table
-										</a>
-									</button>	
-								</div>
 							
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('insertPlanBySalesGet') }}" style="color: white">
-											Plan By Sales
-										</a>
-									</button>	
-								</div>
-							</div>
+
+							
 {{--
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
