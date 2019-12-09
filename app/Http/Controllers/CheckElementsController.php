@@ -49,40 +49,40 @@ class CheckElementsController extends Controller{
 				<table class='table table-triped'>";
 
 		echo "<tr> 
-				<td> Tipo </td>
-				<td> Pendência</td>
+				<td><center> Type </center></td>
+				<td><center> Status </center></td>
 		      </tr>";
 		echo "<tr> 
-				<td> Sales Rep </td>
-				<td>";
+				<td><center> Sales Rep </center></td>
+				<td><center>";
 				if(!$newValues['salesReps']){
 					echo "NO";
 				}else{
 					var_dump($newValues['salesReps']);
 				}
-				echo "</td>";
+				echo "</center></td>";
 		      echo "</tr>";
 
 		echo "<tr> 
-				<td> Clients </td>
-				<td>";
+				<td><center> Clients </center></td>
+				<td><center>";
 				if(!$newValues['clients']){
 					echo "NO";
 				}else{
 					var_dump($newValues['clients']);
 				}
-				echo "</td>";
+				echo "</center></td>";
 		      echo "</tr>";
 
 		echo "<tr> 
-				<td> Agencies </td>
-				<td>";
+				<td><center> Agencies </center></td>
+				<td><center>";
 				if(!$newValues['agencies']){
 					echo "NO";
 				}else{
 					var_dump($newValues['agencies']);
 				}
-				echo "</td>";
+				echo "</center></td>";
 		      echo "</tr>";
 
 		echo "</table>
