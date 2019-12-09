@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class baseExport implements FromArray, WithMultipleSheets {
+class performanceExecutiveExport implements FromArray, WithMultipleSheets {
 
     protected $sheets;
     protected $labels;
@@ -23,7 +23,7 @@ class baseExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheet = [
-            new executiveTabExport($this->labels, $this->sheets)
+            new executiveCase1Export($this->labels[0], $this->sheets)
         ];
 
         return $sheet;

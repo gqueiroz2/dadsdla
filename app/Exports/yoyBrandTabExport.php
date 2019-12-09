@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class yoyBrandTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle {
+class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
     
     protected $view;
 	protected $data;
@@ -28,7 +28,7 @@ class yoyBrandTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 	    ],
     ];
 
-    protected $BodyCenter = [
+    protected $bodyCenter = [
         'font' => [
             'name' => 'Verdana',
             'size' => 10,
@@ -362,7 +362,7 @@ class yoyBrandTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*7)+2); $dm++) { 
                     $cellRange = "B".$dm.":O".$dm;
-                    $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->BodyCenter);
+                    $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 

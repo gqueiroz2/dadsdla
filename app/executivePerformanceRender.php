@@ -22,7 +22,6 @@ class executivePerformanceRender extends renderPerformance
 
 	    for ($s=0; $s < sizeof($mtx["case1"]["value"]); $s++) {
 
-
 	    	if ($mtx["salesRep"][$s]["salesRep"] == "Martin Hernandez" && $mtx["region"] == "Chile") {
 	    		if(($s+1) == sizeof($mtx["salesRep"])){
 	    			break;
@@ -83,7 +82,7 @@ class executivePerformanceRender extends renderPerformance
 	    		echo "<div class='col-sm' style='width:100%; margin-left:auto; margin-right: auto;'>";
     		}
 
-    		echo "<table  class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
+    		echo "<table class='salesGroupClick darkBlue' style='width:100%; margin-top:1.5%;'><th style='font-weight: bold;'>".$mtx["salesRep"][$s]["salesRep"]."</th></table>";
 	    	for ($t=0; $t < sizeof($mtx["case1"]["value"][$s]); $t++) { 
 		    	echo "<table style='width: 100%;' class='mt-3'>";
 		    		echo "<tr>";

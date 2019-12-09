@@ -20,6 +20,8 @@ class analyticsController extends Controller{
 
     	$something = $at->assembler($con,$sql);
 
+
+        return view('analytics.home');
     }
 
     public function base(){

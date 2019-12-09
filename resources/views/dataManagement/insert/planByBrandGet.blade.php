@@ -52,7 +52,7 @@
 
 							 	<div class="row mt-2">
 							 		<div class="col">
-							 			<label> Source </label>
+							 			<label> Source @if($errors->has('source')) <span style="color: red;">* Required </span> @endif </label>
 										<select class="form-control" name="source">
 										 	<option value=""> Select </option>
 										 	<option value="ACTUAL"> ACTUAL </option>
@@ -64,11 +64,14 @@
 
 							 	<div class="row mt-2">
 							 		<div class="col">
-							 			<label> Year </label>
+							 			<label> Year @if($errors->has('year')) <span style="color: red;">* Required </span> @endif </label>
 										<select class="form-control" name="year">
 										 	<option value=""> Select </option>
-										 	<option value="2019"> 2019 </option>
-										 	<option value="2018"> 2018 </option>										 	
+										 	@for($y=0;$y<sizeof($years);$y++)
+
+										 		<option value="{{$years[$y]}}"> {{$years[$y]}} </option>
+
+										 	@endfor									 	
 									 	</select>
 									</div>
 							 	</div>

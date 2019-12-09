@@ -93,7 +93,6 @@ class viewerController extends Controller{
 
                 //var_dump($currencies);
 
-
                 $source = Request::get("sourceDataBase");
 
                 $month = Request::get("month");
@@ -122,7 +121,7 @@ class viewerController extends Controller{
 
                 $brand = Request::get("brand");
 
-                for ($b=0; $b <sizeof($brand); $b++) { 
+                for ($b=0; $b < sizeof($brand); $b++) { 
                     if ($brand[$b] == 9){
                         $check = true;
                     }
@@ -134,15 +133,14 @@ class viewerController extends Controller{
                     array_push($brand, "16");
                 }
 
-
                 //var_dump($salesCurrency);
 
                 $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
-
-                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion);
-
-                $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
-
+                
+                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
+                
+                $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
+                
                 $regionExcel = $regions;
                 $sourceExcel = $source;
                 $yearExcel = $year;
@@ -154,9 +152,7 @@ class viewerController extends Controller{
                 $currencyExcel = $currencies;
                 $valueExcel = $value;
                 $title = $source." - Viewer Base.xlsx";                
-               //var_dump(Request::all());
-
-                //var_dump($table);
+                //var_dump(Request::all());
                 
                 return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel","title"));
 

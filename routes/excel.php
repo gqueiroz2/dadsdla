@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('coreExcel');
 
 				Route::post('executive','performanceExcelController@performanceExecutive')
-												->name('executiveExcel');
+											->name('executiveExcel');
 			});
 				
 			Route::group(['prefix'=>'viewer'], function(){

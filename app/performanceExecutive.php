@@ -15,25 +15,13 @@ use Illuminate\Support\Facades\Request;
 
 class performanceExecutive extends performance
 {
-    public function makeMatrix($con){
+    public function makeMatrix($con, $region, $year, $brand, $salesRepGroup, $salesRep, $currency, $month, $value, $tier){
     	$b = new brand();
         $r = new region();
         $base = new base();
         $sql = new sql();
         $sr = new salesRep();
         $pr = new pRate();
-
- 		$region = Request::get('region');
- 		$year = Request::get('year');
- 		$brand = $base->handleBrand(Request::get('brand'));
- 		$source = Request::get('source');
-        $salesRepGroup = Request::get('salesRepGroup');
- 		$salesRep = Request::get('salesRep');
- 		$currency = Request::get('currency');
- 		$month = Request::get('month');
- 		$value = Request::get('value');
-        $tier = Request::get('tier');
-
 
         $tmp = array(date('Y'));
         $tmp2 = array(date('Y'));

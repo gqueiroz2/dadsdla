@@ -62,7 +62,17 @@ class executivePerformanceController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $mtx = $p->makeMatrix($con);
+        $region = Request::get('region');
+        $year = Request::get('year');
+        $brand = $base->handleBrand(Request::get('brand'));
+        $salesRepGroup = Request::get('salesRepGroup');
+        $salesRep = Request::get('salesRep');
+        $currency = Request::get('currency');
+        $month = Request::get('month');
+        $value = Request::get('value');
+        $tier = Request::get('tier');
+
+        $mtx = $p->makeMatrix($con, $region, $year, $brand, $salesRepGroup, $salesRep, $currency, $month, $value, $tier);
 
         $region = $r->getRegion($con,null);
         $brand = $b->getBrand($con);
@@ -70,16 +80,19 @@ class executivePerformanceController extends Controller
         $currency = $pr->getCurrency($con,null);
         
         $cYear = Request::get('year');
+        
+        $regionExcel = Request::get('region');
+        $yearExcel = Request::get('year');
+        $brandExcel = $base->handleBrand(Request::get('brand'));
+        $salesRepGroupExcel = Request::get('salesRepGroup');
+        $salesRepExcel = Request::get('salesRep');
+        $currencyExcel = Request::get('currency');
+        $monthExcel = Request::get('month');
+        $valueExcel = Request::get('value');
+        $tierExcel = Request::get('tier');
 
-        $regionExcel = Request::get("region");
-                
-        $currencyExcel['id'] = Request::get("currency");
-        $currencyExcel['name'] = $mtx['currency'];
-        $yearExcel = $mtx['year'];
-        $valueExcel = Request::get("value");
-        $salesRepExcel = $mtx['salesRep'];
         $title = $mtx['region']." - Performance Individual.xlsx";
 
-        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel', 'currencyExcel','yearExcel', 'valueExcel','salesRepExcel','title'));
+        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title'));
     }
 }

@@ -144,12 +144,9 @@
 										<div class="col">
 											<label for="region"> Origin </label>
 											<select class="form-control" name="origin">
-												<option value=""> Select</option>
-												@for($o=0;$o<sizeof($origin);$o++)
-													<option value="{{$origin[$o]['id']}}">
-														{{ $origin[$o]['name'] }}
-													</option>
-												@endfor
+													<option value="1">
+														Default
+													</option>												
 											</select>
 										</div>	
 									@else
