@@ -62,7 +62,17 @@ class executivePerformanceController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $mtx = $p->makeMatrix($con);
+        $region = Request::get('region');
+        $year = Request::get('year');
+        $brand = $base->handleBrand(Request::get('brand'));
+        $salesRepGroup = Request::get('salesRepGroup');
+        $salesRep = Request::get('salesRep');
+        $currency = Request::get('currency');
+        $month = Request::get('month');
+        $value = Request::get('value');
+        $tier = Request::get('tier');
+
+        $mtx = $p->makeMatrix($con, $region, $year, $brand, $salesRepGroup, $salesRep, $currency, $month, $value, $tier);
 
         $region = $r->getRegion($con,null);
         $brand = $b->getBrand($con);
@@ -82,7 +92,7 @@ class executivePerformanceController extends Controller
         $tierExcel = Request::get('tier');
 
         $title = $mtx['region']." - Performance Individual.xlsx";
-        
+
         return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title'));
     }
 }
