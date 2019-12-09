@@ -42,8 +42,53 @@ class CheckElementsController extends Controller{
 		$table = Request::get('tableToCheck');
 		
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
+		
+		//var_dump($newValues);
+		
+		echo "<center>
+				<table class='table table-triped'>";
 
-		var_dump($newValues);
+		echo "<tr> 
+				<td> Tipo </td>
+				<td> Pendência</td>
+		      </tr>";
+		echo "<tr> 
+				<td> Sales Rep </td>
+				<td>";
+				if(!$newValues['salesReps']){
+					echo "NO";
+				}else{
+					var_dump($newValues['salesReps']);
+				}
+				echo "</td>";
+		      echo "</tr>";
+
+		echo "<tr> 
+				<td> Clients </td>
+				<td>";
+				if(!$newValues['clients']){
+					echo "NO";
+				}else{
+					var_dump($newValues['clients']);
+				}
+				echo "</td>";
+		      echo "</tr>";
+
+		echo "<tr> 
+				<td> Agencies </td>
+				<td>";
+				if(!$newValues['agencies']){
+					echo "NO";
+				}else{
+					var_dump($newValues['agencies']);
+				}
+				echo "</td>";
+		      echo "</tr>";
+
+		echo "</table>
+		      </center>";
+
+		
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
 

@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\sql;
 use App\region;
-
+use App\salesRep;
 class CheckElements extends Model{
     
 	public function newValues($conDLA,$con,$region,$table){
@@ -223,6 +223,11 @@ class CheckElements extends Model{
 	}
 
 	public function checkNewSalesReps($conDLA,$con,$table,$sql){
+		
+		$sr = new salesRep();
+
+
+
 		if($table != "sf_pr"){
 			$tableDLA = "sales_rep_unit";
 			
@@ -243,8 +248,55 @@ class CheckElements extends Model{
 		}else{
 			$new = false;
 		}
+		
+		$tp = $new;
+		$missing = array();
 
-		return $new;
+		if( is_array($new) ){
+			$prop = array();
+			for ($n=0; $n < sizeof($new); $n++) { 
+				$temp = explode(",",$new[$n]);
+				unset($tp[$n]);
+				if(sizeof($temp) > 1){
+					$sales0 = trim($temp[0]);
+					$sales1 = trim($temp[1]);
+					array_push($prop, $sales0);
+					array_push($prop, $sales1);
+				}else{
+					array_push($prop, $new[$n]);
+				}
+			}
+			$prop = array_values(array_unique($prop));
+
+			for ($p=0; $p < sizeof($prop); $p++) { 
+				$check[$p] = $sr->getSalesRepUnitByName($conDLA,$prop[$p])[0]['salesRepUnit'];
+				if(!$check[$p]){
+					array_push($missing, $prop[$p]);
+				}
+			}
+			
+		}
+
+		$rtr = false;
+
+		$zz = 0;
+
+		if(!empty($missing)){
+			for ($m=0; $m < sizeof($missing); $m++) { 
+				$rtr[$zz] = $missing[$m];
+				$zz++;
+			}
+		}
+
+		if(!empty($tp)){
+			for ($t=0; $t < sizeof($tp); $t++) { 
+				$rtr[$zz] = $tp[$t];
+				$zz++;
+			}
+		}
+
+
+		return $rtr;
 	}
 
 	public function checkNewClients($conDLA,$con,$table,$sql,$region){

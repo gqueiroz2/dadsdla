@@ -330,6 +330,26 @@ class salesRep extends Management{
 		$salesRepUnit = $sql->fetch($res,$from,$from);
     	return $salesRepUnit;
 	}
+
+	public function getSalesRepUnitByName($con,$salesRepUnit=false){
+		$sql = new sql();
+
+		$table = "sales_rep_unit";
+
+		$columns = "name AS 'salesRepUnit'";
+		
+		$where = "WHERE (name = \"".$salesRepUnit."\" )";
+		
+		$res = $sql->select($con,$columns,$table,false,$where);
+
+		$from = array('salesRepUnit');
+
+		$salesRepUnit = $sql->fetch($res,$from,$from);
+
+    	return $salesRepUnit;
+	}
+
+
 	public function addSalesRepUnit($con){
 		$sql = new sql();
 		$regionID = Request::get('region');
