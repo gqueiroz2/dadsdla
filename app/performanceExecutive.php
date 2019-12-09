@@ -26,7 +26,6 @@ class performanceExecutive extends performance
  		$region = Request::get('region');
  		$year = Request::get('year');
  		$brand = $base->handleBrand(Request::get('brand'));
- 		$source = Request::get('source');
         $salesRepGroup = Request::get('salesRepGroup');
  		$salesRep = Request::get('salesRep');
  		$currency = Request::get('currency');

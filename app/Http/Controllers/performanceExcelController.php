@@ -9,7 +9,10 @@ use App\performanceExecutive;
 class performanceExcelController extends Controller{
   	
   	public function performanceExecutive(){
-		$db = new dataBase();
+
+  		var_dump(Request::all());
+
+		/*$db = new dataBase();
 		$con = $db->openConnection("DLA");
 
 		$p = new performanceExecutive();
@@ -32,7 +35,7 @@ class performanceExcelController extends Controller{
 
 		$title = Request::get('title');
 
-		return Excel::download(new executiveExport($data,$label), $title);
+		return Excel::download(new executiveExport($data,$label), $title);*/
 
   	}
 }

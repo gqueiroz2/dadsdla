@@ -93,8 +93,18 @@
 					</div>
 				</form>
 				<div class="row justify-content-end">
-					<div class="col col-3"  style="text-align: center; margin-top: 2%;">
-						<span class="reportsTitle">Individual Performance</span>
+					<div class="col-sm"></div>
+					<div class="col-sm"></div>
+					<div class="col-sm"></div>
+					<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+						<div style="float: right;"> 
+							Individual Performance
+						</div>
+					</div>
+					<div class="col-sm">
+						<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+							Generate Excel
+						</button>
 					</div>
 				</div>
 			</div>
@@ -163,6 +173,66 @@
 					matrix[1] = true;
 				}
 				loadMatrix(matrix);
+			});
+
+			ajaxSetup();
+
+			$('#excel').click(function(event){
+
+				var region = "<?php echo $regionExcel; ?>";
+				var year = "<?php echo $yearExcel; ?>";
+				var brands = <?php echo json_encode($brandExcel); ?>;
+				var salesRepGroup = <?php echo json_encode($salesRepGroupExcel); ?>;
+				var salesRep = <?php echo json_encode($salesRepExcel); ?>;
+				var currency = "<?php echo $currencyExcel; ?>";
+				var month = <?php echo json_encode($monthExcel); ?>;
+				var value = "<?php echo $valueExcel; ?>";
+				var tier = <?php echo json_encode($tierExcel); ?>;
+
+				var title = "<?php echo $title; ?>";
+
+				/*var div = document.createElement('div');
+				var img = document.createElement('img');
+				img.src = '/loading_excel.gif';
+				div.innerHTML = "Generating Excel...</br>";
+				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+				div.appendChild(img);
+				document.body.appendChild(div);*/
+
+				$.ajax({
+					/*xhrFields: {
+						responseType: 'blob',
+					},*/
+					url: "/generate/excel/performance/executive",
+					type: "POST",
+					data: {region, year, brands, salesRepGroup, salesRep, currency, month, value, tier, title},
+					success:function(output){
+						$("#vlau").html(output);
+					},
+					/*success: function(result,status,xhr){
+						var disposition = xhr.getResponseHeader('content-disposition');
+						var matches =/"([^"]*)"/.exec(disposition);
+						var filename = (matches != null && matches[1] ? matches[1] : title);
+
+						//download
+						var blob = new Blob([result],{
+							type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+						});
+						var link =  document.createElement('a');
+						link.href = window.URL.createObjectURL(blob);
+						link.download = filename;
+
+						document.body.appendChild(link);
+
+						link.click();
+						document.body.removeChild(link);
+						document.body.removeChild(div);
+					},*/
+					error: function(xhr,ajaxOptions,thrownError){
+						//document.body.removeChild(div);
+						alert(xhr.status+" "+thrownError);
+					}
+				});
 			});
 
 		});
