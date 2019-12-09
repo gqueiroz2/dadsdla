@@ -124,7 +124,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 				$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 				$letter = 'N';
-
+/*
 				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 					$cellRange = "A".($d+4).":".$letter.($d+4);
 					if (($d+3) % 2 == 0) {
@@ -132,7 +132,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					}else{
 						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 					}
-				}
+				}*/
 			},
 		];
 	}

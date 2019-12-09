@@ -34,7 +34,7 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('chain') }}" style="color: white">
-											Insert (BTS/FW/SF/CMAPS)
+											Insert (BTS/FW/SF/CMAPS/INSIGHTS)
 										</a>
 									</button>
 								</div>
@@ -81,8 +81,7 @@
 										</a>
 									</button>	
 								</div>
-							</div>
-							<div class="row justify-content-center mt-2">
+							
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="user">
 										<a style="color: white;" href="{{ route('dataManagementUserGet') }}">
@@ -100,8 +99,7 @@
 										</a>
 									</button>	
 								</div>
-							</div>
-							<div class="row justify-content-center mt-2">
+							
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="salesrepresentative"> 
 										<a style="color: white;" href="{{ route('dataManagementSalesRepGet') }}">
@@ -110,17 +108,6 @@
 									</button>	
 								</div>
 							</div>				
-							{{--
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
-										<a style="color: white;" href="{{ route('dataManagementOriginGet') }}">
-											Origin
-										</a>
-									</button>	
-								</div>
-							</div>
-							--}}
 
 							<div class="row justify-content-center mt-2">
 								<div class="col">
@@ -140,9 +127,7 @@
 										</a>
 									</button>	
 								</div>	
-							</div>
-
-							<div class="row justify-content-center mt-2">
+							
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
 										<a style="color: white;" href="{{ route('dataManagementClientGet') }}">
@@ -151,44 +136,12 @@
 									</button>	
 								</div>															
 							</div>
-
-							
-
-							
-{{--
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('testExcel') }}" style="color: white">
-											Teste
-										</a>
-									</button>	
-								</div>
-							</div>
---}}
-							<div class="row mt-2 justify-content-center">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
-										<a href="{{ route('dataManagementEmailDivulgacaoGet') }}" style="color: white">
-											Email
-										</a>
-									</button>	
-								</div>
-							</div>
-
-							{{--
-							<div class="row mt-2 justify-content-start">
-								<div class="col">
-									<button class="btn btn-primary" style="width: 100%;" id="brand"> 
-										<a style="color: white;" href="{{ route('dataManagementTruncateGet') }}">
-											Truncate
-										</a>
-									</button>	
-								</div>
-							</div>
-							--}}
 						</div>
 					</div>
+				</div>
+
+
+				<div class="mt-5">
 				</div>
 			</div>
 		</div>
