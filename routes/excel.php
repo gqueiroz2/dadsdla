@@ -34,6 +34,18 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('yoyMonthExcel');
 			});
 
+			Route::group(['prefix'=>'performance'],function(){
+
+				Route::post('executive','performanceExcelController@performanceExecutive')
+											->name('executiveExcel');
+
+				Route::post('bonus','performanceExcelController@bonus')
+											->name('bonusExcel');
+
+				Route::post('core','performanceExcelController@performanceCore')
+											->name('coreExcel');
+			});
+
 			Route::group(['prefix'=>'ranking'], function(){
 				Route::post('brand','rankingExcelController@brand')
 									->name('brandExcel');
@@ -51,14 +63,6 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('rankingExcel');
 			});
 
-			Route::group(['prefix'=>'performance'],function(){
-				Route::post('core','performanceExcelController@performanceCore')
-											->name('coreExcel');
-
-				Route::post('executive','performanceExcelController@performanceExecutive')
-											->name('executiveExcel');
-			});
-				
 			Route::group(['prefix'=>'viewer'], function(){
 				Route::post('vBase', 'viewerExcelController@viewerBase')
 											->name('baseExcel');

@@ -5,8 +5,8 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class performanceExecutiveExport implements FromArray, WithMultipleSheets {
-
+class performanceBonusExport implements FromArray, WithMultipleSheets {
+    
     protected $sheets;
     protected $labels;
 
@@ -16,17 +16,13 @@ class performanceExecutiveExport implements FromArray, WithMultipleSheets {
 	}
 
     public function array(): array {
-
         return $this->sheets;
     }
 
     public function sheets(): array{
     	
     	$sheet = [
-            new performanceExecutiveCase1Export($this->labels[0], $this->sheets),
-            new performanceExecutiveCase2Export($this->labels[1], $this->sheets),
-            new performanceExecutiveCase3Export($this->labels[2], $this->sheets),
-            new performanceExecutiveCase4Export($this->labels[3], $this->sheets),
+            new bonusExport($this->labels, $this->sheets)
         ];
 
         return $sheet;
