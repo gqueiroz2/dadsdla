@@ -156,6 +156,10 @@ class AEController extends Controller{
             if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
                 $msg = "Incorrect value submited";
 
+                var_dump($passTotal[$c]);
+                var_dump($totalClient[$c]);
+                var_dump($c);
+
                 if ($value == "Gross") {
                     $value = "gross";
                 }else{
@@ -205,7 +209,7 @@ class AEController extends Controller{
         $currency = $pr->getCurrencybyName($con,$currencyID);
 
         $bool = $ae->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClient,$client,$splitted,$submit,$brandPerClient);
-/*
+
         if ($bool == "Updated") {
             $msg = "Forecast Updated";
             $typeMsg = "Success";
@@ -223,7 +227,6 @@ class AEController extends Controller{
             $typeMsg = "Error";
             return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }
-*/
     }
 
     public function get(){
