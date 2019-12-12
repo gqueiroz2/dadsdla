@@ -235,6 +235,19 @@
 
 		<div id="troll"></div>
 
+		<script type="text/javascript">
+            var userName = "<?php echo Request::session()->get('userName') ;?>";
+            var userRegion = "<?php echo Request::session()->get('userRegion') ;?>";
+            var userEmail= "<?php echo Request::session()->get('userEmail') ;?>";
+            var date = "<?php echo date("Y-m-d");?>";
+            var hour = "<?php echo date("G:s");?>";
+            var url = "<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";  ?>";
+            var shortUrl = "<?php echo $_SERVER['PHP_SELF'] ;?>";
+            var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
+            ajaxSetup();
+            analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
+        </script>
+
 
 
 		<script type="text/javascript">
