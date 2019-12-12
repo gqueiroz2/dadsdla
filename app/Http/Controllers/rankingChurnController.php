@@ -130,6 +130,29 @@ class rankingChurnController extends Controller {
 		$render = new renderChurnRanking();
   		$names = $rc->createNames($type, $months, $rtr, $brands);
 
-  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
+  		$regionExcel = $region;
+	    $regionNameFilter = $rtr;
+	    $typeExcel = $type;
+	    $brandsExcel = $brands;
+	    $monthsExcel = $months;
+	    $currencyExcel = $pRate;
+	    $valueExcel = $value;
+	    $yearsExcel = $years;
+	    
+	    if ($type == "sector") {
+
+	      $namesExcel = array();
+
+	      for ($m=1; $m < sizeof($mtx[1]); $m++) { 
+	        array_push($namesExcel, $mtx[1][$m]);
+	      }
+
+	    }else{
+	      $namesExcel = null;
+	    }
+	    
+	    $title = "ranking churn (".$rtr.").xlsx";
+	    
+  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
 	}
 }

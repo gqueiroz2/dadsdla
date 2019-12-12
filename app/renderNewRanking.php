@@ -6,6 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class renderNewRanking extends Render {
     
+    public function search($mtx, $type){
+
+        if ($type != "agency") {
+            $p = 1;
+        }else{
+            $p = 2;
+        }
+
+        echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+
+            for ($m=1; $m < sizeof($mtx[$p]); $m++) { 
+                echo "<option value='".$mtx[$p][$m]."' >".$mtx[$p][$m]."</option>";
+            }
+
+        echo "</select>";
+
+    }
+
     public function assembler($mtx, $total, $currency, $value, $type, $names, $region){
     	
     	echo "<table style='width: 100%; zoom:100%; font-size: 16px;'>";

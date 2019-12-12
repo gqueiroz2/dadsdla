@@ -29,15 +29,44 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('yoyBrand','resultsExcelController@resultsYoYBrand')
 											->name('yoyBrandExcel');
+
+				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
+											->name('yoyMonthExcel');
+			});
+
+			Route::group(['prefix'=>'performance'],function(){
+
+				Route::post('executive','performanceExcelController@performanceExecutive')
+											->name('executiveExcel');
+
+				Route::post('bonus','performanceExcelController@bonus')
+											->name('bonusExcel');
+
+				Route::post('core','performanceExcelController@performanceCore')
+											->name('coreExcel');
 			});
 
 			Route::group(['prefix'=>'ranking'], function(){
 				Route::post('brand','rankingExcelController@brand')
 									->name('brandExcel');
+
+				Route::post('market','rankingExcelController@market')
+									->name('marketExcel');
+
+				Route::post('churn','rankingExcelController@churn')
+									->name('churnExcel');
+
+				Route::post('new','rankingExcelController@new')
+									->name('newExcel');
+
+				Route::post('ranking','rankingExcelController@ranking')
+									->name('rankingExcel');
 			});
 
-		Route::post('core','excelController@performanceCore')
-									->name('coreExcel');
+			Route::group(['prefix'=>'viewer'], function(){
+				Route::post('vBase', 'viewerExcelController@viewerBase')
+											->name('baseExcel');
+			});
 
 		});
 	});

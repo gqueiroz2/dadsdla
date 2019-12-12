@@ -227,6 +227,7 @@ class AEController extends Controller{
             $typeMsg = "Error";
             return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
         }
+
     }
 
     public function get(){

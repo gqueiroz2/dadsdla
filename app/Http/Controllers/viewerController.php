@@ -77,6 +77,8 @@ class viewerController extends Controller{
                 $salesRegion = Request::get("region");
                 $r = new region();
 
+                //var_dump($salesRegion);
+
                 $region = $r->getRegion($con,null);
                 $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
@@ -90,7 +92,6 @@ class viewerController extends Controller{
                 $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name']; 
 
                 //var_dump($currencies);
-
 
                 $source = Request::get("sourceDataBase");
 
@@ -111,10 +112,6 @@ class viewerController extends Controller{
                 $salesRep = Request::get("salesRep");
 
                 $agency = Request::get("agency");
-               /*$a = new agency();
-                $agencies = $a->getAgency($con,array($agency))[0]['name'];*/
-
-                //var_dump($agencies);
 
                 $client = Request::get("client");
 
@@ -124,7 +121,7 @@ class viewerController extends Controller{
 
                 $brand = Request::get("brand");
 
-                for ($b=0; $b <sizeof($brand); $b++) { 
+                for ($b=0; $b < sizeof($brand); $b++) { 
                     if ($brand[$b] == 9){
                         $check = true;
                     }
@@ -136,21 +133,28 @@ class viewerController extends Controller{
                     array_push($brand, "16");
                 }
 
-
                 //var_dump($salesCurrency);
 
                 $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
-
-                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion);
-
-                $mtx = $viewer->assemble($table,$total,$salesCurrency,$source,$con,$salesRegion,$currencies);
-
-               //var_dump(Request::all());
-
-                //var_dump($table);
                 
-
-                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions",'year','total'));
+                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
+                
+                $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
+                
+                $regionExcel = $regions;
+                $sourceExcel = $source;
+                $yearExcel = $year;
+                $monthExcel = $month;
+                $brandExcel = $brand;
+                $salesRepExcel = $salesRep;
+                $agencyExcel = $agency;
+                $clientExcel = $client;
+                $currencyExcel = $currencies;
+                $valueExcel = $value;
+                $title = $source." - Viewer Base.xlsx";                
+                //var_dump(Request::all());
+                
+                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel","title"));
 
 	}
 

@@ -131,6 +131,29 @@ class rankingNewController extends Controller {
 		$render = new renderNewRanking();
   		$names = $rn->createNames($type, $months, $rtr, $brands);
 
-  		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr'));
+  		$regionExcel = $region;
+	    $regionNameFilter = $rtr;
+	    $typeExcel = $type;
+	    $brandsExcel = $brands;
+	    $monthsExcel = $months;
+	    $currencyExcel = $pRate;
+	    $valueExcel = $value;
+	    $yearsExcel = $years;
+	    
+	    if ($type == "sector") {
+
+	      $namesExcel = array();
+
+	      for ($m=1; $m < sizeof($mtx[1]); $m++) { 
+	        array_push($namesExcel, $mtx[1][$m]);
+	      }
+	      
+	    }else{
+	      $namesExcel = null;
+	    }
+
+	    $title = "ranking new (".$rtr.").xlsx";
+
+  		return view("adSales.ranking.4newPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
     }
 }

@@ -42,7 +42,7 @@ class  region extends Management{
         return $region;
     }
 
-    public function getRegionByName ($con, $region){
+    public function getRegionByName($con, $region){
         $sql = new sql();
 
         $table = "region r";

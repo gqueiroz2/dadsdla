@@ -16,7 +16,7 @@
 						<div class="col-sm">
 							<label>Sales Region</label>
 							@if($userLevel == 'L0' || $userLevel == 'SU')
-								{{$render->region($salesRegion)}}							
+								{{$render->region($salesRegion)}}
 							@else
 								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
@@ -91,14 +91,13 @@
 	<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size: 12px">
 		<div class="row mt-2">
 			<div class="col-sm table-responsive-sm">
-
 				<tr><td>&nbsp;</td></tr>
 				{{$render->assemble($matrix[0],$matrix[1],$form,$pRate,$value,$year,$base->getMonth(), $brands, $source, $region)}}	
 			</div>
 		</div>
 	</div>
 
-
+	<div id="vlau"></div>
 
 	<div class="modal" id="SemestresTotal" role="dialog" style="display: hidden;">
 		<div id="myModal" class="modal-dialog modal-xl">
@@ -111,7 +110,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="table-responsive">
-						{{ $render->assembleModal($brands, $matrix[1], $year, $source) }}
+						{{$render->assembleModal($brands, $matrix[1], $year, $source)}}
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -120,6 +119,7 @@
 			</div>
 		</div>	
 	</div>
+	
 	<script type="text/javascript">
 
 		$(document).ready(function() {
@@ -128,15 +128,15 @@
 
 			$("#excel").click(function(event){
 
+				var regionExcel = "<?php echo $regionExcel; ?>";
+				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
+				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
 				var firstPosExcel = "<?php echo $firstPosExcel; ?>";
 				var secondPosExcel = "<?php echo $secondPosExcel; ?>";
 				var thirdPosExcel = "<?php echo $thirdPosExcel; ?>";
-				var regionExcel = "<?php echo $regionExcel; ?>";
-				var valueExcel = "<?php echo $valueExcel; ?>";
-				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
+				var valueExcel = "<?php echo $valueExcel; ?>";
 				var title = "<?php echo $title; ?>";
-				var name = "Month";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
@@ -150,9 +150,12 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/yoy",
+					url: "/generate/excel/results/yoyMonth",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel, name},
+					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, thirdPosExcel, brandsExcel},
+					/*success: function(output){
+						$("#vlau").html(output);
+					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

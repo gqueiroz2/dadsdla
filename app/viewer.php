@@ -33,7 +33,7 @@ class viewer extends Model{
 		$agencyString = $base->arrayToString($agency,false,0);
 			
 
-		if ($source == "CMAPS"/*'cmaps'*/){
+		if ($source == "CMAPS"){
 
 			$especificNumber = strtoupper($especificNumber);
 
@@ -58,8 +58,7 @@ class viewer extends Model{
 		                'discount',
 		                'clientCnpj',
 		                'agencyCnpj',
-		                'grossRevenue',
-		                'netRevenue'		                
+		                $value."Revenue"		                
 
 			);
 
@@ -80,8 +79,7 @@ class viewer extends Model{
 				                  c.ad_sales_support AS 'adSalesRupport',
 				                  c.category AS 'category',
 				                  c.sector AS 'sector', 
-				                  c.gross AS 'grossRevenue',
-				                  c.net AS 'netRevenue',
+				                  c.".$value." AS '".$value."Revenue',
 				                  c.year AS 'year',
 				                  c.package AS 'package',
 				                  c.discount AS 'discount',
@@ -96,14 +94,9 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND (a.ID IN ($agencyString))
-									AND (cl.ID IN ($clientString))
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
-
-				
 			}else{
-
 				$select = "SELECT sr.name AS 'salesRep', 
 				                  c.pi_number AS 'piNumber', 
 				                  c.month AS 'month',
@@ -119,8 +112,7 @@ class viewer extends Model{
 				                  c.ad_sales_support AS 'adSalesRupport',
 				                  c.category AS 'category',
 				                  c.sector AS 'sector', 
-				                  c.gross AS 'grossRevenue',
-				                  c.net AS 'netRevenue',
+				                  c.".$value." AS '".$value."Revenue',
 				                  c.year AS 'year',
 				                  c.package AS 'package',
 				                  c.discount AS 'discount',
@@ -135,15 +127,13 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND (a.ID IN ($agencyString))
-									AND (cl.ID IN ($clientString))
 							ORDER BY c.month";
 
-					echo "<pre>$select</pre>";
+					//echo "<pre>$select</pre>";
 
 			}
 
-		}elseif ($source == "IBMS/BTS"/*'ibms/bts'*/){
+		}elseif ($source == "IBMS/BTS"){
 			$from = array(
 						  'region',
         				  'year',
@@ -194,7 +184,7 @@ class viewer extends Model{
 						ORDER BY y.month";			
 			
 
-		}elseif ($source == "FW"/*'fw'*/){
+		}elseif ($source == "FW"){
 			$from = array(
 						  'region',
 						  'year',
@@ -252,7 +242,7 @@ class viewer extends Model{
 								AND (sr.ID IN ($salesRepString))
 						ORDER BY f.month";
 
-		}elseif ($source == "SF"/*"sf"*/){
+		}elseif ($source == "SF"){
 			$from = array(
 							  'oppid',
 							  'region',
@@ -310,11 +300,7 @@ class viewer extends Model{
 							AND (sr.ID IN ($salesRepString))
 							AND (sf.oppid LIKE '%".$especificNumber."%')
 					GROUP BY sf.oppid";
-
-
-
 			}else{
-
 				$select ="SELECT  sf.oppid AS 'oppid',
 				                  sr.name AS 'salesRepOwner',
 				                  s.name AS 'salesRepSplitter',
@@ -350,15 +336,14 @@ class viewer extends Model{
 			}
 		}
 		
-			$result = $con->query($select);
-			$mtx = $sql->fetch($result,$from,$from);
-			
-			
+		$result = $con->query($select);
+		$mtx = $sql->fetch($result,$from,$from);
+
 		return $mtx;
 
 	}
 
-	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion){
+	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion, $value){
 		$base = new base();
 		$p = new pRate();
 
@@ -370,13 +355,11 @@ class viewer extends Model{
 
 		if ($source == 'CMAPS') {
 			$from  = array('averageDiscount',
-							'sumGrossRevenue',
-							'sumNetRevenue'
+							'sum'.ucfirst($value).'Revenue'
 						);
 			if ($checkEspecificNumber) {
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								       SUM(c.gross) AS 'sumGrossRevenue',
-								       SUM(c.net) AS 'sumNetRevenue'
+								       SUM(c.".$value.") AS 'sum".ucfirst($value)."Revenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
@@ -387,8 +370,7 @@ class viewer extends Model{
 									AND (c.map_number LIKE '%".$especificNumber."%')";	
 			}else{
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								   	   SUM(c.gross) AS 'sumGrossRevenue',
-								       SUM(c.net) AS 'sumNetRevenue'
+								   	   SUM(c.".$value.") AS 'sum".ucfirst($value)."Revenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
@@ -419,21 +401,19 @@ class viewer extends Model{
 				}
 			}
 
-		for ($t=0; $t <sizeof($total); $t++) { 
+		for ($t=0; $t < sizeof($total); $t++) { 
 			if ($source == 'CMAPS') {
-				if ($total[$t]['sumNetRevenue'] || $total[$t]['sumGrossRevenue'] || $total[$t]['averageDiscount']) {
+				if ($total[$t]['sum'.ucfirst($value).'Revenue'] || $total[$t]['averageDiscount']) {
 					if ($total[$t]['averageDiscount']) {
 						$total[$t]['averageDiscount'] = doubleval($total[$t]['averageDiscount']);
 					}
-					if ($total[$t]['sumGrossRevenue']) {
-						$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
+
+					if ($total[$t]['sum'.ucfirst($value).'Revenue']) {
+						$total[$t]['sum'.ucfirst($value).'Revenue'] = doubleval($total[$t]['sum'.ucfirst($value).'Revenue'])/$pRate;
 					}
-					if ($total[$t]['sumNetRevenue']) {
-						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
-					}
-				}		
+				}
 			}
-		}		
+		}
 		
 		return $total;
 			
@@ -441,15 +421,17 @@ class viewer extends Model{
 
 
 
-	public function assemble($mtx,$total,$salesCurrency,$source,$con,$salesRegion,$currencies){
+	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies, $value){
 		$base = new base();
 		$p = new pRate();
 		
 		$year = date('Y');
 
-		//var_dump($salesCurrency);
+		$pRate = 1.0;
 
-		//var_dump($mtx);
+		//var_dump($salesRegion);
+
+		//var_dump($currencies);
 
 		for ($m=0; $m <sizeof($mtx); $m++) { 		
 			
@@ -480,17 +462,13 @@ class viewer extends Model{
 						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
 					}
 
-					if ($mtx[$m]['discount'] || $mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue']) {
+					if ($mtx[$m]['discount'] || $mtx[$m][$value.'Revenue']) {
 						if ($mtx[$m]['discount']) {
 							$mtx[$m]['discount'] = doubleval($mtx[$m]['discount']);
 
 						}
-						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
-							
-						}
-						if ($mtx[$m]['netRevenue']) {
-							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
+						if ($mtx[$m][$value.'Revenue']) {
+							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
 						}
 					}
 
@@ -505,13 +483,8 @@ class viewer extends Model{
 						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
 					}
 
-					if($mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue']){
-						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
-						}
-						if ($mtx[$m]['netRevenue']) {
-							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
-						}
+					if($mtx[$m][$value.'Revenue']){
+						$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
 					}
 					if ($mtx[$m]['impressionDuration']) {
 						$mtx[$m]['impressionDuration'] = doubleval($mtx[$m]['impressionDuration']);
@@ -530,13 +503,8 @@ class viewer extends Model{
 					
 					$mtx[$m]['ioEndDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioEndDate']);
 
-					if($mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue']){
-						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
-						}
-						if ($mtx[$m]['netRevenue']) {
-							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
-						}
+					if($mtx[$m][$value.'Revenue']){
+						$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
 					}
 					if ($mtx[$m]['repCommissionPercentage']) {
 						$mtx[$m]['repCommissionPercentage'] = $mtx[$m]['repCommissionPercentage']*100;
@@ -563,12 +531,9 @@ class viewer extends Model{
 						$mtx[$m]['toDate'] = $base->intToMonth(array($mtx[$m]['toDate']))[0];
 					}
 					
-					if($mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue'] || $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
-						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
-						}
-						if ($mtx[$m]['netRevenue']) {
-							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
+					if($mtx[$m][$value.'Revenue'] || $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
+						if ($mtx[$m][$value.'Revenue']) {
+							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
 						}
 						if ($mtx[$m]['fcstAmountGross']) {
 							$mtx[$m]['fcstAmountGross'] = doubleval($mtx[$m]['fcstAmountGross'])/$pRate;

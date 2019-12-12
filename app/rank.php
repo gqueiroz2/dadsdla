@@ -454,7 +454,6 @@ class rank extends Model{
             }
         }
 
-        
         return $res;
 
     }

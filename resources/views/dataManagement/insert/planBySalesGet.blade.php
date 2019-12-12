@@ -51,18 +51,21 @@
 
 								<div class="row mt-2">
 							 		<div class="col">
-							 			<label> Year </label>
+							 			<label> Year @if($errors->has('year')) <span style="color: red;">* Required </span> @endif </label>
 										<select class="form-control" name="year">
 										 	<option value=""> Select </option>
-										 	<option value="2019"> 2019 </option>
-										 	<option value="2018"> 2018 </option>										 	
+										 	@for($y=0;$y<sizeof($years);$y++)
+
+										 		<option value="{{$years[$y]}}"> {{$years[$y]}} </option>
+
+										 	@endfor									 	
 									 	</select>
 									</div>
 							 	</div>
 
 							 	<div class="row mt-2">
 							 		<div class="col">
-							 			<label> Region </label>
+							 			<label> Region @if($errors->has('region')) <span style="color: red;">* Required </span> @endif </label>
 
 										<select class="selectpicker" multiple="true" name="region[]" data-width="100%" data-selected-text-format='count' multiple='true' data-actions-box='true'>
 										 	@for($r=0;$r<sizeof($region);$r++)
