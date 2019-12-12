@@ -9,9 +9,9 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAutoSize, WithTitle {
+class performanceCoreCase1Export implements FromView, WithEvents, ShouldAutoSize, WithTitle {
     
-	protected $view;
+    protected $view;
 	protected $data;
 
 	protected $headStyle = [
@@ -190,9 +190,9 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
                 $sizeTier = sizeof($this->data['mtx']['tier']);
 
                 $ini = "B";
-               	$end = chr(ord($ini) + sizeof($this->data['mtx']['case1']['totalSGVarPrc'][0])+1);
+               	$end = chr(ord($ini) + (sizeof($this->data['mtx']['quarters'])+3));
 
-                for ($s=0; $s < sizeof($this->data['mtx']['salesRep']); $s++) {
+                for ($s=0; $s < (sizeof($this->data['mtx']["case1"]["value"])+1); $s++) {
                 	$cellRange = "A".$number;
 
                 	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->nameStyle);

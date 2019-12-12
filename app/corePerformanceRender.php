@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class corePerformanceRender extends renderPerformance
-{
+class corePerformanceRender extends renderPerformance {
+	
     public function case1($mtx,$cYear){
     	
     	$size = 64/sizeof($mtx["quarters"]);
@@ -74,7 +74,6 @@ class corePerformanceRender extends renderPerformance
 		    			echo "<td class='darkBlue'>".number_format($mtx["case1"]["totalVarPrc"][$sg][$t],0,",",".")."%</td>";
 		    		echo "</tr>";
 		    	echo "</table>";
-
 	    	}
 	    	echo "<table style='width: 100%;' class='mt-3'>";
 	    		echo "<tr>";

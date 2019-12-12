@@ -59,7 +59,9 @@
 		<tr><td>&nbsp;</td></tr>
 
 		<tr>
-			<th colspan="{{sizeof($data['mtx']['case1']['totalSGVarPrc'][0])+3}}"> {{$data['mtx']['salesRep'][$s]['salesRep']}}</th>	
+			<th colspan="{{sizeof($data['mtx']['case1']['totalSGVarPrc'][0])+3}}">
+				{{$data['mtx']['salesRep'][$s]['salesRep']}}
+			</th>
 		</tr>
 
 		<tr><td>&nbsp;</td></tr>

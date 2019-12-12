@@ -92,7 +92,7 @@
 						</div>
 					</div>
 				</form>
-				<div class="row justify-content-end">
+				<div class="row justify-content-end mt-2">
 					<div class="col-sm"></div>
 					<div class="col-sm"></div>
 					@if($render->bonus($user))

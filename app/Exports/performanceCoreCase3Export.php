@@ -9,9 +9,9 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAutoSize, WithTitle {
+class performanceCoreCase3Export implements FromView, WithEvents, ShouldAutoSize, WithTitle {
     
-	protected $view;
+    protected $view;
 	protected $data;
 
 	protected $headStyle = [
@@ -152,13 +152,13 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
     }
 
     public function view(): View{
-    	$size = 64/sizeof($this->data['mtx']['quarters']);
+    	$size = 84/sizeof($this->data['mtx']['month']);
 
     	return view($this->view, ['data' => $this->data, 'size' => $size]);
     }
 
     public function title(): string{
-        return "Tier and Quarter";
+        return "Tier and Month";
     }
 
     public function tierName($name){
@@ -179,6 +179,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
     */
     public function registerEvents(): array{
 
+
     	return [
     		AfterSheet::class => function(AfterSheet $event){
                 $cellRange = "A1";
@@ -190,9 +191,9 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
                 $sizeTier = sizeof($this->data['mtx']['tier']);
 
                 $ini = "B";
-               	$end = chr(ord($ini) + sizeof($this->data['mtx']['case1']['totalSGVarPrc'][0])+1);
+               	$end = chr(ord($ini) + sizeof($this->data['mtx']['month'])+3);
 
-                for ($s=0; $s < sizeof($this->data['mtx']['salesRep']); $s++) {
+                for ($s=0; $s < (sizeof($this->data['mtx']['salesGroup'])+1); $s++) {
                 	$cellRange = "A".$number;
 
                 	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->nameStyle);

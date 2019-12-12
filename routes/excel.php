@@ -36,13 +36,13 @@ Route::group(['middleware' => 'auth'],function(){
 
 			Route::group(['prefix'=>'performance'],function(){
 
-				Route::post('executive','performanceExcelController@performanceExecutive')
+				Route::post('executive','performanceExcelController@executive')
 											->name('executiveExcel');
 
 				Route::post('bonus','performanceExcelController@bonus')
 											->name('bonusExcel');
 
-				Route::post('core','performanceExcelController@performanceCore')
+				Route::post('core','performanceExcelController@core')
 											->name('coreExcel');
 			});
 
