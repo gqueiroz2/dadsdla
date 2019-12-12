@@ -318,7 +318,6 @@ class performanceExecutiveCase2Export implements FromView, WithEvents, ShouldAut
     }
 
     public function view(): View{
-
     	$size = 64/sizeof($this->data['mtx']['quarters']);
 
     	return view($this->view, ['data' => $this->data, 'size' => $size]);
