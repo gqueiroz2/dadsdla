@@ -14,6 +14,11 @@ Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
+		Route::get('dataCurrentThroughtG','dataManagementController@dataCurrentThroughtG')
+							->name('dataCurrentThroughtG');	
+		Route::post('dataCurrentThroughtP','dataManagementController@dataCurrentThroughtP')
+							->name('dataCurrentThroughtP');		
+
 		Route::post('fixCRM','dataManagementController@fixCRM')
 							->name('fixCRM');
 
