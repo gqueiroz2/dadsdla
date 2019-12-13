@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\dataBase;
+use App\base;
+use App\pRate;
+use App\region;
 
 use App\performanceExecutive;
 use App\performanceCore;
+use App\quarterPerformance;
 
 use App\Exports\performanceExecutiveExport;
 use App\Exports\performanceBonusExport;
 use App\Exports\performanceCoreExport;
+use App\Exports\performanceQuarterExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
@@ -111,4 +116,69 @@ class performanceExcelController extends Controller{
 
 		return Excel::download(new performanceCoreExport($data,$labels), $title);
   	}
+
+  	public function quarter(){
+  		
+  		$db = new dataBase();
+		$con = $db->openConnection("DLA");
+
+  		$regionID = Request::get('region');
+        $year = Request::get('year');
+
+        $tiers = Request::get('tiers');
+       
+        $brands = Request::get("brands");
+
+        $currency = Request::get("currency");
+        $p = new pRate();
+        $pRate = $p->getCurrency($con, array($currency));
+
+        $value = Request::get("value");
+
+        $salesRepGroupID = Request::get("salesRepGroup");
+        $salesRepID = Request::get("salesRep");
+
+        $base = new base();
+        $qp = new quarterPerformance();
+
+        $matrix = $qp->makeQuarter($con, $regionID, $year, $brands, $currency, $value, $base->getMonth(), $tiers, $salesRepID);
+
+        $mtx = $matrix[0];
+        $auxTiers = $matrix[1];
+
+        $sales = $qp->createLabels($con, $salesRepGroupID, $salesRepID, $regionID, $year);
+
+        $tmpTiers = array("T1", "T2", "TOTH");
+
+        for ($i=0; $i < sizeof($auxTiers); $i++) { 
+            if (empty($auxTiers[$i])) {
+                unset($tmpTiers[$i]);
+            }
+        }
+
+        $tmpTiers = array_values($tmpTiers);
+
+        $tiersFinal = array();
+        
+        for ($i=0; $i < sizeof($tmpTiers); $i++) { 
+            array_push($tiersFinal, $tmpTiers[$i]);
+        }
+
+        if (sizeof($brands) > 1) {
+            array_push($tiersFinal, "TT");
+        }
+
+        $tiers = $tiersFinal;
+
+        $r = new region();
+        $region = $r->getRegion($con, array($regionID))[0]['name'];
+
+        $data = array('mtx' => $mtx, 'auxTiers' => $auxTiers, 'region' => $region, 'year' => $year, 'currency' => $pRate, 'value' => $value, 'sales' => $sales, 'tiers' => $tiers);
+        $labels = "exports.performance.quarter.quarterExport";
+
+        $title = Request::get('title');
+
+		return Excel::download(new performanceQuarterExport($data,$labels), $title);
+  	}
+
 }

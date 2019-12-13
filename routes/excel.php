@@ -44,6 +44,9 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('core','performanceExcelController@core')
 											->name('coreExcel');
+
+				Route::post('quarter','performanceExcelController@quarter')
+											->name('quarterExcel');
 			});
 
 			Route::group(['prefix'=>'ranking'], function(){

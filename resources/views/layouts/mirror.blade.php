@@ -238,6 +238,7 @@
 		<div id="troll"></div>
 
 		<script type="text/javascript">
+<<<<<<< HEAD
             var userName = "<?php echo Request::session()->get('userName') ;?>";
             var userRegion = "<?php echo Request::session()->get('userRegion') ;?>";
             var userEmail= "<?php echo Request::session()->get('userEmail') ;?>";
@@ -267,10 +268,7 @@
 			ajaxSetup();
 			analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
 
-			
-
 		</script>
-
 
 		<script type="text/javascript">
 			function ShowLoading(e) {

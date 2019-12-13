@@ -113,7 +113,18 @@ class quarterPerformanceController extends Controller {
 
         $tiers = $tiersFinal;
 
-        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers'));
+        $regionExcel = $regionID;
+        $yearExcel = Request::get('year');
+        $brandsExcel = $brands;
+        $currencyExcel = $currency;
+        $valueExcel = $value;
+        $salesRepGroupExcel = $salesRepGroupID;
+        $salesRepExcel = $salesRepID;
+        $tiersExcel = $tiers;
+
+        $title = $region." - Performance Office.xlsx";
+
+        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers', 'regionExcel', 'yearExcel', 'brandsExcel', 'currencyExcel', 'valueExcel', 'salesRepGroupExcel', 'salesRepExcel', 'tiersExcel', 'title'));
         
     }
 }

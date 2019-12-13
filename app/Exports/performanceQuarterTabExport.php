@@ -9,8 +9,8 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize, WithTitle {
-    
+class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
+
     protected $view;
 	protected $data;
 
@@ -58,6 +58,86 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'font' => [
             'name' => 'Verdana',
             'size' => 10,
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $t1 = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => '0070c0',
+            ],
+        ],
+        'font' => [
+        	'bold' => true,
+            'name' => 'Verdana',
+            'size' => 10,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $t2 = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => '1E90FF',
+            ],
+        ],
+        'font' => [
+        	'bold' => true,
+            'name' => 'Verdana',
+            'size' => 10,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $toth = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => '004b84',
+            ],
+        ],
+        'font' => [
+        	'bold' => true,
+            'name' => 'Verdana',
+            'size' => 10,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $tt = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'argb' => '000080',
+            ],
+        ],
+        'font' => [
+        	'bold' => true,
+            'name' => 'Verdana',
+            'size' => 10,
+            'color' => array('rgb' => 'FFFFFF')
         ],
         'alignment' => [
             'horizontal' => 'center',
@@ -318,13 +398,25 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
     }
 
     public function view(): View{
-    	$size = 64/sizeof($this->data['mtx']['quarters']);
-
-    	return view($this->view, ['data' => $this->data, 'size' => $size]);
+    	$c = 0;
+    	return view($this->view, ['data' => $this->data, 'c' => $c]);
     }
 
     public function title(): string{
-        return "Brand and Quarter";
+        return "Office";
+    }
+
+    public function tierName($name){
+        
+        if ($name == "T1") {
+            return $this->t1;
+        }elseif ($name == "T2") {
+            return $this->t2;
+        }elseif ($name == "TOTH") {
+            return $this->toth;
+        }elseif ($name == "TT") {
+            return $this->tt;
+        }
     }
 
     public function brandName($name){
@@ -369,43 +461,50 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                $number = 3;
+				$cellRange = "A2";
+                $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);                
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(10);
 
-            	array_push($this->data['mtx']['brand'], array(13, "DN"));
-                $sizeBrand = sizeof($this->data['mtx']['brand']);
+                $numberTier = 4;
+                $numberBrand = 6;
 
-                $ini = "B";
-               	$end = chr(ord($ini) + sizeof($this->data['mtx']['quarters'])+3);
+                $sizeTier = sizeof($this->data['tiers']);
 
-                for ($s=0; $s < (sizeof($this->data['mtx']['salesGroup'])+1); $s++) {
-                	$cellRange = "A".$number;
+                if ($this->data['tiers'][sizeof($this->data['tiers'])-1] == "TT") {
+                	array_push($this->data['auxTiers'], array("DN"));
+                }
 
-                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->nameStyle);
+                for ($t=0; $t < sizeof($this->data['tiers']); $t++) {
+                	$cellRange = "A".$numberTier;
 
-                	$c = 0;
-                	for ($t=0; $t < $sizeBrand; $t++) { 
-                		$cellRange = "A".($number+2+$c).":A".($number+6+$c);
+                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->tierName($this->data['tiers'][$t]));
+
+                	for ($b=0; $b < sizeof($this->data['auxTiers'][$t]); $b++) {
+                		$cellRange = "A".$numberBrand;
+
+						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->brandName($this->data['auxTiers'][$t][$b]));
+
+						$cellRange = "A".$numberBrand.":A".($numberBrand+4);
                 		$event->sheet->getDelegate()->mergeCells($cellRange);
 
-                		$cellRange = "A".($number+2+$c);
-	                	$cell = $event->sheet->getCell($cellRange)->getValue();
-	                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->brandName($this->data['mtx']['brand'][$t][1]));
+                		for ($l=0; $l <= 4; $l++) {
+                			$cellRange = "B".($numberBrand+$l).":G".($numberBrand+$l);
+                			$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
+                			if ($l == 4) {
+                				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));
+                			}else{
+                				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
+                			}
+                		}
 
-	                	for ($l=0; $l < 5; $l++) {
-	                		$cellRange = $ini.($number+2+$l+$c).":".$end.($number+2+$l+$c);
-	                		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
+						$numberBrand += 6;
 
-	                		if ($l == 1 || $l == 2 || $l == 3) {
-	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));	
-	                		}else{
-	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));	
-	                		}
-	                	}
-
-                		$c += 6;
+						if ($b == (sizeof($this->data['auxTiers'][$t]))-1) {
+		                    $numberBrand += 2;
+		                }
                 	}
 
-                	$number += (($sizeBrand*5)+3+($sizeBrand-1));
+                	$numberTier += ((sizeof($this->data['auxTiers'][$t])*6)+2);
                 }
             }
     	];
