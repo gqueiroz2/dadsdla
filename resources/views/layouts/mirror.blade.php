@@ -235,8 +235,6 @@
 
 		<div id="troll"></div>
 
-
-
 		<script type="text/javascript">
 
 			var userName = "<?php echo Request::session()->get('userName') ;?>";
@@ -249,8 +247,6 @@
 			var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
 			ajaxSetup();
 			analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
-
-			
 
 		</script>
 
