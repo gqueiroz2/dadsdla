@@ -21,9 +21,7 @@ class viewer extends Model{
 		}		
 */
 
-
 		$brandString = $base->arrayToString($brand,false,0);
-
 		$monthString = $base->arrayToString($month,false,false);
 
 		$salesRepString = $base->arrayToString($salesRep,false,false);
@@ -129,10 +127,8 @@ class viewer extends Model{
 									AND (sr.ID IN ($salesRepString))
 							ORDER BY c.month";
 
-					//echo "<pre>$select</pre>";
-
 			}
-
+			//echo "<pre>".($select)."</pre>";
 		}elseif ($source == "IBMS/BTS"){
 			$from = array(
 						  'region',
@@ -337,6 +333,7 @@ class viewer extends Model{
 		}
 		
 		$result = $con->query($select);
+
 		$mtx = $sql->fetch($result,$from,$from);
 
 		return $mtx;
@@ -422,16 +419,13 @@ class viewer extends Model{
 
 
 	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies, $value){
+
 		$base = new base();
 		$p = new pRate();
 		
 		$year = date('Y');
 
 		$pRate = 1.0;
-
-		//var_dump($salesRegion);
-
-		//var_dump($currencies);
 
 		for ($m=0; $m <sizeof($mtx); $m++) { 		
 			
