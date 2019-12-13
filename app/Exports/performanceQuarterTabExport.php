@@ -130,7 +130,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'argb' => '000080',
             ],
         ],
         'font' => [
