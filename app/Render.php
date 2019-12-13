@@ -95,7 +95,7 @@ class Render extends Model{
 
         $temp = array();
 
-        for ($r=0; $r <sizeof($region) ; $r++) { 
+        for ($r=0; $r < sizeof($region) ; $r++) { 
             if ($region[$r]['role'] != "None") {
                 array_push($temp, $region[$r]['role']);
             }
@@ -109,10 +109,10 @@ class Render extends Model{
         $tempName = array(array());
 
 
-        for ($t=0; $t <sizeof($temp); $t++) {
+        for ($t=0; $t < sizeof($temp); $t++) {
             $tempId[$t] = array();
             $tempName[$t] = array();
-            for ($r=0; $r <sizeof($region) ; $r++) { 
+            for ($r=0; $r < sizeof($region) ; $r++) { 
                 if ($temp[$t] == $region[$r]['role']) {
                     array_push($tempId[$t], $region[$r]["id"]);
                     array_push($tempName[$t], $region[$r]["name"]);
@@ -122,9 +122,9 @@ class Render extends Model{
 
     	echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
     		echo "<option value=''> Select </option>";
-            for ($t=0; $t <sizeof($temp) ; $t++) { 
+            for ($t=0; $t < sizeof($temp) ; $t++) { 
                 echo "<optgroup label='".$temp[$t]."'>";
-                    for ($r=0; $r <sizeof($tempId[$t]) ; $r++) {
+                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
                         echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
                     }
                 echo "</optgroup>";
@@ -140,7 +140,7 @@ class Render extends Model{
 
         $temp = array();
 
-        for ($r=0; $r <sizeof($regions) ; $r++) { 
+        for ($r=0; $r < sizeof($regions) ; $r++) { 
             if ($regions[$r]['role'] != "None") {
                 array_push($temp, $regions[$r]['role']);
             }
@@ -154,10 +154,10 @@ class Render extends Model{
         $tempName = array(array());
 
 
-        for ($t=0; $t <sizeof($temp); $t++) {
+        for ($t=0; $t < sizeof($temp); $t++) {
             $tempId[$t] = array();
             $tempName[$t] = array();
-            for ($r=0; $r <sizeof($regions) ; $r++) { 
+            for ($r=0; $r < sizeof($regions) ; $r++) { 
                 if ($temp[$t] == $regions[$r]['role']) {
                     array_push($tempId[$t], $regions[$r]["id"]);
                     array_push($tempName[$t], $regions[$r]["name"]);
@@ -167,9 +167,9 @@ class Render extends Model{
 
         echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select </option>";
-            for ($t=0; $t <sizeof($temp) ; $t++) { 
+            for ($t=0; $t < sizeof($temp) ; $t++) { 
                 echo "<optgroup label='".$temp[$t]."'>";
-                    for ($r=0; $r <sizeof($tempId[$t]) ; $r++) {
+                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
                         echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
                     }
                 echo "</optgroup>";
@@ -184,7 +184,7 @@ class Render extends Model{
         
         $temp = array();
 
-        for ($r=0; $r <sizeof($regions) ; $r++) { 
+        for ($r=0; $r < sizeof($regions) ; $r++) { 
             if ($regions[$r]['role'] != "None") {
                 array_push($temp, $regions[$r]['role']);
             }
@@ -195,10 +195,10 @@ class Render extends Model{
         $tempId = array(array());
         $tempName = array(array());
 
-        for ($t=0; $t <sizeof($temp); $t++) {
+        for ($t=0; $t < sizeof($temp); $t++) {
             $tempId[$t] = array();
             $tempName[$t] = array();
-            for ($r=0; $r <sizeof($regions) ; $r++) { 
+            for ($r=0; $r < sizeof($regions) ; $r++) { 
                 if ($temp[$t] == $regions[$r]['role']) {
                     array_push($tempId[$t], $regions[$r]["id"]);
                     array_push($tempName[$t], $regions[$r]["name"]);
@@ -208,9 +208,9 @@ class Render extends Model{
 
         echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select </option>";
-            for ($t=0; $t <sizeof($temp) ; $t++) { 
+            for ($t=0; $t < sizeof($temp) ; $t++) { 
                 echo "<optgroup label='".$temp[$t]."'>";
-                    for ($r=0; $r <sizeof($tempId[$t]) ; $r++) {
+                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
                         echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
                     }
                 echo "</optgroup>";
