@@ -251,7 +251,7 @@
             var ipV1 = "<?php echo $_SERVER['REMOTE_ADDR'] ;?>";
             ajaxSetup();
             analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1);
-        </script>	
+        </script>
 
 		<script type="text/javascript">
 			function ShowLoading(e) {

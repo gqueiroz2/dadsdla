@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 class resultsExcelController extends Controller{
 
@@ -50,6 +51,7 @@ class resultsExcelController extends Controller{
 
                 $value = Request::get("valueExcel");
                 $title = Request::get("title");
+                $auxTitle = Request::get("auxTitle");
 
                 $b = new brand();
                 $brand = $b->getBrand($con);
@@ -114,7 +116,9 @@ class resultsExcelController extends Controller{
 
                 $labels = "exports.results.summary.summaryExport";
 
-                return Excel::download(new summaryExport($data, $labels, $auxData), $title);
+                $typeExport = Request::get("typeExport");
+
+                return Excel::download(new summaryExport($data, $labels, $auxData, $typeExport, $auxTitle), $title);
         }
 
         public function resultsMonth(){
@@ -168,7 +172,10 @@ class resultsExcelController extends Controller{
 
                 $label = "exports.results.month.monthExport";
 
-                return Excel::download(new monthExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new monthExport($data, $label, $typeExport, $auxTitle), $title);
         }
 
 	public function resultsQuarter(){
@@ -226,7 +233,10 @@ class resultsExcelController extends Controller{
 
                 $label = "exports.results.quarter.quarterExport";
 
-                return Excel::download(new quarterExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new quarterExport($data, $label, $typeExport, $auxTitle), $title);
 	}
 
         public function resultsYoYBrand(){
@@ -285,7 +295,10 @@ class resultsExcelController extends Controller{
                 $title = Request::get("title");
                 //var_dump($matrix);
 
-                return Excel::download(new yoyBrandExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new yoyBrandExport($data, $label, $typeExport, $auxTitle), $title);
         }
 
         public function resultsYoYMonth(){

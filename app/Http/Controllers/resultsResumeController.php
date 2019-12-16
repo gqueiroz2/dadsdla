@@ -145,9 +145,11 @@ class resultsResumeController extends Controller{
 		$valueExcel = $value;
 		$brandsExcel = $brands;
 
-		$title = $salesRegion." - Summary.xlsx";
+		$titleExcel = $salesRegion." - Summary.xlsx";
+		$titlePdf = $salesRegion." - Summary.pdf";
+		$title = $salesRegion." - Summary";
 
-		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'title', 'brandsExcel'));
+		return view('adSales.results.0resumePost',compact('render','region','brand','currency','matrix','currencyS','valueS','cYear','pYear','salesShow', 'salesRegion', 'rName', 'names', 'regionExcel', 'currencyExcel', 'yearExcel', 'valueExcel', 'titleExcel', 'titlePdf', 'brandsExcel', 'title'));
 
 	}
 

@@ -150,10 +150,10 @@ class viewerController extends Controller{
                 $clientExcel = $client;
                 $currencyExcel = $currencies;
                 $valueExcel = $value;
+                $especificNumberExcel = $especificNumber;
                 $title = $source." - Viewer Base.xlsx";                
 
-                
-                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel","title"));
+                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title"));
 
 	}
 
