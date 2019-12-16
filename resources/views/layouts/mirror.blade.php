@@ -1,16 +1,11 @@
-<?php 
 
-	use App\base;
-
-	$bs = new base();
-
-	date_default_timezone_set('America/Sao_Paulo');
-	
-?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<?php 
+			use App\base;
+			$bs = new base();
+			date_default_timezone_set('America/Sao_Paulo');
 			$userName = Request::session()->get('userName'); 
 			$userLevel = Request::session()->get('userLevel');
 		?>
@@ -21,17 +16,15 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title> D|ADS DLA - @yield('title') </title>
 
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" 
-				integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-				crossorigin="anonymous">
-		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" 
 				integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
 		</script>
+
 		<link href="/css/app.css" rel="stylesheet">
 		<link href="/css/root.css" rel="stylesheet">
 		<link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
-		<script src="/components/jquery/jquery.min.js"></script>        
 		<script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="/js/base.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
