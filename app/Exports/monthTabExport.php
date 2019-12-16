@@ -13,6 +13,7 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
         'font' => [
@@ -28,7 +29,7 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
         ],
     ];
 
-    protected $BodyCenter = [
+    protected $bodyCenter = [
         'font' => [
             'name' => 'Verdana',
             'size' => 10,
@@ -40,9 +41,10 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
         ],
     ];
 
-    public function __construct($view, $data){
+    public function __construct($view, $data, $type){
 		$this->view = $view;
 	    $this->data = $data;
+        $this->type = $type;
 	}
 
 	public function view(): View{
@@ -58,10 +60,23 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
             AfterSheet::class => function(AfterSheet $event){
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-               
+
+                $c = 0;
+
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*6)+2); $dm++) { 
             		$cellRange = "A".$dm.":N".$dm;
-            		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->BodyCenter);
+            		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
+
+                    if ($this->type != "Excel") {
+                        $c++;
+
+                        if ($c == 30) {
+                            $cell = "A".($dm-1);
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+                            $c = 0;
+                        }
+                    }
+
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 
@@ -91,11 +106,20 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
 
                     $event->sheet->getStyle($cellRange2)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
 
-                    $event->sheet->getStyle($cellRange3)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));
+                    $event->sheet->getStyle($cellRange3)->getNumberFormat()->applyFromArray(array('formatCode' => "0%"));
 
                     $event->sheet->getStyle($cellRange4)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
                 }
 
+                if ($this->type != "Excel") {
+
+                    $cellRange = "A2:N2";
+                    $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
+                }
             },
         ];
     }
