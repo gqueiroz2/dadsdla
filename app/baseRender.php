@@ -30,20 +30,20 @@ class baseRender extends Render{
 						
 				if ($source == 'Cmaps') {
 					echo "<tr class='center'>";
-						echo "<td class='oddGrey' style='width:4%; '>Map Number</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Pi Number</td>";
-						echo "<td class='oddGrey' style='width:3%;'>Month</td>";
-						echo "<td class='oddGrey' style='width:3%;'>Brand</td>";
-						echo "<td class='oddGrey' style='width:3%;'>Sales Rep</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Agency</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Client</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Product</td>";
-						echo "<td class='oddGrey' style='width:8%;'>Segment</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Media Type</td>";
-						echo "<td class='oddGrey' style='width:3%;'>Discount</td>";
-						echo "<td class='oddGrey' style='width:8%;'>Sector</td>";
-						echo "<td class='oddGrey' style='width:8%;'>Category</td>";
-						echo "<td class='oddGrey' style='width:5%;'>Revenue</td>";
+						echo "<td class='rcBlue' style='width:4%; '>Map Number</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Pi Number</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Product</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Segment</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Media Type</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Discount</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Sector</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Category</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Revenue</td>";
 					echo "</tr>";
 
 					echo "<tr style='font-size:14px;'>";

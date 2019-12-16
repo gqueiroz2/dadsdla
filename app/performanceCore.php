@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Request;
 class performanceCore extends performance
 {
 
-	public function makeCore($con){
+	public function makeCore($con, $region, $year, $brand, $salesRepGroup, $salesRep, $currency, $month, $value, $tier){
     	
         $b = new brand();
         $r = new region();
@@ -24,16 +24,6 @@ class performanceCore extends performance
         $sql = new sql();
         $sr = new salesRep();
         $pr = new pRate();
-
- 		$region = Request::get('region');
- 		$year = Request::get('year');
- 		$brand = $base->handleBrand(Request::get('brand'));
-        $salesRepGroup = Request::get('salesRepGroup');
- 		$salesRep = Request::get('salesRep');
- 		$currency = Request::get('currency');
- 		$month = Request::get('month');
- 		$value = Request::get('value');
-        $tier = Request::get('tier');
 
         $tmp = array(date('Y'));
         $tmp2 = array(date('Y'));

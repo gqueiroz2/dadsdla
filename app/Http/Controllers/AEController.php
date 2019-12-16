@@ -156,6 +156,10 @@ class AEController extends Controller{
             if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
                 $msg = "Incorrect value submited";
 
+                var_dump($passTotal[$c]);
+                var_dump($totalClient[$c]);
+                var_dump($c);
+
                 if ($value == "Gross") {
                     $value = "gross";
                 }else{

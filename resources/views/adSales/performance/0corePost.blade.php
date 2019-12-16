@@ -150,10 +150,16 @@
 
 			$("#excel").click(function(event){
 
-				var regionExcel = <?php echo $regionExcel; ?>;
-				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
-				var yearExcel = "<?php echo $yearExcel; ?>";
-				var valueExcel = "<?php echo $valueExcel; ?>";
+				var region = "<?php echo $regionExcel; ?>";
+				var year = "<?php echo $yearExcel; ?>";
+				var brands = <?php echo json_encode($brandExcel); ?>;
+				var salesRepGroup = <?php echo json_encode($salesRepGroupExcel); ?>;
+				var salesRep = <?php echo json_encode($salesRepExcel); ?>;
+				var currency = "<?php echo $currencyExcel; ?>";
+				var month = <?php echo json_encode($monthExcel); ?>;
+				var value = "<?php echo $valueExcel; ?>";
+				var tier = <?php echo json_encode($tierExcel); ?>;
+
 				var title = "<?php echo $title; ?>";
 
 				var div = document.createElement('div');
@@ -168,9 +174,12 @@
 					xhrFields: {
 						responseType: 'blob',
 					},
-					url: "/generate/excel/core",
+					url: "/generate/excel/performance/core",
 					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title},
+					data: {region, year, brands, salesRepGroup, salesRep, currency, month, value, tier, title},
+					/*success:function(output){
+						$("#vlau").html(output);
+					},*/
 					success: function(result, status, xhr){
 						var disposition = xhr.getResponseHeader('content-disposition');
 				        var matches = /"([^"]*)"/.exec(disposition);

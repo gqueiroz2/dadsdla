@@ -92,7 +92,11 @@ class executivePerformanceController extends Controller
         $tierExcel = Request::get('tier');
 
         $title = $mtx['region']." - Performance Individual.xlsx";
+        $titleBonus = Request::session()->get('userName')." - Bonus.xlsx";
 
-        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title'));
+        $user = Request::session()->get('userName');
+        //$user = "Lilian Akyama";
+
+        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title', 'titleBonus', 'user'));
     }
 }

@@ -22,6 +22,79 @@ use App\emailDivulgacao;
 
 class dataManagementController extends Controller{
     
+    public function dataCurrentThroughtG(){
+        
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
+
+        $select = "SELECT * FROM sources_date";
+
+        $res = $con->query($select);
+
+        $from = array("source","current_throught");
+
+        $list = $sql->fetch($res,$from,$from);
+
+        for ($l=0; $l < sizeof($list); $l++) { 
+            if($list[$l]['source'] == "CMAPS"){
+                $cmaps = $list[$l]['current_throught'];
+            }elseif($list[$l]['source'] == "SF"){
+                $sf = $list[$l]['current_throught'];
+            }elseif($list[$l]['source'] == "FW"){
+                $fw = $list[$l]['current_throught'];
+            }else{
+                $bts = $list[$l]['current_throught'];
+            }
+        }
+
+        $newList = array("cmaps" => $cmaps,"bts" => $bts,"fw" => $fw,"sf" => $sf);
+
+        return view('dataManagement.dataCurrentThrought',compact('newList'));
+    }
+
+    public function dataCurrentThroughtP(){
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $cmapsInfo = Request::get('cmapsInfo');
+        $crmInfo = Request::get('crmInfo');
+        $freeWheelInfo = Request::get('freeWheelInfo');
+        $btsInfo = Request::get('btsInfo');
+
+        $list = array( 
+                        array("name" => "BTS","value" => $btsInfo),
+                        array("name" => "CMAPS","value" => $cmapsInfo),
+                        array("name" => "FW","value" => $freeWheelInfo),
+                        array("name" => "SF","value" => $crmInfo)
+        );
+
+        $count = 0;
+        $error = array();
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $up[$l] = "UPDATE sources_date SET current_throught = \"".$list[$l]['value']."\" WHERE (source = \"".$list[$l]['name']."\") ";
+            
+            if( $con->query($up[$l]) === TRUE ){
+                echo "Record updated successfully <br>";
+                $count ++;
+            }else{
+                $err = "Error updating record: " . $con->error;
+                array_push($error, $err);
+                echo "Error updating record: " . $con->error ."<br>";
+            }
+        }
+
+        if( $count == (sizeof($list)) ){
+            $rtr = array("success" => true ,"error" => false);
+            $message = "Dates was successfully update !!!";
+        }else{
+            $rtr = array("success" => false ,"error" => $error);
+            $message = "Error on update !!!";
+        }
+
+        return back()->with('currentThrought',$message);
+    }
+
     public function fixCRM(){
         $db = new dataBase();
         $sql = new sql();
