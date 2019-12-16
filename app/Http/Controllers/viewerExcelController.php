@@ -41,9 +41,10 @@ class viewerExcelController extends Controller {
 
 	    $client = json_decode(base64_decode(Request::get("clientExcel")));
 
-	    $mtx = json_decode(base64_decode(Request::get("mtx")));
-
 	    $currency = Request::get("currencyExcel");
+	    $p = new pRate();
+        $currencies = $p->getCurrencybyName($con,$currency); 
+
 	    $value = Request::get("valueExcel");
 	    
 	    $especificNumber = Request::get("especificNumber");
@@ -53,14 +54,16 @@ class viewerExcelController extends Controller {
         }else{
             $checkEspecificNumber = false;
         }
-
+        
 	    $viewer = new viewer();
 
-	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$value,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
+	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$value,$year,$currencies['id'],$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currency,$region,$value);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies['name'],$region,$value);
 
-        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
+        $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currencies['name'],$value);
+
+        $data = array('mtx' => $mtx, 'currency' => $currencies['name'], 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
         $label = "exports.viewer.base.baseExport";
         

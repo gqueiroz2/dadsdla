@@ -13,19 +13,26 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
-	    'font' => [
-	        'bold' => true,
-	        'name' => 'Verdana',
-	        'size' => 12,
-	        'color' => array('rgb' => 'FFFFFF')
-	    ],
-	    'alignment' => [
-	        'horizontal' => 'center',
-	        'vertical' => 'center',
-	        'wrapText' => true
-	    ],
+        'font' => [
+            'bold' => true,
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '0070c0',
+            ],
+        ],
     ];
 
     protected $bodyCenter = [
@@ -44,7 +51,7 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
         'font' => [
@@ -58,12 +65,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $hh = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff6600',
+                'rgb' => 'ff6600',
             ],
         ],
         'font' => [
@@ -77,12 +83,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $dk = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ffff00',
+                'rgb' => 'ffff00',
             ],
         ],
         'font' => [
@@ -95,12 +100,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $ap = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '009933',
+                'rgb' => '009933',
             ],
         ],
         'font' => [
@@ -114,12 +118,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $tlc = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -133,12 +136,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $id = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '000000',
+                'rgb' => '000000',
             ],
         ],
         'font' => [
@@ -152,12 +154,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $dt = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '002060',
+                'rgb' => '002060',
             ],
         ],
         'font' => [
@@ -171,12 +172,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $fn = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -190,12 +190,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $onl = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '6600ff',
+                'rgb' => '6600ff',
             ],
         ],
         'font' => [
@@ -209,12 +208,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $vix = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '004b84',
+                'rgb' => '004b84',
             ],
         ],
         'font' => [
@@ -228,12 +226,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $oth = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '808080',
+                'rgb' => '808080',
             ],
         ],
         'font' => [
@@ -247,12 +244,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $hgtv = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '88cc00',
+                'rgb' => '88cc00',
             ],
         ],
         'font' => [
@@ -266,12 +262,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
-
     protected $dn = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
         'font' => [
@@ -286,10 +281,11 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
         ],
     ];
 
-    public function __construct($view, $data){
-		$this->view = $view;
-	    $this->data = $data;
-	}
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
+    }
 
 	public function view(): View{
     	return view($this->view, ['data' => $this->data]);
@@ -299,7 +295,7 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
         return "YoY - Brand";
     }
 
-    public function brandName($name){
+     public function brandName($name){
         
         if ($name == "DC") {
             return $this->dc;
@@ -335,34 +331,54 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
     */
     public function registerEvents(): array{
 
-
     	return [
     		AfterSheet::class => function(AfterSheet $event){
+
+                $c = 0;
+
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-            	for ($i=3; $i < ((sizeof($this->data['mtx'])*7)+1); $i+=7) { 
+                
+            	for ($i=3; $i < ((sizeof($this->data['mtx'])*7)+1); $i+=7) {
             		$cellRange = "A".$i.":A".($i+5);
             		$event->sheet->getDelegate()->mergeCells($cellRange);
                 }
 
                 $a = 10;
 
-                for ($b=0; $b < sizeof($this->data['mtx']); $b++) { 
-
+                 for ($b=0; $b < sizeof($this->data['mtx']); $b++) { 
                     if ($b == 0) {
                         $cellRange = "A3";
                     }else{
                         $cellRange = "A".$a;
                         $a = $a + 7;
                     }
-
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->brandName($this->data['mtx'][$b][0][0]));
                 }
 
+                $c = 0;
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*7)+2); $dm++) { 
-                    $cellRange = "B".$dm.":O".$dm;
+                    $cellRange = "A".$dm.":O".$dm;
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
+
+                    if ($this->type != "Excel") {
+                        $c++;
+
+                        if ($c == 5) {
+                            $cell = "A".($i-2);
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cellMerge = "A".($i-1).":O".($i-1);
+                            $event->sheet->getDelegate()->mergeCells($cellMerge);
+
+                            $cell = "A".($i-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Year Over Year : BKGS - ".$this->data['year']." (".strtoupper($this->data['currency'][0]['name']).")/".strtoupper($this->data['value'].")"));
+
+                            $event->sheet->getDelegate()->getStyle($cellMerge)->applyFromArray($this->headStyle);
+                            
+                            $c = 0;
+                        }
+                    }
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 
@@ -401,6 +417,15 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
                     $event->sheet->getStyle($cellRange4)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
 
                     $event->sheet->getStyle($cellRange5)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
+                }
+
+                if ($this->type != "Excel") {
+
+                    $cellRange = "A2:O2";
+                    $event->sheet->getDelegate()->mergeCells($cellRange);
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
                 }
             }
     	];
