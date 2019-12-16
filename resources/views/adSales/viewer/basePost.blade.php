@@ -62,7 +62,7 @@
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->brandViewer()}}
+                            {{$render->brand($brands)}}
                         </div>
                          
                                             
@@ -126,7 +126,7 @@
             <div class="col-sm"></div>
             <div class="col-sm"></div> 
             <div class="col-sm-4" style="color: #0070c0; font-size:22px">
-                <span style="float: right; margin-right: 2.5%;">Data Current Through: DD-MM-YY (<?php echo date('d/m/Y'); ?>)</span>
+                <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
             </div>
 
             <div class="col-sm-2">
@@ -163,6 +163,7 @@
                     var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
                     var agencyExcel = "<?php echo base64_encode(json_encode($agencyExcel)); ?>";
                     var clientExcel = "<?php echo base64_encode(json_encode($clientExcel)); ?>";
+                    var mtx = "<?php echo base64_encode(json_encode($mtx)); ?>";
                     var currencyExcel = "<?php echo $currencyExcel; ?>";
                     var valueExcel = "<?php echo $valueExcel; ?>";
                     var title = "<?php echo $title; ?>";
@@ -181,7 +182,7 @@
                         },
                         url: "/generate/excel/viewer/vBase",
                         type: "POST",
-                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title},
+                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,$mtx},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/

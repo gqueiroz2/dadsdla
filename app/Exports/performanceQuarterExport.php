@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class performanceCoreExport implements FromArray, WithMultipleSheets {
+class performanceQuarterExport implements FromArray, WithMultipleSheets {
     
     protected $sheets;
     protected $labels;
@@ -22,10 +22,7 @@ class performanceCoreExport implements FromArray, WithMultipleSheets {
     public function sheets(): array{
     	
     	$sheet = [
-            new performanceCoreCase1Export($this->labels[0], $this->sheets),
-            new performanceCoreCase2Export($this->labels[1], $this->sheets),
-            new performanceCoreCase3Export($this->labels[2], $this->sheets),
-            new performanceCoreCase4Export($this->labels[3], $this->sheets)
+            new performanceQuarterTabExport($this->labels, $this->sheets)
         ];
 
         return $sheet;

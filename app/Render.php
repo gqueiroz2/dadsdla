@@ -221,7 +221,7 @@ class Render extends Model{
 
     public function sourceDataBase(){
 
-        $arraySource = array("CMAPS","IBMS/BTS","FW","SF");
+        $arraySource = array("CMAPS"/*,"IBMS/BTS","FW","SF"*/);
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";           
