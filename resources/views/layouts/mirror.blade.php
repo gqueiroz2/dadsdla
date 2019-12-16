@@ -130,14 +130,14 @@
 								@endif
 							</div>
 						</li>	
-
+{{--
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
-						</li>				
+						</li>				--}}
 
 					</ul>    
 
