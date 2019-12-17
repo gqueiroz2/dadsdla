@@ -161,9 +161,9 @@ class ChainController extends Controller{
             var_dump($spreadSheet[$i]);
         }*/
         
-		/*if($complete){
+		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }*/
+        }
 		
 
     }
@@ -195,7 +195,7 @@ class ChainController extends Controller{
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
 
     	if($complete){
-            return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
+            //return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
 
     }

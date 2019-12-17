@@ -31,9 +31,9 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
-        var_dump($spreadSheet[0]);
+        
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-        var_dump($spreadSheet[0]);
+        
         $into = $this->into($columns);      
         
         if($table == "ytdFN"){
@@ -53,12 +53,12 @@ class chain extends excel{
             }
         }
 
-        /*if($check == (sizeof($spreadSheet) - $mark) ){
+        if($check == (sizeof($spreadSheet) - $mark) ){
             $complete = true;
         }else{
             $complete = false;
         }
-        return $complete;*/
+        return $complete;
         
     }    
 
@@ -95,15 +95,26 @@ class chain extends excel{
             $current = $this->localCurrencyToDolar($con,$current,$year);
         } 
 
+        if($table == "insights"){
+            $current = $this->fixShareAccounts($current);
+        } 
+
         if($table == "bts"){
             $current = $this->fixShareAccountsBTS($con,$current);            
         }       
-      
+
+        for ($c=0; $c < sizeof($current); $c++) { 
+            var_dump($current[$c]);
+        }
+
+
+      /*
         $into = $this->into($columnsS);		
+
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-   		return $complete;
+  // 		return $complete;*/
         
     }  
 
@@ -295,8 +306,7 @@ class chain extends excel{
         $values = $this->values($spreadSheet,$columns);
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
-        var_dump($ins);
-        /*if($con->query($ins) === TRUE ){
+        if($con->query($ins) === TRUE ){
             $error = false;
         }else{
             var_dump($spreadSheet);
@@ -306,7 +316,7 @@ class chain extends excel{
             $error = true;
         }     
 
-        return $error;*/     
+        return $error;     
         
     }
 
@@ -398,6 +408,21 @@ class chain extends excel{
                     $current[$c]['sales_rep'] = $sales1;
                     $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
                     $newC['sales_rep'] = $temp3[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                }
+
+                $temp4 = explode(",", $current[$c]['sales_rep']);
+
+                if(sizeof($temp4) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp4[0]);
+                    $sales2 = trim($temp4[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp4[1];
                     $newC['gross_revenue'] = $newC['gross_revenue']/2;
                     array_push($current, $newC);
 
@@ -723,7 +748,7 @@ class chain extends excel{
 			}
             
             if(!$rtr[0]){
-                var_dump($current);
+                //var_dump($current);
             }
 
         }elseif($column == 'sales_rep_owner' || $column == 'sales_rep_splitter'){
@@ -951,22 +976,31 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date' ||
-                                $columns[$c] == 'date_event'                                                
+    						if($columns[$c] == 'campaign_option_start_date'                                                                                
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
-    						}elseif($columns[$c] == 'unit_start_time' || $columns[$c] == 'duration_impression' || $columns[$c] == 'duration_spot' ){
-                                    if (substr($spreadSheet[$s][$c], 0) == 'PM') {
-                                        $temp = $base->formatHour("hh:mm:ss","hh:mm",$spreadSheet[$s][$c]);
-                                        $spreadSheetV2[$s][$columns[$c]] = $temp;
-                                    }
-                                    //$temp = explode('PM', $spreadSheet[$s][$c]);
-                                    //$temp = $base->formatHour("hh:mm:ss","hh:mm",$spreadSheet[$s][$c]);
-                                    //$spreadSheetV2[$s][$columns[$c]] = $temp;                                                        
+    						}elseif ($columns[$c] == 'date_event') {
+                                $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                            
+                            }elseif($columns[$c] == 'unit_start_time' || $columns[$c] == 'duration_impression' || $columns[$c] == 'duration_spot' ){
 
-                            }elseif($columns[$c] == 'agency_commission'){
+                                    $temp = explode(" ", $spreadSheet[$s][$c]);
+
+                                    $time = trim($temp[0]);
+                                    $period = trim($temp[1]);
+
+                                    if($period == "PM"){
+                                        $hour = date("H:i:s",strtotime($time) + (3600*12) );
+                                    }else{
+                                        $hour = $time;
+                                    }
+
+                                    $spreadSheetV2[$s][$columns[$c]] = $hour;        
+
+                            } elseif($columns[$c] == 'agency_commission'){
                                 
                                 if(trim($spreadSheet[$s][$c]) == ""){
                                     $temp = 0.0;
@@ -1771,7 +1805,7 @@ class chain extends excel{
                                      'charge_type',
                                      'product',
                                      'campaign',
-                                     'order',
+                                     'order_reference',
                                      'schedule_event',
                                      'spot_status',
                                      'date_event', //DATE
@@ -1797,7 +1831,7 @@ class chain extends excel{
                                      'charge_type',
                                      'product',
                                      'campaign',
-                                     'order',
+                                     'order_reference',
                                      'schedule_event',
                                      'spot_status',
                                      'date_event', //DATE
@@ -1823,7 +1857,7 @@ class chain extends excel{
                                      'charge_type',
                                      'product',
                                      'campaign',
-                                     'order',
+                                     'order_reference',
                                      'schedule_event',
                                      'spot_status',
                                      'date_event', //DATE
@@ -1848,7 +1882,7 @@ class chain extends excel{
                                      'charge_type',
                                      'product',
                                      'campaign',
-                                     'order',
+                                     'order_reference',
                                      'schedule_event',
                                      'spot_status',
                                      'date_event', //DATE
