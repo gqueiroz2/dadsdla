@@ -2,7 +2,7 @@
 	<tr>
 		<th style="background-color: #0070c0" colspan="14">
 			<span>
-				{{$data['region']}} - Month : BKGS - {{$data['year']}} ({{$data['currency'][0]['name']}}/{{strtoupper($data['value'])}})
+				{{$data['region']}} - Month : BKGS - {{$data['year']}} ({{strtoupper($data['currency'][0]['name'])}}/{{strtoupper($data['value'])}})
 			</span>
 		</th>
 	</tr>
