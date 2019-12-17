@@ -47,7 +47,8 @@
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->year($regionID)}}                    
-                        </div>  
+                        </div> 
+
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))
@@ -55,6 +56,7 @@
                             @endif
                             {{$render->months()}}
                         </div>
+                        
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Brand: </span></label>
                             @if($errors->has('brand'))

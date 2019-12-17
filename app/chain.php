@@ -31,7 +31,7 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
-
+        
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         
         $into = $this->into($columns);      
@@ -95,15 +95,26 @@ class chain extends excel{
             $current = $this->localCurrencyToDolar($con,$current,$year);
         } 
 
+        if($table == "insights"){
+            $current = $this->fixShareAccounts($current);
+        } 
+
         if($table == "bts"){
             $current = $this->fixShareAccountsBTS($con,$current);            
         }       
-      
+
+        for ($c=0; $c < sizeof($current); $c++) { 
+            var_dump($current[$c]);
+        }
+
+
+      /*
         $into = $this->into($columnsS);		
+
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-   		return $complete;
+  // 		return $complete;*/
         
     }  
 
@@ -295,7 +306,6 @@ class chain extends excel{
         $values = $this->values($spreadSheet,$columns);
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
-        //var_dump($ins);
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
@@ -398,6 +408,21 @@ class chain extends excel{
                     $current[$c]['sales_rep'] = $sales1;
                     $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
                     $newC['sales_rep'] = $temp3[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                }
+
+                $temp4 = explode(",", $current[$c]['sales_rep']);
+
+                if(sizeof($temp4) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp4[0]);
+                    $sales2 = trim($temp4[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp4[1];
                     $newC['gross_revenue'] = $newC['gross_revenue']/2;
                     array_push($current, $newC);
 
@@ -723,7 +748,7 @@ class chain extends excel{
 			}
             
             if(!$rtr[0]){
-                var_dump($current);
+                //var_dump($current);
             }
 
         }elseif($column == 'sales_rep_owner' || $column == 'sales_rep_splitter'){
@@ -919,6 +944,8 @@ class chain extends excel{
 
         $allBrands = $bd->getBrandUnit($con);
 
+        //$spreadSheetV2 = 0;
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             for ($c=0; $c < sizeof($columns); $c++) { 
                 if($columns[$c] != ''){
@@ -949,13 +976,31 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date'
-                                
+    						if($columns[$c] == 'campaign_option_start_date'                                                                                
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
-    						}elseif($columns[$c] == 'agency_commission'){
+    						}elseif ($columns[$c] == 'date_event') {
+                                $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                            
+                            }elseif($columns[$c] == 'unit_start_time' || $columns[$c] == 'duration_impression' || $columns[$c] == 'duration_spot' ){
+
+                                    $temp = explode(" ", $spreadSheet[$s][$c]);
+
+                                    $time = trim($temp[0]);
+                                    $period = trim($temp[1]);
+
+                                    if($period == "PM"){
+                                        $hour = date("H:i:s",strtotime($time) + (3600*12) );
+                                    }else{
+                                        $hour = $time;
+                                    }
+
+                                    $spreadSheetV2[$s][$columns[$c]] = $hour;        
+
+                            } elseif($columns[$c] == 'agency_commission'){
                                 
                                 if(trim($spreadSheet[$s][$c]) == ""){
                                     $temp = 0.0;
@@ -1035,9 +1080,9 @@ class chain extends excel{
     					}
     				}
                 }
-			}
-		}
 
+			}
+		} 
         
 		$spreadSheetV2 = array_values($spreadSheetV2);
 		return $spreadSheetV2;
@@ -1215,7 +1260,22 @@ class chain extends excel{
     					return $this->cmapsColumns;
     					break;
     			}
-    			break;
+            case 'insights':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->insightsColumnsF;
+                        break;
+                    case 'second':
+                        return $this->insightsColumnsS;
+                        break;
+                    case 'third':
+                        return $this->insightsColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->insightsColumns;
+                        break;
+                }    			
+                break;
     		
     		
     	}
@@ -1735,8 +1795,107 @@ class chain extends excel{
                                        'gross_revenue' // DOUBLE
                                       );
 
-
+    public $insightsColumnsF = array('brand',
+                                     'brand_feed',
+                                     'sales_rep',
+                                     'agency',
+                                     'client',
+                                     'month',
+                                     'currency',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date_event', //DATE
+                                     'unit_start_time', //TIME
+                                     'duration_spot', //TIME
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression', //DATE
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue' //DOUBLE
+    );
 	
+
+    public $insightsColumnsS = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency',
+                                     'client',
+                                     'month',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date_event', //DATE
+                                     'unit_start_time', //TIME
+                                     'duration_spot', //TIME
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue' //DOUBLE
+    );
+
+
+    public $insightsColumnsT = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency_id',
+                                     'client_id',
+                                     'month',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date_event', //DATE
+                                     'unit_start_time', //TIME
+                                     'duration_spot', //TIME
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue' //DOUBLE
+    );
+
+    public $insightsColumns = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency_id',
+                                     'client_id',
+                                     'month',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date_event', //DATE
+                                     'unit_start_time', //TIME
+                                     'duration_spot', //TIME
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue' //DOUBLE
+    );
 
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');

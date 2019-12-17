@@ -146,7 +146,14 @@ class ChainController extends Controller{
             case 'digital':
                 $dg = new digital();
                 $spreadSheet = $dg->excelToBase($spreadSheet);
-                break;		
+                break;	
+            case 'insights':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                unset($spreadSheet[2]);
+                $spreadSheet = array_values($spreadSheet);
+                //var_dump($spreadSheet);	
+                break;
 		}
         
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
@@ -188,7 +195,7 @@ class ChainController extends Controller{
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
 
     	if($complete){
-            return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
+            //return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
 
     }
