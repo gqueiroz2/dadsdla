@@ -19,7 +19,7 @@ class analyticsController extends Controller{
     	$at = new analytics();
 
     	$something = $at->assembler($con,$sql);
-
+        
 
         return view('analytics.home');
     }

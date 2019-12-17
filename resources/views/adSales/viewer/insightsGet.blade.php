@@ -48,7 +48,7 @@
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->brandViewer()}}
+                            {{$render->brand($brand)}}
                         </div>
 
                         <div class="col">

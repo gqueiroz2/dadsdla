@@ -22,7 +22,7 @@ class CheckElements extends Model{
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);		
 		}
 		
-		$brands = false;//$this->checkNewBrands($conDLA,$con,$table,$sql);
+		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
 		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
 		if($table == "cmaps"){
@@ -53,8 +53,11 @@ class CheckElements extends Model{
 		$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
 		$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
 		$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
+		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
+
 
 		$rtr = array(
+				'brands' => $brands,
 				'salesReps' => $salesReps,
 				'clients' => $clients,
 				'agencies' => $agencies,
@@ -226,8 +229,6 @@ class CheckElements extends Model{
 		
 		$sr = new salesRep();
 
-
-
 		if($table != "sf_pr"){
 			$tableDLA = "sales_rep_unit";
 			
@@ -255,6 +256,8 @@ class CheckElements extends Model{
 		if( is_array($new) ){
 			$prop = array();
 			for ($n=0; $n < sizeof($new); $n++) { 
+				$son =  explode("/",$new[$n]);
+
 				$temp = explode(",",$new[$n]);
 				unset($tp[$n]);
 				if(sizeof($temp) > 1){
@@ -263,9 +266,27 @@ class CheckElements extends Model{
 					array_push($prop, $sales0);
 					array_push($prop, $sales1);
 				}else{
-					array_push($prop, $new[$n]);
+					$temp2 =  explode("/",$new[$n]);
+					if(sizeof($temp2) > 1){
+						$sales0 = trim($temp2[0]);
+						$sales1 = trim($temp2[1]);
+						array_push($prop, $sales0);
+						array_push($prop, $sales1);
+					}else{
+						$temp3 =  explode("|",$new[$n]);
+
+						if(sizeof($temp3) > 1){
+							$sales0 = trim($temp3[0]);
+							$sales1 = trim($temp3[1]);
+							array_push($prop, $sales0);
+							array_push($prop, $sales1);
+						}else{
+							array_push($prop,$new[$n]);
+						}
+					}
 				}
 			}
+
 			$prop = array_values(array_unique($prop));
 
 			for ($p=0; $p < sizeof($prop); $p++) { 
