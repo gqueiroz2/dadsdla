@@ -16,6 +16,12 @@ class quarterTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
     protected $type;
 
 	protected $headStyle = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '0070c0',
+            ],
+        ],
         'font' => [
             'bold' => true,
             'name' => 'Verdana',
@@ -29,7 +35,7 @@ class quarterTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
         ],
     ];
 
-    protected $BodyCenter = [
+    protected $bodyCenter = [
         'font' => [
             'name' => 'Verdana',
             'size' => 10,
@@ -65,17 +71,7 @@ class quarterTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
 
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*6)+2); $dm++) { 
             		$cellRange = "A".$dm.":H".$dm;
-            		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->BodyCenter);
-
-                    if ($this->type != "Excel") {
-                        $c++;
-
-                        if ($c == 30) {
-                            $cell = "A".($dm-1);
-                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
-                            $c = 0;
-                        }
-                    }
+            		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 
@@ -112,7 +108,31 @@ class quarterTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
 
                 if ($this->type != "Excel") {
 
-                    $cellRange = "A2:N2";
+                    $c = 0;
+
+                    for ($dm=3; $dm < ((sizeof($this->data['mtx'])*6)+2); $dm++) {
+
+                        $c++;
+
+                        if ($c == 30) {
+
+                            $cell = "A".($dm-1);
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cellMerge = "A".($dm).":H".($dm);
+                            $event->sheet->getDelegate()->mergeCells($cellMerge);
+
+                            $cell = "A".($dm);
+                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Quarter :(BKGS) ".$this->data['year']." (".strtoupper($this->data['currency'][0]['name']).")/".strtoupper($this->data['value'].")"));
+
+                            $event->sheet->getDelegate()->getStyle($cellMerge)->applyFromArray($this->headStyle);
+
+                            $c = 0;
+                        }
+
+                    }
+
+                    $cellRange = "A2:H2";
                     $event->sheet->getDelegate()->mergeCells($cellRange);
 
                     $event->sheet->getDelegate()->getPageSetup()

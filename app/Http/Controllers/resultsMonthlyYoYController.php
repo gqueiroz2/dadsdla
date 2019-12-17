@@ -107,9 +107,12 @@ class resultsMonthlyYoYController extends Controller{
         $currencyExcel = $pRate;
         $valueExcel = $value;
         $brandsExcel = $brands;
-        $title = $form." - YoY Month.xlsx";
 
-    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'thirdPosExcel', 'currencyExcel', 'valueExcel', 'brandsExcel', 'title'));
+        $title = $form." - YoY Month";
+        $titleExcel = $form." - YoY Month.xlsx";
+        $titlePdf = $form." - YoY Month.pdf";
+
+    	return view("adSales.results.5monthlyYoYPost", compact('matrix', 'render', 'salesRegion', 'brand', 'year', 'brands', 'base', 'form', 'pRate', 'value', 'source', 'region', 'rName', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'thirdPosExcel', 'currencyExcel', 'valueExcel', 'brandsExcel', 'title', 'titleExcel', 'titlePdf'));
 	}
 
 }

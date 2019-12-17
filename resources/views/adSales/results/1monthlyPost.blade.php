@@ -116,7 +116,6 @@
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
 				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
-				var title = "<?php echo $title; ?>";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');

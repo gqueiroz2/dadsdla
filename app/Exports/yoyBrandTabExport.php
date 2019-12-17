@@ -334,8 +334,6 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
     	return [
     		AfterSheet::class => function(AfterSheet $event){
 
-                $c = 0;
-
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
                 
@@ -356,29 +354,9 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->brandName($this->data['mtx'][$b][0][0]));
                 }
 
-                $c = 0;
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*7)+2); $dm++) { 
                     $cellRange = "A".$dm.":O".$dm;
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
-
-                    if ($this->type != "Excel") {
-                        $c++;
-
-                        if ($c == 5) {
-                            $cell = "A".($i-2);
-                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
-
-                            $cellMerge = "A".($i-1).":O".($i-1);
-                            $event->sheet->getDelegate()->mergeCells($cellMerge);
-
-                            $cell = "A".($i-1);
-                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Year Over Year : BKGS - ".$this->data['year']." (".strtoupper($this->data['currency'][0]['name']).")/".strtoupper($this->data['value'].")"));
-
-                            $event->sheet->getDelegate()->getStyle($cellMerge)->applyFromArray($this->headStyle);
-                            
-                            $c = 0;
-                        }
-                    }
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 
@@ -420,6 +398,26 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
                 }
 
                 if ($this->type != "Excel") {
+
+                    $c = 0;
+                    for ($i=3; $i < ((sizeof($this->data['mtx'])*7)+1); $i+=7) { 
+                        $c++;
+
+                        if ($c == 5) {
+                            $cell = "A".($i-2);
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cellMerge = "A".($i-1).":O".($i-1);
+                            $event->sheet->getDelegate()->mergeCells($cellMerge);
+
+                            $cell = "A".($i-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Year Over Year : BKGS - ".$this->data['year']." (".strtoupper($this->data['currency'][0]['name']).")/".strtoupper($this->data['value'].")"));
+
+                            $event->sheet->getDelegate()->getStyle($cellMerge)->applyFromArray($this->headStyle);
+                            
+                            $c = 0;
+                        }
+                    }
 
                     $cellRange = "A2:O2";
                     $event->sheet->getDelegate()->mergeCells($cellRange);
