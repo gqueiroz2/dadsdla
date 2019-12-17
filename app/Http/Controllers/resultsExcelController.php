@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 class resultsExcelController extends Controller{
 
@@ -50,6 +51,7 @@ class resultsExcelController extends Controller{
 
                 $value = Request::get("valueExcel");
                 $title = Request::get("title");
+                $auxTitle = Request::get("auxTitle");
 
                 $b = new brand();
                 $brand = $b->getBrand($con);
@@ -114,7 +116,9 @@ class resultsExcelController extends Controller{
 
                 $labels = "exports.results.summary.summaryExport";
 
-                return Excel::download(new summaryExport($data, $labels, $auxData), $title);
+                $typeExport = Request::get("typeExport");
+
+                return Excel::download(new summaryExport($data, $labels, $auxData, $typeExport, $auxTitle), $title);
         }
 
         public function resultsMonth(){
@@ -168,7 +172,10 @@ class resultsExcelController extends Controller{
 
                 $label = "exports.results.month.monthExport";
 
-                return Excel::download(new monthExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new monthExport($data, $label, $typeExport, $auxTitle), $title);
         }
 
 	public function resultsQuarter(){
@@ -226,7 +233,10 @@ class resultsExcelController extends Controller{
 
                 $label = "exports.results.quarter.quarterExport";
 
-                return Excel::download(new quarterExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new quarterExport($data, $label, $typeExport, $auxTitle), $title);
 	}
 
         public function resultsYoYBrand(){
@@ -285,7 +295,10 @@ class resultsExcelController extends Controller{
                 $title = Request::get("title");
                 //var_dump($matrix);
 
-                return Excel::download(new yoyBrandExport($data, $label), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new yoyBrandExport($data, $label, $typeExport, $auxTitle), $title);
         }
 
         public function resultsYoYMonth(){
@@ -345,7 +358,10 @@ class resultsExcelController extends Controller{
                 $title = Request::get("title");
                 //var_dump($matrix[1]);
 
-                return Excel::download(new yoyMonthExport($data, $labels), $title);
+                $typeExport = Request::get("typeExport");
+                $auxTitle = Request::get("auxTitle");
+
+                return Excel::download(new yoyMonthExport($data, $labels, $typeExport, $auxTitle), $title);
         }
 
         public function resultsShare(){
@@ -398,57 +414,6 @@ class resultsExcelController extends Controller{
                 $report[1] = "$salesRegion - Digital Share : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
 
                 return Excel::download(new shareExport($final, $report, $salesRegion), $title);
-        }
-
-        public function performanceCore(){
-                
-                $db = new dataBase();
-                $con = $db->openConnection("DLA");
-
-                $region = Request::get("regionExcel");
-
-                $r = new region();
-                $tmp = $r->getRegion($con,array($region));
-
-                if(is_array($tmp)){
-                        $salesRegion = $tmp[0]['name'];
-                }else{  
-                        $salesRegion = $tmp['name'];
-                }
-
-                //ano consultado
-                $years = Request::get("yearExcel");
-
-                $base = new base();
-                $months = $base->month;
-
-                $b = new brand();
-                $brands = $b->getBrand($con);
-
-                $tmp = json_decode(base64_decode(Request::get("currencyExcel")));
-
-                $currency[0]['id'] = $tmp->id;
-                $currency[0]['name'] = $tmp->name;
-
-                //gross ou net
-                $value = Request::get("valueExcel");
-                //nome do excel e do relatorio
-                $title = Request::get("title");
-
-                $ge = new generateExcel();
-
-                $values = $ge->selectDataResults($con, $region, $years, $brands, "ytd", $currency, $value, $months);
-
-                $valuesPlan = $ge->selectDataResults($con, $region, $years, $brands, "sales", $currency, $value, $months);
-
-                $final = array("ytd" => $values[0], 'digital' => $values[1], "sales" => $valuesPlan[0]);
-
-                $report[0] = "$salesRegion - TV Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-                $report[1] = "$salesRegion - Digital Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-
-                $report[2] = "$salesRegion - Plan by Sales Performance Core : BKGS - ".$years." (".$currency[0]['name']."/".strtoupper($value).")";
-
-                return Excel::download(new coreExport($final, $report, $salesRegion), $title);
         }
 
 }

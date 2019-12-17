@@ -40,12 +40,12 @@
 						{{$render->position("third")}}
 					</div>				
 
-					<div class="col-sm">
+					<div class="col-sm-2">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						{{$render->currency()}}
 					</div>
 
-					<div class="col-sm">
+					<div class="col-sm-2">
 						<label class="labelLeft"><span class="bold"> Value: </span></label>
 						{{$render->value()}}
 					</div>
@@ -65,9 +65,14 @@
 		<div class="col-sm"></div>
 		<div class="col-sm"></div>
 		<div class="col-sm"></div>
-		<div class="col-sm"></div>
 		<div class="col-sm-2" style="color: #0070c0;font-size: 22px;">
 			<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
+		</div>
+		<div class="col-sm-2">
+			<select id="ExcelPDF" class="form-control">
+				<option value="Excel">Excel</option>
+				<option value="PDF">PDF</option>
+			</select>
 		</div>
 		<div class="col-sm-2">
 			<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -94,6 +99,14 @@
 
 			ajaxSetup();
 
+			$("#ExcelPDF").change(function(event){
+				if ($("#ExcelPDF").val() == "PDF") {
+					$("#excel").text("Generate PDF");
+				}else{
+					$("#excel").text("Generate Excel");
+				}
+			});
+
 			$("#excel").click(function(event){
 
 				var firstPosExcel = "<?php echo $firstPosExcel; ?>";
@@ -103,50 +116,89 @@
 				var yearExcel = "<?php echo base64_encode(json_encode($yearExcel)); ?>";
 				var currencyExcel = "<?php echo base64_encode(json_encode($currencyExcel)); ?>";
 				var brandsExcel = "<?php echo base64_encode(json_encode($brandsExcel)); ?>";
-				var title = "<?php echo $title; ?>";
 
 				var div = document.createElement('div');
 				var img = document.createElement('img');
 				img.src = '/loading_excel.gif';
-				div.innerHTML = "Generating Excel...<br/>";
+				div.innerHTML = "Generating File...<br/>";
 				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;     background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
 				div.appendChild(img);
 				document.body.appendChild(div);
 
-				$.ajax({
-					xhrFields: {
-						responseType: 'blob',
-					},
-					url: "/generate/excel/results/month",
-					type: "POST",
-					data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, brandsExcel},
-					/*success: function(output){
-						$("#vlau").html(output);
-					},*/
-					success: function(result, status, xhr){
-						var disposition = xhr.getResponseHeader('content-disposition');
-				        var matches = /"([^"]*)"/.exec(disposition);
-				        var filename = (matches != null && matches[1] ? matches[1] : title);
+				var typeExport = $("#ExcelPDF").val();
+				var auxTitle = "<?php echo $title; ?>";
 
-						// The actual download
-				        var blob = new Blob([result], {
-				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-				        });
-				        var link = document.createElement('a');
-				        link.href = window.URL.createObjectURL(blob);
-				        link.download = filename;
+				if (typeExport == "Excel") {
 
-				        document.body.appendChild(link);
+					var title = "<?php echo $titleExcel; ?>";
 
-				        link.click();
-				        document.body.removeChild(link);
-				        document.body.removeChild(div);
-					},
-					error: function(xhr, ajaxOptions,thrownError){
-						document.body.removeChild(div);
-                        alert(xhr.status+" "+thrownError);
-                    }
-				});
+					$.ajax({
+						xhrFields: {
+							responseType: 'blob',
+						},
+						url: "/generate/excel/results/month",
+						type: "POST",
+						data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, brandsExcel, typeExport, auxTitle},
+						/*success: function(output){
+							$("#vlau").html(output);
+						},*/
+						success: function(result, status, xhr){
+							var disposition = xhr.getResponseHeader('content-disposition');
+					        var matches = /"([^"]*)"/.exec(disposition);
+					        var filename = (matches != null && matches[1] ? matches[1] : title);
+
+							// The actual download
+					        var blob = new Blob([result], {
+					            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					        });
+					        var link = document.createElement('a');
+					        link.href = window.URL.createObjectURL(blob);
+					        link.download = filename;
+
+					        document.body.appendChild(link);
+
+					        link.click();
+					        document.body.removeChild(link);
+					        document.body.removeChild(div);
+						},
+						error: function(xhr, ajaxOptions,thrownError){
+							document.body.removeChild(div);
+	                        alert(xhr.status+" "+thrownError);
+	                    }
+					});
+				}else{
+					var title = "<?php echo $titlePdf; ?>";
+					
+					$.ajax({
+						xhrFields: {
+							responseType: 'blob',
+						},
+						url: "/generate/excel/results/month",
+						type: "POST",
+						data: {regionExcel, valueExcel, yearExcel, currencyExcel, title, firstPosExcel, secondPosExcel, brandsExcel, typeExport, auxTitle},
+						/*success: function(output){
+							$("#vlau").html(output);
+						},*/
+						success: function(result, status, xhr){
+							var disposition = xhr.getResponseHeader('content-disposition');
+					        var matches = /"([^"]*)"/.exec(disposition);
+					        var filename = (matches != null && matches[1] ? matches[1] : title);
+					        var link = document.createElement('a');
+					        link.href = window.URL.createObjectURL(result);
+					        link.download = filename;
+
+					        document.body.appendChild(link);
+
+					        link.click();
+					        document.body.removeChild(link);
+					        document.body.removeChild(div);
+						},
+						error: function(xhr, ajaxOptions,thrownError){
+							document.body.removeChild(div);
+	                        alert(xhr.status+" "+thrownError);
+	                    }
+					});
+				}
 			});
 
 		});

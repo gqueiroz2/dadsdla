@@ -163,10 +163,11 @@
                     var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
                     var agencyExcel = "<?php echo base64_encode(json_encode($agencyExcel)); ?>";
                     var clientExcel = "<?php echo base64_encode(json_encode($clientExcel)); ?>";
-                    var mtx = "<?php echo base64_encode(json_encode($mtx)); ?>";
+                    var mtx = <?php echo (json_encode($mtx)); ?>;
                     var currencyExcel = "<?php echo $currencyExcel; ?>";
                     var valueExcel = "<?php echo $valueExcel; ?>";
                     var title = "<?php echo $title; ?>";
+                    var especificNumber = "<?php echo $especificNumberExcel; ?>";
 
                     var div = document.createElement('div');
                     var img = document.createElement('img');
@@ -182,7 +183,7 @@
                         },
                         url: "/generate/excel/viewer/vBase",
                         type: "POST",
-                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,$mtx},
+                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/

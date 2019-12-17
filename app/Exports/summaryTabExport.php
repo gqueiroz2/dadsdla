@@ -16,6 +16,7 @@ class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
 	protected $data;
 	protected $tab;
 	protected $headInfo;
+    protected $type;
 
 	protected $headStyle = [
         'font' => [
@@ -31,71 +32,24 @@ class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
         ],
     ];
 
-    protected $lineBodyPair = [
+    protected $bodyCenter = [
         'font' => [
-            'bold' => true,
             'name' => 'Verdana',
             'size' => 10,
-            'color' => array('rgb' => '000000')
         ],
         'alignment' => [
             'horizontal' => 'center',
             'vertical' => 'center',
             'wrapText' => true
         ],
-        'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => 'dce6f1',
-            ],
-        ],
     ];
 
-    protected $lineBodyOdd = [
-        'font' => [
-            'bold' => true,
-            'name' => 'Verdana',
-            'size' => 10,
-            'color' => array('rgb' => '000000')
-        ],
-        'alignment' => [
-            'horizontal' => 'center',
-            'vertical' => 'center',
-            'wrapText' => true
-        ],
-        'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => 'c3d8ef',
-            ],
-        ],
-    ];
-
-    protected $lastLineBody = [
-        'font' => [
-            'bold' => true,
-            'name' => 'Verdana',
-            'size' => 10,
-            'color' => array('rgb' => 'FFFFFF')
-        ],
-        'alignment' => [
-            'horizontal' => 'center',
-            'vertical' => 'center',
-            'wrapText' => true
-        ],
-        'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'startColor' => [
-                'argb' => '0f243e',
-            ],
-        ],
-    ];
-
-    public function __construct($view, $data, $tab, $headInfo){
+    public function __construct($view, $data, $tab, $headInfo, $type){
 		$this->view = $view;
 	    $this->data = $data;
 	    $this->tab = $tab;
 	    $this->headInfo = $headInfo;
+        $this->type = $type;
 	}
 
 	public function view(): View{
@@ -121,15 +75,14 @@ class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
 
                 for ($d=0; $d < sizeof($this->data); $d++) { 
                 	$cellRange = "A".($d+3).":".$letter.($d+3);
-                	if (($d+3) % 2 == 0) {
-                		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
-                	}else{
-                		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
-                	}
+                    $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
                 }
 
-                $cellRange = "A".(sizeof($this->data)+2).":".$letter.(sizeof($this->data)+2);
-                $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+                }
             },
         ];
     }
@@ -146,9 +99,9 @@ class summaryTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitl
             'D' => '#,##0',
             'E' => '#,##0',
             'F' => '#,##0',
-            'G' => '#0%',
-            'H' => '#0%',
-            'I' => '#0%'
+            'G' => '0%',
+            'H' => '0%',
+            'I' => '0%'
         ];
     }
 }

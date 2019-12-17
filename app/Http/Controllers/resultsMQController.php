@@ -102,9 +102,11 @@ class resultsMQController extends Controller{
                 $valueExcel = $value;
                 $brandsExcel = $brandID;
 
-                $title = $salesRegion." - Month.xlsx";
+                $titleExcel = $salesRegion." - Month.xlsx";
+                $titlePdf = $salesRegion." - Month.pdf";
+                $title = $salesRegion." - Month";
 
-                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title', 'brandsExcel'));
+                return view('adSales.results.1monthlyPost',compact('render','region','brand','currency','value','currencyS','year','mtx','form', 'salesRegion', 'rName', 'regionID', 'regionExcel', 'yearExcel', 'firstPosExcel', 'secondPosExcel', 'currencyExcel', 'valueExcel', 'title', 'titleExcel', 'titlePdf', 'brandsExcel'));
         }
 
 
@@ -191,9 +193,11 @@ class resultsMQController extends Controller{
                 $valueExcel = $value;
                 $brandsExcel = $brands;
 
-                $title = $region." - Quarter.xlsx";
+                $titleExcel = $region." - Quarter.xlsx";
+                $titlePdf = $region." - Quarter.pdf";
+                $title = $region." - Quarter";
 
-                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','title', 'brandsExcel'));
+                return view("adSales.results.2quarterPost", compact('salesRegion', 'brand', 'qRender', 'matrix', 'pRate', 'value', 'year', 'form', 'region', 'rName','regionExcel','yearExcel','firstPosExcel','secondPosExcel','currencyExcel','valueExcel','titleExcel', 'titlePdf', 'title', 'brandsExcel'));
 
 	} 
 

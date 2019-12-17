@@ -1,8 +1,8 @@
 <table>
 	<tr>
-		<th colspan="8" style="background-color: #0070c0">
+		<th colspan="8" style="background-color: #0070c0;">
 			<span>
-				{{$data['region']}} - Quarter :({{$data['form']}}) {{$data['year']}} ({{$data['currency'][0]['name']}}/{{strtoupper($data['value'])}})
+				{{$data['region']}} - Quarter :(BKGS) {{$data['year']}} ({{$data['currency'][0]['name']}}/{{strtoupper($data['value'])}})
 			</span>
 		</th>
 	</tr>
@@ -115,8 +115,6 @@
 				@endfor
 			</tr>
 		@endfor
-
-		<tr><td> &nbsp; </td></tr>
-
+		<tr><td>&nbsp;</td></tr>
 	@endfor
 </table>

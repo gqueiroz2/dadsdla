@@ -1,6 +1,6 @@
 <table>
 	<tr>
-		<th colspan="15" style="background-color:#0070c0; ">
+		<th colspan="15" style="background-color:#0070c0;">
 			{{$data['region']}} - Year Over Year : BKGS - {{$data['year']}} ({{strtoupper($data['currency'][0]['name'])}}/{{strtoupper($data['value'])}})			
 		</th>
 	</tr>
