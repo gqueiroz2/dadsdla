@@ -1,8 +1,11 @@
 @extends('layouts.mirror')
 @section('title', 'Insights Viewer')
 @section('head')
+
     <script src="/js/viewer.js"></script>
+
     <?php include(resource_path('views/auth.php'));?>
+    
 @endsection
 @section('content')
 
