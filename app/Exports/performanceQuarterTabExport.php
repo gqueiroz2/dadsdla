@@ -13,12 +13,13 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
 
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
 	    'font' => [
@@ -38,7 +39,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
 	    'font' => [
@@ -70,7 +71,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
         'font' => [
@@ -90,7 +91,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '1E90FF',
+                'rgb' => '1E90FF',
             ],
         ],
         'font' => [
@@ -110,7 +111,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '004b84',
+                'rgb' => '004b84',
             ],
         ],
         'font' => [
@@ -130,7 +131,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '000080',
+                'rgb' => '000080',
             ],
         ],
         'font' => [
@@ -150,7 +151,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
         'font' => [
@@ -169,7 +170,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff6600',
+                'rgb' => 'ff6600',
             ],
         ],
         'font' => [
@@ -188,7 +189,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ffff00',
+                'rgb' => 'ffff00',
             ],
         ],
         'font' => [
@@ -206,7 +207,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '009933',
+                'rgb' => '009933',
             ],
         ],
         'font' => [
@@ -225,7 +226,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -244,7 +245,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '000000',
+                'rgb' => '000000',
             ],
         ],
         'font' => [
@@ -263,7 +264,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '002060',
+                'rgb' => '002060',
             ],
         ],
         'font' => [
@@ -282,7 +283,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -301,7 +302,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '6600ff',
+                'rgb' => '6600ff',
             ],
         ],
         'font' => [
@@ -320,7 +321,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '004b84',
+                'rgb' => '004b84',
             ],
         ],
         'font' => [
@@ -339,7 +340,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '808080',
+                'rgb' => '808080',
             ],
         ],
         'font' => [
@@ -358,7 +359,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '88cc00',
+                'rgb' => '88cc00',
             ],
         ],
         'font' => [
@@ -377,7 +378,7 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
         'font' => [
@@ -392,9 +393,10 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
         ],
     ];
 
-    public function __construct($view,$data){
-    	$this->view = $view;
-    	$this->data = $data;
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
     }
 
     public function view(): View{
@@ -479,6 +481,25 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
 
                 	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->tierName($this->data['tiers'][$t]));
 
+                    if ($this->type != "Excel") {
+
+                        if ($t > 0) {
+                            $cell = "A".($numberTier-2);   
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cell = "A".($numberTier-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Office ".$this->data['year']." (".$this->data['currency'][0]['name']."/".strtoupper($this->data['value']).")");
+                            $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->headStyle);
+                        }
+
+                        $cellRange = "A".($numberTier-1).":G".($numberTier-1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                        $cellRange = "A".($numberTier+1).":G".($numberTier+1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+                    }
+
+                    $c = 0;
                 	for ($b=0; $b < sizeof($this->data['auxTiers'][$t]); $b++) {
                 		$cellRange = "A".$numberBrand;
 
@@ -487,11 +508,27 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
 						$cellRange = "A".$numberBrand.":A".($numberBrand+4);
                 		$event->sheet->getDelegate()->mergeCells($cellRange);
 
+                        if ($this->type != "Excel") {
+                            $cellRange = "A".($numberBrand+5).":G".($numberBrand+5);
+                            $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                            $c++;
+                            if ($c == 5) {
+                                $cell = "A".($numberBrand+4);
+                                $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                                $cell = "A".($numberBrand+5);
+                                $event->sheet->getCell($cell)->setValue($this->data['tiers'][$t]);
+                                $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->tierName($this->data['tiers'][$t]));
+
+                            }
+                        }
+
                 		for ($l=0; $l <= 4; $l++) {
                 			$cellRange = "B".($numberBrand+$l).":G".($numberBrand+$l);
                 			$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
                 			if ($l == 4) {
-                				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));
+                				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "0%"));
                 			}else{
                 				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
                 			}
@@ -505,6 +542,12 @@ class performanceQuarterTabExport implements FromView, WithEvents, ShouldAutoSiz
                 	}
 
                 	$numberTier += ((sizeof($this->data['auxTiers'][$t])*6)+2);
+                }
+
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
                 }
             }
     	];

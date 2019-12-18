@@ -50,7 +50,10 @@ class performanceExcelController extends Controller{
 
 		$title = Request::get('title');
 
-		return Excel::download(new performanceExecutiveExport($data,$labels), $title);
+		$typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+		return Excel::download(new performanceExecutiveExport($data, $labels, $typeExport, $auxTitle), $title);
   	}
 
   	public function bonus(){
@@ -84,7 +87,10 @@ class performanceExcelController extends Controller{
 
 		$title = Request::get('title');
 
-		return Excel::download(new performanceBonusExport($data,$labels), $title);
+		$typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+		return Excel::download(new performanceBonusExport($data, $labels, $typeExport, $auxTitle), $title);
   	}
 
   	public function core(){
@@ -114,7 +120,10 @@ class performanceExcelController extends Controller{
 
 		$title = Request::get('title');
 
-		return Excel::download(new performanceCoreExport($data,$labels), $title);
+		$typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+		return Excel::download(new performanceCoreExport($data, $labels, $typeExport, $auxTitle), $title);
   	}
 
   	public function quarter(){
@@ -178,7 +187,10 @@ class performanceExcelController extends Controller{
 
         $title = Request::get('title');
 
-		return Excel::download(new performanceQuarterExport($data,$labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+		return Excel::download(new performanceQuarterExport($data, $labels, $typeExport, $auxTitle), $title);
   	}
 
 }
