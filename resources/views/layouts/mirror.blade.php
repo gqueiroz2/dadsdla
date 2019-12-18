@@ -114,8 +114,6 @@
                         <li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="#"> Base </a>
-								<a class="dropdown-item" href="#"> Insights </a>
 								<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
@@ -179,28 +177,6 @@
                         	
                         	{{ $bs->sources() }}
 
-                        	<!--
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 02/12/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 05/12/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 06/12/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 04/12/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	-->
                         	
                         </div>     
 {{--

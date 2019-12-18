@@ -333,7 +333,7 @@ class chain extends excel{
         if($value > 0){
             $regionID = $r->getIDRegion($con,array($region))[0]['id'];
             $pRate = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
-            $newValue = doubleval( bcdiv($value,$pRate,5) );
+            $newValue = doubleval( $value/$pRate );
         }else{
             $newValue = $value;
         }
