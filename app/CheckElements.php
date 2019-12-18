@@ -205,9 +205,14 @@ class CheckElements extends Model{
 	public function checkNewBrands($conDLA,$con,$table,$sql){
 
 		$tableDLA = "brand_unit";
-		
+			
 		$somethingDLA = "name";
-		$something = "brand";
+
+		if($table == "fw_digital"){
+			$something = "content_targeting_set_name";
+		}else{
+			$something = "brand";	
+		}	
 
 		$fromDLA = array("name");
 		$from = array($something);
