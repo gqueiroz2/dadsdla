@@ -431,7 +431,7 @@ class base extends Model{
         switch ($from) {
             case 'hh:mm:ss':
                 switch ($to) {
-                    case 'hh:mm':
+                    case 'HH:MM':
                         
                         $tmp = explode(":", $string);
                         $hour = $tmp[0].":".$tmp[1];
@@ -530,6 +530,41 @@ class base extends Model{
 
                         $newString = $dd."/".$mm."/".$aaaa;
 
+                        break;
+                    
+                    default:
+                        $newString = false;
+                        break;
+                }
+            break;
+
+            case 'mm/dd/aaaa':                
+                switch ($to) {
+                    case 'aaaa-mm-dd':
+
+                        if($string != ''){
+
+                            $tmp = explode("/", $string);
+
+                            $dd = $tmp[1];
+
+                            if($dd < 10){
+                                $dd = "0".$dd;
+                            }
+
+                            $mm = $tmp[0];
+
+                            if($mm < 10){
+                                $mm = "0".$mm;
+                            }
+                            $aaaa = $tmp[2];
+
+                            $newString = $aaaa."-".$mm."-".$dd;
+
+                        }else{
+                            $newString = "2000-01-01";
+                        }
+                        
                         break;
                     
                     default:

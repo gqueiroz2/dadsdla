@@ -16,6 +16,12 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
     protected $type;
 
 	protected $headStyle = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '0070c0',
+            ],
+        ],
         'font' => [
             'bold' => true,
             'name' => 'Verdana',
@@ -61,22 +67,9 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                $c = 0;
-
                 for ($dm=3; $dm < ((sizeof($this->data['mtx'])*6)+2); $dm++) { 
             		$cellRange = "A".$dm.":N".$dm;
             		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
-
-                    if ($this->type != "Excel") {
-                        $c++;
-
-                        if ($c == 30) {
-                            $cell = "A".($dm-1);
-                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
-                            $c = 0;
-                        }
-                    }
-
                 }
 
                 for ($dm=0; $dm < sizeof($this->data['mtx']); $dm++) { 
@@ -112,6 +105,30 @@ class monthTabExport implements FromView, WithEvents, ShouldAutoSize, WithTitle 
                 }
 
                 if ($this->type != "Excel") {
+
+                    $c = 0;
+
+                    for ($dm=3; $dm < ((sizeof($this->data['mtx'])*6)+2); $dm++) { 
+
+                        $c++;
+
+                        if ($c == 30) {
+
+                            $cell = "A".($dm-2);
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cellMerge = "A".($dm-1).":N".($dm-1);
+                            $event->sheet->getDelegate()->mergeCells($cellMerge);
+
+                            $cell = "A".($dm-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['region']." - Month : BKGS - ".$this->data['year']." (".strtoupper($this->data['currency'][0]['name']).")/".strtoupper($this->data['value'].")"));
+
+                            $event->sheet->getDelegate()->getStyle($cellMerge)->applyFromArray($this->headStyle);
+
+                            $c = 0;
+                        }
+
+                    }
 
                     $cellRange = "A2:N2";
                     $event->sheet->getDelegate()->mergeCells($cellRange);

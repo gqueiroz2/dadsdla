@@ -146,7 +146,14 @@ class ChainController extends Controller{
             case 'digital':
                 $dg = new digital();
                 $spreadSheet = $dg->excelToBase($spreadSheet);
-                break;		
+                break;	
+            case 'insights':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                unset($spreadSheet[2]);
+                $spreadSheet = array_values($spreadSheet);
+                //var_dump($spreadSheet);	
+                break;
 		}
         
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);

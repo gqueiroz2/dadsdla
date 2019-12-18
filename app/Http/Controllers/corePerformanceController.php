@@ -96,8 +96,10 @@ class corePerformanceController extends Controller{
             $valueExcel = Request::get('value');
             $tierExcel = Request::get('tier');
 
-            $title = $mtx['region']." - Performance Individual.xlsx";
+            $title = $mtx['region']." - Performance Core";
+            $titleExcel = $mtx['region']." - Performance Core.xlsx";
+            $titlePdf = $mtx['region']." - Performance Core.pdf";
             
-            return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear', 'regionExcel', 'yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title'));
+            return view("adSales.performance.0corePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear', 'regionExcel', 'yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title', 'titleExcel', 'titlePdf'));
         }
 }

@@ -14,6 +14,7 @@ class yoySemesterTabExport implements FromView, WithEvents, ShouldAutoSize, With
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
 	    'font' => [
@@ -41,10 +42,11 @@ class yoySemesterTabExport implements FromView, WithEvents, ShouldAutoSize, With
         ],
     ];
 
-    public function __construct($view, $data){
-		$this->view = $view;
-	    $this->data = $data;
-	}
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
+    }
 
 	public function view(): View{
     	return view($this->view, ['data' => $this->data]);
@@ -64,9 +66,18 @@ class yoySemesterTabExport implements FromView, WithEvents, ShouldAutoSize, With
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-                for ($dm=3; $dm < ((sizeof($this->data['mtx'])*13)+2); $dm++) { 
+                for ($dm=3; $dm < ((sizeof($this->data['mtx']))+4); $dm++) { 
                     $cellRange = "A".$dm.":J".$dm;
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->BodyCenter);
+                }
+
+                if ($this->type != "Excel") {
+                    
+                    $cellRange = "A2:J2";
+                    $event->sheet->getDelegate()->mergeCells($cellRange);
+                    $event->sheet->getDelegate()->getPageSetup()
+                    ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                    ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
                 }
             }
     	];

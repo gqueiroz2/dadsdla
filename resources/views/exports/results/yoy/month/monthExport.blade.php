@@ -63,6 +63,7 @@
 		</tr>
 		@for($b = 0; $b < sizeof($data['brands']); $b++)
 			<tr>
+				
 				@if($b != (sizeof($data['brands'])-1))
 					<td style="background-color: #0070c0; font-weight: bold; color: #FFFFFF;">
 						{{$data['brands'][$b][1]}}

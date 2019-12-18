@@ -545,7 +545,7 @@ class viewer extends Model{
 					if ($mtx[$m]['brand']) {
 						$mtx[$m]['brand'] = explode(";",$mtx[$m]['brand']);
 					}
-
+					
 					break;
 			
 			}			

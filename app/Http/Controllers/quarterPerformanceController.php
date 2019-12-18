@@ -122,9 +122,11 @@ class quarterPerformanceController extends Controller {
         $salesRepExcel = $salesRepID;
         $tiersExcel = $tiers;
 
-        $title = $region." - Performance Office.xlsx";
+        $title = $region." - Performance Office";
+        $titleExcel = $region." - Performance Office.xlsx";
+        $titlePdf = $region." - Performance Office.pdf";
 
-        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers', 'regionExcel', 'yearExcel', 'brandsExcel', 'currencyExcel', 'valueExcel', 'salesRepGroupExcel', 'salesRepExcel', 'tiersExcel', 'title'));
+        return view("adSales.performance.1quarterPost", compact('render', 'salesRegion', 'salesRepGroup', 'salesRep', 'mtx', 'rName', 'region', 'pRate', 'value', 'year', 'sales', 'tiers', 'regionExcel', 'yearExcel', 'brandsExcel', 'currencyExcel', 'valueExcel', 'salesRepGroupExcel', 'salesRepExcel', 'tiersExcel', 'title', 'titleExcel', 'titlePdf'));
         
     }
 }

@@ -128,11 +128,11 @@
 				<td style='background-color: #c3d8ef;'>Var %</td>
 				@for($q=0; $q < sizeof($data['mtx']['quarters']); $q++)
 					<td style="background-color: #c3d8ef;">
-						{{$data['mtx']['case1']['varPrc'][$s][$t][$q]/100}}
+						{{round($data['mtx']['case1']['varPrc'][$s][$t][$q])/100}}
 					</td>
 				@endfor
 				<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
-					{{$data['mtx']['case1']['totalVarPrc'][$s][$t]/100}}
+					{{round($data['mtx']['case1']['totalVarPrc'][$s][$t])/100}}
 				</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
@@ -193,11 +193,11 @@
 			<td style="background-color: #c3d8ef;">Var %</td>
 			@for($q=0; $q < sizeof($data['mtx']['quarters']); $q++)
 				<td style="background-color: #c3d8ef;">
-					{{$data['mtx']['case1']['totalSGVarPrc'][$s][$q]/100}}
+					{{round($data['mtx']['case1']['totalSGVarPrc'][$s][$q])/100}}
 				</td>
 			@endfor
 			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">
-				{{$data['mtx']['case1']['totalTotalSGVarPrc'][$s]/100}}
+				{{round($data['mtx']['case1']['totalTotalSGVarPrc'][$s])/100}}
 			</td>
 		</tr>
 	@endfor
