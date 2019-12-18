@@ -91,12 +91,17 @@ class executivePerformanceController extends Controller
         $valueExcel = Request::get('value');
         $tierExcel = Request::get('tier');
 
-        $title = $mtx['region']." - Performance Individual.xlsx";
-        $titleBonus = Request::session()->get('userName')." - Bonus.xlsx";
+        $title = $mtx['region']." - Performance Individual";
+        $titleExcel = $mtx['region']." - Performance Individual.xlsx";
+        $titlePdf = $mtx['region']." - Performance Individual.pdf";
+
+        $titleBonus = Request::session()->get('userName')." - Bonus";
+        $titleBonusExcel = Request::session()->get('userName')." - Bonus.xlsx";
+        $titleBonusPdf = Request::session()->get('userName')." - Bonus.pdf";
 
         $user = Request::session()->get('userName');
         //$user = "Lilian Akyama";
 
-        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title', 'titleBonus', 'user'));
+        return view("adSales.performance.2executivePost",compact('region','salesRepGroup','render','brand','currency','mtx','cYear','regionExcel','yearExcel', 'brandExcel', 'salesRepGroupExcel', 'salesRepExcel', 'currencyExcel', 'monthExcel', 'valueExcel', 'tierExcel', 'title', 'titleExcel', 'titlePdf', 'titleBonus', 'titleBonusExcel', 'titleBonusPdf', 'user'));
     }
 }

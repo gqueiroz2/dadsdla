@@ -1,18 +1,23 @@
-<?php 
-
-	use App\base;
-
-	$bs = new base();
-
-	date_default_timezone_set('America/Sao_Paulo');
-	
-?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<?php 
+			use App\dataBase;
+			use App\base;
+			use App\region;
+			$bs = new base();
+			$r = new region();
+			$db = new dataBase();
+
+			$con = $db->openConnection("DLA");
+
+			date_default_timezone_set('America/Sao_Paulo');
 			$userName = Request::session()->get('userName'); 
 			$userLevel = Request::session()->get('userLevel');
+			$userRegion = Request::session()->get('userRegionID');
+
+			$userRegionName = $r->getRegion($con,array($userRegion))[0]['name'];
+
 		?>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,17 +26,15 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title> D|ADS DLA - @yield('title') </title>
 
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" 
-				integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-				crossorigin="anonymous">
-		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" 
 				integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
 		</script>
+
 		<link href="/css/app.css" rel="stylesheet">
 		<link href="/css/root.css" rel="stylesheet">
 		<link href="/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
-		<script src="/components/jquery/jquery.min.js"></script>        
 		<script src="/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="/js/base.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -112,13 +115,15 @@
 	                        </div>
                         </li>
 
-                        <li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-								<a class="dropdown-item" href="#"> Insights </a>
-							</div>
-						</li>
+                        @if( ( $userLevel == "SU" ) || $userRegionName == "Brazil")
+	                        <li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
+									<a class="dropdown-item" href="{{ route('insightsGet')}}"> Insights </a>
+								</div>
+							</li>
+						@endif
 
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
@@ -131,7 +136,7 @@
 								@endif
 							</div>
 						</li>	
-
+						
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -139,7 +144,6 @@
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
 						</li>				
-
 					</ul>    
 
 					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
@@ -164,59 +168,16 @@
                             	<div class="col">                            		
 	                            	<span style="font-size: 10px;"> Bem-vindo {{$userName}}.</span>
 	                            </div>
-	                        </div><!--
-	                        <div class="row">
-                            	<div class="col">                            		
-	                            	<span style="font-size: 10px; font-weight: bold;">DLA & DNAP AdSales Reporting </span>
-	                            </div>
-	                        </div>-->
+	                        </div>
 	                        <div class="row">
                             	<div class="col" style="margin-top: -5px !important;">                            		
 	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
 	                            </div>	                            
                         	</div>
                         	
-                        	{{ $bs->sources() }}
-
-                        	<!--
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> BTS | 29/10/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> CMAPS | 25/10/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> Discovery CRM | 28/10/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	<div class="row">
-                            	<div class="col" style="margin-top: -10px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; padding: 0px;"> FreeWheel | 24/10/2019 </span>
-	                            </div>	                            
-                        	</div>
-                        	-->
+                        	{{ $bs->sources() }}                       	
                         	
                         </div>     
-{{--
-						<li class="nav-item dropdown dropleft">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> {{$userName}} </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<form method="GET" action="{{ route('logoutGet') }}">
-								@csrf
-									<input type="submit" class="dropdown-item" value="Logout">
-								</form>
-								@if($userLevel == "SU")
-									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
-								@endif
-								<a class="dropdown-item" href="{{ route('relationshipGet') }}"> RelationShip </a>
-								<a class="dropdown-item" href="{{ route('dataCurrentThrough') }}"> Data Current Through </a>
-							</div>
-						</li> --}}
 					</ul>    
 				</div>
 			@else

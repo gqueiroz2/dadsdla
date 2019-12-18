@@ -13,12 +13,13 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
 	    'font' => [
@@ -38,7 +39,7 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'dce6f1',
+                'rgb' => 'dce6f1',
             ],
         ],
     ];
@@ -47,7 +48,7 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'c3d8ef',
+                'rgb' => 'c3d8ef',
             ],
         ],
     ];
@@ -64,9 +65,10 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
         ],
     ];
 
-    public function __construct($view,$data){
+    public function __construct($view,$data,$type){
     	$this->view = $view;
     	$this->data = $data;
+        $this->type = $type;
     }
 
     public function view(): View{
@@ -88,11 +90,21 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
                 $cellRange = "A1";
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
+                if ($this->type != "Excel") {
+                    $cellRange = "A2:G2";
+                    $event->sheet->getDelegate()->mergeCells($cellRange);
+                }
+
                	$cellRange = "A3:A6";
                	$event->sheet->getDelegate()->mergeCells($cellRange);
 
                	$cellRange = "A3:G6";
                	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
+
+                if ($this->type != "Excel") {
+                    $cellRange = "A7:G7";
+                    $event->sheet->getDelegate()->mergeCells($cellRange);
+                }
 
                	$cellRange = "A8:A11";
                	$event->sheet->getDelegate()->mergeCells($cellRange);
@@ -116,7 +128,13 @@ class bonusExport implements FromView, WithEvents, ShouldAutoSize, WithTitle {
 				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
 
 				$cellRange = "C8:G11";
-				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));	
+				$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));
+
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+                }
             }
     	];
     }

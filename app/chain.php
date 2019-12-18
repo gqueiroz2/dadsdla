@@ -103,18 +103,12 @@ class chain extends excel{
             $current = $this->fixShareAccountsBTS($con,$current);            
         }       
 
-        for ($c=0; $c < sizeof($current); $c++) { 
-            var_dump($current[$c]);
-        }
-
-
-      /*
         $into = $this->into($columnsS);		
 
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-  // 		return $complete;*/
+  		return $complete;
         
     }  
 
@@ -545,6 +539,12 @@ class chain extends excel{
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['region_id'],$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['region_id'],$regionName,$current[$c]['client']);      
 
+            }elseif($table == "insights"){
+
+                $regionName = "Brazil";
+
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,1,$regionName,$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,1,$regionName,$current[$c]['client']);
             }else{                
 
                 $regionName = $rr->getRegion($con,array($current[$c]['sales_representant_office_id']))[0]['name'];

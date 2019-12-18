@@ -13,12 +13,13 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
     
 	protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
 	    'font' => [
@@ -38,7 +39,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
 	    'font' => [
@@ -70,7 +71,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
         'font' => [
@@ -90,7 +91,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '1E90FF',
+                'rgb' => '1E90FF',
             ],
         ],
         'font' => [
@@ -110,7 +111,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '004b84',
+                'rgb' => '004b84',
             ],
         ],
         'font' => [
@@ -130,7 +131,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
         'font' => [
@@ -146,9 +147,10 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
         ],
     ];
 
-    public function __construct($view,$data){
-    	$this->view = $view;
-    	$this->data = $data;
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
     }
 
     public function view(): View{
@@ -197,10 +199,34 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
 
                 	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->nameStyle);
 
+                    if ($this->type != "Excel") {
+
+                        if ($s > 0) {
+                            $cell = "A".($number-2);   
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cell = "A".($number-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['mtx']['region']." - Core ".$this->data['mtx']['year']." (".$this->data['mtx']['currency']."/".$this->data['mtx']['valueView'].") - BKGS");
+
+                            $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->headStyle);
+                        }
+
+                        $cellRange = "A".($number-1).":".$end.($number-1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                        $cellRange = "A".($number+1).":".$end.($number+1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+                    }
+
                 	$c = 0;
-                	for ($t=0; $t < $sizeTier; $t++) { 
+                	for ($t=0; $t < $sizeTier; $t++) {
                 		$cellRange = "A".($number+2+$c).":A".($number+6+$c);
                 		$event->sheet->getDelegate()->mergeCells($cellRange);
+
+                        if ($this->type != "Excel") {
+                            $cellRange = "A".($number+7+$c).":".$end.($number+7+$c);
+                            $event->sheet->getDelegate()->mergeCells($cellRange);                            
+                        }
 
                 		$cellRange = "A".($number+2+$c);
 	                	$cell = $event->sheet->getCell($cellRange)->getValue();
@@ -213,7 +239,7 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
 	                		if ($l == 1 || $l == 2 || $l == 3) {
 	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));	
 	                		}else{
-	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));	
+	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "0%"));	
 	                		}
 	                	}
 
@@ -221,6 +247,12 @@ class performanceExecutiveCase1Export implements FromView, WithEvents, ShouldAut
                 	}
 
                 	$number += (($sizeTier*5)+3+($sizeTier-1));
+                }
+
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
                 }
             }
     	];

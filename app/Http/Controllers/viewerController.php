@@ -11,149 +11,247 @@ use App\dataBase;
 use App\region;
 use App\brand;
 use App\pRate;
-use App\viewer;
+use App\viewerBase;
 use App\salesRep;
 use App\cmaps;
 use App\baseRender;
 use App\sql;
 use App\agency;
+use App\insights;
 
 class viewerController extends Controller{
 
+    public function insightsGet(){
+        $bs = new base();
+
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+        $render = new Render();
+
+        $r = new region();
+        $region = $r->getRegion($con, NULL);
+
+        $currency = new pRate();
+        $currencies = $currency->getCurrency($con); 
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $v = new viewerBase();
+
+        return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand"));
+    }
+
+    public function insightsPost(){
+       // var_dump(Request::all());
+
+        $render =  new Render();
+        $bRender = new baseRender();
+        $base = new base();
+        $months = $base->month;
+        $insights = new insights();
+
+    
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $sql = new sql();
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+
+        $salesRegion = Request::get("region");
+        $r = new region();
+
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+
+
+        $b = new brand();
+        $brands = $b->getBrand($con);
+
+        $salesCurrency = Request::get("currency");
+        $p = new pRate();
+        $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name'];
+
+        $month = Request::get("month");
+
+        $value = Request::get("value");
+
+        $year = Request::get("year");
+
+        $salesRep = Request::get("salesRep");
+
+        $agency = Request::get("agency");
+
+        $client = Request::get("client");
+
+        $check = false;
+
+        $tmp = Request::get("brand");
+
+        for ($t=0; $t < sizeof($tmp); $t++) { 
+            $brand[$t] = json_decode(base64_decode($tmp[$t]))[0];
+        }
+
+        for ($b=0; $b < sizeof($brand); $b++) { 
+            if ($brand[$b] == 9){
+                $check = true;
+            }
+        }
+        if ($check) {
+            array_push($brand, "13");
+            array_push($brand, "14");
+            array_push($brand, "15");
+            array_push($brand, "16");
+        }
+
+        var_dump($brand);
+        $table = $insights->getTable($client,$salesRep,$month,$value,$currency,$brand,$salesCurrency);
+        //return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
+    }
+
 	public function baseGet(){
 	
-                $db = new dataBase();
-                $con = $db->openConnection("DLA");
+        $bs = new base();
 
-                $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
-                $render = new Render();
-                $bRender = new baseRender();
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
 
-                $r = new region();
-                $region = $r->getRegion($con, NULL);
+        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+        $render = new Render();
+        $bRender = new baseRender();
 
-                $currency = new pRate();
-                $currencies = $currency->getCurrency($con); 
+        $r = new region();
+        $region = $r->getRegion($con, NULL);
 
-                $b = new brand();
-                $brand = $b->getBrand($con);
+        $currency = new pRate();
+        $currencies = $currency->getCurrency($con); 
 
-                $v = new viewer();
+        $b = new brand();
+        $brand = $b->getBrand($con);
 
-                return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand"));
+        $v = new viewer();
+
+        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand"));
 	}
 
 
 	public function basePost(){
 
-                $render =  new Render();
-                $bRender = new baseRender();
-                $base = new base();
-                $months = $base->month;
-                $viewer = new viewer();
+        $render =  new Render();
+        $bRender = new baseRender();
+        $base = new base();
+        $months = $base->month;
+        $viewer = new viewerBase();
 
-        	
-                $db = new dataBase();
-                $con = $db->openConnection("DLA");
+	
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
 
-                $sql = new sql();
+        $sql = new sql();
 
-                $validator = Validator::make(Request::all(),[
-                    'region' => 'required',
-                    'sourceDataBase' => 'required',
-                    'year' => 'required',
-                    'month' => 'required',
-                    'brand' => 'required',
-                    'salesRep' => 'required',
-                    'currency' => 'required',
-                    'value' => 'required',
-                ]);
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'sourceDataBase' => 'required',
+            'year' => 'required',
+            'month' => 'required',
+            'brand' => 'required',
+            'salesRep' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+        ]);
 
-                if ($validator->fails()) {
-                    return back()->withErrors($validator)->withInput();
-                }
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
-                $years = array($cYear = intval(date('Y')), $cYear - 1);
-                $salesRegion = Request::get("region");
-                $r = new region();
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $salesRegion = Request::get("region");
+        $r = new region();
 
-                //var_dump($salesRegion);
-
-                $region = $r->getRegion($con,null);
-                $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
 
-                $b = new brand();
-                $brands = $b->getBrand($con);
+        $b = new brand();
+        $brands = $b->getBrand($con);
 
-                $salesCurrency = Request::get("currency");
-                $p = new pRate();
-                $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name']; 
+        $salesCurrency = Request::get("currency");
+        $p = new pRate();
+        $currencies = $p->getCurrency($con,array($salesCurrency))[0]['name']; 
 
-                $source = Request::get("sourceDataBase");
+        $source = Request::get("sourceDataBase");
 
-                $month = Request::get("month");
+        $month = Request::get("month");
 
-                $especificNumber = Request::get("especificNumber");
+        $especificNumber = Request::get("especificNumber");
 
-                if (!is_null($especificNumber) ) {
-                    $checkEspecificNumber = true;
-                }else{
-                    $checkEspecificNumber = false;
-                }                
+        if (!is_null($especificNumber) ) {
+            $checkEspecificNumber = true;
+        }else{
+            $checkEspecificNumber = false;
+        }                
 
-                $value = Request::get("value");
+        $value = Request::get("value");
 
-                $year = Request::get("year");
+        $year = Request::get("year");
 
-                $salesRep = Request::get("salesRep");
+        $salesRep = Request::get("salesRep");
 
-                $agency = Request::get("agency");
+        $agency = Request::get("agency");
 
-                $client = Request::get("client");
+        $client = Request::get("client");
 
-                //var_dump($salesCurrency);
+        $check = false;
 
-                $check = false;
+        $tmp = Request::get("brand");
 
-                $tmp = Request::get("brand");
+        for ($t=0; $t < sizeof($tmp); $t++) { 
+            $brand[$t] = json_decode(base64_decode($tmp[$t]))[0];
+        }
 
-                for ($t=0; $t < sizeof($tmp); $t++) { 
-                    $brand[$t] = json_decode(base64_decode($tmp[$t]))[0];
-                }
+        for ($b=0; $b < sizeof($brand); $b++) { 
+            if ($brand[$b] == 9){
+                $check = true;
+            }
+        }
+        if ($check) {
+            array_push($brand, "13");
+            array_push($brand, "14");
+            array_push($brand, "15");
+            array_push($brand, "16");
+        }
 
-                for ($b=0; $b < sizeof($brand); $b++) { 
-                    if ($brand[$b] == 9){
-                        $check = true;
-                    }
-                }
-                if ($check) {
-                    array_push($brand, "13");
-                    array_push($brand, "14");
-                    array_push($brand, "15");
-                    array_push($brand, "16");
-                }
+        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
+        
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
+        
+        $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
 
-                $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
-                
-                $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
-                
-                $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
+        $regionExcel = $regions;
+        $sourceExcel = $source;
+        $yearExcel = $year;
+        $monthExcel = $month;
+        $brandExcel = $brand;
+        $salesRepExcel = $salesRep;
+        $agencyExcel = $agency;
+        $clientExcel = $client;
+        $currencyExcel = $currencies;
+        $valueExcel = $value;
+        $especificNumberExcel = $especificNumber;
+        $title = $source." - Viewer Base.xlsx";                
 
-                $regionExcel = $regions;
-                $sourceExcel = $source;
-                $yearExcel = $year;
-                $monthExcel = $month;
-                $brandExcel = $brand;
-                $salesRepExcel = $salesRep;
-                $agencyExcel = $agency;
-                $clientExcel = $client;
-                $currencyExcel = $currencies;
-                $valueExcel = $value;
-                $especificNumberExcel = $especificNumber;
-                $title = $source." - Viewer Base.xlsx";                
-
-                return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title"));
 
 	}
 

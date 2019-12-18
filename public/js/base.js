@@ -11,10 +11,10 @@ function analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1){
 		method:"POST",
 		data:{userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1},
 		success: function(output){
-			$('#troll').html(output);
+			$('#troll').html(output);/*
 			console.log("Following");
 			console.log(date);
-			console.log(hour);
+			console.log(hour);*/
 		},
 		error: function(xhr, ajaxOptions,thrownError){
 			alert(xhr.status+""+thrownError);
