@@ -116,7 +116,7 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-								<!--<a class="dropdown-item" href="#"> Insights </a>-->
+								<a class="dropdown-item" href="#"> Insights </a>
 							</div>
 						</li>
 
