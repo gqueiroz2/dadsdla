@@ -28,13 +28,13 @@
 						</div>
 
                         <div class="col">
-                            <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
-                            @if($errors->has('salesRep'))
+                            <label class='labelLeft'><span class="bold">Client:</span></label>
+                            @if($errors->has('client'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->salesRep()}}
+                            {{$render->ClientForm()}}
                         </div>
-
+                        
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))
@@ -52,12 +52,12 @@
                         </div>
 
                         <div class="col">
-                            <label class='labelLeft'><span class="bold">Client:</span></label>
-                            @if($errors->has('client'))
+                            <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
+                            @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->ClientForm()}}
-                        </div>
+                            {{$render->salesRep()}}
+                        </div>                        
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
