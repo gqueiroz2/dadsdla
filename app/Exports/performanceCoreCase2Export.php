@@ -13,12 +13,13 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
 	    'font' => [
@@ -38,7 +39,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
 		'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
 	    'font' => [
@@ -70,7 +71,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
         'font' => [
@@ -89,7 +90,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff6600',
+                'rgb' => 'ff6600',
             ],
         ],
         'font' => [
@@ -108,7 +109,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ffff00',
+                'rgb' => 'ffff00',
             ],
         ],
         'font' => [
@@ -126,7 +127,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '009933',
+                'rgb' => '009933',
             ],
         ],
         'font' => [
@@ -145,7 +146,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -164,7 +165,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '000000',
+                'rgb' => '000000',
             ],
         ],
         'font' => [
@@ -183,7 +184,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '002060',
+                'rgb' => '002060',
             ],
         ],
         'font' => [
@@ -202,7 +203,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'ff0000',
+                'rgb' => 'ff0000',
             ],
         ],
         'font' => [
@@ -221,7 +222,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '6600ff',
+                'rgb' => '6600ff',
             ],
         ],
         'font' => [
@@ -240,7 +241,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '004b84',
+                'rgb' => '004b84',
             ],
         ],
         'font' => [
@@ -259,7 +260,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '808080',
+                'rgb' => '808080',
             ],
         ],
         'font' => [
@@ -278,7 +279,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '88cc00',
+                'rgb' => '88cc00',
             ],
         ],
         'font' => [
@@ -297,7 +298,7 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
         'font' => [
@@ -312,9 +313,10 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
         ],
     ];
 
-    public function __construct($view,$data){
-    	$this->view = $view;
-    	$this->data = $data;
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
     }
 
     public function view(): View{
@@ -375,17 +377,41 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
                 $sizeBrand = sizeof($this->data['mtx']['brand']);
 
                 $ini = "B";
-               	$end = chr(ord($ini) + sizeof($this->data['mtx']['quarters'])+3);
+               	$end = chr(ord($ini) + sizeof($this->data['mtx']['quarters'])+1);
 
                 for ($s=0; $s < (sizeof($this->data['mtx']['salesGroup'])+1); $s++) {
                 	$cellRange = "A".$number;
 
                 	$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->nameStyle);
 
+                    if ($this->type != "Excel") {
+
+                        if ($s > 0) {
+                            $cell = "A".($number-2);   
+                            $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                            $cell = "A".($number-1);
+                            $event->sheet->getCell($cell)->setValue($this->data['mtx']['region']." - Core ".$this->data['mtx']['year']." (".$this->data['mtx']['currency']."/".$this->data['mtx']['valueView'].") - BKGS");
+                            $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->headStyle);
+                        }
+
+                        $cellRange = "A".($number-1).":".$end.($number-1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                        $cellRange = "A".($number+1).":".$end.($number+1);
+                        $event->sheet->getDelegate()->mergeCells($cellRange);
+                    }
+
+                    $b = 0;
                 	$c = 0;
                 	for ($t=0; $t < $sizeBrand; $t++) { 
                 		$cellRange = "A".($number+2+$c).":A".($number+6+$c);
                 		$event->sheet->getDelegate()->mergeCells($cellRange);
+
+                        if ($this->type != "Excel") {
+                            $cellRange = "A".($number+7+$c).":".$end.($number+7+$c);
+                            $event->sheet->getDelegate()->mergeCells($cellRange);                            
+                        }
 
                 		$cellRange = "A".($number+2+$c);
 	                	$cell = $event->sheet->getCell($cellRange)->getValue();
@@ -398,14 +424,37 @@ class performanceCoreCase2Export implements FromView, WithEvents, ShouldAutoSize
 	                		if ($l == 1 || $l == 2 || $l == 3) {
 	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#,##0"));	
 	                		}else{
-	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "#0%"));	
+	                			$event->sheet->getStyle($cellRange)->getNumberFormat()->applyFromArray(array('formatCode' => "0%"));	
 	                		}
 	                	}
+
+                        if ($this->type != "Excel") {
+                            $b++;
+
+                            if ($b == 7) {
+                                $cell = "A".($number+6+$c);
+                                $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+
+                                $cellRange = "A".($number+7+$c).":".$end.($number+7+$c);
+                                $event->sheet->getDelegate()->mergeCells($cellRange);
+
+                                $cell = "A".($number+7+$c);
+                                $event->sheet->getCell($cell)->setValue($this->data['mtx']['salesRep'][$s]['salesRep']);
+                                $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->nameStyle);
+                                $b = 0;
+                            }
+                        }
 
                 		$c += 6;
                 	}
 
                 	$number += (($sizeBrand*5)+3+($sizeBrand-1));
+                }
+
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
                 }
             }
     	];
