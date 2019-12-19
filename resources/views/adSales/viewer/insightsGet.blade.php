@@ -2,10 +2,10 @@
 @section('title', 'Insights Viewer')
 @section('head')
 
-    <script src="/js/viewer.js"></script>
+    <script src="/js/insights.js"></script>
 
     <?php include(resource_path('views/auth.php'));?>
-    
+
 @endsection
 @section('content')
 
@@ -87,6 +87,8 @@
 				</form>
 			</div>
 		</div>
+
+        <div id="vlau"></div>
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm-4" style="color: #0070c0; font-size:22px">

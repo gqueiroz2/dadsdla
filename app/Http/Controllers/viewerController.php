@@ -48,7 +48,7 @@ class viewerController extends Controller{
        // var_dump(Request::all());
 
         $render =  new Render();
-        $bRender = new baseRender();
+        //$bRender = new baseRender();
         $base = new base();
         $months = $base->month;
         $insights = new insights();
@@ -85,15 +85,16 @@ class viewerController extends Controller{
 
         $month = Request::get("month");
 
-        $value = Request::get("value");
-
-        $year = Request::get("year");
-
         $salesRep = Request::get("salesRep");
 
-        $agency = Request::get("agency");
-
         $client = Request::get("client");
+
+        $currency = Request::get("currency");
+
+        $p = new pRate();
+        $currencies = $p->getCurrency($con,array($currency))[0]['name']; 
+
+        $value = Request::get("value");
 
         $check = false;
 
@@ -117,6 +118,7 @@ class viewerController extends Controller{
 
         var_dump($brand);
         $table = $insights->getTable($client,$salesRep,$month,$value,$currency,$brand,$salesCurrency);
+
         //return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
     }
 

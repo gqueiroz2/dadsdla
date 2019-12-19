@@ -72,6 +72,31 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getClientByRegionInsights(){
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
+
+        $region = Request::get("regionID");
+        //$client = $c->getClientByRegion($con,array($region));
+        $selectInsight = "SELECT DISTINCT 
+                                c.ID AS 'id',
+                                c.name AS 'client' 
+                                FROM insights i
+                                LEFT JOIN client c ON c.ID = i.client_id
+                                ";
+
+        $res = $con->query($selectInsight);
+        $from = array("id","client");
+        $clientInsights = $sql->fetch($res,$from,$from);
+
+        $client = $clientInsights;
+        for ($c=0; $c < sizeof($client); $c++) { 
+            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+        }
+    }
+
     public function secondaryFilterTitle(){        
         $type = Request::get('type');
         if($type == "agency"){
