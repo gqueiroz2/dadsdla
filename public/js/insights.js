@@ -74,24 +74,10 @@
       var option = "<option> Select Region </option>";
       $('#currency').empty().append(option);
       $('#client').empty().append(option);
-      $('#value').empty().append("<option>Select Source</option>");
     }
 
 	});
 
-  $('#thirdPos').change(function(){
-    var source = $('#thirdPos').val();
-    $.ajax({
-      url:"/ajaxResults/valueBySource",
-      method:"POST",
-      data:{source},
-        success: function(output){
-          $('#value').html(output);
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-      }
-    }); 
-  });
+  
 
 });

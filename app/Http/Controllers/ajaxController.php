@@ -79,7 +79,6 @@ class ajaxController extends Controller{
         $sql = new sql();
 
         $region = Request::get("regionID");
-        //$client = $c->getClientByRegion($con,array($region));
         $selectInsight = "SELECT DISTINCT 
                                 c.ID AS 'id',
                                 c.name AS 'client' 
@@ -92,6 +91,7 @@ class ajaxController extends Controller{
         $clientInsights = $sql->fetch($res,$from,$from);
 
         $client = $clientInsights;
+
         for ($c=0; $c < sizeof($client); $c++) { 
             echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
         }
