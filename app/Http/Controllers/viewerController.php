@@ -117,7 +117,7 @@ class viewerController extends Controller{
         }
 
         var_dump($brand);
-        $table = $insights->getTable($client,$salesRep,$month,$value,$currency,$brand,$salesCurrency);
+        $table = $insights->assemble($client,$salesRep,$month,$value,$currency,$brand,$salesCurrency,$sql,$con);
 
         //return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
     }
