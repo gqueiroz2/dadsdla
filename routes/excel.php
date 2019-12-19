@@ -69,6 +69,8 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::group(['prefix'=>'viewer'], function(){
 				Route::post('vBase', 'viewerExcelController@viewerBase')
 											->name('baseExcel');
+				Route::post('vInsights', 'viewerExcelController@viewerInsights')
+											->name('insightsExcel');
 			});
 
 		});

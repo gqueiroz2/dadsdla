@@ -78,7 +78,7 @@
                             {{$render->value2()}}
                         </div>
                         
-                        <div class="col">
+                        <div class="col-sm">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
@@ -88,14 +88,23 @@
 			</div>
 		</div>
 
-        <div id="vlau"></div>
-
 		<div class="row justify-content-end mt-2">
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
 			<div class="col-sm-4" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Insights</span>
             </div>
-		</div>
 
+            <div class="col-sm">
+                <button class="btn btn-primary" type="button" id="excel" style="width: 100%">
+                    Generate Excel
+                </button>
+            </div>
+        </div>
 	</div>
+
+    <div id="vlau"></div>
 
 @endsection

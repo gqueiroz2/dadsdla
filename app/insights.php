@@ -14,9 +14,9 @@ class insights extends Model{
 		var_dump($salesRep);
 		*/
 		
-		var_dump($currency);
+		/*var_dump($currency);
 		var_dump($value);
-
+		*/
 		$mtx = $this->seek($con,$sql,$client,$month,$brand,$salesRep);
 
 	}
@@ -70,7 +70,7 @@ class insights extends Model{
 
 		";
 
-		echo "<pre>".($sel)."</pre>";
+		//echo "<pre>".($sel)."</pre>";
 
 		$res = $con->query($sel);
 
@@ -102,7 +102,7 @@ class insights extends Model{
 
 		$mtx = $sql->fetch($res,$from,$from);
 
-		var_dump($mtx);
+		//var_dump($mtx);
 
 
 	}

@@ -11,7 +11,7 @@ use App\dataBase;
 use App\region;
 use App\brand;
 use App\pRate;
-use App\viewerBase;
+use App\viewer;
 use App\salesRep;
 use App\cmaps;
 use App\baseRender;
@@ -39,7 +39,7 @@ class viewerController extends Controller{
         $b = new brand();
         $brand = $b->getBrand($con);
 
-        $v = new viewerBase();
+        $v = new viewer();
 
         return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand"));
     }
@@ -48,7 +48,7 @@ class viewerController extends Controller{
        // var_dump(Request::all());
 
         $render =  new Render();
-        //$bRender = new baseRender();
+        $bRender = new baseRender();
         $base = new base();
         $months = $base->month;
 
@@ -165,7 +165,7 @@ class viewerController extends Controller{
         $bRender = new baseRender();
         $base = new base();
         $months = $base->month;
-        $viewer = new viewerBase();
+        $viewer = new viewer();
 
 	
         $db = new dataBase();

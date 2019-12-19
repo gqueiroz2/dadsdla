@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\base;
 use App\pRate;
 
-class viewerBase extends Model{
+class viewer extends Model{
 
 	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client){
 		$base = new base();
