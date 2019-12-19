@@ -88,13 +88,32 @@
 			</div>
 		</div>
 
-        <div id="vlau"></div>
-
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm-4" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Insights</span>
             </div>
 		</div>
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col table-responsive">
+                    <table class="table" style="width: 100%;">
+                        <tr>
+                            @for($h=0;$h<sizeof($header);$h++)
+                                <th> {{$header[$h]}} </th>
+                            @endfor
+                        </tr>
+                        @if($mtx)
+                            @for($m = 0;$m < sizeof($mtx);$m++)
+
+                            @endfor
+                        @endif
+                    </table>
+                </div>
+            </div>
+
+        </div>
 
 	</div>
 
