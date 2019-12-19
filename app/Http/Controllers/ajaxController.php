@@ -877,7 +877,7 @@ class ajaxController extends Controller{
         }else{
             $newType = "agency";
         }
-        
+
         $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
     }
 
@@ -920,7 +920,7 @@ class ajaxController extends Controller{
         $matrix = $sbr->assemble($types, $res, $type);
         $mtx = $matrix[0];
         $total = $matrix[1];
-
+        
         $sbr->renderSubAssembler($mtx, $total, $type, $name, $brands);
     }
 
