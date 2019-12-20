@@ -14,6 +14,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
         'font' => [
@@ -30,7 +31,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
     ];
@@ -50,7 +51,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'dce6f1',
+                'rgb' => 'dce6f1',
             ],
         ],
     ];
@@ -70,7 +71,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'c3d8ef',
+                'rgb' => 'c3d8ef',
             ],
         ],
     ];
@@ -90,18 +91,20 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
     ];
 
-    public function __construct($view, $data){
-		$this->view = $view;
-	    $this->data = $data;
-	}
+    public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
+    }
 
     public function view(): View{
-    	return view($this->view, ['data' => $this->data]);
+        $c = 0;
+    	return view($this->view, ['data' => $this->data, 'type' => $this->type, 'c' => $c]);
     }
 
     /**
@@ -147,17 +150,63 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(10);
 
-                for ($b=0; $b < sizeof($this->data['mtx'][0]); $b++) { 
-                	$cellRange = "A".($b+($pos+1)).":".$letter.($b+($pos+1));
-                	if (($b+($pos+1)) % 2 == 0) {
-                		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
-                	}else{
-                		$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
-                	}
+                if ($this->type == "PDF") {
+                    for ($b=0; $b < (sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))); $b++) { 
+                        $cellRange = "A".($b+($pos+1)).":".$letter.($b+($pos+1));
+                        if (($b+($pos+1)) % 2 == 0) {
+                            $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
+                        }else{
+                            $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
+                        }
+                    }
+
+                    if (sizeof($this->data['mtx'][0]) > 41) {
+                        $c = 0;
+                        for ($d=0; $d < (sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))); $d++) { 
+                            $c++;
+                            if ($c == 42) {
+                                $cell = "A".($d+3);
+                                $event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+                                for ($l=ord("A"), $i = 0; $l <= ord($letter); $l++, $i++) {
+                                    $cell = chr($l).($d+4);
+                                    $event->sheet->getCell($cell)->setValue($this->data['mtx'][$i][0]);
+                                    $event->sheet->getDelegate()->getStyle($cell)->applyFromArray($this->headStyle);
+                                    $event->sheet->getDelegate()->getStyle($cell)->getFont()->setSize(10);
+                                }
+
+                                $c = 1;
+                            }
+                        }
+                    }
+                    
+                    if ((sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))+$val) == 45) {
+                        $cellRange = "A".(sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))+$val-1).":".
+                        $letter.(sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))+$val-1);
+                        $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);   
+                    }else{
+                        $cellRange = "A".(sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))+$val).":".
+                        $letter.(sizeof($this->data['mtx'][0])+(intval(sizeof($this->data['mtx'][0])/40))+$val);
+                        $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
+                    }
+                }else{
+                    for ($b=0; $b < sizeof($this->data['mtx'][0]); $b++) { 
+                        $cellRange = "A".($b+($pos+1)).":".$letter.($b+($pos+1));
+                        if (($b+($pos+1)) % 2 == 0) {
+                            $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyOdd);
+                        }else{
+                            $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineBodyPair);
+                        }
+                    }
+
+                    $cellRange = "A".(sizeof($this->data['mtx'][0])+$val).":".$letter.(sizeof($this->data['mtx'][0])+$val);
+                    $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
                 }
 
-                $cellRange = "A".(sizeof($this->data['mtx'][0])+$val).":".$letter.(sizeof($this->data['mtx'][0])+$val);
-                $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
+                }
             },
         ];
     }
@@ -173,7 +222,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
     		return [
 	            'D' => '#,##0',
 	            'E' => '#,##0',
-	            'F' => '#0%',
+	            'F' => '0%',
 	            'G' => '#,##0',
 	            'H' => '#,##0',
 	            'I' => '#,##0'
@@ -183,7 +232,7 @@ class allNewExport implements FromView, WithEvents, ShouldAutoSize, WithTitle, W
     		return [
 	            'C' => '#,##0',
 	            'D' => '#,##0',
-	            'E' => '#0%',
+	            'E' => '0%',
 	            'F' => '#,##0',
 	            'G' => '#,##0',
 	            'H' => '#,##0'

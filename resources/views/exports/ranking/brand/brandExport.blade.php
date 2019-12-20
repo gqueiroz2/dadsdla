@@ -31,6 +31,13 @@
 				@endif
 			@endfor
 		</tr>
+		@if($type == "PDF")
+			<?php $c++; ?>
+			@if($c == 41 && $m != (sizeof($data[0])-1))
+				<tr><td>teste</td></tr>
+				<?php $c = 0; ?>
+			@endif
+		@endif
 	@endfor
 
 	<tr>

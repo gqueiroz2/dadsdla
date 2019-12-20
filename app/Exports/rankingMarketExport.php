@@ -4,16 +4,21 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class rankingMarketExport implements FromArray, WithMultipleSheets {
+class rankingMarketExport implements FromArray, WithMultipleSheets, WithTitle {
     
     protected $sheets;
 	protected $labels;
+    protected $typeExport;
+    protected $title;
 
-	public function __construct(array $sheets, $labels){
-		$this->sheets = $sheets;
-		$this->labels = $labels;
-	}
+	public function __construct(array $sheets, $labels, $typeExport, $title){
+        $this->sheets = $sheets;
+        $this->labels = $labels;
+        $this->typeExport = $typeExport;
+        $this->title = $title;
+    }
 
     public function array(): array {
         return $this->sheets;
@@ -23,16 +28,20 @@ class rankingMarketExport implements FromArray, WithMultipleSheets {
     	
     	$sheets = array();
 
-    	array_push($sheets, new allMarketExport($this->labels[0], $this->sheets));
+    	array_push($sheets, new allMarketExport($this->labels[0], $this->sheets, $this->typeExport));
 
     	if (is_array($this->sheets['subMtx'])) {
     		$names = array("region" => $this->sheets['region'], "currency" => $this->sheets['currency'], 'value' => $this->sheets['value'], "head" => $this->sheets['headNames'], 'type' => $this->sheets['type'], 'years' => $this->sheets['years'], 'val' => $this->sheets['val']);
 
 	    	for ($i=0; $i < sizeof($this->sheets['subMtx']); $i++) { 
-	    		array_push($sheets, new marketExport($this->labels[1], $this->sheets['subMtx'][$i], $this->sheets['subTotal'][$i], $this->sheets['market'][$i], $names));
+	    		array_push($sheets, new marketExport($this->labels[1], $this->sheets['subMtx'][$i], $this->sheets['subTotal'][$i], $this->sheets['market'][$i], $names, $this->typeExport));
 	    	}	
     	}
 
     	return $sheets;
+    }
+
+    public function title(): string{
+        return $this->title;
     }
 }

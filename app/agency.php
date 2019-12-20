@@ -63,15 +63,22 @@ class agency extends Management{
         return $agencyGroupID[0]['id'];
     }
 
-    public function getAllAgenciesByName($con,$sql,$parent){
+    public function getAllAgenciesByName($con,$sql,$parent, $aux=false){
         $table = "agency";
-        $columns = "ID";
-        $join = false;
-        $where = "WHERE name = \"".addslashes($parent)."\"";
+        $columns = "agency.ID";
+
+        if (!$aux) {
+            $join = false;
+        }else{
+            $join = "LEFT JOIN agency_group ag ON agency.agency_group_id = ag.ID";
+        }
+
+        $where = "WHERE agency.name = \"".addslashes($parent)."\" AND ag.name = \"".addslashes($aux)."\"";
         $res = $sql->select($con,$columns,$table,$join,$where,1);
         $from = array("ID");
         $to = array('id');
         $agencyGroupID = $sql->fetch($res,$from,$to);
+        
         return $agencyGroupID;
     }
 

@@ -3,7 +3,7 @@
 		<th colspan="{{sizeof($data)}}">
 			<span>
 				<b>
-					{{$names['region']}} - Churn ({{$names['val']}} - {{$dataChurn}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
+					{{$names['region']}} - Churn ({{$names['val']}} - {{$dataChurn[1]}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
 				</b>
 			</span>
 		</th>
@@ -25,6 +25,13 @@
 				@endif
 			@endfor
 		</tr>
+		@if($type == "PDF" && $m != 0)
+			<?php $c++; ?>
+			@if($c == 40 && $m != (sizeof($data[0])-1))
+				<tr><td>teste</td></tr>
+				<?php $c = 0; ?>
+			@endif
+		@endif
 	@endfor
 
 	<tr>

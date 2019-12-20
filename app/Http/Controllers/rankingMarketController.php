@@ -125,9 +125,11 @@ class rankingMarketController extends Controller {
       $namesExcel = null;
     }
 
-    $title = "ranking market (".$rtr.").xlsx";
+    $title = "ranking market (".$rtr.")";
+    $titleExcel = "ranking market (".$rtr.").xlsx";
+    $titlePdf = "ranking market (".$rtr.").pdf";
 
-  	return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'namesExcel', 'title'));
+  	return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'namesExcel', 'title', 'titleExcel', 'titlePdf'));
 	}
 
 }
