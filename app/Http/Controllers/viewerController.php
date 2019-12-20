@@ -29,7 +29,6 @@ class viewerController extends Controller{
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
-        $bRender = new baseRender();
 
         $r = new region();
         $region = $r->getRegion($con, NULL);
@@ -42,14 +41,17 @@ class viewerController extends Controller{
 
         $v = new viewer();
 
-        return view("adSales.viewer.insightsGet",compact("render","bRender","years","region","currency","currencies","brand"));
+        return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand"));
     }
 
     public function insightsPost(){
+       // var_dump(Request::all());
+
         $render =  new Render();
         $bRender = new baseRender();
         $base = new base();
         $months = $base->month;
+
         $viewer = new viewer();
         $in = new insights();
 
@@ -67,6 +69,7 @@ class viewerController extends Controller{
         }
 
         $years = array($cYear = intval(date('Y')), $cYear - 1);
+
         $salesRegion = Request::get("region");
         $r = new region();
 

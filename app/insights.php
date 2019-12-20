@@ -1,5 +1,4 @@
 <?php
-
 namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
@@ -21,6 +20,7 @@ class insights extends Model{
 		$monthString = $base->arrayToString($month,false,false);
 		$salesRepString = $base->arrayToString($salesRep,false,false);
 		$clientString = $base->arrayToString($client,false,0);
+
 
 		$sel = "SELECT 
 					b.name AS 'brand',
