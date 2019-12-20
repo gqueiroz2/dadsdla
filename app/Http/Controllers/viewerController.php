@@ -130,7 +130,16 @@ class viewerController extends Controller{
 */
         $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
+        $regionExcel = $regions;
+        $monthExcel = $month;
+        $brandExcel = $brand;
+        $salesRepExcel = $salesRep;
+        $clientExcel = $client;
+        $currencyExcel = $currencies;
+        $valueExcel = $value;
+        $title ="Viewer - Insights.xlsx";
+
+        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title"));
     }
 
 	public function baseGet(){
