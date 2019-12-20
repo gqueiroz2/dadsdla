@@ -12,8 +12,8 @@ use App\base;
 
 class subChurnRanking extends rankingChurn {
     
-    public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType){
-
+    public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType, $auxName){
+        
     	$sql = new sql();
 
     	$r = new region();
@@ -45,7 +45,7 @@ class subChurnRanking extends rankingChurn {
 			
 			$a = new agency();
 
-			$oldAgency = $a->getAllAgenciesByName($con, $sql, $filter);
+			$oldAgency = $a->getAllAgenciesByName($con, $sql, $filter, $auxName);
 
 			if (is_array($oldAgency)) {
 	            for ($a=0; $a < sizeof($oldAgency); $a++) {

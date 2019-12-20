@@ -1,7 +1,7 @@
 <table>
 	<tr>
 		<th colspan="{{sizeof($data)}}">
-			{{$names['head']['name']}} - ({{$dataRanking}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
+			{{$names['head']['name']}} - ({{$dataRanking[1]}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
 		</th>
 	</tr>
 	<tr>
@@ -42,6 +42,13 @@
 				@endif
 			@endfor
 		</tr>
+		@if($type == "PDF" && $m != 0)
+			<?php $c++; ?>
+			@if($c == 35 && $m != (sizeof($data[0])-1))
+				<tr><td>teste</td></tr>
+				<?php $c = 0; ?>
+			@endif
+		@endif
 	@endfor
 
 	<tr>

@@ -117,7 +117,10 @@ class rankingExcelController extends Controller {
         $data = array('mtx' => $mtx, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brand' => $brands, 'brandsMtx' => $brandMtx, 'brandsTotal' => $brandTotal, 'type' => $type);
         $labels = array("exports.ranking.brand.allBrandsExport", "exports.ranking.brand.brandExport");
 
-        return Excel::download(new rankingBrandExport($data, $labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        return Excel::download(new rankingBrandExport($data, $labels, $typeExport, $auxTitle), $title);
     }
 
     public function market(){
@@ -164,9 +167,23 @@ class rankingExcelController extends Controller {
         $headNames = $rm->createNames($type, $months, $salesRegion, $brands);
 
         if ($type == "sector") {
-            $names = json_decode(base64_decode(Request::get("names")));
+            $auxNames = json_decode(base64_decode(Request::get("names")));
+            for ($n=0; $n < sizeof($auxNames); $n++) { 
+                $names[$n][0] = null;
+                $names[$n][1] = $auxNames[$n];
+            }
         }else{
-            $names = Request::get("names");
+            $auxNames = Request::get("names");
+            if (!is_null($auxNames)) {
+                for ($n=0; $n < sizeof($auxNames); $n++) { 
+                    $names[$n] = json_decode(base64_decode($auxNames[$n]));
+                    if ($names[$n][0] == "-") {
+                        $names[$n][0] = "Others";
+                    }
+                }
+            }else{
+                $names = null;
+            }
         }
         
         if (is_null($names)) {
@@ -186,7 +203,7 @@ class rankingExcelController extends Controller {
             $subValues = array();
 
             for ($n=0; $n < sizeof($names); $n++) { 
-                array_push($subValues, $smr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n], $val));
+                array_push($subValues, $smr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n][1], $val, $names[$n][0]));
             }
 
             if ($type != "client") {
@@ -201,7 +218,7 @@ class rankingExcelController extends Controller {
                 $subValuesTotal = array();
 
                 for ($n=0; $n < sizeof($names); $n++) { 
-                    array_push($subValuesTotal, $smr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $names[$n], $val));
+                    array_push($subValuesTotal, $smr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $names[$n][1], $val, $names[$n][0]));
                 }
             }else{
                 $subValuesTotal = array();
@@ -230,7 +247,10 @@ class rankingExcelController extends Controller {
 
         $labels = array("exports.ranking.market.allMarketExport", "exports.ranking.market.marketExport");
 
-        return Excel::download(new rankingMarketExport($data, $labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        return Excel::download(new rankingMarketExport($data, $labels, $typeExport, $auxTitle), $title);
     }
 
     public function churn(){
@@ -309,9 +329,23 @@ class rankingExcelController extends Controller {
         $headNames = $rc->createNames($type, $months, $salesRegion, $brands);
 
         if ($type == "sector") {
-            $names = json_decode(base64_decode(Request::get("names")));
+            $auxNames = json_decode(base64_decode(Request::get("names")));
+            for ($n=0; $n < sizeof($auxNames); $n++) { 
+                $names[$n][0] = null;
+                $names[$n][1] = $auxNames[$n];
+            }
         }else{
-            $names = Request::get("names");
+            $auxNames = Request::get("names");
+            if (!is_null($auxNames)) {
+                for ($n=0; $n < sizeof($auxNames); $n++) { 
+                    $names[$n] = json_decode(base64_decode($auxNames[$n]));
+                    if ($names[$n][0] == "-") {
+                        $names[$n][0] = "Others";
+                    }
+                }
+            }else{
+                $names = null;
+            }
         }
 
         $data = array('mtx' => $mtx, 'total' => $total, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brands' => $brands, 'type' => $type, 'headNames' => $headNames, 'type' => $type, 'years' => $years);
@@ -325,8 +359,10 @@ class rankingExcelController extends Controller {
                 $val = "client";
             }
 
+            $subValues = array();
+
             for ($n=0; $n < sizeof($names); $n++) { 
-                $subValues[$n] = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n], $val);   
+                array_push($subValues, $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n][1], $val, $names[$n][0]));
             }
 
             if ($type == "client") {
@@ -359,8 +395,10 @@ class rankingExcelController extends Controller {
                 array_push($subMonths2, $m);
             }
 
+            $subValuesTotal = array();
+
             for ($n=0; $n < sizeof($names); $n++) { 
-                $subValuesTotal[$n] = $scr->getSubResults($con, $type, $region, $value, $subMonths2, $brands, $currency, $names[$n], $val);
+                array_push($subValuesTotal, $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $names[$n][1], $val, $names[$n][0]));
 
                 $subMatrix[$n] = $scr->assembler($subValues[$n], $subFinalValues, $subValuesTotal[$n], $subYears, $filterType);
 
@@ -376,7 +414,10 @@ class rankingExcelController extends Controller {
 
         $labels = array("exports.ranking.churn.allChurnExport", "exports.ranking.churn.churnExport");
 
-        return Excel::download(new rankingChurnExport($data, $labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        return Excel::download(new rankingChurnExport($data, $labels, $typeExport, $auxTitle), $title);
     }
 
     public function new(){
@@ -455,9 +496,23 @@ class rankingExcelController extends Controller {
         $headNames = $rn->createNames($type, $months, $salesRegion, $brands);
 
         if ($type == "sector") {
-            $names = json_decode(base64_decode(Request::get("names")));
+            $auxNames = json_decode(base64_decode(Request::get("names")));
+            for ($n=0; $n < sizeof($auxNames); $n++) { 
+                $names[$n][0] = null;
+                $names[$n][1] = $auxNames[$n];
+            }
         }else{
-            $names = Request::get("names");
+            $auxNames = Request::get("names");
+            if (!is_null($auxNames)) {
+                for ($n=0; $n < sizeof($auxNames); $n++) { 
+                    $names[$n] = json_decode(base64_decode($auxNames[$n]));
+                    if ($names[$n][0] == "-") {
+                        $names[$n][0] = "Others";
+                    }
+                }
+            }else{
+                $names = null;
+            }
         }
 
         $data = array('mtx' => $mtx, 'total' => $total, 'currency' => $currency, 'value' => $value, 'region' => $salesRegion, 'brands' => $brands, 'type' => $type, 'headNames' => $headNames, 'type' => $type, 'years' => $years);
@@ -472,7 +527,7 @@ class rankingExcelController extends Controller {
             }
 
             for ($n=0; $n < sizeof($names); $n++) { 
-                $subValues[$n] = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n], $val);   
+                $subValues[$n] = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $names[$n][1], $val, $names[$n][0]);
             }
 
             if ($type == "client") {
@@ -506,7 +561,7 @@ class rankingExcelController extends Controller {
             }
 
             for ($n=0; $n < sizeof($names); $n++) { 
-                $subValuesTotal[$n] = $snr->getSubResults($con, $type, $region, $value, $subMonths2, $brands, $currency, $names[$n], $val);
+                $subValuesTotal[$n] = $snr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $names[$n][1], $val, $names[$n][0]);
 
                 $subMatrix[$n] = $snr->assembler($subValues[$n], $subFinalValues, $subValuesTotal[$n], $subYears, $filterType);
 
@@ -521,7 +576,10 @@ class rankingExcelController extends Controller {
 
         $labels = array("exports.ranking.new.allNewExport", "exports.ranking.new.newExport");
 
-        return Excel::download(new rankingNewExport($data, $labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        return Excel::download(new rankingNewExport($data, $labels, $typeExport, $auxTitle), $title);
     }
 
     public function ranking(){
@@ -590,13 +648,23 @@ class rankingExcelController extends Controller {
 
         $labels = array("exports.ranking.ranking.allRankingExport");
 
-        $names = Request::get("names");
+        $auxNames = Request::get("names");
+        if (!is_null($auxNames)) {
+            for ($n=0; $n < sizeof($auxNames); $n++) { 
+                $names[$n] = json_decode(base64_decode($auxNames[$n]));
+                if ($names[$n][0] == "-") {
+                    $names[$n][0] = "Others";
+                }
+            }
+        }else{
+            $names = null;
+        }
 
         if (!is_null($names)) {
             $sr = new subRankings();
 
             for ($n=0; $n < sizeof($names); $n++) {
-                $subValues[$n] = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $names[$n]);
+                $subValues[$n] = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $names[$n][1], $names[$n][0]);
 
                 $matrix =  $sr->assembler($subValues[$n], $years, $type);
 
@@ -619,6 +687,9 @@ class rankingExcelController extends Controller {
 
         $title = Request::get("title");
         
-        return Excel::download(new rankingExport($data, $labels), $title);
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        return Excel::download(new rankingExport($data, $labels, $typeExport, $auxTitle), $title);
     }
 }

@@ -151,8 +151,10 @@ class rankingChurnController extends Controller {
 	      $namesExcel = null;
 	    }
 	    
-	    $title = "ranking churn (".$rtr.").xlsx";
-	    
-  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'namesExcel'));
+	    $title = "ranking churn (".$rtr.")";
+	    $titleExcel = "ranking churn (".$rtr.").xlsx";
+	    $titlePdf = "ranking churn (".$rtr.").pdf";
+
+  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'titleExcel', 'titlePdf', 'namesExcel'));
 	}
 }

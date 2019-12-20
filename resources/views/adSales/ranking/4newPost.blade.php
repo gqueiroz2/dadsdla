@@ -74,11 +74,16 @@
 					{{$render->search($mtx, $type)}}
 				</div>
 				<div class="col-sm">
+					<select id="ExcelPDF" class="form-control">
+						<option value="Excel">Excel</option>
+						<option value="PDF">PDF</option>
+					</select>
+				</div>
+				<div class="col-sm">
 					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 						Generate Excel
 					</button>
 				</div>
-				<div class="col-sm"></div>
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
@@ -92,11 +97,16 @@
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
-				<div class="col-sm"></div>
 				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 					<div style="float: right;"> 
 						{{$rName}} - {{ucfirst($type)}} New Ranking 
 					</div>
+				</div>
+				<div class="col-sm">
+					<select id="ExcelPDF" class="form-control">
+						<option value="Excel">Excel</option>
+						<option value="PDF">PDF</option>
+					</select>
 				</div>
 				<div class="col-sm">
 					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -133,13 +143,14 @@
 				$(document).on('click', "#"+type+{{$m}}, function(){
 
                     var name = $(this).text();
+                    var agencyGroup = $(this).data('value');
 
                     if ($("#sub"+type+{{$m}}).css("display") == "none") {
 
                         $.ajax({
                             url: "/ajaxRanking/newSubRanking",
                             method: "POST",
-                            data: {name, months, type, value, currency, region, brands},
+                            data: {name, months, type, value, currency, region, brands, agencyGroup},
                             success: function(output){
                                 $("#sub"+type+{{$m}}).html(output);
                                 $("#sub"+type+{{$m}}).css("display", "");
@@ -154,6 +165,14 @@
                     }
                 });
             @endfor
+
+            $("#ExcelPDF").change(function(event){
+				if ($("#ExcelPDF").val() == "PDF") {
+					$("#excel").text("Generate PDF");
+				}else{
+					$("#excel").text("Generate Excel");
+				}
+			});
 
             $("#excel").click(function(event){
             	
@@ -172,8 +191,6 @@
 	            	names = $("#namesExcel").val();
 	            }
 
-	            var title = "<?php echo $title; ?>";
-
 	            var div = document.createElement('div');
 				var img = document.createElement('img');
 				img.src = '/loading_excel.gif';
@@ -182,41 +199,82 @@
 				div.appendChild(img);
 				document.body.appendChild(div);
 
-				$.ajax({
-					xhrFields: {
-						responseType: 'blob',
-					},
-					url: "/generate/excel/ranking/new",
-					type: "POST",
-					data: {regionExcel, typeExcel, brandsExcel, monthsExcel, currencyExcel, valueExcel, yearsExcel, names, title},
-					success: function(result, status, xhr){
-						var disposition = xhr.getResponseHeader('content-disposition');
-				        var matches = /"([^"]*)"/.exec(disposition);
-				        var filename = (matches != null && matches[1] ? matches[1] : title);
+				var typeExport = $("#ExcelPDF").val();
+				var auxTitle = "<?php echo $title; ?>";
 
-						// The actual download
-				        var blob = new Blob([result], {
-				            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-				        });
-				        var link = document.createElement('a');
-				        link.href = window.URL.createObjectURL(blob);
-				        link.download = filename;
+				if (typeExport == "Excel") {
 
-				        document.body.appendChild(link);
+					var title = "<?php echo $titleExcel; ?>";
 
-				        link.click();
-				        document.body.removeChild(link);
-				        document.body.removeChild(div);
-					},
-					/*success: function(output) {
-						$('#vlau').html(output);
-					},*/
-					error: function(xhr, ajaxOptions,thrownError){
-						document.body.removeChild(div);
-                        alert(xhr.status+" "+thrownError);
-                    }
+					$.ajax({
+						xhrFields: {
+							responseType: 'blob',
+						},
+						url: "/generate/excel/ranking/new",
+						type: "POST",
+						data: {regionExcel, typeExcel, brandsExcel, monthsExcel, currencyExcel, valueExcel, yearsExcel, names, title, typeExport, auxTitle},
+						success: function(result, status, xhr){
+							var disposition = xhr.getResponseHeader('content-disposition');
+					        var matches = /"([^"]*)"/.exec(disposition);
+					        var filename = (matches != null && matches[1] ? matches[1] : title);
 
-				});
+							// The actual download
+					        var blob = new Blob([result], {
+					            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					        });
+					        var link = document.createElement('a');
+					        link.href = window.URL.createObjectURL(blob);
+					        link.download = filename;
+
+					        document.body.appendChild(link);
+
+					        link.click();
+					        document.body.removeChild(link);
+					        document.body.removeChild(div);
+						},
+						/*success: function(output) {
+							$('#vlau').html(output);
+						},*/
+						error: function(xhr, ajaxOptions,thrownError){
+							document.body.removeChild(div);
+		                    alert(xhr.status+" "+thrownError);
+		                }
+
+					});
+
+				}else{
+					var title = "<?php echo $titlePdf; ?>";
+					
+					$.ajax({
+						xhrFields: {
+							responseType: 'blob',
+						},
+						url: "/generate/excel/ranking/new",
+						type: "POST",
+						data: {regionExcel, typeExcel, brandsExcel, monthsExcel, currencyExcel, valueExcel, yearsExcel, names, title, typeExport, auxTitle},
+						/*success: function(output){
+							$("#vlau").html(output);
+						},*/
+						success: function(result, status, xhr){
+							var disposition = xhr.getResponseHeader('content-disposition');
+					        var matches = /"([^"]*)"/.exec(disposition);
+					        var filename = (matches != null && matches[1] ? matches[1] : title);
+					        var link = document.createElement('a');
+					        link.href = window.URL.createObjectURL(result);
+					        link.download = filename;
+
+					        document.body.appendChild(link);
+
+					        link.click();
+					        document.body.removeChild(link);
+					        document.body.removeChild(div);
+						},
+						error: function(xhr, ajaxOptions,thrownError){
+							document.body.removeChild(div);
+	                        alert(xhr.status+" "+thrownError);
+	                    }
+					});
+				}
             });
 		});
 	</script>

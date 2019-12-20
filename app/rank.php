@@ -668,11 +668,11 @@ class rank extends Model{
                     if (!is_numeric($mtx[$i][$m])) {
                         if ($mtx[$i][$m] != "-") {
                             if ($type == "agency" && $mtx[$i][0] == "Agency") {
-                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
+                                echo "<td id='".$type.$m."' class='$color center' data-value='".$mtx[$i-1][$m]."'> ".$mtx[$i][$m]." </td>";
                             }elseif ($type == "agencyGroup" && $mtx[$i][0] == "Agency Group") {
-                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
+                                echo "<td id='".$type.$m."' class='$color center' data-value='".$mtx[$i-1][$m]."'> ".$mtx[$i][$m]." </td>";
                             }elseif ($type == "client" && $mtx[$i][0] == "Client") {
-                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$i][$m]." </td>";
+                                echo "<td id='".$type.$m."' class='$color center' data-value='".$mtx[$i-1][$m]."'> ".$mtx[$i][$m]." </td>";
                             }else{
                                 if ($mtx[$i][$m] == "Others") {
                                     echo "<td class='$color center'> - </td>";      

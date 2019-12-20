@@ -7,7 +7,7 @@ use App\rank;
 
 class subRankings extends rank{
     
-    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $secondaryFilter=false){
+    public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $auxName, $secondaryFilter=false){
         /*
             $lefName = LEFT JOIN
             $type no caso de overviw eh a ROOT
@@ -70,7 +70,7 @@ class subRankings extends rank{
             $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);
             $aux = "agency";
         }else{
-            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue);
+            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue, $auxName);
             $aux = "client";
         }
 
@@ -185,7 +185,7 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
-    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $secondaryFilter=false){
+    public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $auxName, $secondaryFilter=false){
         
         if ($type == "agencyGroup") {
             $name = "agency";
@@ -197,9 +197,9 @@ class subRankings extends rank{
 
         for ($y=0; $y < sizeof($years); $y++) {
             if ($secondaryFilter) {
-                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $secondaryFilter);    
+                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName, $secondaryFilter);    
             }else{
-                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter);
+                $res[$y] = $this->getSubValues($con, "ytd", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName);
             }
         }
 
@@ -382,7 +382,7 @@ class subRankings extends rank{
             echo "<div class='row mt-2 mb-2 justify-content-center'>";
                 echo "<div class='col'>";
                     echo "<table style='width: 100%; zoom:100%; font-size: 16px;border: 2px solid black;'>";
-
+                    
                         $this->renderAssembler($mtx, $total, $type, $size);
 
                    echo "</table>";

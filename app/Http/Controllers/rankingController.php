@@ -137,9 +137,11 @@ class rankingController extends Controller {
         $nPosExcel = $nPos;
         $valueExcel = $value;
 
-        $title = "ranking (".$rtr.").xlsx";        
+        $title = "ranking (".$rtr.")";
+        $titleExcel = "ranking (".$rtr.").xlsx";
+        $titlePdf = "ranking (".$rtr.").pdf";
 
-        return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName', 'regionExcel', 'typeExcel', 'type2Excel', 'brandsExcel', 'firstFormExcel', 'secondFormExcel', 'thirdFormExcel', 'currencyExcel', 'monthsExcel', 'nPosExcel', 'valueExcel', 'title'));
+        return view('adSales.ranking.3rankingPost', compact('con','subR','salesRegion', 'currencies', 'brand', 'render', 'mtx', 'names', 'pRate', 'value', 'total', 'size', 'type', 'months', 'brands', 'years', 'pRate', 'region', 'rName', 'regionExcel', 'typeExcel', 'type2Excel', 'brandsExcel', 'firstFormExcel', 'secondFormExcel', 'thirdFormExcel', 'currencyExcel', 'monthsExcel', 'nPosExcel', 'valueExcel', 'title', 'titleExcel', 'titlePdf'));
 
     }
 }

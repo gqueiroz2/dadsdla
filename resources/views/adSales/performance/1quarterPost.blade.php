@@ -130,10 +130,8 @@
 		$("#ExcelPDF").change(function(event){
 			if ($("#ExcelPDF").val() == "PDF") {
 				$("#excel").text("Generate PDF");
-				$("#bonusExcel").text("Generate Bonus PDF");
 			}else{
 				$("#excel").text("Generate Excel");
-				$("#bonusExcel").text("Generate Bonus Excel");
 			}
 		});
 
