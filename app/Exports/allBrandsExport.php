@@ -14,6 +14,7 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
     
     protected $view;
 	protected $data;
+    protected $type;
 
 	protected $headStyle = [
         'font' => [
@@ -30,7 +31,7 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0070c0',
+                'rgb' => '0070c0',
             ],
         ],
     ];
@@ -50,7 +51,7 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'dce6f1',
+                'rgb' => 'dce6f1',
             ],
         ],
     ];
@@ -70,7 +71,7 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => 'c3d8ef',
+                'rgb' => 'c3d8ef',
             ],
         ],
     ];
@@ -90,15 +91,16 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
             'startColor' => [
-                'argb' => '0f243e',
+                'rgb' => '0f243e',
             ],
         ],
     ];
 
-	public function __construct($view, $data){
-		$this->view = $view;
-	    $this->data = $data;
-	}
+	public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
+    }
 
     public function view(): View{
     	return view($this->view, ['data' => $this->data]);
@@ -129,6 +131,12 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
 
                 $cellRange = "A".(sizeof($this->data['brand'])+2).":I".(sizeof($this->data['brand'])+2);
                 $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lastLineBody);
+
+                if ($this->type != "Excel") {
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A3);
+                }
             },
         ];
     }
@@ -143,10 +151,10 @@ class allBrandsExport implements FromView, WithEvents, ShouldAutoSize, WithTitle
             'B' => '#,##0',
             'C' => '#,##0',
             'D' => '#,##0',
-            'E' => '#0%',
-            'F' => '#0%',
-            'G' => '#0%',
-            'H' => '#0%',
+            'E' => '0%',
+            'F' => '0%',
+            'G' => '0%',
+            'H' => '0%',
             'I' => '#,##0',
         ];
     }

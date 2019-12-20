@@ -227,7 +227,7 @@ class rankingChurn extends rank {
         /*for ($j=0; $j < sizeof($nameValues); $j++) { 
             var_dump($j,$nameValues[$j]);
         }*/
-
+        
     	$mtx[0][0] = "Ranking";
     	$pos = 1;
     	

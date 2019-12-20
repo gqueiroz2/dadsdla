@@ -295,10 +295,16 @@ class dashboards extends rank{
 
 	    	unset($values[1]);
 	    	
-	    }else{    	
+	    }else{
 	    	$filter = $baseFilter->$type;
-	    	
-	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $secondaryFilter);
+
+            if ($type == "agency") {
+                $auxFilter = $baseFilter->agencyGroup;
+            }else{
+                $auxFilter = "teste";
+            }
+
+	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter);
             
 	    	$mtx = $sr->assembler($values,$years,$type);
 	    }
