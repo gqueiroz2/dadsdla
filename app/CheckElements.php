@@ -209,7 +209,7 @@ class CheckElements extends Model{
 		$somethingDLA = "name";
 
 		if($table == "fw_digital"){
-			$something = "content_targeting_set_name";
+			$something = "ad_unit";
 		}else{
 			$something = "brand";	
 		}	

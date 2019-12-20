@@ -17,6 +17,7 @@ use App\cmaps;
 use App\baseRender;
 use App\sql;
 use App\agency;
+use App\insights;
 
 class viewerController extends Controller{
 
@@ -28,7 +29,6 @@ class viewerController extends Controller{
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
-        $bRender = new baseRender();
 
         $r = new region();
         $region = $r->getRegion($con, NULL);
@@ -41,16 +41,20 @@ class viewerController extends Controller{
 
         $v = new viewer();
 
-        return view("adSales.viewer.insightsGet",compact("render","bRender","years","region","currency","currencies","brand"));
+        return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand"));
     }
 
     public function insightsPost(){
+       // var_dump(Request::all());
+
         $render =  new Render();
         $bRender = new baseRender();
         $base = new base();
         $months = $base->month;
+
         $viewer = new viewer();
-    
+        $in = new insights();
+
         $db = new dataBase();
         $con = $db->openConnection("DLA");
 
@@ -65,6 +69,7 @@ class viewerController extends Controller{
         }
 
         $years = array($cYear = intval(date('Y')), $cYear - 1);
+
         $salesRegion = Request::get("region");
         $r = new region();
 
@@ -73,7 +78,7 @@ class viewerController extends Controller{
 
 
         $b = new brand();
-        $brands = $b->getBrand($con);
+        $brand = $b->getBrand($con);
 
         $salesCurrency = Request::get("currency");
         $p = new pRate();
@@ -97,33 +102,35 @@ class viewerController extends Controller{
         $tmp = Request::get("brand");
 
         for ($t=0; $t < sizeof($tmp); $t++) { 
-            $brand[$t] = json_decode(base64_decode($tmp[$t]))[0];
+            $brands[$t] = json_decode(base64_decode($tmp[$t]))[0];
         }
 
-        for ($b=0; $b < sizeof($brand); $b++) { 
-            if ($brand[$b] == 9){
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            if ($brands[$b] == 9){
                 $check = true;
             }
         }
         if ($check) {
-            array_push($brand, "13");
-            array_push($brand, "14");
-            array_push($brand, "15");
-            array_push($brand, "16");
+            array_push($brands, "13");
+            array_push($brands, "14");
+            array_push($brands, "15");
+            array_push($brands, "16");
         }
- 
+
+/*
         var_dump($month);
 
-        var_dump($brand);
+        var_dump($brands);
 
         var_dump($salesRep);
 
         var_dump($currency);
 
         var_dump($value);
+*/
+        $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-
-        //return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
+        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
     }
 
 	public function baseGet(){
