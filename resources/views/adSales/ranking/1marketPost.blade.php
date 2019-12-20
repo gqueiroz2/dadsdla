@@ -139,12 +139,13 @@
             var currency = <?php echo json_encode($pRate); ?>;
 
             var region = "{{$region}}";
-            
+
             var brands = <?php echo json_encode($brands); ?>;
 
 			ajaxSetup();
 
 			@for($m = 0; $m < sizeof($mtx[0]); $m++)
+				
 				$(document).on('click', "#"+type+{{$m}}, function(){
 
                     var name = $(this).text();
