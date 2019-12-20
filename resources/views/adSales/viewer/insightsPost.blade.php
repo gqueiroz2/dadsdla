@@ -90,7 +90,7 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-            <div class="col-9"></div>            
+            <div class="col-9-000989"></div>            
 
 			<div class="col" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Insights</span>
@@ -124,9 +124,6 @@
             </div>
 
         </div>
-
-    <div id="vlau"></div>
-
     
 
 @endsection
