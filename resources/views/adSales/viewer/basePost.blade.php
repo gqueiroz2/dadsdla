@@ -143,7 +143,11 @@
         <div class="container-fluid">
             <div class="row justify-content-center mt-2">
                 <div class="col">
-                    {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
+                    @if($mtx)
+                        {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
+                    @else
+                        THE IS NO DATA TO THE SELECTED YEAR !!!
+                    @endif
                 </div>
             </div>
         </div>
