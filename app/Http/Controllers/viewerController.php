@@ -7,17 +7,22 @@ use Validator;
 
 use App\base;
 use App\Render;
-use App\dataBase;
+use App\baseRender;
+
 use App\region;
 use App\brand;
-use App\pRate;
-use App\viewer;
+use App\agency;
 use App\salesRep;
 use App\cmaps;
-use App\baseRender;
-use App\sql;
-use App\agency;
+
+use App\viewer;
 use App\insights;
+
+use App\sql;
+use App\pRate;
+use App\dataBase;
+
+
 
 class viewerController extends Controller{
 
