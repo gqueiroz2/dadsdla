@@ -117,20 +117,20 @@ class viewerController extends Controller{
             array_push($brands, "16");
         }
 
-/*
-        var_dump($month);
-
-        var_dump($brands);
-
-        var_dump($salesRep);
-
-        var_dump($currency);
-
-        var_dump($value);
-*/
         $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand"));
+        $header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
+
+        $regionExcel = $regions;
+        $monthExcel = $month;
+        $brandExcel = $brand;
+        $salesRepExcel = $salesRep;
+        $clientExcel = $client;
+        $currencyExcel = $currencies;
+        $valueExcel = $value;
+        $title ="Viewer - Insights.xlsx";
+
+        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title","header","mtx"));
     }
 
 	public function baseGet(){

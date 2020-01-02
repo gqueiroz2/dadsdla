@@ -74,4 +74,9 @@ class viewerExcelController extends Controller {
 
 	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
     }
+
+    public function viewerInsights(){
+
+    	
+    }
 }

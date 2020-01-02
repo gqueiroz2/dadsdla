@@ -7,16 +7,7 @@ use App\base;
 class insights extends Model{
 
 	public function assemble($con,$sql,$client,$month,$brand,$salesRep,$currency,$value){
-		//var_dump($client);
-		/*
-		var_dump($month);
-		var_dump($brand);
-		var_dump($salesRep);
-		*/
-		
-		/*var_dump($currency);
-		var_dump($value);
-		*/
+
 		$mtx = $this->seek($con,$sql,$client,$month,$brand,$salesRep);
 
 	}
@@ -70,8 +61,6 @@ class insights extends Model{
 
 		";
 
-		//echo "<pre>".($sel)."</pre>";
-
 		$res = $con->query($sel);
 
 		$from = array(
@@ -102,8 +91,7 @@ class insights extends Model{
 
 		$mtx = $sql->fetch($res,$from,$from);
 
-		//var_dump($mtx);
-
+		return $mtx;
 
 	}
 }

@@ -131,15 +131,21 @@
 		$(document).ready(function(){
 			
 			var months = <?php echo json_encode($months); ?>;
+
             var type = "{{$type}}";
+
             var value = "{{$value}}";
+
             var currency = <?php echo json_encode($pRate); ?>;
+
             var region = "{{$region}}";
+
             var brands = <?php echo json_encode($brands); ?>;
 
 			ajaxSetup();
 
 			@for($m = 0; $m < sizeof($mtx[0]); $m++)
+				
 				$(document).on('click', "#"+type+{{$m}}, function(){
 
                     var name = $(this).text();
@@ -194,7 +200,9 @@
 	            var div = document.createElement('div');
 				var img = document.createElement('img');
 				img.src = '/loading_excel.gif';
+
 				div.innerHTML = "Generating File...<br/>";
+
 				div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;        background-image: url("/Loading.gif");        background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
 				div.appendChild(img);
 				document.body.appendChild(div);
