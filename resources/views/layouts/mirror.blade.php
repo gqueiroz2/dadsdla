@@ -24,7 +24,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- CSRF Token -->
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<title> D|ADS DLA - @yield('title') </title>
+		<title> D|Ad Sales Portal - @yield('title') </title>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 		

@@ -11,9 +11,8 @@
             <div class="col">
                 <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
                     @csrf
-                    <div class="row">                        
-
-                        <div class="col">
+                    <div class="row">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
 
                             @if($errors->has('region'))
@@ -28,7 +27,7 @@
                         </div>
 
 
-                        <div class="col">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
                             @if($errors->has('sourceDataBase'))
                                 <label style="color: red;">* Required</label>
@@ -36,12 +35,12 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col" id="especificNumberCol" style="display:none;">
+                        <div class="col-sm" id="especificNumberCol" style="display:none;">
                             <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
                             {{$render->especificNumber($brands)}}
                         </div>
                         
-                        <div class="col">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Year: </span></label>
                             @if($errors->has('year'))
                                 <label style="color: red;">* Required</label>
@@ -49,7 +48,7 @@
                             {{$render->year($regionID)}}                    
                         </div> 
 
-                        <div class="col">
+                        <div class="col-sm">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))
                                 <label style="color: red;">* Required</label>
@@ -57,7 +56,7 @@
                             {{$render->months()}}
                         </div>
                         
-                        <div class="col">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Brand: </span></label>
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
@@ -69,7 +68,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col">
+                        <div class="col-sm">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
@@ -77,7 +76,7 @@
                             {{$render->salesRep()}}
                         </div>
                         
-                        <div class="col">
+                        <div class="col-sm">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
                             @if($errors->has('agency'))
                                 <label style="color: red;">* Required</label>
@@ -85,7 +84,7 @@
                             {{$render->AgencyForm()}}
                         </div>
 
-                        <div class="col">
+                        <div class="col-sm">
                             <label class='labelLeft'><span class="bold">Client:</span></label>
                             @if($errors->has('client'))
                                 <label style="color: red;">* Required</label>
@@ -93,21 +92,21 @@
                             {{$render->ClientForm()}}
                         </div>
 
-                        <div class="col">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
                             @if($errors->has('currency'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->currency($currencies)}}
                         </div>
-                        <div class="col">
+                        <div class="col-sm">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
                             @if($errors->has('value'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->value2()}}
                         </div>
-                        <div class="col">
+                        <div class="col-sm">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
@@ -124,11 +123,15 @@
             <div class="col-sm"></div>
             <div class="col-sm"></div>
             <div class="col-sm"></div>
-            <div class="col-sm"></div> 
             <div class="col-sm-4" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
             </div>
-
+            <!--<div class="col-sm-2">
+                <select id="ExcelPDF" class="form-control">
+                    <option value="Excel">Excel</option>
+                    <option value="PDF">PDF</option>
+                </select>
+            </div>-->
             <div class="col-sm-2">
                 <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
                     Generate Excel
@@ -153,6 +156,14 @@
 
                 ajaxSetup();
 
+                $("#ExcelPDF").change(function(event){
+                    if ($("#ExcelPDF").val() == "PDF") {
+                        $("#excel").text("Generate PDF");
+                    }else{
+                        $("#excel").text("Generate Excel");
+                    }
+                });
+
                 $('#excel').click(function(event){
 
                     var regionExcel = "<?php echo $regionExcel; ?>";
@@ -166,52 +177,90 @@
                     var mtx = <?php echo (json_encode($mtx)); ?>;
                     var currencyExcel = "<?php echo $currencyExcel; ?>";
                     var valueExcel = "<?php echo $valueExcel; ?>";
-                    var title = "<?php echo $title; ?>";
                     var especificNumber = "<?php echo $especificNumberExcel; ?>";
 
                     var div = document.createElement('div');
                     var img = document.createElement('img');
                     img.src = '/loading_excel.gif';
-                    div.innerHTML ="Generating Excel...</br>";
+                    div.innerHTML ="Generating File...</br>";
                     div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
                     div.appendChild(img);
                     document.body.appendChild(div);
 
-                    $.ajax({
-                        xhrFields: {
-                            responseType: 'blob',
-                        },
-                        url: "/generate/excel/viewer/vBase",
-                        type: "POST",
-                        data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber},
-                        /*success: function(output){
-                            $("#vlau").html(output);
-                        },*/
-                        success: function(result,status,xhr){
-                            var disposition = xhr.getResponseHeader('content-disposition');
-                            var matches = /"([^"]*)"/.exec(disposition);
-                            var filename = (matches != null && matches[1] ? matches[1] : title);
+                    //var typeExport = $("#ExcelPDF").val();
+                    var typeExport = "Excel";
+                    var auxTitle = "<?php echo $title; ?>";
 
-                            //download
-                            var blob = new Blob([result], {
-                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                            });
-                            var link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = filename;
+                    if (typeExport == "Excel") {
+                        var title = "<?php echo $titleExcel; ?>";
+                        
+                        $.ajax({
+                            xhrFields: {
+                                responseType: 'blob',
+                            },
+                            url: "/generate/excel/viewer/vBase",
+                            type: "POST",
+                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                            /*success: function(output){
+                                $("#vlau").html(output);
+                            },*/
+                            success: function(result,status,xhr){
+                                var disposition = xhr.getResponseHeader('content-disposition');
+                                var matches = /"([^"]*)"/.exec(disposition);
+                                var filename = (matches != null && matches[1] ? matches[1] : title);
 
-                            document.body.appendChild(link);
+                                //download
+                                var blob = new Blob([result], {
+                                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                                });
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = filename;
 
-                            link.click();
-                            document.body.removeChild(link);
-                            document.body.removeChild(div);
-                        },
-                        error: function(xhr, ajaxOptions, thrownError){
-                            document.body.removeChild(div);
-                            alert(xhr.status+" "+thrownError);
-                        }
-                    });
+                                document.body.appendChild(link);
 
+                                link.click();
+                                document.body.removeChild(link);
+                                document.body.removeChild(div);
+                            },
+                            error: function(xhr, ajaxOptions, thrownError){
+                                document.body.removeChild(div);
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }else{
+                        var title = "<?php echo $titlePdf; ?>";
+                    
+                        $.ajax({
+                            xhrFields: {
+                                responseType: 'blob',
+                            },
+                            url: "/generate/excel/viewer/vBase",
+                                type: "POST",
+                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                            /*success: function(output){
+                                $("#vlau").html(output);
+                            },*/
+                            success: function(result, status, xhr){
+                                var disposition = xhr.getResponseHeader('content-disposition');
+                                var matches = /"([^"]*)"/.exec(disposition);
+                                var filename = (matches != null && matches[1] ? matches[1] : title);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(result);
+                                link.download = filename;
+
+                                document.body.appendChild(link);
+
+                                link.click();
+                                document.body.removeChild(link);
+                                document.body.removeChild(div);
+                            },
+                            error: function(xhr, ajaxOptions,thrownError){
+                                document.body.removeChild(div);
+                                alert(xhr.status+" "+thrownError);
+                            }
+                        });
+                    }
                 });
             });
 
