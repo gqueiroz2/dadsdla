@@ -17,7 +17,7 @@ class renderNewRanking extends Render {
         echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
 
             for ($m=1; $m < sizeof($mtx[$p]); $m++) { 
-                echo "<option value='".$mtx[$p][$m]."' >".$mtx[$p][$m]."</option>";
+                echo "<option value='".base64_encode(json_encode(array($mtx[$p-1][$m], $mtx[$p][$m])))."' >".$mtx[$p][$m]."</option>";
             }
 
         echo "</select>";
@@ -70,8 +70,7 @@ class renderNewRanking extends Render {
             				}
             			}else{
                             if ($mtx[$n][0] == ucfirst($type)) {
-                                echo "<td id='".$type.$m."' class='$color center'> ".$mtx[$n][$m]." </td>";
-                                $name = $mtx[$n][$m];
+                                echo "<td id='".$type.$m."' class='$color center' data-value='".$mtx[$n-1][$m]."'> ".$mtx[$n][$m]." </td>";                                
                             }else{
                                 echo "<td class='$color center'> ".$mtx[$n][$m]." </td>";
                             }

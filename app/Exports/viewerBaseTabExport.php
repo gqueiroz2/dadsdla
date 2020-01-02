@@ -14,13 +14,14 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 	protected $view;
 	protected $data;
+	protected $type;
 
 	protected $headStyle = [
 		'font' => [
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 12,
-			'color' => array('rgb' => 'FFFFF')
+			'color' => array('rgb' => 'FFFFFF')
 		],
 		'alignment' => [
 			'horizontal' => 'left',
@@ -34,7 +35,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 10,
-			'color' => array('rgb' => '0000000')
+			'color' => array('rgb' => '000000')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
@@ -48,7 +49,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 10,
-			'color' => array('rgb' => 'FFFFF')
+			'color' => array('rgb' => 'FFFFFF')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
@@ -62,7 +63,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 10,
-			'color' => array('rgb' => '0000000')
+			'color' => array('rgb' => '000000')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
@@ -72,7 +73,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 		'fill' => [
 			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
 			'startColor' => [
-				'argb' => 'f9fbfd',
+				'rgb' => 'f9fbfd',
 			],
 		],
 	];
@@ -82,7 +83,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			'bold' => true,
 			'name' => 'Verdana',
 			'size' => 10,
-			'color' => array('rgb' => '0000000')
+			'color' => array('rgb' => '000000')
 		],
 		'alignment' => [
 			'horizontal' => 'center',
@@ -92,18 +93,20 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 		'fill' => [
 			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
 			'startColor' => [
-				'argb' => 'c3d8ef',
+				'rgb' => 'c3d8ef',
 			],
 		],
 	];
 
-	public function __construct($view, $data){
-		$this->view = $view;
-		$this->data = $data;
-	}
+	public function __construct($view, $data, $type){
+        $this->view = $view;
+        $this->data = $data;
+        $this->type = $type;
+    }
 
 	public function view(): View{
-		return view($this->view, ['data' => $this->data]);
+		$c = 0;
+		return view($this->view, ['data' => $this->data, 'type' => $this->type, 'c' => $c]);
 	}
 
 	public function title(): string{
@@ -133,6 +136,13 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 					}
 				}
+
+				if ($this->type != "Excel") {
+
+                    $event->sheet->getDelegate()->getPageSetup()
+                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
+                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+                }
 			},
 		];
 	}
@@ -140,7 +150,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 	public function columnFormats(): array{
 
 		return[
-			'K' => '#0%',
+			'K' => '0%',
 			'N' => '#,##0'
 		];
 	}

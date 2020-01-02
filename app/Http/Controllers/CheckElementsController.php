@@ -37,6 +37,8 @@ class CheckElementsController extends Controller{
 		$table = Request::get('tableToCheck');
 		
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
+		//var_dump($table);
+		//var_dump($newValues);
 		
 		echo "<center>
 				<table class='table table-triped'>";
@@ -87,7 +89,11 @@ class CheckElementsController extends Controller{
 					echo "<div class='container-fluid'>";
 					for ($c=0; $c < sizeof($newValues['clients']); $c++) { 
 						echo "<div class='row'>";
+						if ($table == 'cmaps') {
+							echo "<div class='col'>".$newValues['clients'][$c]['client']."</div>";
+						}else{
 							echo "<div class='col'>".$newValues['clients'][$c]."</div>";
+						}
 						echo "</div>";
 					}
 					echo "</div>";
@@ -103,7 +109,11 @@ class CheckElementsController extends Controller{
 					echo "<div class='container-fluid'>";
 					for ($a=0; $a < sizeof($newValues['agencies']); $a++) { 
 						echo "<div class='row'>";
+						if ($table == 'cmaps') {
+							echo "<div class='col'>".$newValues['agencies'][$a]['agency']."</div>";
+						}else{
 							echo "<div class='col'>".$newValues['agencies'][$a]."</div>";
+						}
 						echo "</div>";
 					}
 					echo "</div>";

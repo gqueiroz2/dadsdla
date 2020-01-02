@@ -79,7 +79,6 @@ class ajaxController extends Controller{
         $sql = new sql();
 
         $region = Request::get("regionID");
-        //$client = $c->getClientByRegion($con,array($region));
         $selectInsight = "SELECT DISTINCT 
                                 c.ID AS 'id',
                                 c.name AS 'client' 
@@ -92,6 +91,7 @@ class ajaxController extends Controller{
         $clientInsights = $sql->fetch($res,$from,$from);
 
         $client = $clientInsights;
+
         for ($c=0; $c < sizeof($client); $c++) { 
             echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
         }
@@ -383,6 +383,29 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getNewSalesRepByRegionAndYear(){
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$year);
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
     public function yearByRegion(){
         
         $regionID = Request::get('regionID');
@@ -390,9 +413,9 @@ class ajaxController extends Controller{
         $pYear = $cYear - 1;
         $ppYear = $pYear - 1;
         if($regionID == 1){
-            $year = array($cYear,$pYear);           
+            $year = array($cYear,$pYear,$ppYear);           
         }else{
-            $year = array($cYear);
+            $year = array($cYear,$pYear);
         }
         for ($y=0; $y < sizeof($year); $y++) { 
             if($y == 0){
@@ -869,7 +892,7 @@ class ajaxController extends Controller{
          
             echo "<option value='10'>10</option>";
             echo "<option value='15'>15</option>";
-            echo "<option value='25'>25</option>";   
+            echo "<option value='25'>25</option>";
         }
     }
 
@@ -885,11 +908,17 @@ class ajaxController extends Controller{
         $currency = Request::get("currency");
         $months = Request::get("months");
         $years = Request::get("years");
+        
         $name = Request::get("name");
+        $auxName = Request::get("agencyGroup");
+
+        if ($auxName == "-") {
+            $auxName = "Others";
+        }
 
         $sr = new subRankings();
 
-        $subValues = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $name);
+        $subValues = $sr->getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $name, $auxName);
         $matrix = $sr->assembler($subValues, $years, $type);
         
         $mtx = $matrix[0];
@@ -902,7 +931,7 @@ class ajaxController extends Controller{
         }else{
             $newType = "agency";
         }
-        
+
         $sr->renderSubRankings($mtx, $total, $newType, sizeof($mtx[0]));
     }
 
@@ -945,7 +974,7 @@ class ajaxController extends Controller{
         $matrix = $sbr->assemble($types, $res, $type);
         $mtx = $matrix[0];
         $total = $matrix[1];
-
+        
         $sbr->renderSubAssembler($mtx, $total, $type, $name, $brands);
     }
 
@@ -960,7 +989,13 @@ class ajaxController extends Controller{
         $currency = Request::get("currency");
         $months = Request::get("months");
         $brands = Request::get("brands");
+
         $name = Request::get("name");
+        $auxName = Request::get("agencyGroup");
+
+        if ($auxName == "-") {
+            $auxName = "Others";
+        }
 
         $sbm = new subMarketRanking();
 
@@ -973,7 +1008,7 @@ class ajaxController extends Controller{
             $val = "brand";
         }
         
-        $values = $sbm->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
+        $values = $sbm->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val, $auxName);
 
         if ($type != "client") {
 
@@ -984,7 +1019,7 @@ class ajaxController extends Controller{
                 array_push($months2, $m);
             }
 
-            $valuesTotal = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+            $valuesTotal = $sbm->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val, $auxName);
     
         }else{
             $valuesTotal = null;
@@ -1015,7 +1050,13 @@ class ajaxController extends Controller{
         $currency = Request::get("currency");
         $months = Request::get("months");
         $brands = Request::get("brands");
+        
         $name = Request::get("name");
+        $auxName = Request::get("agencyGroup");
+
+        if ($auxName == "-") {
+            $auxName = "Others";
+        }
 
         $scr = new subChurnRanking();
 
@@ -1028,8 +1069,8 @@ class ajaxController extends Controller{
             $val = "client";
         }
         
-        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
-
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val, $auxName);
+        
         if ($type == "client") {
             $filterType = "agency";
         }else{
@@ -1055,7 +1096,7 @@ class ajaxController extends Controller{
             array_push($months2, $m);
         }
         
-        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val, $auxName);
         
         $matrix = $scr->assembler($values, $finalValues, $valuesTotal, $years, $filterType);
 
@@ -1076,7 +1117,13 @@ class ajaxController extends Controller{
         $currency = Request::get("currency");
         $months = Request::get("months");
         $brands = Request::get("brands");
+        
         $name = Request::get("name");
+        $auxName = Request::get("agencyGroup");
+
+        if ($auxName == "-") {
+            $auxName = "Others";
+        }
 
         $snr = new subNewRanking();
 
@@ -1089,7 +1136,7 @@ class ajaxController extends Controller{
             $val = "client";
         }
 
-        $values = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val);
+        $values = $snr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val, $auxName);
 
         $finalValues = array();
 
@@ -1110,7 +1157,7 @@ class ajaxController extends Controller{
             array_push($months2, $m);
         }
         
-        $valuesTotal = $snr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val);
+        $valuesTotal = $snr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val, $auxName);
 
         $matrix = $snr->assembler($values, $finalValues, $valuesTotal, $years, $val);
         

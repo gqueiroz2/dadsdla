@@ -20,7 +20,6 @@
 			<td style="background-color: #e6e6e6;">Category</td>
 			<td style="background-color: #e6e6e6;">Revenue</td>
 		</tr>
-
 		<tr>
 			@for($t=0;$t < sizeof($data['total']); $t++)
 				<td style="background-color: #0f243e;">Total</td>
@@ -46,7 +45,7 @@
 				<td>{{ucwords(strtolower($data['mtx'][$m]['sector']))}}</td>
 				<td>{{ucwords(strtolower($data['mtx'][$m]['category']))}}</td>
 				<td>{{$data['mtx'][$m][$data['value'].'Revenue']}}</td>
-			</tr>	
+			</tr>
 		@endfor
 	@endif
 </table>

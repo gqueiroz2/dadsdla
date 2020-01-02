@@ -423,6 +423,21 @@ class chain extends excel{
                     $count ++;
                 }
 
+                $temp5 = explode("|", $current[$c]['sales_rep']);
+
+                if(sizeof($temp5) > 1){
+                    $newC = $current[$c];
+                    $sales1 = trim($temp5[0]);
+                    $sales2 = trim($temp5[1]);
+                    $current[$c]['sales_rep'] = $sales1;
+                    $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
+                    $newC['sales_rep'] = $temp5[1];
+                    $newC['gross_revenue'] = $newC['gross_revenue']/2;
+                    array_push($current, $newC);
+
+                    $count ++;
+                } 
+
             //}
                 
         }
@@ -1416,10 +1431,10 @@ class chain extends excel{
                                   'io_end_date',
                                   'agency_commission_percentage',
                                   'rep_commission_percentage',
-                                  'currency',
                                   'placement',
                                   'buy_type',
                                   'content_targeting_set_name',
+                                  'currency',
                                   'ad_unit',
                                   'gross_revenue',
                                   'month'

@@ -69,6 +69,14 @@ class viewerExcelController extends Controller {
         
 	    $title = Request::get("title");
 	    
-	    return Excel::download(new baseExport($data, $label), $title);
+	    $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
+    }
+
+    public function viewerInsights(){
+
+    	
     }
 }

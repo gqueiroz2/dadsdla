@@ -8,7 +8,7 @@
 			<th colspan="{{sizeof($data)}}">
 				<span>
 					<b>
-						{{$names['region']}} - Market ({{$names['val']}} - {{$dataMarket}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
+						{{$names['region']}} - Market ({{$names['val']}} - {{$dataMarket[1]}}) Ranking (BKGS) : ({{$names['currency'][0]['name']}}/{{strtoupper($names['value'])}})
 					</b>
 				</span>
 			</th>
@@ -34,6 +34,13 @@
 					@endif
 				@endfor
 			</tr>
+			@if($type == "PDF" && $m != 0)
+				<?php $c++; ?>
+				@if($c == 40 && $m != (sizeof($data[0])-1))
+					<tr><td>teste</td></tr>
+					<?php $c = 0; ?>
+				@endif
+			@endif
 		@endfor
 
 		@if(!is_null($dataTotal))
