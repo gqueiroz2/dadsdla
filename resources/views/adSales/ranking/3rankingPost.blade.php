@@ -104,20 +104,6 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-			<div class="col-sm">
-				{{$render->search($mtx, $type)}}
-			</div>
-			<div class="col-sm">
-				<select id="ExcelPDF" class="form-control">
-					<option value="Excel">Excel</option>
-					<option value="PDF">PDF</option>
-				</select>
-			</div>
-			<div class="col-sm">
-				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
-					Generate Excel
-				</button>
-			</div>
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
@@ -125,6 +111,41 @@
 					<?php $newType = ($type == "agencyGroup") ? "Agency group" : ucfirst($type) ?>
 					{{$rName}} - {{$newType}} Ranking 
 				</span>
+			</div>
+
+
+		</div>
+
+		<div class="row justify-content-end mt-2">
+			<div class="col-sm"></div>
+			<div class="col-sm"></div>
+			<div class="col-sm">
+				<label class="labelLeft">	
+					<span class="bold"> 
+						Select 
+						@if($type == "agencyGroup")
+							an Agency Group
+						@elseif($type == "agency")
+							an Agency
+						@else
+							a Client
+						@endif
+					</span> 
+				</label>
+				{{$render->search($mtx, $type)}}
+			</div>
+			<div class="col-sm">
+				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+				<select id="ExcelPDF" class="form-control">
+					<option value="Excel">Excel</option>
+					<option value="PDF">PDF</option>
+				</select>
+			</div>
+			<div class="col-sm">
+				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
+					Generate Excel
+				</button>
 			</div>
 		</div>
 	</div>

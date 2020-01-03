@@ -337,8 +337,15 @@ class agency extends Management{
             $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
 
             if ($year) {
-                $years = implode(",", $year);
-                $where .= " AND year IN ('$years')";
+               //$years = implode(",", $year);
+                $where .= " AND year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";                
             }
         }
 
@@ -455,8 +462,15 @@ class agency extends Management{
             $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
 
             if ($year) {
-                $years = implode(",", $year);
-                $where .= " AND year IN ('$years')";
+                //$years = implode(",", $year);
+                $where .= " AND year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";
             }
         }
 

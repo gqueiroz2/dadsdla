@@ -35,13 +35,16 @@ class rankingMarket extends rank {
             $id = "";
         }
 
-        for ($v=0; $v < sizeof($values[0]); $v++) { 
-            if ($values[0][$v][$type.$id] == $name[$type.$id]) {
-                $bool = 0;
-                if ($values[0][$v]['total'] == 0) {
-                    $bool = 1;
-                }else{
-                    $bool = 2;
+       
+        if($values[0]){
+            for ($v=0; $v < sizeof($values[0]); $v++) { 
+                if ($values[0][$v][$type.$id] == $name[$type.$id]) {
+                    $bool = 0;
+                    if ($values[0][$v]['total'] == 0) {
+                        $bool = 1;
+                    }else{
+                        $bool = 2;
+                    }
                 }
             }
         }
@@ -66,6 +69,7 @@ class rankingMarket extends rank {
         }else{
             return $cont;
         }
+
     }
 
     public function searchValueByYear($name, $values, $type, $year, $id){
@@ -96,14 +100,16 @@ class rankingMarket extends rank {
         }else{
             $id = "";
         }
-
+        
         for ($s=0; $s < sizeof($values); $s++) { 
-            for ($s2=0; $s2 < sizeof($values[$s]); $s2++) { 
-                if ($name['agency'.$id] == $values[$s][$s2]['agency'.$id]) {
-                    if ($values[$s][$s2]['agencyGroup'] == "Others") {
-                        return "-";
-                    }else{
-                        return $values[$s][$s2]['agencyGroup'];
+            if($values[$s]){
+                for ($s2=0; $s2 < sizeof($values[$s]); $s2++) {                 
+                    if ($name['agency'.$id] == $values[$s][$s2]['agency'.$id]) {
+                        if ($values[$s][$s2]['agencyGroup'] == "Others") {
+                            return "-";
+                        }else{
+                            return $values[$s][$s2]['agencyGroup'];
+                        }
                     }
                 }
             }
