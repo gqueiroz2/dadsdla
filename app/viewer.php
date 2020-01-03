@@ -427,130 +427,136 @@ class viewer extends Model{
 
 		$pRate = 1.0;
 
-		for ($m=0; $m <sizeof($mtx); $m++) { 		
+
+		if($mtx){
+
+			for ($m=0; $m <sizeof($mtx); $m++) { 		
+				
+				if ($currencies == 'USD') {
+					if ($source == 'CMAPS') {
+						$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+					}else{
+						$pRate = 1.0;
+					}
+				}else{
+					if ($source == 'CMAPS') {
+						$pRate = 1.0;
+					}else{
+						$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+					}
+				}
+
+				switch ($source) {
+					case 'CMAPS':
 			
-			if ($currencies == 'USD') {
-				if ($source == 'CMAPS') {
-					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-				}else{
-					$pRate = 1.0;
-				}
-			}else{
-				if ($source == 'CMAPS') {
-					$pRate = 1.0;
-				}else{
-					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-				}
+						if ($mtx[$m]['package'] == 1) {
+							$mtx[$m]['package'] = "YES";
+						}else{
+							$mtx[$m]['package'] = "NO";
+						}
+
+						if ($mtx[$m]['month']){
+							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+						}
+
+						if ($mtx[$m]['discount'] || $mtx[$m][$value.'Revenue']) {
+							if ($mtx[$m]['discount']) {
+								$mtx[$m]['discount'] = doubleval($mtx[$m]['discount']);
+
+							}
+							if ($mtx[$m][$value.'Revenue']) {
+								$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
+							}
+						}
+
+						
+						$mtx[$m]['log'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['log']);
+						
+
+						break;
+
+					case 'IBMS/BTS':
+						if ($mtx[$m]['month']) {
+							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+						}
+
+						if($mtx[$m][$value.'Revenue']){
+							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
+						}
+						if ($mtx[$m]['impressionDuration']) {
+							$mtx[$m]['impressionDuration'] = doubleval($mtx[$m]['impressionDuration']);
+						}
+
+						
+
+						break;
+
+					case 'FW':
+						if ($mtx[$m]['month']) {
+							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+						}
+						
+						$mtx[$m]['ioStartDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioStartDate']);
+						
+						$mtx[$m]['ioEndDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioEndDate']);
+
+						if($mtx[$m][$value.'Revenue']){
+							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
+						}
+						if ($mtx[$m]['repCommissionPercentage']) {
+							$mtx[$m]['repCommissionPercentage'] = $mtx[$m]['repCommissionPercentage']*100;
+						}
+						if ($mtx[$m]['agencyCommissionPercentage']) {
+							$mtx[$m]['agencyCommissionPercentage'] = $mtx[$m]['agencyCommissionPercentage']*100;
+						}
+						if ($mtx[$m]['commission']) {
+							$mtx[$m]['commission'] = doubleval($mtx[$m]['commission']);
+						}
+						if ($mtx[$m]['brand'] == 'ONL'||'ONL-SM' ||'ONL-DSS'||'ONL-G9' ||'VOD') {
+							$mtx[$m]['brand'] = 'ONL';
+						}
+
+						
+						break;
+
+					case 'SF':
+
+						if ($mtx[$m]['fromDate']) {
+							$mtx[$m]['fromDate'] = $base->intToMonth(array($mtx[$m]['fromDate']))[0];
+						}
+						if ($mtx[$m]['toDate']) {
+							$mtx[$m]['toDate'] = $base->intToMonth(array($mtx[$m]['toDate']))[0];
+						}
+						
+						if($mtx[$m][$value.'Revenue'] || $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
+							if ($mtx[$m][$value.'Revenue']) {
+								$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
+							}
+							if ($mtx[$m]['fcstAmountGross']) {
+								$mtx[$m]['fcstAmountGross'] = doubleval($mtx[$m]['fcstAmountGross'])/$pRate;
+							}
+							if ($mtx[$m]['fcstAmountNet']) {
+								$mtx[$m]['fcstAmountNet'] = doubleval($mtx[$m]['fcstAmountNet'])/$pRate;
+							}
+						}
+						if ($mtx[$m]['agencyCommission']) {
+							 $mtx[$m]['agencyCommission'] = $mtx[$m]['agencyCommission']*100;
+						}
+						if ($mtx[$m]['successProbability']) {
+							$mtx[$m]['successProbability'] = $mtx[$m]['successProbability']/1;
+						}
+						if ($mtx[$m]['brand']) {
+							$mtx[$m]['brand'] = explode(";",$mtx[$m]['brand']);
+						}
+						
+						break;
+				
+				}			
 			}
 
-			switch ($source) {
-				case 'CMAPS':
-		
-					if ($mtx[$m]['package'] == 1) {
-						$mtx[$m]['package'] = "YES";
-					}else{
-						$mtx[$m]['package'] = "NO";
-					}
-
-					if ($mtx[$m]['month']){
-						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
-					}
-
-					if ($mtx[$m]['discount'] || $mtx[$m][$value.'Revenue']) {
-						if ($mtx[$m]['discount']) {
-							$mtx[$m]['discount'] = doubleval($mtx[$m]['discount']);
-
-						}
-						if ($mtx[$m][$value.'Revenue']) {
-							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-						}
-					}
-
-					
-					$mtx[$m]['log'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['log']);
-					
-
-					break;
-
-				case 'IBMS/BTS':
-					if ($mtx[$m]['month']) {
-						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
-					}
-
-					if($mtx[$m][$value.'Revenue']){
-						$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-					}
-					if ($mtx[$m]['impressionDuration']) {
-						$mtx[$m]['impressionDuration'] = doubleval($mtx[$m]['impressionDuration']);
-					}
-
-					
-
-					break;
-
-				case 'FW':
-					if ($mtx[$m]['month']) {
-						$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
-					}
-					
-					$mtx[$m]['ioStartDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioStartDate']);
-					
-					$mtx[$m]['ioEndDate'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['ioEndDate']);
-
-					if($mtx[$m][$value.'Revenue']){
-						$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-					}
-					if ($mtx[$m]['repCommissionPercentage']) {
-						$mtx[$m]['repCommissionPercentage'] = $mtx[$m]['repCommissionPercentage']*100;
-					}
-					if ($mtx[$m]['agencyCommissionPercentage']) {
-						$mtx[$m]['agencyCommissionPercentage'] = $mtx[$m]['agencyCommissionPercentage']*100;
-					}
-					if ($mtx[$m]['commission']) {
-						$mtx[$m]['commission'] = doubleval($mtx[$m]['commission']);
-					}
-					if ($mtx[$m]['brand'] == 'ONL'||'ONL-SM' ||'ONL-DSS'||'ONL-G9' ||'VOD') {
-						$mtx[$m]['brand'] = 'ONL';
-					}
-
-					
-					break;
-
-				case 'SF':
-
-					if ($mtx[$m]['fromDate']) {
-						$mtx[$m]['fromDate'] = $base->intToMonth(array($mtx[$m]['fromDate']))[0];
-					}
-					if ($mtx[$m]['toDate']) {
-						$mtx[$m]['toDate'] = $base->intToMonth(array($mtx[$m]['toDate']))[0];
-					}
-					
-					if($mtx[$m][$value.'Revenue'] || $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
-						if ($mtx[$m][$value.'Revenue']) {
-							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-						}
-						if ($mtx[$m]['fcstAmountGross']) {
-							$mtx[$m]['fcstAmountGross'] = doubleval($mtx[$m]['fcstAmountGross'])/$pRate;
-						}
-						if ($mtx[$m]['fcstAmountNet']) {
-							$mtx[$m]['fcstAmountNet'] = doubleval($mtx[$m]['fcstAmountNet'])/$pRate;
-						}
-					}
-					if ($mtx[$m]['agencyCommission']) {
-						 $mtx[$m]['agencyCommission'] = $mtx[$m]['agencyCommission']*100;
-					}
-					if ($mtx[$m]['successProbability']) {
-						$mtx[$m]['successProbability'] = $mtx[$m]['successProbability']/1;
-					}
-					if ($mtx[$m]['brand']) {
-						$mtx[$m]['brand'] = explode(";",$mtx[$m]['brand']);
-					}
-					
-					break;
-			
-			}			
+		}else{
+			return false;
 		}
-
 		return $mtx;
 	}
 

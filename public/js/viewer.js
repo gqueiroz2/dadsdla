@@ -17,6 +17,19 @@ $(document).ready(function(){
           if(year == ""){
             var option = "<option> Select Year </option>";           
           }else{
+            
+            $.ajax({
+              url:"/ajax/adsales/newSalesRepByRegionAndYear",
+              method:"POST",
+              data:{regionID,year},
+              success: function(output){
+                $('#salesRep').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
+
             $.ajax({
               url:"/ajax/adsales/thirdPosByRegion",
               method:"POST",
@@ -75,24 +88,6 @@ $(document).ready(function(){
       $('#sourceDataBase').change(function(){
         var source = $(this).val();
         
-/*
-        if(source != ""){
-          $.ajax({
-            url:"/ajax/adsales/brandBySource",
-            method:"POST",
-            data:{source},
-              success: function(output){
-                $('#brand').html(output).selectpicker('refresh');
-              },
-              error: function(xhr, ajaxOptions,thrownError){
-                alert(xhr.status+" "+thrownError);
-            }
-          });
-        }else{
-          $('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
-        }
-*/
-
         var sourceDataBase = $('#sourceDataBase').val();
         if(sourceDataBase == "CMAPS" || sourceDataBase == "SF"){
           if(sourceDataBase == "CMAPS"){
@@ -111,7 +106,6 @@ $(document).ready(function(){
           $('#especificNumber').css("display", "none");
         }
       });
-
 
       $.ajax({
         url:"/ajax/adsales/newSalesRepByRegion",
@@ -185,6 +179,7 @@ $(document).ready(function(){
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);
       //$('#brand').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
+      $('#salesRep').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#sourceDataBase').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#currency').empty().append(option);
       $('#firstPos').empty().append(option);
