@@ -68,8 +68,16 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-end mt-2">
+		<div class="row justify-content-end mt-4">
 			@if($type != "sector")
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm"></div>
+				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+					<div style="float: right;"> 
+						{{$rName}} - {{ucfirst($type)}} New Ranking 
+					</div>
+				</div>
 				<div class="col-sm">
 					{{$render->search($mtx, $type)}}
 				</div>
@@ -84,14 +92,8 @@
 						Generate Excel
 					</button>
 				</div>
-				<div class="col-sm"></div>
-				<div class="col-sm"></div>
-				<div class="col-sm"></div>
-				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-					<div style="float: right;"> 
-						{{$rName}} - {{ucfirst($type)}} New Ranking 
-					</div>
-				</div>
+				
+				
 			@else
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>

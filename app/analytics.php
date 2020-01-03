@@ -24,7 +24,6 @@ class analytics extends Model{
 
         var_dump($lastSevenDaysV);
 
-
 /*
         $lastHour = $dealWithList['lastHour'];
         $lastDay = $dealWithList['lastDay'];
