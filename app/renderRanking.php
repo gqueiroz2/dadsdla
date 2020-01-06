@@ -9,10 +9,12 @@ class renderRanking extends Render {
     
     public function search($mtx, $type){
 
-        if ($type != "agency") {
+        if($type == "client"){
+            $p = 2;
+        }elseif($type == "agency") {
             $p = 3;
         }else{
-            $p = 4;
+            $p = 2;
         }
 
         echo "<select class='selectpicker' id='namesExcel' name='namesExcel[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";

@@ -9,22 +9,42 @@ class RenderChain extends Render{
     
     public function yearMultiple(){
     	
+        $cYear = intval( date('Y') );
+        $pYear = $cYear -1;
+        $ppYear = $pYear -1;
+        $pppYear = $ppYear -1;
+
+        $year = array($cYear,$pYear,$ppYear,$pppYear);
+        
     	echo "<select class='selectpicker' data-selected-text-format='count' multiple='true' name='year[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
-			echo "<option value='2019' selected='true'> 2019 </option>";
-			echo "<option value='2018'> 2018 </option>";
-			echo "<option value='2017'> 2017 </option>";
-			echo "<option value='2016'> 2016 </option>";
+			for ($y=0; $y < sizeof($year); $y++) { 
+                if($y == 0){
+                    echo "<option value='".$year[$y]."' selected='true'>".$year[$y]."</option>";    
+                }else{  
+                    echo "<option value='".$year[$y]."'>".$year[$y]."</option>";    
+                }
+            }
 		echo "</select>";
     	
     }
 
     public function year(){
     	
+        $cYear = intval( date('Y') );
+        $pYear = $cYear -1;
+        $ppYear = $pYear -1;
+        $pppYear = $ppYear -1;
+
+        $year = array($cYear,$pYear,$ppYear,$pppYear);
+
     	echo "<select class='form-control' name='year' data-width='100%'>";
-			echo "<option value='2019' selected='true'> 2019 </option>";
-			echo "<option value='2018'> 2018 </option>";
-			echo "<option value='2017'> 2017 </option>";
-			echo "<option value='2016'> 2016 </option>";
+			for ($y=0; $y < sizeof($year); $y++) { 
+                if($y == 0){
+                    echo "<option value='".$year[$y]."' selected='true'>".$year[$y]."</option>";    
+                }else{  
+                    echo "<option value='".$year[$y]."'>".$year[$y]."</option>";    
+                }
+            }
 		echo "</select>";
     	
     }

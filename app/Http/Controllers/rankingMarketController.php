@@ -130,6 +130,8 @@ class rankingMarketController extends Controller {
     $titlePdf = "ranking market (".$rtr.").pdf";
 
   	return view("adSales.ranking.1marketPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'namesExcel', 'title', 'titleExcel', 'titlePdf'));
+
+  
 	}
 
 }

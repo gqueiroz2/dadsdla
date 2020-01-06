@@ -46,6 +46,7 @@ class ajaxController extends Controller{
     }
 
     public function getAgencyByRegion(){
+        
         $a = new agency;
         $db = new dataBase();
         $con = $db->openConnection("DLA");
@@ -55,8 +56,6 @@ class ajaxController extends Controller{
         for ($a=0; $a < sizeof($agency); $a++) { 
             echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
         }
-
-
     }
 
     public function getClientByRegion(){
@@ -828,7 +827,7 @@ class ajaxController extends Controller{
             $var = "client";
             
         }
-        
+
         for ($n=0; $n < sizeof($resp); $n++) { 
             
             $names[$n]['id'] = $resp[$n]["id"];
@@ -850,12 +849,13 @@ class ajaxController extends Controller{
         
         $name = Request::get("type");
         $region = Request::get("region");
-        $year = Request::get("year");
+        $year = intval( Request::get("year") );
+        $pYear = $year - 1;
 
         if (is_null($year)) {
             $year = false;        
         }else{
-            $year = array($year);
+            $year = array($year,$pYear);
         }
 
         $db = new dataBase();
@@ -869,7 +869,6 @@ class ajaxController extends Controller{
             $resp = $this->typeHandler($con, $fun, 0, $region, $year);
         }
 
-
         for ($r=0; $r < sizeof($resp); $r++) { 
             $auxVal = base64_encode(json_encode($resp[$r]));
             if ($name == "agency") {
@@ -879,7 +878,7 @@ class ajaxController extends Controller{
             }
             
         }
-        
+       
     }
 
     public function topsByType2(){

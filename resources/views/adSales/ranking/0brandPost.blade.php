@@ -68,7 +68,7 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-end mt-2">
+		<div class="row justify-content-end mt-4">
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
