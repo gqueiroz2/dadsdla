@@ -7,9 +7,42 @@ use App\base;
 class insights extends Model{
 
 	public function assemble($con,$sql,$client,$month,$brand,$salesRep,$currency,$value){
+		$base = new base();
 
 		$mtx = $this->seek($con,$sql,$client,$month,$brand,$salesRep);
+			for($m=0; $m < sizeof($mtx); $m++){
+				if ($mtx[$m]['month']){
+					$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+				}
 
+				if ($mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue'] || $mtx[$m]['numSpot']) {
+					if ($mtx[$m]['grossRevenue']){
+						$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue']);
+					}
+					if ($mtx[$m]['netRevenue']) {
+						$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']);
+					}
+					if ($mtx[$m]['numSpot']) {
+						$mtx[$m]['numSpot'] = doubleval($mtx[$m]['numSpot']);
+					}
+				}
+
+				if ($mtx[$m]['unitStartTime'] || $mtx[$m]['durationSpot'] || $mtx[$m]['durationImpression']) {
+					if ($mtx[$m]['unitStartTime']) {
+						$mtx[$m]['unitStartTime'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['unitStartTime']);
+					}
+					if ($mtx[$m]['durationSpot']) {
+						$mtx[$m]['durationSpot'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['durationSpot']);
+					}
+					if ($mtx[$m]['durationImpression']) {
+						$mtx[$m]['durationImpression'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['durationImpression']);
+					}
+				}
+				$mtx[$m]['dateEvent'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['dateEvent']);
+
+			}		
+
+		return $mtx;
 	}
 
 
@@ -93,5 +126,57 @@ class insights extends Model{
 
 		return $mtx;
 
+	}
+
+	public function total($con,$sql,$client,$month,$brand,$salesRep,$currencies,$salesRegion,$value){
+		$p = new pRate();
+		$base = new base();
+
+		//$brandString = $base->arrayToString($brand,false,0);
+
+		$monthString = $base->arrayToString($month,false,false);
+		
+		$salesRepString = $base->arrayToString($salesRep,false,false);
+		
+		$clientString = $base->arrayToString($client,false,false);
+
+		$year = date('Y');
+
+		$from = array('sumNumSpot',
+					  'sum'.$value.'Revenue');
+
+		$selectTotal = "SELECT SUM(i.numSpot) AS 'sumNumSpot'
+							   SUM(i.".$value."Revenue) AS 'sum".$value."Revenue'
+						FROM insights i
+						LEFT JOIN brand b ON i.brand = b.name
+						LEFT JOIN sales_rep sr ON i.salesRep = sr.name
+						LEFT JOIN client cl ON i.client = cl.name
+						WHERE (i.month IN ($monthString))
+							AND (sr.id IN ($salesRepString))
+							AND (cl.id IN ($clientString))
+						";
+	
+		$result = $con->query($selectTotal);
+		$total = $sql->fetch($result,$from,$from);
+
+		if ($currencies == 'USD'){
+			$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+		}else{
+			$pRate = 1.0;
+		}
+
+		var_dump($selectTotal);
+		/*for ($t=0; $t <sizeof($total); $t++) {
+		var_dump($total[$t]); 
+			if ($total[$t]['sum'.$value.'Revenue'] || $total[$t]['averageNumSpot']){
+				if ($total[$t]['sum'.$value.'Revenue']){
+					$total[$t]['sum'.$value.'Revenue'] = doubleval($total[$t]['sum'.$value.'Revenue'])/$pRate;
+				}
+
+				if ($total[$t]['averageNumSpot']){
+					$total[$t]['averageNumSpot'] = doubleval($total[$t]['averageNumSpot']);
+				}
+			}
+		}*/
 	}
 }

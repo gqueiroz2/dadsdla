@@ -49,7 +49,9 @@ $(document).ready(function(){
         method:"POST",
         data:{regionID},
         success: function(output){
-          $('#vlau').html(output);
+          $('#year').html(output);
+          var year = $('#year').val();
+
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
