@@ -6,6 +6,7 @@
 			use App\base;
 			use App\region;
 			$bs = new base();
+
 			$r = new region();
 			$db = new dataBase();
 
@@ -17,7 +18,6 @@
 			$userRegion = Request::session()->get('userRegionID');
 
 			$userRegionName = $r->getRegion($con,array($userRegion))[0]['name'];
-
 		?>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
