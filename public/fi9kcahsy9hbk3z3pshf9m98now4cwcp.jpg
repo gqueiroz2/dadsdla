@@ -63,7 +63,7 @@
         
         <a href="https://www.box.com/home" class="header-logo" aria-label="Visit the Box homepage">
             
-                <img src="https://discovery.account.box.com/index.php?rm=pic_storage_auth&amp;pic=euks!pac3kv01!K2lblnzugdt8BY_gtSRz867WEpY8c0RWgHV0Xzp1anJLo00TkhBkRlwpBhr8vGbkXx7PQsK4-fddFuWAm3Ar-ZYKA2y5cHbcQrCd4zYnWYzTbzGctdZsTszYZoxwyzLJNSXQerZ7ucmhYtxhOKQmVZMDlX2HFlQVXWplb1HP5nac2sN33SmfUuHSV_2zEFg0cODNPY6U2ferv06PCL4YQL-g8vwFtTJGbko1nTh9gvGIHM1DaF_A6vkzvA5FHqFEvQPd8navhk_pgqX6tzO8ZidwfBf5IQ3jWcTiPCaXzYDe65v9Y_gBbS85K9HXZ43gzy7txp6FcNJrfhYJ" class="logo">
+                <img src="https://discovery.account.box.com/index.php?rm=pic_storage_auth&amp;pic=euks!pac3kv01!ul6HiGDA8V5-_QXTnpqp8xXSBhyxj9wPLbSFy_-nIzT6LhpToArS3tCPeH2KfFH4nHg5D7KRPao2nJdwdDJgZeUUqr9wlIQ5fgB5iTa5DSsG9-EHuQNkp3mqBHYa3sblxUoB0u2OFk-vQth21ppfKf2tao5BUmw497wtwj3v9R2szWLKFsBug4kJ7GflSmpaBmxAov08R61yy5YLWeIH3v02UF-kMoOaSSc71w3vo2ZZhJ0AeOZmdjZTZE9znCYEJsOPa4TFMICb8w8BBw1j1DVyHoG9Md77G6yQZvfVesE3oGkPse5IT4XeiB9OrcXP_pY79fUFU1brszfvh_g." class="logo">
             
         </a>
 
@@ -245,7 +245,7 @@
         </div>
     </div>
 </div>
-  <div class="main-body is-narrow">   <div class="login-container">  <h1>Part of Discovery Communications, LLC?</h1>   <p>Discovery Communications, LLC uses your network username and password to login to Box. Continue to login to Box through your network.</p><form class="form-buttons is-shortened" method="post" action="/login"><button type="submit" class="btn btn-primary btn-full-width"> Continue</button><input type="hidden" name="redirect_url" value="https://discovery.app.box.com/public/static/fi9kcahsy9hbk3z3pshf9m98now4cwcp.jpg"><input type="hidden" name="request_token" value="8eecf0088b519ce1f1cc9cb5e41c27b37a4fd349fd7b4d7592b74e8d44164f7e"><input type="hidden" name="login_page_source" value="sso-prompt-login"></form><div class="login-other-choices"> <a href="https://account.box.com/login?redirect_url=https://discovery.app.box.com/public/static/fi9kcahsy9hbk3z3pshf9m98now4cwcp.jpg">  Not a part of Discovery Communications, LLC?</a></div></div>
+  <div class="main-body is-narrow">   <div class="login-container">  <h1>Part of Discovery Communications, LLC?</h1>   <p>Discovery Communications, LLC uses your network username and password to login to Box. Continue to login to Box through your network.</p><form class="form-buttons is-shortened" method="post" action="/login"><button type="submit" class="btn btn-primary btn-full-width"> Continue</button><input type="hidden" name="redirect_url" value="https://discovery.app.box.com/public/static/fi9kcahsy9hbk3z3pshf9m98now4cwcp.jpg"><input type="hidden" name="request_token" value="f3370899c6c8bd7af3284fad4605d916e74f477f5ff1decc29497de96a7c499d"><input type="hidden" name="login_page_source" value="sso-prompt-login"></form><div class="login-other-choices"> <a href="https://account.box.com/login?redirect_url=https://discovery.app.box.com/public/static/fi9kcahsy9hbk3z3pshf9m98now4cwcp.jpg">  Not a part of Discovery Communications, LLC?</a></div></div>
   <div class="login-custom-message">  <h2>Create Your Account Before You Log In</h2><p>- <a href="https://discovery.box.com/join" target="_blank">Click Here To Create Your Account</a>  <br />
 <br />
 Please Supply Your:<br />
@@ -270,7 +270,7 @@ Please Supply Your:<br />
     window.Box = window.Box || {};
     Box.config = Box.config || {};
     Box.config.currentRm = 'amsterdam_login_premium';
-    Box.config.requestToken = '8eecf0088b519ce1f1cc9cb5e41c27b37a4fd349fd7b4d7592b74e8d44164f7e';
+    Box.config.requestToken = 'f3370899c6c8bd7af3284fad4605d916e74f477f5ff1decc29497de96a7c499d';
     Box.config.debug = 0;
     Box.config.locale = 'en-US';
     Box.config.isBoxEditAllowed = 1;

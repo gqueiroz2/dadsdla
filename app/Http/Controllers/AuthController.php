@@ -7,6 +7,7 @@ use App\dataBase;
 use App\User;
 use App\password;
 use Session;
+
 class AuthController extends Controller
 {
     public function loginGet(){
@@ -16,15 +17,13 @@ class AuthController extends Controller
 
     public function logout(){
 	
-        return view('auth.login');
-
-
-        /*require_once('/var/simplesamlphp/lib/_autoload.php');
+        require_once('/var/simplesamlphp/lib/_autoload.php');
 
         $as = new \SimpleSAML\Auth\Simple('default-sp');
 
-        $as->logout(route('logoutGet'));*/
+	var_dump($as);
 
+        //$as->logout(route('logoutGet'));
 
     }
    
@@ -34,24 +33,26 @@ class AuthController extends Controller
     }
 
     public function autenticate(){
+    	$user = new User();
         
-    	/*$user = new User();
     	$db = new dataBase();
 
     	$con = $db->openConnection('DLA');
-    	require_once('/var/simplesamlphp/lib/_autoload.php');
-    	$as = new \SimpleSAML\Auth\Simple('default-sp');
-    	
+    	if(file_exists('/var/simplesamlphp/lib/_autoload.php')){
+		require_once('/var/simplesamlphp/lib/_autoload.php');
+	}
+	
+    
+	$as = new \SimpleSAML\Auth\Simple('default-sp');
     	$as->requireAuth();
     	
     	$bool=$user->autenticate($con,$as);
-	
+
     	if($bool){
     		return redirect('home');
     	}else{
     		return redirect('permission');
-    	}*/
-        return view('auth.login');
+    	}
         
     }
 

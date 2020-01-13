@@ -107,11 +107,10 @@
                        <li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
-	                        	<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
+	                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
 								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
 								<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
-								<a class="nav-link" href="{{ route('newGet') }}"> New </a>
-	                            <a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+	                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
 	                        </div>
                         </li>
 
@@ -136,6 +135,7 @@
 								@endif
 							</div>
 						</li>	
+					@if( ( $userLevel == "SU" ) )
 						
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
@@ -143,7 +143,12 @@
 								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
+<<<<<<< HEAD
+						</li>	
+					@endif		
+=======
 						</li>
+>>>>>>> cbb5864e852dda91de129b40d2081bb8fd4d51d5
 
 					</ul>    
 
@@ -176,7 +181,7 @@
 	                            </div>	                            
                         	</div>
                         	
-                        	{{ $bs->sources() }}                       	
+                        	{{ $bs->sources() }}
                         	
                         </div>     
 					</ul>    
