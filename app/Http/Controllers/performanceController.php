@@ -13,8 +13,6 @@ use App\region;
 use App\salesRep;
 use App\brand;
 
-use App\individualRender;
-
 class performanceController extends Controller{
     
     public function individualGet(){
@@ -22,7 +20,7 @@ class performanceController extends Controller{
     	$base = new base();
     	$db = new dataBase();
     	$con = $db->openConnection("DLA");
-    	$render = new individualRender();
+    	//$render = new individualRender();
 
     	$r = new region();
     	$sr = new salesRep();
@@ -34,6 +32,6 @@ class performanceController extends Controller{
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
         $currency = $p->getCurrency($con,null);
 
-        return view("adSales.performance.individualGet", compact('region', 'salesRepGroup', 'render', 'brand', 'currency'));
+        return view("adSales.testePerformance.individualGet", compact('region', 'salesRepGroup', /*'render',*/ 'brand', 'currency'));
     }
 }

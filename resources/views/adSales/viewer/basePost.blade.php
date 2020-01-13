@@ -126,21 +126,13 @@
             <div class="col-sm-4" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
             </div>
-<<<<<<< HEAD
             <div class="col-sm-2">
-=======
-            <!--<div class="col-sm-2">
->>>>>>> ab1ab08c66deba80d3a130461462d4b5dbfe9a37
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
                 </select>
-<<<<<<< HEAD
             </div>
 
-=======
-            </div>-->
->>>>>>> ab1ab08c66deba80d3a130461462d4b5dbfe9a37
             <div class="col-sm-2">
                 <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
                     Generate Excel
@@ -170,11 +162,7 @@
                 ajaxSetup();
 
                 $("#ExcelPDF").change(function(event){
-<<<<<<< HEAD
-                    if ($("#ExcelPDF").val() == "PDF"){
-=======
                     if ($("#ExcelPDF").val() == "PDF") {
->>>>>>> ab1ab08c66deba80d3a130461462d4b5dbfe9a37
                         $("#excel").text("Generate PDF");
                     }else{
                         $("#excel").text("Generate Excel");

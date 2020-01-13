@@ -6,12 +6,10 @@
     ?>
 @endsection
 @section('content')
-	@if($userLevel != 'SU' || $userLevel != 'L0' || $userLevel != 'L1' || $userLevel != 'L3' || $userLevel != 'L4' )
 		<div class="container-fluid">		
 			<div class="row">
 				<div class="col">
 					
-
 					<form method="POST" action="{{ route('executivePerformancePost') }}"  runat="server"  onsubmit="ShowLoading()">
 						@csrf
 						<div class="row justify-content-center">
@@ -27,12 +25,12 @@
 								@endif
 							</div>
 							<div class="col">
-								<label class='labelLeft'><span class="bold">Year:</span></label>
-								@if($errors->has('year'))
-									<label style="color: red;">* Required</label>
-								@endif
-								{{$render->year()}}
-							</div>
+	                            <label class="labelLeft"><span class="bold"> Year: </span></label>
+	                            @if($errors->has('year'))
+	                                <label style="color: red;">* Required</label>
+	                            @endif
+	                            {{$render->year($regionID)}}                    
+                        	</div>
 							<div class="col">
 								<label class='labelLeft'><span class="bold">Tiers:</span></label>
 								@if($errors->has('brand'))
@@ -98,8 +96,6 @@
 				</div>
 			</div>
 		</div>
-	@else
-	@endif
 	<div id="vlau"></div>
 
 @endsection

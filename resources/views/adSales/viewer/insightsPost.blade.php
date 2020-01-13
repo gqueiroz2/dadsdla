@@ -90,7 +90,7 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-            <div class="col-9-000989"></div>            
+            <div class="col-9"></div>            
 
 			<div class="col" style="color: #0070c0; font-size:22px">
                 <span style="float: right; margin-right: 2.5%;">Insights</span>
@@ -109,15 +109,8 @@
             <div class="row mt-4">
                 <div class="col table-responsive">
                     <table class="table" style="width: 100%;">
-                        <tr>
-                            @for($h=0;$h<sizeof($header);$h++)
-                                <th> {{$header[$h]}} </th>
-                            @endfor
-                        </tr>
                         @if($mtx)
-                            @for($m = 0;$m < sizeof($mtx);$m++)
-
-                            @endfor
+                           {{$inRender->assemble($mtx,$currencies,$value,$regions)}}
                         @endif
                     </table>
                 </div>

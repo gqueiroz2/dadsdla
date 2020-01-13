@@ -120,7 +120,7 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-									<a class="dropdown-item" href="{{ route('insightsGet')}}"> Insights </a>
+
 								</div>
 							</li>
 						@endif
@@ -145,14 +145,6 @@
 							</div>
 						</li>
 
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> TESTE </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('individualGet') }}"> Individual </a>
-								<a class="dropdown-item" href="{{ route('coreGet') }}"> Core </a>
-								<a class="dropdown-item" href="{{ route('officeGet') }}"> Office </a>
-							</div>
-						</li>				
 					</ul>    
 
 					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">

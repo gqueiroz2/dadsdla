@@ -8,6 +8,7 @@ use Validator;
 use App\base;
 use App\Render;
 use App\baseRender;
+use App\insightsRender;
 
 use App\region;
 use App\brand;
@@ -54,6 +55,7 @@ class viewerController extends Controller{
 
         $render =  new Render();
         $bRender = new baseRender();
+        $inRender =  new insightsRender();
         $base = new base();
         $months = $base->month;
 
@@ -124,7 +126,9 @@ class viewerController extends Controller{
 
         $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-        $header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
+        //$header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
+
+        $total = $in->total($con,$sql,$client,$month,$brand,$salesRep,$currencies,$salesRegion,$value);
 
         $regionExcel = $regions;
         $monthExcel = $month;
@@ -135,7 +139,7 @@ class viewerController extends Controller{
         $valueExcel = $value;
         $title ="Viewer - Insights.xlsx";
 
-        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title","header","mtx"));
+        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title"/*,"header"*/,"mtx","inRender","value","regions","total"));
     }
 
 	public function baseGet(){
@@ -225,6 +229,8 @@ class viewerController extends Controller{
         $year = Request::get("year");
 
         $salesRep = Request::get("salesRep");
+
+        var_dump($salesRep);
 
         $agency = Request::get("agency");
 
