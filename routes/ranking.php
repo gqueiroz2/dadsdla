@@ -12,7 +12,6 @@
 */
 
 Route::group(['middleware' => 'auth'],function(){
-
 	Route::group(['prefix'=>'rankings'], function(){
 		Route::group(['prefix'=>'ranking'], function(){
 			Route::get('/','rankingController@get')
@@ -42,16 +41,6 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('/', 'rankingChurnController@post')
 				->name('churnPost');
 	});
-
-	Route::group(['prefix'=>'new'],function(){
-		Route::get('/', 'rankingNewController@get')
-				->name('newGet');
-		Route::post('/', 'rankingNewController@post')
-				->name('newPost');
-	});
-
-});
-
 Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('typeByRegion', 'ajaxController@typeByRegion');
 	Route::post('firstPosYear', 'ajaxController@firstPosYear');
@@ -65,4 +54,5 @@ Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('marketSubRanking', 'ajaxController@marketSubRanking');
 	Route::post('churnSubRanking', 'ajaxController@churnSubRanking');
 	Route::post('newSubRanking', 'ajaxController@newSubRanking');
+});
 });

@@ -44,7 +44,7 @@
 
 @section('content')
     
-    <div class="container-fluid fill px-4 d-table">
+    <div class="container-fluid fill px-4 d-table" style='margin-top:-5%;'>
         <div class="row">
             <div id="map" class="aligh-middle" >
                 <center>
