@@ -143,12 +143,8 @@
 								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
-<<<<<<< HEAD
 						</li>	
 					@endif		
-=======
-						</li>
->>>>>>> cbb5864e852dda91de129b40d2081bb8fd4d51d5
 
 					</ul>    
 
