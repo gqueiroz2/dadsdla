@@ -16,22 +16,20 @@ use App\brand;
 class performanceController extends Controller{
     
     public function individualGet(){
+        $base = new base();
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $r = new region();
+        $sr = new salesRep();
+        $render = new executivePerformanceRender();
+        $b = new brand();
+        $pr = new pRate();
 
-    	$base = new base();
-    	$db = new dataBase();
-    	$con = $db->openConnection("DLA");
-    	//$render = new individualRender();
-
-    	$r = new region();
-    	$sr = new salesRep();
-    	$b = new brand();
-    	$p = new pRate();
-
-    	$region = $r->getRegion($con,null);
+        $region = $r->getRegion($con,null);
         $brand = $b->getBrand($con);
         $salesRepGroup = $sr->getSalesRepGroup($con,null);
-        $currency = $p->getCurrency($con,null);
+        $currency = $pr->getCurrency($con,null);
 
-        return view("adSales.testePerformance.individualGet", compact('region', 'salesRepGroup', /*'render',*/ 'brand', 'currency'));
+        return view("adSales.testePerformance.individualGet", compact('region', 'salesRepGroup', 'render', 'brand', 'currency'));
     }
 }
