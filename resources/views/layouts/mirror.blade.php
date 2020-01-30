@@ -120,7 +120,9 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('baseGet') }}"> CMAPS </a>
-									<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
+									@if( ( $userLevel == "SU" ))
+										<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
+									@endif
 								</div>
 							</li>
 						@endif
