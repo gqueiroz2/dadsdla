@@ -957,6 +957,12 @@ class ajaxController extends Controller{
         $sbr = new subBrandRanking();
         
         $res = $sbr->getSubResults($con, $type, $region, $value, $months, $currency, $name, $brands);
+
+        if ($type == "agency" || $type == "sector" || $type == "category") {
+            $val = "client";
+        }else{
+            $val = "brand";
+        }
         
         $types = array();
 

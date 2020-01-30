@@ -128,11 +128,11 @@ class insights extends Model{
 
 	}
 
-	public function total($con,$sql,$client,$month,$brand,$salesRep,$currencies,$salesRegion,$value){
+	public function total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value){
 		$p = new pRate();
 		$base = new base();
 
-		//$brandString = $base->arrayToString($brand,false,0);
+		$brandString = $base->arrayToString($brands,false,0);
 
 		$monthString = $base->arrayToString($month,false,false);
 		
@@ -142,18 +142,19 @@ class insights extends Model{
 
 		$year = date('Y');
 
-		$from = array('sumNumSpot',
+		$from = array('averageNumSpot',
 					  'sum'.$value.'Revenue');
 
-		$selectTotal = "SELECT SUM(i.numSpot) AS 'sumNumSpot'
-							   SUM(i.".$value."Revenue) AS 'sum".$value."Revenue'
+		$selectTotal = "SELECT AVG(i.num_spot) AS 'averageNumSpot',
+							   SUM(i.".$value."_revenue) AS 'sum".$value."Revenue'
 						FROM insights i
-						LEFT JOIN brand b ON i.brand = b.name
-						LEFT JOIN sales_rep sr ON i.salesRep = sr.name
-						LEFT JOIN client cl ON i.client = cl.name
+						LEFT JOIN brand b ON i.brand_id = b.ID
+						LEFT JOIN sales_rep sr ON i.sales_rep_id = sr.ID
+						LEFT JOIN client cl ON i.client_id = cl.ID
 						WHERE (i.month IN ($monthString))
-							AND (sr.id IN ($salesRepString))
-							AND (cl.id IN ($clientString))
+							AND (sr.ID IN ($salesRepString))
+							AND (cl.ID IN ($clientString))
+							AND (b.ID IN ($brandString))
 						";
 	
 		$result = $con->query($selectTotal);
@@ -165,9 +166,7 @@ class insights extends Model{
 			$pRate = 1.0;
 		}
 
-		var_dump($selectTotal);
-		/*for ($t=0; $t <sizeof($total); $t++) {
-		var_dump($total[$t]); 
+		for ($t=0; $t <sizeof($total); $t++) {
 			if ($total[$t]['sum'.$value.'Revenue'] || $total[$t]['averageNumSpot']){
 				if ($total[$t]['sum'.$value.'Revenue']){
 					$total[$t]['sum'.$value.'Revenue'] = doubleval($total[$t]['sum'.$value.'Revenue'])/$pRate;
@@ -177,6 +176,7 @@ class insights extends Model{
 					$total[$t]['averageNumSpot'] = doubleval($total[$t]['averageNumSpot']);
 				}
 			}
-		}*/
+		}
+		return $total;
 	}
 }

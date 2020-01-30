@@ -24,7 +24,6 @@ use App\pRate;
 use App\dataBase;
 
 
-
 class viewerController extends Controller{
 
     public function insightsGet(){
@@ -54,12 +53,10 @@ class viewerController extends Controller{
        // var_dump(Request::all());
 
         $render =  new Render();
-        $bRender = new baseRender();
         $inRender =  new insightsRender();
         $base = new base();
         $months = $base->month;
 
-        $viewer = new viewer();
         $in = new insights();
 
         $db = new dataBase();
@@ -82,7 +79,6 @@ class viewerController extends Controller{
 
         $region = $r->getRegion($con,null);
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
-
 
         $b = new brand();
         $brand = $b->getBrand($con);
@@ -128,18 +124,21 @@ class viewerController extends Controller{
 
         //$header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
 
-        $total = $in->total($con,$sql,$client,$month,$brand,$salesRep,$currencies,$salesRegion,$value);
+        $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
 
-        $regionExcel = $regions;
+        $regionExcel = $salesRegion;
         $monthExcel = $month;
-        $brandExcel = $brand;
+        $brandExcel = $brands;
         $salesRepExcel = $salesRep;
         $clientExcel = $client;
         $currencyExcel = $currencies;
         $valueExcel = $value;
-        $title ="Viewer - Insights.xlsx";
 
-        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title"/*,"header"*/,"mtx","inRender","value","regions","total"));
+        $title = "Viewer Insights";
+        $titleExcel = "Viewer Insights.xlsx";
+        $titlePdf = "Viewer Insights.pdf";
+
+        return view("adSales.viewer.insightsPost",compact("render","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel"/*,"header"*/,"mtx","inRender","value","regions","total","titleExcel","titlePdf","title"));
     }
 
 	public function baseGet(){
@@ -229,8 +228,6 @@ class viewerController extends Controller{
         $year = Request::get("year");
 
         $salesRep = Request::get("salesRep");
-
-        var_dump($salesRep);
 
         $agency = Request::get("agency");
 

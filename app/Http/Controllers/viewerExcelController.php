@@ -13,10 +13,11 @@ use App\pRate;
 use App\sql;
 use App\dataBase;
 
-use Illuminate\Support\Facades\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 use App\Exports\baseExport;
 use App\Exports\insightsExport;
@@ -85,13 +86,17 @@ class viewerExcelController extends Controller {
 
 	    $sql = new sql();
 
-    	$region = Request::get('regionExcel');
+    	$salesRegion = Request::get('regionExcel');
+        $r = new region();
+
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
     	$client = json_decode(base64_decode(Request::get('clientExcel')));
 
     	$month = json_decode(base64_decode(Request::get('monthExcel')));
 
-    	$brand = json_decode(base64_decode(Request::get('brandExcel')));
+    	$brands = json_decode(base64_decode(Request::get('brandExcel')));
 
     	$salesRep = json_decode(base64_decode(Request::get('salesRepExcel')));
 
@@ -105,13 +110,14 @@ class viewerExcelController extends Controller {
 
     	$mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-        $header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
+        $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
 
-        $data = array('mtx' => $mtx, 'currency' => $currencies['name'], 'region' => $region, 'client' => $client, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'value' => $value, 'header' => $header);
+        $data = array('mtx' => $mtx,'total' => $total, 'currency' => $currencies['name'], 'region' => $regions, 'client' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value);
 
         $label = 'exports.viewer.insights.insightsExport';
 
         $title = Request::get('title');
+
 
         return Excel::download(new insightsExport($data, $label), $title);
 

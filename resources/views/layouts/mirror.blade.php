@@ -111,6 +111,7 @@
 								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
 								<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
 	                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+	                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
 	                        </div>
                         </li>
 
