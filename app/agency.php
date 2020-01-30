@@ -489,6 +489,34 @@ class agency extends Management{
 
     }
 
+    public function getAgencyByRegionCMAPS($con,$year=false){
+
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID'
+                   ";
+
+        $where = "WHERE year = '$year'";
+        
+        $join = "LEFT JOIN agency a ON a.id = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
+
+        $from = array('id','agency','agencyGroup','agencyGroupID');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
     public function getAllAgenciesByRegion($con,$agencyRegion=false){
      
         $sql = new sql();

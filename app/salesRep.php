@@ -270,6 +270,31 @@ class salesRep extends Management{
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;
 	}
+
+	public function getSalesRepByRegionCMAPS($con,$region,$year){
+
+		$sql = new sql();
+		$table = "cmaps c";
+		$columns = "sr.ID AS 'salesRepID',
+				    sr.name AS 'salesRep',	
+				    srg.name AS 'salesRepGroup',
+				    r.name AS 'region'
+				    ";
+
+		$where = "WHERE (r.ID = '$region') AND (year = '$year')";
+
+		$join = "
+				LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+		        LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				LEFT JOIN region r ON r.ID = srg.region_id
+				";
+		$res = $sql->selectDistinct($con,$columns,$table,$join,$where);
+		$from = array('salesRepID','salesRep','salesRepGroup','region');
+		$salesRep = $sql->fetch($res,$from,$from);
+    	return $salesRep;
+	}
+
+
 	public function addSalesRep($con){
 		$sql = new sql();
 		$regionID = Request::get('region');

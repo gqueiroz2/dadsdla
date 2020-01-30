@@ -10,6 +10,7 @@ class viewer extends Model{
 
 	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client){
 		$base = new base();
+
 /*
 		if ($source == "sf") {
 			$columns = array('brand','year_from','year_to','from_date','to_date','sales_rep_owner_id','sales_rep_splitter_id');
@@ -22,6 +23,7 @@ class viewer extends Model{
 */
 
 		$brandString = $base->arrayToString($brand,false,0);
+		
 		$monthString = $base->arrayToString($month,false,false);
 
 		$salesRepString = $base->arrayToString($salesRep,false,false);
@@ -29,7 +31,6 @@ class viewer extends Model{
 		$clientString = $base->arrayToString($client,false,0);
 
 		$agencyString = $base->arrayToString($agency,false,0);
-			
 
 		if ($source == "CMAPS"){
 
@@ -126,6 +127,8 @@ class viewer extends Model{
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
 							ORDER BY c.month";
+
+				//echo "<pre>".($select)."</pre>";
 
 			}
 			//echo "<pre>".($select)."</pre>";
@@ -340,7 +343,7 @@ class viewer extends Model{
 
 	}
 
-	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion, $value){
+	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion, $value,$agency,$client){
 		$base = new base();
 		$p = new pRate();
 
@@ -349,6 +352,10 @@ class viewer extends Model{
 		$monthString = $base->arrayToString($month,false,false);
 
 		$salesRepString = $base->arrayToString($salesRep,false,false);
+
+		$clientString = $base->arrayToString($client,false,0);
+
+		$agencyString = $base->arrayToString($agency,false,0);
 
 		if ($source == 'CMAPS') {
 			$from  = array('averageDiscount',
@@ -360,6 +367,8 @@ class viewer extends Model{
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+								LEFT JOIN agency a ON a.ID = c.agency_id
+								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
@@ -371,10 +380,18 @@ class viewer extends Model{
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+								LEFT JOIN agency a ON a.ID = c.agency_id
+								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
-									AND (sr.ID IN ($salesRepString))";
+									AND (sr.ID IN ($salesRepString))
+									
+								";
+
+								
+
+
 			}
 
 		}

@@ -130,6 +130,8 @@ class viewerController extends Controller{
 
         $total = $in->total($con,$sql,$client,$month,$brand,$salesRep,$currencies,$salesRegion,$value);
 
+        var_dump($total);
+
         $regionExcel = $regions;
         $monthExcel = $month;
         $brandExcel = $brand;
@@ -139,7 +141,7 @@ class viewerController extends Controller{
         $valueExcel = $value;
         $title ="Viewer - Insights.xlsx";
 
-        return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title"/*,"header"*/,"mtx","inRender","value","regions","total"));
+        //return view("adSales.viewer.insightsPost",compact("render","bRender","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","title"/*,"header"*/,"mtx","inRender","value","regions","total"));
     }
 
 	public function baseGet(){
@@ -230,8 +232,6 @@ class viewerController extends Controller{
 
         $salesRep = Request::get("salesRep");
 
-        var_dump($salesRep);
-
         $agency = Request::get("agency");
 
         $client = Request::get("client");
@@ -258,7 +258,7 @@ class viewerController extends Controller{
 
         $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
         
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value,$agency,$client);
         
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
 

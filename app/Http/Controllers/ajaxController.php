@@ -71,6 +71,61 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getAgencyByRegionAndYear(){        
+        
+        $a = new agency;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");        
+        $year  = Request::get("year");
+
+        $agency = $a->getAgencyByRegionCMAPS($con,$year);
+
+        for ($a=0; $a < sizeof($agency); $a++){ 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+    }
+
+    public function getClientByRegionAndYear(){
+
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+
+        $year  = Request::get("year");
+        $client = $c->getClientByRegionCMAPS($con,$year);
+
+        for ($c=0; $c < sizeof($client); $c++) { 
+            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+        }
+    }
+
+    public function getClientByRegionAndAgency(){
+        $base = new base();
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
+
+        $agency = Request::get('agency');
+        $region = Request::get("region");
+        $year = Request::get("year");
+        if( !is_null($agency) ){
+            $agencyString = $base->arrayToString($agency,false,0);
+        }else{
+            $agencyString = false;
+        }
+
+        $client = $c->clientByAgencyAndRegion($con,$sql,$region,$year,$agencyString);
+
+        if($client){
+            for ($c=0; $c < sizeof($client); $c++) { 
+                echo "<option value='".$client[$c]["clientID"]."' selected='true'>".$client[$c]["client"]."</option>";
+            }    
+        }else{
+            echo "<option value='' selected='true'> There is no Clients for those agencies on $year </option>";
+        }
+    }
+
     public function getClientByRegionInsights(){
         $c = new client;
         $db = new dataBase();
@@ -405,6 +460,29 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getSalesRepByRegionAndYear(){
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            //$regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegionCMAPS($con,$regionID,$year);
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["salesRepID"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
     public function yearByRegion(){
         
         $regionID = Request::get('regionID');
@@ -696,7 +774,7 @@ class ajaxController extends Controller{
         }
 
 
-        echo "<option value=''> Select </option>";
+        //echo "<option value=''> Select </option>";
         for ($s=0; $s < sizeof($source); $s++) { 
             echo "<option value='".$source[$s]."'>".$source[$s]."</option>";
         }

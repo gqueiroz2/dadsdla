@@ -15,7 +15,7 @@ class Render extends Model{
 
     public function agencyForm(){
         
-        echo "<select class='selectpicker' id='agency' name='agency[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+        echo "<select class='selectpicker agencyChange' id='agency' name='agency[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' data-live-search='true'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }
@@ -236,7 +236,7 @@ class Render extends Model{
     }
 
     public function especificNumber(){
-        echo "<input type='text' id='especificNumber' name='especificNumber' value='0' class='form-control' style='display: none;'>";
+        echo "<input type='text' id='especificNumber' name='especificNumber' value='' class='form-control' style='display: block;'>";
     }
 
     public function brand($brand){

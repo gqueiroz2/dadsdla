@@ -145,18 +145,23 @@ class insights extends Model{
 		$from = array('sumNumSpot',
 					  'sum'.$value.'Revenue');
 
-		$selectTotal = "SELECT SUM(i.numSpot) AS 'sumNumSpot'
-							   SUM(i.".$value."Revenue) AS 'sum".$value."Revenue'
+		$selectTotal = "SELECT SUM(i.num_spot) AS 'sumNumSpot',
+							   SUM(i.".$value."_revenue) AS 'sum".$value."Revenue'
 						FROM insights i
-						LEFT JOIN brand b ON i.brand = b.name
-						LEFT JOIN sales_rep sr ON i.salesRep = sr.name
-						LEFT JOIN client cl ON i.client = cl.name
+						LEFT JOIN brand b ON i.brand_id = b.ID
+						LEFT JOIN sales_rep sr ON i.sales_rep_id = sr.ID
+						LEFT JOIN client cl ON i.client_id = cl.ID
 						WHERE (i.month IN ($monthString))
 							AND (sr.id IN ($salesRepString))
 							AND (cl.id IN ($clientString))
 						";
 	
+		echo "<pre>".$selectTotal."</pre>";
+
 		$result = $con->query($selectTotal);
+
+		var_dump($result);
+
 		$total = $sql->fetch($result,$from,$from);
 
 		if ($currencies == 'USD'){
@@ -165,8 +170,11 @@ class insights extends Model{
 			$pRate = 1.0;
 		}
 
-		var_dump($selectTotal);
-		/*for ($t=0; $t <sizeof($total); $t++) {
+		var_dump($total);
+
+		/*
+
+		for ($t=0; $t <sizeof($total); $t++) {
 		var_dump($total[$t]); 
 			if ($total[$t]['sum'.$value.'Revenue'] || $total[$t]['averageNumSpot']){
 				if ($total[$t]['sum'.$value.'Revenue']){
@@ -177,6 +185,8 @@ class insights extends Model{
 					$total[$t]['averageNumSpot'] = doubleval($total[$t]['averageNumSpot']);
 				}
 			}
-		}*/
+		}
+
+		return $total;*/
 	}
 }

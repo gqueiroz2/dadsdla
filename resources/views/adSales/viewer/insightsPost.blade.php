@@ -110,7 +110,13 @@
                 <div class="col table-responsive">
                     <table class="table" style="width: 100%;">
                         @if($mtx)
-                           {{$inRender->assemble($mtx,$currencies,$value,$regions)}}
+                            <?php
+
+                                //var_dump($mtx);
+
+                                $inRender->assemble($mtx,$currencies,$value,$regions,$total)
+
+                            ?>
                         @endif
                     </table>
                 </div>
