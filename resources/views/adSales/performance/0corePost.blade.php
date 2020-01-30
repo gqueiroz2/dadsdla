@@ -96,14 +96,15 @@
 				<div class="row justify-content-end mt-2">
 					<div class="col-sm"></div>
 					<div class="col-sm"></div>
-					<div class="col-sm" style="color: #0070c0;font-size: 22px">
-						<span style="float: right;"> Core Performance </span>
-					</div>
+					<div class="col-sm"></div>
 					<div class="col-sm">
 						<select id="ExcelPDF" class="form-control">
 							<option value="Excel">Excel</option>
 							<option value="PDF">PDF</option>
 						</select>
+					</div>
+					<div class="col-sm" style="color: #0070c0;font-size: 22px">
+						<span style="float: right;"> Core Performance </span>
 					</div>
 					<div class="col-sm">
 						<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -111,9 +112,10 @@
 						</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
-		<div class="row mt-2">
+		<div class="row">
 			<div class="col" style='width:100%; zoom:80%;' >
 				<div class="form-group" style='width:100%;'>
 					<div class="form-inline" style='width:100%; margin-left: 1.2%; margin-right: auto;'>
@@ -159,6 +161,8 @@
 					$("#excel").text("Generate Excel");
 				}
 			});
+
+			$('#ExcelPDF').hide();
 
 			$("#excel").click(function(event){
 

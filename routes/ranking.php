@@ -41,6 +41,14 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('/', 'rankingChurnController@post')
 				->name('churnPost');
 	});
+
+	Route::group(['prefix'=>'new'], function(){
+		Route::get('/', 'rankingNewController@get')
+				->name('newGet');
+		Route::post('/','rankingNewController@post')
+				->name('newPost');
+	});
+
 Route::group(['prefix' => 'ajaxRanking'], function(){
 	Route::post('typeByRegion', 'ajaxController@typeByRegion');
 	Route::post('firstPosYear', 'ajaxController@firstPosYear');

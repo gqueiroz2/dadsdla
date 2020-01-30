@@ -95,14 +95,14 @@
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
-			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				{{$rName}} - Office : {{$year}}
-			</div>
 			<div class="col-sm">
 				<select id="ExcelPDF" class="form-control">
 					<option value="Excel">Excel</option>
 					<option value="PDF">PDF</option>
 				</select>
+			</div>
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				{{$rName}} - Office : {{$year}}
 			</div>
 			<div class="col-sm">
 				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -134,6 +134,8 @@
 				$("#excel").text("Generate Excel");
 			}
 		});
+
+		$('#ExcelPDF').hide();
 
 		$('#excel').click(function(event){
 

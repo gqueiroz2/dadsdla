@@ -33,6 +33,7 @@ class analytics extends Model{
     }
 
     public function lastSevenDays($list){
+
         $sevenDays = array(  
                             date('Y-m-d'),
                             date('Y-m-d', strtotime('-1 days')),
@@ -42,7 +43,6 @@ class analytics extends Model{
                             date('Y-m-d', strtotime('-6 days')),
                             date('Y-m-d', strtotime('-7 days'))
         );
-
 
         for ($s=0; $s < sizeof($sevenDays); $s++) { 
             $sevenDaysI[$s] = array();

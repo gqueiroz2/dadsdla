@@ -146,7 +146,7 @@ class insights extends Model{
 					  'sum'.$value.'Revenue');
 
 		$selectTotal = "SELECT AVG(i.num_spot) AS 'averageNumSpot',
-							   SUM(i.".$value."_revenue) AS 'sum".$value."Revenue'
+		 			    SUM(i.".$value."_revenue) AS 'sum".$value."Revenue'
 						FROM insights i
 						LEFT JOIN brand b ON i.brand_id = b.ID
 						LEFT JOIN sales_rep sr ON i.sales_rep_id = sr.ID
@@ -157,7 +157,9 @@ class insights extends Model{
 							AND (b.ID IN ($brandString))
 						";
 	
+
 		$result = $con->query($selectTotal);
+
 		$total = $sql->fetch($result,$from,$from);
 
 		if ($currencies == 'USD'){
@@ -165,7 +167,7 @@ class insights extends Model{
 		}else{
 			$pRate = 1.0;
 		}
-
+		
 		for ($t=0; $t <sizeof($total); $t++) {
 			if ($total[$t]['sum'.$value.'Revenue'] || $total[$t]['averageNumSpot']){
 				if ($total[$t]['sum'.$value.'Revenue']){
@@ -177,6 +179,8 @@ class insights extends Model{
 				}
 			}
 		}
+
 		return $total;
+
 	}
 }

@@ -94,6 +94,12 @@
 				</form>
 				<div class="row justify-content-end mt-2">
 					<div class="col-sm"></div>
+					<div class="col-sm">
+						<select id="ExcelPDF" class="form-control">
+							<option value="Excel">Excel</option>
+							<option value="PDF">PDF</option>
+						</select>
+					</div>
 					@if($render->bonus($user))
 						<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 							<div style="float: right;">
@@ -113,12 +119,6 @@
 							</div>
 						</div>
 					@endif
-					<div class="col-sm">
-						<select id="ExcelPDF" class="form-control">
-							<option value="Excel">Excel</option>
-							<option value="PDF">PDF</option>
-						</select>
-					</div>
 					<div class="col-sm">
 						<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 							Generate Excel
@@ -204,6 +204,8 @@
 					$("#bonusExcel").text("Generate Bonus Excel");
 				}
 			});
+
+			$('#ExcelPDF').hide();
 
 			$('#excel').click(function(event){
 

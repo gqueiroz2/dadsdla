@@ -43,21 +43,25 @@
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
-			<div class="col-sm" style="color: #0070c0;font-size: 22px">
-				<span style="float: right;"> {{$rName}} - Summary : {{$salesShow}} - {{$cYear}} </span>
-			</div>
+			<div class="col-sm"></div>
 			<div class="col-sm">
 				<select id="ExcelPDF" class="form-control">
 					<option value="Excel">Excel</option>
 					<option value="PDF">PDF</option>
 				</select>
 			</div>
+			<div class="col-sm" style="color: #0070c0;font-size: 22px">
+				<span style="float: right;"> {{$rName}} - Summary : {{$salesShow}} - {{$cYear}} </span>
+			</div>
+
 			<div class="col-sm">
 				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 					Generate Excel
 				</button>
 			</div>
 		</div>
+
+
 	</div>
 	@for($t = 0; $t < sizeof($matrix); $t++)
 		<div class="container-fluid" style="margin-right: 0.5%; margin-left: 0.5%; font-size:12px;">
@@ -84,6 +88,9 @@
 					$("#excel").text("Generate Excel");
 				}
 			});
+
+			$("#ExcelPDF").hide();
+
 
 			$("#excel").click(function(event){
 

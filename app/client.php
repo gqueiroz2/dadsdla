@@ -9,6 +9,34 @@ use App\region;
 use App\sql;
 
 class client extends Management{
+
+    public function clientByAgencyAndRegion($con,$sql,$region,$year,$agency){
+
+        $table = 'cmaps c';
+
+        $columns = "cl.name AS 'client',
+                    cl.ID AS 'clientID',
+                    a.ID AS 'agencyID',
+                    a.name AS 'agency'
+                   ";
+
+        $where = "WHERE (c.agency_id IN ($agency)) AND (year = '$year')";
+
+
+        $join = "LEFT JOIN client cl ON cl.ID = c.client_id
+                 LEFT JOIN agency a ON a.ID = c.agency_id                 
+                ";
+
+        $res = $sql->selectGroupBy2($con,$columns,$table,$join,$where, "cl.name", "cl.id");
+
+        $from = array('clientID','client','agencyID','agency');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+
     public function getClientGroupID($con,$sql,$group,$region){
         $table = "client_group";
         $columns = "ID";
@@ -375,6 +403,33 @@ class client extends Management{
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
 
         $from = array('id','client','clientGroupID','clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+    public function getClientByRegionCMAPS($con,$year=false){
+     
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "c.name AS 'client',
+                    c.ID AS 'id',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup'
+                   ";
+
+        $where = "WHERE year = '$year'";
+
+        $join = "LEFT JOIN client c ON c.ID = y.client_id
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                ";
+
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
+
+        $from = array('id','client','clientGroupID','clientGroup');
 
         $client = $sql->fetch($res,$from,$from);
 

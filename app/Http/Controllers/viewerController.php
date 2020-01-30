@@ -139,6 +139,7 @@ class viewerController extends Controller{
         $titlePdf = "Viewer Insights.pdf";
 
         return view("adSales.viewer.insightsPost",compact("render","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel"/*,"header"*/,"mtx","inRender","value","regions","total","titleExcel","titlePdf","title"));
+
     }
 
 	public function baseGet(){
@@ -255,7 +256,7 @@ class viewerController extends Controller{
 
         $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
         
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value,$agency,$client);
         
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
 

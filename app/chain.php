@@ -473,35 +473,43 @@ class chain extends excel{
                     $newC['net_revenue_prate'] = $newC['net_revenue_prate']/2;
                     $newC['net_net_revenue_prate'] = $newC['net_net_revenue_prate']/2;
                 }else{
-                    
                     $salesArray = array();
-
                     for ($t=0; $t < sizeof($temp); $t++){ 
                       $somp = $sr->getNewSalesRep($con, trim($temp[$t]))[0];
-                      if($somp['region'] == $current[$c]['sales_representant_office']){
+                      //if($somp['region'] == $current[$c]['sales_representant_office']){
                         array_push($salesArray, trim($temp[$t]) ) ;
-                      }
+                      //}
+
                     }
 
                     if(sizeof($salesArray) > 1){
-                        $current[$c]['sales_rep'] = $salesArray[0];
-                        $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/2;
-                        $current[$c]['net_revenue'] = $current[$c]['net_revenue']/2;
-                        $current[$c]['net_net_revenue'] = $current[$c]['net_net_revenue']/2;
 
-                        $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_prate']/2;
-                        $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue_prate']/2;
-                        $current[$c]['net_net_revenue_prate'] = $current[$c]['net_net_revenue_prate']/2;
+                        if(sizeof($salesArray) == 2){
+                            $divi = 2;
+                        }else if(sizeof($salesArray) == 3){
+                            $divi = 3;
+                        }else{
+                            $divi = 4;
+                        }
+
+                        $current[$c]['sales_rep'] = $salesArray[0];
+                        $current[$c]['gross_revenue'] = $current[$c]['gross_revenue']/$divi;
+                        $current[$c]['net_revenue'] = $current[$c]['net_revenue']/$divi;
+                        $current[$c]['net_net_revenue'] = $current[$c]['net_net_revenue']/$divi;
+
+                        $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_prate']/$divi;
+                        $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue_prate']/$divi;
+                        $current[$c]['net_net_revenue_prate'] = $current[$c]['net_net_revenue_prate']/$divi;
                         
                         $newC['sales_rep'] = $salesArray[1];
 
-                        $newC['gross_revenue'] = $newC['gross_revenue']/2;
-                        $newC['net_revenue'] = $newC['net_revenue']/2;
-                        $newC['net_net_revenue'] = $newC['net_net_revenue']/2;
+                        $newC['gross_revenue'] = $newC['gross_revenue']/$divi;
+                        $newC['net_revenue'] = $newC['net_revenue']/$divi;
+                        $newC['net_net_revenue'] = $newC['net_net_revenue']/$divi;
 
-                        $newC['gross_revenue_prate'] = $newC['gross_revenue_prate']/2;
-                        $newC['net_revenue_prate'] = $newC['net_revenue_prate']/2;
-                        $newC['net_net_revenue_prate'] = $newC['net_net_revenue_prate']/2;
+                        $newC['gross_revenue_prate'] = $newC['gross_revenue_prate']/$divi;
+                        $newC['net_revenue_prate'] = $newC['net_revenue_prate']/$divi;
+                        $newC['net_net_revenue_prate'] = $newC['net_net_revenue_prate']/$divi;
                     }else{
                         $current[$c]['sales_rep'] = $salesArray[0];
                     }

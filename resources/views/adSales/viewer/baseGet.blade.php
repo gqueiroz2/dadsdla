@@ -38,7 +38,7 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col" id="especificNumberCol" style="display:none;">
+                        <div class="col" id="especificNumberCol" style="display:block;">
                             <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
                             {{$render->especificNumber($brand)}}
                         </div>

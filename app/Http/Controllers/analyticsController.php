@@ -18,6 +18,8 @@ class analyticsController extends Controller{
     	$con = $db->openConnection('DLA');
     	$at = new analytics();
 
+        var_dump("something");
+
     	$something = $at->assembler($con,$sql);
         
 

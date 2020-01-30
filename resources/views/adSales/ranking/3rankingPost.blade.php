@@ -106,19 +106,21 @@
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
-			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+			<div class="col-sm">
+				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+				<select id="ExcelPDF" class="form-control">
+					<option value="Excel">Excel</option>
+					<option value="PDF">PDF</option>
+				</select>
+			</div>
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;"><br>
 				<span style="float: right;"> 
 					<?php $newType = ($type == "agencyGroup") ? "Agency group" : ucfirst($type) ?>
 					{{$rName}} - {{$newType}} Ranking 
 				</span>
 			</div>
 
-
-		</div>
-
-		<div class="row justify-content-end mt-2">
-			<div class="col-sm"></div>
-			<div class="col-sm"></div>
+			
 			<div class="col-sm">
 				<label class="labelLeft">	
 					<span class="bold"> 
@@ -134,13 +136,7 @@
 				</label>
 				{{$render->search($mtx, $type)}}
 			</div>
-			<div class="col-sm">
-				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-				<select id="ExcelPDF" class="form-control">
-					<option value="Excel">Excel</option>
-					<option value="PDF">PDF</option>
-				</select>
-			</div>
+			
 			<div class="col-sm">
 				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
 				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -208,6 +204,8 @@
 				$("#excel").text("Generate Excel");
 			}
 		});
+
+		$('#ExcelPDF').hide();
 
 		$("#excel").click(function(event){
             	

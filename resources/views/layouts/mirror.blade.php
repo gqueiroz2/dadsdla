@@ -119,7 +119,7 @@
 	                        <li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
+									<a class="dropdown-item" href="{{ route('baseGet') }}"> CMAPS </a>
 									<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
 								</div>
 							</li>
@@ -137,7 +137,6 @@
 							</div>
 						</li>	
 					@if( ( $userLevel == "SU" ) )
-						
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -145,7 +144,7 @@
 								<!--<a class="dropdown-item" href="#"> Insights </a>-->
 							</div>
 						</li>	
-					@endif		
+					
 
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Teste Performance </a>
@@ -155,6 +154,7 @@
 								<a class="dropdown-item"> Office </a>
 							</div>
 						</li>
+					@endif		
 					</ul>    
 
 					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">

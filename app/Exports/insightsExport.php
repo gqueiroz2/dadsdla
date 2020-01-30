@@ -4,16 +4,19 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class baseExport implements FromArray, WithMultipleSheets {
+class insightsExport implements FromArray, WithMultipleSheets, WithTitle {
 
     protected $sheets;
     protected $labels;
+    protected $title;
 
-    public function __construct(array $sheets, $labels){
-		$this->sheets = $sheets;
+    public function __construct(array $sheets, $labels, $title){
+        $this->sheets = $sheets;
         $this->labels = $labels;
-	}
+        $this->title = $title;
+    }
 
     public function array(): array {
 
@@ -21,11 +24,15 @@ class baseExport implements FromArray, WithMultipleSheets {
     }
 
     public function sheets(): array{
-    	
-    	$sheet = [
+        
+        $sheet = [
             new viewerInsightsTabExport($this->labels, $this->sheets)
         ];
 
         return $sheet;
+    }
+
+    public function title(): string{
+        return $this->title;
     }
 }

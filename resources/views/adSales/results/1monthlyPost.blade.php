@@ -65,21 +65,24 @@
 		<div class="col-sm"></div>
 		<div class="col-sm"></div>
 		<div class="col-sm"></div>
-		<div class="col-sm-2" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
-		</div>
+		<div class="col-sm-2"></div>
 		<div class="col-sm-2">
 			<select id="ExcelPDF" class="form-control">
 				<option value="Excel">Excel</option>
 				<option value="PDF">PDF</option>
 			</select>
 		</div>
+		<div class="col-sm-2" style="color: #0070c0;font-size: 20px;">
+			<span style="float: right;"> {{$rName}} - Month : {{$form}} - {{$year}} </span>
+		</div>
 		<div class="col-sm-2">
 			<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 				Generate Excel
 			</button>
 		</div>
-	</div>	
+	</div>
+
+		
 	
 </div>
 
@@ -106,6 +109,8 @@
 					$("#excel").text("Generate Excel");
 				}
 			});
+
+			$("#ExcelPDF").hide();
 
 			$("#excel").click(function(event){
 

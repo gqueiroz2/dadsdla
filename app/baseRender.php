@@ -25,7 +25,7 @@ class baseRender extends Render{
 		
 		echo "<table style='width: 100%;'>";
 			echo "<tr>";	
-				echo "<th class='newBlue center' colspan='14' style='font-size:20px; width:100%;'> $regions - Viewer $source $year - ($currencies/$newValue) </th>";
+				echo "<th class='newBlue center' colspan='14' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies/$newValue) </th>";
 			echo "</tr>";
 						
 				if ($source == 'Cmaps') {

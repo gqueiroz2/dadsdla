@@ -73,6 +73,12 @@
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
+				<div class="col-sm">
+					<select id="ExcelPDF" class="form-control">
+						<option value="Excel">Excel</option>
+						<option value="PDF">PDF</option>
+					</select>
+				</div>
 
 				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 					<div style="float: right;"> 
@@ -81,15 +87,25 @@
 				</div>
 				
 				<div class="col-sm">
-					{{$render->search($mtx, $type)}}
-				</div>
+				<label class="labelLeft">	
+					<span class="bold"> 
+						Select 
+						@if($type == "category")
+							a Category
+						@elseif($type == 'sector')
+							a Sector
+						@elseif($type == "agency")
+							an Agency
+						@else
+							a Client
+						@endif
+					</span> 
+				</label>
+				{{$render->search($mtx, $type)}}
+			</div>
+				
 				<div class="col-sm">
-					<select id="ExcelPDF" class="form-control">
-						<option value="Excel">Excel</option>
-						<option value="PDF">PDF</option>
-					</select>
-				</div>
-				<div class="col-sm">
+					<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
 					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 						Generate Excel
 					</button>
@@ -100,17 +116,18 @@
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
 				<div class="col-sm"></div>
-				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-					<div style="float: right;"> 
-						{{$rName}} - {{ucfirst($type)}} Market Ranking 
-					</div>
-				</div>
 				<div class="col-sm">
 					<select id="ExcelPDF" class="form-control">
 						<option value="Excel">Excel</option>
 						<option value="PDF">PDF</option>
 					</select>
 				</div>
+				<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+					<div style="float: right;"> 
+						{{$rName}} - {{ucfirst($type)}} Market Ranking 
+					</div>
+				</div>
+				
 				<div class="col-sm">
 					<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
 						Generate Excel
@@ -182,6 +199,8 @@
 					$("#excel").text("Generate Excel");
 				}
 			});
+
+			$('#ExcelPDF').hide();
 
             $("#excel").click(function(event){
             	

@@ -114,7 +114,7 @@
             <div class="row mt-4">
                 <div class="col table-responsive">
                         @if($mtx)
-                           {{$inRender->assemble($mtx,$currencies,$value,$regions,$total)}}
+                        {{$inRender->assemble($mtx,$currencies,$value,$regions,$total)}} 
                         @endif
                 </div>
             </div>

@@ -123,17 +123,18 @@
             <div class="col-sm"></div>
             <div class="col-sm"></div>
             <div class="col-sm"></div>
-            <div class="col-sm-4" style="color: #0070c0; font-size:22px">
-                <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
-            </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
                 </select>
             </div>
+            
+            <div class="col-sm-4" style="color: #0070c0; font-size:22px">
+                <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
+            </div>            
 
-            <div class="col-sm-2">
+            <div class="col-2">
                 <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
                     Generate Excel
                 </button>               
@@ -142,8 +143,8 @@
     </div>
 
         <div class="container-fluid">
-            <div class="row justify-content-center mt-2">
-                <div class="col">
+            <div class="row mt-4">
+                <div class="col table-responsive">
                     @if($mtx)
                         {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
                     @else
@@ -169,6 +170,8 @@
                     }
                 });
 
+                $('#ExcelPDF').hide();
+
                 $('#excel').click(function(event){
 
                     var regionExcel = "<?php echo $regionExcel; ?>";
@@ -192,8 +195,8 @@
                     div.appendChild(img);
                     document.body.appendChild(div);
 
-                    //var typeExport = $("#ExcelPDF").val();
-                    var typeExport = "Excel";
+                    var typeExport = $("#ExcelPDF").val();
+                    //var typeExport = "Excel";
                     var auxTitle = "<?php echo $title; ?>";
 
                     if (typeExport == "Excel") {

@@ -73,14 +73,14 @@
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
 			<div class="col-sm"></div>
-			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Brand Ranking </div>
-			</div>
 			<div class="col-sm">
 				<select id="ExcelPDF" class="form-control">
 					<option value="Excel">Excel</option>
 					<option value="PDF">PDF</option>
 				</select>
+			</div>
+			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
+				<div style="float: right;"> {{$rName}} - {{ucfirst($type)}} Brand Ranking </div>
 			</div>
 			<div class="col-sm">
 				<button id="excel" type="button" class="btn btn-primary" style="width: 100%">
@@ -110,7 +110,7 @@
             var region = "{{$region}}";
             var brands = <?php echo json_encode($brands); ?>;
 
-			ajaxSetup();
+			ajaxSetup();		
 
 			$("#ExcelPDF").change(function(event){
 				if ($("#ExcelPDF").val() == "PDF") {
@@ -119,6 +119,8 @@
 					$("#excel").text("Generate Excel");
 				}
 			});
+
+			$('#ExcelPDF').hide();
 
 			@for($b = 0; $b < sizeof($brand); $b++)
 				$(document).on('click', "#"+"{{$brand[$b]['name']}}", function(){
