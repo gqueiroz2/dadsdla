@@ -11,11 +11,13 @@ class insightsExport implements FromArray, WithMultipleSheets, WithTitle {
     protected $sheets;
     protected $labels;
     protected $title;
+    protected $typeExport;
 
-    public function __construct(array $sheets, $labels, $title){
+    public function __construct(array $sheets, $labels,$typeExport, $title){
         $this->sheets = $sheets;
         $this->labels = $labels;
         $this->title = $title;
+        $this->typeExport = $typeExport;
     }
 
     public function array(): array {
@@ -26,7 +28,7 @@ class insightsExport implements FromArray, WithMultipleSheets, WithTitle {
     public function sheets(): array{
         
         $sheet = [
-            new viewerInsightsTabExport($this->labels, $this->sheets)
+            new viewerInsightsTabExport($this->labels, $this->sheets,$this->typeExport)
         ];
 
         return $sheet;

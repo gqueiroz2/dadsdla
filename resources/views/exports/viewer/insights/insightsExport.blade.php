@@ -32,7 +32,7 @@
 			<td>Total</td>
 			<td colspan="18"></td>	
 			<td>{{$data['total'][$t]['averageNumSpot']}}</td>
-			<td>{{$data['total'][$t]['sum'.ucfirst($data['value']).'Revenue']}}</td>	
+			<td>{{$data['total'][$t]['sum'.($data['value']).'Revenue']}}</td>	
 		@endfor
 	</tr>
 

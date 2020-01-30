@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
+class viewerInsightsTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
 
 	protected $view;
 	protected $data;
@@ -134,13 +134,13 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 						$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 					}
 				}
-
+/*
 				if ($this->type != "Excel") {
 
                     $event->sheet->getDelegate()->getPageSetup()
                         ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
                         ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
-                }
+                }*/
 			},
 		];
 	}

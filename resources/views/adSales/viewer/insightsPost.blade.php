@@ -145,7 +145,7 @@
                 var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel )); ?>";
                 var currencyExcel = "<?php echo $currencyExcel; ?>";
                 var valueExcel = "<?php echo $valueExcel; ?>";
-                var mtx "<?php echo (json_encode($mtx)); ?>";
+                var mtx = "<?php echo base64_encode((json_encode($mtx))); ?>";
 
                 var div = document.createElement('div');
                 var img = document.createElement('img');
