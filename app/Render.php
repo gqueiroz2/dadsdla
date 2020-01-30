@@ -21,7 +21,7 @@ class Render extends Model{
     }
 
     public function clientForm(){
-        echo "<select class='selectpicker' id='client' name='client[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control'>";
+        echo "<select class='selectpicker' id='client' name='client[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>";
             echo "<option value=''> Select Region </option>";
         echo "</select>";
     }
