@@ -43,12 +43,13 @@ class ChainController extends Controller{
 
 		for ($c=0; $c < sizeof($connections); $c++) { 
 			$con[$c] = $db->openConnection($connections[$c]);
-
 			if($con[$c]->query($truncateStatement) === TRUE){
-				$something[$c] = "Tabela $table na dataBase ".$connections[$c]." foi Truncada ";
+                $something[$c] = "Tabela $table na dataBase ".$connections[$c]." foi Truncada ";
 
 				$check++;
-			}
+			}else{
+                //
+            }
 
 		}
 

@@ -26,7 +26,7 @@ class chain extends excel{
 
         $columns = $this->defineColumns($table,'first');
         
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts"){
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts" || $table = "insights"){
             $parametter = $table;
         }else{
             $parametter = false;
@@ -34,6 +34,10 @@ class chain extends excel{
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         
+        if($table == "insights"){
+            array_push($columns, 'year');
+        }
+
         $into = $this->into($columns);      
         
         if($table == "ytdFN"){
@@ -59,7 +63,7 @@ class chain extends excel{
             $complete = false;
         }
         return $complete;
-        
+  
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -71,6 +75,10 @@ class chain extends excel{
         $columns = $this->defineColumns($table,'first');
         if($table == "fw_digital"){
             //unset($columns[0]);        
+        }
+
+        if($table == "insights"){
+            array_push($columns, 'year');
         }
 
         $columns = array_values($columns);
@@ -300,6 +308,7 @@ class chain extends excel{
         $values = $this->values($spreadSheet,$columns);
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
+
         if($con->query($ins) === TRUE ){
             $error = false;
         }else{
@@ -1092,6 +1101,10 @@ class chain extends excel{
                                 if( $table && ($table == "ytdFN") ){
                                     //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+                                }else if( $table && ($table == "insights") ){
+                                    $temp = $base->monthToIntInsights(trim($spreadSheet[$s][$c]));
+                                    $spreadSheetV2[$s][$columns[$c]] = $temp[1];
+                                    $spreadSheetV2[$s]['year'] = $temp[0];
                                 }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
@@ -1866,7 +1879,8 @@ class chain extends excel{
                                      'duration_impression',
                                      'gross_revenue', //DOUBLE
                                      'num_spot', //INT
-                                     'net_revenue' //DOUBLE
+                                     'net_revenue', //DOUBLE
+                                     'year' // INT
     );
 
 
@@ -1892,7 +1906,8 @@ class chain extends excel{
                                      'duration_impression',
                                      'gross_revenue', //DOUBLE
                                      'num_spot', //INT
-                                     'net_revenue' //DOUBLE
+                                     'net_revenue', //DOUBLE
+                                     'year' // INT
     );
 
     public $insightsColumns = array('brand_id',
@@ -1917,7 +1932,8 @@ class chain extends excel{
                                      'duration_impression',
                                      'gross_revenue', //DOUBLE
                                      'num_spot', //INT
-                                     'net_revenue' //DOUBLE
+                                     'net_revenue', //DOUBLE
+                                     'year' // INT
     );
 
 	public $salesRepColumns = array('sales_group_id','name');

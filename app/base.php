@@ -362,6 +362,23 @@ class base extends Model{
         return $intMonth;
     }
 
+    public function monthToIntInsights($month){
+        $tmp = explode(" ",$month);
+        $newMonth = trim($tmp[0]);
+        
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            if($newMonth == $this->month[$m][2]){
+                $intMonth = $this->month[$m][1];
+            }
+        }
+
+        $intYear = intval(trim($tmp[1]));
+
+        $rtr = array($intYear,$intMonth);
+
+        return $rtr;//$intMonth;
+    }
+
     public function intToMonth2($month){
         $monthNames = array();
         for ($m=0; $m < sizeof($this->month); $m++) { 
