@@ -91,7 +91,7 @@
         <div id="vlau"></div>
 
 		<div class="row justify-content-end mt-2">
-			<div class="col-sm-4" style="color: #0070c0; font-size:22px">
+			<div class="col-sm-4" style="color: #0070c0; font-size:24px">
                 <span style="float: right; margin-right: 2.5%;">Insights</span>
             </div>
 		</div>
