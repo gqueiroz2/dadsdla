@@ -11,8 +11,9 @@
             <div class="col">
                 <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
                     @csrf
-                    <div class="row">
-                        <div class="col-sm">
+                    <div class="row">                        
+
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Region: </span></label>
 
                             @if($errors->has('region'))
@@ -27,7 +28,7 @@
                         </div>
 
 
-                        <div class="col-sm">
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
                             @if($errors->has('sourceDataBase'))
                                 <label style="color: red;">* Required</label>
@@ -35,28 +36,26 @@
                             {{$render->sourceDataBase()}}
                         </div>
                         
-                        <div class="col-sm" id="especificNumberCol" style="display:none;">
+                        <div class="col" id="especificNumberCol" style="display:block;">
                             <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
-                            {{$render->especificNumber($brands)}}
+                            {{$render->especificNumber($brand)}}
                         </div>
                         
-                        <div class="col-sm">
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Year: </span></label>
                             @if($errors->has('year'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->year($regionID)}}                    
-                        </div> 
-
-                        <div class="col-sm">
+                        </div>  
+                        <div class="col">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->months()}}
                         </div>
-                        
-                        <div class="col-sm">
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Brand: </span></label>
                             @if($errors->has('brand'))
                                 <label style="color: red;">* Required</label>
@@ -68,15 +67,15 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-sm">
+                        <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->salesRep()}}
                         </div>
-                        
-                        <div class="col-sm">
+                       
+                        <div class="col">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
                             @if($errors->has('agency'))
                                 <label style="color: red;">* Required</label>
@@ -84,7 +83,7 @@
                             {{$render->AgencyForm()}}
                         </div>
 
-                        <div class="col-sm">
+                        <div class="col">
                             <label class='labelLeft'><span class="bold">Client:</span></label>
                             @if($errors->has('client'))
                                 <label style="color: red;">* Required</label>
@@ -92,21 +91,21 @@
                             {{$render->ClientForm()}}
                         </div>
 
-                        <div class="col-sm">
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
                             @if($errors->has('currency'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->currency($currencies)}}
                         </div>
-                        <div class="col-sm">
+                        <div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
                             @if($errors->has('value'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->value2()}}
                         </div>
-                        <div class="col-sm">
+                        <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
