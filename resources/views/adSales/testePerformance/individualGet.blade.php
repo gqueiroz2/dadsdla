@@ -12,7 +12,7 @@
 				<div class="col">
 					
 
-					<form method="POST" action="{{ route('executivePerformancePost') }}"  runat="server"  onsubmit="ShowLoading()">
+					<form method="POST" action="{{ route('individualPost') }}"  runat="server"  onsubmit="ShowLoading()">
 						@csrf
 						<div class="row justify-content-center">
 							<div class="col">	

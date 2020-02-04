@@ -8,28 +8,59 @@ use App\Base;
 
 class insightsRender extends Render{
 
-	public function idNumber($mtx){
-		echo "<table style='width: 100%;'>";
-			echo "<tr class='darkBlue center'>";
-				echo "<td>Copy Key</td>";
-				echo "<td>Media Item</td>";
-			echo "</tr>";
+	public function idNumber($mtx){			
 
-			for ($m=0; $m <sizeof($mtx); $m++) { 
+			for ($c=0; $c <sizeof($mtx); $c++) { 
+				
+				$client[$c] = $mtx[$c]['client']; 
+			}
 
-				if ($m%2 == 0) {
-					$color = 'even';
-				}else{
-					$color = 'medBlue';
+			$client = array_values(array_unique($client));
+
+			for ($c=0; $c <sizeof($client); $c++) { 
+				$idNumber[$c] =  array(); 
+				for ($m=0; $m <sizeof($mtx); $m++) { 
+
+					$temp[$m] = array($mtx[$m]['copyKey'], $mtx[$m]['mediaItem'], $mtx[$m]['client']);
+
+
+					if ($client[$c] == $mtx[$m]['client']){
+						array_push($idNumber[$c], $temp[$m]);
+					}
 				}
+			}
 
-			echo "<tr class='$color center'>";
-					echo "<td>".$mtx[$m]['copyKey']."</td>";
-					echo "<td>".$mtx[$m]['mediaItem']."</td>";	
+			for ($i=0; $i <sizeof($idNumber); $i++) { 
+				$idNumber[$i] = array_map('unserialize', array_values( array_unique(array_map('serialize', $idNumber[$i]))));
+
+
+			}
+
+			for ($i=0; $i <sizeof($idNumber); $i++) { 
+				echo "<table style='width: 100%;'>";
+					echo "<tr>";
+						echo "<td class='darkBlue center'>Copy Key</td>";
+						echo "<td class='darkBlue'>Media Item</td>";
+					echo "</tr>";
+					echo "<tr class='darkBlue center'>";
+						echo "<td colspan='2'>".$client[$i]."</td>";
+					echo "</tr>";
+				for ($j=0; $j <sizeof($idNumber[$i]); $j++) { 
+					if ($j%2 == 0) {
+						$color = 'even';
+					}else{
+						$color = 'medBlue';
+					}
+					echo "<tr class='$color'>";
+						echo "<td>".$idNumber[$i][$j][0]."</td>";
+						echo "<td>".$idNumber[$i][$j][1]."</td>";
+					echo "</tr>";
 				}
 				
-			echo "</tr>";
-		echo "</table>";
+									
+				echo "</table>";
+			}
+				
 	}
 
 	public function assemble($mtx,$currencies,$value,$regions,$total){
@@ -43,15 +74,15 @@ class insightsRender extends Render{
 				echo "<th class='newBlue center' colspan='9' style='font-size:22px;'> $regions - Insights - ($newCurrency/$newValue) </th>";
 			echo "</tr>";
 		
-					echo "<tr class='newBlue center'>";
+					echo "<tr class='newBlue center' style='font-size:16px;'>";
 						echo "<td style='width:3%;'>Brand</td>";
 						echo "<td style='width:5%;'>Sales Rep</td>";
 						echo "<td style='width:3%;'>Month</td>";
 						echo "<td style='width:10%;'>Client</td>";
 						echo "<td style='width:10%;'>Agency</td>";
 						echo "<td style='width:10%;'>Product</td>";
-						echo "<td style='width:20%;'>Schedule Event</td>";
-						echo "<td style='width:3%;'>Num Spot</td>";
+						echo "<td style='width:25%;'>Schedule Event</td>";
+						echo "<td style='width:5%;'>Num Spot</td>";
 						echo "<td style='width:3%;'>Revenue</td>";
 					echo "</tr>";
 
@@ -72,7 +103,7 @@ class insightsRender extends Render{
 							$color = 'medBlue';
 						}
 
-						echo "<tr class='$color center' style='font-size:11px;'>";
+						echo "<tr class='$color center' style='font-size:13px;'>";
 							echo "<td>".$mtx[$m]['brand']."</td>";
 							echo "<td>".$mtx[$m]['salesRep']."</td>";
 							echo "<td>".$mtx[$m]['month']."</td>";

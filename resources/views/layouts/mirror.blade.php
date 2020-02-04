@@ -151,7 +151,7 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Teste Performance </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item"> Individual </a>
+								<a class="dropdown-item" href="{{ route('individualGet')}}"> Individual </a>
 								<a class="dropdown-item"> Core </a>
 								<a class="dropdown-item"> Office </a>
 							</div>

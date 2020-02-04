@@ -31,6 +31,26 @@ Route::group(['middleware' => 'auth'],function(){
 	});
 });
 
+Route::group(['middleware' => 'auth'],function(){
+	Route::group(['prefix'=>'performance1'],function(){
+		
+		Route::get('core','performanceController@coreGet')
+									->name('coreGet');
+		Route::post('core','performanceController@corePost')
+									->name('corePost');
+
+		Route::get('office','performanceController@officeGet')
+									->name('officeGet');
+		Route::post('office','performanceController@officePost')
+									->name('officePost');
+
+		Route::get('individual','performanceController@individualGet')
+									->name('individualGet');
+		Route::post('individual','performanceController@individualPost')
+									->name('individualPost');
+	});
+});
+
 Route::group(['prefix' => 'ajaxPerformance'], function(){
 
 });
