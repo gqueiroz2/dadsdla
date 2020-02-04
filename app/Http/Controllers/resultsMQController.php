@@ -31,6 +31,7 @@ class resultsMQController extends Controller{
                 $region = $r->getRegion($con,false);
                 $brand = $b->getBrand($con);
                 $currency = $pr->getCurrency($con,false);
+
                 return view('adSales.results.1monthlyGet',compact('render','region','brand','currency'));
         }
 

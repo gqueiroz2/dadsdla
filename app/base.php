@@ -38,7 +38,7 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date";
+        $select = "SELECT * FROM sources_date ";
 
         $res = $con->query($select);
 
@@ -242,18 +242,13 @@ class base extends Model{
                             );
 
     public function TruncateName($form){
-        /*
-        if ($form == 'mini_header') {
-            $newForm = "Header";
-        }elseif ($form == 'cmaps') {
+        
+        if ($form == 'cmaps') {
             $newForm = "CMAPS";
         }else{
-            $newForm = "IBMS";
+            $newForm = "BKGS";
         }
-        */
-
-        $newForm = "BKGS";
-
+        
         return $newForm;
     }
 

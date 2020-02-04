@@ -6,27 +6,30 @@ use App\dataBase;
 use App\region;
 use App\User;
 use App\analytics;
+use App\analyticsRender;
 use App\sql;
 use Illuminate\Support\Facades\Request;
 
 class analyticsController extends Controller{
+
     public function panel(){
+
     	$db = new dataBase();
     	$at = new analytics();
     	$sql = new sql();
 
+        $aR = new analyticsRender();
+
     	$con = $db->openConnection('DLA');
     	$at = new analytics();
 
-        var_dump("something");
+    	$info = $at->assembler($con,$sql);
 
-    	$something = $at->assembler($con,$sql);
-        
-
-        return view('analytics.home');
+        return view('analytics.home',compact('aR','info'));
     }
 
     public function base(){
+
     	$db = new dataBase();
     	$r = new region();
     	$u = new User();
