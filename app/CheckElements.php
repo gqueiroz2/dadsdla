@@ -15,13 +15,14 @@ class CheckElements extends Model{
 		$currencies = false;
 
 		if($table == "cmaps"){			
-			$regions = false;
-			
+			$regions = false;			
 		}else{
 			$regions = false;//$this->checkNewRegions($conDLA,$con,$table,$sql);	
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);		
 		}
 		
+		var_dump($region);
+
 		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
 		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
@@ -78,6 +79,8 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
+		}elseif($table == "data_hub"){
+			$selectDistinctFM = "SELECT DISTINCT client,holding_company FROM $table ORDER BY client";		
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT client,region FROM $table ORDER BY client";		
 		}else{
@@ -86,15 +89,15 @@ class CheckElements extends Model{
 
 		$res = $con->query($selectDistinctFM);
 
-		
 		if($table == "cmaps"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
+		}elseif($table == "data_hub"){
+			$resultsFM = $sql->fetch($res,array("client","holding_company"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
-
 		
 		if($resultsFM){
 
@@ -210,6 +213,8 @@ class CheckElements extends Model{
 
 		if($table == "fw_digital"){
 			$something = "ad_unit";
+		}else if($table == "data_hub"){
+			$something = "master_channel";
 		}else{
 			$something = "brand";	
 		}	
@@ -320,8 +325,6 @@ class CheckElements extends Model{
 				$zz++;
 			}
 		}
-
-
 		return $rtr;
 	}
 
@@ -341,6 +344,15 @@ class CheckElements extends Model{
 
 		if($table == "cmaps"){
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";		
+		}else if($table == "data_hub"){
+			if($seekRegion['name'] == "Europe"){
+				$seekRegion['name'] = "%EUROPE%";
+			}
+
+			$selectDistinctFM = "SELECT DISTINCT client,holding_company FROM $table 
+													WHERE (holding_company LIKE '".$seekRegion['name']."')
+													ORDER BY holding_company,client ";	
+			
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$selectDistinctFM = "SELECT DISTINCT client,region FROM $table 
 												WHERE (region = '".$seekRegion['name']."')
@@ -357,6 +369,8 @@ class CheckElements extends Model{
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
+		}elseif($table == "data_hub"){
+			$resultsFM = $sql->fetch($res,array("client","holding_company"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
@@ -393,12 +407,15 @@ class CheckElements extends Model{
 			$selectDistinctFM = "SELECT DISTINCT agency,region FROM $table 
 														WHERE (region = '".$seekRegion['name']."')
 														ORDER BY agency";		
+		}elseif($table == "data_hub"){
+			$selectDistinctFM = "SELECT DISTINCT agency,holding_company FROM $table 
+														WHERE (holding_company = '".$seekRegion['name']."')
+														ORDER BY agency";		
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT agency,sales_representant_office FROM $table 
 														WHERE (sales_representant_office = '".$seekRegion['name']."')
 														ORDER BY agency";		
-		}
-		
+		}		
 
 		$res = $con->query($selectDistinctFM);
 		$sql = new sql();
@@ -407,6 +424,8 @@ class CheckElements extends Model{
 			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
 		}elseif($table == "fw_digital" || $table == "sf_pr"){
 			$resultsFM = $sql->fetch($res,array("agency","region"),array("agency","region"));
+		}elseif($table == "data_hub"){
+			$resultsFM = $sql->fetch($res,array("agency","holding_company"),array("agency","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));
 		}
@@ -431,13 +450,14 @@ class CheckElements extends Model{
 		$select = "SELECT $something FROM $table ORDER BY $something";
 		$res = $con->query($select);
 		$tmp = $sql->fetch($res,$from,$from);
-
+		
 		for ($t=0; $t < sizeof($tmp); $t++) { 
 			for ($f=0; $f < sizeof($from); $f++) { 
 				$distinct[$t] = $tmp[$t][$from[$f]];
 			}
 		}
 		return $distinct;	
+		
 	}
 
 	public function checkDifferencesAC($type,$dla,$fm){

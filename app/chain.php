@@ -26,7 +26,7 @@ class chain extends excel{
 
         $columns = $this->defineColumns($table,'first');
         
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts" || $table = "insights"){
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts" || $table == "insights"){
             $parametter = $table;
         }else{
             $parametter = false;
@@ -46,6 +46,7 @@ class chain extends excel{
 
         $check = 0;               
         $mark = 0;
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -63,7 +64,7 @@ class chain extends excel{
             $complete = false;
         }
         return $complete;
-  
+        
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -83,7 +84,7 @@ class chain extends excel{
 
         $columns = array_values($columns);
     	$columnsS = $this->defineColumns($table,'second');
-        
+
         if($table == 'bts'){
             $tempBase = 'bts';
             $table = 'ytd';
@@ -92,7 +93,7 @@ class chain extends excel{
         }
 
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
-
+        
         if($tempBase){
             $table = 'bts';
         }
@@ -105,18 +106,29 @@ class chain extends excel{
 
         if($table == "insights"){
             $current = $this->fixShareAccounts($current);
-        } 
+        }
 
+        if($table == "data_hub"){
+            $current = $this->fixShareAccountsDH($con,$current);
+        }
+        
         if($table == "bts"){
             $current = $this->fixShareAccountsBTS($con,$current);            
         }       
-
+        
         $into = $this->into($columnsS);		
+
+        if($table == 'data_hub'){
+            $columns = $this->ytdColumnsF;
+        }
 
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-  		return $complete;
+  		
+        return $complete;
+        
+        
         
     }  
 
@@ -320,7 +332,7 @@ class chain extends excel{
         }     
 
         return $error;     
-        
+      
     }
 
     public function localCurrencyToDolar($con,$current,$year){
@@ -454,6 +466,67 @@ class chain extends excel{
 
     }
 
+    public function fixShareAccountsDH($con,$current){
+        $r = new region();
+        $pRate = new pRate();
+
+        for ($c=0; $c < sizeof($current); $c++) { 
+            $current[$c]['campaign_sales_office'] = $this->fixBTSRegion($current[$c]['holding_company']);
+            
+
+            $current[$c]['sales_representant_office'] = $this->fixBTSRegion($current[$c]['invoice_holding_company']);
+            
+
+            $current[$c]['brand'] = $current[$c]['master_channel'];
+            $current[$c]['brand_feed'] = $current[$c]['channel'];
+
+            $current[$c]['order_reference'] = $current[$c]['campaign_desc'];
+            $current[$c]['campaign_reference'] = $current[$c]['campaign'];
+            $current[$c]['campaign_currency'] = $current[$c]['currency'];
+            $current[$c]['client_product'] = $current[$c]['product'];
+
+            $current[$c]['spot_duration'] = 0;
+            $current[$c]['num_spot'] = $current[$c]['booked_spots'];
+            $current[$c]['impression_duration'] = 0;
+            $current[$c]['net_net_revenue'] = 0.0;
+
+            $valPRate = $pRate->getPRateByRegionAndYear($con,
+                                                        array(
+                $r->getIDRegion($con,
+                                array($current[$c]['campaign_sales_office'])
+                               )[0]['id']) ,
+                                                        array($current[$c]['year']));
+            
+            $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue']/$valPRate;
+            $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue']/$valPRate;
+            $current[$c]['net_net_revenue_prate'] = 0.0;
+        }
+
+        return $current;
+
+    }
+
+    public function fixBTSRegion($region){
+
+        if($region == "US HISPANIC"){
+            $region = "US Hispanic";
+        }elseif($region == "DOMINICAN REPUBLIC"){
+            $region = "Dominican Republic";
+        }else if($region == 'EUROPE INTL.'){
+            $region = "Europe";
+        }else{
+            $region = ucfirst(strtolower($region));
+        }
+
+        if($region == "Spain" || $region == "SPAIN"){
+
+            $region = "Europe";
+        }
+        //$regionR = intval($r->getIDRegion($con,array($region))[0]['id']);
+
+        return $region;
+    }
+
     public function fixShareAccountsBTS($con,$current){
         $sr = new salesRep(); 
         $count = 0;
@@ -548,9 +621,12 @@ class chain extends excel{
     }    
 
     public function selectFromCurrentTable($sql,$con,$table,$columns){
+        
     	$res = $sql->select($con,"*",$table);
         $current = $sql->fetch($res,$columns,$columns);
     	return $current;
+        
+
     }
 
     public function handleForLastTable($con,$table,$current,$columns){
@@ -621,10 +697,12 @@ class chain extends excel{
     	$brands = $b->getBrandUnit($con);
     	$salesReps = $sr->getSalesRepUnit($con);
     	$currencies = $pr->getCurrency($con);
+
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
-    			$tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
-    			if($columns[$cc] == "ad_unit" || $columns[$cc] == "from_date" || $columns[$cc] == "to_date"){
+                $tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
+    			
+                if($columns[$cc] == "ad_unit" || $columns[$cc] == "from_date" || $columns[$cc] == "to_date"){
                     $current[$c][$tmp[1][1]] = $tmp[1][0];
                     $current[$c][$tmp[0][1]] = $tmp[0][0];                    
                 }else{
@@ -634,6 +712,7 @@ class chain extends excel{
     				unset($current[$c][$columns[$cc]]);
     			}
     		}
+
             if( $table == 'cmaps' || $table == 'fw_digital' || $table == 'sf_pr' ){
                 $current[$c]['year'] = $year;
             }
@@ -644,8 +723,9 @@ class chain extends excel{
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
         $base = new base();
 
+
         if($column == 'campaign_sales_office'){
-			$rtr =  array(false,'campaign_sales_office_id');
+            $rtr =  array(false,'campaign_sales_office_id');
 			for ($r=0; $r < sizeof($regions); $r++) { 
 				if($current == $regions[$r]['name']){	
 					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
@@ -976,8 +1056,6 @@ class chain extends excel{
 
         $allBrands = $bd->getBrandUnit($con);
 
-        //$spreadSheetV2 = 0;
-
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             for ($c=0; $c < sizeof($columns); $c++) { 
                 if($columns[$c] != ''){
@@ -987,6 +1065,7 @@ class chain extends excel{
                            $columns[$c] == 'gross' ||
     					   $columns[$c] == 'net_revenue' ||						
                            $columns[$c] == 'net' ||                     
+                           $columns[$c] == 'booked_spots' ||                     
     					   $columns[$c] == 'net_net_revenue' ||						
     					   $columns[$c] == 'gross_revenue_prate' ||
     					   $columns[$c] == 'net_revenue_prate' ||						
@@ -1097,14 +1176,18 @@ class chain extends excel{
                                 $spreadSheetV2[$s][$columns[$c]] = $string;
                             }elseif($columns[$c] == 'obs'){
                                 $spreadSheetV2[$s][$columns[$c]] = "OBS";
+                            }elseif($columns[$c] == 'year'){
+                                $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
                             }elseif($columns[$c] == 'month'){
                                 if( $table && ($table == "ytdFN") ){
                                     //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                 }else if( $table && ($table == "insights") ){
+                                    var_dump($table);
                                     $temp = $base->monthToIntInsights(trim($spreadSheet[$s][$c]));
                                     $spreadSheetV2[$s][$columns[$c]] = $temp[1];
                                     $spreadSheetV2[$s]['year'] = $temp[0];
+                                    var_dump("AKI");
                                 }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
@@ -1138,7 +1221,8 @@ class chain extends excel{
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
         $values = "";
-		for ($c=0; $c < sizeof($columns); $c++) { 
+        
+        for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   
                 if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
@@ -1157,6 +1241,7 @@ class chain extends excel{
 			}
 		}
 		return $values;
+        
         
 	}
 
@@ -1177,8 +1262,24 @@ class chain extends excel{
     }
 
 	public function defineColumns($table,$recurrency){
-
     	switch ($table) {
+            case 'data_hub':                
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->dataHubColumnsF;
+                        break;
+                    case 'second':
+                        return $this->ytdColumnsS;
+                        break;
+                    case 'third':
+                        return $this->ytdColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->ytdColumns;
+                        break;
+                }
+                break;
+
     		case 'ytd':
     			switch ($recurrency) {
     				case 'first':
@@ -1643,6 +1744,27 @@ class chain extends excel{
                                   'sector',
                                   'category'
                               );
+
+    public $dataHubColumnsF = array(
+                                'holding_company',
+                                'invoice_holding_company',
+                                'year',
+                                'month',
+                                'master_channel',
+                                'channel',
+                                'sales_rep',
+                                'client',
+                                'product',
+                                'agency',
+                                'campaign_desc',
+                                'campaign',
+                                'start_and_end_date',
+                                'currency',
+                                'agency_commission_percentage',
+                                'booked_spots',
+                                'gross_revenue',
+                                'net_revenue'
+                            );
 
     public $ytdColumnsF = array(
 		 					'campaign_sales_office', 

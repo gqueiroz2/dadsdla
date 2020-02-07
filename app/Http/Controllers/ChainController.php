@@ -36,7 +36,7 @@ class ChainController extends Controller{
     	$db = new dataBase();
 		
 		$connections = array('firstMatch','secondMatch','thirdMatch');
-		
+
 		$truncateStatement = "TRUNCATE TABLE $table";
 
 		$check = 0;
@@ -82,6 +82,18 @@ class ChainController extends Controller{
 		$spreadSheet = $i->base();
 
 		switch ($table) {
+            case 'data_hub':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                unset($spreadSheet[2]);
+
+                $tar = sizeof($spreadSheet);
+                unset($spreadSheet[$tar]);
+
+                $spreadSheet = array_values($spreadSheet);
+
+                break;
+
             case 'bts':
                 unset($spreadSheet[0]);
                 //unset($spreadSheet[1]);
@@ -153,14 +165,10 @@ class ChainController extends Controller{
                 unset($spreadSheet[1]);
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
-                //var_dump($spreadSheet);	
                 break;
 		}
         
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
-        /*for ($i=0; $i < sizeof($spreadSheet); $i++) { 
-            var_dump($spreadSheet[$i]);
-        }*/
         
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
