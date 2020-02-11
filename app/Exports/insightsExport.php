@@ -28,7 +28,8 @@ class insightsExport implements FromArray, WithMultipleSheets, WithTitle {
     public function sheets(): array{
         
         $sheet = [
-            new viewerInsightsTabExport($this->labels, $this->sheets,$this->typeExport)
+            new viewerInsightsTabExport($this->labels[0], $this->sheets, $this->typeExport),
+            new idNumberTabExport($this->labels[1], $this->sheets, $this->typeExport)
         ];
 
         return $sheet;

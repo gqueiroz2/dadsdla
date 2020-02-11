@@ -112,9 +112,38 @@ class viewerExcelController extends Controller {
 
         $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
 
-        $data = array('mtx' => $mtx,'total' => $total, 'currency' => $currencies['name'], 'region' => $regions, 'client' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value);
+        //ID NUMBER
 
-        $label = 'exports.viewer.insights.insightsExport';
+        for ($c=0; $c <sizeof($mtx); $c++) { 
+                        
+            $clients[$c] = $mtx[$c]['client']; 
+        }
+
+        $clients = array_values(array_unique($clients));
+
+        for ($c=0; $c <sizeof($clients); $c++) { 
+            $idNumber[$c] =  array(); 
+            for ($m=0; $m <sizeof($mtx); $m++) { 
+
+                $temp[$m] = array($mtx[$m]['copyKey'], $mtx[$m]['mediaItem'], $mtx[$m]['client']);
+
+
+                if ($clients[$c] == $mtx[$m]['client']){
+                    array_push($idNumber[$c], $temp[$m]);
+                }
+            }
+        }
+
+        for ($i=0; $i <sizeof($idNumber); $i++) { 
+            $idNumber[$i] = array_map('unserialize', array_values( array_unique(array_map('serialize', $idNumber[$i]))));
+
+        }
+
+        //FIM ID NUMBER
+
+        $data = array('mtx' => $mtx,'total' => $total, 'currency' => $currencies['name'], 'region' => $regions, 'clientExcel' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value, 'idNumber' => $idNumber, 'client' => $clients);
+
+        $label = array('exports.viewer.insights.insightsExport','exports.viewer.insights.idNumberExport');
 
         $title = Request::get('title');
 

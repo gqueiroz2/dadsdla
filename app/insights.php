@@ -183,4 +183,5 @@ class insights extends Model{
 		return $total;
 
 	}
+
 }

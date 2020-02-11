@@ -43,5 +43,11 @@ class performanceController extends Controller{
         $con = $db->openConnection("DLA");
 
         var_dump(Request::all());
+
+        $region = Request::get('region');
+        $year = Request::get('year');
+        $tier = Request::get('brand');
+        $month = Request::get('month');
+
     }
 }

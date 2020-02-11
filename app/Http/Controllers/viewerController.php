@@ -122,8 +122,6 @@ class viewerController extends Controller{
 
         $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
 
-        //$header = array('Brand','Brand Feed','Sales Rep','Agency','Client','Month','Currency','Charge Type','Product','Campaign','Order Reference','Schedule Event','Spot Status','Date Event','Unit Start Time','Duration Spot','Copy Key','Media Item','Spot Type','Duration Impression','Gross Revenue','Num Spot','Net Revenue');
-
         $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
 
         $regionExcel = $salesRegion;
