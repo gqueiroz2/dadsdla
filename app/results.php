@@ -181,7 +181,7 @@ class results extends base{
                 break;
 
             case 'ytd':
-                $columns = array("sales_representant_office_id"/*,"campaign_currency_id"*/,"brand_id", "year", "month");
+                $columns = array("campaign_sales_office_id"/*,"campaign_currency_id"*/,"brand_id", "year", "month");
                 $columnsValue = array($region/*,$currency[0]['id']*/, $brand, $year, $month);
                 $value .= "_revenue_prate";
                 break;
