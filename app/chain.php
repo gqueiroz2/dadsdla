@@ -126,8 +126,7 @@ class chain extends excel{
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
-        return $complete;
-        
+        return $complete;      
         
         
     }  
@@ -220,6 +219,18 @@ class chain extends excel{
                                   ";     
                     if($con->query($delete[$y])){
                     }
+                }
+            }
+
+            $table = "ytd";
+
+        }else if($table == "data_hub"){
+            
+            for ($y=0; $y < sizeof($year); $y++) { 
+                $delete[$y] = "DELETE FROM ytd 
+                                    WHERE(year = '".$year[$y]."')
+                              ";     
+                if($con->query($delete[$y])){
                 }
             }
 
@@ -497,8 +508,8 @@ class chain extends excel{
                                )[0]['id']) ,
                                                         array($current[$c]['year']));
             
-            $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue']/$valPRate;
-            $current[$c]['net_revenue_prate'] = $current[$c]['net_revenue']/$valPRate;
+            $current[$c]['net_revenue'] = $current[$c]['gross_revenue']*(1-$current[$c]['agency_commission_percentage']);
+            $current[$c]['net_revenue_prate'] = $current[$c]['gross_revenue_prate']*(1-$current[$c]['agency_commission_percentage']);
             $current[$c]['net_net_revenue_prate'] = 0.0;
         }
 
@@ -1183,11 +1194,9 @@ class chain extends excel{
                                     //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
                                 }else if( $table && ($table == "insights") ){
-                                    var_dump($table);
                                     $temp = $base->monthToIntInsights(trim($spreadSheet[$s][$c]));
                                     $spreadSheetV2[$s][$columns[$c]] = $temp[1];
                                     $spreadSheetV2[$s]['year'] = $temp[0];
-                                    var_dump("AKI");
                                 }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
@@ -1763,7 +1772,7 @@ class chain extends excel{
                                 'agency_commission_percentage',
                                 'booked_spots',
                                 'gross_revenue',
-                                'net_revenue'
+                                'gross_revenue_prate'
                             );
 
     public $ytdColumnsF = array(

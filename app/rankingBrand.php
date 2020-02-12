@@ -198,7 +198,16 @@ class rankingBrand extends rank{
 				array_pop($line[$l]);
 			}
 		}
-		
+
+		for ($l=0; $l < sizeof($line) ; $l++) { 
+			for ($m=0; $m < sizeof($line[$l]) ; $m++) { 
+				//for ($n=0; $n < sizeof($line[$l][$m]); $n++) { 
+					var_dump($line[$l][$m][$n]['brand']);
+					//var_dump( number_format( $line[$l][$m][$n]['total'] ) );
+				//}
+			}
+		}
+
 		return $line;
 
 	}

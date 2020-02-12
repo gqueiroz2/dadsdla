@@ -83,7 +83,6 @@ class Management extends Model{
 	}
 
 	public function updateValues($con,$tableName,$set,$where){
-
 		$sql = "UPDATE $tableName $set $where";
 		
 		if($con->query($sql) === true){

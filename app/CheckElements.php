@@ -20,8 +20,6 @@ class CheckElements extends Model{
 			$regions = false;//$this->checkNewRegions($conDLA,$con,$table,$sql);	
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);		
 		}
-		
-		var_dump($region);
 
 		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
 		$salesReps = false;//$this->checkNewSalesReps($conDLA,$con,$table,$sql);
@@ -378,13 +376,13 @@ class CheckElements extends Model{
 		if($resultsFM){
 
 			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+
 			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 
 			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
 		}else{
 			$new = false;
 		}
-
 		return $new;
 	}	
 
@@ -462,7 +460,7 @@ class CheckElements extends Model{
 
 	public function checkDifferencesAC($type,$dla,$fm){
 		$new = array();		
-		
+
 		for ($f=0; $f < sizeof($fm); $f++) { 
 			$check = false;
 			for ($d=0; $d < sizeof($dla); $d++) { 

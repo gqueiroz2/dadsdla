@@ -368,11 +368,12 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $db = new dataBase();
         $con = $db->openConnection('DLA');
-        $bool = $p->editPRate($con);         
+        $bool = $p->editPRate($con);
+
         if($bool){
             return back()->with('response',$bool['msg']);
         }else{
-            return back()->with('error',$bool['msg']);
+            //return back()->with('error',$bool['msg']);
         }
     }
 

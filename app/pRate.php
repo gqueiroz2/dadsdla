@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Request;
 use App\Management;
 use App\sql;
 use App\region;
+use App\excel;
 
 class pRate extends Management{
     
@@ -31,7 +32,7 @@ class pRate extends Management{
 		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
 				 LEFT JOIN region r ON c.region_id = r.ID";
 		$order = " 1,2,5,4";
-		$result = $sql->larica($con,$columns,$table,$join,$where,$order);
+		$result = $sql->select($con,$columns,$table,$join,$where,$order);
 		$pRate = $sql->fetch($result,$from,$from);		
 		return $pRate;
 	}
@@ -108,21 +109,21 @@ class pRate extends Management{
 		
 	}
 
-	public function editpRate($con){
+	public function editPRate($con){
 		$sql = new sql();
 		$r = new region();
 		$size = Request::get('size');
+		$excel = new excel();
 		$columnsWhere = array('currency_id','value','year');
 		$columnsSet = array('value','year');
 		$table = "p_rate";
 		$cc = $this->getCurrency($con);
 
-
 		for ($i=0; $i <$size ; $i++) { 
 			$region[$i] = Request::get("region-$i");
 			$currency[$i] = Request::get("currency-$i");
-			$oY[$i] = Request::get("oldYear-$i");
-			$oV[$i] = Request::get("oldValue-$i");
+			$oY[$i] = $excel->fixExcelNumber(Request::get("oldYear-$i"));
+			$oV[$i] = $excel->fixExcelNumber(Request::get("oldValue-$i"));
 			$nY[$i] = Request::get("newYear-$i");
 			$nV[$i] = Request::get("newValue-$i");
 			for ($j=0; $j <sizeof($cc); $j++) { 
@@ -140,7 +141,12 @@ class pRate extends Management{
 			$set[$i] = $sql->setUpdate($columnsSet,$arraySet[$i]);
 		}
 
+		var_dump($size);
+
 		$bool = false;
+
+		var_dump($nV);
+		var_dump($nV);
 
 		for ($i=0; $i <$size ; $i++) { 
 			if ($oY[$i] != $nY[$i] || $oV[$i] != $nV[$i]) {
@@ -150,8 +156,7 @@ class pRate extends Management{
 				}
 			}
 		}
-
-
+		var_dump($bool);
 		return $bool;
 	}
 
@@ -170,8 +175,10 @@ class pRate extends Management{
 		$join = "LEFT JOIN region r ON c.region_id = r.ID";		
 		$order = "3";
 		$result = $sql->select($con,$columns,$table,$join,$where);
+		
 		$from = array('id','name','region');	
 		$currency = $sql->fetch($result,$from,$from);
+
 		return $currency;
 	}
 

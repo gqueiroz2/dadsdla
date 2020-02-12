@@ -172,6 +172,7 @@ class results extends base{
             
         }
 
+        
         switch ($table) {
 
             case 'cmaps':
@@ -249,7 +250,7 @@ class results extends base{
 
             }
 
-            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 

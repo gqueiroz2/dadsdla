@@ -167,13 +167,12 @@ class sql extends Model{
     }
 
     public function updateValues($con,$tableName,$set,$where){
-
+        var_dump("AA");
         $sql = "UPDATE DLA.$tableName $set $where";
-
+        var_dump($sql);
         if ($con->query($sql) === TRUE) {
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
-
         } else {
             echo "Error updating record: " . $con->error;
             $rtr["bool"] = false;
