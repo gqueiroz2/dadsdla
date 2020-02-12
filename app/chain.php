@@ -234,7 +234,7 @@ class chain extends excel{
                 }
             }
 
-            $table = "ytd";
+            //$table = "ytd";
 
         }else{
             if($table == "ytd"){
@@ -304,19 +304,26 @@ class chain extends excel{
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
 
-        if($table == 'bts'){
-            $tempBase = 'bts';
+        if($table == 'bts' || $table == 'data_hub'){
+            if($table == 'bts'){    
+                $tempBase = 'bts';
+            }else{
+                $tempBase = 'data_hub';
+            }
             $table = 'ytd';
         }else{
             $tempBase = false;
         }
-
-    	$current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
-
-        if($tempBase){
-            $table = 'bts';
+        if($tempBase && ($tempBase == "data_hub") ){
+    	    $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$tempBase,$columns),$columns);
+        }else{
+            $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
         }
-
+/*
+        if($tempBase){
+            $table = $tempBase;
+        }
+*/
     	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
 
         return $bool;

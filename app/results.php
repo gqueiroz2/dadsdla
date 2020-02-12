@@ -122,7 +122,7 @@ class results extends base{
                             $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);
                         }
                     }else{
-                        if($year > 2020){
+                        if($year < 2020){
                             $where[$b][$m] = $this->defineValues($con, "digital", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $keyYear);       
                         }else{
                             if ($form == "cmaps") {
@@ -152,27 +152,30 @@ class results extends base{
             if ($currency[0]['name'] == "USD") {
                 if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
                     $pRate = 1.0;
+                    $pRateSel = $pRate;
                 }
             }else{
                 if($table == "cmaps"){
                     $pRate = 1.0;
+                    $pRateSel = $pRate;
                 }else{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }                
             }    
         }else{
-
             if ($currency[0]['name'] == "USD") {
                 $pRate = 1.0;
+                $pRateSel = $pRate;
             }else{
                 $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
             }
-            
         }
 
-        
         switch ($table) {
 
             case 'cmaps':
@@ -247,7 +250,6 @@ class results extends base{
 
             if($table == "digital"){
                 $table = "fw_digital";
-
             }
 
             $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
@@ -256,6 +258,8 @@ class results extends base{
 
             if($table == "cmaps"){                          
                 $rtr = $tmp/$pRate;
+            }else if($table == "plan_by_brand"){                          
+                $rtr = $tmp*$pRateSel;
             }else{
                 $rtr = $tmp*$pRate;
             }           
