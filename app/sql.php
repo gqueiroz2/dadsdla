@@ -74,6 +74,8 @@ class sql extends Model{
 
         $sql .= "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
 
+        //echo "<pre>".$sql."</pre>";
+
         /*for ($i=0; $i < strlen($sql); $i++) { 
             echo $sql[$i];
         }
