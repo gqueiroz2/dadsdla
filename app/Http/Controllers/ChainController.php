@@ -167,7 +167,7 @@ class ChainController extends Controller{
                 $spreadSheet = array_values($spreadSheet);
                 break;
 		}
-        
+
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
         
 		if($complete){

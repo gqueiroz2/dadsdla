@@ -741,7 +741,6 @@ class chain extends excel{
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
         $base = new base();
 
-
         if($column == 'campaign_sales_office'){
             $rtr =  array(false,'campaign_sales_office_id');
 			for ($r=0; $r < sizeof($regions); $r++) { 
@@ -749,7 +748,9 @@ class chain extends excel{
 					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
 				}
 			}
+
 		}elseif($column == 'package'){
+            
             if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
                 $bool = 1;
             }else{
@@ -783,7 +784,11 @@ class chain extends excel{
             
         }elseif($column == 'region'){
             $rtr =  array(false,'region');
-            
+
+            if($current == 'CAM, Andina & Caribe Region'){
+                $current = "LATAM";
+            }
+
             if( $current == "" ){
                 $rtr =  array( 8,'region_id');
             }else{
@@ -1396,6 +1401,7 @@ class chain extends excel{
                         return $this->sfPandRColumns;
                         break;
                 }
+
                 break;
 
     		case 'cmaps':
@@ -1491,6 +1497,7 @@ class chain extends excel{
                                   'brand',
                                   'opportunity_name',
                                   'agency',
+                                  'agency_commission',
                                   'stage',
                                   'fcst_category',
                                   'gross_revenue',
@@ -1504,7 +1511,6 @@ class chain extends excel{
                                   'is_split',
                                   'year_from',
                                   'year_to',
-                                  'agency_commission'
 
                               );
 
@@ -1516,6 +1522,7 @@ class chain extends excel{
                                   'brand',
                                   'opportunity_name',
                                   'agency_id',
+                                  'agency_commission',
                                   'stage',
                                   'fcst_category',
                                   'gross_revenue',
@@ -1529,7 +1536,6 @@ class chain extends excel{
                                   'is_split',
                                   'year_from',
                                   'year_to',
-                                  'agency_commission'
                               );
 
     public $sfPandRColumns = array(
@@ -1540,6 +1546,7 @@ class chain extends excel{
                                   'brand',
                                   'opportunity_name',
                                   'agency_id',
+                                  'agency_commission',
                                   'stage',
                                   'fcst_category',
                                   'gross_revenue',
@@ -1553,7 +1560,6 @@ class chain extends excel{
                                   'is_split',
                                   'year_from',
                                   'year_to',
-                                  'agency_commission'
                               );      
 
 

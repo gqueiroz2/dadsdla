@@ -38,7 +38,7 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date ";
+        $select = "SELECT * FROM sources_date WHERE (source != 'FW')";
 
         $res = $con->query($select);
 

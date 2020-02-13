@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+{{--
                                 <div class="row justify-content-center">          
                                     <div class="col">       
                                         <div class="form-group">
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+--}}
                                 <div class="row justify-content-center">          
                                     <div class="col">       
                                         <div class="form-group">
