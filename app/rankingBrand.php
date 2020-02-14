@@ -68,7 +68,7 @@ class rankingBrand extends rank{
 				for ($b=0; $b < sizeof($brands); $b++) {
 				
 					if ($l == 0) {
-						if ($b == 1) {
+						if ($b == 1 && $years[$y] < 2020) {
 							$table = "fw_digital";
 						}else{
 							$table = $info['table'];
