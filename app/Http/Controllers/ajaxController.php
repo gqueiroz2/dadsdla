@@ -126,6 +126,33 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getClientByRegionAndAgencySize(){
+        $base = new base();
+        $c = new client;
+        $db = new dataBase();
+        $con = $db->openConnection("DLA");
+        $sql = new sql();
+
+        $agency = Request::get('agency');
+        $region = Request::get("region");
+        $year = Request::get("year");
+        if( !is_null($agency) ){
+            $agencyString = $base->arrayToString($agency,false,0);
+        }else{
+            $agencyString = false;
+        }
+
+        $client = $c->clientByAgencyAndRegion($con,$sql,$region,$year,$agencyString);
+
+
+
+        if($client){
+            echo sizeof($client);
+        }else{
+            echo 0;
+        }
+    }
+
     public function getClientByRegionInsights(){
         $c = new client;
         $db = new dataBase();

@@ -29,6 +29,7 @@ $(document).ready(function(){
               }
             });
 
+            
             $.ajax({
               url:"/ajax/adsales/thirdPosByRegion",
               method:"POST",
@@ -66,6 +67,7 @@ $(document).ready(function(){
                   alert(xhr.status+" "+thrownError);
                 }
               });
+              
               $.ajax({
               url:"/ajax/adsales/secondPosByRegion",
               method:"POST",
@@ -75,8 +77,23 @@ $(document).ready(function(){
                 },
                 error: function(xhr, ajaxOptions,thrownError){
                   alert(xhr.status+" "+thrownError);
-              }
-            });
+                }
+              });
+
+              var agency = $('#agency').val();
+              
+              $.ajax({
+                url:"/ajax/adsales/clientByRegionAndAgencySize",
+                method:"POST",
+                data:{agency,regionID,year},
+                success: function(output){
+                  $('#sizeOfClient').val(output);
+                },
+                error: function(xhr, ajaxOptions,thrownError){
+                  alert(xhr.status+" "+thrownError);
+                }
+              });
+            
           }
         },
         error: function(xhr, ajaxOptions,thrownError){
@@ -201,16 +218,29 @@ $(document).ready(function(){
     var region = $('#region').val();
     var year = $('#year').val();
     $.ajax({
-        url:"/ajax/adsales/clientByRegionAndAgency",
-        method:"POST",
-        data:{agency,region,year},
-        success: function(output){
-          $('#client').html(output).selectpicker("refresh");
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });
+      url:"/ajax/adsales/clientByRegionAndAgency",
+      method:"POST",
+      data:{agency,region,year},
+      success: function(output){
+        $('#client').html(output).selectpicker("refresh");
+      },
+      error: function(xhr, ajaxOptions,thrownError){
+        alert(xhr.status+" "+thrownError);
+      }
+    });
+
+    $.ajax({
+      url:"/ajax/adsales/clientByRegionAndAgencySize",
+      method:"POST",
+      data:{agency,region,year},
+      success: function(output){
+        $('#sizeOfClient').val(output);
+      },
+      error: function(xhr, ajaxOptions,thrownError){
+        alert(xhr.status+" "+thrownError);
+      }
+    });    
+
   });
 
   $('#thirdPos').change(function(){

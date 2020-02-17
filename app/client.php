@@ -27,7 +27,7 @@ class client extends Management{
                  LEFT JOIN agency a ON a.ID = c.agency_id                 
                 ";
 
-        $res = $sql->selectGroupBy2($con,$columns,$table,$join,$where, "cl.name", "cl.id");
+        $res = $sql->selectGroupByDistinct($con,$columns,$table,$join,$where, "cl.name");
 
         $from = array('clientID','client','agencyID','agency');
 

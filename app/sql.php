@@ -48,9 +48,28 @@ class sql extends Model{
         return $res;
     }
 
-    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = 1, $order=""){
-        $sql = "SELECT $columns FROM $table $join $where GROUP BY $group_by ORDER BY $order_by $order";
+    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = false, $order=""){
+        if($group_by){
+            $grp = "GROUP BY ".$group_by;
+        }else{
+            $grp = false;
+        }
+
+        $sql = "SELECT $columns FROM $table $join $where $grp ORDER BY $order_by $order";
         echo "<pre>".$sql."</pre><br>";
+        $res = $con->query($sql);
+        return $res;
+    }
+
+    public function selectGroupByDistinct($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = false, $order=""){
+        if($group_by){
+            $grp = "GROUP BY ".$group_by;
+        }else{
+            $grp = false;
+        }
+
+        $sql = "SELECT DISTINCT $columns FROM $table $join $where $grp ORDER BY $order_by $order";
+        //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
     }

@@ -91,7 +91,10 @@
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->ClientForm()}}
+
+                            <input type="text" name="sizeOfClient" id="sizeOfClient" value="">
                         </div>
+
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Currency: </span></label>
