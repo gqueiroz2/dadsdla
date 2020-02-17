@@ -112,7 +112,7 @@ class viewerExcelController extends Controller {
 
         $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
 
-        //ID NUMBER
+        //INICIO ID NUMBER
 
         for ($c=0; $c <sizeof($mtx); $c++) { 
                         
@@ -139,9 +139,11 @@ class viewerExcelController extends Controller {
 
         }
 
+        $names = array('Copy Key', 'Media Item');
+
         //FIM ID NUMBER
 
-        $data = array('mtx' => $mtx,'total' => $total, 'currency' => $currencies['name'], 'region' => $regions, 'clientExcel' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value, 'idNumber' => $idNumber, 'client' => $clients);
+        $data = array('mtx' => $mtx,'total' => $total, 'idNumber' => $idNumber, 'currency' => $currencies['name'], 'region' => $regions, 'clientExcel' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value, 'client' => $clients, 'names' => $names);
 
         $label = array('exports.viewer.insights.insightsExport','exports.viewer.insights.idNumberExport');
 
