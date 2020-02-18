@@ -8,7 +8,6 @@ class insights extends Model{
 
 	public function assemble($con,$sql,$client,$month,$brand,$salesRep,$currency,$value){
 		$base = new base();
-
 		$mtx = $this->seek($con,$sql,$client,$month,$brand,$salesRep);
 			for($m=0; $m < sizeof($mtx); $m++){
 				if ($mtx[$m]['month']){
