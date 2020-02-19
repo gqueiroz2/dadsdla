@@ -236,6 +236,14 @@ class viewerController extends Controller{
 
         $tmp = Request::get("brand");
 
+        $sizeOfClient = Request::get("sizeOfClient");
+
+        if($sizeOfClient == sizeof($client)){
+            $checkClient = true;
+        }else{
+            $checkClient = false;    
+        }
+
         for ($t=0; $t < sizeof($tmp); $t++) { 
             $brand[$t] = json_decode(base64_decode($tmp[$t]))[0];
         }
@@ -252,7 +260,7 @@ class viewerController extends Controller{
             array_push($brand, "16");
         }
 
-        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client);
+        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
         
         $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value,$agency,$client);
         

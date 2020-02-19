@@ -1,11 +1,11 @@
 $(document).ready(function(){
-	$('#region').change(function(){
+  $('#region').change(function(){
 
-		var regionID = $(this).val();
+    var regionID = $(this).val();
 
     ajaxSetup();
 
-		if (regionID != "") {
+    if (regionID != "") {
       //$('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
       $.ajax({ 
         url:"/ajax/adsales/yearByRegion",
@@ -80,12 +80,10 @@ $(document).ready(function(){
                 }
               });
 
-              var agency = $('#agency').val();
-              
               $.ajax({
-                url:"/ajax/adsales/clientByRegionAndAgencySize",
+                url:"/ajax/adsales/clientByRegionSize",
                 method:"POST",
-                data:{agency,regionID,year},
+                data:{regionID,year},
                 success: function(output){
                   $('#sizeOfClient').val(output);
                 },
@@ -175,6 +173,18 @@ $(document).ready(function(){
         }
       });
 
+      $.ajax({
+        url:"/ajax/adsales/clientByRegionSize",
+        method:"POST",
+        data:{year,regionID},
+        success: function(output){
+          $('#sizeOfClient').html(output).selectpicker("refresh");
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
+
       /*
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -184,18 +194,18 @@ $(document).ready(function(){
       */
 
       $.ajax({
-  			url:"/ajax/adsales/currencyByRegion",
-  			method:"POST",
-  			data:{regionID},
-    		success: function(output){
-      		$('#currency').html(output);
-    		},
-    		error: function(xhr, ajaxOptions,thrownError){
-      		alert(xhr.status+" "+thrownError);
-    		}
-    	});
+        url:"/ajax/adsales/currencyByRegion",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#currency').html(output);
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
 
-		}else{
+    }else{
       var option = "<option> Select Region </option>";
       $('#year').empty().append(option);
       //$('#brand').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
@@ -211,7 +221,7 @@ $(document).ready(function(){
       $('#especificNumber').css("display", "none");
     }
 
-	});
+  });
 
   $('.agencyChange').change(function(){
     var agency = $(this).val();
@@ -258,19 +268,19 @@ $(document).ready(function(){
     }); 
   });
 
-	$('#year').click(function(){
-		var year = $(this).val();
-		if (year != "") {
-			var regionID = $('#region').val();
-			ajaxSetup();      
-			if (regionID != "") {
+  $('#year').click(function(){
+    var year = $(this).val();
+    if (year != "") {
+      var regionID = $('#region').val();
+      ajaxSetup();      
+      if (regionID != "") {
 
-				$.ajax({
-    			url:"/ajax/adsales/thirdPosByRegion",
-    			method:"POST",
-    			data:{regionID, year},
-        		success: function(output){
-          		$('#thirdPos').html(output);
+        $.ajax({
+          url:"/ajax/adsales/thirdPosByRegion",
+          method:"POST",
+          data:{regionID, year},
+            success: function(output){
+              $('#thirdPos').html(output);
               var form = $('#thirdPos').val();
               $.ajax({
                 url:"/ajax/adsales/firstPosByRegion",
@@ -283,25 +293,25 @@ $(document).ready(function(){
                     alert(xhr.status+" "+thrownError);
                 }
               });
-        		},
-        		error: function(xhr, ajaxOptions,thrownError){
-          		alert(xhr.status+" "+thrownError);
-    			}
-    		});
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+          }
+        });
 
 
 
-    		$.ajax({
-    			url:"/ajax/adsales/secondPosByRegion",
-    			method:"POST",
-    			data:{year},
-        		success: function(output){
-          		$('#secondPos').html(output);
-        		},
-        		error: function(xhr, ajaxOptions,thrownError){
-          		alert(xhr.status+" "+thrownError);
-    			}
-    		});
+        $.ajax({
+          url:"/ajax/adsales/secondPosByRegion",
+          method:"POST",
+          data:{year},
+            success: function(output){
+              $('#secondPos').html(output);
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+          }
+        });
 
         $.ajax({
           url:"/ajax/adsales/agencyByRegionAndYear",
@@ -340,14 +350,14 @@ $(document).ready(function(){
         });
 
 
-			}else{
+      }else{
         var option = "<option> Select Region </option>";
       }
-		}else{
+    }else{
       var option = "<option> Select Year </option>";
       $('#firstPos').empty().append(option);
       $('#secondPos').empty().append(option);
       $('#thirdPos').empty().append(option);
     }
-	});
+  });
 });

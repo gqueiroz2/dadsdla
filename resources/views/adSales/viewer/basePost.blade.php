@@ -89,6 +89,8 @@
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->ClientForm()}}
+
+                            <input type="hidden" name="sizeOfClient" id="sizeOfClient" value="">
                         </div>
 
                         <div class="col">

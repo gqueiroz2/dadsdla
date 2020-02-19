@@ -8,9 +8,8 @@ use App\pRate;
 
 class viewer extends Model{
 
-	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client){
+	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
 		$base = new base();
-
 /*
 		if ($source == "sf") {
 			$columns = array('brand','year_from','year_to','from_date','to_date','sales_rep_owner_id','sales_rep_splitter_id');
@@ -96,43 +95,74 @@ class viewer extends Model{
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
 			}else{
-				$select = "SELECT sr.name AS 'salesRep', 
-				                  c.pi_number AS 'piNumber', 
-				                  c.month AS 'month',
-				                  c.map_number AS 'mapNumber',
-				                  c.product AS 'product',
-				                  c.segment AS 'segment',
-				                  c.market AS 'market',
-				                  c.media_type AS 'mediaType', 
-				                  b.name AS 'brand',
-				                  a.name AS 'agency',
-				                  cl.name AS 'client',
-				                  c.log AS 'log',
-				                  c.ad_sales_support AS 'adSalesRupport',
-				                  c.category AS 'category',
-				                  c.sector AS 'sector', 
-				                  c.".$value." AS '".$value."Revenue',
-				                  c.year AS 'year',
-				                  c.package AS 'package',
-				                  c.discount AS 'discount',
-				                  c.client_cnpj AS 'clientCnpj',
-				                  c.agency_cnpj AS 'agencyCnpj'
-							FROM cmaps c
-							LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
-							LEFT JOIN brand b ON b.ID = c.brand_id
-							LEFT JOIN agency a ON c.agency_id = a.ID
-							LEFT JOIN client cl ON c.client_id = cl.ID
-							WHERE (c.brand_id IN ($brandString)) 
-									AND (c.year = '$year') 
-									AND (c.month IN ($monthString))
-									AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
-									AND (sr.ID IN ($salesRepString))
-							ORDER BY c.month";
-
-				//echo "<pre>".($select)."</pre>";
-
+				if($checkClient){
+					$select = "SELECT sr.name AS 'salesRep', 
+					                  c.pi_number AS 'piNumber', 
+					                  c.month AS 'month',
+					                  c.map_number AS 'mapNumber',
+					                  c.product AS 'product',
+					                  c.segment AS 'segment',
+					                  c.market AS 'market',
+					                  c.media_type AS 'mediaType', 
+					                  b.name AS 'brand',
+					                  a.name AS 'agency',
+					                  cl.name AS 'client',
+					                  c.log AS 'log',
+					                  c.ad_sales_support AS 'adSalesRupport',
+					                  c.category AS 'category',
+					                  c.sector AS 'sector', 
+					                  c.".$value." AS '".$value."Revenue',
+					                  c.year AS 'year',
+					                  c.package AS 'package',
+					                  c.discount AS 'discount',
+					                  c.client_cnpj AS 'clientCnpj',
+					                  c.agency_cnpj AS 'agencyCnpj'
+								FROM cmaps c
+								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+								LEFT JOIN brand b ON b.ID = c.brand_id
+								LEFT JOIN agency a ON c.agency_id = a.ID
+								LEFT JOIN client cl ON c.client_id = cl.ID
+								WHERE (c.brand_id IN ($brandString)) 
+										AND (c.year = '$year') 
+										AND (c.month IN ($monthString))
+										AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
+										AND (sr.ID IN ($salesRepString))
+								ORDER BY month,mapNumber";
+				}else{
+					$select = "SELECT sr.name AS 'salesRep', 
+					                  c.pi_number AS 'piNumber', 
+					                  c.month AS 'month',
+					                  c.map_number AS 'mapNumber',
+					                  c.product AS 'product',
+					                  c.segment AS 'segment',
+					                  c.market AS 'market',
+					                  c.media_type AS 'mediaType', 
+					                  b.name AS 'brand',
+					                  a.name AS 'agency',
+					                  cl.name AS 'client',
+					                  c.log AS 'log',
+					                  c.ad_sales_support AS 'adSalesRupport',
+					                  c.category AS 'category',
+					                  c.sector AS 'sector', 
+					                  c.".$value." AS '".$value."Revenue',
+					                  c.year AS 'year',
+					                  c.package AS 'package',
+					                  c.discount AS 'discount',
+					                  c.client_cnpj AS 'clientCnpj',
+					                  c.agency_cnpj AS 'agencyCnpj'
+								FROM cmaps c
+								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+								LEFT JOIN brand b ON b.ID = c.brand_id
+								LEFT JOIN agency a ON c.agency_id = a.ID
+								LEFT JOIN client cl ON c.client_id = cl.ID
+								WHERE (c.brand_id IN ($brandString)) 
+										AND (c.year = '$year') 
+										AND (c.month IN ($monthString))
+										AND ( cl.ID IN ($clientString)  )
+										AND (sr.ID IN ($salesRepString))
+								ORDER BY month,mapNumber";
+				}
 			}
-			//echo "<pre>".($select)."</pre>";
 		}elseif ($source == "IBMS/BTS"){
 			$from = array(
 						  'region',

@@ -92,7 +92,7 @@
                             @endif
                             {{$render->ClientForm()}}
 
-                            <input type="text" name="sizeOfClient" id="sizeOfClient" value="">
+                            <input type="hidden" name="sizeOfClient" id="sizeOfClient" value="">
                         </div>
 
 

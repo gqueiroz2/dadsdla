@@ -224,7 +224,10 @@ class Render extends Model{
         $arraySource = array("CMAPS"/*,"IBMS/BTS","FW","SF"*/);
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select Region </option>";           
+            for ($a=0; $a < sizeof($arraySource); $a++) { 
+                echo "<option value='".$arraySource[$a]."'>".$arraySource[$a]."</option>";
+            }
+            //echo "<option value=''> Select Region </option>";           
         echo "</select>";
 
     }
