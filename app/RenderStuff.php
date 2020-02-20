@@ -150,7 +150,7 @@ class RenderStuff extends Model{
 								echo "</div>";
 							}
 						}else{
-							var_dump($newValues[$dependencies[$d]]);
+							//var_dump($newValues[$dependencies[$d]]);
 						}
 					}
 					echo "<div class='row mt-2'>

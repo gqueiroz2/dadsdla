@@ -789,6 +789,12 @@ class chain extends excel{
                 $current = "LATAM";
             }
 
+            if($current == 'Us Hispanic'){
+                $current = "US Hispanic";
+            }
+
+
+
             if( $current == "" ){
                 $rtr =  array( 8,'region_id');
             }else{

@@ -81,10 +81,14 @@ class share extends results{
         //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
         $actualMonth = date("m");
 
+        var_dump($year);
+
+        $yy = $year[0];
+
         for ($m=0; $m <sizeof($month) ; $m++) {
             for ($b=0; $b <sizeof($brand); $b++) {
                 if ($m > $actualMonth-1 && ($source == "CMAPS")) {
-                    if($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    if( ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") && $year < 2020 ) {
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($region == "1") {
                         $sourceBrand[$m][$b] = "CMAPS";
@@ -92,7 +96,7 @@ class share extends results{
     
                     }
                 }else{
-                    if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    if( ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") && $year < 2020 ) {
                         $sourceBrand[$m][$b] = "Digital";
                     }elseif ($brand[$b][1] == "OTH") {
                         $sourceBrand[$m][$b] = "IBMS";

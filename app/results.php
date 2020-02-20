@@ -184,8 +184,13 @@ class results extends base{
                 break;
 
             case 'ytd':
-                $columns = array("campaign_sales_office_id"/*,"campaign_currency_id"*/,"brand_id", "year", "month");
-                $columnsValue = array($region/*,$currency[0]['id']*/, $brand, $year, $month);
+                $columns = array("sales_representant_office_id"/*,"campaign_currency_id"*/,"brand_id", "year", "month");
+                if($brand == 9){
+                    $brandArray = array(9,13,14,15,16);
+                    $columnsValue = array($region/*,$currency[0]['id']*/, $brandArray, $year, $month);
+                }else{
+                    $columnsValue = array($region/*,$currency[0]['id']*/, $brand, $year, $month);
+                }
                 $value .= "_revenue_prate";
                 break;
 
@@ -216,15 +221,7 @@ class results extends base{
                 }
 
                 break;
-/*
-    
-    DIGITAL ESTA VINDO DO ACTUAL DO PLAN BY BRAND
 
-                $columns = array("sales_representant_office_id", "brand_id", "year", "month");
-                $columnsValue = array($region, $brand, $year, $month);
-                $value .= "_revenue";
-                break;
-*/
             case 'plan_by_brand':
 
                 $columns = array("sales_office_id", "source", "type_of_revenue", "brand_id", "year", "month", "currency_id");
