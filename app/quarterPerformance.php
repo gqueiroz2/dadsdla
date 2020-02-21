@@ -87,10 +87,10 @@ class quarterPerformance extends performance {
 
 		for ($b=0; $b < sizeof($brands); $b++) { 
 			for ($m=0; $m < sizeof($months); $m++) { 
-				if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
-					$table[$b][$m] = "ytd";
-				}else{
+				if ( ($brands[$b][1] == 'ONL' && $brands[$b][1] == 'VIX') && $year < 2020 ) {
 					$table[$b][$m] = "fw_digital";
+				}else{
+					$table[$b][$m] = "ytd";
 				}
 
 				$where[$b][$m] = $this->generateColumns($value,$table[$b][$m]);

@@ -89,7 +89,7 @@ class quarterPerformanceController extends Controller {
         $sales = $qp->createLabels($con, $salesRepGroupID, $salesRepID, $regionID, $year);
 
         $region = $r->getRegion($con, array($regionID))[0]['name'];
-        $rName = $qp->TRuncateRegion($region);
+        $rName = $qp->TruncateRegion($region);
 
         $tmpTiers = array("T1", "T2", "TOTH");
 

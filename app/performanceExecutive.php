@@ -74,7 +74,7 @@ class performanceExecutive extends performance
         //$actualMonth = date("m");
         for ($b=0; $b < sizeof($brand); $b++) {
             for ($m=0; $m < sizeof($month); $m++) {
-                if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                if (  ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") && $year < 2020 ) {
                     $table[$b][$m] = "fw_digital";
                 }else{
                     $table[$b][$m] = "ytd";

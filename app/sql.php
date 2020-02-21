@@ -188,9 +188,7 @@ class sql extends Model{
     }
 
     public function updateValues($con,$tableName,$set,$where){
-        var_dump("AA");
         $sql = "UPDATE DLA.$tableName $set $where";
-        var_dump($sql);
         if ($con->query($sql) === TRUE) {
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
@@ -210,6 +208,7 @@ class sql extends Model{
         
         for ($i=0; $i < sizeof($columns); $i++) { 
             if ($i == sizeof($columns)-1) {
+
                 if (is_array($variables[$i])) {
                     
                     $where .= "($columns[$i] IN (";
@@ -239,6 +238,87 @@ class sql extends Model{
                     }
                 }else{
                     $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                }
+            }
+        }
+        
+        return $where;
+
+    }
+
+    public function whereONLAdjust($columns,$variables){
+        $where = "WHERE ";
+        
+        for ($i=0; $i < sizeof($columns); $i++) { 
+            if($columns[$i] == "brand_id"){
+                if ($i == sizeof($columns)-1) {
+                    
+                    if (is_array($variables[$i])) {
+                        
+                        $where .= "($columns[$i] IN (";
+
+                        for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                            if ($v == sizeof($variables[$i])-1) {
+                                $where .= "\"".$variables[$i][$v]."\"))";
+                            }else{
+                                $where .= "\"".$variables[$i][$v]."\",";
+                            }
+                        }
+                        
+                    }else{
+                        //$where .= "($columns[$i] = \"$variables[$i]\")";
+                        $where .= "( $columns[$i] IN ('9','13','14','15','16')) AND";
+                    }
+                }else{
+                    if (is_array($variables[$i])) {
+
+                        $where .= "($columns[$i] IN (";
+                        
+                        for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                            if ($v == sizeof($variables[$i])-1) {
+                                $where .= "\"".$variables[$i][$v]."\")) AND ";
+                            }else{
+                                $where .= "\"".$variables[$i][$v]."\",";
+                            }
+                        }
+                    }else{
+                        //$where .= "($columns[$i] = \"$variables[$i]\")";
+                        $where .= "( $columns[$i] IN ('9','13','14','15','16')) AND";
+                    }
+                }
+            }else{
+                if ($i == sizeof($columns)-1) {
+                    
+                    if (is_array($variables[$i])) {
+                        
+                        $where .= "($columns[$i] IN (";
+
+                        for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                            if ($v == sizeof($variables[$i])-1) {
+                                $where .= "\"".$variables[$i][$v]."\"))";
+                            }else{
+                                $where .= "\"".$variables[$i][$v]."\",";
+                            }
+                        }
+                        
+                    }else{
+                        $where .= "($columns[$i] = \"$variables[$i]\")";
+                    }
+                }else{
+                    if (is_array($variables[$i])) {
+
+                        $where .= "($columns[$i] IN (";
+                        
+                        for ($v=0; $v < sizeof($variables[$i]); $v++) { 
+                            if ($v == sizeof($variables[$i])-1) {
+                                $where .= "\"".$variables[$i][$v]."\")) AND ";
+                            }else{
+                                $where .= "\"".$variables[$i][$v]."\",";
+                            }
+                        }
+                    }else{
+                        $where .= "($columns[$i] = \"$variables[$i]\") AND ";
+                    }
                 }
             }
         }

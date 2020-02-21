@@ -62,11 +62,19 @@ class performance extends base{
         if ($source == "ytd") {
             $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
-            $where = $sql->where($columns,$arrayWhere);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
+                $where = $sql->where($columns,$arrayWhere);
+            }
         }elseif ($source == "ytdWB") {
             $columns = array("sales_representant_office_id","year","month");
             $arrayWhere = array($region,$year,$month);
-            $where = $sql->where($columns,$arrayWhere);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
+                $where = $sql->where($columns,$arrayWhere);
+            }
         }elseif ($source == "fw_digital"){
             $columns = array("region_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);

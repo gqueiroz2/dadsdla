@@ -81,8 +81,6 @@ class share extends results{
         //definindo a source de cada canal, Digital, VIX e OTH são diferentes do normal
         $actualMonth = date("m");
 
-        var_dump($year);
-
         $yy = $year[0];
 
         for ($m=0; $m <sizeof($month) ; $m++) {
@@ -255,10 +253,14 @@ class share extends results{
             $columns = array("year","brand_id","sales_rep_id","month");
             $arrayWhere = array($year,$brand,$salesRep["id"],$month);
             $where = $sql->where($columns,$arrayWhere);
-        }elseif ($source == "IBMS") {
+        }elseif ($source == "IBMS") { // BTS WORKS THROUGHT HERE
             $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
-            $where = $sql->where($columns,$arrayWhere);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
+                $where = $sql->where($columns,$arrayWhere);
+            }
         }elseif ($source == "Header") {
             $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");
             $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
