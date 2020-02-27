@@ -12,66 +12,68 @@ class analytics extends Model{
     	$list = $this->getInfo($con,$sql);
 
         $dealWithList = $this->dealWithList($list);  
-                
-        $lastWeekV = sizeof($dealWithList['lastWeek']);
         
-        
+        if($dealWithList){        
+            $lastWeekV = sizeof($dealWithList['lastWeek']);
 
-        $allV = sizeof($dealWithList['all']); 
+            $allV = sizeof($dealWithList['all']); 
 
-        $last15Days = $this->last15Days($list);
-        $last15DaysV = 0;
-        for ($l=0; $l < sizeof($last15Days); $l++) { 
-            if(!empty($last15Days[$l])){
-                $lastFifteenDaysV[$l] = sizeof($last15Days[$l]);
-            }else{
-                $lastFifteenDaysV[$l] = 0;
+            $last15Days = $this->last15Days($list);
+            $last15DaysV = 0;
+            for ($l=0; $l < sizeof($last15Days); $l++) { 
+                if(!empty($last15Days[$l])){
+                    $lastFifteenDaysV[$l] = sizeof($last15Days[$l]);
+                }else{
+                    $lastFifteenDaysV[$l] = 0;
+                }
+                $last15DaysV += $lastFifteenDaysV[$l];
+            }       
+
+            $lastSevenDays = $this->lastSevenDays($list);
+
+
+            $lastSevenDaysV = 0;
+
+            for ($l=0; $l < sizeof($lastSevenDays); $l++) { 
+                $lastSevenDaysA[$l] = sizeof($lastSevenDays[$l]);
+                $lastSevenDaysV += $lastSevenDaysA[$l];
             }
-            $last15DaysV += $lastFifteenDaysV[$l];
-        }       
 
-        $lastSevenDays = $this->lastSevenDays($list);
+            $lastDay = $this->lastDay($list); 
+            $lastDayV = sizeof($lastDay);
 
+            $lastHour = $this->lastHour($list);
+            $lastHourV = sizeof($lastHour);
 
-        $lastSevenDaysV = 0;
+            $all = $list;
 
-        for ($l=0; $l < sizeof($lastSevenDays); $l++) { 
-            $lastSevenDaysA[$l] = sizeof($lastSevenDays[$l]);
-            $lastSevenDaysV += $lastSevenDaysA[$l];
+            $regions = $this->regions($list);       
+
+            $visitsByRegion = $this->visitsByRegion($regions,$list);
+
+            $rtr = array( 
+                        "lastHourV" => $lastHourV,
+                        "lastDayV" => $lastDayV,
+                        "lastWeekV" => $lastWeekV,
+                        "last15DaysV" => $last15DaysV,
+                        "allV" => $allV,
+
+                        "last15Days" => $last15Days,
+                        "lastFifteenDaysV" => $lastFifteenDaysV,
+                        "lastSevenDays" => $lastSevenDays,
+                        "lastSevenDaysV" => $lastSevenDaysV,
+                        "lastSevenDaysA" => $lastSevenDaysA,
+                        "lastDay" => $lastDay,
+                        "lastHour" => $lastHour,
+
+                        "regions" => $regions,
+                        "visitsByRegion" => $visitsByRegion,
+
+                        "all" => $all
+                    );
+        }else{
+            $rtr = false;
         }
-
-        $lastDay = $this->lastDay($list); 
-        $lastDayV = sizeof($lastDay);
-
-        $lastHour = $this->lastHour($list);
-        $lastHourV = sizeof($lastHour);
-
-        $all = $list;
-
-        $regions = $this->regions($list);       
-
-        $visitsByRegion = $this->visitsByRegion($regions,$list);
-
-        $rtr = array( 
-                    "lastHourV" => $lastHourV,
-                    "lastDayV" => $lastDayV,
-                    "lastWeekV" => $lastWeekV,
-                    "last15DaysV" => $last15DaysV,
-                    "allV" => $allV,
-
-                    "last15Days" => $last15Days,
-                    "lastFifteenDaysV" => $lastFifteenDaysV,
-                    "lastSevenDays" => $lastSevenDays,
-                    "lastSevenDaysV" => $lastSevenDaysV,
-                    "lastSevenDaysA" => $lastSevenDaysA,
-                    "lastDay" => $lastDay,
-                    "lastHour" => $lastHour,
-
-                    "regions" => $regions,
-                    "visitsByRegion" => $visitsByRegion,
-
-                    "all" => $all
-                );
 
         return $rtr;
 
@@ -297,62 +299,66 @@ class analytics extends Model{
         $last15Days = array();
         $all = array();
 
-        for ($l=0; $l < sizeof($list); $l++) { 
-            /* VERIFICA SE O REGISTRO FOI CRIADO*/
-            array_push($all, $list[$l]);
+        if($list){
+            for ($l=0; $l < sizeof($list); $l++) { 
+                /* VERIFICA SE O REGISTRO FOI CRIADO*/
+                array_push($all, $list[$l]);
 
-            /* VERIFICA SE O REGISTRO FOI CRIADO NA ÚLTIMA HORA */
-            if( strtotime($list[$l]['hour']) < strtotime($now) &&  strtotime($list[$l]['hour']) > strtotime($oneHourAgo) ){
-                array_push($lastHour, $list[$l]);
+                /* VERIFICA SE O REGISTRO FOI CRIADO NA ÚLTIMA HORA */
+                if( strtotime($list[$l]['hour']) < strtotime($now) &&  strtotime($list[$l]['hour']) > strtotime($oneHourAgo) ){
+                    array_push($lastHour, $list[$l]);
+                }
+
+                /* VERIFICA SE O REGISTRO FOI CRIADO NAS ÚLTIMAS 24 HORAS */
+                if( 
+                    (strtotime($list[$l]['day']) <= strtotime($today)) 
+                    && 
+                    ( 
+                        ( strtotime($list[$l]['day']) >= strtotime($yesterday) ) 
+                            && 
+                        ( strtotime($list[$l]['hour']) >= strtotime($now) )
+                    )
+                  ){
+                    array_push($lastDay, $list[$l]);
+                }
+
+                /* VERIFICA SE O REGISTRO FOI CRIADO NA ÚLTIMA SEMANA */
+                if( 
+                    (strtotime($list[$l]['day']) <= strtotime($today)) 
+                    && 
+                    ( 
+                        ( strtotime($list[$l]['day']) >= strtotime($lastWeekDate) ) 
+                            && 
+                        ( strtotime($list[$l]['hour']) >= strtotime($now) )
+                    )
+                  ){
+                    array_push($lastWeek, $list[$l]);
+                }
+
+                /* VERIFICA SE O REGISTRO FOI CRIADO NOS ULTIMOS 15 DIAS */
+                if( 
+                    (strtotime($list[$l]['day']) <= strtotime($last15Date)) 
+                    && 
+                    ( 
+                        ( strtotime($list[$l]['day']) >= strtotime($last15Date) ) 
+                            && 
+                        ( strtotime($list[$l]['hour']) >= strtotime($now) )
+                    )
+                  ){
+                    array_push($lastWeek, $list[$l]);
+                }
             }
 
-            /* VERIFICA SE O REGISTRO FOI CRIADO NAS ÚLTIMAS 24 HORAS */
-            if( 
-                (strtotime($list[$l]['day']) <= strtotime($today)) 
-                && 
-                ( 
-                    ( strtotime($list[$l]['day']) >= strtotime($yesterday) ) 
-                        && 
-                    ( strtotime($list[$l]['hour']) >= strtotime($now) )
-                )
-              ){
-                array_push($lastDay, $list[$l]);
-            }
-
-            /* VERIFICA SE O REGISTRO FOI CRIADO NA ÚLTIMA SEMANA */
-            if( 
-                (strtotime($list[$l]['day']) <= strtotime($today)) 
-                && 
-                ( 
-                    ( strtotime($list[$l]['day']) >= strtotime($lastWeekDate) ) 
-                        && 
-                    ( strtotime($list[$l]['hour']) >= strtotime($now) )
-                )
-              ){
-                array_push($lastWeek, $list[$l]);
-            }
-
-            /* VERIFICA SE O REGISTRO FOI CRIADO NOS ULTIMOS 15 DIAS */
-            if( 
-                (strtotime($list[$l]['day']) <= strtotime($last15Date)) 
-                && 
-                ( 
-                    ( strtotime($list[$l]['day']) >= strtotime($last15Date) ) 
-                        && 
-                    ( strtotime($list[$l]['hour']) >= strtotime($now) )
-                )
-              ){
-                array_push($lastWeek, $list[$l]);
-            }
+            $rtr = array(
+                         "lastHour" => $lastHour,
+                         "lastDay" => $lastDay,
+                         "lastWeek" => $lastWeek,
+                         "last15Days" => $last15Days,
+                         "all" => $all
+                     );
+        }else{
+            $rtr = false;
         }
-
-        $rtr = array(
-                     "lastHour" => $lastHour,
-                     "lastDay" => $lastDay,
-                     "lastWeek" => $lastWeek,
-                     "last15Days" => $last15Days,
-                     "all" => $all
-                 );
 
         return $rtr;
        

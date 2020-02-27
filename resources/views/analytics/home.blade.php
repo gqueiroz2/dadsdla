@@ -18,7 +18,17 @@
                         <center><h4> <b> Analytics </b> </h4></center>
                     </div>
                     <div class="card-body">
-                        {{ $aR->panel($info) }}
+                        @if($info)
+                            {{ $aR->panel($info) }}
+                        @else
+                            <center>
+                                <h4>
+                                    
+                                    NO DATA
+
+                                </h4>
+                            </center>
+                        @endif
                     </div>
                 </div>
             </div>
