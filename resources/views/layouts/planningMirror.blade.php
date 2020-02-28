@@ -77,105 +77,15 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Proposal </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Summary </a>
-								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
-								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
-								<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
-								<a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY - Brand </a>
-								<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
-							</div>
-						</li>
-						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )						
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Individual </a>
-								<a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
-								<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
-							</div>
-						</li>
-						@endif
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-							</div>
-						</li>
-
-                       <li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
-	                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
-								<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
-								<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
-	                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
-	                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
-	                        </div>
-                        </li>
-
-                        @if( ( $userLevel == "SU" ) || $userRegionName == "Brazil")
-	                        <li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('baseGet') }}"> CMAPS </a>
-									@if( ( $userLevel == "SU" ))
-										<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
-									@endif
-								</div>
-							</li>
-						@endif
-
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>
-								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
-									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
-									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
-									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
-								@endif
-							</div>
-						</li>	
-					@if( ( $userLevel == "SU" ) )
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
-								<!--<a class="dropdown-item" href="#"> Insights </a>-->
-							</div>
-						</li>	
-					
-
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Teste Performance </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('individualGet')}}"> Individual </a>
-								<a class="dropdown-item"> Core </a>
-								<a class="dropdown-item"> Office </a>
-							</div>
-						</li>
-					@endif		
-					</ul>    
-
-					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
-						<li class="right nav-item dropdown dropleft">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> Settings </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<form method="GET" action="{{ route('logoutGet') }}">
-								@csrf
-									<input type="submit" class="dropdown-item" value="Logout">
-								</form>
-								<a class="dropdown-item" href="{{ route('relationshipGet') }}"> RelationShip </a>
-								@if($userLevel == "SU")
-									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
-									<a class="dropdown-item" href="{{ route('planningHome') }}"> Planning </a>
-								@endif
-								
+								<a class="dropdown-item" href=""> Sponsorship  </a>
+								<a class="dropdown-item" href=""> Determinated Media </a>
 							</div>
 						</li>
 					</ul>
+
+					
 
 					<ul class="navbar-nav mr-right" style="margin-right: 3%;">
 						<div class="container-fluid" style="height: auto;">
@@ -185,12 +95,21 @@
 	                            </div>
 	                        </div>
 	                        <div class="row">
-                            	<div class="col" style="margin-top: -5px !important;">                            		
-	                            	<span style="width: 100%; font-size: 10px; font-weight: bold; padding: 0px;"> Ad Sales Portal | Data Current Throught: </span>
+                            	<div class="col" style="margin-top: -5px !important;">   
+				                    <ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
+										<li class="right nav-item dropdown dropleft">
+											<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-flip="true" aria-haspopup="true" aria-expanded="false"> Settings </a>
+											<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+												<form method="GET" action="{{ route('logoutGet') }}">
+												@csrf
+													<input type="submit" class="dropdown-item" value="Logout">
+												</form>
+												<a class="dropdown-item" href="{{ route('home') }}"> Ad Sales </a>								
+											</div>
+										</li>
+									</ul>
 	                            </div>	                            
                         	</div>
-                        	
-                        	{{ $bs->sources() }}
                         	
                         </div>     
 					</ul>    
