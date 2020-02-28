@@ -6,7 +6,7 @@ use App\base;
 
 class insights extends Model{
 
-	public function assemble($con,$sql,$client,$month,$brand,$salesRep,$currency,$value){
+	public function assemble($con,$sql,$client,$month,$brand,$salesRep,$currency){
 		$base = new base();
 		$mtx = $this->seek($con,$sql,$client,$month,$brand,$salesRep);
 			for($m=0; $m < sizeof($mtx); $m++){
@@ -127,7 +127,7 @@ class insights extends Model{
 
 	}
 
-	public function total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value){
+	public function total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion){
 		$p = new pRate();
 		$base = new base();
 
@@ -142,10 +142,13 @@ class insights extends Model{
 		$year = date('Y');
 
 		$from = array('averageNumSpot',
-					  'sum'.$value.'Revenue');
+					  'sumGrossRevenue',
+					  'sumNetRevenue'
+					);
 
 		$selectTotal = "SELECT AVG(i.num_spot) AS 'averageNumSpot',
-		 			    SUM(i.".$value."_revenue) AS 'sum".$value."Revenue'
+		 			    SUM(i.net_revenue) AS 'sumNetRevenue',
+		 			    SUM(i.gross_revenue) AS 'sumGrossRevenue'
 						FROM insights i
 						LEFT JOIN brand b ON i.brand_id = b.ID
 						LEFT JOIN sales_rep sr ON i.sales_rep_id = sr.ID
@@ -168,11 +171,13 @@ class insights extends Model{
 		}
 		
 		for ($t=0; $t <sizeof($total); $t++) {
-			if ($total[$t]['sum'.$value.'Revenue'] || $total[$t]['averageNumSpot']){
-				if ($total[$t]['sum'.$value.'Revenue']){
-					$total[$t]['sum'.$value.'Revenue'] = doubleval($total[$t]['sum'.$value.'Revenue'])/$pRate;
+			if ($total[$t]['sumNetRevenue'] || $total[$t]['sumGrossRevenue'] || $total[$t]['averageNumSpot']){
+				if ($total[$t]['sumNetRevenue']){
+					$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
 				}
-
+				if ($total[$t]['sumGrossRevenue']){
+					$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
+				}
 				if ($total[$t]['averageNumSpot']){
 					$total[$t]['averageNumSpot'] = doubleval($total[$t]['averageNumSpot']);
 				}

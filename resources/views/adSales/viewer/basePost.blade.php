@@ -100,13 +100,13 @@
                             @endif
                             {{$render->currency($currencies)}}
                         </div>
-                        <div class="col">
+                        {{--<div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
                             @if($errors->has('value'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->value2()}}
-                        </div>
+                        </div>--}}
                         <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
@@ -124,7 +124,7 @@
             <div class="col-sm"></div>
             <div class="col-sm"></div>
             <div class="col-sm"></div>
-            <div class="col-sm">
+            <div class="col-sm" style="visibility: hidden;">
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
@@ -147,7 +147,7 @@
             <div class="row mt-4">
                 <div class="col table-responsive">
                     @if($mtx)
-                        {{$bRender->assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total)}}
+                        {{$bRender->assemble($mtx,$months,$year,$regions,$brand,$source,$currencies,$total)}}
                     @else
                         THE IS NO DATA TO THE SELECTED YEAR !!!
                     @endif
@@ -171,7 +171,6 @@
                     }
                 });
 
-                $('#ExcelPDF').hide();
 
                 $('#excel').click(function(event){
 

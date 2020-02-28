@@ -103,13 +103,13 @@
                             @endif
                             {{$render->currency($currency)}}
                         </div>
-                        <div class="col">
+                        {{--<div class="col" >
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
                             @if($errors->has('value'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->value2()}}
-                        </div>
+                        </div>--}}
                         <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
@@ -123,12 +123,12 @@
             <div class="col" style="color: #0070c0;font-size: 22px">
                 <span style="float: right; margin-right: 2.5%;"> Data Current Through: (<?php echo date('d/m/Y'); ?>) </span>
             </div>
-
             
         </div>
 
         <div id="vlau"></div>
     </div>
+
 
 
 @endsection

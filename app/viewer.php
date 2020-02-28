@@ -8,7 +8,7 @@ use App\pRate;
 
 class viewer extends Model{
 
-	public function getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
+	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
 		$base = new base();
 
 		$brandString = $base->arrayToString($brand,false,0);
@@ -46,7 +46,8 @@ class viewer extends Model{
 		                'discount',
 		                'clientCnpj',
 		                'agencyCnpj',
-		                $value."Revenue"		                
+		                'netRevenue',
+				        'grossRevenue'
 
 			);
 
@@ -67,7 +68,8 @@ class viewer extends Model{
 				                  c.ad_sales_support AS 'adSalesRupport',
 				                  c.category AS 'category',
 				                  c.sector AS 'sector', 
-				                  c.".$value." AS '".$value."Revenue',
+				                  c.net AS 'netRevenue',
+				                  c.gross AS 'grossRevenue',
 				                  c.year AS 'year',
 				                  c.package AS 'package',
 				                  c.discount AS 'discount',
@@ -101,7 +103,8 @@ class viewer extends Model{
 					                  c.ad_sales_support AS 'adSalesRupport',
 					                  c.category AS 'category',
 					                  c.sector AS 'sector', 
-					                  c.".$value." AS '".$value."Revenue',
+					                  c.net AS 'netRevenue',
+				                  	  c.gross AS 'grossRevenue',
 					                  c.year AS 'year',
 					                  c.package AS 'package',
 					                  c.discount AS 'discount',
@@ -134,7 +137,8 @@ class viewer extends Model{
 					                  c.ad_sales_support AS 'adSalesRupport',
 					                  c.category AS 'category',
 					                  c.sector AS 'sector', 
-					                  c.".$value." AS '".$value."Revenue',
+					                  c.net AS 'netRevenue',
+				                   	  c.gross AS 'grossRevenue',
 					                  c.year AS 'year',
 					                  c.package AS 'package',
 					                  c.discount AS 'discount',
@@ -364,7 +368,7 @@ class viewer extends Model{
 
 	}
 
-	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion, $value,$agency,$client){
+	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
 		$base = new base();
 		$p = new pRate();
 
@@ -380,11 +384,13 @@ class viewer extends Model{
 
 		if ($source == 'CMAPS') {
 			$from  = array('averageDiscount',
-							'sum'.ucfirst($value).'Revenue'
+							'sumNetRevenue',
+							'sumGrossRevenue'
 						);
 			if ($checkEspecificNumber) {
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								       SUM(c.".$value.") AS 'sum".ucfirst($value)."Revenue'
+								       SUM(c.net) AS 'sumNetRevenue',
+								       SUM(c.gross) AS 'sumGrossRevenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
@@ -397,7 +403,8 @@ class viewer extends Model{
 									AND (c.map_number LIKE '%".$especificNumber."%')";	
 			}else{
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								   	   SUM(c.".$value.") AS 'sum".ucfirst($value)."Revenue'
+								       SUM(c.net) AS 'sumNetRevenue',
+								       SUM(c.gross) AS 'sumGrossRevenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
@@ -410,14 +417,9 @@ class viewer extends Model{
 									
 								";
 
-								
-
-
 			}
 
 		}
-
-
 
 		$result = $con->query($selectTotal);
 		$total = $sql->fetch($result,$from,$from);	
@@ -438,13 +440,16 @@ class viewer extends Model{
 
 		for ($t=0; $t < sizeof($total); $t++) { 
 			if ($source == 'CMAPS') {
-				if ($total[$t]['sum'.ucfirst($value).'Revenue'] || $total[$t]['averageDiscount']) {
+				if ($total[$t]['sumNetRevenue'] || $total[$t]['averageDiscount'] || $total[$t]['sumGrossRevenue']) {
 					if ($total[$t]['averageDiscount']) {
 						$total[$t]['averageDiscount'] = doubleval($total[$t]['averageDiscount']);
 					}
 
-					if ($total[$t]['sum'.ucfirst($value).'Revenue']) {
-						$total[$t]['sum'.ucfirst($value).'Revenue'] = doubleval($total[$t]['sum'.ucfirst($value).'Revenue'])/$pRate;
+					if ($total[$t]['sumNetRevenue']) {
+						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
+					}
+					if ($total[$t]['sumGrossRevenue']) {
+						$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
 					}
 				}
 			}
@@ -456,7 +461,7 @@ class viewer extends Model{
 
 
 
-	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies, $value){
+	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies){
 
 		$base = new base();
 		$p = new pRate();
@@ -497,13 +502,16 @@ class viewer extends Model{
 							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
 						}
 
-						if ($mtx[$m]['discount'] || $mtx[$m][$value.'Revenue']) {
+						if ($mtx[$m]['discount'] || $mtx[$m]['netRevenue'] || $mtx[$m]['grossRevenue']) {
 							if ($mtx[$m]['discount']) {
 								$mtx[$m]['discount'] = doubleval($mtx[$m]['discount']);
 
 							}
-							if ($mtx[$m][$value.'Revenue']) {
-								$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
+							if ($mtx[$m]['netRevenue']) {
+								$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
+							}
+							if ($mtx[$m]['grossRevenue']) {
+								$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
 							}
 						}
 

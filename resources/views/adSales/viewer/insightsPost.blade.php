@@ -69,14 +69,6 @@
                                 @endif
                                 {{$render->currency($currencies)}}
                             </div>
-
-                            <div class="col">
-                                <label class="labelLeft"><span class="bold"> Value: </span></label>
-                                @if($errors->has('value'))
-                                    <label style="color: red;">* Required</label>
-                                @endif
-                                {{$render->value2()}}
-                            </div>
                             
                             <div class="col">
                                 <label> &nbsp; </label>
@@ -91,7 +83,7 @@
 
 		<div class="row justify-content-end mt-2">
             <div class="col-7"></div>
-            <div class="col-sm">
+            <div class="col-sm" style="visibility: hidden;">
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
@@ -142,7 +134,7 @@
             <div class="row mt-4">
                 <div class="col table-responsive">
                         @if($mtx)
-                        {{$inRender->assemble($mtx,$currencies,$value,$regions,$total)}} 
+                        {{$inRender->assemble($mtx,$currencies,$regions,$total)}} 
                         @endif
                 </div>
             </div>
@@ -164,7 +156,6 @@
                 }
             });
 
-            $('#ExcelPDF').hide();
 
             $('#excel').click(function(event){
 

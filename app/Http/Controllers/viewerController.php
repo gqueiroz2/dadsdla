@@ -120,9 +120,9 @@ class viewerController extends Controller{
             array_push($brands, "16");
         }
 
-        $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
+        $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency);
 
-        $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
+        $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion);
 
         $regionExcel = $salesRegion;
         $monthExcel = $month;
@@ -188,7 +188,6 @@ class viewerController extends Controller{
             'brand' => 'required',
             'salesRep' => 'required',
             'currency' => 'required',
-            'value' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -260,11 +259,11 @@ class viewerController extends Controller{
             array_push($brand, "16");
         }
 
-        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$value,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
+        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
         
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$value,$agency,$client);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
         
-        $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies,$value);
+        $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
 
         $regionExcel = $regions;
         $sourceExcel = $source;

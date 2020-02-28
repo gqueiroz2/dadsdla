@@ -118,13 +118,13 @@ class viewerInsightsTabExport implements FromView,WithEvents, ShouldAutoSize, Wi
 				$cellRange = 'A1';
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 			
-				$cellRange = 'A2:I2';
+				$cellRange = 'A2:J2';
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-				$cellRange = 'A3:I3';
+				$cellRange = 'A3:J3';
 				$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
-				$letter = 'I';
+				$letter = 'J';
 
 				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 					$cellRange = "A".($d+4).":".$letter.($d+4);
@@ -148,7 +148,8 @@ class viewerInsightsTabExport implements FromView,WithEvents, ShouldAutoSize, Wi
 	public function columnFormats(): array{
 
 		return[
-			'I' => '#,##0'
+			'I' => '#,##0',
+			'J' => '#,##0'
 		];
 	}
 }
