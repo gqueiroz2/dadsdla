@@ -52,13 +52,15 @@ class CheckElementsController extends Controller{
 				if(!$newValues['brands']){
 					echo "NO";
 				}else{
-					echo "<div class='container-fluid'>";
-					for ($b=0; $b < sizeof($newValues['brands']); $b++) { 
-						echo "<div class='row'>";
-							echo "<div class='col'>".$newValues['brands'][$b]."</div>";
+					if($table != 'sf_pr'){
+						echo "<div class='container-fluid'>";
+						for ($b=0; $b < sizeof($newValues['brands']); $b++) { 
+							echo "<div class='row'>";
+								echo "<div class='col'>".$newValues['brands'][$b]."</div>";
+							echo "</div>";
+						}
 						echo "</div>";
 					}
-					echo "</div>";
 				}
 				echo "</center></td>";
       	echo "</tr>";

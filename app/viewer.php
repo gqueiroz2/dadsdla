@@ -10,16 +10,6 @@ class viewer extends Model{
 
 	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
 		$base = new base();
-/*
-		if ($source == "sf") {
-			$columns = array('brand','year_from','year_to','from_date','to_date','sales_rep_owner_id','sales_rep_splitter_id');
-			$variables = array(array($brand),$year,$year,array($month),array($month),array($salesRep),array($salesRep));
-		}else{
-			$columns = array('brand_id','year','month','sales_rep_id');
-			$variables = array( array($brand),$year,array($month),array($salesRep));
-			$where = "WHERE  $columns IN $variables";
-		}		
-*/
 
 		$brandString = $base->arrayToString($brand,false,0);
 		
