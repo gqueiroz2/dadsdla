@@ -110,7 +110,7 @@
                             @endif
                             {{$render->value2()}}
                         </div>--}}
-                        <div class="col">
+                        <div class="col-4">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>

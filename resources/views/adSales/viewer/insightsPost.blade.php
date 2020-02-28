@@ -82,8 +82,8 @@
 		</div>
 
 		<div class="row justify-content-end mt-2">
-            <div class="col-7"></div>
-            <div class="col-sm" style="visibility: hidden;">
+            <div class="col-6"></div>
+            <div class="col" style="visibility: hidden;">
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
@@ -94,6 +94,7 @@
             </div>
 
             <!-- Botão para acionar modal -->
+
             <div class='col'>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
                   ID Numbers
