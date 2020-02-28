@@ -70,13 +70,13 @@
                             {{$render->currency($currencies)}}
                         </div>
 
-                        <div class="col">
+                        {{--<div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
                             @if($errors->has('value'))
                                 <label style="color: red;">* Required</label>
                             @endif
                             {{$render->value2()}}
-                        </div>
+                        </div>--}}
                         
                         <div class="col">
                             <label> &nbsp; </label>

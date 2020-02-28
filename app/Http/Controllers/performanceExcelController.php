@@ -82,7 +82,7 @@ class performanceExcelController extends Controller{
 
 		$mtx = $p->makeBonus($con, $region, $year, $brands, $userName, $currency, $month, $tier);
 
-		$data = $mtx;
+		$data = array('mtx' => $mtx, 'region' => $region, 'year' => $year, 'brand' => $brands, 'currency' => $currency, 'month' => $month, 'tier' => $tier, 'userName' => $userName);
 
 		$labels = "exports.performance.bonus.bonusExport";
 

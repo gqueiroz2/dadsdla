@@ -8,10 +8,10 @@ use App\Base;
 
 class baseRender extends Render{
 
-	public function assemble($mtx,$value,$months,$year,$regions,$brand,$source,$currencies,$total){
+	public function assemble($mtx,$months,$year,$regions,$brand,$source,$currencies,$total){
 		//var_dump($currencies);
 
-		$newValue = strtoupper($value);
+		//$newValue = strtoupper($value);
 
 		if ($source == 'SF') {
 			$source = "SalesForce";
@@ -25,34 +25,35 @@ class baseRender extends Render{
 		
 		echo "<table style='width: 100%;'>";
 			echo "<tr>";	
-				echo "<th class='newBlue center' colspan='14' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies/$newValue) </th>";
+				echo "<th class='newBlue center' colspan='15' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
 			echo "</tr>";
 						
 				if ($source == 'Cmaps') {
 					echo "<tr class='center'>";
-						echo "<td class='rcBlue' style='width:4%; '>Map Number</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Pi Number</td>";
+						echo "<td class='rcBlue' style='width:8%; '>Map Number</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Pi Number</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
-						echo "<td class='rcBlue' style='width:3%;'>Sales Rep</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Agency</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Product</td>";
-						echo "<td class='rcBlue' style='width:8%;'>Segment</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Media Type</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:10%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:10%;'>Client</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Product</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Media Type</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Discount</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Sector</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Category</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Revenue</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Net Revenue</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Revenue</td>";
 					echo "</tr>";
 
 					echo "<tr style='font-size:14px;'>";
 						for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue' colspan='8'></td>";
 							echo "<td class='darkBlue center'>".number_format($total[$t]['averageDiscount'])."%</td>";
 							echo "<td class='darkBlue' colspan='2'></td>";
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sum'.ucfirst($value).'Revenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
 						}	
 					echo"</tr>";
 
@@ -64,7 +65,7 @@ class baseRender extends Render{
 							$color = 'medBlue';
 						}
 
-						echo "<tr class='center' style='font-size:11px;'>";
+						echo "<tr class='center' style='font-size:13px;'>";
 							echo "<td class='$color' > ".$mtx[$m]['mapNumber']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['piNumber']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['month']."</td>";
@@ -73,12 +74,12 @@ class baseRender extends Render{
 							echo "<td class='$color'> ".$mtx[$m]['agency']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['client']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['product']."</td>";
-							echo "<td class='$color'> ".$mtx[$m]['segment']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['mediaType']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['discount']."%</td>";
 							echo "<td class='$color'> ".ucwords(strtolower($mtx[$m]['sector']))."</td>";
 							echo "<td class='$color'> ".ucwords(strtolower($mtx[$m]['category']))."</td>";
-							echo "<td class='$color'>".number_format($mtx[$m][$value.'Revenue'],0,",",".")."</td>";
+							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
+							echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
 						echo "</tr>";
 					}
 				}/*elseif ($source == 'BTS') {

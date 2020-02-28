@@ -62,11 +62,11 @@ class viewerExcelController extends Controller {
         
 	    $viewer = new viewer();
 
-	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$value,$year,$currencies['id'],$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
+	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currencies['id'],$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies['name'],$region,$value,$agency,$client);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies['name'],$region,$agency,$client);
 
-        $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currencies['name'],$value);
+        $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currencies['name']);
 
         $data = array('mtx' => $mtx, 'currency' => $currencies['name'], 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
