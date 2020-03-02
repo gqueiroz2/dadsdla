@@ -271,6 +271,34 @@ class salesRep extends Management{
     	return $salesRep;
 	}
 
+	public function getSalesRepUnitByRegion($con,$region=false,$notIN = false, $year){
+		$sql = new sql();
+		$table = "sales_rep_unit sru";
+		$columns = "sru.ID AS 'id',
+				sru.name AS 'salesRepUnit',	
+				r.name AS 'region'
+				";
+		$where = "";
+		if($region){
+			$ids = implode(",", $region);
+			$where .= "WHERE r.ID IN ('$ids')";
+		}
+		
+		//$where .= "AND (sr.ID = '9')";
+
+		$where .= "AND (sru.name != 'N/A')";
+
+		$join = "LEFT JOIN sales_rep sr ON sr.ID = sru.sales_rep_id
+				 LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				 LEFT JOIN region r ON r.ID = srg.region_id
+		        ";
+
+		$res = $sql->select($con,$columns,$table,$join,$where);
+		$from = array('id','salesRepUnit','region');
+		$salesRep = $sql->fetch($res,$from,$from);
+    	return $salesRep;
+	}
+
 	public function getSalesRepByRegionCMAPS($con,$region,$year){
 
 		$sql = new sql();

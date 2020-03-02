@@ -317,6 +317,14 @@ class Render extends Model{
 
     }
 
+    public function salesRepUnit(){
+        echo "<select id='salesRepUnit'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRepUnit[]' multiple data-actions-box='true' data-size='3 ' data-width='100%' data-live-search='true'>";
+            echo "<option value=''> Select Region </option>";
+
+        echo "</select>";   
+
+    }
+
     public function months(){
 
     	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='6' data-width='100%'>";

@@ -38,6 +38,11 @@ class chain extends excel{
             array_push($columns, 'year');
         }
 
+        if($table == 'cmaps'){
+            array_push($columns, 'sales_rep_unit');
+            $spreadSheet = $this->addSalesRepUnit($spreadSheet);
+        }
+
         $into = $this->into($columns);      
         
         if($table == "ytdFN"){
@@ -46,7 +51,7 @@ class chain extends excel{
 
         $check = 0;               
         $mark = 0;
-
+        
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -65,6 +70,7 @@ class chain extends excel{
         }
         return $complete;
         
+        
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
@@ -80,6 +86,10 @@ class chain extends excel{
 
         if($table == "insights"){
             array_push($columns, 'year');
+        }
+
+        if($table == "cmaps"){
+            array_push($columns, 'sales_rep_unit');
         }
 
         $columns = array_values($columns);
@@ -121,13 +131,12 @@ class chain extends excel{
         if($table == 'data_hub'){
             $columns = $this->ytdColumnsF;
         }
-
+        
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
-        return $complete;      
-        
+        return $complete;             
         
     }  
 
@@ -328,6 +337,15 @@ class chain extends excel{
 
         return $bool;
     }   
+
+    public function addSalesRepUnit($spreadSheet){
+
+        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+            $spreadSheet[$s]['sales_rep_unit'] = $spreadSheet[$s]['sales_rep'];
+        }
+
+        return $spreadSheet;
+    }
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
         
@@ -854,9 +872,6 @@ class chain extends excel{
                 }
             }
             
-        }elseif($column == 'sales_rep'){
-        	$rtr =  array(false,'sales_rep_id');
-        	$check = -1;
 
             $current = trim($current);
 
@@ -891,6 +906,64 @@ class chain extends excel{
             if(!$rtr[0]){
                 //var_dump($current);
             }
+
+        }elseif($column == 'sales_rep'){
+            $rtr =  array(false,'sales_rep_id');
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['salesRepID'],'sales_rep_id');
+
+                    $check++;
+                }
+
+                if($check > 0){
+
+                    if($table == "fw_digital"){
+                        $frt = "region_id";
+                    }else{
+                        $frt = "campaign_sales_office_id";                        
+                    }
+
+                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                        if($current == $salesReps[$srr]['salesRepUnit'] &&
+                            $currentC[$frt] == $salesReps[$srr]['regionID']){
+                            
+                            $rtr =  array( $salesReps[$srr]['salesRepID'],'sales_rep_id');   
+                        }                        
+                    }
+                }
+            }
+            
+            if(!$rtr[0]){
+                //var_dump($current);
+            }
+
+        }elseif($column == 'sales_rep_unit'){
+            $rtr =  array(false,'sales_rep_unit_id');
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['id'],'sales_rep_unit_id');
+
+                    $check++;
+                }
+
+                
+            }
+            
 
         }elseif($column == 'sales_rep_owner' || $column == 'sales_rep_splitter'){
 
@@ -1140,7 +1213,7 @@ class chain extends excel{
 
                                     $spreadSheetV2[$s][$columns[$c]] = $hour;        
 
-                            } elseif($columns[$c] == 'agency_commission'){
+                            }elseif($columns[$c] == 'agency_commission'){
                                 
                                 if(trim($spreadSheet[$s][$c]) == ""){
                                     $temp = 0.0;
@@ -1699,6 +1772,7 @@ class chain extends excel{
                                   'month',
                                   'map_number',                                  
                                   'sales_rep_id',
+                                  'sales_rep_unit_id',
                                   'package',                                  
                                   'client',
                                   'product',
@@ -1725,6 +1799,7 @@ class chain extends excel{
                                   'month',
                                   'map_number',
                                   'sales_rep_id',
+                                  'sales_rep_unit_id',
                                   'package',                                  
                                   'client_id',
                                   'product',

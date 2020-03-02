@@ -2,7 +2,11 @@
 @section('title', 'Base Viewer')
 @section('head')
     <script src="/js/viewer.js"></script>
-    <?php include(resource_path('views/auth.php'));?>
+    <?php 
+        include(resource_path('views/auth.php'));
+        use App\base;
+        $bs = new base();
+    ?>
 @endsection
 @section('content')
 
@@ -74,7 +78,16 @@
                             @endif
                             {{$render->salesRep()}}
                         </div>
-                       
+                        {{--
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Sales Rep Unit:</span></label>
+                            @if($errors->has('salesRepUnit'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->salesRepUnit()}}
+                        </div>
+                        --}}
+
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
                             @if($errors->has('agency'))
@@ -100,46 +113,41 @@
                             @endif
                             {{$render->currency($currencies)}}
                         </div>
-                        {{--<div class="col">
-                            <label class="labelLeft"><span class="bold"> Value: </span></label>
-                            @if($errors->has('value'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->value2()}}
-                        </div>--}}
-                        <div class="col-2">
+                        <div class="col" >
+                            <label class="labelLeft"><span class="bold"> &nbsp; </span></label>                            
+                        </div>
+                        <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
-                        <div class="col-2">
-                            <label> &nbsp; </label>
-                            <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
-                                Generate Excel
-                            </button>               
-                        </div>
+                        
                     </div>
                 </form>
             </div>
         </div>
 
     	<div class="row justify-content-end mt-2">
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm"></div>
-            <div class="col-sm" style="visibility: hidden;">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col" style="visibility: hidden;">
                 <select id="ExcelPDF" class="form-control">
                     <option value="Excel">Excel</option>
                     <option value="PDF">PDF</option>
                 </select>
             </div>
             
-            <div class="col-sm-4" style="color: #0070c0; font-size:22px">
-                <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo date('d/m/Y'); ?></span>
-            </div>            
+            <div class="col-4" style="color: #0070c0; font-size:22px">
+                <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo $bs->sourceCMAPS(); ?></span>
+            </div> 
+            <div class="col-2">
+                <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                    Generate Excel
+                </button>               
+            </div>           
     	</div>
     </div>
 

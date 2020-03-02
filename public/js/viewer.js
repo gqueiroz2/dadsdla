@@ -29,6 +29,17 @@ $(document).ready(function(){
               }
             });
 
+            $.ajax({
+              url:"/ajax/adsales/newSalesRepUnitByRegionAndYear",
+              method:"POST",
+              data:{regionID,year},
+              success: function(output){
+                $('#salesRepUnit').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
             
             $.ajax({
               url:"/ajax/adsales/thirdPosByRegion",

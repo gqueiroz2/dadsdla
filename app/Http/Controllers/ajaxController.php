@@ -512,6 +512,29 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getNewSalesRepUnitByRegionAndYear(){
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+            $con = $db->openConnection("DLA");
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepUnitByRegion($con,$regionID,true,$year);
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRepUnit"]." </option>";
+            }
+        }
+    }
+
     public function getSalesRepByRegionAndYear(){
         $regionID = Request::get('regionID');
 

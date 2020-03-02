@@ -67,6 +67,24 @@ class base extends Model{
         }
     }
 
+    public function sourceCMAPS(){
+        $db = new dataBase();
+        $base = new base();
+        $con = $db->openConnection("DLA");
+
+        $sql = new sql();
+
+        $select = "SELECT * FROM sources_date WHERE (source = 'CMAPS')";
+
+        $res = $con->query($select);
+
+        $from = array("current_throught");
+
+        $list = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$sql->fetch($res,$from,$from)[0]['current_throught']);
+
+        return $list;
+    }
+
     public function arrayToString($array,$hasKey,$key){
         $string = "";
         if($hasKey){

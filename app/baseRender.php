@@ -35,25 +35,26 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Sales Rep Unit</td>";
 						echo "<td class='rcBlue' style='width:10%;'>Agency</td>";
 						echo "<td class='rcBlue' style='width:10%;'>Client</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Product</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Media Type</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Discount</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Sector</td>";
-						echo "<td class='rcBlue' style='width:8%;'>Category</td>";
-						echo "<td class='rcBlue' style='width:8%;'>Net Revenue</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Category</td>";						
 						echo "<td class='rcBlue' style='width:8%;'>Revenue</td>";
+						echo "<td class='rcBlue' style='width:8%;'>Net Revenue</td>";
 					echo "</tr>";
 
 					echo "<tr style='font-size:14px;'>";
 						for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='8'></td>";
+							echo "<td class='darkBlue' colspan='9'></td>";
 							echo "<td class='darkBlue center'>".number_format($total[$t]['averageDiscount'])."%</td>";
-							echo "<td class='darkBlue' colspan='2'></td>";
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue' colspan='2'></td>";							
 							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
 						}	
 					echo"</tr>";
 
@@ -71,6 +72,11 @@ class baseRender extends Render{
 							echo "<td class='$color'> ".$mtx[$m]['month']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['brand']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['salesRep']."</td>";
+							if($mtx[$m]['salesRep'] == "Ricardo Alves"){
+								echo "<td class='$color'> ".$mtx[$m]['salesRepUnit']."</td>";
+							}else{
+								echo "<td class='$color'> - </td>";
+							}
 							echo "<td class='$color'> ".$mtx[$m]['agency']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['client']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['product']."</td>";
@@ -78,8 +84,8 @@ class baseRender extends Render{
 							echo "<td class='$color'> ".$mtx[$m]['discount']."%</td>";
 							echo "<td class='$color'> ".ucwords(strtolower($mtx[$m]['sector']))."</td>";
 							echo "<td class='$color'> ".ucwords(strtolower($mtx[$m]['category']))."</td>";
-							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
 							echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
+							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
 						echo "</tr>";
 					}
 				}/*elseif ($source == 'BTS') {

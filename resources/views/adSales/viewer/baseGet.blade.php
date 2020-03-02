@@ -76,7 +76,15 @@
                             @endif
                             {{$render->salesRep()}}
                         </div>
-                       
+{{--
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Sales Rep Unit:</span></label>
+                            @if($errors->has('salesRepUnit'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->salesRepUnit()}}
+                        </div>
+--}}                   
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
                             @if($errors->has('agency'))
@@ -103,14 +111,10 @@
                             @endif
                             {{$render->currency($currency)}}
                         </div>
-                        {{--<div class="col" >
-                            <label class="labelLeft"><span class="bold"> Value: </span></label>
-                            @if($errors->has('value'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->value2()}}
-                        </div>--}}
-                        <div class="col-4">
+                        <div class="col" >
+                            <label class="labelLeft"><span class="bold"> &nbsp; </span></label>                            
+                        </div>
+                        <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     
                         </div>
