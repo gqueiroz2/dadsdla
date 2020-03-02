@@ -205,6 +205,7 @@
 				}
 			});
 
+			$('#ExcelPDF').hide();
 
 			$('#excel').click(function(event){
 
