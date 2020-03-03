@@ -1888,9 +1888,7 @@ class AE extends pAndR{
                                 AND ( stage != '6')
                                 AND ( stage != '7')
                                 AND (year_from = \"".$year."\")                                
-                                AND (from_date > \"".$date."\")";/*
-                                AND (year_to = \"".$year."\")
-                              "; */
+                                AND (from_date > \"".$date."\")";
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
@@ -1899,10 +1897,11 @@ class AE extends pAndR{
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND (agency_id = \"".$clients['agencyID']."\")
                             AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
-                            AND (stage != '5' && stage != '6' && stage != '7')
-                            AND (from_date > \"".$date."\") AND (year_from = \"".$year."\")";/*
-                            AND (year_to = \"".$year."\")
-                          ";*/
+                            AND ( stage != '5')
+                            AND ( stage != '6')
+                            AND ( stage != '7')
+                            AND (from_date > \"".$date."\") 
+                            AND (year_from = \"".$year."\")";
         }
 
         $res = $con->query($select);
