@@ -2080,9 +2080,13 @@ class AE extends pAndR{
                                             AND (year = \"".$year."\")
                                             AND (sales_rep_id = \"".$salesRepID."\")
                                           ";  
+
                         $res[$c][$m] = $con->query($select[$c][$m]);
                         $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div*$mult;
-
+                        /*
+                            THIS PART IS COMMENTED, BECAUSE IN 2020 DIGITAL IS INCLUDED IN BTS
+                        */
+                        /*
                         $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
                                             FROM fw_digital
                                             WHERE (client_id = \"".$clients[$c]["clientID"]."\")
@@ -2094,18 +2098,19 @@ class AE extends pAndR{
 
                         $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
                         $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div*$mult; 
+                        */
 
                     }else{
                         $revACT[$c][$m] = 0.0;
-                        $revFW[$c][$m] = 0.0;
+                        //$revFW[$c][$m] = 0.0;
                     }                    
                     
                     $rev[$c][$m] = $revACT[$c][$m];
-
+                    /*
                     if( !is_null($revFW[$c][$m]) ){
                         $rev[$c][$m] += $revFW[$c][$m];
                     }       
-
+                    */
                 }else{
 	    			$from = array("sumValue");
                     $select[$c][$m] = "
@@ -2117,6 +2122,7 @@ class AE extends pAndR{
 
 	    			                  ";    					    	    			
 	    			$res[$c][$m] = $con->query($select[$c][$m]);
+                    /*
                     $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
 
                     $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
@@ -2128,12 +2134,13 @@ class AE extends pAndR{
 
                     $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
 	    			$revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;	
-
+                    */
                     $rev[$c][$m] = $revACT[$c][$m];
-
+                    /*
                     if( !is_null($revFW[$c][$m]) ){
                         $rev[$c][$m] += $revFW[$c][$m];
                     }		
+                    */
     			}
     		}
 

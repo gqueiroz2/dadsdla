@@ -145,7 +145,7 @@ class results extends base{
 
         $p = new pRate();
 
-        $keyYear = date('Y');
+        //$keyYear = date('Y');
 
         if ($table != "plan_by_brand" && $table != "digital") {
 

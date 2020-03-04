@@ -147,14 +147,14 @@ class performanceExecutive extends performance
                 for ($m=0; $m < sizeof($month); $m++) { 
                     for ($s=0; $s < sizeof($salesRep); $s++) { 
                         $tmp[$s][$b][$m] = $values[$b][$m][$s]*$divDig; 
-                        $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]*$divDig; 
+                        $tmp_2[$s][$b][$m] = bcmul( $planValues[$b][$m][$s],$divDig,5); 
                     }
                 }
             }else{
                 for ($m=0; $m < sizeof($month); $m++) { 
                     for ($s=0; $s < sizeof($salesRep); $s++) { 
                         $tmp[$s][$b][$m] = $values[$b][$m][$s]*$div; 
-                        $tmp_2[$s][$b][$m] = $planValues[$b][$m][$s]*$div; 
+                        $tmp_2[$s][$b][$m] = bcmul($planValues[$b][$m][$s],$div,5); 
                     }
                 }
             }    
