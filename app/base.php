@@ -461,7 +461,7 @@ class base extends Model{
         switch ($from) {
             case 'hh:mm:ss':
                 switch ($to) {
-                    case 'HH:MM':
+                    case 'hh:mm':
                         
                         $tmp = explode(":", $string);
                         $hour = $tmp[0].":".$tmp[1];

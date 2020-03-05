@@ -46,6 +46,15 @@ class excel extends Model{
 		return $matrix;
 	}
 
+	public function fixExcelNumberWithComma($number){
+		$number = str_replace('$', '', $number);
+		$number = str_replace('.', '', $number);
+		$number = str_replace(',', '.', $number);
+		$number = doubleval($number);
+
+		return $number;
+	}
+
 	public function fixExcelNumber($number){
 		$number = str_replace('$', '', $number);
 		$number = str_replace(',', '', $number);

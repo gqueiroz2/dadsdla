@@ -191,7 +191,7 @@ class AE extends pAndR{
                     if ($con->query($update[$c][$m]) === true) {
                         
                     }else{
-                        var_dump($con->error);
+                        //var_dump($con->error);
                         return false;
                     }
                 }
@@ -221,7 +221,7 @@ class AE extends pAndR{
             if ($con->query($insert[$m]) === true) {
       
             }else{
-                var_dump($con->error);
+                //var_dump($con->error);
                 return false;
             }
         }
@@ -255,8 +255,6 @@ class AE extends pAndR{
                     $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\",\"".$list[$c]->agencyID."\")";
 
                     $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
-
-                    //var_dump($insert[$c][$m]);
 
                     if ($con->query($insert[$c][$m]) === true) {
                         
