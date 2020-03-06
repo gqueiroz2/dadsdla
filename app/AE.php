@@ -1630,7 +1630,6 @@ class AE extends pAndR{
     }
 
     public function fcstAmountByStage($fcst,$mOPP){
-
         $stages = array( 0 => "1" , 1 => "2" , 2 => array("3a","3b") , 3 => "4" , 4 => "5" , 5 => "6" );
         $stagesToView = array( 0 => "1" , 1 => "2" , 2 => "3" , 3 => "4" , 4 => "5" , 5 => "6" );
         for ($s=0; $s < sizeof($stages); $s++) { 
@@ -1641,7 +1640,8 @@ class AE extends pAndR{
             if(isset($stages[$s]) && is_array($stages[$s])){                
                 for ($m=0; $m < sizeof($mOPP); $m++) { 
                     for ($f=0; $f < sizeof($mOPP[$m]); $f++) { 
-                        if($fcst[$m][$mOPP[$m][$f]]['stage'] == "3a" ||
+                        if($fcst[$m][$mOPP[$m][$f]]['stage'] == "3" ||
+                            $fcst[$m][$mOPP[$m][$f]]['stage'] == "3a" ||
                            $fcst[$m][$mOPP[$m][$f]]['stage'] == "3b"
                         ){
                             $amountByStage[$s] += $fcst[$m][$mOPP[$m][$f]]['value'];
