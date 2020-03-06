@@ -38,7 +38,11 @@
 				<td>{{$data['mtx'][$m]['month']}}</td>
 				<td>{{$data['mtx'][$m]['brand']}}</td>
 				<td>{{$data['mtx'][$m]['salesRep']}}</td>
-				<td>{{$data['mtx'][$m]['salesRepUnit']}}</td>
+				@if($data['mtx'][$m]['salesRepUnit'] == "Ricardo Alves")
+					<td>{{$data['mtx'][$m]['salesRepUnit']}}</td>
+				@else
+					<td> - </td>
+				@endif
 				<td>{{$data['mtx'][$m]['agency']}}</td>
 				<td>{{$data['mtx'][$m]['client']}}</td>
 				<td>{{$data['mtx'][$m]['product']}}</td>
