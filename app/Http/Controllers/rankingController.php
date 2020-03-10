@@ -35,7 +35,6 @@ class rankingController extends Controller {
     }
 
     public function post(){
-
     	$base = new base();
 
     	$db = new dataBase();
@@ -104,8 +103,6 @@ class rankingController extends Controller {
         $years = $r->createPositions($firstForm, $secondForm, $thirdForm);
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years, $type2);
-
-        var_dump($values);
 
         $filterValues = $r->filterValues($values, $type2, $type);
         
