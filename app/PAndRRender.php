@@ -397,7 +397,7 @@ class PAndRRender extends Render{
                         }
                     }
                 }else{
-                    $ow = "(P)";
+                    $ow = "";
                 }
             }else{
                 $ow = false;

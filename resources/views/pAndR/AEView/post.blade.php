@@ -218,31 +218,31 @@
                             rf += (handleNumber($("#clientRF-"+c2+"-"+{{$m}}).val())*mult);
                         }
                         rf += handleNumber($("#bookingE-"+{{$m}}).val());
-                        rf = Math.round(rf);
+                        //rf = Math.round(rf);
                         rf = Comma(rf);
                         $("#rf-"+{{$m}}).val(rf);
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
                             month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
-                            month = Math.round(month);
+                            //month = Math.round(month);
                             month = Comma(month);
                             $("#rf-3").val(month);
                         }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
                             month = handleNumber($("#rf-4").val()) + handleNumber($("#rf-5").val()) + handleNumber($("#rf-6").val());
-                            month = Math.round(month);
+                            //month = Math.round(month);
                             month = Comma(month);
                             $("#rf-7").val(month);
                         }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
                             month = handleNumber($("#rf-8").val()) + handleNumber($("#rf-9").val()) + handleNumber($("#rf-10").val());
-                            month = Math.round(month);
+                            //month = Math.round(month);
                             month = Comma(month);
                             $("#rf-11").val(month);
                         }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
                             month = handleNumber($("#rf-12").val()) + handleNumber($("#rf-13").val()) + handleNumber($("#rf-14").val());
-                            month = Math.round(month);
+                            //month = Math.round(month);
                             month = Comma(month);
                             $("#rf-15").val(month);
                         }

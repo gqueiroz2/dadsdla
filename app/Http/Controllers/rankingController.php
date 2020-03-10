@@ -105,6 +105,8 @@ class rankingController extends Controller {
 
         $values = $r->getAllResults($con, $brands, $type, $region, $value, $pRate, $months, $years, $type2);
 
+        var_dump($values);
+
         $filterValues = $r->filterValues($values, $type2, $type);
         
         $mtx = $r->assembler($values, $type2, $years, $type, $filterValues);
