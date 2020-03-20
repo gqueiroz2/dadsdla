@@ -22,7 +22,8 @@
 							@else
 								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
-						</div>
+						</div>						
+
 						<div class="col">
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))

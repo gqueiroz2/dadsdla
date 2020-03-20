@@ -374,6 +374,33 @@ class viewer extends Model{
 		return $mtx;
 	}
 
+	public function totalFromTable($table){
+
+		$discount = 0.0;
+		$net = 0.0;
+		$gross = 0.0;
+
+		$c = 0;
+
+		for ($t=0; $t < sizeof($table); $t++){ 
+			$discount += $table[$t]['discount'];
+			$gross += $table[$t]['grossRevenue'];
+			$net += $table[$t]['netRevenue'];
+
+			$c++;
+		}
+
+		$sumGrossRevenue = $gross;
+		$sumNetRevenue = $net;
+		$averageDiscount = $discount/$c;
+
+		$return = array(array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue  ));
+		 
+		return $return;
+
+
+	}
+
 	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
 		$base = new base();
 		$p = new pRate();
