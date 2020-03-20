@@ -12,7 +12,7 @@ use App\base;
 
 class subChurnRanking extends rankingChurn {
     
-    public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType, $auxName){
+    public function getSubResults($con, $type, $regionID, $value, $months, $brands, $currency, $filter, $filterType, $auxName,$year){
         
     	$sql = new sql();
 
@@ -32,7 +32,9 @@ class subChurnRanking extends rankingChurn {
             $table = "ytd";
         }
 
-        $cYear = intval(date('Y'));
+        
+
+        $cYear = $year;//intval(date('Y'));
 		$years = array($cYear, $cYear-1, $cYear-2);
 
 		$brand = array();

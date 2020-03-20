@@ -18,6 +18,19 @@ $(document).ready(function(){
     		}
     	});
 
+      $.ajax({ 
+        url:"/ajax/adsales/yearByRegion",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#year').html(output);
+          var year = $('#year').val();          
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
+
       $.ajax({
         url:"/ajax/adsales/currencyByRegion",
         method:"POST",
@@ -44,3 +57,6 @@ $(document).ready(function(){
 
 	});
 });
+
+
+      

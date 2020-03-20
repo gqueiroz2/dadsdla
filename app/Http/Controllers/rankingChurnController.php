@@ -81,14 +81,16 @@ class rankingChurnController extends Controller {
 
 	  	$value = Request::get("value");
 
-	  	$cYear = intval(date('Y'));
+	  	$year = Request::get('year');
+
+	  	$cYear = $year; //intval(date('Y'));
     	$pYear = $cYear - 1;
 	  	$years = array($cYear, $pYear, $pYear-1);
 
 	  	$rc = new rankingChurn();
 
 	  	$values = $rc->getAllResults($con, $brands, $type, $region, $rtr, $value, $pRate, $months, $years);
-	  	
+
 	  	$finalValues = array();
 
 	  	if ($type != "agency" && $type != "client") {
@@ -123,6 +125,7 @@ class rankingChurnController extends Controller {
 		$matrix = $rc->assembler($values, $finalValues, $valuesTotal, $years, $type);
 
 		$mtx = $matrix[0];
+
 		$total = $matrix[1];
 
 		$rName = $rc->TruncateRegion($rtr);
@@ -155,6 +158,6 @@ class rankingChurnController extends Controller {
 	    $titleExcel = "ranking churn (".$rtr.").xlsx";
 	    $titlePdf = "ranking churn (".$rtr.").pdf";
 
-  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'titleExcel', 'titlePdf', 'namesExcel'));
+  		return view("adSales.ranking.2churnPost", compact('salesRegion', 'currencies', 'brand', 'type', 'brands', 'months', 'value', 'pRate', 'region', 'render', 'rName', 'mtx', 'total', 'pRate', 'names', 'rtr', 'regionExcel', 'regionNameFilter', 'typeExcel', 'brandsExcel', 'monthsExcel', 'currencyExcel', 'valueExcel', 'yearsExcel', 'title', 'titleExcel', 'titlePdf', 'namesExcel','year'));
 	}
 }

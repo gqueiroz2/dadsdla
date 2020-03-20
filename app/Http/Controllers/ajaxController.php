@@ -1218,7 +1218,9 @@ class ajaxController extends Controller{
 
         $scr = new subChurnRanking();
 
-        $cYear = intval(date('Y'));
+        $year = Request::get('year');
+
+        $cYear = $year;// intval(date('Y'));
         $years = array($cYear, $cYear-1, $cYear-2);
 
         if ($type == "client") {
@@ -1227,7 +1229,9 @@ class ajaxController extends Controller{
             $val = "client";
         }
         
-        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val, $auxName);
+        
+
+        $values = $scr->getSubResults($con, $type, $region, $value, $months, $brands, $currency, $name, $val, $auxName,$year );
         
         if ($type == "client") {
             $filterType = "agency";
@@ -1254,7 +1258,7 @@ class ajaxController extends Controller{
             array_push($months2, $m);
         }
         
-        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val, $auxName);
+        $valuesTotal = $scr->getSubResults($con, $type, $region, $value, $months2, $brands, $currency, $name, $val, $auxName ,$year);
         
         $matrix = $scr->assembler($values, $finalValues, $valuesTotal, $years, $filterType);
 

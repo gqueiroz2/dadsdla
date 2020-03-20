@@ -23,6 +23,15 @@
 								{{$render->regionFiltered($salesRegion, $regionID, $special)}}
 							@endif
 						</div>
+
+						<div class="col">
+							<label class="labelLeft"><span class="bold"> Year: </span></label>
+							@if($errors->has('year'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{$render->year($regionID)}}					
+						</div>
+
 						<div class="col">
 							<label class="labelLeft bold"> Type: </label>
 							@if($errors->has('type'))
@@ -142,7 +151,6 @@
 	</div>
 
 	<div id="vlau"></div>
-
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
@@ -152,7 +160,7 @@
             var currency = <?php echo json_encode($pRate); ?>;
             var region = "{{$region}}";
             var brands = <?php echo json_encode($brands); ?>;
-
+            var year = "{{$year}}";
 			ajaxSetup();
 
 			@for($m = 0; $m < sizeof($mtx[0]); $m++)
@@ -166,7 +174,7 @@
                         $.ajax({
                             url: "/ajaxRanking/churnSubRanking",
                             method: "POST",
-                            data: {name, months, type, value, currency, region, brands, agencyGroup},
+                            data: {name, months, type, value, currency, region, brands, agencyGroup,year},
                             success: function(output){
                                 $("#sub"+type+{{$m}}).html(output);
                                 $("#sub"+type+{{$m}}).css("display", "");

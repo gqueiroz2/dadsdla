@@ -126,7 +126,7 @@ class rankingChurn extends rank {
     }
 
     public function checkColumn($mtx, $m, $name, $values, $years, $p, $type, $cont, $valuesTotal, $id){
-    	
+
     	if ($mtx[$m][0] == "Ranking") {
     		$res = $this->checkRank($cont, $values, $name, $type, $years, $id);
     	}elseif ($mtx[$m][0] == "Agency group") {
@@ -223,10 +223,6 @@ class rankingChurn extends rank {
     }
 
     public function assembler($values, $nameValues, $valuesTotal, $years, $type){
-
-        /*for ($j=0; $j < sizeof($nameValues); $j++) { 
-            var_dump($j,$nameValues[$j]);
-        }*/
         
     	$mtx[0][0] = "Ranking";
     	$pos = 1;
@@ -249,6 +245,8 @@ class rankingChurn extends rank {
 		
         $cont = 1;
         
+        //array_push(array, var)
+
         if ($type != "agency" && $type != "client") {
             for ($t=0; $t < sizeof($nameValues); $t++) { 
                 for ($m=0; $m < sizeof($mtx); $m++) { 
@@ -285,7 +283,7 @@ class rankingChurn extends rank {
                 }
             }
         }
-        
+
         $total = $this->assemblerChurnTotal($mtx, $type, $years);
     	
     	return array($mtx, $total);
