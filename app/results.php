@@ -25,7 +25,6 @@ class results extends base{
         $coin = $pRate->getCurrency($con,array($currency))[0]['name'];
 
         if ($table == "digital") {
-            
             $sum = "revenue";
             
             if ($coin == "USD") {
@@ -48,7 +47,6 @@ class results extends base{
             }else{
                 $div = $pRate->getPRateByRegionAndYear($con,array($region),array($year));
             }
-
         }elseif($table == 'ytd'){
             $sum = $value."_revenue_prate";
         }elseif($table == 'fw_digital'){
@@ -64,10 +62,6 @@ class results extends base{
         for ($m=0; $m < sizeof($month); $m++) { 
             for ($b=0; $b < sizeof($brand); $b++) { 
                 
-                if($table == "fw_digital"){
-                    //var_dump($where[$m][$b]);
-                }
-
                 $res[$m][$b] = $sql->selectSum($con,$sum,$as,$table,$join,$where[$m][$b]);
 
                 $valueSum = $sql->fetchSum($res[$m][$b],$as)["sum"];

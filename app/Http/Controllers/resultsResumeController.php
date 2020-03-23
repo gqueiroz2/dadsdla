@@ -93,7 +93,6 @@ class resultsResumeController extends Controller{
 		$brands = $resume->divideBrands($brandID);
 
 		if (empty($brands[0])) {
-			
 			//$Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
 			$Digital = $resume->generateVectorTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);

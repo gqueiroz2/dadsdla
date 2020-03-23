@@ -54,31 +54,10 @@ class resultsResume extends results{
 		                                   ";
 		        }else{
 		       	//SE FOR IBMS / BTS
-
-		        	/*if ($brands[$b][1] == "FN") {
-						if ($cYear == 2019 && ($months[$m][1] < 6)) {
-							$whereSales[$m][$b] = "WHERE (plan_by_brand.month IN (".$months[$m][1].")) 
-            					   			AND (source  = \"ACTUAL\")
-		                                    AND (type_of_revenue = \"".$tr."\")
-		                                    AND (sales_office_id = \"".$regionID."\")
-		                                    AND (currency_id = 4 )
-		                                    AND (brand_id = \"".$brands[$b][0]."\" )
-		                               		";
-						}else{
-							$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
-			        	                   AND (ytd.year IN ($cYear) )
-			        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
-			        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
-			        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
-  		                }
-					}else{
-					*/
 		        	$whereSales[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 		        	                   AND (ytd.year IN ($cYear) )
 		        	                   AND (ytd.sales_representant_office_id IN (".$regionID.") )
 		        	                   AND (ytd.brand_id IN (".$brands[$b][0].") )";
-		        	                   //AND (ytd.campaign_currency_id IN (".$regionID."))";
-			        //}
 
 			        $whereSalesPYear[$m][$b] = "WHERE (ytd.month IN (".$months[$m][1].") ) 
 			                                    AND ( ytd.year IN ($pYear) )
@@ -126,7 +105,7 @@ class resultsResume extends results{
 		$target = $this->generateVector($con,$tableTarget,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinTarget,$whereTarget);
 		$actual = $this->generateVector($con,$tableActual,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinActual,$whereActual);
 		$corporate = $this->generateVector($con,$tableCorporate,$regionID,$cYear,$months,$brands,$currencyID,$value,$joinCorporate,$whereCorporate);
-		
+
 		if($tableSales == "cmaps"){
 			$tableSales = 'ytd';
 		}

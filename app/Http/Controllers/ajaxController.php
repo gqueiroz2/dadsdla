@@ -564,8 +564,10 @@ class ajaxController extends Controller{
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;
         $ppYear = $pYear - 1;
+        $pppYear = $ppYear - 1;
+
         if($regionID == 1){
-            $year = array($cYear,$pYear,$ppYear);           
+            $year = array($cYear,$pYear,$ppYear,$pppYear);           
         }else{
             $year = array($cYear,$pYear);
         }

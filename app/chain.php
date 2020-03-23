@@ -255,7 +255,7 @@ class chain extends excel{
                         $truncated = false;
                     }
                 }else{
-                    if($year == "2019"){
+                    /*if($year == "2019"){
                         for ($y=0; $y < sizeof($year); $y++) { 
                             $delete[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
@@ -274,7 +274,7 @@ class chain extends excel{
                             if($con->query($delete2[$y])){
                             }
                         }
-                    }elseif($year == "2018"){
+                    }else*/if($year == "2018"){
                         for ($y=0; $y < sizeof($year); $y++) { 
                             $delete[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
