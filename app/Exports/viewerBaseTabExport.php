@@ -120,13 +120,13 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 				$cellRange = 'A1';
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-				$cellRange = 'A2:N2';
+				$cellRange = 'A2:O2';
 				$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-				$cellRange = 'A3:N3';
+				$cellRange = 'A3:O3';
 				$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
-				$letter = 'N';
+				$letter = 'O';
 
 				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 					$cellRange = "A".($d+4).":".$letter.($d+4);
@@ -150,9 +150,9 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 	public function columnFormats(): array{
 
 		return[
-			'J' => '0%',
-			'M' => '#,##0',
-			'N' => '#,##0'
+			'K' => '0%',
+			'N' => '#,##0',
+			'O' => '#,##0'
 		];
 	}
 }

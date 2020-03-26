@@ -1,6 +1,6 @@
 <table>
 	<tr>
-		<th style="background-color: #0047b3;" colspan="14"> {{$data['region']}} - Viewer CMAPS {{$data['year']}} - ({{strtoupper($data['currency'])}})</th>		
+		<th style="background-color: #0047b3;" colspan="15"> {{$data['region']}} - Viewer CMAPS {{$data['year']}} - ({{strtoupper($data['currency'])}})</th>		
 	</tr>
 
 	@if($data['source'] == "cmaps")
