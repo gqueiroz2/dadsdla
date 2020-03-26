@@ -445,6 +445,8 @@ class dataManagementController extends Controller{
         $region = $r->getRegion($con,false);
         $salesRepGroup = $sr->getSalesRepGroup($con,false);
         $salesRep = $sr->getSalesRep($con,false);       
+        $salesRepGroupingReps = $sr->getSalesRepGroupingReps($con,false);   
+
         $salesRepUnit = $sr->getSalesRepUnit($con,false);       
         $origin = $o->getOrigin($con,false);
         $render = new dataManagementRender();

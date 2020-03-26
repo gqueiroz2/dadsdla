@@ -35,7 +35,6 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Sales Rep</td>";
-						echo "<td class='rcBlue' style='width:8%;'>Sales Rep Unit</td>";
 						echo "<td class='rcBlue' style='width:10%;'>Agency</td>";
 						echo "<td class='rcBlue' style='width:10%;'>Client</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Product</td>";
@@ -50,7 +49,7 @@ class baseRender extends Render{
 					echo "<tr style='font-size:14px;'>";
 						for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue' colspan='8'></td>";
 							echo "<td class='darkBlue center'>".number_format($total[$t]['averageDiscount'])."%</td>";
 							echo "<td class='darkBlue' colspan='2'></td>";							
 							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
@@ -71,12 +70,7 @@ class baseRender extends Render{
 							echo "<td class='$color'> ".$mtx[$m]['piNumber']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['month']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['brand']."</td>";
-							echo "<td class='$color'> ".$mtx[$m]['salesRep']."</td>";
-							if($mtx[$m]['salesRep'] == "Ricardo Alves"){
-								echo "<td class='$color'> ".$mtx[$m]['salesRepUnit']."</td>";
-							}else{
-								echo "<td class='$color'> - </td>";
-							}
+							echo "<td class='$color'> ".$mtx[$m]['salesRep']."</td>";							
 							echo "<td class='$color'> ".$mtx[$m]['agency']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['client']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['product']."</td>";

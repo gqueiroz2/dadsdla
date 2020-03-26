@@ -271,6 +271,37 @@ class salesRep extends Management{
     	return $salesRep;
 	}
 
+	public function getSalesRepRepresentativeByRegion($con,$region=false,$notIN = false, $year){
+		$sql = new sql();
+		$table = "sales_rep_representatives sr";
+		$columns = "sr.ID AS 'id',
+				sr.name AS 'salesRep',	
+				srg.name AS 'salesRepGroup',
+				r.name AS 'region',
+				srs.status AS 'status'";
+		$where = "";
+		if($region){
+			$ids = implode(",", $region);
+			$where .= "WHERE r.ID IN ('$ids')";
+		}
+		if($notIN){
+			if(!$region){
+				$where .= " WHERE";
+			}else{
+				$where .= " AND";
+			}
+			$where .= " ( srs.status != '0') AND (srs.year = '$year')";
+		}
+		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				LEFT JOIN region r ON r.ID = srg.region_id
+				LEFT JOIN sales_rep_status srs ON srs.sales_rep_representatives_id = sr.ID
+				";
+		$res = $sql->larica($con,$columns,$table,$join,$where);
+		$from = array('id','salesRep','salesRepGroup','region');
+		$salesRep = $sql->fetch($res,$from,$from);
+    	return $salesRep;
+	}
+
 	public function getSalesRepUnitByRegion($con,$region=false,$notIN = false, $year){
 		$sql = new sql();
 		$table = "sales_rep_unit sru";
@@ -361,6 +392,7 @@ class salesRep extends Management{
 		}
 		return $bool;
 	}
+
 	public function getSalesRepUnit($con,$salesRepID=false){
 		$sql = new sql();
 		$table = "sales_rep_unit sru";
@@ -382,6 +414,52 @@ class salesRep extends Management{
 		$from = array('id','salesRepUnit','salesRep','salesRepID','origin','regionID');
 		$salesRepUnit = $sql->fetch($res,$from,$from);
     	return $salesRepUnit;
+	}
+
+	public function getSalesRepUnitWithRepresentatives($con,$salesRepID=false){
+
+		$sql = new sql();
+		$table = "sales_rep_unit sru";
+		$columns = "sru.ID AS 'id',
+				    sru.name AS 'salesRepUnit',
+				    srr.name AS 'salesRepRepresentatives',
+				    srr.ID AS 'salesRepRepresentativesID',				    
+				    srg.region_id AS 'regionID'";
+
+		$where = "";
+
+		if($salesRepID){
+			$salesRepIDS = implode(",", $salesRepID);
+			$where .= "WHERE srr.ID IN ('$salesRepIDS')";
+		}
+		$join = "LEFT JOIN sales_rep_representatives srr ON srr.ID = sru.sales_rep_representatives_id
+				 LEFT JOIN origin o ON o.ID = sru.origin_id
+				 LEFT JOIN sales_rep_group srg ON srg.ID = srr.sales_group_id";
+		$res = $sql->select($con,$columns,$table,$join,$where);
+		$from = array('id','salesRepUnit','salesRepRepresentatives','salesRepRepresentativesID','regionID');
+		$salesRepUnitRepresentatives = $sql->fetch($res,$from,$from);
+    	return $salesRepUnitRepresentatives;
+	}
+
+	public function getSalesRepGroupingReps($con,$salesRepID=false){
+		$sql = new sql();
+		$table = "sales_rep_grouping_reps srgr";
+		$columns = "srgr.ID AS 'id',
+				    srgr.name AS 'salesRepGroupingReps',
+				    sr.name AS 'salesRep',
+				    sr.ID AS 'salesRepID',				    
+				    srg.region_id AS 'regionID'";
+		$where = "";
+		if($salesRepID){
+			$salesRepIDS = implode(",", $salesRepID);
+			$where .= "WHERE sr.ID IN ('$salesRepIDS')";
+		}
+		$join = "LEFT JOIN sales_rep sr ON sr.ID = srgr.sales_rep_id				 
+				 LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id";
+		$res = $sql->select($con,$columns,$table,$join,$where);
+		$from = array('id','salesRepGroupingReps','salesRep','salesRepID','origin','regionID');
+		$salesRepGroupingReps = $sql->fetch($res,$from,$from);
+    	return $salesRepGroupingReps;
 	}
 
 	public function getSalesRepUnitByName($con,$salesRepUnit=false){

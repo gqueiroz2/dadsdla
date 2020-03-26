@@ -10,7 +10,6 @@
 			<td style="background-color: #e6e6e6;">Month</td>
 			<td style="background-color: #e6e6e6;">Brand</td>
 			<td style="background-color: #e6e6e6;">Sales Rep</td>
-			<td style="background-color: #e6e6e6;">Sales Rep Unit</td>
 			<td style="background-color: #e6e6e6;">Agency</td>
 			<td style="background-color: #e6e6e6;">Client</td>
 			<td style="background-color: #e6e6e6;">Product</td>
@@ -24,7 +23,7 @@
 		<tr>
 			@for($t=0;$t < sizeof($data['total']); $t++)
 				<td style="background-color: #0f243e;">Total</td>
-				<td style="background-color: #0f243e;" colspan="9"></td>
+				<td style="background-color: #0f243e;" colspan="8"></td>
 				<td style="background-color: #0f243e;">{{$data['total'][$t]['averageDiscount']/100}}</td>
 				<td style="background-color: #0f243e;" colspan="2"></td>				
 				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
@@ -37,12 +36,7 @@
 				<td>{{$data['mtx'][$m]['piNumber']}}</td>
 				<td>{{$data['mtx'][$m]['month']}}</td>
 				<td>{{$data['mtx'][$m]['brand']}}</td>
-				<td>{{$data['mtx'][$m]['salesRep']}}</td>
-				@if($data['mtx'][$m]['salesRep'] == "Ricardo Alves")
-					<td>{{$data['mtx'][$m]['salesRepUnit']}}</td>
-				@else
-					<td> - </td>
-				@endif
+				<td>{{$data['mtx'][$m]['salesRep']}}</td>				
 				<td>{{$data['mtx'][$m]['agency']}}</td>
 				<td>{{$data['mtx'][$m]['client']}}</td>
 				<td>{{$data['mtx'][$m]['product']}}</td>

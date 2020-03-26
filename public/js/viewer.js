@@ -18,7 +18,7 @@ $(document).ready(function(){
             var option = "<option> Select Year </option>";           
           }else{
             $.ajax({
-              url:"/ajax/adsales/newSalesRepByRegionAndYear",
+              url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
               method:"POST",
               data:{regionID,year},
               success: function(output){
@@ -137,7 +137,7 @@ $(document).ready(function(){
       var year = currentTime.getFullYear();
 
       $.ajax({
-        url:"/ajax/adsales/salesRepByRegionAndYear",
+        url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
         method:"POST",
         data:{regionID,year},
         success: function(output){
@@ -349,7 +349,7 @@ $(document).ready(function(){
         });   
         
         $.ajax({
-          url:"/ajax/adsales/salesRepByRegionAndYear",
+          url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
           method:"POST",
           data:{regionID,year},
           success: function(output){
