@@ -226,7 +226,7 @@ class viewerController extends Controller{
         $year = Request::get("year");
 
         $salesRep = Request::get("salesRep");
-
+        
         $agency = Request::get("agency");
 
         $client = Request::get("client");

@@ -359,7 +359,9 @@ class viewer extends Model{
 						//AND (sf.year_to = '$year')";
 			}
 		}
-		echo "<pre>".$select."</pre>";
+		
+		//echo "<pre>".$select."</pre>";
+		
 		$result = $con->query($select);
 
 		$mtx = $sql->fetch($result,$from,$from);
