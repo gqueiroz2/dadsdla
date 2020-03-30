@@ -20,7 +20,7 @@ class analyticsController extends Controller{
 
         $aR = new analyticsRender();
 
-    	$con = $db->openConnection('DLA');
+    	$con = $db->openConnection('dla');
     	$at = new analytics();
 
     	$info = $at->assembler($con,$sql);
@@ -35,7 +35,7 @@ class analyticsController extends Controller{
     	$u = new User();
     	$at = new analytics();
 
-    	$con = $db->openConnection('DLA');
+    	$con = $db->openConnection('dla');
 
     	$userName = Request::get('userName');
     	$userRegion = Request::get('userRegion');
