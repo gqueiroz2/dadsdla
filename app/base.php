@@ -34,7 +34,7 @@ class base extends Model{
     public function sources(){
         $db = new dataBase();
         $base = new base();
-        $con = $db->openConnection("DLA");
+        $con = $db->openConnection("dla");
 
         $sql = new sql();
 
@@ -70,7 +70,7 @@ class base extends Model{
     public function sourceCMAPS(){
         $db = new dataBase();
         $base = new base();
-        $con = $db->openConnection("DLA");
+        $con = $db->openConnection("dla");
 
         $sql = new sql();
 
@@ -274,7 +274,7 @@ class base extends Model{
         $r = new region();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $con = $db->openConnection("dla");
 
         $regionId = array($regionId);
 
@@ -305,7 +305,7 @@ class base extends Model{
 
         $db = new dataBase();
 
-        $con = $db->openConnection("DLA");
+        $con = $db->openConnection("dla");
 
         $region = $r->getRegion($con,array($regionId))[0]["name"];
 
@@ -664,7 +664,7 @@ class base extends Model{
     public function adaptValue($value,$save,$regionID,$listOfClients,$type = false){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $con = $db->openConnection("dla");
 
 
         if($type){
