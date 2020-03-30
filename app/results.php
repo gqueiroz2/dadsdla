@@ -14,7 +14,8 @@ class results extends base{
         $base = new base();
         $sql = new sql();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $as = "sum";
         $currentMonth = intval(date('m'));
         $cYear = date('Y');

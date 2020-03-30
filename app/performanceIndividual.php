@@ -77,7 +77,8 @@ class performanceIndividual extends performance{
 
 	public function assembler($values,$planValues,$salesRep,$month,$brand,$salesGroup,$tier,$currency,$div,$divDig){
 		$db = new dataBase();
-		$con = $db->openConnection('DLA');
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$sql = new sql();
 		$base = new base();
 

@@ -495,7 +495,8 @@ class rank extends Model{
             $sql = new sql();
 
             $db = new dataBase();   
-            $con = $db->openConnection("DLA");
+            $default = $db->defaultConnection();
+            $con = $db->openConnection($default);
 
             $client = $c->getClientIDByRegion($con, $sql, addslashes($filter), array($region));
             

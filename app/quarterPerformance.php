@@ -138,7 +138,10 @@ class quarterPerformance extends performance {
 		setlocale(LC_ALL, "en_US.utf8");
         $uN = iconv("utf-8", "ascii//TRANSLIT", Request::session()->get('userName'));
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $sql = new sql();
         $base = new base();
 
