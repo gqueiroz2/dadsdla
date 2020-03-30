@@ -10,7 +10,7 @@
 			$r = new region();
 			$db = new dataBase();
 
-			$con = $db->openConnection("DLA");
+			$con = $db->openConnection("dla");
 
 			date_default_timezone_set('America/Sao_Paulo');
 			$userName = Request::session()->get('userName'); 
