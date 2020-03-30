@@ -28,7 +28,8 @@ class AEController extends Controller{
         $render = new PAndRRender();
         $excel = new excel();
 
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $user = Request::session()->get('userName');
         $permission = Request::session()->get('userLevel');
@@ -229,7 +230,8 @@ class AEController extends Controller{
 
     public function get(){
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $sr = new salesRep();
         $render = new PAndRRender();
@@ -253,7 +255,9 @@ class AEController extends Controller{
         $r = new region();
         $pr = new pRate();
         $ae = new AE();        
-        $con = $db->openConnection("DLA");        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);

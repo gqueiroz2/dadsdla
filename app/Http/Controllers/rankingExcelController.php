@@ -39,7 +39,9 @@ class rankingExcelController extends Controller {
 	public function brand(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionExcel");
       
@@ -127,7 +129,8 @@ class rankingExcelController extends Controller {
     public function market(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionExcel");
 
@@ -257,7 +260,8 @@ class rankingExcelController extends Controller {
     public function churn(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionExcel");
 
@@ -424,7 +428,8 @@ class rankingExcelController extends Controller {
     public function new(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionExcel");
 
@@ -586,7 +591,8 @@ class rankingExcelController extends Controller {
     public function ranking(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionExcel");
 

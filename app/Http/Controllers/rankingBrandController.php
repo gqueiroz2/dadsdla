@@ -17,19 +17,20 @@ class rankingBrandController extends Controller {
     
     public function brandGet(){
       
-      $db = new dataBase();
-      $con = $db->openConnection("DLA");
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
+        $region = new region();
+        $salesRegion = $region->getRegion($con);
 
-      $region = new region();
-      $salesRegion = $region->getRegion($con);
+        $currency = new pRate();
+        $currencies = $currency->getCurrency($con);
 
-      $currency = new pRate();
-      $currencies = $currency->getCurrency($con);
+        $b = new brand();
+        $brands = $b->getBrand($con);
 
-      $b = new brand();
-      $brands = $b->getBrand($con);
-
-      $render = new renderBrandRanking();
+        $render = new renderBrandRanking();
       
       return view("adSales.ranking.0brandGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
     }
@@ -37,7 +38,8 @@ class rankingBrandController extends Controller {
     public function brandPost(){
 
 		$db = new dataBase();
-      	$con = $db->openConnection("DLA");
+      	$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
       	$validator = Validator::make(Request::all(),[
             'region' => 'required',

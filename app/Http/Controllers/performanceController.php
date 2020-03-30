@@ -22,7 +22,8 @@ class performanceController extends Controller{
     public function individualGet(){
         $base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $r = new region();
         $sr = new salesRep();
@@ -48,7 +49,8 @@ class performanceController extends Controller{
         $r = new region();
         $render = new executivePerformanceRender();
         $pIndividual = new performanceIndividual();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',

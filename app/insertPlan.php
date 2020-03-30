@@ -13,15 +13,14 @@ class insertPlan extends excel{
 	public function baseSales(){
     	$db = new dataBase();
 		$i = new import();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$table = Request::get('table');
 		$year = Request::get('year');
 		$region = Request::get('region');
 		$spreadSheet = $i->base();
 		$column = array("region_id","sales_rep_id","brand_id","currency_id","month","type_of_revenue","value","year");
 		$spreadSheet = $this->fixSpreadSheet($spreadSheet,$column);
-
-		var_dump($table);
 
 		$del = 0;
 
@@ -63,7 +62,8 @@ class insertPlan extends excel{
     public function baseBrand(){
     	$db = new dataBase();
 		$i = new import();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$table = Request::get('table');
 		$year = Request::get('year');
 		$source = Request::get('source');

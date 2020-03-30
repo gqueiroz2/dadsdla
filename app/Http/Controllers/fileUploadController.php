@@ -41,7 +41,8 @@ class fileUploadController extends Controller{
 
 	public function excelPost(){
 		$db = new dataBase();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$i = new import();
 		$spreadSheet = $i->base();
 		unset($spreadSheet[0]);
@@ -57,7 +58,8 @@ class fileUploadController extends Controller{
 		$c = new client();
 		$ag = new agency();
 		$db = new dataBase();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$i = new import();
 		$r = new region();
 		$ytd = new ytdLatam();
@@ -97,7 +99,8 @@ class fileUploadController extends Controller{
 	public function agency(){
 		/*
 		$db = new dataBase();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$i = new import();
 		$a = new agency();
 
@@ -116,7 +119,8 @@ class fileUploadController extends Controller{
 
 	public function client(){
 		$db = new dataBase();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$i = new import();
 		$c = new client();
 

@@ -13,7 +13,8 @@ class RootController extends Controller{
         
         $db = new dataBase();
         $base = new base();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 
@@ -44,7 +45,8 @@ class RootController extends Controller{
 
     	$db = new dataBase();
         $base = new base();
-    	$con = $db->openConnection("DLA");
+    	$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $current = array("IBMS","CMAPS","Digital");
     	$tables = array("ytd","cmaps","digital");

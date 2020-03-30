@@ -30,7 +30,8 @@ class viewerController extends Controller{
         $bs = new base();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
@@ -60,7 +61,8 @@ class viewerController extends Controller{
         $in = new insights();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 
@@ -145,7 +147,8 @@ class viewerController extends Controller{
         $bs = new base();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
@@ -176,7 +179,8 @@ class viewerController extends Controller{
 
 	
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 
@@ -226,7 +230,7 @@ class viewerController extends Controller{
         $year = Request::get("year");
 
         $salesRep = Request::get("salesRep");
-
+        
         $agency = Request::get("agency");
 
         $client = Request::get("client");
@@ -260,8 +264,9 @@ class viewerController extends Controller{
         }
 
         $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
-        
+
         //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
+        
         $total = $viewer->totalFromTable($table);
 
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
@@ -283,8 +288,6 @@ class viewerController extends Controller{
         $titlePdf = $source." - Viewer Base.pdf";
 
         return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf"));
-    
-        
 
 	}
 

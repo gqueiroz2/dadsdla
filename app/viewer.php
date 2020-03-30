@@ -32,7 +32,6 @@ class viewer extends Model{
 						'agency',
 		                'client',
 		                'salesRep', 
-		                'salesRepUnit',
 		                'piNumber',		                
 		                'mapNumber',
 		                'product',
@@ -55,7 +54,6 @@ class viewer extends Model{
 			if ($checkEspecificNumber) {
 
 				$select = "SELECT sr.name AS 'salesRep', 
-								  sru.name AS 'salesRepUnit',
 				                  c.pi_number AS 'piNumber', 
 				                  c.month AS 'month',
 				                  c.map_number AS 'mapNumber',
@@ -78,8 +76,7 @@ class viewer extends Model{
 				                  c.client_cnpj AS 'clientCnpj',
 				                  c.agency_cnpj AS 'agencyCnpj'
 							FROM cmaps c
-							LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
-							LEFT JOIN sales_rep_unit sru ON sru.ID = c.sales_rep_unit_id
+							LEFT JOIN sales_rep_representatives sr ON sr.ID = c.sales_rep_representatives_id
 							LEFT JOIN brand b ON b.ID = c.brand_id
 							LEFT JOIN agency a ON c.agency_id = a.ID
 							LEFT JOIN client cl ON c.client_id = cl.ID
@@ -92,7 +89,6 @@ class viewer extends Model{
 			}else{
 				if($checkClient){
 					$select = "SELECT sr.name AS 'salesRep', 
-									  sru.name AS 'salesRepUnit',
 					                  c.pi_number AS 'piNumber', 
 					                  c.month AS 'month',
 					                  c.map_number AS 'mapNumber',
@@ -115,8 +111,7 @@ class viewer extends Model{
 					                  c.client_cnpj AS 'clientCnpj',
 					                  c.agency_cnpj AS 'agencyCnpj'
 								FROM cmaps c
-								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
-								LEFT JOIN sales_rep_unit sru ON sru.ID = c.sales_rep_unit_id
+								LEFT JOIN sales_rep_representatives sr ON sr.ID = c.sales_rep_representatives_id
 								LEFT JOIN brand b ON b.ID = c.brand_id
 								LEFT JOIN agency a ON c.agency_id = a.ID
 								LEFT JOIN client cl ON c.client_id = cl.ID
@@ -128,7 +123,6 @@ class viewer extends Model{
 								ORDER BY month,mapNumber";
 				}else{
 					$select = "SELECT sr.name AS 'salesRep', 
-					                  sru.name AS 'salesRepUnit',
 					                  c.pi_number AS 'piNumber', 
 					                  c.month AS 'month',
 					                  c.map_number AS 'mapNumber',
@@ -151,8 +145,7 @@ class viewer extends Model{
 					                  c.client_cnpj AS 'clientCnpj',
 					                  c.agency_cnpj AS 'agencyCnpj'
 								FROM cmaps c
-								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
-								LEFT JOIN sales_rep_unit sru ON sru.ID = c.sales_rep_unit_id
+								LEFT JOIN sales_rep_representatives sr ON sr.ID = c.sales_rep_representatives_id
 								LEFT JOIN brand b ON b.ID = c.brand_id
 								LEFT JOIN agency a ON c.agency_id = a.ID
 								LEFT JOIN client cl ON c.client_id = cl.ID
@@ -366,6 +359,8 @@ class viewer extends Model{
 						//AND (sf.year_to = '$year')";
 			}
 		}
+		
+		//echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
 

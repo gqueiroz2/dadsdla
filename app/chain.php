@@ -39,8 +39,8 @@ class chain extends excel{
         }*/
 
         if($table == 'cmaps'){
-            array_push($columns, 'sales_rep_unit');
-            $spreadSheet = $this->addSalesRepUnit($spreadSheet);
+            //array_push($columns, 'sales_rep_representatives');
+            //$spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
         }
 
         $into = $this->into($columns);      
@@ -89,7 +89,7 @@ class chain extends excel{
         }
 
         if($table == "cmaps"){
-            array_push($columns, 'sales_rep_unit');
+            //array_push($columns, 'sales_rep_representatives');
         }
 
         $columns = array_values($columns);
@@ -137,7 +137,7 @@ class chain extends excel{
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
         return $complete;             
-        
+     
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -338,10 +338,10 @@ class chain extends excel{
         return $bool;
     }   
 
-    public function addSalesRepUnit($spreadSheet){
+    public function addSalesRepRepresentatives($spreadSheet){
 
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
-            $spreadSheet[$s]['sales_rep_unit'] = $spreadSheet[$s]['sales_rep'];
+            $spreadSheet[$s]['sales_rep_representatives'] = $spreadSheet[$s]['sales_rep'];
         }
 
         return $spreadSheet;
@@ -356,6 +356,8 @@ class chain extends excel{
         $values = $this->values($spreadSheet,$columns);
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
+
+        //var_dump($ins);
 
         if($con->query($ins) === TRUE ){
             $error = false;
@@ -732,11 +734,12 @@ class chain extends excel{
     	$regions = $r->getRegion($con);
     	$brands = $b->getBrandUnit($con);
     	$salesReps = $sr->getSalesRepUnit($con);
+        $salesRepRepresentatives = $sr->getSalesRepUnitWithRepresentatives($con);
     	$currencies = $pr->getCurrency($con);
 
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
-                $tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$currencies,$year,$current[$c]);
+                $tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$salesRepRepresentatives,$currencies,$year,$current[$c]);
     			
                 if($columns[$cc] == "ad_unit" || $columns[$cc] == "from_date" || $columns[$cc] == "to_date"){
                     $current[$c][$tmp[1][1]] = $tmp[1][0];
@@ -756,7 +759,7 @@ class chain extends excel{
 		return $current;
     }
 
-    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$currencies,$year,$currentC){
+    public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$salesRepRepresentatives,$currencies,$year,$currentC){
         $base = new base();
 
         if($column == 'campaign_sales_office'){
@@ -945,8 +948,8 @@ class chain extends excel{
                 //var_dump($current);
             }
 
-        }elseif($column == 'sales_rep_unit'){
-            $rtr =  array(false,'sales_rep_unit_id');
+        }elseif($column == 'sales_rep_representatives'){
+            $rtr =  array(false,'sales_rep_representatives_id');
             $check = -1;
 
             $current = trim($current);
@@ -954,13 +957,13 @@ class chain extends excel{
             /*
                 O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
             */
-            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
-                if($current == $salesReps[$sr]['salesRepUnit']){    
-                    $rtr =  array( $salesReps[$sr]['id'],'sales_rep_unit_id');
+            for ($sr=0; $sr < sizeof($salesRepRepresentatives); $sr++) { 
+
+                if($current == $salesRepRepresentatives[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesRepRepresentatives[$sr]['salesRepRepresentativesID'],'sales_rep_representatives_id');
 
                     $check++;
                 }
-
                 
             }
             
@@ -1154,7 +1157,8 @@ class chain extends excel{
 
         $db = new dataBase();
 
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $allBrands = $bd->getBrandUnit($con);
 
@@ -1787,8 +1791,8 @@ class chain extends excel{
                                   'year',
                                   'month',
                                   'map_number',                                  
-                                  'sales_rep_id',
-                                  'sales_rep_unit_id',
+                                  'sales_rep_id',/*
+                                  'sales_rep_representatives_id',*/
                                   'package',                                  
                                   'client',
                                   'product',
@@ -1814,8 +1818,8 @@ class chain extends excel{
                                   'year',
                                   'month',
                                   'map_number',
-                                  'sales_rep_id',
-                                  'sales_rep_unit_id',
+                                  'sales_rep_id',/*
+                                  'sales_rep_representatives_id',*/
                                   'package',                                  
                                   'client_id',
                                   'product',
@@ -1861,7 +1865,8 @@ class chain extends excel{
                                   'ad_sales_support',
                                   'obs',
                                   'sector',
-                                  'category'
+                                  'category'/*,
+                                  'sales_rep_representatives_id'*/
                               );
 
     public $dataHubColumnsF = array(

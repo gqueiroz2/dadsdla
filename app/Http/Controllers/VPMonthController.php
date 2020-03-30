@@ -18,7 +18,8 @@ class VPMonthController extends Controller {
     public function save(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
         $base = new base();
@@ -166,7 +167,8 @@ class VPMonthController extends Controller {
     public function get(){
 
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();        
         $render = new renderVPMonth();
         $pr = new pRate();
@@ -180,7 +182,8 @@ class VPMonthController extends Controller {
     public function post(){
     	
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         
         $r = new region();
         $regionID = Request::get("region");

@@ -191,7 +191,8 @@ class ChainController extends Controller{
 		$chain = new chain();
 		$sql = new sql();
 
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		$fCon = $db->openConnection('firstMatch');	
 		$sCon = $db->openConnection('secondMatch');	
     	$table = Request::get('tableSecondChain');
@@ -223,7 +224,9 @@ class ChainController extends Controller{
 		$chain = new chain();
 		$sql = new sql();
 
-		$con = $db->openConnection('DLA');			
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);	
+
 		$sCon = $db->openConnection('secondMatch');	
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('tableThirdChain');
@@ -256,7 +259,9 @@ class ChainController extends Controller{
 		$chain = new chain();
 		$sql = new sql();
 
-		$con = $db->openConnection('DLA');			
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        		
 		$tCon = $db->openConnection('thirdMatch');	
     	$table = Request::get('tableToDLAChain');
     	$year = Request::get('year');

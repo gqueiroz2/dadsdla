@@ -18,7 +18,8 @@ class ClientAgencyController extends Controller{
 	public function clientGet(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $region = $r->getRegion($con);
         $cli = new client();
@@ -32,7 +33,8 @@ class ClientAgencyController extends Controller{
 	public function agencyGet(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $region = $r->getRegion($con);
         $ag = new agency();
@@ -45,7 +47,8 @@ class ClientAgencyController extends Controller{
 
     public function insertGroup(){
         $db = new dataBase();
-        $con = $db->openCOnnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $type = Request::get('type');
         $region = Request::get('region');
         $name = Request::get('groupName');
@@ -65,7 +68,8 @@ class ClientAgencyController extends Controller{
     public function insertOne(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $type = Request::get('type');
         $groupName = Request::get('groupName');
         $name = Request::get('name');
@@ -93,7 +97,8 @@ class ClientAgencyController extends Controller{
 		$i = new import();
 		$cA = new ClientAgency();
 		$base = new base();
-		$con = $db->openConnection('DLA');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 		
 		$year = Request::get('year');
 		$type = Request::get('type');
@@ -104,7 +109,7 @@ class ClientAgencyController extends Controller{
 			unset($spreadSheet[$f][0]);			
 			$spreadSheet[$f] = array_values($spreadSheet[$f]);
 		}
-		var_dump("AKI");
+		
 		$complete = $cA->toDataBase($con,$table,$spreadSheet,$base);
 		if($complete){
             var_dump("FOI");

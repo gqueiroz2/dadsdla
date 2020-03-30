@@ -25,7 +25,10 @@ class dataManagementController extends Controller{
     public function dataCurrentThroughtG(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $sql = new sql();
 
         $select = "SELECT * FROM sources_date";
@@ -55,7 +58,9 @@ class dataManagementController extends Controller{
 
     public function dataCurrentThroughtP(){
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $cmapsInfo = Request::get('cmapsInfo');
         $crmInfo = Request::get('crmInfo');
@@ -100,7 +105,8 @@ class dataManagementController extends Controller{
     public function fixCRM(){
         $db = new dataBase();
         $sql = new sql();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $select = "SELECT oppid , gross_revenue , net_revenue , fcst_amount_gross , fcst_amount_net , COUNT(oppid) AS 'repeat'
                    FROM sf_pr 
@@ -162,7 +168,8 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $r->addRegion($con);
 
         if($bool){
@@ -176,7 +183,8 @@ class dataManagementController extends Controller{
     	$sql = new sql();
     	$r = new region();
     	$db = new dataBase();
-		$con = $db->openConnection('DLA');
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
     	$render = new dataManagementRender();
     	return view('dataManagement.regionGet',compact('region','render'));
@@ -186,7 +194,8 @@ class dataManagementController extends Controller{
         $sql = new sql();
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
         $render = new dataManagementRender();
         return view('dataManagement.edit.editRegion',compact('region','render'));
@@ -196,7 +205,8 @@ class dataManagementController extends Controller{
         $sql = new sql();
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
         $bool = $r->editRegion($con);        
         if($bool){
@@ -210,7 +220,8 @@ class dataManagementController extends Controller{
     public function userAdd(){
         $usr = new User();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $usr->addUser($con);
 
         if($bool['bool']){
@@ -225,7 +236,8 @@ class dataManagementController extends Controller{
         $r = new region();
         $db = new dataBase();
         $usr = new User();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
         $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
@@ -241,7 +253,8 @@ class dataManagementController extends Controller{
         $r = new region();
         $db = new dataBase();
         $usr = new User();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         
         if (!is_null(Request::get('filterRegion'))) {
             $filter = array(Request::get('filterRegion'));
@@ -281,7 +294,8 @@ class dataManagementController extends Controller{
     public function UserTypeAdd(){
         $usr = new User();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $usr->addUserType($con);
 
         if($bool){
@@ -296,7 +310,8 @@ class dataManagementController extends Controller{
         $usr = new User();
         $db = new dataBase();
         $render = new dataManagementRender();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $userType = $usr->getUserType($con);
         
         return view('dataManagement.edit.editUserType',compact('userType','render'));
@@ -305,7 +320,8 @@ class dataManagementController extends Controller{
     public function userTypeEditPost(){
         $usr = new User();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $bool = $usr->editUserType($con);
 
@@ -327,7 +343,8 @@ class dataManagementController extends Controller{
         $sql = new sql();
         $db = new dataBase();
         $p = new pRate();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $p->addPRate($con,false);
         if($bool){
             return back()->with('response',$bool['msg']);
@@ -341,7 +358,8 @@ class dataManagementController extends Controller{
         $r = new region();
         $p = new pRate();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
         $currency = $p->getCurrency($con);
         $pRate = $p->getPRate($con,null);
@@ -355,7 +373,8 @@ class dataManagementController extends Controller{
         $r = new region();
         $p = new pRate();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,"");
         $currency = $p->getCurrency($con);
         $pRate = $p->getPRate($con,null);
@@ -369,7 +388,8 @@ class dataManagementController extends Controller{
         $p = new pRate();
         $sql = new sql(); 
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $p->editPRate($con);
 
         if($bool){
@@ -383,7 +403,8 @@ class dataManagementController extends Controller{
         $p = new pRate();
         $sql = new sql(); 
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $p->addCurrency($con);
         if($bool){
             return back()->with('response',$bool['msg']);
@@ -397,7 +418,8 @@ class dataManagementController extends Controller{
         $r = new region();
         $p = new pRate();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $region = $r->getRegion($con,false);
         $currency = $p->getCurrency($con);
         $pRate = $p->getPRate($con,null);
@@ -409,7 +431,8 @@ class dataManagementController extends Controller{
     public function currencyEditPost(){
         $db = new dataBase();
         $p = new pRate();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $bool = $p->editCurrency($con);
         if($bool){
@@ -426,7 +449,8 @@ class dataManagementController extends Controller{
     public function salesRepGroupAdd(){
         $sql = new sql(); 
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $bool = $sr->addSalesRepGroup($con);
 
@@ -442,11 +466,14 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $region = $r->getRegion($con,false);
         $salesRepGroup = $sr->getSalesRepGroup($con,false);
         $salesRep = $sr->getSalesRep($con,false);       
+        $salesRepGroupingReps = $sr->getSalesRepGroupingReps($con,false);   
+
         $salesRepUnit = $sr->getSalesRepUnit($con,false);       
         $origin = $o->getOrigin($con,false);
         $render = new dataManagementRender();
@@ -458,7 +485,8 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $bool = $sr->addSalesRep($con);
         if($bool){
@@ -472,7 +500,8 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $r = new region();
         $sr = new salesRep();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $render = new dataManagementRender();
 
 
@@ -505,7 +534,8 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $bool = $sr->addSalesRepUnit($con);
         if($bool){
@@ -520,7 +550,8 @@ class dataManagementController extends Controller{
         $sql = new sql(); 
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $region = $r->getRegion($con,false);
         $salesRepGroup = $sr->getSalesRepGroup($con,false);
@@ -554,7 +585,8 @@ class dataManagementController extends Controller{
         $db = new dataBase();
         $r = new region();
         $sr = new salesRep();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $render = new dataManagementRender();
 
         $temp = Request::get("filterRegion");
@@ -586,7 +618,8 @@ class dataManagementController extends Controller{
         $sql = new sql();
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $ag = new agency();
         $agencyGroupID = array( Request::get('agencyGroup') );
         $agencyGroup = $ag->getAgencyGroup($con,$agencyGroupID);
@@ -602,7 +635,8 @@ class dataManagementController extends Controller{
         $sql = new sql();
         $r = new region();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $ag = new agency();
 
         $regionID = Request::get('region');
@@ -666,7 +700,8 @@ class dataManagementController extends Controller{
     public function originAdd(){
         $o = new origin();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $o->addOrigin($con);
         
         if($bool){
@@ -679,7 +714,8 @@ class dataManagementController extends Controller{
     public function originGet(){
         $o = new origin();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $origin = $o->getOrigin($con,false);
         $render = new dataManagementRender();
 
@@ -693,7 +729,8 @@ class dataManagementController extends Controller{
     public function brandAdd(){
         $sql = new sql();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $b = new brand();
         $bool = $b->addBrand($con);
         
@@ -707,7 +744,8 @@ class dataManagementController extends Controller{
     public function brandGet(){
         $sql = new sql();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $b = new brand();
         $o = new origin();
         $brand = $b->getBrand($con,false);
@@ -726,7 +764,8 @@ class dataManagementController extends Controller{
         $b = new brand();
         $sql = new sql();
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bool = $b->addBrandUnit($con);        
         if($bool){
             return back()->with('response',$bool['msg']);
@@ -758,7 +797,8 @@ class dataManagementController extends Controller{
 
         $queries = new queries();
         $db = new dataBase();
-        $con = $db->openCOnnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         return view('dataManagement.truncateCheck');
     }

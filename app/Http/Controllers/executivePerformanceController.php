@@ -20,7 +20,10 @@ class executivePerformanceController extends Controller
     public function get(){
     	$base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
         $r = new region();
         $sr = new salesRep();
         $render = new executivePerformanceRender();
@@ -38,7 +41,10 @@ class executivePerformanceController extends Controller
     public function post(){
         $base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $r = new region();
         $sr = new salesRep();
         $render = new executivePerformanceRender();

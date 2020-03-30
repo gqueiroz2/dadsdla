@@ -22,7 +22,8 @@ class resultsController extends Controller{
     public function monthlyGet(){
         
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
@@ -45,7 +46,10 @@ class resultsController extends Controller{
 
         $base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $monthly = new monthly();
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );      
         $salesRegion = $base->getSalesRegion();

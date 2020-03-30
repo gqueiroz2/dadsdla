@@ -23,7 +23,8 @@ class resultsMQController extends Controller{
                 
                 $base = new base();
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
                 $r = new region();
                 $b = new brand();
                 $pr = new pRate();
@@ -39,7 +40,8 @@ class resultsMQController extends Controller{
                 
                 $base = new base();
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
                 $r = new region();
                 $b = new brand();
                 $pr = new pRate();
@@ -113,7 +115,8 @@ class resultsMQController extends Controller{
 
         public function getQuarter(){
         	$db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $region = new region();
                 $salesRegion = $region->getRegion($con);
@@ -131,7 +134,8 @@ class resultsMQController extends Controller{
 
 	public function postQuarter(){
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $base = new base();
 

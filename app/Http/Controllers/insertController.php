@@ -47,7 +47,8 @@ class insertController extends Controller{
 		$years = array($cYear,$pYear,$ppYear);
 
 		$db = new dataBase();
-		$con = $db->openConnection("DLA");
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 		$r = new region();
 

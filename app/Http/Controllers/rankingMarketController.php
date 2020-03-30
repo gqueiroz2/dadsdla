@@ -18,26 +18,28 @@ class rankingMarketController extends Controller {
 	public function get(){
 		
 		$db = new dataBase();
-      	$con = $db->openConnection("DLA");
+  	$default = $db->defaultConnection();
+    $con = $db->openConnection($default);
 
-      	$region = new region();
-      	$salesRegion = $region->getRegion($con);
+  	$region = new region();
+  	$salesRegion = $region->getRegion($con);
 
-      	$currency = new pRate();
-      	$currencies = $currency->getCurrency($con);
+  	$currency = new pRate();
+  	$currencies = $currency->getCurrency($con);
 
-      	$b = new brand();
-      	$brands = $b->getBrand($con);
+  	$b = new brand();
+  	$brands = $b->getBrand($con);
 
-      	$render = new renderMarketRanking();
-      
-      	return view("adSales.ranking.1marketGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
+  	$render = new renderMarketRanking();
+  
+  	return view("adSales.ranking.1marketGet", compact('salesRegion', 'currencies', 'brands', 'render')); 
 	}
 
 	public function post(){
 		
 		$db = new dataBase();
-  	$con = $db->openConnection("DLA");
+  	$default = $db->defaultConnection();
+    $con = $db->openConnection($default);
 
   	$validator = Validator::make(Request::all(),[
         'region' => 'required',

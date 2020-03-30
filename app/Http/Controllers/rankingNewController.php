@@ -18,7 +18,8 @@ class rankingNewController extends Controller {
     public function get(){
     	
     	$db = new dataBase();
-      	$con = $db->openConnection("DLA");
+      	$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
       	$region = new region();
       	$salesRegion = $region->getRegion($con);
@@ -38,7 +39,8 @@ class rankingNewController extends Controller {
     public function post(){
     	
     	$db = new dataBase();
-	  	$con = $db->openConnection("DLA");
+	  	$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 	  	$validator = Validator::make(Request::all(),[
 	        'region' => 'required',

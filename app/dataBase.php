@@ -23,6 +23,24 @@ class dataBase extends Model{
         }
     }
 
+    public function defaultConnection(){
+        return "dla";
+    }
+
+    public function matchesConnection($something){
+
+        if($something = "first"){
+            return "firstmatch";
+        }elseif($something = "second"){
+            return "secondmatch";
+        }elseif($something = "third"){
+            return "thirdmatch";
+        }else{
+            return "dla";
+        }
+
+    }
+
     public function openConnection($base){
         $this->con = new \Mysqli($this->ip,$this->user,$this->pass,$base,3306);
         $this->con->set_charset("utf8");
