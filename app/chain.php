@@ -39,8 +39,8 @@ class chain extends excel{
         }
 
         if($table == 'cmaps'){
-            array_push($columns, 'sales_rep_representatives');
-            $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
+            //array_push($columns, 'sales_rep_representatives');
+            //$spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
         }
 
         $into = $this->into($columns);      
@@ -89,7 +89,7 @@ class chain extends excel{
         }
 
         if($table == "cmaps"){
-            array_push($columns, 'sales_rep_representatives');
+            //array_push($columns, 'sales_rep_representatives');
         }
 
         $columns = array_values($columns);
@@ -1774,8 +1774,8 @@ class chain extends excel{
                                   'year',
                                   'month',
                                   'map_number',                                  
-                                  'sales_rep_id',
-                                  'sales_rep_representatives_id',
+                                  'sales_rep_id',/*
+                                  'sales_rep_representatives_id',*/
                                   'package',                                  
                                   'client',
                                   'product',
@@ -1801,8 +1801,8 @@ class chain extends excel{
                                   'year',
                                   'month',
                                   'map_number',
-                                  'sales_rep_id',
-                                  'sales_rep_representatives_id',
+                                  'sales_rep_id',/*
+                                  'sales_rep_representatives_id',*/
                                   'package',                                  
                                   'client_id',
                                   'product',
@@ -1848,8 +1848,8 @@ class chain extends excel{
                                   'ad_sales_support',
                                   'obs',
                                   'sector',
-                                  'category',
-                                  'sales_rep_representatives_id'
+                                  'category'/*,
+                                  'sales_rep_representatives_id'*/
                               );
 
     public $dataHubColumnsF = array(
