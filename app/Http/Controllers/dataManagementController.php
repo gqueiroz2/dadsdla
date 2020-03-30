@@ -31,7 +31,6 @@ class dataManagementController extends Controller{
         $select = "SELECT * FROM sources_date";
 
         $res = $con->query($select);
-
         $from = array("source","current_throught");
 
         $list = $sql->fetch($res,$from,$from);
@@ -43,13 +42,14 @@ class dataManagementController extends Controller{
                 $sf = $list[$l]['current_throught'];
             }elseif($list[$l]['source'] == "FW"){
                 $fw = $list[$l]['current_throught'];
+            }elseif ($list[$l]['source'] == 'INSIGHTS') {
+                $insights = $list[$l]['current_throught'];
             }else{
                 $bts = $list[$l]['current_throught'];
             }
         }
 
-        $newList = array("cmaps" => $cmaps,"bts" => $bts,"fw" => $fw,"sf" => $sf);
-
+        $newList = array("cmaps" => $cmaps,"bts" => $bts,"fw" => $fw,"sf" => $sf, $insights => "insights");
         return view('dataManagement.dataCurrentThrought',compact('newList'));
     }
 
@@ -61,12 +61,14 @@ class dataManagementController extends Controller{
         $crmInfo = Request::get('crmInfo');
         $freeWheelInfo = Request::get('freeWheelInfo');
         $btsInfo = Request::get('btsInfo');
+        $insightsInfo = Request::get('insightsInfo');
 
         $list = array( 
                         array("name" => "BTS","value" => $btsInfo),
                         array("name" => "CMAPS","value" => $cmapsInfo),
                         array("name" => "FW","value" => $freeWheelInfo),
-                        array("name" => "SF","value" => $crmInfo)
+                        array("name" => "SF","value" => $crmInfo),
+                        array('name' => "INSIGHTS","value" => $insightsInfo)
         );
 
         $count = 0;

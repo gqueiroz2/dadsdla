@@ -165,6 +165,7 @@ class ChainController extends Controller{
                 unset($spreadSheet[1]);
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
+                var_dump($spreadSheet);
                 break;
 		}
 
