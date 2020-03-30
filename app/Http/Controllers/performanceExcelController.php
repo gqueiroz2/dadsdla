@@ -27,7 +27,8 @@ class performanceExcelController extends Controller{
   	public function executive(){
 
 		$db = new dataBase();
-		$con = $db->openConnection("DLA");
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 		$p = new performanceExecutive();
 
@@ -60,7 +61,8 @@ class performanceExcelController extends Controller{
   	public function bonus(){
   		
   		$db = new dataBase();
-		$con = $db->openConnection("DLA");
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 		$p = new performanceExecutive();
 
@@ -97,7 +99,8 @@ class performanceExcelController extends Controller{
   	public function core(){
   		
   		$db = new dataBase();
-		$con = $db->openConnection("DLA");
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 		$p = new performanceCore();
 
@@ -130,7 +133,8 @@ class performanceExcelController extends Controller{
   	public function quarter(){
   		
   		$db = new dataBase();
-		$con = $db->openConnection("DLA");
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
   		$regionID = Request::get('region');
         $year = Request::get('year');

@@ -18,7 +18,8 @@ class quarterPerformanceController extends Controller {
     public function get(){
 
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $render = new quarterPerformanceRender();
 
@@ -36,7 +37,8 @@ class quarterPerformanceController extends Controller {
     public function post(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',

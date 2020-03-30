@@ -22,7 +22,8 @@ class resultsResumeController extends Controller{
 
 		$base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $b = new brand();
         $pr = new pRate();
@@ -41,7 +42,8 @@ class resultsResumeController extends Controller{
 		$sql = new sql();
 		$base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $sr = new salesRep();
         $b = new brand();

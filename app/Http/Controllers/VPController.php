@@ -29,7 +29,8 @@ class VPController extends Controller
         $render = new PAndRRender();
         $excel = new excel();
 
-        $con = $db->openConnection("DLA");  
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $excel = new excel();
 
@@ -81,7 +82,8 @@ class VPController extends Controller
     public function get(){
 
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $sr = new salesRep();
         $render = new PAndRRender();
@@ -95,7 +97,8 @@ class VPController extends Controller
 
     public function post(){
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $sr = new salesRep();
         $render = new VPPAndRRender();

@@ -1157,7 +1157,8 @@ class chain extends excel{
 
         $db = new dataBase();
 
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $allBrands = $bd->getBrandUnit($con);
 

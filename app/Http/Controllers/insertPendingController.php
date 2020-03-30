@@ -18,8 +18,11 @@ class insertPendingController extends Controller{
 		$cE = new CheckElements();
 		$base = new base();
 
-		$con = $db->openConnection('DLA');
-		$conFM = $db->openConnection('firstMatch');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+		$fM = $db->matchesConnection("first");
+		$conFM = $db->openConnection($fM);
 
 		$region = Request::get('region'); 
 		$table = Request::get('table');
@@ -54,8 +57,11 @@ class insertPendingController extends Controller{
 		$cE = new CheckElements();
 		$base = new base();
 
-		$con = $db->openConnection('DLA');
-		$conFM = $db->openConnection('firstMatch');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+		$fM = $db->matchesConnection("first");
+		$conFM = $db->openConnection($fM);
 
 		$region = Request::get('region'); 
 		$table = Request::get('table');		

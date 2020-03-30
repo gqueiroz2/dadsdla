@@ -29,7 +29,8 @@ class resultsExcelController extends Controller{
         public function resultsSummary(){
 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $region = Request::get("regionExcel");
 
@@ -124,7 +125,8 @@ class resultsExcelController extends Controller{
         public function resultsMonth(){
                 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 //id da região
                 $region = Request::get("regionExcel");
@@ -181,7 +183,8 @@ class resultsExcelController extends Controller{
 	public function resultsQuarter(){
                 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 //id da região
                 $region = Request::get("regionExcel");
@@ -242,7 +245,8 @@ class resultsExcelController extends Controller{
         public function resultsYoYBrand(){
 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $region = Request::get("regionExcel");
 
@@ -304,7 +308,8 @@ class resultsExcelController extends Controller{
         public function resultsYoYMonth(){
 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $region = Request::get("regionExcel");
 
@@ -367,7 +372,8 @@ class resultsExcelController extends Controller{
         public function resultsShare(){
 
                 $db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
 
                 $region = Request::get("regionExcel");
 

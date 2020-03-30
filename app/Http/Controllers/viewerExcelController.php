@@ -26,7 +26,8 @@ class viewerExcelController extends Controller {
 
     public function viewerBase(){
 	    $db =  new dataBase();
-	    $con = $db->openConnection("DLA");
+	    $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 	    $sql = new sql();
 
@@ -84,7 +85,8 @@ class viewerExcelController extends Controller {
 
     public function viewerInsights(){
     	$db =  new dataBase();
-	    $con = $db->openConnection("DLA");
+	    $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
 	    $sql = new sql();
 

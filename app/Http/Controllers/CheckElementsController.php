@@ -18,8 +18,13 @@ class CheckElementsController extends Controller{
 		$db = new dataBase();
 		$cE = new CheckElements();
 		$base = new base();
-		$con = $db->openConnection('DLA');	
-		$conFM = $db->openConnection('firstMatch');	
+
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+		$fM = $db->matchesConnection("first");
+		$conFM = $db->openConnection($fM);	
+		
 		$table = Request::get('table');
 		$region = Request::get('region');
 		$newValues = $cE->newValues($con,$conFM,$region,$table);
@@ -32,8 +37,10 @@ class CheckElementsController extends Controller{
 		$db = new dataBase();
 		$cE = new CheckElements();
 		$base = new base();
-		$con = $db->openConnection('DLA');	
-		$conFM = $db->openConnection('firstMatch');	
+		$default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $fM = $db->matchesConnection("first");
+		$conFM = $db->openConnection($fM);	
 		$table = Request::get('tableToCheck');
 		
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);

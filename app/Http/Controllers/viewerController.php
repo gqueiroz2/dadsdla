@@ -30,7 +30,8 @@ class viewerController extends Controller{
         $bs = new base();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
@@ -60,7 +61,8 @@ class viewerController extends Controller{
         $in = new insights();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 
@@ -145,7 +147,8 @@ class viewerController extends Controller{
         $bs = new base();
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
@@ -176,7 +179,8 @@ class viewerController extends Controller{
 
 	
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 

@@ -11,7 +11,8 @@ class executivePerformanceRender extends renderPerformance {
 	public function bonus($userName){
 
 		$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sr = new salesRep();
 		$salesRep = $sr->getSalesRepByName($con,$userName);

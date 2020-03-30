@@ -15,8 +15,9 @@ class pacingReportController extends Controller{
     
 	public function get(){
 		
-		$db = new dataBase();
-                $con = $db->openConnection("DLA");
+	        $db = new dataBase();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
                 $r = new region();
                 $sr = new salesRep();
                 $render = new pacingRender();
@@ -30,7 +31,8 @@ class pacingReportController extends Controller{
 
 	public function post(){
 		$db = new dataBase();
-                $con = $db->openConnection("DLA");
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
                 $r = new region();
                 $sr = new salesRep();
                 $render = new pacingRender();

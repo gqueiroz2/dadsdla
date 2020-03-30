@@ -25,7 +25,10 @@ class ajaxController extends Controller{
 
     public function brandBySource(){
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
         $b = new brand();
         $brand = $b->getBrand($con);
         $source = Request::get('source');
@@ -49,7 +52,10 @@ class ajaxController extends Controller{
         
         $a = new agency;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
         $region = Request::get("regionID");
         $agency = $a->getAgencyByRegion($con,array($region));
 
@@ -61,7 +67,9 @@ class ajaxController extends Controller{
     public function getClientByRegion(){
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $region = Request::get("regionID");
         $client = $c->getClientByRegion($con,array($region));
@@ -75,7 +83,10 @@ class ajaxController extends Controller{
         
         $a = new agency;
         $db = new dataBase();
-        $con = $db->openConnection("dla");        
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $year  = Request::get("year");
 
         $agency = $a->getAgencyByRegionCMAPS($con,$year);
@@ -89,7 +100,9 @@ class ajaxController extends Controller{
 
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $year  = Request::get("year");
         $client = $c->getClientByRegionCMAPS($con,$year);
@@ -103,7 +116,9 @@ class ajaxController extends Controller{
         $base = new base();
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sql = new sql();
 
         $agency = Request::get('agency');
@@ -130,7 +145,9 @@ class ajaxController extends Controller{
         $base = new base();
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sql = new sql();
 
         $agency = Request::get('agency');
@@ -157,7 +174,9 @@ class ajaxController extends Controller{
         $base = new base();
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sql = new sql();
 
         $region = Request::get("region");
@@ -181,7 +200,9 @@ class ajaxController extends Controller{
     public function getClientByRegionInsights(){
         $c = new client;
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sql = new sql();
 
         $region = Request::get("regionID");
@@ -226,7 +247,9 @@ class ajaxController extends Controller{
 
     public function secondaryFilter(){
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sql = new sql();
 
         $type = Request::get('type');
@@ -324,7 +347,9 @@ class ajaxController extends Controller{
 
     public function baseFilter(){
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $bs = new base();
         $type = Request::get('type');
         $regionID = Request::get('region');
@@ -376,7 +401,9 @@ class ajaxController extends Controller{
     public function Product(){
         
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $render = new renderDashboards();
 
@@ -417,7 +444,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
             $b = new brand();
             $brands = $b->getBrand($con);
@@ -452,7 +481,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -475,7 +506,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -498,7 +531,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -521,7 +556,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -544,7 +581,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -567,7 +606,9 @@ class ajaxController extends Controller{
             
         }else{
             $db = new dataBase();
-            $con = $db->openConnection("dla");
+
+            $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -641,7 +682,9 @@ class ajaxController extends Controller{
     public function secondPosByRegion(){
 
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $sql = new sql();
 
@@ -666,7 +709,9 @@ class ajaxController extends Controller{
     public function thirdPosByRegion(){
         
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $regionID = Request::get("regionID");
 
@@ -681,7 +726,10 @@ class ajaxController extends Controller{
 
     public function salesRepGroupByRegion(){
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $regionID = array(Request::get('regionID'));
         $sr = new salesRep();
         $salesRepGroup = $sr->getSalesRepGroup($con,$regionID);
@@ -730,7 +778,8 @@ class ajaxController extends Controller{
 
     public function salesRepByRegionFiltered(){
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $regionID = Request::get('regionID');
 
@@ -789,7 +838,8 @@ class ajaxController extends Controller{
 
     public function salesRepBySalesRepGroup(){
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $sr = new salesRep();
         $regionID = Request::get('regionID');
 
@@ -840,10 +890,10 @@ class ajaxController extends Controller{
         }
     }
 
-
     public function currencyByRegion(){
         $db = new dataBase();
-        $con = $db->openConnection('DLA');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         
         $pr = new pRate();
         $regionID = array(Request::get('regionID'));
@@ -1037,7 +1087,9 @@ class ajaxController extends Controller{
         }
 
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $fun = substr($name, 0, 6);
 
@@ -1076,7 +1128,9 @@ class ajaxController extends Controller{
     public function subRanking(){
 
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $brands = Request::get("brands");
         $type = Request::get("type");
@@ -1115,7 +1169,9 @@ class ajaxController extends Controller{
     public function brandSubRanking(){
         
         $db = new dataBase();   
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $type = Request::get("type");
         $region = Request::get("region");
@@ -1164,7 +1220,9 @@ class ajaxController extends Controller{
     public function marketSubRanking(){
         
         $db = new dataBase();
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $type = Request::get("type");
         $region = Request::get("region");
@@ -1225,7 +1283,9 @@ class ajaxController extends Controller{
     public function churnSubRanking(){
         
         $db = new dataBase();   
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $type = Request::get("type");
         $region = Request::get("region");
@@ -1296,7 +1356,9 @@ class ajaxController extends Controller{
     public function newSubRanking(){
         
         $db = new dataBase();   
-        $con = $db->openConnection("dla");
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $type = Request::get("type");
         $region = Request::get("region");

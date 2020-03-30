@@ -18,7 +18,8 @@ class resultsYoYController extends Controller{
     public function get(){
 
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $render = new Render();
 
@@ -37,7 +38,8 @@ class resultsYoYController extends Controller{
     	$base = new base();
 
     	$db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',

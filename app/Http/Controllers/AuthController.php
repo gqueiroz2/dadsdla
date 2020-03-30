@@ -26,7 +26,8 @@ class AuthController extends Controller
         $user = new User();
         
         $db = new dataBase();
-        $con = $db->openConnection('dla');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         if(file_exists('/var/simplesamlphp/lib/_autoload.php')){
             require_once('/var/simplesamlphp/lib/_autoload.php');
             $as = new \SimpleSAML\Auth\Simple('default-sp');
@@ -57,7 +58,8 @@ class AuthController extends Controller
 
     public function loginPost(){
         $db = new dataBase();
-        $con = $db->openConnection('dla');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $usr = new User();
         $resp = $usr->login($con);
         if (!$resp['bool']) {
@@ -86,7 +88,8 @@ class AuthController extends Controller
     public function forgotPasswordPost(){
         
         $db = new dataBase();
-        $con = $db->openConnection('dla');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $email = Request::get('email');
         $pwd = new password();
         $bool = $pwd->requestToEmail($con, $email);
@@ -100,7 +103,8 @@ class AuthController extends Controller
         
         date_default_timezone_set('America/Sao_Paulo');
         $db = new dataBase();
-        $con = $db->openConnection('dla');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $email = Request::get('email');
         $token = Request::get('_token');
         $usr = new User();
@@ -120,7 +124,8 @@ class AuthController extends Controller
     }
     public function resetPassword(){
         $db = new dataBase();
-        $con = $db->openConnection('dla');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         
         $permission = Request::get('permission');
         $email = Request::get("email");
