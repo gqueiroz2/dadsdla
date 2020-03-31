@@ -74,7 +74,10 @@ class Render extends Model{
 
     public function regionWI(){ // Without Input
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
         $r = new region();
 
         $region = $r->getRegion($con);

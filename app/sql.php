@@ -188,7 +188,9 @@ class sql extends Model{
     }
 
     public function updateValues($con,$tableName,$set,$where){
-        $sql = "UPDATE DLA.$tableName $set $where";
+        $default = $db->defaultConnection();
+
+        $sql = "UPDATE $default.$tableName $set $where";
         if ($con->query($sql) === TRUE) {
             $rtr["bool"] = true;
             $rtr["msg"] = "Successfully updated!";
