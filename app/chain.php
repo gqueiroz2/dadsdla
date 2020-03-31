@@ -26,7 +26,7 @@ class chain extends excel{
 
         $columns = $this->defineColumns($table,'first');
         
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts" || $table == "insights" || $table == "insights_bts"){
+        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "ytdFN" || $table == "bts" || $table == "insights"){
             $parametter = $table;
         }else{
             $parametter = false;
@@ -1517,21 +1517,6 @@ class chain extends excel{
                         return $this->insightsColumns;
                         break;
                 }
-            case 'insights_bts':
-                switch ($recurrency) {
-                    case 'first':
-                        return $this->insightsBColumnsF;
-                        break;
-                    case 'second':
-                        return $this->insightsBColumnsS;
-                        break;
-                    case 'third':
-                        return $this->insightsBColumnsT;
-                        break;
-                    case 'DLA':
-                        return $this->insightsBColumns;
-                        break;              
-                }
                     
                 break;
     		
@@ -2155,51 +2140,7 @@ class chain extends excel{
                                      'agency_commission_percentage'
     );
 
-     public $insightsBColumnsF = array('contract',
-                                        'spot_type',
-                                        'duration_impression',//time
-                                        'program',
-                                        'house_number',
-                                        'copy_title',
-                                        'unit_start_time',//time
-                                        'date_event',//date
-                                        'spot_status'
-
-     );
-
-     public $insightsBColumnsS = array('contract',
-                                        'spot_type',
-                                        'duration_impression',//time
-                                        'program',
-                                        'house_number',
-                                        'copy_title',
-                                        'unit_start_time',//time
-                                        'date_event',//date
-                                        'spot_status'
-
-     );
-     public $insightsBColumnsT = array('contract',
-                                        'spot_type',
-                                        'duration_impression',//time
-                                        'program',
-                                        'house_number',
-                                        'copy_title',
-                                        'unit_start_time',//time
-                                        'date_event',//date
-                                        'spot_status'
-
-     );
-     public $insightsBColumns = array('contract',
-                                        'spot_type',
-                                        'duration_impression',//time
-                                        'program',
-                                        'house_number',
-                                        'copy_title',
-                                        'unit_start_time',//time
-                                        'date_event',//date
-                                        'spot_status'
-
-     );
+     
 	public $salesRepColumns = array('sales_group_id','name');
 	public $salesRepUnitColumns = array('sales_rep_id','origin_id','name');
 	

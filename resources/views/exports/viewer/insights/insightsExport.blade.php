@@ -10,7 +10,7 @@
 		<td style="background-color: #0047b3;">Client</td>
 		<td style="background-color: #0047b3;">Agency</td>
 		<td style="background-color: #0047b3;">Product</td>
-		<td style="background-color: #0047b3;">Schedule Event</td>
+		<td style="background-color: #0047b3;">Program</td>
 		<td style="background-color: #0047b3;">Num Spot</td>
 		<td style="background-color: #0047b3;">Net Revenue</td>
 		<td style="background-color: #0047b3;">Revenue</td>
@@ -21,7 +21,7 @@
 			<td style="background-color: #0f243e;">Total</td>
 			<td colspan="6" style="background-color: #0f243e;"></td>	
 			<td style="background-color: #0f243e;">{{$data['total'][$t]['averageNumSpot']}}</td>
-			<td style="background-color: #0f243e;">{{$data['total'][$t]['sumNetRevenue']}}</td>	
+			<td style="background-color: #0f243e;">PENDENTE</td>	
 			<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>	
 		@endfor
 	</tr>
@@ -34,7 +34,7 @@
 			<td>{{$data['mtx'][$m]['client']}}</td>
 			<td>{{$data['mtx'][$m]['agency']}}</td>			
 			<td>{{$data['mtx'][$m]['product']}}</td>
-			<td>{{$data['mtx'][$m]['scheduleEvent']}}</td>
+			<td>{{$data['mtx'][$m]['program']}}</td>
 			<td>{{$data['mtx'][$m]['numSpot']}}</td>
 			<td>{{$data['mtx'][$m]['netRevenue']}}</td>
 			<td>{{$data['mtx'][$m]['grossRevenue']}}</td>

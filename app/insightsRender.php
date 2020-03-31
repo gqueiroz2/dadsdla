@@ -21,7 +21,7 @@ class insightsRender extends Render{
 			$idNumber[$c] =  array(); 
 			for ($m=0; $m <sizeof($mtx); $m++) { 
 
-				$temp[$m] = array($mtx[$m]['copyKey'], $mtx[$m]['mediaItem'], $mtx[$m]['client']);
+				$temp[$m] = array($mtx[$m]['copyTitle'], $mtx[$m]['houseNumber'], $mtx[$m]['client']);
 
 
 				if ($client[$c] == $mtx[$m]['client']){
@@ -39,8 +39,8 @@ class insightsRender extends Render{
 		for ($i=0; $i <sizeof($idNumber); $i++) { 
 			echo "<table style='width: 100%;'>";
 				echo "<tr>";
-					echo "<td class='darkBlue center'>Copy Key</td>";
-					echo "<td class='darkBlue'>Media Item</td>";
+					echo "<td class='darkBlue center'>Copy Title</td>";
+					echo "<td class='darkBlue center'>House Number</td>";
 				echo "</tr>";
 				echo "<tr class='darkBlue center'>";
 					echo "<td colspan='2'>".$client[$i]."</td>";
@@ -53,7 +53,7 @@ class insightsRender extends Render{
 				}
 				echo "<tr class='$color'>";
 					echo "<td class='center'>".$idNumber[$i][$j][0]."</td>";
-					echo "<td>".$idNumber[$i][$j][1]."</td>";
+					echo "<td class= 'center'>".$idNumber[$i][$j][1]."</td>";
 				echo "</tr>";
 			}
 			
@@ -81,7 +81,7 @@ class insightsRender extends Render{
 						echo "<td style='width:10%;'>Client</td>";
 						echo "<td style='width:10%;'>Agency</td>";
 						echo "<td style='width:10%;'>Product</td>";
-						echo "<td style='width:25%;'>Schedule Event</td>";
+						echo "<td style='width:25%;'>Program</td>";
 						echo "<td style='width:5%;'>Num Spot</td>";
 						echo "<td style='width:3%;'>Net Revenue</td>";
 						echo "<td style='width:3%;'>Revenue</td>";
@@ -92,7 +92,7 @@ class insightsRender extends Render{
 							echo "<td>Total</td>";
 							echo "<td colspan='6'></td>";
 							echo "<td>".number_format($total[$t]['averageNumSpot'])."</td>";
-							echo "<td>".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
+							echo "<td>PENDENTE</td>";
 							echo "<td>".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
 						}	
 					echo"</tr>";
@@ -112,9 +112,9 @@ class insightsRender extends Render{
 							echo "<td>".$mtx[$m]['client']."</td>";
 							echo "<td>".$mtx[$m]['agency']."</td>";
 							echo "<td>".$mtx[$m]['product']."</td>";
-							echo "<td>".$mtx[$m]['scheduleEvent']."</td>";
+							echo "<td>".$mtx[$m]['program']."</td>";
 							echo "<td>".$mtx[$m]['numSpot']."</td>";
-							echo "<td>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
+							echo "<td>PENDENTE</td>";
 							echo "<td>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
 						echo"</tr>";
 					}
