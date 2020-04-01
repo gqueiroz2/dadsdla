@@ -52,7 +52,8 @@ class dataManagementController extends Controller{
             }
         }
 
-        $newList = array("cmaps" => $cmaps,"bts" => $bts,"fw" => $fw,"sf" => $sf, $insights => "insights");
+        $newList = array("cmaps" => $cmaps, "bts" => $bts, "fw" => $fw, "sf" => $sf, "insights" => $insights);
+
         return view('dataManagement.dataCurrentThrought',compact('newList'));
     }
 

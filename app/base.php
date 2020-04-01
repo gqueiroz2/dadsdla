@@ -40,7 +40,7 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date WHERE (source != 'FW')";
+        $select = "SELECT * FROM sources_date WHERE (source != 'FW' AND source != 'INSIGHTS')";
 
         $res = $con->query($select);
 

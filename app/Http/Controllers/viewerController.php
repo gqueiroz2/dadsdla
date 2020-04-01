@@ -33,6 +33,8 @@ class viewerController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
+        $base = new base();
+
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
 
@@ -47,7 +49,7 @@ class viewerController extends Controller{
 
         $v = new viewer();
 
-        return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand"));
+        return view("adSales.viewer.insightsGet",compact("render","years","region","currency","currencies","brand","base"));
     }
 
     public function insightsPost(){
@@ -165,7 +167,7 @@ class viewerController extends Controller{
 
         $v = new viewer();
 
-        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand"));
+        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand","bs"));
 	}
 
 
@@ -287,7 +289,7 @@ class viewerController extends Controller{
         $titleExcel = $source." - Viewer Base.xlsx";
         $titlePdf = $source." - Viewer Base.pdf";
 
-        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base"));
 
 	}
 

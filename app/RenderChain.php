@@ -77,9 +77,6 @@ class RenderChain extends Render{
             echo "<option value='ytdFN'> YTD FN </option>";
 			echo "<option value='ytd'> YTD </option>";
             echo "<option value='fw_digital'> FW Digital </option>";
-            
-            
-
 			//echo "<option value='mini_header'> Mini-Header </option>";
 			//echo "<option value='digital'> Digital </option>";
 		echo "</select>";
