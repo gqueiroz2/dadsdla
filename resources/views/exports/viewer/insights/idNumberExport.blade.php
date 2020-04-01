@@ -1,8 +1,8 @@
 @for($i=0; $i<sizeof($data['idNumber']); $i++)
 	<table>
 		<tr>
-			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">Copy Key</td>
-			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">Media Item</td>
+			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">Copy Title</td>
+			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;">House Number</td>
 		</tr>
 		<tr>
 			<td style="background-color: #0f243e; font-weight: bold; color: #FFFFFF;" colspan="2">{{$data['client'][$i]}}</td>

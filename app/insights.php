@@ -14,32 +14,21 @@ class insights extends Model{
 					$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
 				}
 
-				if ($mtx[$m]['grossRevenue'] || $mtx[$m]['netRevenue'] || $mtx[$m]['numSpot']) {
+				if ($mtx[$m]['grossRevenue'] || $mtx[$m]['grossRevenueP'] || $mtx[$m]['numSpot']) {
 					if ($mtx[$m]['grossRevenue']){
 						$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue']);
 					}
-					if ($mtx[$m]['netRevenue']) {
-						$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']);
+					if ($mtx[$m]['grossRevenueP']) {
+						$mtx[$m]['grossRevenueP'] = doubleval($mtx[$m]['grossRevenueP']);
 					}
 					if ($mtx[$m]['numSpot']) {
 						$mtx[$m]['numSpot'] = doubleval($mtx[$m]['numSpot']);
 					}
 				}
 
-				if ($mtx[$m]['unitStartTime'] || $mtx[$m]['durationSpot'] || $mtx[$m]['durationImpression']) {
-					if ($mtx[$m]['unitStartTime']) {
-						$mtx[$m]['unitStartTime'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['unitStartTime']);
-					}
-					if ($mtx[$m]['durationSpot']) {
-						$mtx[$m]['durationSpot'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['durationSpot']);
-					}
-					if ($mtx[$m]['durationImpression']) {
-						$mtx[$m]['durationImpression'] = $base->formatHour("hh:mm:ss","HH:MM",$mtx[$m]['durationImpression']);
-					}
-				}
-				$mtx[$m]['dateEvent'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['dateEvent']);
+				//$mtx[$m]['dateEvent'] = $base->formatData("aaaa-mm-dd","dd/mm/aaaa",$mtx[$m]['dateEvent']);
 
-			}		
+			}
 
 		return $mtx;
 	}
@@ -64,24 +53,28 @@ class insights extends Model{
 					c.name AS 'client',
 					c.ID AS 'clientID',
 					i.month AS 'month',
+					i.year AS 'year',
 					c.name AS 'currency',
 					i.charge_type AS 'chargeType',
 					i.product AS 'product',
 					i.campaign AS 'campaign',
+					ib.contract AS 'contract',
 					i.order_reference AS 'orderReference',
-					i.schedule_event AS 'scheduleEvent',
-					i.spot_status AS 'spotStatus',
-					i.date_event AS 'dateEvent',
-					i.unit_start_time AS 'unitStartTime',
-					i.duration_spot AS 'durationSpot',
-					i.copy_key AS 'copyKey',
-					i.media_item AS 'mediaItem',
-					i.spot_type AS 'spotType',
-					i.duration_impression AS 'durationImpression',
-					i.gross_revenue AS 'grossRevenue',
+					ib.program AS 'program',
+					ib.spot_status AS 'spotStatus',
+					ib.date_event AS 'dateEvent',
+					ib.unit_start_time AS 'unitStartTime',
+					ib.duration_impression AS 'durationImpression',
+					i.clock_number AS 'clockNumber',
+					ib.house_number AS 'houseNumber',
+					ib.copy_title AS 'copyTitle',
+					ib.spot_type AS 'spotType',
 					i.num_spot AS 'numSpot',
-					i.net_revenue AS 'netRevenue'
+					i.gross_revenue AS 'grossRevenue',
+					i.gross_revenue_prate AS 'grossRevenueP',
+					i.agency_commission_percentage AS 'agencyCommission'
 					FROM insights i
+					LEFT JOIN insights_bts ib ON i.campaign = ib.contract 
 					LEFT JOIN brand b ON b.ID = i.brand_id
 					LEFT JOIN sales_rep sr ON sr.ID = i.sales_rep_id
 					LEFT JOIN agency a ON a.ID = i.agency_id
@@ -102,23 +95,26 @@ class insights extends Model{
 				'agency',
 				'client',
 				'month',
+				'year',
 				'currency',
 				'chargeType',
 				'product',
 				'campaign',
+				'contract',
 				'orderReference',
-				'scheduleEvent',
+				'program',
 				'spotStatus',
 				'dateEvent',
 				'unitStartTime',
-				'durationSpot',
-				'copyKey',
-				'mediaItem',
-				'spotType',
 				'durationImpression',
-				'grossRevenue',
+				'clockNumber',
+				'houseNumber',
+				'copyTitle',
+				'spotType',
 				'numSpot',
-				'netRevenue'
+				'grossRevenue',
+				'grossRevenueP',
+				'agencyCommission'
 		);
 
 		$mtx = $sql->fetch($res,$from,$from);
@@ -142,12 +138,10 @@ class insights extends Model{
 		$year = date('Y');
 
 		$from = array('averageNumSpot',
-					  'sumGrossRevenue',
-					  'sumNetRevenue'
+					  'sumGrossRevenue'
 					);
 
 		$selectTotal = "SELECT AVG(i.num_spot) AS 'averageNumSpot',
-		 			    SUM(i.net_revenue) AS 'sumNetRevenue',
 		 			    SUM(i.gross_revenue) AS 'sumGrossRevenue'
 						FROM insights i
 						LEFT JOIN brand b ON i.brand_id = b.ID
@@ -171,10 +165,8 @@ class insights extends Model{
 		}
 		
 		for ($t=0; $t <sizeof($total); $t++) {
-			if ($total[$t]['sumNetRevenue'] || $total[$t]['sumGrossRevenue'] || $total[$t]['averageNumSpot']){
-				if ($total[$t]['sumNetRevenue']){
-					$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
-				}
+			if ($total[$t]['sumGrossRevenue'] || $total[$t]['averageNumSpot']){
+				
 				if ($total[$t]['sumGrossRevenue']){
 					$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
 				}
