@@ -24,19 +24,19 @@ class dataBase extends Model{
     }
 
     public function defaultConnection(){
-        return "dla";
+        return "DLA";
     }
 
     public function matchesConnection($something){
 
         if($something = "first"){
-            return "firstmatch";
+            return "firstMatch";
         }elseif($something = "second"){
-            return "secondmatch";
+            return "secondMatch";
         }elseif($something = "third"){
-            return "thirdmatch";
+            return "thirdMatch";
         }else{
-            return "dla";
+            return "DLA";
         }
 
     }

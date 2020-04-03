@@ -98,24 +98,27 @@ class rank extends Model{
 
         $p = new pRate();
 
-        if ($tableName == "cmaps") {
-            if ($currency[0]['name'] == "USD") {
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if($tableName == "cmaps"){
+                if ($currency[0]['name'] == "USD"){
+                    $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                }else{
+                    $pRate[$y] = 1.0;
+                }
             }else{
-                $pRate = 1.0;
+                if ($currency[0]['name'] == "USD"){
+                    $pRate[$y] = 1.0;
+                }else{
+                    $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                }
             }
-        }else{
+
             if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
+                $pRateDigital[$y] = 1.0;
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
+                $pRateDigital[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
             }
-        }
-        
-        if ($currency[0]['name'] == "USD") {
-            $pRateDigital = 1.0;
-        }else{
-            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(date('Y')));
+
         }
 
         $as = "total";
@@ -220,16 +223,16 @@ class rank extends Model{
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
                         if ($tableName == "cmaps") {
-                            $res[$y][$r]['total'] /= $pRate;
+                            $res[$y][$r]['total'] /= $pRate[$y];
                         }else{
-                            $res[$y][$r]['total'] *= $pRate;
+                            $res[$y][$r]['total'] *= $pRate[$y];
                         }
                     }
                 }
                 
                 if(is_array($res[$y]) && is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
-                        $resD[$y][$r]['total'] *= $pRateDigital;
+                        $resD[$y][$r]['total'] *= $pRateDigital[$y];
                     }
 
                     if ($res[$y]) {
@@ -273,7 +276,7 @@ class rank extends Model{
                     }
                 }elseif(is_array($resD[$y])){
                     for ($r=0; $r < sizeof($resD[$y]); $r++) { 
-                        $resD[$y][$r]['total'] *= $pRateDigital;
+                        $resD[$y][$r]['total'] *= $pRateDigital[$y];
 
                         if (!is_null($type2)) {
                             $obj = (object) [
@@ -292,9 +295,7 @@ class rank extends Model{
                 }
 
             }
-
         }else{
-
             $table = "$tableName $tableAbv";
             $tableDigital = "fw_digital f";
 
@@ -343,7 +344,7 @@ class rank extends Model{
                 array_push($colsValue, $years[$y]);
                 $where = $sql->where($columns, $colsValue);
                 $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
-
+                
                 if($tmpD){
                     array_push($colsValueDigital, $years[$y]);
                     $whereDigital = $sql->where($columnsDigital,$colsValueDigital);
@@ -360,21 +361,23 @@ class rank extends Model{
                 if ($tmpD) {
                     $resD[$y] = $sql->fetch($valuesD[$y], $from, $from);
                 }
-                
+
                 if(is_array($res[$y])){
+
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
                         if ($tableName == "cmaps") {
-                            $res[$y][$r]['total'] /= $pRate;
+                            $res[$y][$r]['total'] /= $pRate[$y];
                         }else{
-                            $res[$y][$r]['total'] *= $pRate;
+                            $temp = $res[$y][$r]['total'];
+                            $res[$y][$r]['total'] *= $pRate[$y];
                         }
                     }
                 }
-                
+
                 if ($tmpD) {
                     if(is_array($res[$y]) && is_array($resD[$y])){
                         for ($r=0; $r < sizeof($resD[$y]); $r++) { 
-                            $resD[$y][$r]['total'] *= $pRateDigital;
+                            $resD[$y][$r]['total'] *= $pRateDigital[$y];
                         }
 
                         if ($res[$y]) {
@@ -453,6 +456,7 @@ class rank extends Model{
                 }
             }
         }
+
 
         return $res;
 
