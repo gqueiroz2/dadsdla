@@ -24,7 +24,7 @@ class dataBase extends Model{
     }
 
     public function defaultConnection(){
-        return "DLA";
+        return "dla";
     }
 
     public function matchesConnection($something){
@@ -36,7 +36,7 @@ class dataBase extends Model{
         }elseif($something = "third"){
             return "thirdMatch";
         }else{
-            return "DLA";
+            return "dla";
         }
 
     }

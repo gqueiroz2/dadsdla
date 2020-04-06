@@ -6,7 +6,6 @@
 			use App\base;
 			use App\region;
 			$bs = new base();
-
 			$r = new region();
 			$db = new dataBase();
 			$default = $db->defaultConnection();
