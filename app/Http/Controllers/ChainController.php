@@ -80,7 +80,7 @@ class ChainController extends Controller{
 		$year = Request::get('year');
 
 		$spreadSheet = $i->base();
-/*
+
 		switch ($table) {
             case 'data_hub':
                 unset($spreadSheet[0]);
@@ -174,7 +174,7 @@ class ChainController extends Controller{
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
-		*/
+		
 
     }
 

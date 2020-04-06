@@ -85,17 +85,27 @@ class import extends Model{
 
 		    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
 
-		    $reader->setLoadSheetsOnly(["JAN", "FEV"]);
+		    $reader->setLoadSheetsOnly(["JAN"]);
 
 		    $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
-		    $sheet = $spreadsheet->getSheet($i);
-        	$sheetData = $sheet->toArray(null, true, true, true);
-		    //$sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+		    $loadedSheetNames = $spreadsheet->getSheetNames();
+
+		    var_dump($loadedSheetNames);
+
+		    $count = 0;
+
+		    foreach ($loadedSheetNames as $loadedSheetNames) {
+			    $sheetData[$count] = $spreadsheet->getActiveSheet($loadedSheetNames)->toArray();
+			    $count++;
+		    }
+
 		    //$sheetData = $spreadsheet->getSheet(0)->toArray();
 		}else{
-			$sheetData = false;
+			//$sheetData = false;
 		}
 
-		return $sheetData;
+		//return $sheetData;
+
 	}
 }
