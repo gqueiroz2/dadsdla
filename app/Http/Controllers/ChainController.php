@@ -75,7 +75,7 @@ class ChainController extends Controller{
     	$db = new dataBase();
 		$chain = new chain();		
 		$i = new import();
-		$con = $db->openConnection('firstMatch');	
+		$con = $db->openConnection('firstmatch');	
 		$table = Request::get('tableFirstChain');
 		$year = Request::get('year');
 
@@ -193,8 +193,8 @@ class ChainController extends Controller{
 
 		$default = $db->defaultConnection();
         $con = $db->openConnection($default);
-		$fCon = $db->openConnection('firstMatch');	
-		$sCon = $db->openConnection('secondMatch');	
+		$fCon = $db->openConnection('firstmatch');	
+		$sCon = $db->openConnection('secondmatch');	
     	$table = Request::get('tableSecondChain');
 
     	$year = Request::get('year');
@@ -227,8 +227,8 @@ class ChainController extends Controller{
 		$default = $db->defaultConnection();
         $con = $db->openConnection($default);	
 
-		$sCon = $db->openConnection('secondMatch');	
-		$tCon = $db->openConnection('thirdMatch');	
+		$sCon = $db->openConnection('secondmatch');	
+		$tCon = $db->openConnection('thirdmatch');	
     	$table = Request::get('tableThirdChain');
     	$year = Request::get('year');
 
@@ -262,7 +262,7 @@ class ChainController extends Controller{
 		$default = $db->defaultConnection();
         $con = $db->openConnection($default);
         		
-		$tCon = $db->openConnection('thirdMatch');	
+		$tCon = $db->openConnection('thirdmatch');	
     	$table = Request::get('tableToDLAChain');
     	$year = Request::get('year');
 		$truncate = (bool)intval(Request::get('truncate'));
