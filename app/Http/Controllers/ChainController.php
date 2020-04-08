@@ -35,7 +35,7 @@ class ChainController extends Controller{
         
     	$db = new dataBase();
 		
-		$connections = array('firstMatch','secondMatch','thirdMatch');
+		$connections = array('firstmatch','secondmatch','thirdmatch');
 
 		$truncateStatement = "TRUNCATE TABLE $table";
 
