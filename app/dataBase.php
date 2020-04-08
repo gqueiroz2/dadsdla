@@ -30,11 +30,11 @@ class dataBase extends Model{
     public function matchesConnection($something){
 
         if($something = "first"){
-            return "firstMatch";
+            return "firstmatch";
         }elseif($something = "second"){
-            return "secondMatch";
+            return "secondmatch";
         }elseif($something = "third"){
-            return "thirdMatch";
+            return "thirdmatch";
         }else{
             return "dla";
         }
