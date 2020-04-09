@@ -25,11 +25,10 @@ class testController extends Controller{
 		$chain = new chain();		
 		$i = new import();
 
-		$spreadSheet = $i->baseControle();
+		$spreadSheet = $i->base();
 
 		var_dump($spreadSheet);
 
-		var_dump(Request::all());
 
 	}
 

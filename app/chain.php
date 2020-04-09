@@ -552,6 +552,8 @@ class chain extends excel{
             $region = "Dominican Republic";
         }else if($region == 'EUROPE INTL.'){
             $region = "Europe";
+        }else if($region == 'MIAMI INTL.'){
+            $region = "Miami";
         }else{
             $region = ucfirst(strtolower($region));
         }

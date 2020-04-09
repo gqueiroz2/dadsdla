@@ -43,12 +43,6 @@ class import extends Model{
 		
 		$file_mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
-		var_dump($_FILES['file']['name']);
-		var_dump($_FILES['file']['type']);
-		var_dump($file_mimes);
-
-		var_dump(in_array($_FILES['file']['type'],$file_mimes));
-
 		if( isset($_FILES['file']['name']) && in_array($_FILES['file']['type'],$file_mimes) ){
 
 			$arr_file = explode('.', $_FILES['file']['name']);
@@ -102,10 +96,10 @@ class import extends Model{
 
 		    //$sheetData = $spreadsheet->getSheet(0)->toArray();
 		}else{
-			//$sheetData = false;
+			$sheetData = false;
 		}
 
-		//return $sheetData;
+		return $sheetData;
 
 	}
 }
