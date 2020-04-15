@@ -6,11 +6,10 @@
 			use App\base;
 			use App\region;
 			$bs = new base();
-
 			$r = new region();
 			$db = new dataBase();
-
-			$con = $db->openConnection("DLA");
+			$default = $db->defaultConnection();
+			$con = $db->openConnection($default);
 
 			date_default_timezone_set('America/Sao_Paulo');
 			$userName = Request::session()->get('userName'); 
