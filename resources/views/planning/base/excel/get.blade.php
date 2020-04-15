@@ -47,9 +47,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<select name="pattern" class="form-control">
-												<option value="id"> ID </option>
-											</select>
+											<label class="labelLeft"><span class="bold"> Brand: </span></label>
+											@if($errors->has('brand'))
+												<label style="color: red;">* Required</label>
+											@endif
+											{{$rP->brand($brand)}}
 								    	</div>
 								    </div>
 								</div>

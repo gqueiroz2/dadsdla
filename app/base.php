@@ -9,6 +9,12 @@ use App\sql;
 
 class base extends Model{
 
+    public function fixDate($d,$m,$y){
+        var_dump($d);
+        var_dump($m);
+        var_dump($y);
+    }
+
     public function sourceABVtoComplete($parametter){
 
         switch ($parametter) {
@@ -247,18 +253,20 @@ class base extends Model{
 
     public $monthWQ = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
 
-    public $month = array( array("JAN",1, "January","JAN"),
-                              array("FEB",2, "February","FEV"),
-                              array("MAR",3, "March","MAR"),
-                              array("APR",4, "April","ABR"),
-                              array("MAY",5, "May","MAI"),
-                              array("JUN",6, "June","JUN"),
-                              array("JUL",7, "July","JUL"),
-                              array("AUG",8, "August","AGO"),
-                              array("SEP",9, "September","SET"),
-                              array("OCT",10, "October","OUT"),
-                              array("NOV",11, "November","NOV"),
-                              array("DEC",12, "December","DEZ")
+    protected $fullMonthEN = array();          
+
+    public $month = array( array("JAN",1, "January","JAN","JANUARY"),
+                              array("FEB",2, "February","FEV","FEBRUARY"),
+                              array("MAR",3, "March","MAR","MARCH"),
+                              array("APR",4, "April","ABR","APRIL"),
+                              array("MAY",5, "May","MAI","MAY"),
+                              array("JUN",6, "June","JUN","JUNE"),
+                              array("JUL",7, "July","JUL","JULY"),
+                              array("AUG",8, "August","AGO","AUGUST"),
+                              array("SEP",9, "September","SET","SEPTEMBER"),
+                              array("OCT",10, "October","OUT","OCTOBER"),
+                              array("NOV",11, "November","NOV","NOVEMBER"),
+                              array("DEC",12, "December","DEZ","DECEMBER")
 
                             );
 

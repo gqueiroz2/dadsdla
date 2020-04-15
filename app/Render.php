@@ -246,7 +246,7 @@ class Render extends Model{
     }
 
     public function brand($brand){
-
+        
         echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
                 if ($brand[$i]["name"] != "DN") {
