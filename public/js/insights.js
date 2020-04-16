@@ -7,7 +7,7 @@
 
 		if (regionID != "") {
       
-      $('#sourceDataBase').change(function(){
+     /* $('#sourceDataBase').change(function(){
         var source = $(this).val();
         
         var sourceDataBase = $('#sourceDataBase').val();
@@ -27,7 +27,7 @@
           $('#especificNumberCol').css("display", "none");
           $('#especificNumber').css("display", "none");
         }
-      });
+      });*/
 
       $.ajax({
         url:"/ajax/adsales/newSalesRepByRegion",

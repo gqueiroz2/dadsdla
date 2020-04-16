@@ -21,7 +21,7 @@ class insightsRender extends Render{
 			$idNumber[$c] =  array(); 
 			for ($m=0; $m <sizeof($mtx); $m++) { 
 
-				$temp[$m] = array($mtx[$m]['copyTitle'], $mtx[$m]['houseNumber'], $mtx[$m]['client']);
+				$temp[$m] = array($mtx[$m]['copyKey'], $mtx[$m]['mediaItem'], $mtx[$m]['client']);
 
 
 				if ($client[$c] == $mtx[$m]['client']){
@@ -40,7 +40,7 @@ class insightsRender extends Render{
 			echo "<table style='width: 100%;'>";
 				echo "<tr>";
 					echo "<td class='darkBlue center'>Copy Title</td>";
-					echo "<td class='darkBlue center'>House Number</td>";
+					echo "<td class='darkBlue'>House Number</td>";
 				echo "</tr>";
 				echo "<tr class='darkBlue center'>";
 					echo "<td colspan='2'>".$client[$i]."</td>";
@@ -82,9 +82,9 @@ class insightsRender extends Render{
 						echo "<td style='width:10%;'>Agency</td>";
 						echo "<td style='width:10%;'>Product</td>";
 						echo "<td style='width:25%;'>Program</td>";
-						echo "<td style='width:5%;'>Num Spot</td>";
-						echo "<td style='width:3%;'>Net Revenue</td>";
+						echo "<td style='width:5%;'>Num Spot</td>";						
 						echo "<td style='width:3%;'>Revenue</td>";
+						echo "<td style='width:3%;'>Net Revenue</td>";
 					echo "</tr>";
 
 					echo "<tr style='font-size:14px;' class='darkBlue center'>";
@@ -92,8 +92,8 @@ class insightsRender extends Render{
 							echo "<td>Total</td>";
 							echo "<td colspan='6'></td>";
 							echo "<td>".number_format($total[$t]['averageNumSpot'])."</td>";
-							echo "<td>PENDENTE</td>";
 							echo "<td>".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td>".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
 						}	
 					echo"</tr>";
 
@@ -104,7 +104,6 @@ class insightsRender extends Render{
 						}else{
 							$color = 'medBlue';
 						}
-
 						echo "<tr class='$color center' style='font-size:13px;'>";
 							echo "<td>".$mtx[$m]['brand']."</td>";
 							echo "<td>".$mtx[$m]['salesRep']."</td>";
@@ -112,10 +111,10 @@ class insightsRender extends Render{
 							echo "<td>".$mtx[$m]['client']."</td>";
 							echo "<td>".$mtx[$m]['agency']."</td>";
 							echo "<td>".$mtx[$m]['product']."</td>";
-							echo "<td>".$mtx[$m]['program']."</td>";
+							echo "<td>".$mtx[$m]['scheduleEvent']."</td>";
 							echo "<td>".$mtx[$m]['numSpot']."</td>";
-							echo "<td>PENDENTE</td>";
 							echo "<td>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
+							echo "<td>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
 						echo"</tr>";
 					}
 		echo "</table>";

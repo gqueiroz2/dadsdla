@@ -56,7 +56,6 @@ class RenderChain extends Render{
             echo "<option value='cmaps'> CMAPS </option>";            
             echo "<option value='sf_pr'> SF P&R </option>";
             echo "<option value='insights'> INSIGHTS </option>";
-            echo "<option value='insights'> INSIGHTS-BTS </option>";
             echo "<option value='ytd'> YTD </option>";
             echo "<option value='ytdFN'> YTD FN </option>";
             echo "<option value='fw_digital'> FW Digital </option>";
@@ -72,7 +71,6 @@ class RenderChain extends Render{
             echo "<option value='data_hub'> DATA HUB </option>";
             echo "<option value='sf_pr'> SF P&R </option>";
             echo "<option value='insights'> INSIGHTS </option>";
-            echo "<option value='insights'> INSIGHTS-BTS </option>";
             echo "<option value='bts'> BTS </option>";
             echo "<option value='ytdFN'> YTD FN </option>";
 			echo "<option value='ytd'> YTD </option>";

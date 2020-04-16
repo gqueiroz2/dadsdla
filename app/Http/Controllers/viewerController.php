@@ -122,7 +122,7 @@ class viewerController extends Controller{
             array_push($brands, "16");
         }
 
-        $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency);
+        $mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion);
 
         $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion);
 
