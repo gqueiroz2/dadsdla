@@ -58,7 +58,7 @@ class import extends Model{
 		    
 		    $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
 		     
-		    $sheetData = $spreadsheet->getActiveSheet();//->toArray();
+		    $sheetData = $spreadsheet->getActiveSheet()->toArray();
 		}else{
 			$sheetData = false;
 		}
