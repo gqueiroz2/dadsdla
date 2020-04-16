@@ -246,7 +246,7 @@ class Render extends Model{
     }
 
     public function brand($brand){
-
+        
         echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
             for ($i = 0; $i < sizeof($brand); $i++) { 
                 if ($brand[$i]["name"] != "DN") {
@@ -372,7 +372,7 @@ class Render extends Model{
     }
 
     public function type2(){
-        echo "<select class='selectpicker' id='type2' name='type2[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%'>";
+        echo "<select class='selectpicker' id='type2' name='type2[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%' data-live-search='true'>";
                 echo "<option selected='true' value=''> Select the previous field </option>";    
         echo "</select>";
     }

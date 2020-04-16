@@ -24,7 +24,7 @@ class CheckElementsController extends Controller{
 
 		$fM = $db->matchesConnection("first");
 		$conFM = $db->openConnection($fM);	
-		
+
 		$table = Request::get('table');
 		$region = Request::get('region');
 		$newValues = $cE->newValues($con,$conFM,$region,$table);
@@ -44,9 +44,7 @@ class CheckElementsController extends Controller{
 		$table = Request::get('tableToCheck');
 		
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
-		//var_dump($table);
-		//var_dump($newValues);
-		
+
 		echo "<center>
 				<table class='table table-triped'>";
 		echo "<tr> 

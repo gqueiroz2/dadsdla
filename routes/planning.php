@@ -21,6 +21,13 @@ Route::group(['middleware'=>'auth'],function(){
 Route::group(['prefix' => 'planning'],function(){
 	Route::get('/','planningController@home')
 						->name('planningHome');
-	
+
+	Route::group(['prefix' => 'base'],function(){
+		Route::get('rollOutExcel','rollOutExcelController@excelG')
+							->name('rollOutExcelG');
+		Route::post('rollOutExcel','rollOutExcelController@excelP')
+							->name('rollOutExcelP');		
+
+	});	
 
 });

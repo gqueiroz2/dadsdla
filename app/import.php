@@ -65,4 +65,41 @@ class import extends Model{
 
 		return $sheetData;
 	}
+
+	public function baseControle(){
+
+		$import = new importSpreadsheet();
+		
+		$file_mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+		if( isset($_FILES['file']['name']) && in_array($_FILES['file']['type'],$file_mimes) ){
+
+			$arr_file = explode('.', $_FILES['file']['name']);
+		    $extension = end($arr_file);
+
+		    $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+
+		    $reader->setLoadSheetsOnly(["JAN"]);
+
+		    $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
+
+		    $loadedSheetNames = $spreadsheet->getSheetNames();
+
+		    var_dump($loadedSheetNames);
+
+		    $count = 0;
+
+		    foreach ($loadedSheetNames as $loadedSheetNames) {
+			    $sheetData[$count] = $spreadsheet->getActiveSheet($loadedSheetNames)->toArray();
+			    $count++;
+		    }
+
+		    //$sheetData = $spreadsheet->getSheet(0)->toArray();
+		}else{
+			$sheetData = false;
+		}
+
+		return $sheetData;
+
+	}
 }
