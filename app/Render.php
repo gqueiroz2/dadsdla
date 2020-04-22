@@ -258,6 +258,20 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function brandSS($brand){
+        
+        echo "<select id='brandSS' class='selectpicker' name='brand' data-size='7' data-width='100%'>";
+            echo "<option value=''> Select </option>";
+            for ($i = 0; $i < sizeof($brand); $i++) { 
+                if ($brand[$i]["name"] != "DN") {
+                    $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                    echo "<option value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
+                }
+            }
+            
+        echo "</select>";
+    }
+
     public function brandViewer(){
 
         echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";

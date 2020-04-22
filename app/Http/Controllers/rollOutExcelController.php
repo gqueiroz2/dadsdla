@@ -52,19 +52,25 @@ class rollOutExcelController extends Controller{
 		$ro = new rollOut();
 		$default = $db->defaultConnection();
         $conDLA = $db->openConnection($default);
-        $b = new brand();
-        $brand = $b->getBrand($conDLA);
+        
+        $brandTmp = Request::get('brand');
+        $brand = $base->handleBrandSS($brandTmp);
+
 		$pattern = Request::get('pattern');
-		$spreadSheet = $i->base();
+
+		$spreadSheet = $i->spread();
 
 		$mergedCells = $ro->getMergedCells($spreadSheet);
 		$cellsToFix = $ro->workOnMergedCells($mergedCells,$column);
 		$newSpreadSheet = $ro->spreadSheetToMatrix($spreadSheet,$column);
 		$newSpreadSheet = $ro->handleExcel($pattern,$newSpreadSheet,$column,$cellsToFix);
 
-		$structure = $ro->structureSpreadsheet($newSpreadSheet,$column);
+		$structure = $ro->structureSpreadsheet($newSpreadSheet,$column,$brand);
 
-		return view('planning.base.excel.post',compact('rC','rP','brand','spreadSheet','column','newSpreadSheet'));
+		$structureHead = array("program","brand","date","dayOfTheWeek","startHour","endHour");
+		$structureHeadTable = array("Program","Brand","Date","Day Of The Week","Start Hour","End Hour");
+
+		return view('planning.base.excel.post',compact('rC','rP','spreadSheet','column','newSpreadSheet','structure','structureHead','structureHeadTable'));
 
 	}
 

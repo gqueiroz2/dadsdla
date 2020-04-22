@@ -9,10 +9,16 @@ use App\sql;
 
 class base extends Model{
 
-    public function fixDate($d,$m,$y){
-        var_dump($d);
-        var_dump($m);
-        var_dump($y);
+    public function fixDate($y,$m,$d){
+        if($d < 10){
+            $d = "0".$d;
+        }
+
+        if($m < 10){
+            $m = "0".$m;
+        }
+
+        return ($y."-".$m."-".$d);
     }
 
     public function sourceABVtoComplete($parametter){
@@ -824,6 +830,13 @@ class base extends Model{
         }
 
         return $brands;
+    }
+
+    public function handleBrandSS($tmp){
+        
+        $brand = json_decode(base64_decode($tmp));
+        return $brand;
+
     }
 
     public function generateDiv($con,$pr,$region,$year,$currencyID){

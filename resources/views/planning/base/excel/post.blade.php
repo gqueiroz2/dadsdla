@@ -8,8 +8,9 @@
 @if($userLevel == 'SU')
 	<div class="container-fluid">
 		<div class="row justify-content-center">
-			<div class="col">
+			<div class="col-8">
 				<?php
+					/*
 					echo '<table class="table table-bordered">';
 					for ($s=0; $s < sizeof($newSpreadSheet); $s++) { 
 						echo "<tr>";
@@ -19,6 +20,25 @@
 						echo "</tr>";
 					}
 					echo '</table>';
+					*/
+
+					echo '<table class="table table-bordered">';
+						echo "<tr>";
+						for ($i=0; $i < sizeof($structureHead); $i++) { 
+							echo "<td>".$structureHeadTable[$i]."</td>";
+						}
+						echo "</tr>";
+
+					for ($s=0; $s < sizeof($structure); $s++) { 
+						echo "<tr>";
+						for ($t=0; $t < sizeof($structure[$s]); $t++) { 
+							echo "<td>".$structure[$s][$structureHead[$t]]."</td>";
+						}
+						echo "</tr>";
+					}
+					echo '</table>';
+
+
 				?>
 			</div>
 		</div>
