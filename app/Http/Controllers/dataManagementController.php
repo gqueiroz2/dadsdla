@@ -19,9 +19,110 @@ use App\matchingClientAgency;
 use App\sql;
 use App\pRate;
 use App\emailDivulgacao;
+use App\import;
+use App\bvBand;
+use App\chain;
 
 class dataManagementController extends Controller{
     
+    public function agencyGroupCheck(){
+        $db = new dataBase();
+        $sql = new sql();
+        $conFM = $db->openConnection('firstmatch');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $ag = new agency();
+        $table = 'bv_band';
+        $from = array("agency_group");
+
+        $agencyG = $ag->getAgencyGroupBrazil($con);
+
+        $select = "SELECT DISTINCT agency_group FROM $table ORDER BY agency_group ASC";
+
+        $res = $conFM->query($select);
+
+        $tmp = $sql->fetch($res,$from,$from);
+
+        for ($t=0; $t < sizeof($tmp); $t++){ 
+            $list[$t] = $tmp[$t]['agency_group'];
+            $seek[$t] = "SELECT name FROM agency_group_unit WHERE (name = '".$list[$t]."')";
+            $resCheck[$t] = $con->query($seek[$t]);
+            if($resCheck[$t]->num_rows > 0){
+                $check[$t] = true;
+            }else{
+                $check[$t] = false;
+            }
+        }   
+
+        for ($t=0; $t < sizeof($tmp); $t++){ 
+            if(!$check[$t]){
+                echo "<div class='row justify-content-center mt-2'>";
+                    echo "<div class='col'>";
+                        echo "<select class='form-control' name='agencyGroup' data-live-search='true'>";
+                            for ($aa=0; $aa < sizeof($agencyG); $aa++) { 
+                                echo "<option value=''> Select </option>";
+                                echo "<option value=".$agencyG[$aa]['agencyGroup'].">".$agencyG[$aa]['agencyGroup']."</option>";
+                            } 
+                        echo "</select>";
+                    echo "</div>";           
+                    echo "<div class='col'>";         
+                        echo "<input type='text' class='form-control' value='".$list[$t]."'>";        
+                    echo "</div>";
+                echo "</div>";
+            }
+        }
+
+    }
+
+    public function insertBvBandG(){
+        return view('dataManagement.insert.bvBandGet');
+    }
+
+    public function insertBvBandP(){
+
+        $bb = new bvBand();
+        $i = new import();
+        $chain = new chain();
+        $db = new dataBase();
+        
+        $con = $db->openConnection('firstmatch');
+
+        $table = "bv_band";
+
+        $spreadSheet = $i->base();
+        unset($spreadSheet[0]);
+        $spreadSheet = array_values($spreadSheet);
+
+        $column = $bb->column;
+        $into = $chain->into($column); 
+
+        $mtx = $bb->workOnSheet($spreadSheet);
+        $mtx = $bb->fixColumnWorkSheet($column,$mtx);
+
+        $count = 0;
+
+        for ($m=0; $m < sizeof($mtx); $m++) { 
+            $values[$m] = $chain->values($mtx[$m],$column);
+
+            $ins[$m] = "INSERT INTO $table ($into) VALUES (".$values[$m].")";
+            
+            if($con->query($ins[$m]) === TRUE ){
+                $count ++;   
+            }else{
+                var_dump($spreadSheet[$m]);
+                var_dump($ins[$m]);
+                echo "<pre>".($ins[$m])."</pre>";
+                var_dump($con->error);
+            } 
+            
+        }
+
+        if($count == sizeof($mtx)){
+            return view('dataManagement.insert.bvBandPost');
+        }
+    }
+
+
     public function dataCurrentThroughtG(){
         
         $db = new dataBase();
@@ -243,9 +344,7 @@ class dataManagementController extends Controller{
         $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
-
     	return view('dataManagement.userGet',compact('user','userType','region','render'));
-
     }
 
     public function userEditFilter(){
@@ -792,42 +891,6 @@ class dataManagementController extends Controller{
         var_dump($res);
     }
 
-    /*END OF BRAND FUNCTIONS*/
-/*
-    public function truncateGet(){
-
-        $queries = new queries();
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-
-        return view('dataManagement.truncateCheck');
-    }
-
-    public function trueTruncateGet(){
-
-        $queries = new queries();
-        $db = new dataBase();
-        $con = $db->openCOnnection("DLA");
-
-        $queries->truncateAll($con);
-
-        return view('dataManagement.home');
-    }
-*/
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
     
 }

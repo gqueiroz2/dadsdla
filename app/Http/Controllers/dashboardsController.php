@@ -15,6 +15,77 @@ use App\makeChart;
 
 class dashboardsController extends Controller{
    
+   public function dashboardBVGet(){
+      $db = new dataBase();
+      $default = $db->defaultConnection();
+      $con = $db->openConnection($default);
+      $region = new region();
+      $salesRegion = array(
+         array(
+            'id' => '1',
+            'name' => 'Brazil',
+            'role' => 'Regional Office'
+         )
+      );
+
+      $currency = new pRate();
+      $currencies = $currency->getCurrency($con);
+
+      $b = new brand();
+      $brands = $b->getBrand($con);
+      $render = new renderDashboards();
+        
+      return view("adSales.dashboards.dashboardBVGet", compact('region','salesRegion', 'currencies', 'brands', 'render'));
+   }
+
+   public function dashboardBVPost(){
+      $db = new dataBase();
+      $region = new region();
+      $dash = new dashboards();
+      $currency = new pRate();
+      $b = new brand();      
+      $render = new renderDashboards();
+      $p = new pRate();
+      $mc = new makeChart();
+      $base = new base();
+      $default = $db->defaultConnection();
+      $con = $db->openConnection($default);
+      $salesRegion = array(
+         array(
+            'id' => '1',
+            'name' => 'Brazil',
+            'role' => 'Regional Office'
+         )
+      );
+      $currencies = $currency->getCurrency($con);      
+      $brands = $b->getBrand($con);      
+      $regionID = Request::get("region");
+      $type = Request::get("type");
+      $baseFilter = json_decode( base64_decode( Request::get("baseFilter") ));
+      $secondaryFilter = Request::get("secondaryFilter");
+
+      if($type == "agency"){
+         $sub = "agency";
+         $subT = "Agência";
+      }else{
+         $sub = "agencyGroup";
+         $subT = "Grupo de Agência";
+      }
+
+         $choice = $baseFilter->$sub;
+
+      $currency = Request::get("currency");
+      $value = Request::get("value");
+
+      $cYear = intval(date("Y"));
+      $years = array($cYear);
+      
+      $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,"cmaps");
+      $graph = $dash->excelBV($base,$mc,$mountBV,$cYear);
+
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','choice','cYear','sub','subT'));
+   }
+
 	public function overviewGet(){
 
 		$db = new dataBase();
@@ -78,7 +149,7 @@ class dashboardsController extends Controller{
       $ppYear = $pYear - 1;
       $years = array($cYear,$pYear,$ppYear);
 
-      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years);
+      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,"ytd");
 
       $last3YearsChild = $handle['last3YearsChild'];
       $last3YearsByMonth = $handle['last3YearsByMonth'];

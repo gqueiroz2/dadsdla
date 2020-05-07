@@ -17,3 +17,6 @@ Route::post('base','viewerController@basePost')->name('basePost');
 Route::get('insights','viewerController@insightsGet')->name('insightsGet');
 Route::post('insights','viewerController@insightsPost')->name('insightsPost');
 
+Route::get('saveRead','viewerController@saveCMAPSReadGet')->name('saveCMAPSReadGet');
+Route::post('saveRead','viewerController@saveCMAPSReadPost')->name('saveCMAPSReadPost');
+

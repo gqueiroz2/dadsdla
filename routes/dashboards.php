@@ -13,12 +13,21 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'dashboards'],function(){
+
 		Route::group(['prefix'=>'overview'],function(){
 			Route::get('/','dashboardsController@overviewGet')
 							->name('overviewGet');
 			Route::post('/','dashboardsController@overviewPost')
 								->name('overviewPost');
 		});
+
+		Route::group(['prefix'=>'bv'],function(){
+			Route::get('/','dashboardsController@dashboardBVGet')
+							->name('dashboardBVGet');
+			Route::post('/','dashboardsController@dashboardBVPost')
+								->name('dashboardBVPost');
+		});
+
 	});
 });
 

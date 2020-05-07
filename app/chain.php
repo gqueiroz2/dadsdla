@@ -31,12 +31,13 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
-        
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-        
+        /*
         if($table == "insights"){
-            //array_push($columns, 'year');
+            array_push($columns, 'year');
         }
+        */
+
+        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
 
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
@@ -1282,7 +1283,12 @@ class chain extends excel{
                             }elseif($columns[$c] == 'obs'){
                                 $spreadSheetV2[$s][$columns[$c]] = "OBS";
                             }elseif($columns[$c] == 'year'){
-                                $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
+                                if($table == "insights"){
+                                    $x = date('Y');
+                                    $spreadSheetV2[$s][$columns[$c]] = $x;
+                                }else{
+                                    $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
+                                }
                             }elseif($columns[$c] == 'month'){
                                 if( $table && ($table == "ytdFN") ){
                                     //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);

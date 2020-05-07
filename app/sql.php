@@ -14,14 +14,14 @@ class sql extends Model{
     }
 
     public function select($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false , $groupBy = false){    	
-        $sql = "SELECT $columns FROM $table $join $where $groupBy ORDER BY 1 $limit";
+        $sql = "SELECT $columns FROM $table $join $where $groupBy ORDER BY $order_by $limit";
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;
     }
 
     public function selectDistinct($con, $columns, $table, $join = null, $where = null, $order_by = 1, $limit = false , $groupBy = false){      
-        $sql = "SELECT DISTINCT $columns FROM $table $join $where $groupBy ORDER BY 1 $limit";
+        $sql = "SELECT DISTINCT $columns FROM $table $join $where $groupBy ORDER BY $order_by $limit";
         //echo "<pre>".$sql."</pre><br>";
         $res = $con->query($sql);
         return $res;

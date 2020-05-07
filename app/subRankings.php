@@ -7,12 +7,136 @@ use App\rank;
 
 class subRankings extends rank{
     
+    public function getNewSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $auxName, $secondaryFilter=false){
+        if ($type == "agencyGroup") {
+            $filter = "agency_group_id";
+        }elseif($type == "client"){
+            $filter = "agency_id";
+        }else{
+            $filter = "agency_id";
+        }
+
+        $brands_id = array();
+        $brands_idD = array();
+
+        for ($b=0; $b < sizeof($brands); $b++) {
+            if ($brands[$b][0] == '9') {
+                array_push($brands_idD, '9');
+                array_push($brands_idD, '13');
+                array_push($brands_idD, '14');
+                array_push($brands_idD, '15');
+                array_push($brands_idD, '16');
+            }elseif ($brands[$b][0] == '10') {
+                array_push($brands_idD, '10');
+            }else{
+                array_push($brands_id,$brands[$b][0]);
+            }
+        }
+
+        $sql = new sql();
+
+        $p = new pRate();
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
+        if ($currency[0]['name'] == "USD") {
+            $pRateDigital = 1.0;
+        }else{
+            $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }
+
+        $as = "total";
+
+        $tableAbv = "a";
+        $leftAbv = "b";
+
+        $a = new agency();
+
+        if ($type == "agencyGroup") {
+            $oldAgency = $a->getAgencyGroupID($con, $sql, $filterValue, $region);
+            $aux = "client";
+        }elseif($type == "client"){
+            $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);
+            $aux = "agency";
+        }else{
+            $oldAgency = $a->getAllAgenciesByName($con, $sql, $filterValue, $auxName);
+            $aux = "client";
+        }
+
+        if (is_array($oldAgency)) {
+            for ($a=0; $a < sizeof($oldAgency); $a++) { 
+                $agency[$a] = $oldAgency[$a]['id'];
+            }    
+        }else{
+            $agency = $oldAgency;
+        }
+
+        $valueD = $value."_revenue";
+        $columnsD = array("region_id","brand_id","month","year",$filter);
+        $colsValueD = array($region,$brands_idD,$months,$year,$agency);
+
+        if ($tableName == "ytd") {
+            $value .= "_revenue_prate";
+            $columns = array("sales_representant_office_id", $filter, "brand_id", "month", "year");
+            $colsValue = array($region, $agency, $brands_id, $months, $year);
+        }else{
+            $columns = array($filter,"brand_id", "month", "year");
+            $colsValue = array($agency,$brands_id, $months, $year);
+        }
+
+        if ($secondaryFilter) {
+            array_push($columns, $aux."_id");
+            array_push($colsValue, $secondaryFilter);
+            array_push($columnsD, $aux."_id");
+            array_push($colsValueD, $secondaryFilter);
+        }
+
+        $table = "$tableName $tableAbv";
+        if($type == "client"){
+            $leftName = "agency";
+            array_push($columns, $type."_id");
+            array_push($columnsD, $type."_id");
+
+            $c = new client();
+            $val = $c->getClientIDByRegion($con,$sql,$filterValue,array($region));
+            array_push($colsValue, $val);
+            array_push($colsValueD, $val);
+        }
+
+        $tmp = $tableAbv.".".$leftName."_id AS '".$leftName."ID', ".$leftAbv.".name AS '".$leftName."', SUM($value) AS $as";
+
+        $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$leftName."_id";
+
+        if($type == "agencyGroup")
+            $join .= " LEFT JOIN agency i ON i.ID = ".$tableAbv.".agency_id LEFT JOIN agency_group j ON j.ID = i.agency_group_id";
+
+        $name = $leftName."_id";
+        $names = array($leftName."ID", $leftName, $as);
+
+        $where = $sql->where($columns, $colsValue);
+        
+        $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+        $from = $names;
+
+        $res = $sql->fetch($values[$y], $from, $from);
+        if (is_array($res)) {
+            for ($r=0; $r < sizeof($res); $r++) { 
+                $res[$r]['total'] *= $pRate;
+            }
+        }
+        
+        return $res;
+    }
+
     public function getSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $auxName, $secondaryFilter=false){
         /*
             $lefName = LEFT JOIN
             $type no caso de overviw eh a ROOT
             $filterValue = nome da agencia
-
         */
 
         if ($type == "agencyGroup") {
@@ -103,7 +227,6 @@ class subRankings extends rank{
         }
 
         $table = "$tableName $tableAbv";
-
         if($type == "client"){
             $leftName = "agency";
             array_push($columns, $type."_id");
@@ -185,8 +308,27 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
+    public function getNewSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $auxName, $secondaryFilter=false){
+        if ($type == "agencyGroup") {
+            $name = "client";
+        }elseif ($type == "client") {
+            $name = "agency";
+        }else{
+            $name = "client";
+        }
+
+        for ($y=0; $y < sizeof($years); $y++) {
+            if ($secondaryFilter) {
+                $res[$y] = $this->getNewSubValues($con, "cmaps", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName, $secondaryFilter);    
+            }else{
+                $res[$y] = $this->getNewSubValues($con, "cmaps", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName);
+            }
+        }
+
+        return $res;
+    }
+
     public function getSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $auxName, $secondaryFilter=false){
-        
         if ($type == "agencyGroup") {
             $name = "agency";
         }elseif ($type == "client") {

@@ -345,6 +345,58 @@ class ajaxController extends Controller{
 
     }
 
+    public function BVBaseFilter(){
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $bs = new base();
+        $type = Request::get('type');
+        $regionID = Request::get('region');
+
+        $years = false;
+
+        switch ($type) {
+
+            case 'client':
+                $clss = new client();
+                $base = $clss->getClientByRegion($con,array($regionID),$years);
+                $tralala = "clientGroup";
+                break;
+            default:
+                $clss = new agency();
+                if($type == "agency"){
+                    $base = $clss->getAgencyByRegionCMAPS($con,$years);
+                    $tralala = "agencyGroup";
+                }else{
+                    $base = $clss->getAgencyGroupByRegionCMAPS($con,$years);
+                    $tralala = "region";
+                }
+                break;
+        }
+
+        for ($bb=0; $bb < sizeof($base); $bb++) { 
+            
+            $forVerify[$bb] = $base[$bb]['id'];
+
+        }
+
+        $verified = $bs->verifyOnBaseCMAPS($con,$type,$forVerify);
+
+        echo "<option value=''> Select </option>";
+        for ($b=0; $b < sizeof($base); $b++) { 
+            if($verified[$b]){
+                echo "<option value=\"". base64_encode(json_encode($base[$b]))."\">"
+                    .$base[$b][$type];
+                if($type != "client" && $type != 'agencyGroup'){
+                    echo " - ".$base[$b][$tralala];
+                }
+                echo "</option>";
+            }
+        }
+ 
+    }
+
     public function baseFilter(){
         $db = new dataBase();
 
@@ -533,7 +585,7 @@ class ajaxController extends Controller{
             $db = new dataBase();
 
             $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
+            $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -970,6 +1022,12 @@ class ajaxController extends Controller{
             echo "<option value='sector'> Sector </option>";
             echo "<option value='category'> Category </option>";
         }
+    }
+
+    public function typeByRegionBV(){       
+        echo "<option value=''> Select </option>";
+        echo "<option value='agencyGroup'> Agency Group </option>";    
+        echo "<option value='agency'> Agency </option>";
     }
 
     public function firstPosYear(){

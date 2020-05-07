@@ -10,27 +10,98 @@ use App\brand;
 use App\rankings;
 class dashboards extends rank{
     
-	public function mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years){
-		$sr = new subRankings();
+    public function clearBrands($brand){
+        $size = sizeof($brand);
 
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
+        for ($b=0; $b < $size; $b++) { 
+            if($brand[$b]['value'] <= 0){
+                unset($brand[$b]);
+            }
+        }
 
-	   	$table = "ytd";
+        $brand = array_values($brand);
 
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
+        return $brand;
+    }
 
+    public function excelBV($base,$mc,$handle,$year){
+
+        $child = $handle['child'];
+        $byBrand = $this->clearBrands($handle['byBrand']);
+        $byMonth = $handle['byMonth'];
+        for ($b=0; $b <sizeof($byBrand) ; $b++) { 
+            $brandColor[$b] = $base->getBrandColor($byBrand[$b]['brand']);
+            $brandTextColor[$b] = $base->getBrandTextColor($byBrand[$b]['brand']);
+        }
+        
+        $childChart = $mc->bvChild($child,$year);
+        $byMonthChart = $mc->bvMonth($byMonth,$year);
+        $byBrandChart = $mc->bvBrand($byBrand,$year);
+
+        $charts = array(
+                            'child' => $childChart,
+                            'byMonth' => $byMonthChart,
+                            'byBrand' => array(
+                                                'graph' => $byBrandChart,
+                                                'brandColor' => $brandColor,
+                                                'brandTextColor' => $brandTextColor
+                                              )
+                        );
+
+        return $charts;
+
+    }
+
+    public function mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,$kind){
+        $sr = new subRankings();
+        $table = $kind;
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
+        if($currencyName == "USD"){ $pRate = 1.0; }else{ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}
+        
+        if($value == "gross"){
+            $column = "gross";
+        }else{
+            $column = "net";  
+        }        
+        switch ($type) {
+            default:
+                if($type == "agency"){          
+                    $current = $this->current($con,"agency",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $child = $this->child($con,"client","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byBrand = $this->byBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byMonth = $this->byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                }else{
+                    $current = $this->current($con,"agencyGroup",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $child = $this->child($con,"agency","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byBrand = $this->byBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byMonth = $this->byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    
+                }
 
+                break;
+        }
+       
+        $rtr = array( "current" => $current,
+                      "child" => $child,                      
+                      "byBrand" => $byBrand,
+                      "byMonth" => $byMonth
+                    );
+
+        return $rtr;
+
+    }
+
+	public function mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,$kind){
+		$sr = new subRankings();
+	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
+	   	$table = $kind;
+	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
+        $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
         if ($currencyName == "USD") {
             $pRate = 1.0;
         }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
         }
-
         if($value == "gross"){
             $column = "gross_revenue_prate";
         	$columnD = "gross_revenue";
@@ -38,7 +109,6 @@ class dashboards extends rank{
             $column = "net_revenue_prate";  
         	$columnD = "net_revenue";	
         }        
-
 	    switch ($type) {
 	    	case 'client':
     			$last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
@@ -65,20 +135,6 @@ class dashboards extends rank{
 
 	    		break;
 	    }
-
-        
-        /*var_dump("last3YearsRoot");
-        var_dump($last3YearsRoot);
-        var_dump("last3YearsChild");
-        var_dump($last3YearsChild);
-        var_dump("last3YearsByMonth");
-        var_dump($last3YearsByMonth);
-        var_dump("last3YearsByBrand");
-        var_dump($last3YearsByBrand);
-        var_dump("last3YearsByProduct");
-        var_dump($last3YearsByProduct);
-        var_dump("------------------------------------------------------------");*/
-
 
 	    $rtr = array( "last3YearsRoot" => $last3YearsRoot,
 	    			  "last3YearsChild" => $last3YearsChild,
@@ -143,7 +199,56 @@ class dashboards extends rank{
 		return $rtr;
 	}
 
-	public function last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD){
+    public function byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
+        $sql = new sql(); 
+        $months = $this->months; 
+
+        if (is_array($secondaryFilter)) {
+            $secondaryFilter = implode(",", $secondaryFilter);
+        }
+
+        $year = $years[0];
+
+        for ($m=0; $m < sizeof($months); $m++) { 
+            
+            if($type == "agencyGroup"){
+                $smt = "agency_group";
+                $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
+                $where = "WHERE(year = \"".$year."\")
+                            AND (month = \"".$months[$m]."\")
+                            AND ( ".$smt."_id = \"".$baseFilter->id."\")";
+                
+            }elseif ($type == "agency") {
+                $join = false;
+                $where = "WHERE(year = \"".$year."\")
+                            AND (month = \"".$months[$m]."\")
+                            AND ( ".$type."_id = \"".$baseFilter->id."\")";
+                
+            }else{
+                $join = false;
+                $where = "WHERE(year = \"".$year."\")
+                            AND (month = \"".$months[$m]."\")
+                            AND ( ".$type."_id = \"".$baseFilter->id."\")";
+                
+            }
+
+            $some[$m] = "SELECT SUM($column) AS mySum 
+                            FROM $table y
+                            $join
+                            $where";
+
+            $res[$m] = $con->query($some[$m]);
+
+            $from = array("mySum");
+            $values[$m]['month'] = $months[$m];
+            $values[$m]['value'] = doubleval($sql->fetch($res[$m],$from,$from)[0]['mySum']);//*$pRate;
+
+        }
+
+        return $values;
+    }
+
+	public function byBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
 		$sql = new sql(); 
 		$brands = $this->getBrands($con);
 
@@ -151,12 +256,55 @@ class dashboards extends rank{
             $secondaryFilter = implode(",", $secondaryFilter);
         }
 
-		for ($y=0; $y < sizeof($years); $y++) { 
-		    for ($b=0; $b < sizeof($brands); $b++) { 
-		    	
-		    	if($type == "agencyGroup"){
-		    		$smt = "agency_group";
-		    		$join = "LEFT JOIN agency a ON a.ID = y.agency_id";
+        $year = $years[0];
+
+	    for ($b=0; $b < sizeof($brands); $b++) { 
+	    	if($type == "agencyGroup"){
+	    		$smt = "agency_group";
+	    		$join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                         LEFT JOIN agency_group c ON c.ID = a.agency_group_id";
+                $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
+                            AND (year = '$year')
+                            AND ( ".$smt."_id = \"".$baseFilter->id."\")";                    
+	    	}elseif ($type == "agency") {
+                $join = false;
+                $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
+                        AND (year = '$year')
+                        AND ( ".$type."_id = \"".$baseFilter->id."\")";    
+            }else{
+	    		$join = false;
+                $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
+                        AND (year = '$year')
+                        AND ( ".$type."_id = \"".$baseFilter->id."\")";    
+	    	}	
+            
+            $some[$b] = "SELECT SUM($column) AS mySum 
+                        FROM $table y
+                        $join
+                        $where";              
+	    	$res[$b] = $con->query($some[$b]);
+	    	$from = array("mySum");
+            $values[$b]['brand'] = $brands[$b][1];            
+	    	$values[$b]['value'] = doubleval($sql->fetch($res[$b],$from,$from)[0]['mySum']);            
+	    }
+ 
+    	return $values;
+	}
+
+    public function last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD){
+        $sql = new sql(); 
+        $brands = $this->getBrands($con);
+
+        if (is_array($secondaryFilter)) {
+            $secondaryFilter = implode(",", $secondaryFilter);
+        }
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                
+                if($type == "agencyGroup"){
+                    $smt = "agency_group";
+                    $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
                                     AND (brand_id != \"10\")
@@ -168,7 +316,7 @@ class dashboards extends rank{
                                     AND ( ".$smt."_id = \"".$baseFilter->id."\")
                                     AND (agency_id IN (".$secondaryFilter."))";
                     }
-		    	}elseif ($type == "agency") {
+                }elseif ($type == "agency") {
                     $join = false;
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
@@ -182,7 +330,7 @@ class dashboards extends rank{
                                 AND (client_id IN (".$secondaryFilter."))";    
                     }
                 }else{
-		    		$join = false;
+                    $join = false;
                     if ($brands[$b][0] == '9') {
                         $where = "WHERE(year = \"".$years[$y]."\")
                                 AND (brand_id != \"10\")
@@ -194,7 +342,7 @@ class dashboards extends rank{
                                 AND ( ".$type."_id = \"".$baseFilter->id."\")
                                 AND (agency_id IN (".$secondaryFilter."))";    
                     }
-		    	}	    	
+                }           
 
                 if ($brands[$b][0] == '9' || $brands[$b][0] == '10') {
                     $some[$y][$b] = "SELECT SUM($columnD) AS mySum 
@@ -208,14 +356,14 @@ class dashboards extends rank{
                                 $where";
                 }
 
-		    	$res[$y][$b] = $con->query($some[$y][$b]);
-		    	$from = array("mySum");
-		    	$values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
-		    }
-    	}
+                $res[$y][$b] = $con->query($some[$y][$b]);
+                $from = array("mySum");
+                $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+            }
+        }
 
-    	return $values;
-	}
+        return $values;
+    }
 
 	public function last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD){
 		$sql = new sql(); 
@@ -272,7 +420,25 @@ class dashboards extends rank{
     	return $values;
 	}
 
-    public function last3Years($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
+    public function current($con,$what,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
+        $sql = new sql();    
+
+        $brands = $this->getBrands($con);
+        $months = $this->months;
+        $cr = $p->getCurrency($con, array($currency));
+        $null = null;
+        if ($type == "agencyGroup") {
+            $somekind = $sr->getAllNewValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter,$baseFilter);
+        }else{
+            $somekind = $sr->getAllNewValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter,$baseFilter);
+        }
+
+        $value = $somekind[0][0];
+            
+        return $value;
+    }
+
+    public function child($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
     	$sql = new sql();    
 
 	    $brands = $this->getBrands($con);
@@ -281,22 +447,50 @@ class dashboards extends rank{
 	    $null = null;
 
 	    if($kind == "root"){
-	    	if ($type == "agencyGroup") {
+	    	if($type == "agencyGroup")
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter);
+	    	else
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter);
+	    }else{
+	    	$filter = $baseFilter->$type;
+
+            if($type == "agency")
+                $auxFilter = $baseFilter->agencyGroup;
+            else
+                $auxFilter = "teste";            
+
+	    	$values = $sr->getNewSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter)[0];
+            
+	    }
+	    
+        return $values;
+    }
+
+    public function last3Years($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
+        $sql = new sql();    
+
+        $brands = $this->getBrands($con);
+        $months = $this->months;
+        $cr = $p->getCurrency($con, array($currency));
+        $null = null;
+
+        if($kind == "root"){
+            if ($type == "agencyGroup") {
                 $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter);
                 $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency");
-	    	}else{
+            }else{
                 $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter);
                 $somekind2 = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null);
-	    	}
+            }
             
             $filterValues = $sr->filterValues2($somekind, array($baseFilter), $type);
 
-	    	$values = $this->assembler($somekind,array($baseFilter), $years, $type, $filterValues, $somekind2);
+            $values = $this->assembler($somekind,array($baseFilter), $years, $type, $filterValues, $somekind2);
 
-	    	unset($values[1]);
-	    	
-	    }else{
-	    	$filter = $baseFilter->$type;
+            unset($values[1]);
+            
+        }else{
+            $filter = $baseFilter->$type;
 
             if ($type == "agency") {
                 $auxFilter = $baseFilter->agencyGroup;
@@ -304,13 +498,15 @@ class dashboards extends rank{
                 $auxFilter = "teste";
             }
 
-	    	$values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter);
+            $values = $sr->getSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter);
             
-	    	$mtx = $sr->assembler($values,$years,$type);
-	    }
-	    
+            $mtx = $sr->assembler($values,$years,$type);
+        }
+        
         return $values;
     }
+
+    
 
     
 

@@ -11,6 +11,7 @@ use App\chain;
 use App\sql;
 use App\RenderChain;
 use App\digital;
+
 class ChainController extends Controller{
     public function chainGet(){
     	$rC = new RenderChain();

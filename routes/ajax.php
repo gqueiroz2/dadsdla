@@ -47,6 +47,10 @@ Route::group(['middleware' => 'auth'],function(){
 
 		Route::group(['prefix'=>'dashboards'],function(){
 			Route::post("Overview-BaseFilter","ajaxController@baseFilter");
+			Route::post("BV-BaseFilter","ajaxController@BVBaseFilter");
+
+			Route::post('typeByRegionBV', 'ajaxController@typeByRegionBV');
+
 			Route::post("Overview-SecondaryFilter","ajaxController@secondaryFilter");
 
 			Route::post("Overview-BaseFilterTitle","ajaxController@baseFilterTitle");
@@ -61,9 +65,12 @@ Route::group(['middleware' => 'auth'],function(){
 		});
 
 		Route::group(['prefix'=>'checkElements'],function(){
+
 			Route::post('clientGroupByClient','ajaxController@clientGroupByClient');
 
 			Route::post('agencyGroupByAgency','ajaxController@agencyGroupByAgency');
+
+
 
 		});
 

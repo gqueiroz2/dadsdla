@@ -14,6 +14,15 @@ Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
+		Route::post('agencyGroupCheck','dataManagementController@agencyGroupCheck')
+							->name('agencyGroupCheck');
+
+		Route::get('insertBvBandG','dataManagementController@insertBvBandG')
+							->name('insertBvBandG');	
+		Route::post('insertBvBandP','dataManagementController@insertBvBandP')
+							->name('insertBvBandP');		
+
+
 		Route::get('dataCurrentThroughtG','dataManagementController@dataCurrentThroughtG')
 							->name('dataCurrentThroughtG');	
 		Route::post('dataCurrentThroughtP','dataManagementController@dataCurrentThroughtP')
