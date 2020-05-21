@@ -16,10 +16,12 @@ class agency extends Management{
         $join = false;
         $where = "WHERE name = '$group' AND region_id = '$region'";
         $limit = "LIMIT 1";
-        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $res = $sql->larica($con,$columns,$table,$join,$where,1,$limit);
         $from = array("ID");
         $to = array('id');
         $agencyGroupID = $sql->fetch($res,$from,$to);
+
+        var_dump($agencyGroupID);
         return $agencyGroupID[0]['id'];
     }
 

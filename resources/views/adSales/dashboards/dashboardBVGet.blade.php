@@ -20,18 +20,11 @@
 							{{$render->region($salesRegion)}}							
 						</div>
 						<div class="col">
-							<label class="labelLeft bold"> Type: </label>
-							@if($errors->has('type'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->type()}}
-						</div>
-						<div class="col">
-							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>
+							<label class="labelLeft bold" > Agency Group </label>
 							@if($errors->has('baseFilter'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->baseFilter()}}
+							{{$render->agencyGroupForm()}}
 						</div>						
 						<div class="col">
 							<label class="labelLeft bold"> Currency: </label>

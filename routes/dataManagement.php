@@ -10,18 +10,24 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::group(['middleware' => ['auth']],function(){
 
 	Route::group(['prefix' => 'dataManagement'],function(){
 
+		Route::post('insertBvBandAfterCheck','dataManagementController@insertBvBandAfterCheck')
+							->name('insertBvBandAfterCheck');
+
 		Route::post('agencyGroupCheck','dataManagementController@agencyGroupCheck')
 							->name('agencyGroupCheck');
+
+		Route::post('insertAgencyGroupBV','dataManagementController@insertAgencyGroupBV')
+							->name('insertAgencyGroupBV');
 
 		Route::get('insertBvBandG','dataManagementController@insertBvBandG')
 							->name('insertBvBandG');	
 		Route::post('insertBvBandP','dataManagementController@insertBvBandP')
-							->name('insertBvBandP');		
-
+							->name('insertBvBandP');
 
 		Route::get('dataCurrentThroughtG','dataManagementController@dataCurrentThroughtG')
 							->name('dataCurrentThroughtG');	

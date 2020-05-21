@@ -7,7 +7,7 @@ use App\rank;
 
 class subRankings extends rank{
     
-    public function getNewSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $auxName, $secondaryFilter=false){
+    public function getNewSubValues($con, $tableName, $leftName, $type, $brands, $region, $value, $year, $months, $currency, $y, $filterValue, $auxName, $secondaryFilter=false, $baseFilter){
         if ($type == "agencyGroup") {
             $filter = "agency_group_id";
         }elseif($type == "client"){
@@ -57,7 +57,7 @@ class subRankings extends rank{
         $a = new agency();
 
         if ($type == "agencyGroup") {
-            $oldAgency = $a->getAgencyGroupID($con, $sql, $filterValue, $region);
+            $oldAgency = $baseFilter;//$a->getAgencyGroupID($con, $sql, $filterValue, $region);
             $aux = "client";
         }elseif($type == "client"){
             $oldAgency = $a->getAllAgenciesByClient($con, $sql, $filterValue ,$region);
@@ -308,7 +308,7 @@ class subRankings extends rank{
         return $object1['total'] < $object2['total'];
     }
 
-    public function getNewSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $auxName, $secondaryFilter=false){
+    public function getNewSubResults($con, $brands, $type, $region, $value, $currency, $months, $years, $filter, $auxName, $secondaryFilter=false,$baseFilter){
         if ($type == "agencyGroup") {
             $name = "client";
         }elseif ($type == "client") {
@@ -321,7 +321,7 @@ class subRankings extends rank{
             if ($secondaryFilter) {
                 $res[$y] = $this->getNewSubValues($con, "cmaps", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName, $secondaryFilter);    
             }else{
-                $res[$y] = $this->getNewSubValues($con, "cmaps", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName);
+                $res[$y] = $this->getNewSubValues($con, "cmaps", $name, $type, $brands, $region, $value, $years[$y], $months, $currency, $y, $filter, $auxName , false, $baseFilter);
             }
         }
 

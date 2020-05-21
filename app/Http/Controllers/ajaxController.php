@@ -23,6 +23,32 @@ use App\base;
 
 class ajaxController extends Controller{
 
+    public function BVAgencyGroup(){
+
+        $db = new dataBase();
+
+        $regionID = Request::get('regionID');
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $agency = new agency();
+
+        $agencies = $agency->getAgencyGroupByRegionCMAPS($con,false,array($regionID));
+
+        echo "<option value=''> Select </option>";
+        for ($a=0; $a < sizeof($agencies); $a++){ 
+            echo "<option value='".base64_encode(
+                                   json_encode(
+                                   array(
+                                            'id' => $agencies[$a]['id'],
+                                            'name' => $agencies[$a]['agencyGroup'] 
+                                        )
+                                    ))
+                                  ."'>".$agencies[$a]['agencyGroup']."</option>";
+        }
+    }
+
     public function brandBySource(){
         $db = new dataBase();
 

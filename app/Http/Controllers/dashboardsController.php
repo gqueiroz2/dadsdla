@@ -39,6 +39,7 @@ class dashboardsController extends Controller{
    }
 
    public function dashboardBVPost(){
+      
       $db = new dataBase();
       $region = new region();
       $dash = new dashboards();
@@ -57,33 +58,33 @@ class dashboardsController extends Controller{
             'role' => 'Regional Office'
          )
       );
+
       $currencies = $currency->getCurrency($con);      
       $brands = $b->getBrand($con);      
       $regionID = Request::get("region");
-      $type = Request::get("type");
-      $baseFilter = json_decode( base64_decode( Request::get("baseFilter") ));
-      $secondaryFilter = Request::get("secondaryFilter");
 
-      if($type == "agency"){
-         $sub = "agency";
-         $subT = "Agência";
-      }else{
-         $sub = "agencyGroup";
-         $subT = "Grupo de Agência";
-      }
+      $temp = json_decode(base64_decode(Request::get("agencyGroup")));
 
-         $choice = $baseFilter->$sub;
+      $agencyGroup = $temp->id;
+      $agencyGroupName = $temp->name;
 
       $currency = Request::get("currency");
       $value = Request::get("value");
 
       $cYear = intval(date("Y"));
       $years = array($cYear);
+
+      $type = "agencyGroup";
       
-      $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,"cmaps");
+      $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,"cmaps");
+
+      $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years);
+
       $graph = $dash->excelBV($base,$mc,$mountBV,$cYear);
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','choice','cYear','sub','subT'));
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','cYear','agencyGroupName'));
+      
+      
    }
 
 	public function overviewGet(){

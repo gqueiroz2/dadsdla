@@ -148,7 +148,6 @@ class ChainController extends Controller{
             case 'fw_digital':
                 var_dump($spreadSheet[0]);
                 unset($spreadSheet[0]);
-                //unset($spreadSheet[1]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
             case 'sf_pr':

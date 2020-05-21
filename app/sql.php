@@ -48,11 +48,15 @@ class sql extends Model{
         return $res;
     }
 
-    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = false, $order=""){
+    public function selectGroupBy2($con, $columns, $table, $join = null, $where = null, $order_by = 1, $group_by = false, $order=false){
         if($group_by){
             $grp = "GROUP BY ".$group_by;
         }else{
             $grp = false;
+        }
+
+        if($order){
+            $order = "ORDER BY $order_by";
         }
 
         $sql = "SELECT $columns FROM $table $join $where $grp ORDER BY $order_by $order";

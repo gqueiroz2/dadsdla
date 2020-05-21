@@ -25,18 +25,11 @@
 							{{$render->region($salesRegion)}}							
 						</div>
 						<div class="col">
-							<label class="labelLeft bold"> Type: </label>
-							@if($errors->has('type'))
-								<label style="color: red;">* Required</label>
-							@endif
-							{{$render->type()}}
-						</div>
-						<div class="col">
-							<label class="labelLeft bold" > <span style="color: red;" id="labelBaseFilter"> Select Type </span> </label>
+							<label class="labelLeft bold" > Agency Group </label>
 							@if($errors->has('baseFilter'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->baseFilter()}}
+							{{$render->agencyGroupForm()}}
 						</div>						
 						<div class="col">
 							<label class="labelLeft bold"> Currency: </label>
@@ -63,7 +56,7 @@
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> BV - No Excel </div>
+				<div style="float: right;"> BV </div>
 			</div>
 		</div>	
 	</div>
@@ -73,8 +66,8 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td style="background-color: #002060;color:white; width: 50%;"> {{$subT}} </td>
-						<td style="background-color: #d5dee4;width: 50%;"> {{ $choice }} </td>
+						<td style="background-color: #002060;color:white; width: 50%;"> Agência </td>
+						<td style="background-color: #d5dee4;width: 50%;"> {{$agencyGroupName}}  </td>
 					</tr>
 					<tr>
 						<td class="dc"> Tabela </td>

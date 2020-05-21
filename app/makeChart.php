@@ -22,6 +22,7 @@ class makeChart extends Model{
 	}
 
     public function bvChild($values,$year){
+
 		$string = "[['Client','Revenue $year',{ role: 'style' }],";
 		
 		for ($v=0; $v < sizeof($values); $v++) { 
@@ -34,6 +35,7 @@ class makeChart extends Model{
 		$string .= "]";
 
 		return $string;
+		
 	}
 
 	public function bvMonth($values,$year){

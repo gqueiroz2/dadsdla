@@ -15,20 +15,23 @@ use App\relationshipRender;
 class relationshipController extends Controller{
     
 	public function get(){
-		$base = new base();
+	$base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $region = $r->getRegion($con,false);  
         $render = new Render();
 
-		return view('relationship.get',compact('render','region'));
+        return view('relationship.get',compact('render','region'));
+
 	}
 
 	public function post(){
-		$base = new base();
+	$base = new base();
         $db = new dataBase();
-        $con = $db->openConnection("DLA");
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $r = new region();
         $region = $r->getRegion($con,false);  
         $render = new relationshipRender();
@@ -38,13 +41,16 @@ class relationshipController extends Controller{
         $type = Request::get('type');
         $regionID = Request::get('region');
         $structure = $rel->getStructure($con,$regionID,$type);
-		return view('relationship.post',compact('render','region','structure','type'));
+
+        return view('relationship.post',compact('render','region','structure','type'));
+
 	}
 
 	public function relationshipAgencyGet(){
 		
-		$db = new dataBase();
-        $con = $db->openConnection('DLA');
+	$db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $render = new relationshipRender();
         $ag = new agency();
         $r = new region();
@@ -54,10 +60,11 @@ class relationshipController extends Controller{
 
 	public function relationshipAgencyPost(){		
 
-		$regionID = Request::get('region');
-		$alphabetLetter = Request::get('alphabetLetter');
-		$db = new dataBase();
-        $con = $db->openConnection('DLA');
+	$regionID = Request::get('region');
+	$alphabetLetter = Request::get('alphabetLetter');
+	$db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
         $render = new relationshipRender();
         $ag = new agency();
         $agencies = $ag->getAllAgenciesByFirstLetter($con,$regionID,$alphabetLetter);

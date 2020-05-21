@@ -9,7 +9,7 @@ use App\subRankings;
 use App\brand;
 use App\rankings;
 class dashboards extends rank{
-    
+
     public function clearBrands($brand){
         $size = sizeof($brand);
 
@@ -35,6 +35,7 @@ class dashboards extends rank{
         }
         
         $childChart = $mc->bvChild($child,$year);
+        
         $byMonthChart = $mc->bvMonth($byMonth,$year);
         $byBrandChart = $mc->bvBrand($byBrand,$year);
 
@@ -49,10 +50,53 @@ class dashboards extends rank{
                         );
 
         return $charts;
+        
+    }
+
+    public function forecastBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years){
+        
+        var_dump($baseFilter);
+        var_dump($years);
+        $year = $years[0];
+        $sql = new sql();
+        $sr = new subRankings();
+        $table = 'sf_pr';
+        $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
+        if($currencyName == "USD"){ $pRate = 1.0; }else{ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}        
+        if($value == "gross"){ $column = "gross_revenue"; }else{$column = "net_revenue";}
+
+        $select = "SELECT 
+                        c.name AS 'client',
+                        from_date AS 'fromDate',
+                        to_date AS 'toDate',
+                        $column AS 'revenue'                      
+                        FROM $table t
+                           LEFT JOIN region r ON r.ID = t.region_id
+                           LEFT JOIN client c ON c.ID = t.client_id
+                           LEFT JOIN agency a ON a.ID = t.agency_id
+                           LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                           WHERE(agency_group_id IN ('$baseFilter'))
+                           AND ( year_from = $year )
+                           AND ( year_to = $year )
+                           AND ( stage NOT IN ('5','6') )                           
+                           GROUP BY client
+        ";
+
+        $from = array("client",'fromDate','toDate',"revenue");
+
+        echo "<pre>".($select)."</pre>";
+
+        $res = $con->query($select);
+        
+        $fcst = $sql->fetch($res,$from,$from);
+
+        var_dump($fcst);
+        
 
     }
 
-    public function mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,$kind){
+    public function mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind){
+        $secondaryFilter = false;
         $sr = new subRankings();
         $table = $kind;
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
@@ -199,6 +243,34 @@ class dashboards extends rank{
 		return $rtr;
 	}
 
+    public function child($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
+        $sql = new sql();    
+
+        $brands = $this->getBrands($con);
+        $months = $this->months;
+        $cr = $p->getCurrency($con, array($currency));
+        $null = null;
+
+        if($kind == "root"){
+            if($type == "agencyGroup")
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter);
+            else
+                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter);
+        }else{
+            $filter = 'agencyGroup';
+
+            if($type == "agency")
+                $auxFilter = $baseFilter;
+            else
+                $auxFilter = "teste";            
+
+            $values = $sr->getNewSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter,$baseFilter)[0];
+            
+        }
+        
+        return $values;
+    }
+
     public function byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
         $sql = new sql(); 
         $months = $this->months; 
@@ -216,19 +288,19 @@ class dashboards extends rank{
                 $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
                 $where = "WHERE(year = \"".$year."\")
                             AND (month = \"".$months[$m]."\")
-                            AND ( ".$smt."_id = \"".$baseFilter->id."\")";
+                            AND ( ".$smt."_id = \"".$baseFilter."\")";
                 
             }elseif ($type == "agency") {
                 $join = false;
                 $where = "WHERE(year = \"".$year."\")
                             AND (month = \"".$months[$m]."\")
-                            AND ( ".$type."_id = \"".$baseFilter->id."\")";
+                            AND ( ".$type."_id = \"".$baseFilter."\")";
                 
             }else{
                 $join = false;
                 $where = "WHERE(year = \"".$year."\")
                             AND (month = \"".$months[$m]."\")
-                            AND ( ".$type."_id = \"".$baseFilter->id."\")";
+                            AND ( ".$type."_id = \"".$baseFilter."\")";
                 
             }
 
@@ -265,17 +337,17 @@ class dashboards extends rank{
                          LEFT JOIN agency_group c ON c.ID = a.agency_group_id";
                 $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
                             AND (year = '$year')
-                            AND ( ".$smt."_id = \"".$baseFilter->id."\")";                    
+                            AND ( ".$smt."_id = \"".$baseFilter."\")";                    
 	    	}elseif ($type == "agency") {
                 $join = false;
                 $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
                         AND (year = '$year')
-                        AND ( ".$type."_id = \"".$baseFilter->id."\")";    
+                        AND ( ".$type."_id = \"".$baseFilter."\")";    
             }else{
 	    		$join = false;
                 $where = "WHERE (brand_id = \"".$brands[$b][0]."\")
                         AND (year = '$year')
-                        AND ( ".$type."_id = \"".$baseFilter->id."\")";    
+                        AND ( ".$type."_id = \"".$baseFilter."\")";    
 	    	}	
             
             $some[$b] = "SELECT SUM($column) AS mySum 
@@ -438,33 +510,7 @@ class dashboards extends rank{
         return $value;
     }
 
-    public function child($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
-    	$sql = new sql();    
-
-	    $brands = $this->getBrands($con);
-	    $months = $this->months;
-	    $cr = $p->getCurrency($con, array($currency));
-	    $null = null;
-
-	    if($kind == "root"){
-	    	if($type == "agencyGroup")
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter);
-	    	else
-                $somekind = $sr->getAllValues($con,$table,$type,$type, $brands, $regionID, $value, $years,$months,$cr, $null, null, null, $secondaryFilter);
-	    }else{
-	    	$filter = $baseFilter->$type;
-
-            if($type == "agency")
-                $auxFilter = $baseFilter->agencyGroup;
-            else
-                $auxFilter = "teste";            
-
-	    	$values = $sr->getNewSubResults($con, $brands, $type, $regionID, $value, $cr, $months, $years, $filter, $auxFilter, $secondaryFilter)[0];
-            
-	    }
-	    
-        return $values;
-    }
+    
 
     public function last3Years($con,$what,$kind,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency){
         $sql = new sql();    
@@ -505,11 +551,7 @@ class dashboards extends rank{
         
         return $values;
     }
-
     
-
-    
-
     public function getProducts($con,$table,$type,$filter){
     	$sql = new sql();
 

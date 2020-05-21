@@ -83,8 +83,7 @@ class rank extends Model{
 
         if($type == "agencyGroup"){ 
 
-            $temp = $ag->getAgencyByAgencyGroupID($con,$baseFilter->id);
-
+            $temp = $ag->getAgencyByAgencyGroupID($con,$baseFilter);
             for ($t=0; $t < sizeof($temp); $t++) { 
                 $base_filter_id[$t] = $temp[$t]['agencyID'];        
             }
