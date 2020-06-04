@@ -70,10 +70,37 @@ class dataManagementController extends Controller{
 
                 $list = $sql->fetch($res,$from,$from);
 
-                for ($l=0; $l < sizeof($list); $l++) { 
-                    var_dump($list[$l]);
+                $cc = 0;
 
-                    var_dump($list[$l]);
+                for ($l=0; $l < sizeof($list); $l++) { 
+                    $seek[$l] = "SELECT agency_group_id FROM agency_group_unit WHERE (name = '".$list[$l]['agency_group']."')";
+                    $resultSeek[$l] = $con->query($seek[$l]);
+                    $from = array('agency_group_id');
+                    $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
+                    $list[$l]['agency_group_id'] = $agencyGroupSeek[$l];
+
+                    $insertSeek[$l] = "INSERT INTO bv_band (agency_group_id,from_value,to_value,percentage,year) 
+                                            VALUES (\"".$list[$l]['agency_group_id']."\",
+                                                  \"".$list[$l]['from_value']."\",
+                                                  \"".$list[$l]['to_value']."\",
+                                                  \"".$list[$l]['percentage']."\",
+                                                  \"".$list[$l]['year']."\")";
+
+                    
+                    if($con->query($insertSeek[$l])===TRUE){
+                        $cc++;
+                    }else{
+                        $temp = "Error: " . $sql . "<br>" . $con->error;
+                        var_dump($temp);
+                    }
+
+
+                    
+
+                }
+
+                if($cc == sizeof($list)){
+                    var_dump("TODOS OS DADOS INSERIDOS");
                 }
 
             }

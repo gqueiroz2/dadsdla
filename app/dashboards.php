@@ -53,6 +53,90 @@ class dashboards extends rank{
         
     }
 
+    public function bvAnalisis($current,$band){
+        $currentVal = $current['total'];
+        
+        //NOW
+        for ($b=0; $b < sizeof($band); $b++) { 
+            if($currentVal < $band[$b]['toValue'] && $currentVal > $band[$b]['fromValue']){
+                $currentBand = $band[$b]['toValue']*1;
+                $currentPercentage = $band[$b]['percentage']*1;
+                $currentBV = $currentVal*$currentPercentage;
+                $pivot = $b;
+            }
+        }
+        //NEXT
+        if( isset($band[($pivot+1)]) ){
+            $nextBandVal = $band[($pivot+1)]['fromValue']*1;
+            $nextBandDiff = $band[($pivot+1)]['fromValue'] - $currentVal;
+            $nextBandPercentage = $band[($pivot+1)]['percentage']*100;
+        }else{
+            // FAIXA MAXIMA
+        }
+
+        //TOP
+        $maxBandVal = $band[(sizeof($band)-1)]['fromValue'];
+        $maxBandPercentage = $band[(sizeof($band)-1)]['percentage']*100;
+        $maxBandDiff = $band[(sizeof($band)-1)]['fromValue'] - $currentVal;
+
+        if($currentVal > $maxBandVal){
+            $maxBandCurrentVal = $currentVal*1;
+        }else{
+            $maxBandCurrentVal = $maxBandVal*1;
+        }
+
+        $maxBandBV = $maxBandCurrentVal*($maxBandPercentage/100);
+        
+        $rtr = array(
+                        'currentVal' => $currentVal,
+
+                        'currentBand' => $currentBand,
+                        'currentPercentage' => $currentPercentage,
+                        'currentBV' => $currentBV,
+
+                        'nextBandVal' => $nextBandVal,
+                        'nextBandDiff' => $nextBandDiff,
+                        'nextBandPercentage' => $nextBandPercentage,
+
+                        'maxBandCurrentVal' => $maxBandCurrentVal,
+                        'maxBandPercentage' => $maxBandPercentage,
+                        'maxBandBV' => $maxBandBV
+                    );
+
+        return($rtr);
+
+    }
+
+    public function bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years){
+        $sql = new sql();
+        $sr = new subRankings();
+        $table = 'bv_band';
+        $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
+        if($currencyName == "USD"){ $pRate = 1.0; }else{ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}        
+        if($value == "gross"){ $column = "gross_revenue"; }else{$column = "net_revenue";}
+        $from = array('agencyGroup','fromValue','toValue','percentage');
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            $select[$y] = "SELECT ag.name AS 'agencyGroup',
+                              b.from_value AS 'fromValue',
+                              b.to_value AS 'toValue',
+                              b.percentage AS 'percentage'
+                              FROM $table b
+                              LEFT JOIN agency_group ag ON ag.ID = b.agency_group_id
+                              WHERE (agency_group_id = '$agencyGroup')
+                              AND (year = '".$years[$y]."')
+
+
+
+                      ";
+
+            $res[$y] = $con->query($select[$y]);
+            $bands[$y] = $sql->fetch($res[$y],$from,$from);
+        }
+
+        return $bands;
+    }
+
     public function forecastBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years){
         
         var_dump($baseFilter);

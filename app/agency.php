@@ -370,7 +370,6 @@ class agency extends Management{
             $agencyRegions = implode(",", $agencyRegion);
 
             if ($year) {
-               //$years = implode(",", $year);
                 $where .= "WHERE year IN (";
                 for ($y=0; $y < sizeof($year); $y++) { 
                     $where .= "'".$year[$y]."'";
@@ -389,6 +388,49 @@ class agency extends Management{
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
 
         $from = array('id','agencyGroup');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyGroupByRegionCMAPSWithValues($con,$year=false,$agencyRegion=false){
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    SUM(gross) AS 'revenue'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+
+            if ($year) {
+                $where .= "WHERE year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";                
+            }else{
+                //$where = "WHERE (SUM(gross) > 0)";
+            }
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+
+        $from = array('id','agencyGroup','revenue');
 
         $agency = $sql->fetch($res,$from,$from);
 

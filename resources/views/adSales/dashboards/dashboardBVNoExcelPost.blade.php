@@ -83,15 +83,15 @@
 				<table class="table table-borderless table-outside-border">
 					<tr>
 						<td class="dc" style="width: 50%;"> ACTUALS </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> VALUE </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format($bvAnalisis['currentVal']) }} </td>
 					</tr>
 					<tr>
 						<td class="dc"> FX ATUAL </td>
-						<td style="background-color: #d9e1f2;"> POR </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['currentPercentage'])*100 ) }}% </td>
 					</tr>
 					<tr>
 						<td class="dc"> REM. ATUAL </td>
-						<td style="background-color: #d9e1f2;"> VALUE </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format($bvAnalisis['currentBV']) }} </td>
 					</tr>					
 				</table>
 			</div>
@@ -100,15 +100,15 @@
 				<table class="table table-borderless table-outside-border">
 					<tr>
 						<td class="dc" style="width: 50%;"> PRÓX. FX </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> VALUE </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['nextBandVal']) ) }} </td>
 					</tr>
 					<tr>
 						<td class="dc"> DIF.PRÓX. </td>
-						<td style="background-color: #d9e1f2;"> POR </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format($bvAnalisis['nextBandDiff']) }} </td>
 					</tr>
 					<tr>
 						<td class="dc"> PROX.FX </td>
-						<td style="background-color: #d9e1f2;"> VALUE </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['nextBandPercentage']) ) }}% </td>
 					</tr>					
 				</table>
 			</div>
@@ -116,16 +116,16 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td class="dc" style="width: 50%;"> PRÓX. FX </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> VALUE </td>
+						<td class="dc" style="width: 50%;"> DIF. TETO </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['maxBandCurrentVal']) ) }} </td>
 					</tr>
 					<tr>
-						<td class="dc"> DIF.PRÓX. </td>
-						<td style="background-color: #d9e1f2;"> POR </td>
+						<td class="dc"> TETO FX. </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['maxBandPercentage']) ) }}% </td>
 					</tr>
 					<tr>
-						<td class="dc"> PROX.FX </td>
-						<td style="background-color: #d9e1f2;"> VALUE </td>
+						<td class="dc"> REM. TETO </td>
+						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['maxBandBV']) ) }} </td>
 					</tr>					
 				</table>
 			</div>
@@ -136,7 +136,7 @@
 				<table class="table table-borderless table-outside-border">
 					<tr class="dc">
 						<td colspan="3">
-							<center> {{ $cYear }} </center>
+							<center> {{ $yearsBand[0] }} </center>
 						</td>
 					</tr>
 					<tr class="dc">
@@ -145,13 +145,27 @@
 						<td style="width: 20%;">%</td>
 					</tr>
 
-					@for($i=0;$i<10;$i++)
+					@if($bands[0])
+						@for($i=0;$i< sizeof($bands[0]) ;$i++)
+							<tr style="background-color: #d9e1f2;">
+								<td>{{ number_format( $bands[0][$i]['fromValue'] ) }}</td>
+								@if($bands[0][$i]['toValue'] == -1)
+									<td> &nbsp; </td>
+								@else
+									<td>{{ number_format( $bands[0][$i]['toValue'] ) }}</td>
+								@endif
+								<td>{{ number_format( ($bands[0][$i]['percentage'])*100 ) }}%</td>
+							</tr>
+						@endfor
+					@else
 						<tr style="background-color: #d9e1f2;">
-							<td>XXX,XXX,XXX</td>
-							<td>XXX,XXX,XXX</td>
-							<td>XXX,XXX,XXX</td>
+							<td colspan="3"> 
+								<center>
+									Não existe informação de faixas para este ano.
+								</center>
+							</td>
 						</tr>
-					@endfor
+					@endif
 					
 					<tr class="dc">
 						<td colspan="3"> Real Net Year </td>
@@ -187,6 +201,48 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-3">
+				<table class="table table-borderless table-outside-border">
+					<tr class="dc">
+						<td colspan="3">
+							<center> {{ $yearsBand[1] }} </center>
+						</td>
+					</tr>
+					<tr class="dc">
+						<td style="width: 40%;">De</td>
+						<td style="width: 40%;">Até</td>
+						<td style="width: 20%;">%</td>
+					</tr>
+					@if($bands[1])
+						@for($i=0;$i< sizeof($bands[1]) ;$i++)
+							<tr style="background-color: #d9e1f2;">
+								<td>{{ number_format( $bands[1][$i]['fromValue'] ) }}</td>
+								@if($bands[1][$i]['toValue'] == -1)
+									<td> &nbsp; </td>
+								@else
+									<td>{{ number_format( $bands[1][$i]['toValue'] ) }}</td>
+								@endif
+								<td>{{ number_format( ($bands[1][$i]['percentage'])*100 ) }}%</td>
+							</tr>
+						@endfor
+					@else
+						<tr style="background-color: #d9e1f2;">
+							<td colspan="3"> 
+								<center>
+									Não existe informação de faixas para este ano.
+								</center>
+							</td>
+						</tr>
+					@endif
+					
+					<tr class="dc">
+						<td colspan="3"> Real Net Year </td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>

@@ -32,10 +32,13 @@ class ajaxController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $agency = new agency();
+        $agency = new agency(); 
 
-        $agencies = $agency->getAgencyGroupByRegionCMAPS($con,false,array($regionID));
 
+        $year = array(date('Y'));
+
+        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValues($con,$year,array($regionID));
+        
         echo "<option value=''> Select </option>";
         for ($a=0; $a < sizeof($agencies); $a++){ 
             echo "<option value='".base64_encode(
