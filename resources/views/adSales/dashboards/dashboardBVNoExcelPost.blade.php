@@ -10,6 +10,18 @@
     </style>
 @endsection
 
+<script type="text/javascript">
+	var screenW = screen.width;
+	var screenH = screen.height;
+
+	var widthChart = screenW/4;
+
+	console.log("Your screen resolution is: " + screen.width + "x" + screen.height);
+
+	
+
+</script>
+
 @section('content')
 	<div class="container-fluid">
 		<div class="row">
@@ -56,7 +68,14 @@
 
 		<div class="row justify-content-end mt-2">
 			<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<div style="float: right;"> BV </div>
+				<!-- Button trigger modal -->
+				<div style="float: right;">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+					  	Info. 2019
+					</button>
+				</div>
+
+				<div style="float: right; margin-right: 5%;"> BV </div>
 			</div>
 		</div>	
 	</div>
@@ -72,9 +91,6 @@
 					<tr>
 						<td class="dc"> Tabela </td>
 						<td style="background-color: #d9e1f2;"> {{ $cYear }} </td>
-					</tr>
-					<tr>
-						<td colspan="2" style="background-color: #d9e1f2;"><center> Apuração - {{ $base->formatData("aaaa-mm-dd","dd/mm/aaaa", $base->source('CMAPS')) }} </center></td>
 					</tr>					
 				</table>
 			</div>
@@ -87,7 +103,13 @@
 					</tr>
 					<tr>
 						<td class="dc"> FX ATUAL </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['currentPercentage'])*100 ) }}% </td>
+						<td style="background-color: #d9e1f2;">
+							@if($bvAnalisis['currentPercentage'] <= 0)
+								-
+							@else
+								{{ number_format( ($bvAnalisis['currentPercentage'])*100 ) }}% 
+							@endif
+						</td>
 					</tr>
 					<tr>
 						<td class="dc"> REM. ATUAL </td>
@@ -99,17 +121,17 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td class="dc" style="width: 50%;"> PRÓX. FX </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['nextBandVal']) ) }} </td>
-					</tr>
-					<tr>
 						<td class="dc"> DIF.PRÓX. </td>
 						<td style="background-color: #d9e1f2;"> {{ number_format($bvAnalisis['nextBandDiff']) }} </td>
 					</tr>
 					<tr>
 						<td class="dc"> PROX.FX </td>
 						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['nextBandPercentage']) ) }}% </td>
-					</tr>					
+					</tr>
+					<tr>
+						<td class="dc" style="width: 50%;"> REM. PRÓX. FX </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['nextBandBV']) ) }} </td>
+					</tr>				
 				</table>
 			</div>
 
@@ -131,9 +153,11 @@
 			</div>
 		</div>
 
+		
+					
 		<div class="row">
-			<div class="col-3">
-				<table class="table table-borderless table-outside-border">
+			<div class="col-3" id="tableActualBandsDiv">
+				<table class="table table-borderless table-outside-border" id="tableActualBands">
 					<tr class="dc">
 						<td colspan="3">
 							<center> {{ $yearsBand[0] }} </center>
@@ -166,89 +190,141 @@
 							</td>
 						</tr>
 					@endif
-					
-					<tr class="dc">
-						<td colspan="3"> Real Net Year </td>
-					</tr>
 				</table>
 			</div>
 
-			<div class="col-9">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-8" style="border: 1px solid black;">
-							<div class="container-fluid">
-								<div class="row">
-									<div class="col">
-										<div id="childGraph"></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<div id="byMonthGraph"></div>
-									</div>
-								</div>								
-							</div>
-						</div>
-						<div class="col-4" style="border: 1px solid black;">
-							<div class="container-fluid">
-								<div class="row">
-									<div class="col">
-										<div id="byBrand"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div class="col-5" id="byBrandDiv">
+				<div id="byBrand"></div>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col">
+				<div id="childGraph"></div>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-3">
-				<table class="table table-borderless table-outside-border">
-					<tr class="dc">
-						<td colspan="3">
-							<center> {{ $yearsBand[1] }} </center>
-						</td>
-					</tr>
-					<tr class="dc">
-						<td style="width: 40%;">De</td>
-						<td style="width: 40%;">Até</td>
-						<td style="width: 20%;">%</td>
-					</tr>
-					@if($bands[1])
-						@for($i=0;$i< sizeof($bands[1]) ;$i++)
-							<tr style="background-color: #d9e1f2;">
-								<td>{{ number_format( $bands[1][$i]['fromValue'] ) }}</td>
-								@if($bands[1][$i]['toValue'] == -1)
-									<td> &nbsp; </td>
-								@else
-									<td>{{ number_format( $bands[1][$i]['toValue'] ) }}</td>
-								@endif
-								<td>{{ number_format( ($bands[1][$i]['percentage'])*100 ) }}%</td>
-							</tr>
-						@endfor
-					@else
-						<tr style="background-color: #d9e1f2;">
-							<td colspan="3"> 
-								<center>
-									Não existe informação de faixas para este ano.
-								</center>
-							</td>
-						</tr>
-					@endif
-					
-					<tr class="dc">
-						<td colspan="3"> Real Net Year </td>
-					</tr>
-				</table>
+			<div class="col">
+				<div id="byMonthGraph"></div>
 			</div>
+		</div>
+
+		
+		
+	</div>
+
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true">&times;</span>
+		        	</button>
+		      	</div>
+			    <div class="modal-body">
+			    	<div class="container-fluid">
+				    	<div class="row">
+							<div class="col">
+								<table class="table table-borderless table-outside-border">
+									<tr class="dc">
+										<td colspan="3">
+											<center> {{ $yearsBand[1] }} </center>
+										</td>
+									</tr>
+									<tr class="dc">
+										<td style="width: 40%;">De</td>
+										<td style="width: 40%;">Até</td>
+										<td style="width: 20%;">%</td>
+									</tr>
+									@if($bands[1])
+										@for($i=0;$i< sizeof($bands[1]) ;$i++)
+											<tr style="background-color: #d9e1f2;">
+												<td>{{ number_format( $bands[1][$i]['fromValue'] ) }}</td>
+												@if($bands[1][$i]['toValue'] == -1)
+													<td> &nbsp; </td>
+												@else
+													<td>{{ number_format( $bands[1][$i]['toValue'] ) }}</td>
+												@endif
+												<td>{{ number_format( ($bands[1][$i]['percentage'])*100 ) }}%</td>
+											</tr>
+										@endfor
+									@else
+										<tr style="background-color: #d9e1f2;">
+											<td colspan="3"> 
+												<center>
+													Não existe informação de faixas para este ano.
+												</center>
+											</td>
+										</tr>
+									@endif
+								</table>
+							</div>
+						</div>
+					</div>
+			    </div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        	<button type="button" class="btn btn-primary">Save changes</button>
+		      	</div>
+		    </div>
 		</div>
 	</div>
 
+
 	<div id="vlau"></div>
 	<div id="vlau1"></div>
+
+	
+
+	<script>
+      	google.charts.load('current', {'packages':['corechart']});
+      	google.charts.setOnLoadCallback(drawChart);
+
+	    function drawChart() {
+	    	var options = {
+				legend:'none',
+		        width: '100%',
+		        height: '100%',
+		        chartArea: {
+		            left: "3%",
+		            top: "3%",
+		            height: "94%",
+		            width: "94%"
+		        },
+				backgroundColor:'transparent',
+				pieSliceText: 'none',
+				slices:{
+					@for($b = 0; $b<sizeof($graph['byBrand']['brandColor']); $b++)
+						@if ($b == sizeof($graph['byBrand']['brandColor']) -1 ) 
+							{{$b}}: {textStyle: {color: '{{$graph['byBrand']["brandTextColor"][$b]}}' },color: '{{$graph['byBrand']['brandColor'][$b]}}'  }
+						@else
+							{{$b}}: {textStyle: {color: '{{$graph['byBrand']["brandTextColor"][$b]}}' },color: '{{$graph['byBrand']['brandColor'][$b]}}'  },
+						@endif
+					@endfor
+				}
+
+			}; 
+	    	var data = google.visualization.arrayToDataTable(<?php echo $graph['byBrand']['graph']; ?>);
+	        var chart = new google.visualization.PieChart(document.getElementById('byBrand'));
+	        
+	        divElement = document.querySelector("#tableActualBandsDiv"); 
+   
+            elemRect = divElement.getBoundingClientRect(); 
+        
+            elemHeight = elemRect.height; 
+   
+	        $('#byBrand').css('height', elemHeight+'px');
+	        
+	        chart.draw(data, options);
+
+	   	}
+
+    </script>
 
 	<script>
 		google.charts.load('current', {
@@ -274,6 +350,7 @@
 				
 			};
 			var chart = new google.visualization.LineChart(document.getElementById('byMonthGraph'));
+
         	chart.draw(data, options);
 		}
 	</script>
@@ -297,54 +374,10 @@
 		    }
 	</script>
 
-	<script>
-      	google.charts.load('current', {'packages':['corechart']});
-      	google.charts.setOnLoadCallback(drawChart);
-
-	    function drawChart() {
-	    	var options = {
-				chartArea:{
-					'width':'100%',
-					'height':'100%'
-				},
-				'width': '100%',
-				'height': '100%',
-				backgroundColor:'transparent',
-				legend:'none',
-				pieSliceText: 'label',
-				pieSliceTextStyle: {
-					fontSize:'25'
-				},
-				slices:{
-					@for($b = 0; $b<sizeof($graph['byBrand']['brandColor']); $b++)
-						@if ($b == sizeof($graph['byBrand']['brandColor']) -1 ) 
-							{{$b}}: {textStyle: {color: '{{$graph['byBrand']["brandTextColor"][$b]}}' },color: '{{$graph['byBrand']['brandColor'][$b]}}'  }
-						@else
-							{{$b}}: {textStyle: {color: '{{$graph['byBrand']["brandTextColor"][$b]}}' },color: '{{$graph['byBrand']['brandColor'][$b]}}'  },
-						@endif
-					@endfor
-				}
-
-			}; 
-	    	var data = google.visualization.arrayToDataTable(<?php echo $graph['byBrand']['graph']; ?>);
-	        var chart = new google.visualization.PieChart(document.getElementById('byBrand'));
-	        chart.draw(data, options);
-	   	}
-
-    </script>
+	
 @endsection
 
-				{{--
-				slices:{
-					@for($b = 0; $b<sizeof($mtx['brandColor']); $b++)
-						@if ($b == sizeof($mtx['brandColor']) -1 ) 
-							{{$b}}: {textStyle: {color: '{{$mtx["brandTextColor"][$b]}}' },color: '{{$mtx['brandColor'][$b]}}'  }
-						@else
-							{{$b}}: {textStyle: {color: '{{$mtx["brandTextColor"][$b]}}' },color: '{{$mtx['brandColor'][$b]}}'  },
-						@endif
-					@endfor
-				}
-				--}}
+				
 
 
 

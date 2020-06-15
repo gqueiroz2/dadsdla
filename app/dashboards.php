@@ -54,20 +54,35 @@ class dashboards extends rank{
     }
 
     public function bvAnalisis($current,$band){
-        $currentVal = $current['total'];
+
         
+        $currentVal = $current['total'];
+        /*
+        var_dump($currentVal);
+        var_dump($band);
+        */
         //NOW
-        for ($b=0; $b < sizeof($band); $b++) { 
-            if($currentVal < $band[$b]['toValue'] && $currentVal > $band[$b]['fromValue']){
-                $currentBand = $band[$b]['toValue']*1;
-                $currentPercentage = $band[$b]['percentage']*1;
-                $currentBV = $currentVal*$currentPercentage;
-                $pivot = $b;
+        if($currentVal < $band[0]['fromValue']){
+            $currentBand = 0;
+            $currentPercentage = 0;
+            $currentBV = $currentVal*$currentPercentage;
+            $pivot = -1; 
+        }else{
+            for ($b=0; $b < sizeof($band); $b++) { 
+                if($currentVal < $band[$b]['toValue'] && $currentVal > $band[$b]['fromValue']){
+                    $currentBand = $band[$b]['toValue']*1;
+                    $currentPercentage = $band[$b]['percentage']*1;
+                    $currentBV = $currentVal*$currentPercentage;
+                    $pivot = $b;
+                    break;
+                }
             }
         }
+
         //NEXT
         if( isset($band[($pivot+1)]) ){
             $nextBandVal = $band[($pivot+1)]['fromValue']*1;
+            $nextBandBV = $nextBandVal*$band[($pivot+1)]['percentage'];
             $nextBandDiff = $band[($pivot+1)]['fromValue'] - $currentVal;
             $nextBandPercentage = $band[($pivot+1)]['percentage']*100;
         }else{
@@ -97,6 +112,7 @@ class dashboards extends rank{
                         'nextBandVal' => $nextBandVal,
                         'nextBandDiff' => $nextBandDiff,
                         'nextBandPercentage' => $nextBandPercentage,
+                        'nextBandBV' => $nextBandBV,
 
                         'maxBandCurrentVal' => $maxBandCurrentVal,
                         'maxBandPercentage' => $maxBandPercentage,
@@ -104,7 +120,7 @@ class dashboards extends rank{
                     );
 
         return($rtr);
-
+        
     }
 
     public function bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years){
@@ -137,10 +153,47 @@ class dashboards extends rank{
         return $bands;
     }
 
+    public function shareLastYear($con,$p,$regionID,$years){
+
+        $sql = new sql();
+
+        $year = intval($years[0]) - 1;
+
+        $select = "SELECT
+                        SUM(gross) AS 'revenue',
+                        month AS 'month'
+                        FROM cmaps 
+                        WHERE(year = '$year')
+                        GROUP BY month
+                  ";
+
+        $from = array('month','revenue');
+
+        $sql = new sql();
+
+        $res = $con->query($select);
+
+        $list = $sql->fetch($res,$from,$from);
+
+        $sum = 0.0;
+
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $sum += $list[$l]['revenue'];
+        }
+
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $share[$l]['percentage'] = $list[$l]['revenue']/$sum;
+            $share[$l]['months'] = $this->months[$l];
+        }
+
+        return $share;
+
+    }
+
     public function forecastBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years){
         
-        var_dump($baseFilter);
-        var_dump($years);
+        $share = $this->shareLastYear($con,$p,$regionID,$years);
+
         $year = $years[0];
         $sql = new sql();
         $sr = new subRankings();
@@ -168,15 +221,60 @@ class dashboards extends rank{
 
         $from = array("client",'fromDate','toDate',"revenue");
 
-        echo "<pre>".($select)."</pre>";
-
         $res = $con->query($select);
         
         $fcst = $sql->fetch($res,$from,$from);
 
-        var_dump($fcst);
-        
+        $this->dealWithFcst($fcst,$share);
 
+
+    }
+
+    public function dealWithFcst($fcst,$share){
+
+        var_dump($fcst);
+
+        var_dump($share);
+
+        for ($f=0; $f < sizeof($fcst); $f++) { 
+            $months[$f] = $this->handleMonths($fcst[$f]['fromDate'],$fcst[$f]['toDate']); 
+            var_dump($months[$f]);
+
+            $shareExp[$f] = array();
+
+            if(sizeof($months[$f]) > 1){
+
+                var_dump($months);
+
+                for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                    for ($s=0; $s < sizeof($share); $s++) { 
+                        if($share[$s]['months'] == $months[$f][$m]){
+                            array_push($shareExp[$f], $share[$s]['percentage']);
+                        }
+                    }
+                }
+                var_dump($shareExp[$f]);
+            }else{
+
+            }
+        }
+
+
+    }
+
+    public function handleMonths($from,$to){
+        if($from == $to){
+            $arr = array($from);
+        }else{
+            $arr = array();            
+            $cc = $from;
+            while ($cc <= $to) {
+                array_push($arr,$cc);
+                $cc++;
+            }
+        }
+
+        return $arr;
     }
 
     public function mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind){
@@ -886,6 +984,10 @@ class dashboards extends rank{
     	return $this->monthsFullName;
     }
 
+    public function getMonthsMidName(){
+        return $this->monthsMidName;
+    }
+
     protected $months = array(1,2,3,4,5,6,7,8,9,10,11,12);
     protected $monthsFullName = array("January",
     	 					  "February",
@@ -899,6 +1001,19 @@ class dashboards extends rank{
     	 					  "October",
     	 					  "November",
     	 					  "December"
+                             );
+    protected $monthsMidName = array("Jan",
+                              "Feb",
+                              "Mar",
+                              "Apr",
+                              "May",
+                              "Jun",
+                              "Jul",
+                              "Aug",
+                              "Sep",
+                              "Oct",
+                              "Nov",
+                              "Dec"
                              );
 
 }

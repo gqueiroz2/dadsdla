@@ -41,7 +41,7 @@ class makeChart extends Model{
 	public function bvMonth($values,$year){
 		$dash = new dashboards();
         $months = $dash->getMonths();
-        $monthsFN = $dash->getMonthsFullName();
+        $monthsFN = $dash->getMonthsMidName();
 
 		$string = "['Month','Revenue $year'],";
 
