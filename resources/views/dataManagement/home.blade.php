@@ -44,7 +44,17 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('chain') }}" style="color: white">
-											Insert (BTS/FW/SF/CMAPS/INSIGHTS)
+											Insert (BTS/FW/SF/CMAPS)
+										</a>
+									</button>
+								</div>
+							</div>
+
+							<div class="row mt-2 justify-content-center">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insightsChain') }}" style="color: white">
+											Insert (INSIGHTS)
 										</a>
 									</button>
 								</div>

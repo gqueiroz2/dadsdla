@@ -108,6 +108,22 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('thirdChain');
 			Route::post('thirdToDLA','ChainController@thirdToDLA')
 							->name('thirdToDLA');
+							
+		});
+
+		Route::group(['prefix'=> 'insightsChain'], function(){
+			Route::get('insightsChain','chainInsightsController@INSIGHTSGet')
+							->name('insightsChain');
+			Route::post('trubcate','chainInsightsController@truncate')
+							->name('truncate');
+			Route::post('firstC','chainInsightsController@firstC')
+							->name('firstC');
+			Route::post('secondC','chainInsightsController@secondChain')
+							->name('secondC');
+			Route::post('thirdC','chainInsightsController@thirdChain')
+							->name('thirdC');
+			Route::post('ToDLA','chainInsightsController@thirdToDLA')
+							->name('toDLA');
 		});
 
 		Route::group(['prefix' => 'file'],function(){

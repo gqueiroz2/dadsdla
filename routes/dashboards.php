@@ -19,6 +19,12 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('/','dashboardsController@overviewPost')
 								->name('overviewPost');
 		});
+		Route::group(['prefix'=>'BV'],function(){
+			Route::get('/','dashboardsBvController@bvGet')
+							->name('bvGet');
+			Route::post('/','dashboardsBvController@bvPost')
+								->name('bvPost');
+		});
 	});
 });
 

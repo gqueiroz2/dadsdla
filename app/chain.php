@@ -34,10 +34,6 @@ class chain extends excel{
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         
-        if($table == "insights"){
-            //array_push($columns, 'year');
-        }
-
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
@@ -233,7 +229,7 @@ class chain extends excel{
 
             $table = "ytd";
 
-        }else if($table == "data_hub"){
+        }elseif($table == "data_hub"){
             
             for ($y=0; $y < sizeof($year); $y++) { 
                 $delete[$y] = "DELETE FROM ytd 
@@ -312,6 +308,10 @@ class chain extends excel{
 
     	$columns = $this->defineColumns($table,'third');
     	$into = $this->into($columns);
+
+        /*if($table == 'insights'){
+            $insert = ""
+        }*/
 
         if($table == 'bts' || $table == 'data_hub'){
             if($table == 'bts'){    
@@ -1187,6 +1187,9 @@ class chain extends excel{
                            $columns[$c] == 'success_probability' ||
                            $columns[$c] == 'num_spot'
     				      ){
+                            if ($columns[$c] == 'gross_revenue_prate'){
+                                explode("$", $columns[$c]);
+                            }
 
     						if( is_null($spreadSheet[$s][$c])){
     							$columnValue = 0.0;
@@ -1307,6 +1310,7 @@ class chain extends excel{
 		} 
         
 		$spreadSheetV2 = array_values($spreadSheetV2);
+        //var_dump($spreadSheetV2);
 		return $spreadSheetV2;
 	}
 
@@ -1501,6 +1505,21 @@ class chain extends excel{
     					return $this->cmapsColumns;
     					break;
     			}
+            /*case 'insights':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->insightsColumnsF;
+                        break;
+                    case 'second':
+                        return $this->insightsColumnsS;
+                        break;
+                    case 'third':
+                        return $this->insightsColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->insightsColumns;
+                        break;
+                }*/
             case 'insights':
                 switch ($recurrency) {
                     case 'first':
@@ -1511,6 +1530,21 @@ class chain extends excel{
                         break;
                     case 'third':
                         return $this->insightsColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->insightsColumns;
+                        break;
+                }
+            case 'insights_bts':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->insightsBTSColumnsF;
+                        break;
+                    case 'second':
+                        return $this->insightsBTSColumnsS;
+                        break;
+                    case 'third':
+                        return $this->insightsBTSColumnsT;
                         break;
                     case 'DLA':
                         return $this->insightsColumns;
@@ -2039,6 +2073,7 @@ class chain extends excel{
 		                               'campaign_option_spend', // DOUBLE
 		                               'gross_revenue' // DOUBLE
 		                              );
+
     public $miniHeaderColumns = array('campaign_sales_office_id',
                                        'sales_representant_office_id',
                                        'brand_id',
@@ -2060,33 +2095,29 @@ class chain extends excel{
                                        'campaign_option_spend', // DOUBLE
                                        'gross_revenue' // DOUBLE
                                       );
-
+    
     public $insightsColumnsF = array('brand',
                                      'brand_feed',
                                      'sales_rep',
                                      'agency',
                                      'client',
                                      'month',
+                                     'year',
                                      'currency',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'schedule_event',
-                                     'spot_status',
-                                     'date_event',
-                                     'unit_start_time',
-                                     'duration_spot',
                                      'copy_key',
-                                     'media_item',
                                      'spot_type',
-                                     'duration_impression',
-                                     'gross_revenue', //DOUBLE
+                                     'date_event',
+                                     'duration_spot',
                                      'num_spot', //INT
-                                     'net_revenue', //DOUBLE
-                                     'year'//INT
+                                     'gross_revenue', //DOUBLE
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
     );
-	
+    
 
     public $insightsColumnsS = array('brand_id',
                                      'brand_feed',
@@ -2094,24 +2125,20 @@ class chain extends excel{
                                      'agency',
                                      'client',
                                      'month',
+                                     'year',
                                      'currency_id',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'schedule_event',
-                                     'spot_status',
-                                     'date_event',
-                                     'unit_start_time',
-                                     'duration_spot',
                                      'copy_key',
-                                     'media_item',
                                      'spot_type',
-                                     'duration_impression',
-                                     'gross_revenue', //DOUBLE
+                                     'date_event',
+                                     'duration_spot',
                                      'num_spot', //INT
-                                     'net_revenue', //DOUBLE
-                                     'year'//INT
+                                     'gross_revenue', //DOUBLE
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
     );
 
 
@@ -2121,24 +2148,20 @@ class chain extends excel{
                                      'agency_id',
                                      'client_id',
                                      'month',
+                                     'year',
                                      'currency_id',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'schedule_event',
-                                     'spot_status',
-                                     'date_event',
-                                     'unit_start_time',
-                                     'duration_spot',
                                      'copy_key',
-                                     'media_item',
                                      'spot_type',
-                                     'duration_impression',
-                                     'gross_revenue', //DOUBLE
+                                     'date_event',
+                                     'duration_spot',
                                      'num_spot', //INT
-                                     'net_revenue', //DOUBLE
-                                     'year'//INT
+                                     'gross_revenue', //DOUBLE
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
     );
 
     public $insightsColumns = array('brand_id',
@@ -2165,6 +2188,50 @@ class chain extends excel{
                                      'num_spot', //INT
                                      'net_revenue', //DOUBLE
                                      'year'//INT
+    );
+
+
+    public $insightsBTSColumnsF = array('order_reference',
+                                         'sales_rep',
+                                         'brand',
+                                         'spot_type',
+                                         'duration_spot',
+                                         'schedule_event',
+                                         'media_item',
+                                         'copy_key',
+                                         'duration_impression',
+                                         'date_event',
+                                         'spot_status',
+                                         'gross_revenue'
+    );
+
+    public $insightsBTSColumnsS = array('order_reference',
+                                         'sales_rep_id',
+                                         'brand_id',
+                                         'spot_type',
+                                         'duration_spot',
+                                         'schedule_event',
+                                         'media_item',
+                                         'copy_key',
+                                         'duration_impression',
+                                         'date_event',
+                                         'spot_status',
+                                         'gross_revenue'
+    );
+
+    public $insightsBTSColumnsT = array('order_reference',
+                                         'sales_rep_id',
+                                         'brand_id',
+                                         'spot_type',
+                                         'duration_spot',
+                                         'schedule_event',
+                                         'media_item',
+                                         'copy_key',
+                                         'duration_impression',
+                                         'date_event',
+                                         'spot_status',
+                                         'gross_revenue'
+
     );
 
      
