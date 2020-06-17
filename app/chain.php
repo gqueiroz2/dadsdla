@@ -551,7 +551,7 @@ class chain extends excel{
 
     public function fixBTSRegion($region){
 
-        if($region == "US HISPANIC"){
+        if($region == "US HISPANIC" || $region == 'US HISPANIC INTL'){
             $region = "US Hispanic";
         }elseif($region == "DOMINICAN REPUBLIC"){
             $region = "Dominican Republic";
