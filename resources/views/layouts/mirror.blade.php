@@ -100,13 +100,16 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-<<<<<<< HEAD
+								
 								@if(( $userLevel == "SU" ))
 								<a class="dropdown-item" href="{{ route('bvGet') }}"> BV </a>
-=======
+
 								@if($userLevel == 'SU')
 									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
->>>>>>> 9afed3429c486df038af43b8b3b2214bd995cf78
+
+								@if($userLevel == 'SU')
+									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
+
 								@endif
 							</div>
 						</li>

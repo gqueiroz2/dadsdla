@@ -31,20 +31,14 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
-<<<<<<< HEAD
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         
-=======
         /*
         if($table == "insights"){
             array_push($columns, 'year');
         }
         */
-
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-
->>>>>>> 9afed3429c486df038af43b8b3b2214bd995cf78
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
@@ -561,7 +555,7 @@ class chain extends excel{
 
     public function fixBTSRegion($region){
 
-        if($region == "US HISPANIC"){
+        if($region == "US HISPANIC" || $region == 'US HISPANIC INTL'){
             $region = "US Hispanic";
         }elseif($region == "DOMINICAN REPUBLIC"){
             $region = "Dominican Republic";
