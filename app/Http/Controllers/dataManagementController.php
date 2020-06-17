@@ -19,9 +19,265 @@ use App\matchingClientAgency;
 use App\sql;
 use App\pRate;
 use App\emailDivulgacao;
+use App\import;
+use App\bvBand;
+use App\chain;
 
 class dataManagementController extends Controller{
     
+    public function insertBvBandAfterCheck(){
+        $db = new dataBase();
+        $sql = new sql();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $conFM = $db->openConnection('firstmatch');
+
+        $insert = json_decode(base64_decode(Request::get('insert')));
+
+        $delete = "DELETE FROM bv_band";
+
+        $deleted = false;
+
+        if($conFM->query($delete) === TRUE) {
+            $deleted = true;
+        }
+
+        if($deleted){
+
+            $count = 0;
+            $check = false;
+
+            for ($i=0; $i < sizeof($insert); $i++) { 
+                if($conFM->query($insert[$i]) === TRUE) {
+                    $count ++;
+                }else{
+                    echo "Error deleting record: " . $con->error;
+                }
+            }
+
+            if($count == sizeof($insert)){
+                $check = true;
+            }
+
+            if($check){
+                var_dump("TUDO FOI INSERIDO");
+
+                $select = "SELECT * FROM bv_band";
+
+                $res = $conFM->query($select);
+
+                $from = array('agency_group','from_value','to_value','percentage','year');
+
+                $list = $sql->fetch($res,$from,$from);
+
+                $cc = 0;
+
+                for ($l=0; $l < sizeof($list); $l++) { 
+                    $seek[$l] = "SELECT agency_group_id FROM agency_group_unit WHERE (name = '".$list[$l]['agency_group']."')";
+                    $resultSeek[$l] = $con->query($seek[$l]);
+                    $from = array('agency_group_id');
+                    $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
+                    $list[$l]['agency_group_id'] = $agencyGroupSeek[$l];
+
+                    $insertSeek[$l] = "INSERT INTO bv_band (agency_group_id,from_value,to_value,percentage,year) 
+                                            VALUES (\"".$list[$l]['agency_group_id']."\",
+                                                  \"".$list[$l]['from_value']."\",
+                                                  \"".$list[$l]['to_value']."\",
+                                                  \"".$list[$l]['percentage']."\",
+                                                  \"".$list[$l]['year']."\")";
+
+                    
+                    if($con->query($insertSeek[$l])===TRUE){
+                        $cc++;
+                    }else{
+                        $temp = "Error: " . $sql . "<br>" . $con->error;
+                        var_dump($temp);
+                    }
+
+
+                    
+
+                }
+
+                if($cc == sizeof($list)){
+                    var_dump("TODOS OS DADOS INSERIDOS");
+                }
+
+            }
+
+        }
+
+
+
+    }
+
+    public function insertAgencyGroupBV(){
+        $db = new dataBase();
+        $sql = new sql();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $size = Request::get('size');
+        var_dump($size);
+
+        $count = 0;
+
+        for ($s=0; $s < $size; $s++) { 
+            if( !is_null(Request::get("agencyGroup$s")) ){
+                $agency[$count]['group'] = Request::get("agencyGroup$s");
+                $agency[$count]['groupUnit'] = Request::get("agencyGroupUnit$s");
+                $count++;
+            }
+        }
+
+        $check = 0;
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            $insert[$a] = "INSERT INTO agency_group_unit (agency_group_id,name) 
+                                  VALUES (\"".$agency[$a]['group']."\",
+                                          \"".$agency[$a]['groupUnit']."\")";
+
+            if($con->query($insert[$a]) === TRUE){
+                $check++;
+            }else{
+                $temp = "Error: " . $sql . "<br>" . $conn->error;
+                var_dump($temp);
+            }            
+        }
+
+        if($check == sizeof($insert)){
+            var_dump("VALORES INSERIDOS");
+        }
+    }
+
+    public function agencyGroupCheck(){
+        $db = new dataBase();
+        $sql = new sql();
+        $conFM = $db->openConnection('firstmatch');
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $ag = new agency();
+        $table = 'bv_band';
+        $from = array("agency_group");
+
+        $agencyG = $ag->getAgencyGroupBrazil($con);
+        $select = "SELECT DISTINCT agency_group FROM $table ORDER BY agency_group ASC";
+
+        $res = $conFM->query($select);
+
+        $tmp = $sql->fetch($res,$from,$from);
+
+        for ($t=0; $t < sizeof($tmp); $t++){ 
+            $list[$t] = $tmp[$t]['agency_group'];
+            $seek[$t] = "SELECT name FROM agency_group_unit WHERE (name = '".$list[$t]."')";
+            $resCheck[$t] = $con->query($seek[$t]);
+            if($resCheck[$t]->num_rows > 0){
+                $check[$t] = true;
+            }else{
+                $check[$t] = false;
+            }
+        }   
+
+        $countCheck = 0;
+        for ($c=0; $c < sizeof($check) ; $c++) { 
+            if($check){
+                $countCheck ++;
+            }
+        }
+
+        if($countCheck == sizeof($check)){
+            $checkCheck = false;
+        }else{
+            $checkCheck = true;
+        }
+
+        if($checkCheck){
+            for ($t=0; $t < sizeof($tmp); $t++){ 
+                if(!$check[$t]){
+                    echo "<div class='row justify-content-center mt-2'>";
+                        echo "<div class='col'>";
+                            echo "<select class='form-control' name='agencyGroup$t' data-live-search='true'>";
+                                echo "<option value=''> Select </option>";
+                                for ($aa=0; $aa < sizeof($agencyG); $aa++) { 
+                                    
+                                    echo "<option value=".$agencyG[$aa]['id'].">".$agencyG[$aa]['agencyGroup']."</option>";
+                                } 
+                            echo "</select>";
+                        echo "</div>";           
+                        echo "<div class='col'>";         
+                            echo "<input type='text' class='form-control' name='agencyGroupUnit$t' value='".$list[$t]."'>";        
+                        echo "</div>";
+                    echo "</div>";
+                }
+            }
+            echo "<div class='row justify-content-center mt-2'>";
+                echo "<div class='col'>";
+                    echo "<input type='text' class='form-control' name='size' value='".$t."'>";        
+                echo "</div>";
+            echo "</div>";
+            echo "<input type='hidden' value='0' id='forward' class='form-control' style='width: 100%;'>";
+        }else{
+            echo "<div class='row justify-content-center mt-2'>";
+                echo "<div class='col'>";
+                    echo "Não existem Grupos de Agência a serem criados !";        
+                echo "</div>";
+            echo "</div>";
+            echo "<input type='hidden' value='1' id='forward' class='form-control' style='width: 100%;'>";
+
+        }
+
+
+    }
+
+    public function insertBvBandG(){
+        return view('dataManagement.insert.bvBandGet');
+    }
+
+    public function insertBvBandP(){
+
+        $bb = new bvBand();
+        $i = new import();
+        $chain = new chain();
+        $db = new dataBase();
+        
+        $con = $db->openConnection('firstmatch');
+
+        $table = "bv_band";
+
+        $spreadSheet = $i->base();
+        unset($spreadSheet[0]);
+        $spreadSheet = array_values($spreadSheet);
+
+        $column = $bb->column;
+        $into = $chain->into($column); 
+
+        $mtx = $bb->workOnSheet($spreadSheet);
+        $mtx = $bb->fixColumnWorkSheet($column,$mtx);
+
+        $count = 0;
+
+        for ($m=0; $m < sizeof($mtx); $m++) { 
+            $values[$m] = $chain->values($mtx[$m],$column);
+
+            $ins[$m] = "INSERT INTO $table ($into) VALUES (".$values[$m].")";
+            
+            if($con->query($ins[$m]) === TRUE ){
+                $count ++;   
+            }else{
+                var_dump($spreadSheet[$m]);
+                var_dump($ins[$m]);
+                echo "<pre>".($ins[$m])."</pre>";
+                var_dump($con->error);
+            } 
+            
+        }
+
+        if($count == sizeof($mtx)){
+            return view('dataManagement.insert.bvBandPost',compact('ins'));
+        }
+    }
+
+
     public function dataCurrentThroughtG(){
         
         $db = new dataBase();
@@ -243,9 +499,7 @@ class dataManagementController extends Controller{
         $user = $usr->getUser($con, null);
         $userType = $usr->getUserType($con);
         $render = new dataManagementRender();
-
     	return view('dataManagement.userGet',compact('user','userType','region','render'));
-
     }
 
     public function userEditFilter(){
@@ -792,42 +1046,6 @@ class dataManagementController extends Controller{
         var_dump($res);
     }
 
-    /*END OF BRAND FUNCTIONS*/
-/*
-    public function truncateGet(){
-
-        $queries = new queries();
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-
-        return view('dataManagement.truncateCheck');
-    }
-
-    public function trueTruncateGet(){
-
-        $queries = new queries();
-        $db = new dataBase();
-        $con = $db->openCOnnection("DLA");
-
-        $queries->truncateAll($con);
-
-        return view('dataManagement.home');
-    }
-*/
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
     
 }

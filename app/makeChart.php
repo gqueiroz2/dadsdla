@@ -7,13 +7,60 @@ use App\dashboards;
 use App\subRankings;
 class makeChart extends Model{
     
+	public function bvBrand($values,$year){
+		$string = "[['Client','Revenue $year'],";
+		
+		for ($v=0; $v < sizeof($values); $v++) { 
+			$string .= " ['".$values[$v]['brand']."',";			
+			$string .= " ".$values[$v]['value'].",";
+			$string .= " ], ";
+		}
+
+		$string .= "]";
+		
+		return $string;
+	}
+
+    public function bvChild($values,$year){
+
+		$string = "[['Client','Revenue $year',{ role: 'style' }],";
+		
+		for ($v=0; $v < sizeof($values); $v++) { 
+			$string .= " ['".$values[$v]['client']."',";			
+			$string .= " ".$values[$v]['total'].",";
+			$string .= "'blue'";
+			$string .= " ], ";
+		}
+
+		$string .= "]";
+
+		return $string;
+		
+	}
+
+	public function bvMonth($values,$year){
+		$dash = new dashboards();
+        $months = $dash->getMonths();
+        $monthsFN = $dash->getMonthsMidName();
+
+		$string = "['Month','Revenue $year'],";
+
+		for ($m=0; $m < 12; $m++) { 
+			$string .= " ['".$monthsFN[$m]."',";			
+			$string .= " ".$values[$m]['value']."";
+			$string .= " ], ";
+		}
+
+		return $string;
+
+	}
+
 	public function overviewMonth($con,$type,$l3M,$years){
 		$dash = new dashboards();
         $months = $dash->getMonths();
         $monthsFN = $dash->getMonthsFullName();
 
 		$string = "['Month','".$years[0]."','".$years[1]."','".$years[2]."'],";
-
 
 		for ($m=0; $m < 12; $m++) { 
 			$string .= " ['".$monthsFN[$m]."', ";

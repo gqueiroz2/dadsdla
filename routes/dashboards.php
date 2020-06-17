@@ -13,18 +13,30 @@
 
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'dashboards'],function(){
+
 		Route::group(['prefix'=>'overview'],function(){
 			Route::get('/','dashboardsController@overviewGet')
 							->name('overviewGet');
 			Route::post('/','dashboardsController@overviewPost')
 								->name('overviewPost');
 		});
+<<<<<<< HEAD
 		Route::group(['prefix'=>'BV'],function(){
 			Route::get('/','dashboardsBvController@bvGet')
 							->name('bvGet');
 			Route::post('/','dashboardsBvController@bvPost')
 								->name('bvPost');
 		});
+=======
+
+		Route::group(['prefix'=>'bv'],function(){
+			Route::get('/','dashboardsController@dashboardBVGet')
+							->name('dashboardBVGet');
+			Route::post('/','dashboardsController@dashboardBVPost')
+								->name('dashboardBVPost');
+		});
+
+>>>>>>> 9afed3429c486df038af43b8b3b2214bd995cf78
 	});
 });
 

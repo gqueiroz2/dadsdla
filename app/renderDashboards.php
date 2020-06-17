@@ -617,9 +617,8 @@ class renderDashboards extends Render{
 */
 
     public function baseFilter(){
-    	echo "<select id='baseFilter' name='baseFilter' style='width:100%;' class='selectpicker' data-live-search='true'>";
+    	echo "<select id='baseFilter' name='baseFilter' data-width='100%;' class='selectpicker' data-live-search='true'>";
             echo "<option value=''> Select Region </option>";
-
     	echo "</select>";
     }
 

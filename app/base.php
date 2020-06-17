@@ -9,10 +9,16 @@ use App\sql;
 
 class base extends Model{
 
-    public function fixDate($d,$m,$y){
-        var_dump($d);
-        var_dump($m);
-        var_dump($y);
+    public function fixDate($y,$m,$d){
+        if($d < 10){
+            $d = "0".$d;
+        }
+
+        if($m < 10){
+            $m = "0".$m;
+        }
+
+        return ($y."-".$m."-".$d);
     }
 
     public function sourceABVtoComplete($parametter){
@@ -73,6 +79,27 @@ class base extends Model{
                 echo "</div>";                              
             echo "</div>";    
         }
+    }
+
+    public function source($type){
+        $db = new dataBase();
+        $base = new base();
+        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $sql = new sql();
+
+        $select = "SELECT * FROM sources_date WHERE (source = '$type')";
+
+        $res = $con->query($select);
+
+        $from = array("source","current_throught");
+
+        $list = $sql->fetch($res,$from,$from);
+
+        return $list[0]['current_throught'];
+        
     }
 
     public function sourceCMAPS(){
@@ -179,6 +206,45 @@ class base extends Model{
         }
 
         return $percentage;
+    }
+
+    public function verifyOnBaseCMAPS($con,$what,$arr){       
+        $sql = new sql();
+        if($what == "client"){
+           $something = "client_id";
+        }elseif($what == "agencyGroup"){
+           $something = "agency_group_id";
+        }else{
+           $something = "agency_id";
+        }
+
+        for ($a=0; $a < sizeof($arr); $a++) {
+            
+            if($what == "agencyGroup"){
+                $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
+                $where = "WHERE($something = \"".$arr[$a]."\")";
+            }else{
+                $join = false;
+                $where = "WHERE($something = \"".$arr[$a]."\")";
+            }
+
+            $select[$a] = "SELECT SUM(gross) AS mySum 
+                                FROM cmaps y
+                                $join
+                                $where";
+            
+            $res[$a] = $con->query($select[$a]);
+            $from = array("mySum");
+            $value[$a] = $sql->fetch($res[$a],$from,$from);
+            if( !is_null($value[$a][0]['mySum']) && $value[$a][0]['mySum'] > 0 ){
+                $verified[$a] = true;
+            }else{
+                $verified[$a] = false;
+            }
+        }
+        
+        return $verified;        
+
     }
 
     public function verifyOnBase($con,$what,$arr){       
@@ -824,6 +890,13 @@ class base extends Model{
         }
 
         return $brands;
+    }
+
+    public function handleBrandSS($tmp){
+        
+        $brand = json_decode(base64_decode($tmp));
+        return $brand;
+
     }
 
     public function generateDiv($con,$pr,$region,$year,$currencyID){

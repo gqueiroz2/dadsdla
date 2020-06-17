@@ -73,6 +73,200 @@ class rank extends Model{
         return array($brandsTV, $brandsDigital);
     }
 
+    public function getAllNewValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $type2, $order_by=null, $leftName2=null, $secondaryFilter=false ,$baseFilter){
+
+        $ag = new agency();
+
+        for ($b=0; $b < sizeof($brands); $b++) { 
+            $brands_id[$b] = $brands[$b][0];
+        }
+
+        if($type == "agencyGroup"){ 
+
+            $temp = $ag->getAgencyByAgencyGroupID($con,$baseFilter);
+            for ($t=0; $t < sizeof($temp); $t++) { 
+                $base_filter_id[$t] = $temp[$t]['agencyID'];        
+            }
+            
+        }else{
+            $base_filter_id[0] = $baseFilter->id;    
+        }
+
+        $check = false;
+
+        for ($b=0; $b < sizeof($brands); $b++) {
+            if ($brands[$b][1] == 'ONL') {
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            array_push($brands_id, '13');
+            array_push($brands_id, '14');
+            array_push($brands_id, '15');
+            array_push($brands_id, '16');
+        }
+
+        $sql = new sql();
+
+        $p = new pRate();
+
+        for ($y=0; $y < sizeof($years); $y++) { 
+            if($tableName == "cmaps"){
+                if ($currency[0]['name'] == "USD"){
+                    $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                }else{
+                    $pRate[$y] = 1.0;
+                }
+            }else{
+                if ($currency[0]['name'] == "USD"){
+                    $pRate[$y] = 1.0;
+                }else{
+                    $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                }
+            }
+
+            if ($currency[0]['name'] == "USD") {
+                $pRateDigital[$y] = 1.0;
+            }else{
+                $pRateDigital[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+            }
+
+        }
+
+        $as = "total";
+
+        $tableAbv = "a";
+        $leftAbv = "b";
+
+        if ($type == "agency") {
+            $aux = "client";
+        }elseif ($type == "client") {
+            $aux = "agency";
+        }else{
+            $aux = "agency";
+        }
+
+        if ($tableName == "ytd") {
+            $value .= "_revenue_prate";
+            $columns = array("sales_representant_office_id", "brand_id", "month");
+            $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "plan_by_brand") {
+            $columns = array("sales_office_id","type_of_revenue","brand_id", "month");
+            $colsValue = array($region, $value, $brands_id, $months);
+            $value = "revenue";
+        }else{
+            $columns = array("brand_id", "month");
+            $colsValue = array($brands_id, $months);
+        }
+
+        if ($secondaryFilter) {
+            array_push($columns, $aux."_id");
+            array_push($colsValue, $secondaryFilter);
+        }
+
+        array_push($columns, "year");
+        array_push($columns, "agency_id");
+
+        if ($type == "agencyGroup") {
+            $leftAbv2 = "c";
+            $leftAbv3 = "d";
+
+            if ($tableName == "ytd") {
+                $columns = array("$leftAbv3.ID", "sales_representant_office_id", "brand_id", "month");
+                $colsValue = array($region, $region, $brands_id, $months,);
+            }else{
+                $columns = array("brand_id", "month");
+                $colsValue = array($brands_id, $months);
+            }
+
+            if ($secondaryFilter) {
+                array_push($columns, $aux."_id");
+                array_push($colsValue, $secondaryFilter);
+            }
+
+            array_push($columns, "year");
+            array_push($columns, "agency_id");
+
+            $table = "$tableName $tableAbv";
+            $tmp = $leftAbv.".ID AS '".$type."ID', ".
+                   $leftAbv.".name AS '".$type."', SUM($value) AS $as";
+            $join = "LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2."."."ID = ".$tableAbv.".".$leftName2."_id
+                    LEFT JOIN ".substr($leftName, 0, 6)."_group ".$leftAbv." ON ".$leftAbv.".ID = ".$leftAbv2.".".substr($leftName, 0, 6)."_group_id
+                    LEFT JOIN region $leftAbv3 ON $leftAbv3.ID = $leftAbv.region_id";
+            $name = substr($type, 0, 6)."_group_id";
+            $names = array($type."ID", $type, $as);
+            for ($y=0; $y < sizeof($years); $y++) {
+                array_push($colsValue, $years[$y]);
+                array_push($colsValue, $base_filter_id);
+
+                $where = $sql->where($columns, $colsValue);
+
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, $order_by);
+                array_pop($colsValue);
+                $from = $names;
+                $res[$y] = $sql->fetch($values[$y], $from, $from);
+                if(is_array($res[$y])){
+                    for ($r=0; $r < sizeof($res[$y]); $r++) { 
+                        if ($tableName == "cmaps") {
+                            $res[$y][$r]['total'] /= $pRate[$y];
+                        }else{
+                            $res[$y][$r]['total'] *= $pRate[$y];
+                        }
+                    }
+                }
+            }
+        }else{
+            $table = "$tableName $tableAbv";
+            if ($type == "sector" || $type == "category") {
+                $tmp = $tableAbv.".".$type." AS '".$type."', SUM($value) AS $as";
+                $tmpD = false;
+                $join = null;
+                $name = $type;
+                $names = array($type, $as);
+            }else{
+                $name = $type."_id";
+                if ($type == "agency") {
+                    $leftName2 = "agency_group";
+                    $leftAbv2 = "c";
+                    $tmp = $leftAbv.".ID AS '".$type."ID', ".$leftAbv.".name AS '".$type."', ".$leftAbv2.".name AS 'agencyGroup', SUM($value) AS $as";
+                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv.".ID = ".$tableAbv.".".$type."_id
+                            LEFT JOIN ".$leftName2." ".$leftAbv2." ON ".$leftAbv2.".ID = ".$leftAbv.".".$leftName2."_id";
+                    $names = array($type."ID", $type, "agencyGroup", $as);
+                }else{
+                    $tmp = $tableAbv.".".$type."_id AS '".$type."ID', ".$leftAbv."."."name AS '".$type."', SUM($value) AS $as";
+                    $join = "LEFT JOIN ".$leftName." ".$leftAbv." ON ".$leftAbv."."."ID = ".$tableAbv.".".$type."_id"; 
+                    $names = array($type."ID", $type, $as);
+                }
+            }
+
+            for ($y=0; $y < sizeof($years); $y++) {
+                array_push($colsValue, $years[$y]);
+                array_push($colsValue, $base_filter_id);
+                $where = $sql->where($columns, $colsValue);
+                $values[$y] = $sql->selectGroupBy($con, $tmp, $table, $join, $where, "total", $name, "DESC");
+                array_pop($colsValue);
+                $from = $names;
+                $res[$y] = $sql->fetch($values[$y], $from, $from);
+
+                if(is_array($res[$y])){
+
+                    for ($r=0; $r < sizeof($res[$y]); $r++) { 
+                        if ($tableName == "cmaps") {
+                            $res[$y][$r]['total'] /= $pRate[$y];
+                        }else{
+                            $temp = $res[$y][$r]['total'];
+                            $res[$y][$r]['total'] *= $pRate[$y];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $res;
+
+    }
+
     public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, &$type2, $order_by=null, $leftName2=null, $secondaryFilter=false){
 
         for ($b=0; $b < sizeof($brands); $b++) { 
@@ -217,7 +411,6 @@ class rank extends Model{
                 $from = $names;
 
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
-
                 $resD[$y] = $sql->fetch($valuesD[$y], $from, $from);
 
                 if(is_array($res[$y])){

@@ -105,5 +105,6 @@ class shareController extends Controller{
         $title = $mtx['region']." - Share.xlsx";
 
         return view("adSales.results.3sharePost",compact('region','salesRep','salesRepGroup','render','brand','currency','mtx','rName', 'regionExcel', 'yearExcel', 'sourceExcel', 'currencyExcel', 'valueExcel', 'title'));
+        
     }
 }

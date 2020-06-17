@@ -12,6 +12,22 @@ use App\base;
 class rollOutBase extends Model{
     protected $fullMonthEN = array("JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER");			
 
+    public function endHour($row,$column,$mtx){
+
+    	$check = true;
+    	$count = 1;
+    	while ($check){
+    		if( $mtx[($row + $count)]['B'] != "Important Dates" || $mtx[($row + $count)]['B'] != "DAY" || $mtx[($row + $count)]['B'] != "AVG PT"){
+    			$endHour = $mtx[($row + $count)]['B'];
+    			$check = false;
+    		}    		
+    		$count++;
+    	}
+
+    	return $endHour;
+
+    }
+
 	public function loopThrough($kind,$seek,$where,$mtx){
 		$values = array();
 		switch ($kind) {
@@ -32,7 +48,6 @@ class rollOutBase extends Model{
 	public function findDateInSpreadsheet($columnHeader,$mtx,$row,$col,$dayRow,$monthRow){
 		$base = new base();
 		$M = $base->month;
-		var_dump("================== INICIO =======================");
 		$dayC= -1;
 		for ($d=0; $d < sizeof($dayRow); $d++) { 
 			if($row > $dayRow[$d]){
@@ -47,15 +62,9 @@ class rollOutBase extends Model{
 				break;
 			}
 		}
-		var_dump($day);
-		var_dump($month);
-		var_dump($monthAbv);
-
-		$date = $day."-".$monthAbv."-"."2020";
-
-		var_dump($date);
-
-		var_dump("================== FIM =======================");
+		
+		$date = $base->fixDate("2020",$monthAbv,$day);
+		return $date;		
 	}
 
 	public function getColumnPivot($sp,$column){

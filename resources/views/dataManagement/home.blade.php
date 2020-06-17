@@ -3,21 +3,14 @@
 @section('title', '@')
 
 @section('head')
-
 	<style type="text/css">		
-		
 		.button:focus{    
     		color:white;
 		}
-
 	</style>
     <?php include(resource_path('views/auth.php')); ?>
-
 @endsection
-
-
 @section('content')
-
 @if($userLevel == 'SU')
 	<div class="container-fluid">
 		<div class="row justify-content-center">
@@ -75,6 +68,26 @@
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('insertPlanBySalesGet') }}" style="color: white">
 											Insert Target by Sales Rep
+										</a>
+									</button>	
+								</div>
+							</div>
+
+							<div class="row justify-content-center mt-2">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('insertBvBandG') }}" style="color: white">
+											Insert BV Bands
+										</a>
+									</button>	
+								</div>
+							</div>
+
+							<div class="row justify-content-center mt-2">
+								<div class="col">
+									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
+										<a href="{{ route('saveCMAPSReadGet') }}" style="color: white">
+											Save CMAPS Read
 										</a>
 									</button>	
 								</div>
@@ -159,26 +172,12 @@
 						</div>
 					</div>
 				</div>
-
-
 				<div class="mt-5">
 				</div>
 			</div>
 		</div>
 	</div>
-	<!--
-	<script type="text/javascript">
 		
-		jQuery(document).ready(function($){
-			$('#region').click(function(e){
-
-				location.href =''
-
-			});
-		});
-
-	</script>
-	-->
 @else
 @endif
 @endsection

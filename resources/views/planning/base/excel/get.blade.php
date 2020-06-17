@@ -1,4 +1,4 @@
-@extends('layouts.mirror')
+@extends('layouts.planningMirror')
 @section('title', '@')
 @section('head')
     <?php include(resource_path('views/auth.php')); ?>
@@ -51,7 +51,7 @@
 											@if($errors->has('brand'))
 												<label style="color: red;">* Required</label>
 											@endif
-											{{$rP->brand($brand)}}
+											{{$rP->brandSS($brand)}}
 								    	</div>
 								    </div>
 								</div>

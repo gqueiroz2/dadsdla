@@ -8,17 +8,15 @@ use App\rollOutBase;
 class rollOut extends rollOutBase{
 
 	public function searchPatterns($parametter){
-
 		$rowStart = 5;
 		$columnStart = "C";
 
 		$rtr = array("rowStart" => $rowStart, "columnStart" => $columnStart);
 
 		return $rtr;
-
 	}
 
-	public function structureSpreadsheet($mtx,$column){
+	public function structureSpreadsheet($mtx,$column,$brand){
 		$structure = array();
 
 		$searchPatterns = $this->searchPatterns("Roll Out");
@@ -34,24 +32,27 @@ class rollOut extends rollOutBase{
 		$seek2 = "2020";
 		$monthRow = $this->loopThrough($kind2,$seek2,$where1,$mtx)[0];
 
-		var_dump($monthRow);
-
 		for ($r= $rs; $r < sizeof($mtx); $r++) { # ROWS
 			for ($c=$cs; $c < sizeof($mtx[$r]); $c++) { # COLUMNS
 				if( strlen($mtx[$r][$column[$c]]) != 0 ){
-					
-						$date = $this->findDateInSpreadsheet($column,$mtx,$r,$c,$dayRow,$monthRow);
-
-						//var_dump($mtx[$r][$column[$c]]);
-
-
+					$date = $this->findDateInSpreadsheet($column,$mtx,$r,$c,$dayRow,$monthRow);
+					$dayOfTheWeek = $mtx[$r]['A'];
+					$startHour = $mtx[$r]['B'];
+					$endHour = $this->endHour($r,$c,$mtx);
+					$info = array(
+									"program" => $mtx[$r][$column[$c]],
+									"brand" => $brand[1],
+									"date" => $date,
+									"dayOfTheWeek" => $dayOfTheWeek,
+									"startHour" => $startHour,
+									"endHour" => $endHour,
+					             );
+					array_push($structure, $info);
 				}
 			}
-
 		}
 		
-
-
+		return $structure;
 	}
 
 	public function spreadSheetToMatrix($spreadSheet,$column){

@@ -16,10 +16,12 @@ class agency extends Management{
         $join = false;
         $where = "WHERE name = '$group' AND region_id = '$region'";
         $limit = "LIMIT 1";
-        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $res = $sql->larica($con,$columns,$table,$join,$where,1,$limit);
         $from = array("ID");
         $to = array('id');
         $agencyGroupID = $sql->fetch($res,$from,$to);
+
+        var_dump($agencyGroupID);
         return $agencyGroupID[0]['id'];
     }
 
@@ -243,7 +245,40 @@ class agency extends Management{
         $join = "LEFT JOIN region r ON r.ID = ag.region_id
                  ";
 
-        $res = $sql->select($con,$columns,$table,$join,$where);
+        $res = $sql->selectDistinct($con,$columns,$table,$join,$where,2);
+
+        $from = array('id','agencyGroup','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyGroupBrazil($con,$agencyID=false){
+
+        $sql = new sql();
+
+        $table = "agency_group ag";
+
+        $columns = "ag.name AS 'agencyGroup',
+                    ag.ID AS 'id',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyID){
+            $agencyIDS = implode(",", $agencyID);
+            $where .= "WHERE ag.ID IN ('$agencyIDS') AND (r.ID = 1)";
+        }else{
+            $where .= "WHERE (r.ID = 1)";
+        }
+
+        $join = "LEFT JOIN region r ON r.ID = ag.region_id
+                 ";
+
+        $res = $sql->selectDistinct($con,$columns,$table,$join,$where,2);
 
         $from = array('id','agencyGroup','region');
 
@@ -317,6 +352,90 @@ class agency extends Management{
         $agency = $sql->fetch($res,$from,$from);
 
         return $agency;
+    }
+
+    public function getAgencyGroupByRegionCMAPS($con,$year=false,$agencyRegion=false){
+
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+
+            if ($year) {
+                $where .= "WHERE year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";                
+            }
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+
+        $from = array('id','agencyGroup');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyGroupByRegionCMAPSWithValues($con,$year=false,$agencyRegion=false){
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    SUM(gross) AS 'revenue'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+
+            if ($year) {
+                $where .= "WHERE year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";                
+            }else{
+                //$where = "WHERE (SUM(gross) > 0)";
+            }
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+
+        $from = array('id','agencyGroup','revenue');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
     }
 
     public function getAgencyGroupByRegion($con,$agencyRegion=false, $year=false){
@@ -500,8 +619,12 @@ class agency extends Management{
                     ag.name AS 'agencyGroup',
                     ag.ID AS 'agencyGroupID'
                    ";
-
-        $where = "WHERE year = '$year'";
+        
+        if($year){
+            $where = "WHERE year = '$year'";
+        }else{
+            $where = false;
+        }
         
         $join = "LEFT JOIN agency a ON a.id = y.agency_id
                  LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
@@ -514,7 +637,7 @@ class agency extends Management{
         $agency = $sql->fetch($res,$from,$from);
 
         return $agency;
-
+        
     }
 
     public function getAllAgenciesByRegion($con,$agencyRegion=false){

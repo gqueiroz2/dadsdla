@@ -31,9 +31,20 @@ class chain extends excel{
         }else{
             $parametter = false;
         }
+<<<<<<< HEAD
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         
+=======
+        /*
+        if($table == "insights"){
+            array_push($columns, 'year');
+        }
+        */
+
+        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+
+>>>>>>> 9afed3429c486df038af43b8b3b2214bd995cf78
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
@@ -99,7 +110,7 @@ class chain extends excel{
         }
 
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
-        
+
         if($tempBase){
             $table = 'bts';
         }
@@ -117,11 +128,11 @@ class chain extends excel{
         if($table == "data_hub"){
             $current = $this->fixShareAccountsDH($con,$current);
         }
-        
+
         if($table == "bts"){
             $current = $this->fixShareAccountsBTS($con,$current);            
         }       
-        
+
         $into = $this->into($columnsS);		
 
         if($table == 'data_hub'){
@@ -514,7 +525,11 @@ class chain extends excel{
 
             $current[$c]['sales_representant_office'] = $this->fixBTSRegion($current[$c]['invoice_holding_company']);
             
+            $currentMonth = floatval(date('m'));
 
+            if( $current[$c]['month'] < $currentMonth){
+                $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_curr_prate'];
+            }
             $current[$c]['brand'] = $current[$c]['master_channel'];
             $current[$c]['brand_feed'] = $current[$c]['channel'];
 
@@ -1185,6 +1200,7 @@ class chain extends excel{
                            $columns[$c] == 'fcst_amount_gross' ||
                            $columns[$c] == 'fcst_amount_net' ||
                            $columns[$c] == 'success_probability' ||
+                           $columns[$c] == 'gross_revenue_curr_prate' ||
                            $columns[$c] == 'num_spot'
     				      ){
                             if ($columns[$c] == 'gross_revenue_prate'){
@@ -1285,7 +1301,12 @@ class chain extends excel{
                             }elseif($columns[$c] == 'obs'){
                                 $spreadSheetV2[$s][$columns[$c]] = "OBS";
                             }elseif($columns[$c] == 'year'){
-                                $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
+                                if($table == "insights"){
+                                    $x = date('Y');
+                                    $spreadSheetV2[$s][$columns[$c]] = $x;
+                                }else{
+                                    $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
+                                }
                             }elseif($columns[$c] == 'month'){
                                 if( $table && ($table == "ytdFN") ){
                                     //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
@@ -1558,26 +1579,6 @@ class chain extends excel{
 
     }
 
-    /*
-      1 => string 'Advertiser' (length=10)
-      2 => string 'Agency' (length=6)
-      3 => string 'Campaign' (length=8)
-      4 => string 'Insertion Order' (length=15)
-      5 => string 'Insertion Order ID' (length=18)
-      6 => string 'Sales Location' (length=14)
-      7 => string 'Sales Person' (length=12)
-      8 => string 'IO Start Date' (length=13)
-      9 => string 'IO End Date' (length=11)
-      10 => string 'Agency Commission (%)' (length=21)
-      11 => string 'Rep Commission (%)' (length=18)
-      12 => string 'IO Currency' (length=11)
-      13 => string 'Placement' (length=9)
-      14 => string 'Buy Type' (length=8)
-      15 => string 'Content Targeting Set Name' (length=26)
-      16 => string 'Ad Unit' (length=7)
-      17 => string 'MONTH' (length=5)
-      18 => string 'GROSS REVENUE' (length=13)
-    */
     public $sfPandRColumnsF = array(
                                   'oppid',
                                   'region',                                  
@@ -1905,7 +1906,8 @@ class chain extends excel{
                                 'agency_commission_percentage',
                                 'booked_spots',
                                 'gross_revenue',
-                                'gross_revenue_prate'
+                                'gross_revenue_prate',
+                                'gross_revenue_curr_prate'
                             );
 
     public $ytdColumnsF = array(

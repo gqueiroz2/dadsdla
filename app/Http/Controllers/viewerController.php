@@ -26,6 +26,18 @@ use App\dataBase;
 
 class viewerController extends Controller{
 
+    public function saveCMAPSReadGet(){
+        var_dump("GET");
+
+        return view("adSales.viewer.saveReadGet");
+    }
+
+    public function saveCMAPSReadPost(){
+        var_dump("POST");
+
+        var_dump(Request::all());
+    }
+
     public function insightsGet(){
         $bs = new base();
 

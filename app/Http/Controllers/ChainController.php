@@ -11,6 +11,7 @@ use App\chain;
 use App\sql;
 use App\RenderChain;
 use App\digital;
+
 class ChainController extends Controller{
     public function chainGet(){
     	$rC = new RenderChain();
@@ -147,7 +148,6 @@ class ChainController extends Controller{
             case 'fw_digital':
                 var_dump($spreadSheet[0]);
                 unset($spreadSheet[0]);
-                //unset($spreadSheet[1]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
             case 'sf_pr':
@@ -165,7 +165,6 @@ class ChainController extends Controller{
                 unset($spreadSheet[1]);
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
-                var_dump($spreadSheet);
                 break;
 		}
 

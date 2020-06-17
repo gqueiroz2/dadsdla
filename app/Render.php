@@ -20,6 +20,13 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function agencyGroupForm(){
+        
+        echo "<select class='selectpicker agencyChange' id='agencyGroup' name='agencyGroup' data-selected-text-format='count' data-width='100%' data-live-search='true'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
     public function clientForm(){
         echo "<select class='selectpicker' id='client' name='client[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>";
             echo "<option value=''> Select Region </option>";
@@ -252,6 +259,20 @@ class Render extends Model{
                 if ($brand[$i]["name"] != "DN") {
                     $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
                     echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
+                }
+            }
+            
+        echo "</select>";
+    }
+
+    public function brandSS($brand){
+        
+        echo "<select id='brandSS' class='selectpicker' name='brand' data-size='7' data-width='100%'>";
+            echo "<option value=''> Select </option>";
+            for ($i = 0; $i < sizeof($brand); $i++) { 
+                if ($brand[$i]["name"] != "DN") {
+                    $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                    echo "<option value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
                 }
             }
             

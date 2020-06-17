@@ -54,9 +54,7 @@ class share extends results{
             $valueView = "Net";
         }
 
-
         $yearView = $year[0];
-
 
         $tmp = array($region);
         $regionView = $r->getRegion($con,$tmp)[0]["name"];
