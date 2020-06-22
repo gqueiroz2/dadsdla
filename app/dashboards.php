@@ -225,26 +225,20 @@ class dashboards extends rank{
         
         $fcst = $sql->fetch($res,$from,$from);
 
-        $this->dealWithFcst($fcst,$share);
+        $deal = $this->dealWithFcst($fcst,$share);
 
-
+        return $deal;
     }
 
     public function dealWithFcst($fcst,$share){
-
-        var_dump($fcst);
-
-        var_dump($share);
-
+        $currentMonth = intval(date('m')) - 1;
+        
         for ($f=0; $f < sizeof($fcst); $f++) { 
-            $months[$f] = $this->handleMonths($fcst[$f]['fromDate'],$fcst[$f]['toDate']); 
-            var_dump($months[$f]);
 
+            $months[$f] = $this->handleMonths($fcst[$f]['fromDate'],$fcst[$f]['toDate']); 
             $shareExp[$f] = array();
 
             if(sizeof($months[$f]) > 1){
-
-                var_dump($months);
 
                 for ($m=0; $m < sizeof($months[$f]); $m++) { 
                     for ($s=0; $s < sizeof($share); $s++) { 
@@ -253,12 +247,52 @@ class dashboards extends rank{
                         }
                     }
                 }
-                var_dump($shareExp[$f]);
+
+                $totShareExp[$f] = 0.0;
+
+                for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
+                    $totShareExp[$f] += $shareExp[$f][$s];
+                }
+
+                for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
+                    $shareExpDiv[$f][$s] = $shareExp[$f][$s]/$totShareExp[$f];
+                    $value[$f][$s] = $fcst[$f]['revenue']*$shareExpDiv[$f][$s];
+                }
+
+                for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                    $temp[$f][$m]['month'] = intval($months[$f][$m]);
+                    $temp[$f][$m]['revenue'] = $value[$f][$m];
+                }
+
+                for ($x=$currentMonth; $x < 12; $x++) { 
+                    $revenue[$f][$x] = 0.0;                            
+                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                        if( ($x+1) == intval($months[$f][$m]) ){                            
+                            $revenue[$f][$x] = $temp[$f][$m]['revenue'];
+                            break;
+                        }
+                    }   
+                }
+
             }else{
+                $temp[$f][0]['month'] = intval($months[$f][0]);
+                $temp[$f][0]['revenue'] = doubleval($fcst[$f]['revenue']);
 
+                for ($x=$currentMonth; $x < 12; $x++) { 
+                    $revenue[$f][$x] = 0.0;                            
+                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                        if( ($x+1) == intval($months[$f][$m]) ){                            
+                            $revenue[$f][$x] = $temp[$f][$m]['revenue'];
+                            break;
+                        }
+                    }   
+                }
             }
-        }
 
+            $fcst[$f]['split'] = $revenue[$f];
+        }
+        
+        return $fcst;
 
     }
 

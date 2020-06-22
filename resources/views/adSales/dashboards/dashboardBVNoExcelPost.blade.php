@@ -152,8 +152,6 @@
 				</table>
 			</div>
 		</div>
-
-		
 					
 		<div class="row">
 			<div class="col-3" id="tableActualBandsDiv">
@@ -171,7 +169,12 @@
 
 					@if($bands[0])
 						@for($i=0;$i< sizeof($bands[0]) ;$i++)
-							<tr style="background-color: #d9e1f2;">
+							@if($i%2==0)
+								<?php $color = '#d5dee4;';?>
+							@else
+								<?php $color = '#d9e1f2;'?>
+							@endif
+							<tr style="background-color: {{$color}};">
 								<td>{{ number_format( $bands[0][$i]['fromValue'] ) }}</td>
 								@if($bands[0][$i]['toValue'] == -1)
 									<td> &nbsp; </td>
@@ -193,7 +196,35 @@
 				</table>
 			</div>
 
-			<div class="col-5" id="byBrandDiv">
+			<div class="col">
+				<span style="font-weight: bold; font-size: 18px;"> Forecast </span>
+
+				<table class="table table-borderless table-outside-border" style="margin-top: 1.25%;">
+					<tr class="dc">
+						<td> Cliente </td>
+						@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
+							<td> {{ $monthsMidName[$m] }} </td>
+						@endfor
+						<td> Total </td>
+					</tr>
+					@for($f = 0; $f < sizeof($forecast); $f++)
+
+						@if($f%2==0)
+							<?php $color = '#d5dee4;';?>
+						@else
+							<?php $color = '#d9e1f2;'?>
+						@endif
+						<tr style="background-color: {{$color}};">
+							<td> {{ $forecast[$f]['client']}} </td>
+							@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
+								<td> {{ number_format($forecast[$f]['split'][$m]) }} </td>
+							@endfor								
+						</tr>
+					@endfor						
+				</table>
+			</div>
+
+			<div class="col-3" id="byBrandDiv">
 				<div id="byBrand"></div>
 			</div>
 		</div>
