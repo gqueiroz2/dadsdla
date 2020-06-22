@@ -102,14 +102,7 @@
 								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
 								
 								@if(( $userLevel == "SU" ))
-								<a class="dropdown-item" href="{{ route('bvGet') }}"> BV </a>
-
-								@if($userLevel == 'SU')
 									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
-
-								@if($userLevel == 'SU')
-									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
-
 								@endif
 							</div>
 						</li>
