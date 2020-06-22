@@ -22,8 +22,8 @@ class makeChart extends Model{
 	}
 
     public function bvChild($values,$year){
-
-		$string = "[['Client','Revenue $year',{ role: 'style' }],";
+    	
+		$string = "[['Client','Investimento $year',{ role: 'style' }],";
 		
 		for ($v=0; $v < sizeof($values); $v++) { 
 			$string .= " ['".$values[$v]['client']."',";			

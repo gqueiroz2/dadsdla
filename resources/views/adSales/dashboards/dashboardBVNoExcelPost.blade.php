@@ -13,13 +13,8 @@
 <script type="text/javascript">
 	var screenW = screen.width;
 	var screenH = screen.height;
-
 	var widthChart = screenW/4;
-
 	console.log("Your screen resolution is: " + screen.width + "x" + screen.height);
-
-	
-
 </script>
 
 @section('content')
@@ -197,8 +192,9 @@
 			</div>
 
 			<div class="col">
-				<span style="font-weight: bold; font-size: 18px;"> Forecast </span>
-
+				<center>
+					<span style="font-weight: bold; font-size: 18px;"> FORECAST </span>
+				</center>
 				<table class="table table-borderless table-outside-border" style="margin-top: 1.25%;">
 					<tr class="dc">
 						<td> Cliente </td>
@@ -219,6 +215,7 @@
 							@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
 								<td> {{ number_format($forecast[$f]['split'][$m]) }} </td>
 							@endfor								
+							<td> {{ number_format($forecast[$f]['revenue']) }} </td>
 						</tr>
 					@endfor						
 				</table>
@@ -231,13 +228,19 @@
 
 		<div class="row mt-2">
 			<div class="col">
-				<div id="childGraph"></div>
+				<center>
+					<span style="font-weight: bold; font-size: 18px;"> CLIENTES </span>
+				</center>
+				<div id="childGraph" style="margin-top: 1.25%;"></div>
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row mt-5">
 			<div class="col">
-				<div id="byMonthGraph"></div>
+				<center>
+					<span style="font-weight: bold; font-size: 18px;"> MESES </span>
+				</center>
+				<div id="byMonthGraph" style="margin-top: 1.25%;"></div>
 			</div>
 		</div>
 
@@ -394,7 +397,7 @@
 		      var data = google.visualization.arrayToDataTable(<?php echo $graph['child']; ?>);
 
 		      var options = {		        
-		        legend:'none',
+		        legend: { position: "none" },
 				'width': '100%',
 				'height': '100%',
 				backgroundColor:'transparent',        
