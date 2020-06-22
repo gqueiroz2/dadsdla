@@ -11,6 +11,7 @@ use App\sql;
 class agency extends Management{
 
     public function getAgencyGroupID($con,$sql,$group,$region){
+        
         $table = "agency_group";
         $columns = "ID";
         $join = false;
