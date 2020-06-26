@@ -38,7 +38,7 @@
 							@if($errors->has('value'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->value2()}}
+							{{$render->valueNet()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>

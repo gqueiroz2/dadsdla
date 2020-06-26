@@ -123,11 +123,14 @@ class subRankings extends rank{
         $from = $names;
 
         $res = $sql->fetch($values[$y], $from, $from);
+
+        /*
         if (is_array($res)) {
             for ($r=0; $r < sizeof($res); $r++) { 
-                $res[$r]['total'] *= $pRate;
+                //$res[$r]['total'] *= $pRate;
             }
         }
+        */
         
         return $res;
     }

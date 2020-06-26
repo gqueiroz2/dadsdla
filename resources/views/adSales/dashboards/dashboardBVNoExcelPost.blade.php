@@ -7,6 +7,15 @@
     	.table-outside-border{
     		border: 1px solid black;
     	}
+
+    	.dot {
+			height: 25px;
+			width: 25px;
+			background-color: #bbb;
+			border-radius: 50%;
+			display: inline-block;
+		}
+
     </style>
 @endsection
 
@@ -50,7 +59,7 @@
 							@if($errors->has('value'))
 								<label style="color: red;">* Required</label>
 							@endif
-							{{$render->value2()}}
+							{{$render->valueNet()}}
 						</div>
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
@@ -70,7 +79,7 @@
 					</button>
 				</div>
 
-				<div style="float: right; margin-right: 5%;"> BV </div>
+				<div style="float: right; margin-right: 5%;"> BV - ({{$currencyShow}}/{{$valueShow}})  </div>
 			</div>
 		</div>	
 	</div>
@@ -80,11 +89,11 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td style="background-color: #002060;color:white; width: 50%;"> Agência </td>
-						<td style="background-color: #d5dee4;width: 50%;"> {{$agencyGroupName}}  </td>
+						<td style="background-color: #002060;color:white; width: 50%;"> AGÊNCIA </td>
+						<td style="background-color: #d5dee4;width: 50%;"> {{ strtoupper($agencyGroupName) }}  </td>
 					</tr>
 					<tr>
-						<td class="dc"> Tabela </td>
+						<td class="dc"> TABELA </td>
 						<td style="background-color: #d9e1f2;"> {{ $cYear }} </td>
 					</tr>					
 				</table>
@@ -93,11 +102,11 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td class="dc" style="width: 50%;"> ACTUALS </td>
+						<td class="dc" style="width: 50%;"> INVESTIMENTO </td>
 						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format($bvAnalisis['currentVal']) }} </td>
 					</tr>
 					<tr>
-						<td class="dc"> FX ATUAL </td>
+						<td class="dc"> FAIXA ATUAL </td>
 						<td style="background-color: #d9e1f2;">
 							@if($bvAnalisis['currentPercentage'] <= 0)
 								-
@@ -107,8 +116,14 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="dc"> REM. ATUAL </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format($bvAnalisis['currentBV']) }} </td>
+						<td class="dc"> REMUNERAÇÃO ATUAL </td>
+						<td style="background-color: #d9e1f2;"> 
+							@if($bvAnalisis['currentBV'])
+								{{ number_format($bvAnalisis['currentBV']) }} 
+							@else
+								-
+							@endif
+						</td>
 					</tr>					
 				</table>
 			</div>
@@ -116,16 +131,34 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td class="dc"> DIF.PRÓX. </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format($bvAnalisis['nextBandDiff']) }} </td>
+						<td class="dc"> DIF. PRÓXIMA FAIXA </td>
+						<td style="background-color: #d9e1f2;"> 
+							@if($bvAnalisis['nextBandDiff'])
+								{{ number_format($bvAnalisis['nextBandDiff']) }} 
+							@else
+								-
+							@endif							
+						</td>
 					</tr>
 					<tr>
-						<td class="dc"> PROX.FX </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['nextBandPercentage']) ) }}% </td>
+						<td class="dc"> PRÓXIMA FAIXA </td>
+						<td style="background-color: #d9e1f2;"> 
+							@if($bvAnalisis['nextBandPercentage'])
+								{{ number_format( ($bvAnalisis['nextBandPercentage']) ) }}% 
+							@else
+								-
+							@endif							
+						</td>
 					</tr>
 					<tr>
-						<td class="dc" style="width: 50%;"> REM. PRÓX. FX </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['nextBandBV']) ) }} </td>
+						<td class="dc" style="width: 50%;"> REM. PRÓXIMA FAIXA </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> 
+							@if($bvAnalisis['nextBandBV'])
+								{{ number_format( ($bvAnalisis['nextBandBV']) ) }} 
+							@else
+								-
+							@endif							
+						</td>
 					</tr>				
 				</table>
 			</div>
@@ -133,16 +166,34 @@
 			<div class="col">
 				<table class="table table-borderless table-outside-border">
 					<tr>
-						<td class="dc" style="width: 50%;"> DIF. TETO </td>
-						<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format( ($bvAnalisis['maxBandCurrentVal']) ) }} </td>
+						<td class="dc" style="width: 50%;"> DIFERENÇA TETO </td>
+						<td style="background-color: #d9e1f2;width: 50%;"> 
+							@if($bvAnalisis['maxBandCurrentVal'])
+								{{ number_format( ($bvAnalisis['maxBandCurrentVal']) ) }}
+							@else
+								-
+							@endif 
+						</td>
 					</tr>
 					<tr>
-						<td class="dc"> TETO FX. </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['maxBandPercentage']) ) }}% </td>
+						<td class="dc"> TETO FAIXA </td>
+						<td style="background-color: #d9e1f2;"> 
+							@if($bvAnalisis['maxBandPercentage'])
+								{{ number_format( ($bvAnalisis['maxBandPercentage']) ) }}% 
+							@else
+								-
+							@endif	
+						</td>
 					</tr>
 					<tr>
-						<td class="dc"> REM. TETO </td>
-						<td style="background-color: #d9e1f2;"> {{ number_format( ($bvAnalisis['maxBandBV']) ) }} </td>
+						<td class="dc"> REMUNERAÇÃO TETO </td>
+						<td style="background-color: #d9e1f2;"> 
+							@if($bvAnalisis['maxBandBV'])
+								{{ number_format( ($bvAnalisis['maxBandBV']) ) }} 
+							@else
+								-
+							@endif
+						</td>
 					</tr>					
 				</table>
 			</div>
@@ -153,12 +204,12 @@
 				<table class="table table-borderless table-outside-border" id="tableActualBands">
 					<tr class="dc">
 						<td colspan="3">
-							<center> {{ $yearsBand[0] }} </center>
+							<center> TABELA {{ $yearsBand[0] }} </center>
 						</td>
 					</tr>
 					<tr class="dc">
-						<td style="width: 40%;">De</td>
-						<td style="width: 40%;">Até</td>
+						<td style="width: 40%;">DE</td>
+						<td style="width: 40%;">ATÉ</td>
 						<td style="width: 20%;">%</td>
 					</tr>
 
@@ -193,36 +244,62 @@
 
 			<div class="col">
 				<center>
-					<span style="font-weight: bold; font-size: 18px;"> FORECAST </span>
+					<span style="font-weight: bold; font-size: 18px;"> PREVISÃO </span>
 				</center>
-				<table class="table table-borderless table-outside-border" style="margin-top: 1.25%;">
-					<tr class="dc">
-						<td> Cliente </td>
-						@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
-							<td> {{ $monthsMidName[$m] }} </td>
-						@endfor
-						<td> Total </td>
-					</tr>
-					@for($f = 0; $f < sizeof($forecast); $f++)
 
-						@if($f%2==0)
-							<?php $color = '#d5dee4;';?>
-						@else
-							<?php $color = '#d9e1f2;'?>
-						@endif
-						<tr style="background-color: {{$color}};">
-							<td> {{ $forecast[$f]['client']}} </td>
+				@if($forecast)
+					<table class="table table-borderless table-outside-border" style="margin-top: 1.25%;">
+						<tr class="dc">
+							<td> CLIENTE </td>
 							@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
-								<td> {{ number_format($forecast[$f]['split'][$m]) }} </td>
-							@endfor								
-							<td> {{ number_format($forecast[$f]['revenue']) }} </td>
+								<td> {{ strtoupper($monthsMidName[$m]) }} </td>
+							@endfor
+							<td> TOTAL </td>
 						</tr>
-					@endfor						
-				</table>
+						@for($f = 0; $f < sizeof($forecast); $f++)
+
+							@if(strtoupper($forecast[$f]['client']) == "TOTAL")
+								<?php 
+									$color = '#0f243e;';
+									$bckGrd = 'color:white;';
+								?>
+							@elseif($f%2==0)
+								<?php 
+									$color = '#d5dee4;';
+									$bckGrd = '';
+								?>
+							@else
+								<?php 
+									$color = '#d9e1f2;';
+									$bckGrd = '';
+								?>
+							@endif
+							<tr style="background-color: {{$color}}; {{$bckGrd}}">
+								<td> {{ strtoupper($forecast[$f]['client']) }} </td>
+								@for($m = $startMonthFcst; $m < sizeof($monthsMidName);$m++)
+									<td> {{ number_format($forecast[$f]['split'][$m]) }} </td>
+								@endfor								
+								<td> {{ number_format($forecast[$f]['revenue']) }} </td>
+							</tr>
+						@endfor						
+					</table>
+				@else
+
+				@endif
 			</div>
 
 			<div class="col-3" id="byBrandDiv">
 				<div id="byBrand"></div>
+				<center>
+				<div class="form-inline">
+					@for($b = 0; $b < sizeof($graph['byBrand']['brandNames']); $b++)
+						<div style="margin-left: 1.25%;">
+							<span class="dot" style="background-color: {{$graph['byBrand']['brandColor'][$b]}};"></span>
+							<span style="font-weight: bold; font-size: 14px;"> {{$graph['byBrand']['brandNames'][$b]}} </span>
+						</div>
+					@endfor
+				</div>
+				</center>
 			</div>
 		</div>
 
@@ -235,7 +312,7 @@
 			</div>
 		</div>
 
-		<div class="row mt-5">
+		<div class="row mt-5" style="margin-bottom: 2%;">
 			<div class="col">
 				<center>
 					<span style="font-weight: bold; font-size: 18px;"> MESES </span>
@@ -243,9 +320,6 @@
 				<div id="byMonthGraph" style="margin-top: 1.25%;"></div>
 			</div>
 		</div>
-
-		
-		
 	</div>
 
 

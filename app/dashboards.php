@@ -27,11 +27,14 @@ class dashboards extends rank{
     public function excelBV($base,$mc,$handle,$year){
 
         $child = $handle['child'];
+
         $byBrand = $this->clearBrands($handle['byBrand']);
+
         $byMonth = $handle['byMonth'];
         for ($b=0; $b <sizeof($byBrand) ; $b++) { 
             $brandColor[$b] = $base->getBrandColor($byBrand[$b]['brand']);
             $brandTextColor[$b] = $base->getBrandTextColor($byBrand[$b]['brand']);
+            $brandNames[$b] = $byBrand[$b]['brand'];
         }
         
         $childChart = $mc->bvChild($child,$year);
@@ -45,7 +48,8 @@ class dashboards extends rank{
                             'byBrand' => array(
                                                 'graph' => $byBrandChart,
                                                 'brandColor' => $brandColor,
-                                                'brandTextColor' => $brandTextColor
+                                                'brandTextColor' => $brandTextColor,
+                                                'brandNames' => $brandNames
                                               )
                         );
 
@@ -55,52 +59,62 @@ class dashboards extends rank{
 
     public function bvAnalisis($current,$band){
 
-        
         $currentVal = $current['total'];
-        /*
-        var_dump($currentVal);
-        var_dump($band);
-        */
-        //NOW
-        if($currentVal < $band[0]['fromValue']){
-            $currentBand = 0;
-            $currentPercentage = 0;
-            $currentBV = $currentVal*$currentPercentage;
-            $pivot = -1; 
-        }else{
-            for ($b=0; $b < sizeof($band); $b++) { 
-                if($currentVal < $band[$b]['toValue'] && $currentVal > $band[$b]['fromValue']){
-                    $currentBand = $band[$b]['toValue']*1;
-                    $currentPercentage = $band[$b]['percentage']*1;
-                    $currentBV = $currentVal*$currentPercentage;
-                    $pivot = $b;
-                    break;
+
+        if($band){
+            //NOW
+            if($currentVal < $band[0]['fromValue']){
+                $currentBand = 0;
+                $currentPercentage = 0;
+                $currentBV = $currentVal*$currentPercentage;
+                $pivot = -1; 
+            }else{
+                for ($b=0; $b < sizeof($band); $b++) { 
+                    if($currentVal < $band[$b]['toValue'] && $currentVal > $band[$b]['fromValue']){
+                        $currentBand = $band[$b]['toValue']*1;
+                        $currentPercentage = $band[$b]['percentage']*1;
+                        $currentBV = $currentVal*$currentPercentage;
+                        $pivot = $b;
+                        break;
+                    }
                 }
             }
-        }
 
-        //NEXT
-        if( isset($band[($pivot+1)]) ){
-            $nextBandVal = $band[($pivot+1)]['fromValue']*1;
-            $nextBandBV = $nextBandVal*$band[($pivot+1)]['percentage'];
-            $nextBandDiff = $band[($pivot+1)]['fromValue'] - $currentVal;
-            $nextBandPercentage = $band[($pivot+1)]['percentage']*100;
+            //NEXT
+            if( isset($band[($pivot+1)]) ){
+                $nextBandVal = $band[($pivot+1)]['fromValue']*1;
+                $nextBandBV = $nextBandVal*$band[($pivot+1)]['percentage'];
+                $nextBandDiff = $band[($pivot+1)]['fromValue'] - $currentVal;
+                $nextBandPercentage = $band[($pivot+1)]['percentage']*100;
+            }else{
+                // FAIXA MAXIMA
+            }
+
+            //TOP
+            $maxBandVal = $band[(sizeof($band)-1)]['fromValue'];
+            $maxBandPercentage = $band[(sizeof($band)-1)]['percentage']*100;
+            $maxBandDiff = $band[(sizeof($band)-1)]['fromValue'] - $currentVal;
+
+            if($currentVal > $maxBandVal){
+                $maxBandCurrentVal = $currentVal*1;
+            }else{
+                $maxBandCurrentVal = $maxBandVal*1;
+            }
+
+            $maxBandBV = $maxBandCurrentVal*($maxBandPercentage/100);
         }else{
-            // FAIXA MAXIMA
+
+            $currentBand = false;
+            $currentPercentage = false;
+            $currentBV = false;
+            $nextBandVal = false;
+            $nextBandDiff = false;
+            $nextBandPercentage = false;
+            $nextBandBV = false;
+            $maxBandCurrentVal = false;
+            $maxBandPercentage = false;
+            $maxBandBV = false;
         }
-
-        //TOP
-        $maxBandVal = $band[(sizeof($band)-1)]['fromValue'];
-        $maxBandPercentage = $band[(sizeof($band)-1)]['percentage']*100;
-        $maxBandDiff = $band[(sizeof($band)-1)]['fromValue'] - $currentVal;
-
-        if($currentVal > $maxBandVal){
-            $maxBandCurrentVal = $currentVal*1;
-        }else{
-            $maxBandCurrentVal = $maxBandVal*1;
-        }
-
-        $maxBandBV = $maxBandCurrentVal*($maxBandPercentage/100);
         
         $rtr = array(
                         'currentVal' => $currentVal,
@@ -120,6 +134,7 @@ class dashboards extends rank{
                     );
 
         return($rtr);
+
         
     }
 
@@ -227,73 +242,105 @@ class dashboards extends rank{
 
         $deal = $this->dealWithFcst($fcst,$share);
 
+        $final = $this->addTotal($deal);
+
+        return $final;
+    }
+
+    public function addTotal($deal){
+
+        $currentMonth = intval(date('m')) - 1;
+
+        $final['client'] = "Total";
+        $final['fromDate'] = false;
+        $final['toDate'] = false;
+        $final['revenue'] = 0.0;
+        for ($i=$currentMonth; $i < 12; $i++) { 
+            $final['split'][$i] = 0.0;
+        }
+
+        for ($d=0; $d < sizeof($deal); $d++) { 
+            $final['revenue'] += $deal[$d]['revenue'];
+            for ($e=$currentMonth; $e < 12; $e++) { 
+                $final['split'][$e] += $deal[$d]['split'][$e];
+            }
+        }
+
+        array_push($deal, $final);
+        
         return $deal;
+
+
     }
 
     public function dealWithFcst($fcst,$share){
-        $currentMonth = intval(date('m')) - 1;
         
-        for ($f=0; $f < sizeof($fcst); $f++) { 
+        $currentMonth = intval(date('m')) - 1;
 
-            $months[$f] = $this->handleMonths($fcst[$f]['fromDate'],$fcst[$f]['toDate']); 
-            $shareExp[$f] = array();
+        if($fcst){        
+            for ($f=0; $f < sizeof($fcst); $f++) { 
 
-            if(sizeof($months[$f]) > 1){
+                $months[$f] = $this->handleMonths($fcst[$f]['fromDate'],$fcst[$f]['toDate']); 
+                $shareExp[$f] = array();
 
-                for ($m=0; $m < sizeof($months[$f]); $m++) { 
-                    for ($s=0; $s < sizeof($share); $s++) { 
-                        if($share[$s]['months'] == $months[$f][$m]){
-                            array_push($shareExp[$f], $share[$s]['percentage']);
+                if(sizeof($months[$f]) > 1){
+
+                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                        for ($s=0; $s < sizeof($share); $s++) { 
+                            if($share[$s]['months'] == $months[$f][$m]){
+                                array_push($shareExp[$f], $share[$s]['percentage']);
+                            }
                         }
+                    }
+
+                    $totShareExp[$f] = 0.0;
+
+                    for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
+                        $totShareExp[$f] += $shareExp[$f][$s];
+                    }
+
+                    for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
+                        $shareExpDiv[$f][$s] = $shareExp[$f][$s]/$totShareExp[$f];
+                        $value[$f][$s] = $fcst[$f]['revenue']*$shareExpDiv[$f][$s];
+                    }
+
+                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                        $temp[$f][$m]['month'] = intval($months[$f][$m]);
+                        $temp[$f][$m]['revenue'] = $value[$f][$m];
+                    }
+
+                    for ($x=$currentMonth; $x < 12; $x++) { 
+                        $revenue[$f][$x] = 0.0;                            
+                        for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                            if( ($x+1) == intval($months[$f][$m]) ){                            
+                                $revenue[$f][$x] = $temp[$f][$m]['revenue'];
+                                break;
+                            }
+                        }   
+                    }
+
+                }else{
+                    $temp[$f][0]['month'] = intval($months[$f][0]);
+                    $temp[$f][0]['revenue'] = doubleval($fcst[$f]['revenue']);
+
+                    for ($x=$currentMonth; $x < 12; $x++) { 
+                        $revenue[$f][$x] = 0.0;                            
+                        for ($m=0; $m < sizeof($months[$f]); $m++) { 
+                            if( ($x+1) == intval($months[$f][$m]) ){                            
+                                $revenue[$f][$x] = $temp[$f][$m]['revenue'];
+                                break;
+                            }
+                        }   
                     }
                 }
 
-                $totShareExp[$f] = 0.0;
-
-                for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
-                    $totShareExp[$f] += $shareExp[$f][$s];
-                }
-
-                for ($s=0; $s < sizeof($shareExp[$f]); $s++) { 
-                    $shareExpDiv[$f][$s] = $shareExp[$f][$s]/$totShareExp[$f];
-                    $value[$f][$s] = $fcst[$f]['revenue']*$shareExpDiv[$f][$s];
-                }
-
-                for ($m=0; $m < sizeof($months[$f]); $m++) { 
-                    $temp[$f][$m]['month'] = intval($months[$f][$m]);
-                    $temp[$f][$m]['revenue'] = $value[$f][$m];
-                }
-
-                for ($x=$currentMonth; $x < 12; $x++) { 
-                    $revenue[$f][$x] = 0.0;                            
-                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
-                        if( ($x+1) == intval($months[$f][$m]) ){                            
-                            $revenue[$f][$x] = $temp[$f][$m]['revenue'];
-                            break;
-                        }
-                    }   
-                }
-
-            }else{
-                $temp[$f][0]['month'] = intval($months[$f][0]);
-                $temp[$f][0]['revenue'] = doubleval($fcst[$f]['revenue']);
-
-                for ($x=$currentMonth; $x < 12; $x++) { 
-                    $revenue[$f][$x] = 0.0;                            
-                    for ($m=0; $m < sizeof($months[$f]); $m++) { 
-                        if( ($x+1) == intval($months[$f][$m]) ){                            
-                            $revenue[$f][$x] = $temp[$f][$m]['revenue'];
-                            break;
-                        }
-                    }   
-                }
+                $fcst[$f]['split'] = $revenue[$f];
             }
-
-            $fcst[$f]['split'] = $revenue[$f];
+        }else{
+            $fcst = false;
         }
         
         return $fcst;
-
     }
 
     public function handleMonths($from,$to){
@@ -323,6 +370,7 @@ class dashboards extends rank{
         }else{
             $column = "net";  
         }        
+
         switch ($type) {
             default:
                 if($type == "agency"){          

@@ -71,6 +71,10 @@ class dashboardsController extends Controller{
       $currency = Request::get("currency");
       $value = Request::get("value");
 
+
+      $currencyShow = $p->getCurrency($con, array($currency))[0]['name'];
+      $valueShow = strtoupper($value);
+
       $cYear = intval(date("Y"));
       $pYear = $cYear - 1;
       
@@ -81,7 +85,7 @@ class dashboardsController extends Controller{
       $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,"cmaps");
 
       $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years);
-      
+
       $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
 
       $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
@@ -104,7 +108,7 @@ class dashboardsController extends Controller{
 
       $startMonthFcst = intval(date('m')) - 1;
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst'));
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow'));
       
    }
 

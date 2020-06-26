@@ -48,7 +48,7 @@
         <div class="row">
             <div id="map" class="aligh-middle" >
                 <center>
-                    <img src="\warningImg.png" style="width: 65%; margin-top: 10%; height: auto;">
+                    <img src="\warning.png" style="width: 65%; margin-top: 10%; height: auto;">
                     
                 </center>                
                 <center>
