@@ -10,6 +10,26 @@ use App\brand;
 use App\rankings;
 class dashboards extends rank{
 
+    public function someTotals($something){
+        $sumChild = 0.0;
+        for ($s0=0; $s0 < sizeof($something['child']); $s0++) { 
+            $sumChild += $something['child'][$s0]['total'];
+        }
+        $temp0 = array('clientID' => -1,'client' => 'TOTAL','total' => $sumChild );
+        array_push($something['child'], $temp0);
+
+        $sumMonth = 0.0;
+        for ($s1=0; $s1 < sizeof($something['byMonth']); $s1++) { 
+            $sumMonth += $something['byMonth'][$s1]['value'];
+        }
+
+        $temp1 = array('month' => 'TOTAL','value' => $sumMonth);
+
+        array_push($something['byMonth'], $temp1);
+
+        return $something;
+    }
+
     public function clearBrands($brand){
         $size = sizeof($brand);
 
@@ -143,7 +163,8 @@ class dashboards extends rank{
         $sr = new subRankings();
         $table = 'bv_band';
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
-        if($currencyName == "USD"){ $pRate = 1.0; }else{ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}        
+        if($currencyName == "USD"){ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}else{ $pRate = 1.0;}        
+
         if($value == "gross"){ $column = "gross_revenue"; }else{$column = "net_revenue";}
         $from = array('agencyGroup','fromValue','toValue','percentage');
 
@@ -163,6 +184,11 @@ class dashboards extends rank{
 
             $res[$y] = $con->query($select[$y]);
             $bands[$y] = $sql->fetch($res[$y],$from,$from);
+
+            for ($w=0; $w < sizeof($bands[$y]); $w++) { 
+                $bands[$y][$w]['fromValue'] /= $pRate;
+                $bands[$y][$w]['toValue'] /= $pRate;
+            }
         }
 
         return $bands;
@@ -240,11 +266,22 @@ class dashboards extends rank{
         
         $fcst = $sql->fetch($res,$from,$from);
 
+        $fcst = $this->multPRate($fcst,$pRate);
+
         $deal = $this->dealWithFcst($fcst,$share);
 
         $final = $this->addTotal($deal);
 
         return $final;
+    }
+
+    public function multPRate($fcst,$pRate){
+
+        for ($f=0; $f < sizeof($fcst); $f++) { 
+            $fcst[$f]['revenue'] *= $pRate;
+        }
+
+        return $fcst;
     }
 
     public function addTotal($deal){
@@ -363,7 +400,7 @@ class dashboards extends rank{
         $sr = new subRankings();
         $table = $kind;
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
-        if($currencyName == "USD"){ $pRate = 1.0; }else{ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));}
+        if($currencyName == "USD"){ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0])); }else{ $pRate = 1.0;}
         
         if($value == "gross"){
             $column = "gross";
@@ -579,6 +616,9 @@ class dashboards extends rank{
             $values[$m]['month'] = $months[$m];
             $values[$m]['value'] = doubleval($sql->fetch($res[$m],$from,$from)[0]['mySum']);//*$pRate;
 
+            $values[$m]['value'] /= $pRate;
+
+
         }
 
         return $values;
@@ -763,6 +803,7 @@ class dashboards extends rank{
         $months = $this->months;
         $cr = $p->getCurrency($con, array($currency));
         $null = null;
+
         if ($type == "agencyGroup") {
             $somekind = $sr->getAllNewValues($con,$table,$type,$type, $brands, $regionID, $value, $years, $months, $cr, $null, "", "agency", $secondaryFilter,$baseFilter);
         }else{

@@ -38,15 +38,15 @@ class subRankings extends rank{
         $p = new pRate();
 
         if ($currency[0]['name'] == "USD") {
-            $pRate = 1.0;
-        }else{
             $pRate = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }else{
+            $pRate = 1.0;
         }
 
         if ($currency[0]['name'] == "USD") {
-            $pRateDigital = 1.0;
-        }else{
             $pRateDigital = $p->getPRateByRegionAndYear($con, array($region), array(intval(date('Y'))));
+        }else{
+            $pRateDigital = 1.0;
         }
 
         $as = "total";
@@ -124,14 +124,14 @@ class subRankings extends rank{
 
         $res = $sql->fetch($values[$y], $from, $from);
 
-        /*
+
+        
         if (is_array($res)) {
             for ($r=0; $r < sizeof($res); $r++) { 
-                //$res[$r]['total'] *= $pRate;
+                $res[$r]['total'] /= $pRate;
             }
         }
-        */
-        
+                
         return $res;
     }
 

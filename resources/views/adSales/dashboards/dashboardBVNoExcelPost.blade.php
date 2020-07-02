@@ -312,6 +312,57 @@
 			</div>
 		</div>
 
+		<div class="row mt-4">
+			<div class="col">
+				<center>
+					<button type="button" id="showTabelaClientes" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+						TABELA DE CLIENTES
+					</button>
+				</center>
+			</div>
+		</div>
+					
+
+		<div class="row mt-2" id="divTabelaClientes" >
+			<div class="col">
+				<center>
+					<table class="table table-borderless table-outside-border" style="width: 50%; margin-top: 1.25%;">
+						<tr class="dc" style="text-align: center;">
+							<td> CLIENTE </td>
+							<td> VALOR </td>
+						</tr>
+						@for($tc =0;$tc < sizeof($mountBV['child']);$tc++)
+							@if(strtoupper($mountBV['child'][$tc]['client']) == "TOTAL")
+								<?php 
+									$color = '#0f243e;';
+									$bckGrd = 'color:white;';
+								?>
+							@elseif($tc%2==0)
+								<?php 
+									$color = '#d5dee4;';
+									$bckGrd = '';
+								?>
+							@else
+								<?php 
+									$color = '#d9e1f2;';
+									$bckGrd = '';
+								?>
+							@endif
+
+							<tr style="text-align: center;background-color: {{$color}}; {{$bckGrd}}">
+								<td>{{ strtoupper( $mountBV['child'][$tc]['client'] ) }}</td>
+								<td>{{ number_format( $mountBV['child'][$tc]['total'] ) }}</td>
+							</tr>
+						@endfor	
+					</table>						
+				</center>				
+			</div>
+		</div>
+
+		
+			
+		
+
 		<div class="row mt-5" style="margin-bottom: 2%;">
 			<div class="col">
 				<center>
@@ -320,11 +371,49 @@
 				<div id="byMonthGraph" style="margin-top: 1.25%;"></div>
 			</div>
 		</div>
+
+		<div class="row mt-4">
+			<div class="col">
+				<center>
+					<button type="button" id="showTabelaMeses" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+						TABELA MESES
+					</button>
+				</center>
+			</div>
+		</div>
+
+		<div class="row mt-2"  id="divTabelaMeses">
+			<div class="col">
+				<center>
+					<table class="table table-borderless table-outside-border" style="width: 100%; margin-top: 1.25%;">
+						<!--<tr class="dc" style="text-align: center;">
+							<td colspan="14"> INVESTIMENTO MENSAL </td>
+						</tr>-->
+						<tr class="dc" style="text-align: center;">
+							<td style="width: 10%;"> MÊS </td>
+							@for($tc =0;$tc < sizeof($mountBV['byMonth']);$tc++)							
+								@if($mountBV['byMonth'][$tc]['month'] == "TOTAL")
+									<td style="width: 7%;">{{ $mountBV['byMonth'][$tc]['month'] }}</td>
+								@else
+								<td style="width: 7%;">{{ strtoupper( $monthsMidName[$mountBV['byMonth'][$tc]['month'] - 1] ) }}</td>
+								@endif
+							@endfor						
+						</tr>
+						<tr style="text-align: center;background-color: #d9e1f2;">
+							<td> INVESTIMENTO </td>
+							@for($tc =0;$tc < sizeof($mountBV['byMonth']);$tc++)
+								<td>{{ number_format( $mountBV['byMonth'][$tc]['value'] ) }}</td>
+							@endfor							
+						</tr>
+				</center>				
+			</div>
+		</div>
 	</div>
 
 
 
 	<!-- Modal -->
+	{{--
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		    <div class="modal-content">
@@ -377,17 +466,26 @@
 			    </div>
 		      	<div class="modal-footer">
 		        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        	<button type="button" class="btn btn-primary">Save changes</button>
 		      	</div>
 		    </div>
 		</div>
 	</div>
-
+	--}}
 
 	<div id="vlau"></div>
 	<div id="vlau1"></div>
 
-	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#showTabelaClientes').click(function(){
+				$("divTabelaClientes").hide();
+			});
+
+			$('#showTabelaMeses').click(function(){
+				alert("AKI2");
+			});
+		});
+	</script>
 
 	<script>
       	google.charts.load('current', {'packages':['corechart']});
