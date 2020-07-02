@@ -395,6 +395,81 @@ class dashboards extends rank{
         return $arr;
     }
 
+    public function analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind,$bands){
+
+        $current = $this->infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind);
+        $currentVal = $current['total'];
+            
+        if(isset($bands[1])){
+            $pBand = $bands[1];
+
+            for ($b=0; $b < sizeof($pBand); $b++) { 
+                if($currentVal < $pBand[0]['fromValue']){
+                    $currentBand = 0;
+                    $currentPercentage = 0;
+                    $currentBV = $currentVal*$currentPercentage;
+                    $pivot = -1; 
+                }else{
+                    for ($b=0; $b < sizeof($pBand); $b++) { 
+                        if($currentVal < $pBand[$b]['toValue'] && $currentVal > $pBand[$b]['fromValue']){
+                            $currentBand = $pBand[$b]['toValue']*1;
+                            $currentPercentage = $pBand[$b]['percentage']*1;
+                            $currentBV = $currentVal*$currentPercentage;
+                            $pivot = $b;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            /*
+            var_dump($currentBand);
+            var_dump($currentPercentage);
+            var_dump($currentBV);
+            */
+        }else{
+            $pa = false;
+        }
+
+        
+
+    }
+
+    public function infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind){
+        $secondaryFilter = false;
+        $sr = new subRankings();
+        $table = $kind;
+        $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
+        if($currencyName == "USD"){ $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0])); }else{ $pRate = 1.0;}
+        
+        if($value == "gross"){
+            $column = "gross";
+        }else{
+            $column = "net";  
+        }        
+
+        switch ($type) {
+            default:
+                if($type == "agency"){          
+                    $current = $this->current($con,"agency",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);/*
+                    $child = $this->child($con,"client","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byBrand = $this->byBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byMonth = $this->byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);*/
+                }else{
+                    $current = $this->current($con,"agencyGroup",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);/*
+                    $child = $this->child($con,"agency","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byBrand = $this->byBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $byMonth = $this->byMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);*/
+                    
+                }
+
+                break;
+        }
+
+        return $current;
+
+    }
+
     public function mountBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind){
         $secondaryFilter = false;
         $sr = new subRankings();

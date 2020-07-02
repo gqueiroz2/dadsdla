@@ -79,6 +79,7 @@ class dashboardsController extends Controller{
       $pYear = $cYear - 1;
       
       $years = array($cYear);
+      $yearsP = array($pYear);
       $yearsBand = array($cYear,$pYear);
       $type = "agencyGroup";
       
@@ -88,6 +89,8 @@ class dashboardsController extends Controller{
       $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years);
       $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
       $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
+
+      $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
 
       $monthsMidName = array("Jan",
                               "Feb",

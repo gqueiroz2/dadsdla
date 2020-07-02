@@ -315,15 +315,19 @@
 		<div class="row mt-4">
 			<div class="col">
 				<center>
-					<button type="button" id="showTabelaClientes" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-						TABELA DE CLIENTES
+					<button type="button" id="showTabelaClientes" class="btn btn-primary">
+						ABRIR TABELA DE CLIENTES
+					</button>
+
+					<button type="button" id="hideTabelaClientes" class="btn btn-primary" style="display: none;">
+						FECHAR TABELA DE CLIENTES
 					</button>
 				</center>
 			</div>
 		</div>
 					
 
-		<div class="row mt-2" id="divTabelaClientes" >
+		<div class="row mt-2" id="divTabelaClientes" style="display: none;">
 			<div class="col">
 				<center>
 					<table class="table table-borderless table-outside-border" style="width: 50%; margin-top: 1.25%;">
@@ -375,14 +379,17 @@
 		<div class="row mt-4">
 			<div class="col">
 				<center>
-					<button type="button" id="showTabelaMeses" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-						TABELA MESES
+					<button type="button" id="showTabelaMeses" class="btn btn-primary">
+						ABRIR TABELA DOS MESES
+					</button>
+					<button type="button" id="hideTabelaMeses" class="btn btn-primary" style="display: none;" >
+						FECHAR TABELA DOS MESES
 					</button>
 				</center>
 			</div>
 		</div>
 
-		<div class="row mt-2"  id="divTabelaMeses">
+		<div class="row mt-2" style="display: none;" id="divTabelaMeses">
 			<div class="col">
 				<center>
 					<table class="table table-borderless table-outside-border" style="width: 100%; margin-top: 1.25%;">
@@ -405,6 +412,7 @@
 								<td>{{ number_format( $mountBV['byMonth'][$tc]['value'] ) }}</td>
 							@endfor							
 						</tr>
+					</table>
 				</center>				
 			</div>
 		</div>
@@ -413,18 +421,17 @@
 
 
 	<!-- Modal -->
-	{{--
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      	<div class="modal-header">
-		        	<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          		<span aria-hidden="true">&times;</span>
-		        	</button>
-		      	</div>
-			    <div class="modal-body">
-			    	<div class="container-fluid">
+  		<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+      			<div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel"> INFORMAÇÕES 2019 </h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          	<span aria-hidden="true">&times;</span>
+			        </button>
+      			</div>
+      			<div class="modal-body">
+		        	<div class="container-fluid">
 				    	<div class="row">
 							<div class="col">
 								<table class="table table-borderless table-outside-border">
@@ -454,7 +461,7 @@
 										<tr style="background-color: #d9e1f2;">
 											<td colspan="3"> 
 												<center>
-													Não existe informação de faixas para este ano.
+													NÃO EXISTE INFORMAÇÃO DE FAIXAS PARA ESTE ANO.
 												</center>
 											</td>
 										</tr>
@@ -462,27 +469,74 @@
 								</table>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col">
+								<table class="table table-borderless table-outside-border">
+									<tr>
+										<td class="dc" style="width: 50%;"> INVESTIMENTO {{($cYear-1)}} </td>
+										<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format($bvAnalisis['currentVal']) }} </td>
+									</tr>
+									<tr>
+										<td class="dc"> FAIXA ATINGIDA </td>
+										<td style="background-color: #d9e1f2;">
+											@if($bvAnalisis['currentPercentage'] <= 0)
+												-
+											@else
+												{{ number_format( ($bvAnalisis['currentPercentage'])*100 ) }}% 
+											@endif
+										</td>
+									</tr>
+									<tr>
+										<td class="dc"> REMUNERAÇÃO ATINGIDA </td>
+										<td style="background-color: #d9e1f2;"> 
+											@if($bvAnalisis['currentBV'])
+												{{ number_format($bvAnalisis['currentBV']) }} 
+											@else
+												-
+											@endif
+										</td>
+									</tr>					
+								</table>
+							</div>	
+						</div>
 					</div>
-			    </div>
-		      	<div class="modal-footer">
-		        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		      	</div>
-		    </div>
-		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		        	
+		      	</div>
+	    	</div>
+	  	</div>
 	</div>
-	--}}
 
-	<div id="vlau"></div>
-	<div id="vlau1"></div>
+
+
+
+	
 
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('#showTabelaClientes').click(function(){
-				$("divTabelaClientes").hide();
+				$("#divTabelaClientes").show();
+				$("#hideTabelaClientes").show();
+				$("#showTabelaClientes").hide();
+			});
+
+			$('#hideTabelaClientes').click(function(){
+				$("#divTabelaClientes").hide();
+				$("#hideTabelaClientes").hide();
+				$("#showTabelaClientes").show();
 			});
 
 			$('#showTabelaMeses').click(function(){
-				alert("AKI2");
+				$("#divTabelaMeses").show();
+				$("#hideTabelaMeses").show();
+				$("#showTabelaMeses").hide();
+			});
+
+			$('#hideTabelaMeses').click(function(){
+				$("#divTabelaMeses").hide();
+				$("#hideTabelaMeses").hide();
+				$("#showTabelaMeses").show();
 			});
 		});
 	</script>
