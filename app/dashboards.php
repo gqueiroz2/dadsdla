@@ -185,9 +185,11 @@ class dashboards extends rank{
             $res[$y] = $con->query($select[$y]);
             $bands[$y] = $sql->fetch($res[$y],$from,$from);
 
-            for ($w=0; $w < sizeof($bands[$y]); $w++) { 
-                $bands[$y][$w]['fromValue'] /= $pRate;
-                $bands[$y][$w]['toValue'] /= $pRate;
+            if($bands[$y]){
+                for ($w=0; $w < sizeof($bands[$y]); $w++) { 
+                    $bands[$y][$w]['fromValue'] /= $pRate;
+                    $bands[$y][$w]['toValue'] /= $pRate;
+                }
             }
         }
 
@@ -399,34 +401,33 @@ class dashboards extends rank{
 
         $current = $this->infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind);
         $currentVal = $current['total'];
-            
+        var_dump(number_format($currentVal));
+          
         if(isset($bands[1])){
             $pBand = $bands[1];
 
-            for ($b=0; $b < sizeof($pBand); $b++) { 
-                if($currentVal < $pBand[0]['fromValue']){
-                    $currentBand = 0;
-                    $currentPercentage = 0;
-                    $currentBV = $currentVal*$currentPercentage;
-                    $pivot = -1; 
-                }else{
-                    for ($b=0; $b < sizeof($pBand); $b++) { 
-                        if($currentVal < $pBand[$b]['toValue'] && $currentVal > $pBand[$b]['fromValue']){
-                            $currentBand = $pBand[$b]['toValue']*1;
-                            $currentPercentage = $pBand[$b]['percentage']*1;
-                            $currentBV = $currentVal*$currentPercentage;
-                            $pivot = $b;
-                            break;
-                        }
+            if($currentVal < $pBand[0]['fromValue']){
+                $currentBand = 0;
+                $currentPercentage = 0;
+                $currentBV = $currentVal*$currentPercentage;
+                $pivot = -1; 
+            }else{
+                for ($b=0; $b < sizeof($pBand); $b++) { 
+                    if($currentVal < $pBand[$b]['toValue'] && $currentVal > $pBand[$b]['fromValue']){
+                        $currentBand = $pBand[$b]['toValue']*1;
+                        $currentPercentage = $pBand[$b]['percentage']*1;
+                        $currentBV = $currentVal*$currentPercentage;
+                        $pivot = $b;
+                        break;
                     }
                 }
             }
             
-            /*
+            
+
             var_dump($currentBand);
             var_dump($currentPercentage);
             var_dump($currentBV);
-            */
         }else{
             $pa = false;
         }
