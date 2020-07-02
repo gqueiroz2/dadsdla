@@ -267,12 +267,15 @@ class dashboards extends rank{
         $res = $con->query($select);
         
         $fcst = $sql->fetch($res,$from,$from);
+        if($fcst){
+            $fcst = $this->multPRate($fcst,$pRate);
 
-        $fcst = $this->multPRate($fcst,$pRate);
+            $deal = $this->dealWithFcst($fcst,$share);
 
-        $deal = $this->dealWithFcst($fcst,$share);
-
-        $final = $this->addTotal($deal);
+            $final = $this->addTotal($deal);
+        }else{
+            $final = false;
+        }
 
         return $final;
     }
