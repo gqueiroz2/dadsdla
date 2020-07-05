@@ -108,7 +108,7 @@ class dashboardsController extends Controller{
 
       $startMonthFcst = intval(date('m')) - 1;
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV'));
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV','infoPreviousYear'));
       
    }
 

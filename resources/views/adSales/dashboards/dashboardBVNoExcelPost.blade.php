@@ -469,28 +469,29 @@
 								</table>
 							</div>
 						</div>
+
 						<div class="row">
 							<div class="col">
 								<table class="table table-borderless table-outside-border">
 									<tr>
 										<td class="dc" style="width: 50%;"> INVESTIMENTO {{($cYear-1)}} </td>
-										<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format($bvAnalisis['currentVal']) }} </td>
+										<td style="background-color: #d9e1f2;width: 50%;"> {{ number_format($infoPreviousYear['finalValue']) }} </td>
 									</tr>
 									<tr>
 										<td class="dc"> FAIXA ATINGIDA </td>
 										<td style="background-color: #d9e1f2;">
-											@if($bvAnalisis['currentPercentage'] <= 0)
+											@if($infoPreviousYear['finalPercentage'] <= 0)
 												-
 											@else
-												{{ number_format( ($bvAnalisis['currentPercentage'])*100 ) }}% 
+												{{ number_format( ($infoPreviousYear['finalPercentage'])*100 ) }}% 
 											@endif
 										</td>
 									</tr>
 									<tr>
 										<td class="dc"> REMUNERAÇÃO ATINGIDA </td>
 										<td style="background-color: #d9e1f2;"> 
-											@if($bvAnalisis['currentBV'])
-												{{ number_format($bvAnalisis['currentBV']) }} 
+											@if($infoPreviousYear['finalBV'])
+												{{ number_format($infoPreviousYear['finalBV']) }} 
 											@else
 												-
 											@endif

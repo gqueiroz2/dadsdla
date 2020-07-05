@@ -29,6 +29,7 @@ $(document).ready(function(){
         data:{regionID},
         success: function(output){
           $('#agencyGroup').html(output).selectpicker('refresh');
+          //$('#vlau ').html(output).selectpicker('refresh');
         },
         error: function(xhr, ajaxOptions,thrownError){
             alert(xhr.status+" "+thrownError);

@@ -154,7 +154,6 @@ class dashboards extends rank{
                     );
 
         return($rtr);
-
         
     }
 
@@ -404,11 +403,9 @@ class dashboards extends rank{
 
         $current = $this->infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind);
         $currentVal = $current['total'];
-        var_dump(number_format($currentVal));
-          
-        if(isset($bands[1])){
-            $pBand = $bands[1];
 
+        if(isset($bands[1]) && $bands[1]){
+            $pBand = $bands[1];
             if($currentVal < $pBand[0]['fromValue']){
                 $currentBand = 0;
                 $currentPercentage = 0;
@@ -425,17 +422,18 @@ class dashboards extends rank{
                     }
                 }
             }
-            
-            
+            $pa = array(
+                        'finalValue' => $currentVal,
+                        'finalBand' => $currentBand,
+                        'finalPercentage' => $currentPercentage,
+                        'finalBV' => $currentBV
+            );
 
-            var_dump($currentBand);
-            var_dump($currentPercentage);
-            var_dump($currentBV);
         }else{
             $pa = false;
         }
 
-        
+        return $pa;
 
     }
 
