@@ -121,7 +121,7 @@ class dashboards extends rank{
                 $maxBandCurrentVal = $maxBandVal*1;
             }
 
-            $maxBandBV = $maxBandCurrentVal*($maxBandPercentage/100);
+            $maxBandBV = $maxBandDiff*($maxBandPercentage/100);
         }else{
 
             $currentBand = false;
@@ -150,9 +150,10 @@ class dashboards extends rank{
 
                         'maxBandCurrentVal' => $maxBandCurrentVal,
                         'maxBandPercentage' => $maxBandPercentage,
-                        'maxBandBV' => $maxBandBV
+                        'maxBandBV' => $maxBandBV,
+                        'maxBandDiff' => $maxBandDiff
                     );
-
+        var_dump($rtr);
         return($rtr);
         
     }

@@ -169,7 +169,7 @@
 						<td class="dc" style="width: 50%;"> DIFERENÇA TETO </td>
 						<td style="background-color: #d9e1f2;width: 50%;"> 
 							@if($bvAnalisis['maxBandCurrentVal'])
-								{{ number_format( ($bvAnalisis['maxBandCurrentVal']) ) }}
+								{{ number_format( ($bvAnalisis['maxBandDiff']) ) }}
 							@else
 								-
 							@endif 
