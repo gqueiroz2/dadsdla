@@ -153,7 +153,7 @@ class dashboards extends rank{
                         'maxBandBV' => $maxBandBV,
                         'maxBandDiff' => $maxBandDiff
                     );
-        var_dump($rtr);
+
         return($rtr);
         
     }
