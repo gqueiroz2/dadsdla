@@ -11,7 +11,6 @@ use App\sql;
 use App\digital;
 use App\RenderChain;
 use App\base;
-
 use App\chain;
 
 class chainInsightsController extends Controller{
