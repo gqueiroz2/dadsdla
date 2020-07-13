@@ -6,7 +6,7 @@ use Validator;
 
 use App\dataBase;
 use App\import;
-use App\insightsChain;
+use App\InsightsChain;
 use App\sql;
 use App\digital;
 use App\RenderChain;
