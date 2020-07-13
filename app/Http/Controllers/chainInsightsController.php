@@ -12,7 +12,7 @@ use App\digital;
 use App\RenderChain;
 use App\base;
 
-use App\Chain;
+use App\chain;
 
 class chainInsightsController extends Controller{
 

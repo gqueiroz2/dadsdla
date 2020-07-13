@@ -79,6 +79,9 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Summary </a>
+								@if( ( $userLevel == "SU" ) )
+									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> LATAM </a>
+								@endif
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 								<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>

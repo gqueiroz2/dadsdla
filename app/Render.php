@@ -143,6 +143,47 @@ class Render extends Model{
 	   echo "</select>";
     }
 
+    public function regionArray($region){
+
+        $temp = array();
+
+        for ($r=0; $r < sizeof($region) ; $r++) { 
+            if ($region[$r]['role'] != "None") {
+                array_push($temp, $region[$r]['role']);
+            }
+        }
+
+        $temp = array_unique($temp);
+
+        $temp = array_values($temp);
+
+        $tempId = array(array());
+        $tempName = array(array());
+
+
+        for ($t=0; $t < sizeof($temp); $t++) {
+            $tempId[$t] = array();
+            $tempName[$t] = array();
+            for ($r=0; $r < sizeof($region) ; $r++) { 
+                if ($temp[$t] == $region[$r]['role']) {
+                    array_push($tempId[$t], $region[$r]["id"]);
+                    array_push($tempName[$t], $region[$r]["name"]);
+                }
+            }
+        }
+
+        echo "<select id='region' name='region[]' style='width:100%;' class='selectpicker' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-width='100%'>";
+            for ($t=0; $t < sizeof($temp) ; $t++) { 
+                echo "<optgroup label='".$temp[$t]."'>";
+                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
+                        echo "<option value='".$tempId[$t][$r]."' selected='true'>".$tempName[$t][$r]."</option>";
+                    }
+                echo "</optgroup>";
+            }
+
+       echo "</select>";
+    }
+
     public function regionFilteredReps($region,$regionFiltered){
         $b = new base();
 
@@ -246,6 +287,25 @@ class Render extends Model{
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
     	echo "</select>";
+    }
+
+    public function yearLATAM(){     
+
+        $cYear = date('Y');
+
+        if($cYear > 2020){
+            $pYear = $cYear - 1;
+            $years = array($cYear,$pYear);
+        }else{
+            $years = array($cYear);
+        }
+
+        echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
+            for ($y=0; $y < sizeof($years); $y++) { 
+                echo "<option value='".$years[$y]."'>".$years[$y]."</option>";
+            }
+        echo "</select>";
+
     }
 
     public function especificNumber(){
@@ -357,7 +417,6 @@ class Render extends Model{
     		for ($m=0; $m < sizeof($this->month); $m++) { 
     			echo "<option selected='true' value='".($m+1)."'>".$this->month[$m]."</option>";
     		}
-
     	echo "</select>";
     }
 
@@ -366,6 +425,27 @@ class Render extends Model{
     		echo "<option value=''> Select Region </option>";            
     	echo "</select>";
     }
+
+    public function currencyLATAM(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $pr = new pRate();
+        $currency = $pr->getCurrencyByRegion($con);
+        if ($currency) {
+            echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
+                echo "<option value='4'>USD</option>";
+                for ($c=0; $c <sizeof($currency); $c++) {
+                    if($currency[$c]["name"] != "USD" && $currency[$c]['id'] <= 6){
+                        echo "<option value='".$currency[$c]["id"]."'>".$currency[$c]["name"]."</option>";
+                    }
+                }
+            echo "</select>";
+        }else{
+            echo "<option value=''> There is no Currency for this Region </option>";
+        }
+    }
+
 
     public function value(){
     	echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
