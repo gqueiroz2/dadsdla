@@ -36,6 +36,10 @@ class base extends Model{
                 return "Discovery CRM";
                 break;
 
+            case 'INSIGHTS':
+                return "INSIGHTS";
+                break;
+
             default:
                 return "BTS";
                 break;
