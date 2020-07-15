@@ -14,6 +14,11 @@
 Route::group(['middleware' => 'auth'],function(){
 
 	Route::group(['prefix' => 'results'],function(){
+		Route::get('LATAM','resultsLATAMController@get')
+							->name('resultsLATAMGet');
+		Route::post('LATAM','resultsLATAMController@post')
+						->name('resultsLATAMPost');
+
 		Route::get('YoY','resultsYoYController@get')
 							->name('resultsYoYGet');
 		Route::post('YoY','resultsYoYController@post')

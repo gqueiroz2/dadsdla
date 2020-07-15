@@ -121,7 +121,7 @@ class dashboards extends rank{
                 $maxBandCurrentVal = $maxBandVal*1;
             }
 
-            $maxBandBV = $maxBandCurrentVal*($maxBandPercentage/100);
+            $maxBandBV = $maxBandVal*($maxBandPercentage/100);
         }else{
 
             $currentBand = false;
@@ -134,6 +134,7 @@ class dashboards extends rank{
             $maxBandCurrentVal = false;
             $maxBandPercentage = false;
             $maxBandBV = false;
+            $maxBandDiff = false;
         }
         
         $rtr = array(
@@ -150,11 +151,11 @@ class dashboards extends rank{
 
                         'maxBandCurrentVal' => $maxBandCurrentVal,
                         'maxBandPercentage' => $maxBandPercentage,
-                        'maxBandBV' => $maxBandBV
+                        'maxBandBV' => $maxBandBV,
+                        'maxBandDiff' => $maxBandDiff
                     );
 
         return($rtr);
-
         
     }
 
@@ -404,11 +405,9 @@ class dashboards extends rank{
 
         $current = $this->infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind);
         $currentVal = $current['total'];
-        //var_dump(number_format($currentVal));
-          
-        if(isset($bands[1])){
-            $pBand = $bands[1];
 
+        if(isset($bands[1]) && $bands[1]){
+            $pBand = $bands[1];
             if($currentVal < $pBand[0]['fromValue']){
                 $currentBand = 0;
                 $currentPercentage = 0;
@@ -425,17 +424,18 @@ class dashboards extends rank{
                     }
                 }
             }
-            
-            
+            $pa = array(
+                        'finalValue' => $currentVal,
+                        'finalBand' => $currentBand,
+                        'finalPercentage' => $currentPercentage,
+                        'finalBV' => $currentBV
+            );
 
-            /*var_dump($currentBand);
-            var_dump($currentPercentage);
-            var_dump($currentBV);*/
         }else{
             $pa = false;
         }
 
-        
+        return $pa;
 
     }
 

@@ -1342,18 +1342,24 @@ class chain extends excel{
 	}
 
 	public function values($spreadSheet,$columns,$nextColumns = false){
+
         $values = "";
-        
+
+        $excel = new excel();
         for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   
                 if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
+                }else if($nextColumns[$c] == "from_value" || $nextColumns[$c] == "to_value"){
+                    $values .= "\"".round($excel->fixExcelNumber($spreadSheet[$nextColumns[$c]]),5)."\"";
                 }else{
                     $values .= "\"".  addslashes($spreadSheet[$nextColumns[$c]])."\"";
                 }
             }else{
                 if($columns[$c] == "gross" || $columns[$c] == "net" || $columns[$c] == "discount"){
                     $values .= "\"".round($spreadSheet[$columns[$c]],5)."\"";
+                }else if($columns[$c] == "from_value" || $columns[$c] == "to_value"){
+                    $values .= "\"".round( $excel->fixExcelNumber( $spreadSheet[$columns[$c]] ) ,5)."\"";
                 }else{
                     $values .= "\"".  addslashes($spreadSheet[$columns[$c]])."\"";
                 }

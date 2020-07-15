@@ -6,13 +6,12 @@ use Validator;
 
 use App\dataBase;
 use App\import;
-use App\insightsChain;
+use App\InsightsChain;
 use App\sql;
 use App\digital;
 use App\RenderChain;
 use App\base;
-
-use App\Chain;
+use App\chain;
 
 class chainInsightsController extends Controller{
 

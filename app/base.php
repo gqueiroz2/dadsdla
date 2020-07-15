@@ -36,6 +36,10 @@ class base extends Model{
                 return "Discovery CRM";
                 break;
 
+            case 'INSIGHTS':
+                return "INSIGHTS";
+                break;
+
             default:
                 return "BTS";
                 break;
@@ -52,7 +56,7 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date WHERE (source != 'FW' AND source != 'INSIGHTS')";
+        $select = "SELECT * FROM sources_date WHERE (source != 'FW')";
 
         $res = $con->query($select);
 

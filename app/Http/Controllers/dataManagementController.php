@@ -22,6 +22,7 @@ use App\emailDivulgacao;
 use App\import;
 use App\bvBand;
 use App\chain;
+use App\excel;
 
 class dataManagementController extends Controller{
     
@@ -74,6 +75,7 @@ class dataManagementController extends Controller{
 
                 for ($l=0; $l < sizeof($list); $l++) { 
                     $seek[$l] = "SELECT agency_group_id FROM agency_group_unit WHERE (name = '".$list[$l]['agency_group']."')";
+
                     $resultSeek[$l] = $con->query($seek[$l]);
                     $from = array('agency_group_id');
                     $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
@@ -91,7 +93,12 @@ class dataManagementController extends Controller{
                         $cc++;
                     }else{
                         $temp = "Error: " . $sql . "<br>" . $con->error;
+
+                        var_dump($agencyGroupSeek[$l]);
                         var_dump($temp);
+                        var_dump($seek[$l]);
+                        var_dump($agencyGroupSeek[$l]);
+                        var_dump($insertSeek[$l]);
                     }
 
 

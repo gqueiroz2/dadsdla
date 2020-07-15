@@ -18,7 +18,7 @@ use App\sql;
 use App\dataBase;
 
 
-class insightsChain extends excel{
+class InsightsChain extends excel{
 
     public function handler($con,$table,$spreadSheet,$year){
         $base = new base();
