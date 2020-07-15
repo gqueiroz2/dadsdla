@@ -303,14 +303,14 @@ class rank extends Model{
                 if ($currency[0]['name'] == "USD"){
                     $pRate[$y] = 1.0;
                 }else{
-                    $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                    $pRate[$y] = $p->getPRateByRegionAndYearIBMS($con, array($region), array($years[$y]));
                 }
             }
 
             if ($currency[0]['name'] == "USD") {
                 $pRateDigital[$y] = 1.0;
             }else{
-                $pRateDigital[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
+                $pRateDigital[$y] = $p->getPRateByRegionAndYearIBMS($con, array($region), array($years[$y]));
             }
 
         }

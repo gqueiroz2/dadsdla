@@ -36,6 +36,8 @@ class rankingController extends Controller {
     }
 
     public function post(){
+
+        var_dump("AKI");
     	$base = new base();
 
     	$db = new dataBase();

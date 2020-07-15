@@ -96,8 +96,8 @@ class resultsResumeController extends Controller{
 
 		if (empty($brands[0])) {
 			//$Digital = $resume->generateVectorDigital($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
-
-			$Digital = $resume->generateVectorTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
+			var_dump($brands[1]);
+			$Digital = $resume->generateVectorsTV($con, $brands[1], $month, $currentMonth, $value, $cYear, $pYear, $regionID, $currencyID, $salesRegion);
 
 			$matrixDigital = $resume->assembler($month,$Digital["salesCYear"],$Digital["actual"],$Digital["target"],$Digital["corporate"]/*$pAndR,$finance*/,$Digital["previousYear"]);
 
