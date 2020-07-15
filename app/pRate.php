@@ -82,7 +82,7 @@ class pRate extends Management{
 		$cYear = date('Y');
 
 		if($cYear == $year[0]){
-			var_dump("IGUAL");
+
 		}else{
 			$year[0]++;
 		}
