@@ -66,6 +66,12 @@ Route::group(['middleware' => 'auth'],function(){
 									->name('rankingExcel');
 			});
 
+			Route::group(['prefix'=>'dashboard'], function(){
+				Route::post('dashBV','dashboardExcelController@bv')
+								    ->name('bvExcel');
+
+			});
+
 			Route::group(['prefix'=>'viewer'], function(){
 				Route::post('vBase', 'viewerExcelController@viewerBase')
 											->name('baseExcel');

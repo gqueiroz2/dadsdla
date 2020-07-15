@@ -61,6 +61,7 @@
 				<div style="float: right;"> BV </div>
 			</div>
 		</div>	
+		
 	</div>
 	<div class="container-fluid">
 		<div class="row">
@@ -287,6 +288,58 @@
 	        chart.draw(data, options);
 	   	}
 
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+
+    		ajaxSetup();
+
+    		$('#pdf').click(function(event){
+
+    			var regionExcel = "<?php echo $regionExcel; ?>";
+    			var agencyExcel = "<?php echo $agencyExcel; ?>";
+    			var currencyExcel = "<?php echo $currencyExcel; ?>";
+    			var valueExcel = "<?php echo $valueExcel; ?>";
+
+    			var div = document.createElement('div');
+    			var img = document.createElement('img');
+    			img.src = '/loading_excel.gif';
+    			div.innerHTML = "Generating File...</br>";
+    			div.style.cssText = 'position: absolute; left: 0px; top:0px; margin:0px; width: 100%; height: 100%; display:block;        z-index: 99999; opacity: 0.9; -moz-opacity: 0; filter: alpha(opacity = 45); background: white; background-repeat: no-repeat; background-position:50% 50%; text-align: center; overflow: hidden; font-size:30px; font-weight: bold;        color: black; padding-top: 20%';
+    			div.appendChild(img);
+    			document.body.appendChild(div);
+
+    			var typeExport = $("#Pdf").val();
+    			var auxTitle = "<?php echo $titlePdf; ?>";
+
+    			$.ajax({
+    				xhrFields: {
+    					responseType: 'blob',
+    				},
+    				url: "/generate/excel/viewer/dashBV";
+    				type: "POST",
+    				data: {regionExcel, agencyExcel, currencyExcel, valueExcel},
+    				success: function(result, status, xhr){
+                            var disposition = xhr.getResponseHeader('content-disposition');
+                            var matches = /"([^"]*)"/.exec(disposition);
+                            var filename = (matches != null && matches[1] ? matches[1] : title);
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(result);
+                            link.download = filename;
+
+                            document.body.appendChild(link);
+
+                            link.click();
+                            document.body.removeChild(link);
+                            document.body.removeChild(div);
+                        },
+                        error: function(xhr, ajaxOptions,thrownError){
+                            document.body.removeChild(div);
+                            alert(xhr.status+" "+thrownError);
+                        }
+    			});
+    		});
+    	});
     </script>
 @endsection
 

@@ -71,6 +71,10 @@ class dashboardsController extends Controller{
       $currency = Request::get("currency");
       $value = Request::get("value");
 
+      $regionExcel = $regionID;
+      $agencyExcel = $temp;
+      $currencyExcel = $currency;
+      $valueExcel = $value;
 
       $currencyShow = $p->getCurrency($con, array($currency))[0]['name'];
       $valueShow = strtoupper($value);
@@ -108,7 +112,10 @@ class dashboardsController extends Controller{
 
       $startMonthFcst = intval(date('m')) - 1;
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV','infoPreviousYear'));
+      $title = "Dashboard - BV";
+      $titlePdf = "Dashboard - BV.pdf";
+
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 
       
    }
 
