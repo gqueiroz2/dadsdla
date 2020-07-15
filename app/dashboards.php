@@ -404,7 +404,7 @@ class dashboards extends rank{
 
         $current = $this->infoPreviousYear($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$kind);
         $currentVal = $current['total'];
-        var_dump(number_format($currentVal));
+        //var_dump(number_format($currentVal));
           
         if(isset($bands[1])){
             $pBand = $bands[1];
@@ -428,9 +428,9 @@ class dashboards extends rank{
             
             
 
-            var_dump($currentBand);
+            /*var_dump($currentBand);
             var_dump($currentPercentage);
-            var_dump($currentBV);
+            var_dump($currentBV);*/
         }else{
             $pa = false;
         }
