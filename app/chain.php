@@ -366,7 +366,7 @@ class chain extends excel{
 
         if($con->query($ins) === TRUE ){
             $error = false;
-            var_dump($ins);
+            //var_dump($ins);
         }else{
             var_dump($spreadSheet);
             var_dump($ins);
