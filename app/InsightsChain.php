@@ -30,7 +30,7 @@ class InsightsChain extends excel{
 		$chain = new chain();
 
 		$columns = $this->defineColumns($table,'first');
-
+        var_dump($columns);
 		 if($table == "insights" || $table == "insights_bts"){
             $parametter = $table;
         }else{
@@ -44,14 +44,16 @@ class InsightsChain extends excel{
         $check = 0;
         $mark = 0;
 
+        var_dump('step 1');
+        var_dump($table);
         for ($s=0; $s <sizeof($spreadSheet); $s++) { 
-        	if ($table = 'insights') {
+        	/*if ($table == 'insights') {
         		$mark++;
-        	}/*else{
+        	}else{*/
         		$error = $chain->insert($con,$spreadSheet[$s],$columns,$table,$into);
         		if (!$error) {
         			$check++;
-        		}
+        		}/*
         	}*/	
 
         }
@@ -190,6 +192,7 @@ class InsightsChain extends excel{
         }
     }
 
+    /*
      public $insightsColumnsF = array('brand',
                                      'brand_feed',
                                      'sales_rep',
@@ -283,7 +286,105 @@ class InsightsChain extends excel{
                                      'net_revenue', //DOUBLE
                                      'year'//INT
     );
+    */
 
+    public $insightsColumnsF = array('brand',
+                                     'brand_feed',
+                                     'sales_rep',
+                                     'agency',
+                                     'client',
+                                     'month',                                     
+                                     'currency',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date',
+                                     'unit_start_time',
+                                     'spot_duration',
+                                     'copy_key',
+                                     'main_house_media',
+                                     'spot_type',
+                                     'duration_spot',                                     
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
+    );
+    
+
+    public $insightsColumnsS = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency',
+                                     'client',
+                                     'month',
+                                     'year',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'copy_key',
+                                     'spot_type',
+                                     'date_event',
+                                     'duration_spot',
+                                     'num_spot', //INT
+                                     'gross_revenue', //DOUBLE
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
+    );
+
+
+    public $insightsColumnsT = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency_id',
+                                     'client_id',
+                                     'month',
+                                     'year',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'copy_key',
+                                     'spot_type',
+                                     'date_event',
+                                     'duration_spot',
+                                     'num_spot', //INT
+                                     'gross_revenue', //DOUBLE
+                                     'gross_revenue_prate', //DOUBLE
+                                     //'agency_commission_percentage', //DOUBLE
+    );
+
+    public $insightsColumns = array('brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'agency_id',
+                                     'client_id',
+                                     'month',
+                                     'currency_id',
+                                     'charge_type',
+                                     'product',
+                                     'campaign',
+                                     'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date_event',
+                                     'unit_start_time',
+                                     'duration_spot',
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',
+                                     'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue', //DOUBLE
+                                     'year'//INT
+    );
 
     public $insightsBTSColumnsF = array('order_reference',
                                          'sales_rep',

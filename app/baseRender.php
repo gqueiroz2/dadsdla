@@ -24,11 +24,13 @@ class baseRender extends Render{
 		}
 		
 		echo "<table style='width: 100%;'>";
-			echo "<tr>";	
-				echo "<th class='newBlue center' colspan='15' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
-			echo "</tr>";
 						
 				if ($source == 'Cmaps') {
+					echo "<tr>";	
+						echo "<th class='newBlue center' colspan='15' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+					echo "</tr>";
+
+
 					echo "<tr class='center'>";
 						echo "<td class='rcBlue' style='width:8%; '>Map Number</td>";
 						echo "<td class='rcBlue' style='width:8%;'>Pi Number</td>";
@@ -82,7 +84,11 @@ class baseRender extends Render{
 							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
 						echo "</tr>";
 					}
-				}/*elseif ($source == 'BTS') {
+				}elseif ($source == 'BTS') {
+					echo "<tr>";	
+						echo "<th class='newBlue center' colspan='12' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+					echo "</tr>";
+
 					echo "<tr class='center'>";
 						echo "<td class='grey' style='width:6%; '>Order Reference</td>";
 						echo "<td class='grey' style='width:5%;'>Campaign Reference</td>";
@@ -93,11 +99,21 @@ class baseRender extends Render{
 						echo "<td class='grey' style='width:3%;'>Agency</td>";
 						echo "<td class='grey' style='width:5%;'>Client</td>";
 						echo "<td class='grey' style='width:5%;'>Client Product</td>";
-						echo "<td class='grey' style='width:5%;'>Spot Duration</td>";
-						echo "<td class='grey' style='width:5%;'>impression Duration</td>";
+						//echo "<td class='grey' style='width:5%;'>Spot Duration</td>";
+						//echo "<td class='grey' style='width:5%;'>Impression Duration</td>";
 						echo "<td class='grey' style='width:5%;'>Num Spot</td>";							
-						echo "<td class='grey' style='width:5%;'>Revenue</td>";
+						echo "<td class='grey' style='width:5%;'>Gross Revenue</td>";
+						echo "<td class='grey' style='width:5%;'>Net Revenue</td>";
 					echo "</tr>";	
+
+					echo "<tr style='font-size:14px;'>";
+						for ($t=0; $t <sizeof($total) ; $t++){ 
+							echo "<td class='darkBlue center'>Total</td>";
+							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
+						}	
+					echo"</tr>";
 
 					for ($m=0; $m <sizeof($mtx) ; $m++) {
 						if ($m%2 == 0) {
@@ -116,18 +132,17 @@ class baseRender extends Render{
 							echo "<td class='$color'> ".$mtx[$m]['agency']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['client']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['clientProduct']."</td>";
-							echo "<td class='$color'> ".$mtx[$m]['spotDuration']."</td>";
-							echo "<td class='$color'> ".$mtx[$m]['impressionDuration']."</td>";
+							//echo "<td class='$color'> ".$mtx[$m]['spotDuration']."</td>";
+							//echo "<td class='$color'> ".$mtx[$m]['impressionDuration']."</td>";
 							echo "<td class='$color'> ".$mtx[$m]['numSpot']."</td>";
-							if ($value == 'GROSS') {
-								echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
-							}else{
-								echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
-							}
+							echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
+							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
+						
 					echo "</tr>";
 
+
 					}			
-				}elseif ($source = 'FreeWheel') {
+				}/*elseif ($source = 'FreeWheel') {
 					echo "<tr class='center'>";
 						echo "<td class='grey' style='width:6%; '>Insertion Order</td>";
 						echo "<td class='grey' style='width:5%;'>Insertion Order ID</td>";

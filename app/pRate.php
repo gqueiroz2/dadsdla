@@ -73,6 +73,50 @@ class pRate extends Management{
 		return $pRate;
 	}
 
+	public function getPRateByRegionAndYearIBMS($con,$region,$year){
+		
+		$sql = new sql();
+		
+		$where = "";
+
+		$cYear = date('Y');
+
+		if($cYear == $year[0]){
+
+		}else{
+			$year[0]++;
+		}
+
+		if($region && $year){
+			
+			$ids = implode($region);
+			$years = implode($year);
+			$where .= "WHERE r.ID IN ($ids) AND p.year IN ($years)";
+		}
+
+		$sql = new sql();
+		$table = "p_rate p";
+		$columns = "p.ID AS 'id',					
+					p.year AS 'year',
+					p.value AS 'value',				
+					c.name AS 'currency',
+					r.name AS 'region'
+				   ";
+
+		$from = array('id','year','value','currency','region');	
+		$join = "LEFT JOIN currency c ON p.currency_id = c.ID
+				 LEFT JOIN region r ON c.region_id = r.ID";
+		$order = "2,5,4";
+		$limit = "LIMIT 1";
+		$result = $sql->select($con,$columns,$table,$join,$where,$order,$limit);
+		$pRate = doubleval($sql->fetch($result,$from,$from)[0]['value']);
+
+		if ($pRate == 0) {
+			$pRate = 1;
+		}
+		return $pRate;
+	}
+
 	public function getPrateByCurrencyAndYear($con,$currency,$year){
 		$sql = new sql();
 		

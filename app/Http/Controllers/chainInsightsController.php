@@ -86,18 +86,19 @@ class chainInsightsController extends Controller{
                 unset($spreadSheet[1]);
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
-                var_dump($spreadSheet);
+                //var_dump($spreadSheet);
                 break;
 			
 		}
 
 		$complete = $iChain->handler($con,$table,$spreadSheet,$year);
 
+        /*
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }else{
             return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
-        }
+        }*/
 
 	}
 

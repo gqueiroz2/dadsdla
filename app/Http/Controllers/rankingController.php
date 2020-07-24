@@ -36,6 +36,7 @@ class rankingController extends Controller {
     }
 
     public function post(){
+
     	$base = new base();
 
     	$db = new dataBase();

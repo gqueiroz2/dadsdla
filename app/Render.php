@@ -283,6 +283,12 @@ class Render extends Model{
 
     }
 
+    public function sourceDataBasev2(){
+        echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
     public function year(){    	
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";

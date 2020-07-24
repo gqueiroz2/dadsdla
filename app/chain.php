@@ -52,7 +52,7 @@ class chain extends excel{
 
         $check = 0;               
         $mark = 0;
-        
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -362,10 +362,11 @@ class chain extends excel{
 
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
 
-        //var_dump($ins);
+        
 
         if($con->query($ins) === TRUE ){
             $error = false;
+            //var_dump($ins);
         }else{
             var_dump($spreadSheet);
             var_dump($ins);
@@ -2103,19 +2104,23 @@ class chain extends excel{
                                      'sales_rep',
                                      'agency',
                                      'client',
-                                     'month',
-                                     'year',
+                                     'month',                                     
                                      'currency',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
+                                     'schedule_event',
+                                     'spot_status',
+                                     'date',
+                                     'unit_start_time',
+                                     'spot_duration',
                                      'copy_key',
+                                     'main_house_media',
                                      'spot_type',
-                                     'date_event',
-                                     'duration_spot',
-                                     'num_spot', //INT
+                                     'duration_spot',                                     
                                      'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
                                      'gross_revenue_prate', //DOUBLE
                                      //'agency_commission_percentage', //DOUBLE
     );
