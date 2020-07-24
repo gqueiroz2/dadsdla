@@ -157,7 +157,7 @@ class viewer extends Model{
 								ORDER BY month,mapNumber";
 				}
 			}
-		}elseif ($source == "IBMS/BTS"){
+		}elseif ($source == "BTS"){
 			$from = array(
 						  'region',
         				  'year',
@@ -191,8 +191,8 @@ class viewer extends Model{
 			                  y.impression_duration AS 'impressionDuration', 
 			                  r.name AS 'region',
 			                  y.year AS 'year',
-			                  y.gross_revenue AS 'grossRevenue',
-			                  y.net_revenue AS 'netRevenue'
+			                  y.gross_revenue_prate AS 'grossRevenue',
+			                  y.net_revenue_prate AS 'netRevenue'
 						FROM ytd y 
 						LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
 						LEFT JOIN brand b ON b.ID = y.brand_id
@@ -369,7 +369,22 @@ class viewer extends Model{
 		return $mtx;
 	}
 
-	public function totalFromTable($table){
+	public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
+		$p = new pRate();
+		$year = date('Y');
+		if ($currencies == 'USD') {
+			if ($source == 'CMAPS') {
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}else{
+				$pRate = 1.0;
+			}
+		}else{
+			if ($source == 'CMAPS') {
+				$pRate = 1.0;
+			}else{
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}
+		}
 
 		$discount = 0.0;
 		$net = 0.0;
@@ -378,10 +393,14 @@ class viewer extends Model{
 		$c = 0;
 
 		for ($t=0; $t < sizeof($table); $t++){ 
-			$discount += $table[$t]['discount'];
-			$gross += $table[$t]['grossRevenue'];
-			$net += $table[$t]['netRevenue'];
-
+			if($source == "CMAPS"){
+				$discount += $table[$t]['discount'];
+				$gross += $table[$t]['grossRevenue'];
+				$net += $table[$t]['netRevenue'];
+			}else{
+				$gross += $table[$t]['grossRevenue']*$pRate;
+				$net += $table[$t]['netRevenue']*$pRate;
+			}
 			$c++;
 		}
 
@@ -446,6 +465,24 @@ class viewer extends Model{
 								";
 
 			}
+		}else{
+			$from  = array( 'sumNetRevenue',
+							'sumGrossRevenue'
+						);
+			
+			$selectTotal = "SELECT SUM(c.net_revenue_prate) AS 'sumNetRevenue',
+							       SUM(c.gross_revenue_prate) AS 'sumGrossRevenue'
+							FROM ytd c
+							LEFT JOIN brand b ON c.brand_id = b.ID
+							LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
+							LEFT JOIN agency a ON a.ID = c.agency_id
+							LEFT JOIN client cl ON cl.ID = c.client_id
+							WHERE (c.brand_id IN ($brandString)) 
+								AND (c.year = '$year') 
+								AND (c.month IN ($monthString))
+								AND (sr.ID IN ($salesRepString))
+								
+							";
 
 		}
 
@@ -473,6 +510,15 @@ class viewer extends Model{
 						$total[$t]['averageDiscount'] = doubleval($total[$t]['averageDiscount']);
 					}
 
+					if ($total[$t]['sumNetRevenue']) {
+						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
+					}
+					if ($total[$t]['sumGrossRevenue']) {
+						$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
+					}
+				}
+			}else{
+				if ($total[$t]['sumNetRevenue'] || $total[$t]['sumGrossRevenue']) {
 					if ($total[$t]['sumNetRevenue']) {
 						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
 					}
@@ -549,14 +595,15 @@ class viewer extends Model{
 
 						break;
 
-					case 'IBMS/BTS':
+					case 'BTS':
 						if ($mtx[$m]['month']) {
 							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
 						}
 
-						if($mtx[$m][$value.'Revenue']){
-							$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-						}
+						
+						$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])*$pRate;
+						$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])*$pRate;
+
 						if ($mtx[$m]['impressionDuration']) {
 							$mtx[$m]['impressionDuration'] = doubleval($mtx[$m]['impressionDuration']);
 						}

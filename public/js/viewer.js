@@ -135,13 +135,14 @@ $(document).ready(function(){
       var currentTime = new Date();
 
       var year = currentTime.getFullYear();
-
+      var source = $('#sourceDataBase').val();
       $.ajax({
         url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
         method:"POST",
-        data:{regionID,year},
+        data:{regionID,year,source},
         success: function(output){
           $('#saleRep').html(output).selectpicker("refresh");
+          //$('#vlau').html(output).selectpicker("refresh");
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);

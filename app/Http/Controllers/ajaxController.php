@@ -629,19 +629,54 @@ class ajaxController extends Controller{
     }
 
     public function getNewSalesRepRepresentativesByRegionAndYear(){
-        $regionID = Request::get('regionID');
+        $rr = new region();
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $cYear = intval(date('Y'));
+        $sr = new salesRep();
 
+        $regionID = Request::get('regionID');
+        var_dump($regionID);
         $year = Request::get('year');
+        $source = Request::get('source');
+
+        var_dump($source);
+
+        $regionName = $rr->getRegion($con,array($regionID))[0]['name'];
+        var_dump($regionName);
+        
+        if($regionName == 'Brazil'){
+            if (is_null($regionID)) {
+                
+            }else{
+                $regionID = array($regionID);
+                $resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
+                for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                }
+            }
+
+        }else{
+            if (is_null($regionID)) {
+                
+            }else{
+                $regionID = array($regionID);
+                $resp = $sr->getSalesRepByRegion($con,$regionID,true,$year);
+                for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                }
+            }
+        }
+
+        /*
+
+
 
         if (is_null($regionID)) {
             
         }else{
-            $db = new dataBase();
-
-            $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-            $cYear = intval(date('Y'));
-            $sr = new salesRep();
+            
 
             $regionID = array($regionID);
 
@@ -651,6 +686,8 @@ class ajaxController extends Controller{
                 echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
             }
         }
+
+        */
     }
 
     public function getNewSalesRepUnitByRegionAndYear(){
@@ -999,9 +1036,9 @@ class ajaxController extends Controller{
 
 
         if ($region == 1) {
-            $source = array("CMAPS"/*,"IBMS/BTS","FW","SF"*/);            
+            $source = array("CMAPS","BTS"/*,"FW","SF"*/);            
         }else{
-            $source = array(/*"IBMS/BTS","FW","SF"*/);
+            $source = array("BTS"/*,"FW","SF"*/);
         }
 
 

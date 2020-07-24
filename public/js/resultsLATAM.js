@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  
 	/*
   $('#region').change(function(){
 		var regionID = $(this).val();
