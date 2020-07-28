@@ -271,6 +271,7 @@ class dashboards extends rank{
         $from = array("client",'fromDate','toDate',"revenue");
 
         $res = $con->query($select);
+        var_dump($res);
         
         $fcst = $sql->fetch($res,$from,$from);
         if($fcst){
