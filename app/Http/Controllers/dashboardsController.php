@@ -49,6 +49,16 @@ class dashboardsController extends Controller{
       $p = new pRate();
       $mc = new makeChart();
       $base = new base();
+
+      $validator = Validator::make(Request::all(),[
+         'agencyGroup' => 'required',         
+     ]);
+
+     if ($validator->fails()) {
+         return back()->withErrors($validator)->withInput();
+     }
+
+
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $salesRegion = array(

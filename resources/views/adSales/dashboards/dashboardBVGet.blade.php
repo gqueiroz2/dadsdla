@@ -21,7 +21,7 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft bold" > Agency Group </label>
-							@if($errors->has('baseFilter'))
+							@if($errors->has('agencyGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->agencyGroupForm()}}
