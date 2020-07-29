@@ -30,7 +30,9 @@ class dashboardExcelController extends Controller{
 
       $temp = json_decode(base64_decode(Request::get("agencyExcel")));
 
-      $currency
+      $currency = Request::get("currencyExcel");
 
-      $value
+      $value = Request::get("valueExcel");
+
+      
 }

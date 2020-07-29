@@ -114,8 +114,8 @@ class dashboardsController extends Controller{
       $title = "Dashboard - BV";
       $titlePdf = "Dashboard - BV.pdf";
 
+
       return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'title', 'titlePdf','infoPreviousYear'));
-      
    }
 
 	public function overviewGet(){

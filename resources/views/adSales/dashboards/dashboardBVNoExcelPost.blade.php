@@ -302,6 +302,50 @@
 				</center>
 			</div>
 		</div>
+		
+		<div class="row mt-4">
+			<div class="col">
+				<center>
+					<button type="button" id="showTabelaCanais" class="btn btn-primary">
+						ABRIR TABELA DE CANAIS
+					</button>
+
+					<button type="button" id="hideTabelaCanais" class="btn btn-primary" style="display: none;">
+						FECHAR TABELA DE CANAIS
+					</button>
+				</center>
+			</div>
+		</div>
+
+		<div class="row mt-2" style="display: none;" id="divTabelaCanais">
+				<div class="col">
+					<center>
+						<table class="table table-borderless table-outside-border" style="width: 100%; margin-top: 1.25%;">
+							<tr class="dc" style="text-align: center;">
+								<td style="width: 10%;"> CANAIS </td>
+								@for($tc =0;$tc < sizeof($mountBV['byBrand']);$tc++)
+									@if(number_format( $mountBV['byBrand'][$tc]['value']  >= 1))
+										@if($mountBV['byBrand'][$tc]['brand'] == "TOTAL")						
+											<td style="width: 7%;">{{ $mountBV['byBrand'][$tc]['brand'] }}</td>
+										@else
+											<td style="width: 7%;">{{ $mountBV['byBrand'][$tc]['brand'] }}</td>
+										@endif
+									@endif
+								@endfor						
+							</tr>
+							<tr style="text-align: center;background-color: #d9e1f2;">
+								<td> INVESTIMENTO </td>
+								@for($tc =0;$tc < sizeof($mountBV['byBrand']);$tc++)
+									@if(number_format( $mountBV['byBrand'][$tc]['value']  >= 1))							
+										<td>{{ number_format( $mountBV['byBrand'][$tc]['value'] ) }}</td>
+									@endif
+								@endfor
+							</tr>
+						</table>
+					</center>				
+				</div>
+			</div>
+		</div>
 
 		<div class="row mt-2">
 			<div class="col">
@@ -402,7 +446,7 @@
 								@if($mountBV['byMonth'][$tc]['month'] == "TOTAL")
 									<td style="width: 7%;">{{ $mountBV['byMonth'][$tc]['month'] }}</td>
 								@else
-								<td style="width: 7%;">{{ strtoupper( $monthsMidName[$mountBV['byMonth'][$tc]['month'] - 1] ) }}</td>
+									<td style="width: 7%;">{{ strtoupper( $monthsMidName[$mountBV['byMonth'][$tc]['month'] - 1] ) }}</td>
 								@endif
 							@endfor						
 						</tr>
@@ -528,6 +572,18 @@
 				$("#showTabelaClientes").show();
 			});
 
+			$('#showTabelaCanais').click(function(){
+				$("#divTabelaCanais").show();
+				$("#hideTabelaCanais").show();
+				$("#showTabelaCanais").hide();
+			});
+
+			$('#hideTabelaCanais').click(function(){
+				$("#divTabelaCanais").hide();
+				$("#hideTabelaCanais").hide();
+				$("#showTabelaCanais").show();
+			});
+			
 			$('#showTabelaMeses').click(function(){
 				$("#divTabelaMeses").show();
 				$("#hideTabelaMeses").show();
