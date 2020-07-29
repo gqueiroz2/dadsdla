@@ -51,6 +51,7 @@ class dashboardsController extends Controller{
       $base = new base();
 
       $validator = Validator::make(Request::all(),[
+         'region' => 'required',         
          'agencyGroup' => 'required',         
      ]);
 
