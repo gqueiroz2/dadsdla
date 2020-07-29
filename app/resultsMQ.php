@@ -36,13 +36,20 @@ class resultsMQ extends results{
             $matrix[$i] = $this->handler($brandName[$i],$lines[0][$i],$lines[1][$i],$month,$year,$source);
             
         }
+        
+        $mtx = $matrix;
+
+        for ($m=0; $m < sizeof($mtx); $m++) { 
+            $tp[$m+1] = $mtx[$m];
+        }
 
         if (sizeof($brandID) > 1) {
-            $matrix[sizeof($brandID)] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year,$source);
-        }
-        
+            $tp[0] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year,$source);
+            //$matrix[sizeof($brandID)] = $this->assemblerDN($matrix,sizeof($brandID),$month,$year,$source);
+        }              
 
-        return $matrix;
+        return $tp;
+        //return $matrix;
     }
 
     public function handler($brand, $valueCurrentYear, $target, $month, $year, $source){

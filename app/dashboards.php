@@ -250,7 +250,7 @@ class dashboards extends rank{
                         c.name AS 'client',
                         from_date AS 'fromDate',
                         to_date AS 'toDate',
-                        $column AS 'revenue'                      
+                        SUM($column) AS 'revenue'                      
                         FROM $table t
                            LEFT JOIN region r ON r.ID = t.region_id
                            LEFT JOIN client c ON c.ID = t.client_id
@@ -262,7 +262,6 @@ class dashboards extends rank{
                            AND ( stage NOT IN ('5','6') )                           
                            GROUP BY client
         ";
-
         $from = array("client",'fromDate','toDate',"revenue");
 
         $res = $con->query($select);
@@ -270,10 +269,8 @@ class dashboards extends rank{
         $fcst = $sql->fetch($res,$from,$from);
         if($fcst){
             $fcst = $this->multPRate($fcst,$pRate);
-
             $deal = $this->dealWithFcst($fcst,$share);
-
-            $final = $this->addTotal($deal);
+            $final = $this->addTotal($deal);            
         }else{
             $final = false;
         }
