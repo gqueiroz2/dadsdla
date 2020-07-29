@@ -22,15 +22,10 @@ class dashboards extends rank{
         for ($s1=0; $s1 < sizeof($something['byMonth']); $s1++) { 
             $sumMonth += $something['byMonth'][$s1]['value'];
         }
-        $temp1 = array('month' => 'TOTAL','value' => $sumMonth);
-        array_push($something['byMonth'], $temp1);
 
-        $sumBrand = 0.0;
-        for ($s2=0; $s2 < sizeof($something['byBrand']); $s2++) { 
-                $sumBrand += $something['byBrand'][$s2]['value'];
-        }
-        $temp2 = array('brand'=> 'TOTAL', 'value' => $sumBrand);
-        array_push($something['byBrand'],$temp2);        
+        $temp1 = array('month' => 'TOTAL','value' => $sumMonth);
+
+        array_push($something['byMonth'], $temp1);
 
         return $something;
     }
@@ -698,7 +693,10 @@ class dashboards extends rank{
             $values[$m]['value'] = doubleval($sql->fetch($res[$m],$from,$from)[0]['mySum']);//*$pRate;
 
             $values[$m]['value'] /= $pRate;
+
+
         }
+
         return $values;
     }
 
@@ -741,6 +739,7 @@ class dashboards extends rank{
             $values[$b]['brand'] = $brands[$b][1];            
 	    	$values[$b]['value'] = doubleval($sql->fetch($res[$b],$from,$from)[0]['mySum']);            
 	    }
+ 
     	return $values;
 	}
 
