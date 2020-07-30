@@ -239,7 +239,7 @@ class dashboards extends rank{
 
     }
 
-    public function forecastBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years){
+    public function forecastBV($con,$p,$type,$regionID,$currency,$value,$baseFilter,$years,$startMonthFcst){
         
         $share = $this->shareLastYear($con,$p,$regionID,$years);
 
@@ -264,7 +264,8 @@ class dashboards extends rank{
                            WHERE(agency_group_id IN ('$baseFilter'))
                            AND ( year_from = $year )
                            AND ( year_to = $year )
-                           AND ( stage NOT IN ('5','6') )                           
+                           AND ( stage NOT IN ('5','6') )
+                           AND (from_date >= $startMonthFcst)                           
                            GROUP BY client
         ";
 
