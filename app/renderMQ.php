@@ -46,8 +46,7 @@ class renderMQ extends Render{
 									echo "<td class='darkBlue center' style='width:10%;'>".$mtx[$m][$n][$o]."</td>";
 								}else{
 									echo "<td class='lightBlue center' style='width:10%;'>".$mtx[$m][$n][$o]."</td>";
-								}
-								
+								}								
 							}elseif($n == 0 && $o != 0){
 								if($o == 13){
 									echo "<td class='darkBlue center' style='width:10%;'>".$mtx[$m][$n][$o]."</td>";
@@ -55,19 +54,19 @@ class renderMQ extends Render{
 									echo "<td class='lightGrey center' style='width:6.66%;'>".$mtx[$m][$n][$o]."</td>";
 								}
 							}elseif($n == 1 && $o == 0){
-								if ($m == (sizeof($mtx)-1)) {
+								if ($m == 0) {
 									echo "<td class='smBlue center'>".$mtx[$m][$n][$o]."</td>";
 								}else{
 									echo "<td class='coralBlue center'>".$mtx[$m][$n][$o]."</td>";
 								}
 							}elseif( ($n == 2 || $n == 3)  && $o == 0){
-								if ($m == (sizeof($mtx)-1)) {
+								if ($m == 0) {
 									echo "<td class='smBlue center'>".$mtx[$m][$n][$o]."</td>";
 								}else{
 									echo "<td class='rcBlue center'>".$mtx[$m][$n][$o]."</td>";
 								}
 							}elseif($n == 4 && $o == 0){
-								if ($m == (sizeof($mtx)-1)) {
+								if ($m == 0) {
 									echo "<td class='darkBlue center'>".$mtx[$m][$n][$o]."</td>";
 								}else{
 									echo "<td class='medBlue center'>".$mtx[$m][$n][$o]."</td>";

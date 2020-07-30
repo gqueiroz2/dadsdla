@@ -91,6 +91,7 @@ class resultsMQController extends Controller{
                 $lines = $mq->lines($con,$tmp,$month,$secondPos,$brandID,$year,$regionID,$value,$firstPos);
 
                 $mtx = $mq->assembler($con,$brandID,$lines,$month,$year,$firstPos);
+
                 $render = new renderMQ();
 
                 $form = $mq->TruncateName($secondPos);

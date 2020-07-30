@@ -42,7 +42,7 @@
 						</div>
 						<div class="col">
 							<label class="labelLeft bold" > Agency Group </label>
-							@if($errors->has('baseFilter'))
+							@if($errors->has('agencyGroup'))
 								<label style="color: red;">* Required</label>
 							@endif
 							{{$render->agencyGroupForm()}}
@@ -284,7 +284,11 @@
 						@endfor						
 					</table>
 				@else
-
+					<table class="table table-borderless table-outside-border" style="margin-top: 1.25%;">
+						<tr class="dc">
+							<td><center> SEM PREVISÃO PARA AGÊNCIA </center></td>
+						</tr>
+					</table>
 				@endif
 			</div>
 

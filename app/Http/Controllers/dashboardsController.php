@@ -49,6 +49,17 @@ class dashboardsController extends Controller{
       $p = new pRate();
       $mc = new makeChart();
       $base = new base();
+
+      $validator = Validator::make(Request::all(),[
+         'region' => 'required',         
+         'agencyGroup' => 'required',         
+     ]);
+
+     if ($validator->fails()) {
+         return back()->withErrors($validator)->withInput();
+     }
+
+
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $salesRegion = array(
@@ -95,9 +106,8 @@ class dashboardsController extends Controller{
       $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,$startMonthFcst);
       $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
       $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
-
       $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
-
+      
       $monthsMidName = array("Jan",
                               "Feb",
                               "Mar",
@@ -117,8 +127,8 @@ class dashboardsController extends Controller{
       $title = "Dashboard - BV";
       $titlePdf = "Dashboard - BV.pdf";
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'infoPreviousYear'));
 
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'title', 'titlePdf','infoPreviousYear'));
    }
 
 	public function overviewGet(){
