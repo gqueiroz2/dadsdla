@@ -459,7 +459,7 @@ class viewer extends Model{
 								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
 									AND (c.year = '$year') 
-									AND (c.month IN ($monthString))
+								AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
 									
 								";
@@ -488,7 +488,7 @@ class viewer extends Model{
 
 		$result = $con->query($selectTotal);
 		$total = $sql->fetch($result,$from,$from);	
-
+		//echo"<pre>$selectTotal)</pre>";
 		if ($currencies == 'USD') {
 				if ($source == 'CMAPS') {
 					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
@@ -520,10 +520,10 @@ class viewer extends Model{
 			}else{
 				if ($total[$t]['sumNetRevenue'] || $total[$t]['sumGrossRevenue']) {
 					if ($total[$t]['sumNetRevenue']) {
-						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])/$pRate;
+						$total[$t]['sumNetRevenue'] = doubleval($total[$t]['sumNetRevenue'])*$pRate;
 					}
 					if ($total[$t]['sumGrossRevenue']) {
-						$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])/$pRate;
+						$total[$t]['sumGrossRevenue'] = doubleval($total[$t]['sumGrossRevenue'])*$pRate;
 					}
 				}
 			}

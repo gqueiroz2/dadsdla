@@ -281,7 +281,8 @@ class viewerController extends Controller{
 
         $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
         
-        $total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
+        //$total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
+        
 
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
         $regionExcel = $regions;
