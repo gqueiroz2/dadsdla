@@ -138,7 +138,7 @@ class chain extends excel{
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
         return $complete;             
-     
+    
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -516,7 +516,6 @@ class chain extends excel{
 
         for ($c=0; $c < sizeof($current); $c++) { 
             $current[$c]['campaign_sales_office'] = $this->fixBTSRegion($current[$c]['holding_company']);
-            
 
             $current[$c]['sales_representant_office'] = $this->fixBTSRegion($current[$c]['invoice_holding_company']);
             
@@ -558,10 +557,12 @@ class chain extends excel{
 
         if($region == "US HISPANIC" || $region == 'US HISPANIC INTL'){
             $region = "US Hispanic";
-        }elseif($region == "DOMINICAN REPUBLIC"){
+        }elseif($region == "DOMINICAN REPUBLIC" || $region == "Dominican Republic"){
             $region = "Dominican Republic";
         }else if($region == 'EUROPE INTL.'){
             $region = "Europe";
+        }else if($region == 'New York International'){
+            $region = "New York International";
         }else if($region == 'MIAMI INTL.'){
             $region = "Miami";
         }else{
@@ -569,10 +570,9 @@ class chain extends excel{
         }
 
         if($region == "Spain" || $region == "SPAIN"){
-
             $region = "Europe";
         }
-        //$regionR = intval($r->getIDRegion($con,array($region))[0]['id']);
+        
 
         return $region;
     }
@@ -1526,22 +1526,7 @@ class chain extends excel{
     				case 'DLA':
     					return $this->cmapsColumns;
     					break;
-    			}
-            /*case 'insights':
-                switch ($recurrency) {
-                    case 'first':
-                        return $this->insightsColumnsF;
-                        break;
-                    case 'second':
-                        return $this->insightsColumnsS;
-                        break;
-                    case 'third':
-                        return $this->insightsColumnsT;
-                        break;
-                    case 'DLA':
-                        return $this->insightsColumns;
-                        break;
-                }*/
+    			}            
             case 'insights':
                 switch ($recurrency) {
                     case 'first':
@@ -1560,13 +1545,13 @@ class chain extends excel{
             case 'insights_bts':
                 switch ($recurrency) {
                     case 'first':
-                        return $this->insightsBTSColumnsF;
+                        return $this->insightsColumnsF;
                         break;
                     case 'second':
-                        return $this->insightsBTSColumnsS;
+                        return $this->insightsColumnsS;
                         break;
                     case 'third':
-                        return $this->insightsBTSColumnsT;
+                        return $this->insightsColumnsT;
                         break;
                     case 'DLA':
                         return $this->insightsColumns;
@@ -2112,17 +2097,17 @@ class chain extends excel{
                                      'order_reference',
                                      'schedule_event',
                                      'spot_status',
-                                     'date',
+                                     'date_event',
                                      'unit_start_time',
-                                     'spot_duration',
+                                     'duration_spot',
                                      'copy_key',
-                                     'main_house_media',
+                                     'media_item',
                                      'spot_type',
-                                     'duration_spot',                                     
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
                                      'num_spot', //INT
                                      'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'year' //DOUBLE
     );
     
 
@@ -2132,20 +2117,25 @@ class chain extends excel{
                                      'agency',
                                      'client',
                                      'month',
-                                     'year',
                                      'currency_id',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'copy_key',
-                                     'spot_type',
+                                     'schedule_event',
+                                     'spot_status',
                                      'date_event',
+                                     'unit_start_time',
                                      'duration_spot',
-                                     'num_spot', //INT
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
                                      'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'year' //DOUBLE
+                                     
     );
 
 
@@ -2155,20 +2145,24 @@ class chain extends excel{
                                      'agency_id',
                                      'client_id',
                                      'month',
-                                     'year',
                                      'currency_id',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'copy_key',
-                                     'spot_type',
+                                     'schedule_event',
+                                     'spot_status',
                                      'date_event',
+                                     'unit_start_time',
                                      'duration_spot',
-                                     'num_spot', //INT
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
+                                     'num_spot', //INT
                                      'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'year' //DOUBLE
     );
 
     public $insightsColumns = array('brand_id',

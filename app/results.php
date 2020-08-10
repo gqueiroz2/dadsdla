@@ -143,7 +143,6 @@ class results extends base{
         //$keyYear = date('Y');
 
         if ($table != "plan_by_brand" && $table != "digital") {
-
             if ($currency[0]['name'] == "USD") {
                 if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
@@ -157,19 +156,25 @@ class results extends base{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
+                    /*
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                    */
+                    $ccYear = date('Y');
+                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
                 }                
             }    
-        }else{
+        }else{            
             if ($currency[0]['name'] == "USD") {
                 $pRate = 1.0;
                 $pRateSel = $pRate;
             }else{
                 $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
                 $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
-            }
+            }            
         }
+
 
         switch ($table) {
 

@@ -81,11 +81,18 @@ class pRate extends Management{
 
 		$cYear = date('Y');
 
+		$year[0] = $cYear;
+
+		/*
+
+		IBMS vem com o P-Rate do ano
+
 		if($cYear == $year[0]){
 
 		}else{
 			$year[0]++;
 		}
+		*/
 
 		if($region && $year){
 			

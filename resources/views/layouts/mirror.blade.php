@@ -80,7 +80,8 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								{{--<a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Summary </a>--}}
 								@if( ( $userLevel == "SU" ) )
-									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> LATAM </a>
+									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>
+									<a class="dropdown-item" href="{{ route('resultsPacingGet') }}"> Pacing </a>
 								@endif
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>

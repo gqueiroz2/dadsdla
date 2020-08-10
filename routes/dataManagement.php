@@ -137,7 +137,7 @@ Route::group(['middleware' => ['auth']],function(){
 							->name('secondC');
 			Route::post('thirdC','chainInsightsController@thirdChain')
 							->name('thirdC');
-			Route::post('ToDLA','chainInsightsController@thirdToDLA')
+			Route::post('ToDLA','chainInsightsController@toDLA')
 							->name('toDLA');
 		});
 

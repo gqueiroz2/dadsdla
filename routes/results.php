@@ -19,6 +19,12 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('LATAM','resultsLATAMController@post')
 						->name('resultsLATAMPost');
 
+
+		Route::get('Pacing','resultsPacingController@get')
+							->name('resultsPacingGet');
+		Route::post('Pacing','resultsPacingController@post')
+						->name('resultsPacingPost');
+
 		Route::get('YoY','resultsYoYController@get')
 							->name('resultsYoYGet');
 		Route::post('YoY','resultsYoYController@post')
