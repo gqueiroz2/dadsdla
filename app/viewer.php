@@ -369,7 +369,7 @@ class viewer extends Model{
 		return $mtx;
 	}
 
-	public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
+	/*public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
 		$p = new pRate();
 		$year = date('Y');
 		if ($currencies == 'USD') {
@@ -413,7 +413,7 @@ class viewer extends Model{
 		return $return;
 
 
-	}
+	}*/
 
 	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
 		$base = new base();
