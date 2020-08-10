@@ -216,7 +216,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                             type: "POST",
-                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/
@@ -253,7 +253,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                                 type: "POST",
-                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/

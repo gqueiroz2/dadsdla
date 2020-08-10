@@ -98,10 +98,12 @@ class dashboardsController extends Controller{
       $yearsBand = array($cYear,$pYear);
       $type = "agencyGroup";
       
+      $startMonthFcst = intval(date('m')) - 1;
+
       $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,"cmaps");
       $graph = $dash->excelBV($base,$mc,$mountBV,$cYear);
       $mountBV = $dash->someTotals($mountBV);
-      $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years);
+      $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,$startMonthFcst);
       $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
       $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
       $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
@@ -120,7 +122,7 @@ class dashboardsController extends Controller{
                               "Dec"
                              );
 
-      $startMonthFcst = intval(date('m')) - 1;
+      
 
       $title = "Dashboard - BV";
       $titlePdf = "Dashboard - BV.pdf";
