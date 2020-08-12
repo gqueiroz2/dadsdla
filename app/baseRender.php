@@ -90,20 +90,20 @@ class baseRender extends Render{
 					echo "</tr>";
 
 					echo "<tr class='center'>";
-						echo "<td class='grey' style='width:6%; '>Order Reference</td>";
-						echo "<td class='grey' style='width:5%;'>Campaign Reference</td>";
-						echo "<td class='grey' style='width:3%;'>Year</td>";
-						echo "<td class='grey' style='width:3%;'>Month</td>";
-						echo "<td class='grey' style='width:5%;'>Brand</td>";
-						echo "<td class='grey' style='width:5%;'>Sales Rep</td>";
-						echo "<td class='grey' style='width:3%;'>Agency</td>";
-						echo "<td class='grey' style='width:5%;'>Client</td>";
-						echo "<td class='grey' style='width:5%;'>Client Product</td>";
-						//echo "<td class='grey' style='width:5%;'>Spot Duration</td>";
-						//echo "<td class='grey' style='width:5%;'>Impression Duration</td>";
-						echo "<td class='grey' style='width:5%;'>Num Spot</td>";							
-						echo "<td class='grey' style='width:5%;'>Gross Revenue</td>";
-						echo "<td class='grey' style='width:5%;'>Net Revenue</td>";
+						echo "<td class='rcBlue' style='width:6%; '>Order Reference</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Campaign Reference</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Brand</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Client Product</td>";
+						//echo "<td class='rcBlue' style='width:5%;'>Spot Duration</td>";
+						//echo "<td class='rcBlue' style='width:5%;'>Impression Duration</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Num Spot</td>";							
+						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";
 					echo "</tr>";	
 
 					echo "<tr style='font-size:14px;'>";

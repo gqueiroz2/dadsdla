@@ -149,14 +149,14 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 					$letter = 'L';
 
-					/*for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
+					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 						$cellRange = "A".($d+4).":".$letter.($d+4);
 						if (($d+3) % 2 == 0) {
 							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
 						}else{
 							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 						}
-					}*/
+					}
 				}
 				
 				
@@ -173,12 +173,19 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 	public function columnFormats(): array{
 
-		return[
+		if ($this->data['source'] == 'cmaps') {
+			return[
 			'J' => '0%',
 			'M' => '#,##0',
 			'N' => '#,##0'
-		];
-	}
+			];
+		}else{
+			return[
+			'K' => '#,##0',
+			'L' => '#,##0'
+			];
+		}
+	}		
 }
 
 
