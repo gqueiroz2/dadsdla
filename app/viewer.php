@@ -21,6 +21,8 @@ class viewer extends Model{
 
 		$agencyString = $base->arrayToString($agency,false,0);
 
+		var_dump($source);
+
 		if ($source == "CMAPS"){
 
 			$especificNumber = strtoupper($especificNumber);
@@ -360,7 +362,7 @@ class viewer extends Model{
 			}
 		}
 		
-		//echo "<pre>".$select."</pre>";
+		echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
 
@@ -544,6 +546,7 @@ class viewer extends Model{
 
 		$pRate = 1.0;
 
+		var_dump($mtx);
 
 		if($mtx){
 

@@ -64,12 +64,13 @@ class viewerExcelController extends Controller {
 	    $viewer = new viewer();
 
 	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currencies['id'],$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
-
+        var_dump($table);
         $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies['name'],$region,$agency,$client);
 
         //$total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
         $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currencies['name']);
 
+        var_dump($mtx);/*
 
         $data = array('mtx' => $mtx, 'currency' => $currencies['name'], 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
@@ -80,7 +81,7 @@ class viewerExcelController extends Controller {
 	    $typeExport = Request::get("typeExport");
         $auxTitle = Request::get("auxTitle");
 
-	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
+	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);*/
     }
 
     public function viewerInsights(){
