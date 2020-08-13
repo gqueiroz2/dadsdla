@@ -201,11 +201,11 @@ class viewer extends Model{
 						LEFT JOIN agency a ON y.agency_id = a.ID
 						LEFT JOIN client cl ON y.client_id = cl.ID
 						LEFT JOIN region r ON r.ID = y.sales_representant_office_id
-						LEFT JOIN currency c ON y.sales_representant_office_id = c.ID
+						LEFT JOIN currency c ON y.campaign_currency_id = c.ID
 						WHERE (y.brand_id IN ($brandString))
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
-								AND (r.ID = '$salesRegion')
+								AND (r.ID = '$salesRegion' OR r.name = '$salesRegion')
 								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
 			
@@ -371,51 +371,7 @@ class viewer extends Model{
 		return $mtx;
 	}
 
-	/*public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
-		$p = new pRate();
-		$year = date('Y');
-		if ($currencies == 'USD') {
-			if ($source == 'CMAPS') {
-				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-			}else{
-				$pRate = 1.0;
-			}
-		}else{
-			if ($source == 'CMAPS') {
-				$pRate = 1.0;
-			}else{
-				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-			}
-		}
 
-		$discount = 0.0;
-		$net = 0.0;
-		$gross = 0.0;
-
-		$c = 0;
-
-		for ($t=0; $t < sizeof($table); $t++){ 
-			if($source == "CMAPS"){
-				$discount += $table[$t]['discount'];
-				$gross += $table[$t]['grossRevenue'];
-				$net += $table[$t]['netRevenue'];
-			}else{
-				$gross += $table[$t]['grossRevenue']*$pRate;
-				$net += $table[$t]['netRevenue']*$pRate;
-			}
-			$c++;
-		}
-
-		$sumGrossRevenue = $gross;
-		$sumNetRevenue = $net;
-		$averageDiscount = $discount/$c;
-
-		$return = array(array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue  ));
-		 
-		return $return;
-
-
-	}*/
 
 	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
 		$base = new base();

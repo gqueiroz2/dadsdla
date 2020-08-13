@@ -283,8 +283,8 @@ class viewerController extends Controller{
         
         //$total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
         
-
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
+
         $regionExcel = $regions;
         $sourceExcel = $source;
         $yearExcel = $year;
