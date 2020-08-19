@@ -104,7 +104,7 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-								@if($userRegionName == "Brazil" && ( $userLevel == 'L0' || $userLevel == 'L1' ) )
+								@if($userRegionName == "Brazil" && ( $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'SU') )
 									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
 								@endif
 							</div>
