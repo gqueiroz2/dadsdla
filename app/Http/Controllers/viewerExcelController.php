@@ -70,6 +70,7 @@ class viewerExcelController extends Controller {
         //$total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
         $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currency);
 
+        var_dump($mtx);
 
         $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 

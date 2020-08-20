@@ -80,7 +80,8 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								{{--<a class="dropdown-item" href="{{ route('resultsResumeGet') }}"> Summary </a>--}}
 								@if( ( $userLevel == "SU" ) )
-									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> LATAM </a>
+									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>
+									<a class="dropdown-item" href="{{ route('resultsPacingGet') }}"> Pacing </a>
 								@endif
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
@@ -103,7 +104,7 @@
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-								@if($userRegionName == "Brazil")
+								@if($userRegionName == "Brazil" && ( $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'SU') )
 									<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
 								@endif
 							</div>

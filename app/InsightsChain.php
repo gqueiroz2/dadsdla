@@ -30,7 +30,7 @@ class InsightsChain extends excel{
 		$chain = new chain();
 
 		$columns = $this->defineColumns($table,'first');
-        var_dump($columns);
+
 		 if($table == "insights" || $table == "insights_bts"){
             $parametter = $table;
         }else{
@@ -44,18 +44,11 @@ class InsightsChain extends excel{
         $check = 0;
         $mark = 0;
 
-        var_dump('step 1');
-        var_dump($table);
         for ($s=0; $s <sizeof($spreadSheet); $s++) { 
-        	/*if ($table == 'insights') {
-        		$mark++;
-        	}else{*/
-        		$error = $chain->insert($con,$spreadSheet[$s],$columns,$table,$into);
-        		if (!$error) {
-        			$check++;
-        		}/*
-        	}*/	
-
+    		$error = $chain->insert($con,$spreadSheet[$s],$columns,$table,$into);
+    		if (!$error) {
+    			$check++;
+    		}
         }
 
         if ($check == (sizeof($spreadSheet) - $mark)) {
@@ -84,7 +77,7 @@ class InsightsChain extends excel{
 
 		$into = $chain->into($columnsS);
 
-		$next = $chain->handlerForNextTable($con,$table,$current,$columns,$year);
+		$next = $chain->handleForNextTable($con,$table,$current,$columns,$year);
 
 		$complete = $chain->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
 
@@ -103,7 +96,7 @@ class InsightsChain extends excel{
 
     	$cleanedValues = $current;
 
-    	$next = $chain->handlerForLastTable($con,$table,$$cleanedValues,$columnsS);
+    	$next = $chain->handleForLastTable($con,$table,$cleanedValues,$columnsS);
 
     	$bool = $chain->insertToLastTable($tCon,$table,$columnsT,$next,$into);
 
@@ -112,6 +105,7 @@ class InsightsChain extends excel{
 
     public function toDLA($sql,$con,$tCon,$table,$year,$truncate){
         $base = new base();
+        $chain = new chain();
 
         if($truncate){
             $truncateStatement = "TRUNCATE TABLE $table";
@@ -131,7 +125,7 @@ class InsightsChain extends excel{
         $columns = $this->defineColumns($table,'third');
         $into = $chain->into($columns);
 
-        $current = $chain->fixToInput($this->selectFromCurrentTable($aql,$tCon,$table,$columns),$columns);
+        $current = $chain->fixToInput($chain->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
 
         $bool = $chain->insertToDLA($con,$table,$columns,$current,$into);
 
@@ -176,13 +170,13 @@ class InsightsChain extends excel{
             case 'insights_bts':
                 switch ($recurrency) {
                     case 'first':
-                        return $this->insightsBTSColumnsF;
+                        return $this->insightsColumnsF;
                         break;
                     case 'second':
-                        return $this->insightsBTSColumnsS;
+                        return $this->insightsColumnsS;
                         break;
                     case 'third':
-                        return $this->insightsBTSColumnsT;
+                        return $this->insightsColumnsT;
                         break;
                     case 'DLA':
                         return $this->insightsColumns;
@@ -192,27 +186,30 @@ class InsightsChain extends excel{
         }
     }
 
-    /*
-     public $insightsColumnsF = array('brand',
+    public $insightsColumnsF = array('brand',
                                      'brand_feed',
                                      'sales_rep',
                                      'agency',
                                      'client',
-                                     'month',
-                                     'year',
+                                     'month',                                     
                                      'currency',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'copy_key',
-                                     'spot_type',
+                                     'schedule_event',
+                                     'spot_status',
                                      'date_event',
+                                     'unit_start_time',
                                      'duration_spot',
-                                     'num_spot', //INT
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue', //DOUBLE
+                                     'year' //DOUBLE
     );
     
 
@@ -222,46 +219,29 @@ class InsightsChain extends excel{
                                      'agency',
                                      'client',
                                      'month',
-                                     'year',
                                      'currency_id',
                                      'charge_type',
                                      'product',
                                      'campaign',
                                      'order_reference',
-                                     'copy_key',
-                                     'spot_type',
+                                     'schedule_event',
+                                     'spot_status',
                                      'date_event',
+                                     'unit_start_time',
                                      'duration_spot',
-                                     'num_spot', //INT
+                                     'copy_key',
+                                     'media_item',
+                                     'spot_type',
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'num_spot', //INT
+                                     'net_revenue', //DOUBLE
+                                     'year' //DOUBLE
+                                     
     );
 
 
     public $insightsColumnsT = array('brand_id',
-                                     'brand_feed',
-                                     'sales_rep_id',
-                                     'agency_id',
-                                     'client_id',
-                                     'month',
-                                     'year',
-                                     'currency_id',
-                                     'charge_type',
-                                     'product',
-                                     'campaign',
-                                     'order_reference',
-                                     'copy_key',
-                                     'spot_type',
-                                     'date_event',
-                                     'duration_spot',
-                                     'num_spot', //INT
-                                     'gross_revenue', //DOUBLE
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
-    );
-
-    public $insightsColumns = array('brand_id',
                                      'brand_feed',
                                      'sales_rep_id',
                                      'agency_id',
@@ -280,84 +260,11 @@ class InsightsChain extends excel{
                                      'copy_key',
                                      'media_item',
                                      'spot_type',
-                                     'duration_impression',
+                                     'duration_impression',                                     
                                      'gross_revenue', //DOUBLE
                                      'num_spot', //INT
                                      'net_revenue', //DOUBLE
-                                     'year'//INT
-    );
-    */
-
-    public $insightsColumnsF = array('brand',
-                                     'brand_feed',
-                                     'sales_rep',
-                                     'agency',
-                                     'client',
-                                     'month',                                     
-                                     'currency',
-                                     'charge_type',
-                                     'product',
-                                     'campaign',
-                                     'order_reference',
-                                     'schedule_event',
-                                     'spot_status',
-                                     'date',
-                                     'unit_start_time',
-                                     'spot_duration',
-                                     'copy_key',
-                                     'main_house_media',
-                                     'spot_type',
-                                     'duration_spot',                                     
-                                     'gross_revenue', //DOUBLE
-                                     'num_spot', //INT
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
-    );
-    
-
-    public $insightsColumnsS = array('brand_id',
-                                     'brand_feed',
-                                     'sales_rep_id',
-                                     'agency',
-                                     'client',
-                                     'month',
-                                     'year',
-                                     'currency_id',
-                                     'charge_type',
-                                     'product',
-                                     'campaign',
-                                     'order_reference',
-                                     'copy_key',
-                                     'spot_type',
-                                     'date_event',
-                                     'duration_spot',
-                                     'num_spot', //INT
-                                     'gross_revenue', //DOUBLE
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
-    );
-
-
-    public $insightsColumnsT = array('brand_id',
-                                     'brand_feed',
-                                     'sales_rep_id',
-                                     'agency_id',
-                                     'client_id',
-                                     'month',
-                                     'year',
-                                     'currency_id',
-                                     'charge_type',
-                                     'product',
-                                     'campaign',
-                                     'order_reference',
-                                     'copy_key',
-                                     'spot_type',
-                                     'date_event',
-                                     'duration_spot',
-                                     'num_spot', //INT
-                                     'gross_revenue', //DOUBLE
-                                     'gross_revenue_prate', //DOUBLE
-                                     //'agency_commission_percentage', //DOUBLE
+                                     'year' //DOUBLE
     );
 
     public $insightsColumns = array('brand_id',

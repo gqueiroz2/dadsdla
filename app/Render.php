@@ -229,45 +229,10 @@ class Render extends Model{
        echo "</select>";
     }
 
-    public function regionFiltered($region,$regionFiltered,$special){
-        $b = new base();
-        $regions = $b->filteredRegion($regionFiltered,$special);
-        
-        $temp = array();
-
-        for ($r=0; $r < sizeof($regions) ; $r++) { 
-            if ($regions[$r]['role'] != "None") {
-                array_push($temp, $regions[$r]['role']);
-            }
-        }
-
-        $temp = array_values(array_unique($temp));
-
-        $tempId = array(array());
-        $tempName = array(array());
-
-        for ($t=0; $t < sizeof($temp); $t++) {
-            $tempId[$t] = array();
-            $tempName[$t] = array();
-            for ($r=0; $r < sizeof($regions) ; $r++) { 
-                if ($temp[$t] == $regions[$r]['role']) {
-                    array_push($tempId[$t], $regions[$r]["id"]);
-                    array_push($tempName[$t], $regions[$r]["name"]);
-                }
-            }
-        }
-
+    public function newRegionFiltered($regionName,$regionID){
         echo "<select id='region' name='region' style='width:100%;' class='form-control'>";
-            echo "<option value=''> Select </option>";
-            for ($t=0; $t < sizeof($temp) ; $t++) { 
-                echo "<optgroup label='".$temp[$t]."'>";
-                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
-                        echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
-                    }
-                echo "</optgroup>";
-            }
-
-       echo "</select>";
+            echo "<option value='".$regionID."'>".$regionName."</option>";
+        echo "</select>";
     }
 
     public function sourceDataBase(){
@@ -427,9 +392,22 @@ class Render extends Model{
     }
 
     public function currency(){
+        echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
+            echo "<option value=''> Select Region </option>";            
+        echo "</select>";
+    }
+    
+    public function newCurrency($regionName,$regionCurrencies){
     	echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
-    		echo "<option value=''> Select Region </option>";            
+    		for ($c=0; $c < sizeof($regionCurrencies[$regionName]); $c++) { 
+                if($c == 0){
+                    echo "<option selected='true' value='".$regionCurrencies[$regionName][$c]."'>".$regionCurrencies[$regionName][$c]."</option>";
+                }else{
+                    echo "<option value='".$regionCurrencies[$regionName][$c]."'>".$regionCurrencies[$regionName][$c]."</option>";
+                }
+            }
     	echo "</select>";
+        
     }
 
     public function currencyLATAM(){

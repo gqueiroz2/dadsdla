@@ -93,12 +93,10 @@ class chainInsightsController extends Controller{
 
 		$complete = $iChain->handler($con,$table,$spreadSheet,$year);
 
-        /*
+        
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }else{
-            return back()->with('firstChainError',"There was and error on the insertion of the Excel Data :( ");
-        }*/
+        }
 
 	}
 
@@ -158,9 +156,7 @@ class chainInsightsController extends Controller{
 
     	if($complete){
             return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }/*else{
-            return back()->with('thirdChainError',"There was and error on the insertion of the Excel Data :( ");
-        }*/
+        }
 		
     }
 
@@ -186,13 +182,11 @@ class chainInsightsController extends Controller{
     	$year = Request::get('year');
 		$truncate = (bool)intval(Request::get('truncate'));
 
-    	$complete = $iChain->ToDLA($sql,$con,$tCon,$table,$year,$truncate);
+    	$complete = $iChain->toDLA($sql,$con,$tCon,$table,$year,$truncate);
 
-    	/*if($complete){
+    	if($complete){
             return back()->with('lastChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }/*else{
-            return back()->with('lastChainError',"There was and error on the insertion of the Excel Data :( ");
-        }*/
+        }
 
     }
 

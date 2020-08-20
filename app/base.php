@@ -9,6 +9,29 @@ use App\sql;
 
 class base extends Model{
 
+    public function currenciesByRegion(){
+
+        $curr = array(
+                        "Brazil" => array("BRL","USD"),
+                        "Argentina" => array("ARS","USD"),
+                        "Colombia" => array("COP","USD"),
+                        "Miami" => array("USD"),
+                        "Mexico" => array("MXN","USD"),
+                        "Chile" => array("CLP","USD"),
+                        "Peru" => array("USD"),
+                        "Vezenuela" => array("USD"),
+                        "Panama" => array("USD"),
+                        "Dominican Republic" => array("USD"),
+                        "Ecuador" => array("USD"),
+                        "Bolivia" => array("USD"),
+                        "Puerto Rico" => array("USD"),
+                        "US Hispanic" => array("USD")
+        );
+
+        return $curr;
+
+    }
+
     public function fixDate($y,$m,$d){
         if($d < 10){
             $d = "0".$d;
