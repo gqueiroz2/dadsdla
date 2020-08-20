@@ -78,15 +78,7 @@
                             @endif
                             {{$render->salesRep()}}
                         </div>
-                        {{--
-                        <div class="col">
-                            <label class='labelLeft'><span class="bold">Sales Rep Unit:</span></label>
-                            @if($errors->has('salesRepUnit'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->salesRepUnit()}}
-                        </div>
-                        --}}
+                        
 
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Agency:</span></label>
@@ -193,6 +185,8 @@
                     var currencyExcel = "<?php echo $currencyExcel; ?>";
                     var valueExcel = "<?php echo $valueExcel; ?>";
                     var especificNumber = "<?php echo $especificNumberExcel; ?>";
+                    var mtx = <?php echo (json_encode($mtx)); ?>;
+                    var total = <?php echo (json_encode($total)); ?>;
 
                     var div = document.createElement('div');
                     var img = document.createElement('img');
@@ -215,7 +209,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                             type: "POST",
-                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle, mtx,total},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/
@@ -252,7 +246,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                                 type: "POST",
-                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle},
+                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx,total},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/

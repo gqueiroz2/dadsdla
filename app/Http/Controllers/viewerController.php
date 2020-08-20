@@ -106,6 +106,7 @@ class viewerController extends Controller{
         $month = Request::get("month");
 
         $salesRep = Request::get("salesRep");
+        var_dump($salesRep);
 
         $client = Request::get("client");
 

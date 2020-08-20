@@ -204,7 +204,6 @@ class viewer extends Model{
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
 								AND (r.ID = '$salesRegion' OR r.name = '$salesRegion')
-								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
 			
 
@@ -363,6 +362,7 @@ class viewer extends Model{
 		//echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
+		//echo "$result";
 
 		$mtx = $sql->fetch($result,$from,$from);
 
@@ -402,7 +402,6 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
-									AND (sr.ID IN ($salesRepString))
 									AND (c.map_number LIKE '%".$especificNumber."%')";	
 			}else{
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
@@ -415,8 +414,7 @@ class viewer extends Model{
 								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
 									AND (c.year = '$year') 
-								AND (c.month IN ($monthString))
-									AND (sr.ID IN ($salesRepString))
+									AND (c.month IN ($monthString))
 									
 								";
 
@@ -426,17 +424,19 @@ class viewer extends Model{
 							'sumGrossRevenue'
 						);
 			
-			$selectTotal = "SELECT SUM(c.net_revenue_prate) AS 'sumNetRevenue',
-							       SUM(c.gross_revenue_prate) AS 'sumGrossRevenue'
-							FROM ytd c
-							LEFT JOIN brand b ON c.brand_id = b.ID
-							LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
-							LEFT JOIN agency a ON a.ID = c.agency_id
-							LEFT JOIN client cl ON cl.ID = c.client_id
-							WHERE (c.brand_id IN ($brandString)) 
-								AND (c.year = '$year') 
-								AND (c.month IN ($monthString))
-								AND (sr.ID IN ($salesRepString))
+			$selectTotal = "SELECT SUM(y.net_revenue_prate) AS 'sumNetRevenue',
+							       SUM(y.gross_revenue_prate) AS 'sumGrossRevenue'
+							FROM ytd y 
+							LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
+							LEFT JOIN brand b ON b.ID = y.brand_id
+							LEFT JOIN agency a ON y.agency_id = a.ID
+							LEFT JOIN client cl ON y.client_id = cl.ID
+							LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+							LEFT JOIN currency c ON y.campaign_currency_id = c.ID
+							WHERE (y.brand_id IN ($brandString))
+									AND (y.year = '$year')
+									AND (y.month IN ($monthString))
+									AND (r.ID = '$salesRegion' OR r.name = '$salesRegion')
 								
 							";
 
@@ -446,18 +446,20 @@ class viewer extends Model{
 		$total = $sql->fetch($result,$from,$from);	
 		//echo"<pre>$selectTotal)</pre>";
 		if ($currencies == 'USD') {
-				if ($source == 'CMAPS') {
-					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-				}else{
-					$pRate = 1.0;
-				}
+			if ($source == 'CMAPS') {
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 			}else{
-				if ($source == 'CMAPS') {
-					$pRate = 1.0;
-				}else{
-					$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-				}
+				$pRate = 1.0;
 			}
+		}else{
+			if ($source == 'CMAPS') {
+				$pRate = 1.0;
+			}else{
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}
+		}
+
+		//var_dump($pRate);
 
 		for ($t=0; $t < sizeof($total); $t++) { 
 			if ($source == 'CMAPS') {
@@ -484,7 +486,6 @@ class viewer extends Model{
 				}
 			}
 		}
-		
 		return $total;
 			
 	}
