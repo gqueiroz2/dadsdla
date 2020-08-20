@@ -394,30 +394,30 @@ class viewer extends Model{
 						);
 			if ($checkEspecificNumber) {
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								       SUM(c.net) AS 'sumNetRevenue',
-								       SUM(c.gross) AS 'sumGrossRevenue'
+									   SUM(c.net) AS 'sumNetRevenue',
+									   SUM(c.gross) AS 'sumGrossRevenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
 								LEFT JOIN agency a ON a.ID = c.agency_id
 								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
-									AND (c.year = '$year') 
-									AND (c.month IN ($monthString))
-									AND (c.map_number LIKE '%".$especificNumber."%')";	
+								AND (c.year = '$year') 
+								AND (c.month IN ($monthString))
+								AND (c.map_number LIKE '%".$especificNumber."%')";	
 			}else{
 				$selectTotal = "SELECT AVG(c.discount) AS 'averageDiscount',
-								       SUM(c.net) AS 'sumNetRevenue',
-								       SUM(c.gross) AS 'sumGrossRevenue'
+									   SUM(c.net) AS 'sumNetRevenue',
+									   SUM(c.gross) AS 'sumGrossRevenue'
 								FROM cmaps c
 								LEFT JOIN brand b ON c.brand_id = b.ID
 								LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
 								LEFT JOIN agency a ON a.ID = c.agency_id
 								LEFT JOIN client cl ON cl.ID = c.client_id
 								WHERE (c.brand_id IN ($brandString)) 
-									AND (c.year = '$year') 
-									AND (c.month IN ($monthString))
-									
+								AND (c.year = '$year') 
+								AND (c.month IN ($monthString))
+																	
 								";
 
 			}

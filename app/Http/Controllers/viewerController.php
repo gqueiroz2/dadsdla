@@ -245,6 +245,7 @@ class viewerController extends Controller{
         $year = Request::get("year");
 
         $salesRep = Request::get("salesRep");
+        //var_dump($salesRep);
         
         $agency = Request::get("agency");
 
@@ -294,7 +295,7 @@ class viewerController extends Controller{
         $salesRepExcel = $salesRep;
         $agencyExcel = $agency;
         $clientExcel = $client;
-        $currencyExcel = $currencies;
+        $currencyExcel = $salesCurrency;
         $valueExcel = $value;
         $especificNumberExcel = $especificNumber;
         
@@ -302,7 +303,7 @@ class viewerController extends Controller{
         $titleExcel = $source." - Viewer Base.xlsx";
         $titlePdf = $source." - Viewer Base.pdf";
 
-        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base"));
 
 	}
 

@@ -49,7 +49,7 @@ class viewerExcelController extends Controller {
 
 	    $currency = Request::get("currencyExcel");
 	    $p = new pRate();
-        $currencies = $p->getCurrencybyName($con,$currency); 
+        $currencies = $p->getCurrency($con,array($currency))[0]['name']; 
 
 	    $value = Request::get("valueExcel");
 	    
@@ -63,14 +63,13 @@ class viewerExcelController extends Controller {
         
 	    $viewer = new viewer();
 
-	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currencies['id'],$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
+	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currency,$region,$agency,$client);
-
-        //$total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
-        $mtx = $viewer->assemble($table,$currencies['id'],$source,$con,$region,$currency);
-
-        var_dump($mtx);
+        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region,$agency,$client);
+        
+        //$total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
+        
+        $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
 
         $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
 
