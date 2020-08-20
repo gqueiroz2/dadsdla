@@ -205,7 +205,7 @@ class viewer extends Model{
 						WHERE (y.brand_id IN ($brandString))
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
-								AND (r.ID = '$salesRegion' OR r.name = '$salesRegion')
+								AND (r.ID = '$salesRegion')
 						ORDER BY y.month";			
 			
 
@@ -438,7 +438,7 @@ class viewer extends Model{
 							WHERE (y.brand_id IN ($brandString))
 									AND (y.year = '$year')
 									AND (y.month IN ($monthString))
-									AND (r.ID = '$salesRegion' OR r.name = '$salesRegion')
+									AND (r.ID = '$salesRegion')
 								
 							";
 
@@ -492,6 +492,54 @@ class viewer extends Model{
 			
 	}
 
+	public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
+		$p = new pRate();
+		$year = date('Y');
+		var_dump($currencies);
+		if ($currencies == 'USD') {
+			if ($source == 'CMAPS') {
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}else{
+				$pRate = 1.0;
+			}
+		}else{
+			if ($source == 'CMAPS') {
+				$pRate = 1.0;
+			}else{
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}
+		}
+
+		$discount = 0.0;
+		$net = 0.0;
+		$gross = 0.0;
+
+		$c = 0;
+
+		for ($t=0; $t < sizeof($table); $t++){ 
+			if($source == "CMAPS"){
+				$discount += $table[$t]['discount'];
+				$gross += $table[$t]['grossRevenue']/$pRate;
+				$net += $table[$t]['netRevenue']/$pRate;
+			}else{
+				$gross += $table[$t]['grossRevenue']*$pRate;
+				$net += $table[$t]['netRevenue']*$pRate;
+			}
+			$c++;
+		}
+
+		$sumGrossRevenue = $gross;
+		$sumNetRevenue = $net;
+		$averageDiscount = $discount/$c;
+
+		$return = array(array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue  ));
+		//var_dump($return);
+		 
+		return $return;
+
+
+	}
+
 
 
 	public function assemble($mtx,$salesCurrency,$source,$con,$salesRegion,$currencies){
@@ -504,24 +552,26 @@ class viewer extends Model{
 		$pRate = 1.0;
 
 		//var_dump($mtx);
-
+		if ($currencies == 'USD') {
+			if ($source == 'CMAPS') {
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+				var_dump("ola");
+			}else{
+				$pRate = 1.0;
+				var_dump("tchau");
+			}
+		}else{
+			if ($source == 'CMAPS') {
+				$pRate = 1.0;
+			}else{
+				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}
+		}
+		var_dump($pRate);
+		var_dump($source);
 		if($mtx){
 
 			for ($m=0; $m <sizeof($mtx); $m++) { 		
-				
-				if ($currencies == 'USD') {
-					if ($source == 'CMAPS') {
-						$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-					}else{
-						$pRate = 1.0;
-					}
-				}else{
-					if ($source == 'CMAPS') {
-						$pRate = 1.0;
-					}else{
-						$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-					}
-				}
 
 				switch ($source) {
 					case 'CMAPS':

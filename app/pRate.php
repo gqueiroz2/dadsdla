@@ -64,7 +64,7 @@ class pRate extends Management{
 				 LEFT JOIN region r ON c.region_id = r.ID";
 		$order = "2,5,4";
 		$limit = "LIMIT 1";
-		$result = $sql->select($con,$columns,$table,$join,$where,$order,$limit);
+		$result = $sql->larica($con,$columns,$table,$join,$where,$order,$limit);
 		$pRate = doubleval($sql->fetch($result,$from,$from)[0]['value']);
 
 		if ($pRate == 0) {
