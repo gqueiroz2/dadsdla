@@ -495,7 +495,6 @@ class viewer extends Model{
 	public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
 		$p = new pRate();
 		$year = date('Y');
-		var_dump($currencies);
 		if ($currencies == 'USD') {
 			if ($source == 'CMAPS') {
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
@@ -567,8 +566,6 @@ class viewer extends Model{
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 			}
 		}
-		var_dump($pRate);
-		var_dump($source);
 		if($mtx){
 
 			for ($m=0; $m <sizeof($mtx); $m++) { 		

@@ -281,11 +281,11 @@ class viewerController extends Controller{
 
         $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
         
-        var_dump($table[0]);
+       // var_dump($table[0]);
         //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
         
         $total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
-        var_dump($table[0]);
+        //var_dump($table[0]);
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
 
         $regionExcel = $salesRegion;
