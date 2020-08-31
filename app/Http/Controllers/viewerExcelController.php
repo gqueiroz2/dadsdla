@@ -65,9 +65,8 @@ class viewerExcelController extends Controller {
 
 	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
 
-        $total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region,$agency,$client);
-        
-        //$total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
+        //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region,$agency,$client);
+        $total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
         
         $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
 
