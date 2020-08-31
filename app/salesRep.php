@@ -216,7 +216,7 @@ class salesRep extends Management{
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
 				 LEFT JOIN region r ON r.ID = srg.region_id";
 		$order = "srg.ID,sr.name";
-		$res = $sql->select($con,$columns,$table,$join,$where,$order);
+		$res = $sql->larica($con,$columns,$table,$join,$where,$order);
 		$from = array('id','salesRep','salesRepGroup','region');
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;

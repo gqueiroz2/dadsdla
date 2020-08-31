@@ -183,6 +183,8 @@
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($client);$c++)
                     $("#clientRF-"+{{$c}}+"-"+{{$m}}).change(function(){
+                        
+                        $("#client-"+{{$c}}).css("background-color","red");
                         if ($(this).val() == '') {
                             $(this).val(0);
                         }
@@ -203,11 +205,11 @@
                         var totalClient = Comma(handleNumber($("#clientRF-"+{{$c}}+"-3").val()) + handleNumber($("#clientRF-"+{{$c}}+"-7").val()) + handleNumber($("#clientRF-"+{{$c}}+"-11").val()) + handleNumber($("#clientRF-"+{{$c}}+"-15").val()));
                         $("#totalClient-"+{{$c}}).val(totalClient);
                         Temp3 = handleNumber(totalClient);
-                        if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
+                        //if (Temp3.toFixed(0) != handleNumber($("#passTotal-"+{{$c}}).val()).toFixed(0) /*|| ((tmp2 != '100.00') && (tmp2 != '0.00') )*/ ) {
                             $("#client-"+{{$c}}).css("background-color","red");
-                        }else{
+                        /*}else{
                             $("#client-"+{{$c}}).css("background-color","");
-                        }
+                        }*/
                         var rf = 0;
                         for(var c2=0;c2<client.length;c2++){
                             if ($("#splitted-"+c2).val() != false) {

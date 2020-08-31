@@ -52,6 +52,8 @@ class PAndRRender extends Render{
         $brandsPerClient = $forRender["brandsPerClient"];
         $emptyCheck = $forRender["emptyCheck"];
 
+        $nSecondary = $forRender["nSecondary"];
+
         echo "<input type='hidden' id='salesRep' name='salesRep' value='".base64_encode(json_encode($salesRep))."'>";
         echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
         echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
@@ -373,6 +375,7 @@ class PAndRRender extends Render{
 
         echo "<br>";
 
+        
 
         for ($c=0; $c < sizeof($client); $c++) {
             if($splitted){
@@ -402,12 +405,24 @@ class PAndRRender extends Render{
             }else{
                 $ow = false;
             }
-
+/*
             if (round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) < 5 && round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) > -5) {
                 $lastRollingFCST[$c][16] = $rollingFCST[$c][16];
                 $color = "";
                 $boolfcst = "1";
             }elseif (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
+                $color = "red";
+                $boolfcst = "0";
+            }else{
+                $color = "";
+                $boolfcst = "1";
+            }
+*/
+            if (round($nSecondary[$c]['lastRollingFCST'][16])-round($nSecondary[$c]['rollingFCST'][16]) < 5 && round($nSecondary[$c]['lastRollingFCST'][16])-round($nSecondary[$c]['rollingFCST'][16]) > -5) {
+                $nSecondary[$c]['lastRollingFCST'][16] = $nSecondary[$c]['rollingFCST'][16];
+                $color = "";
+                $boolfcst = "1";
+            }elseif (round($nSecondary[$c]['lastRollingFCST'][16]) != round($nSecondary[$c]['rollingFCST'][16])) {
                 $color = "red";
                 $boolfcst = "0";
             }else{
@@ -420,7 +435,10 @@ class PAndRRender extends Render{
             echo "<div class='col-2' style='padding-right:1px;'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";
+                    /*
                     echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span style='font-size:18px; '> ".$client[$c]['clientName']." - ".$client[$c]["agencyName"]." $ow </span>";
+                    */    
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span style='font-size:18px; '> ".$nSecondary[$c]['clientName']." - ".$nSecondary[$c]["agencyName"]." $ow </span>";
                 echo "</tr>";
                 echo "<tr>";
                     echo "<td class='rcBlue'  style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'> Rolling Fcast ".$cYear." </td>";
@@ -507,7 +525,7 @@ class PAndRRender extends Render{
 
                     START OF CLIENT ROLLING FORECAST
 
-                */                 
+                *//*             
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -518,7 +536,7 @@ class PAndRRender extends Render{
                         }
                     }
                     echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' name='passTotal-$c' readonly='true' value='".number_format($lastRollingFCST[$c][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
-
+ 
                     if ($fcstAmountByStage[$c]) {
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][4],2,',','.')."</td>";
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][7],2,',','.')."%</td>";
@@ -528,6 +546,39 @@ class PAndRRender extends Render{
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][3],2,',','.')."</td>";
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][6],2,',','.')."</td>";
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($fcstAmountByStage[$c][1][5],2,',','.')."</td>";
+                    }else{
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00%</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";    
+                    }
+                echo "</tr>";
+                */
+
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."</td>";
+                        }else{
+                            echo "<td class='$even[$m]'>".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."</td>";
+                    
+                        }
+                    }
+                    echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' name='passTotal-$c' readonly='true' value='".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
+ 
+                    if ($nSecondary[$c]['fcstAmountByStage']) {
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][4],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][7],2,',','.')."%</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][0],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][1],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][2],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][3],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][6],2,',','.')."</td>";
+                        echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['fcstAmountByStage'][1][5],2,',','.')."</td>";
                     }else{
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00</td>";
                         echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>0.00%</td>";
@@ -549,7 +600,9 @@ class PAndRRender extends Render{
 
                     START OF CLIENT MANUAL ESTIMATION
 
-                */ 
+                */
+
+                /*
                 echo "<tr>";
                         //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
@@ -563,16 +616,16 @@ class PAndRRender extends Render{
                                     echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCST[$c][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
                                 }
                             echo "</td>";
-                            /*echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
-                                for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
-                                    echo"<center>";
-                                        echo "<div class='row' id='inputC-$c-$ch-$m' style='width:100%;white-space:nowrap;'>";
-                                            echo "<div class='col-sm-4'>".$this->channel[$ch]."</div>";
-                                            echo "<div class='col-sm-8'><input id='inputCNumber-$c-$ch-$m' type='number' min='0' max='100' step='0.5' value='10' style='width:100%;'></div>";
-                                        echo "</div>";
-                                    echo"</center>";
-                                }
-                            echo "</td>";*/
+                            # echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
+                            #    for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
+                            #        echo"<center>";
+                            #            echo "<div class='row' id='inputC-$c-$ch-$m' style='width:100%;white-space:nowrap;'>";
+                            #                echo "<div class='col-sm-4'>".$this->channel[$ch]."</div>";
+                            #                echo "<div class='col-sm-8'><input id='inputCNumber-$c-$ch-$m' type='number' min='0' max='100' step='0.5' value='10' style='width:100%;'></div>";
+                            #            echo "</div>";
+                            #        echo"</center>";
+                            #    }
+                            #echo "</td>";
                         }
                     }
                     echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalClient-$c' name='totalClient-$c' value='".number_format($rollingFCST[$c][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'></td>";
@@ -585,6 +638,44 @@ class PAndRRender extends Render{
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "</tr>";
+                */
+
+                echo "<tr>";
+                        //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' name='fcstClient-$c-$m' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' name='clientRF-$c-$m' value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
+                        }else{
+                            echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'>";
+                                if (($ow && $ow != '(P)') || !$emptyCheck[$c]) {
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
+                                }else{
+                                    echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
+                                }
+                            echo "</td>";
+                            # echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
+                            #    for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
+                            #        echo"<center>";
+                            #            echo "<div class='row' id='inputC-$c-$ch-$m' style='width:100%;white-space:nowrap;'>";
+                            #                echo "<div class='col-sm-4'>".$this->channel[$ch]."</div>";
+                            #                echo "<div class='col-sm-8'><input id='inputCNumber-$c-$ch-$m' type='number' min='0' max='100' step='0.5' value='10' style='width:100%;'></div>";
+                            #            echo "</div>";
+                            #        echo"</center>";
+                            #    }
+                            #echo "</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalClient-$c' name='totalClient-$c' value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'></td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                echo "</tr>";
+
                 /* 
 
                     END OF CLIENT MANUAL ESTIMATION
@@ -595,7 +686,8 @@ class PAndRRender extends Render{
 
                     START OF CLIENT BOOKING
 
-                */   
+                */
+                /*               
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -606,6 +698,26 @@ class PAndRRender extends Render{
                         }
                     }
                     echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>".number_format($clientRevenueCYear[$c][$m],2,',','.')."</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                echo "</tr>";
+                */
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],2,',','.')."</td>";
+                        }else{
+                            echo "<td class='$even[$m]' >".number_format($nSecondary[$c]['clientRevenueCYear'][$m],2,',','.')."</td>";
+                            echo "<td id='booking-$c-$m' style='display:none;'> </td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],2,',','.')."</td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
@@ -626,6 +738,8 @@ class PAndRRender extends Render{
                     START OF CLIENT PAST YEAR
 
                 */ 
+
+                /*
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -645,6 +759,27 @@ class PAndRRender extends Render{
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                     echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
                 echo "</tr>";
+                */
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='PY-$c-$m' name='PY-$c-$m' value='".number_format($nSecondary[$c]['clientRevenuePYear'][$m],2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center' ></td>";
+                        }else{
+                            echo "<td class='$odd[$m]'><input type='text' readonly='true' id='PY-$c-$m' name='PY-$c-$m' value='".number_format($nSecondary[$c]['clientRevenuePYear'][$m],2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center' ></td>";
+                            echo "<td id='lastYear-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' readonly='true' id='totalPY-$c' name='totalPY-$c' value='".number_format($nSecondary[$c]['clientRevenuePYear'][$m],2,',','.')."' style='width:100%; color:white; background-color:transparent; font-weight:bold; border:none; text-align:center'></td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                    echo "<td class='odd' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>&nbsp</td>";
+                echo "</tr>";
+
                 /* 
 
                     END OF CLIENT PAST YEAR
@@ -661,7 +796,8 @@ class PAndRRender extends Render{
 
                     NAO EXISTE PLANO POR CLIENTE, FAZER O QUE ???
 
-                *//*
+                */
+                /*
                 echo "<tr>";
                     echo "<td class='odd' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Var RF vs Plan</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
@@ -691,6 +827,7 @@ class PAndRRender extends Render{
                     START OF CLIENT RF VS PYEAR
 
                 */
+                /*
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         $tmp = $rollingFCST[$c][$m] - $clientRevenuePYear[$c][$m];
@@ -706,6 +843,32 @@ class PAndRRender extends Render{
                         }
                     }
                     echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'><input type='text' id='totalRFvsPY-$c' name='totalRFvsPY-$c' readonly='true' value='".number_format($rollingFCST[$c][$m] - $clientRevenuePYear[$c][$m],2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; color:white; text-align:center'></td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                    echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
+                echo "</tr>";
+                */
+
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        $tmp = $nSecondary[$c]['rollingFCST'][$m] - $nSecondary[$c]['clientRevenuePYear'][$m];
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>";                            
+                                echo "<input type='text' readonly='true' id='RFvsPY-$c-$m' name='RFvsPY-$c-$m' value='".number_format($tmp,2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center'>";
+                            echo "</td>";
+                        }else{
+                            echo "<td class='$even[$m]' style='border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>";                            
+                                echo "<input type='text' name='RFvsPY-$c-$m' readonly='true' id='RFvsPY-$c-$m' value='".number_format($tmp,2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; text-align:center'>";
+                            echo "</td>";
+                            echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style=' border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;'><input type='text' id='totalRFvsPY-$c' name='totalRFvsPY-$c' readonly='true' value='".number_format($nSecondary[$c]['rollingFCST'][$m] - $nSecondary[$c]['clientRevenuePYear'][$m],2,',','.')."' style='width:100%; font-weight:bold; background-color:transparent; border:none; color:white; text-align:center'></td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
                     echo "<td class='rcBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;'>&nbsp</td>";
