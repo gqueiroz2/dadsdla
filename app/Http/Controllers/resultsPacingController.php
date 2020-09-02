@@ -16,6 +16,7 @@ use App\quarterRender;
 use App\resultsMQ;
 use App\renderMQ;
 use Validator;
+use App\resultsPacing;
 
 class resultsPacingController extends Controller{
 
@@ -40,6 +41,9 @@ class resultsPacingController extends Controller{
 	}
 
 	public function post(){
+                
+                $rp = new resultsPacing();
+
                 $validator = Validator::make(Request::all(),[
                         'region' => 'required',                        
                         'brand' => 'required',
@@ -73,6 +77,17 @@ class resultsPacingController extends Controller{
                 $brandID = $base->handleBrand($brandTmp);
                 $currencyID = Request::get("currency");
                 $value = Request::get('value');        
+
+                $cYear = date('Y');
+                $pYear = $cYear - 1;
+
+                $years = array($cYear,$pYear);
+
+                $month = $base->getMonth();
+
+                $preMtx = $rp->construct($con,$currency,$month,$brands,$);
+
+
 
                 var_dump($regionID);
                 var_dump($salesRegion);
