@@ -89,7 +89,7 @@ class resultsMQController extends Controller{
                 
                 $mq = new resultsMQ();
                 $lines = $mq->lines($con,$tmp,$month,$secondPos,$brandID,$year,$regionID,$value,$firstPos);
-                var_dump($lines);
+
                 $mtx = $mq->assembler($con,$brandID,$lines,$month,$year,$firstPos);
 
                 $render = new renderMQ();
