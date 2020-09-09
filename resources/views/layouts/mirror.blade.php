@@ -131,12 +131,12 @@
 							</li>
 						@endif
 
-					@if( ( $userLevel == "SU" ) )
+					@if( ( $userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' ) )
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>
 								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
+								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
 									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
 									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
 									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>

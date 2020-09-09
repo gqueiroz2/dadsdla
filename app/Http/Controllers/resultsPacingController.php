@@ -83,9 +83,10 @@ class resultsPacingController extends Controller{
 
                 $years = array($cYear,$pYear);
 
+
                 $month = $base->getMonth();
 
-                $preMtx = $rp->construct($con,$currency,$month,$brands,$);
+                $preMtx = $rp->construct($con,$currency,$month,$brandID,$regionID,$value);
 
 
 
