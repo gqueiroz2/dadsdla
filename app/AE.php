@@ -787,7 +787,7 @@ class AE extends pAndR{
 
         $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
 
-        if ($save) {
+        if ($save){
 
             if ($submitted == 1) {
                 $sourceSave = "LAST SUBMITTED";                
@@ -991,7 +991,14 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
+        /*
+        var_dump($listOfClients);
+        var_dump($rollingFCST);
+        var_dump($lastRollingFCST);
+        */
+        $secondary = $listOfClients;
 
+        $nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
 
 
         $rtr = array(	
@@ -1004,10 +1011,10 @@ class AE extends pAndR{
                         "splitted" => $splitted,
         				"targetValues" => $targetValues,
 
-        				"rollingFCST" => $rollingFCST,
-                        "lastRollingFCST" => $lastRollingFCST,
-        				"clientRevenueCYear" => $clientRevenueCYear,
-        				"clientRevenuePYear" => $clientRevenuePYear,
+        				"rollingFCST" => $rollingFCST, // ***
+                        "lastRollingFCST" => $lastRollingFCST, // ***
+        				"clientRevenueCYear" => $clientRevenueCYear, // ***
+        				"clientRevenuePYear" => $clientRevenuePYear, // ***
 
                         "executiveRF" => $executiveRF,
                         "executiveRevenuePYear" => $executiveRevenuePYear,
@@ -1025,16 +1032,40 @@ class AE extends pAndR{
                         "valueView" => $valueView,
                         "currency" => $currencyName,
                         "value" => $valueView,
-                        "fcstAmountByStage" => $fcstAmountByStage,
+                        "fcstAmountByStage" => $fcstAmountByStage, // ***
                         "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerClient" => $brandsPerClient,
                         "sourceSave" => $sourceSave,
                         "emptyCheck" => $emptyCheck,
+                        "nSecondary" => $nSecondary,
                     );
 
         return $rtr;
 
     }
+
+    public function mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage){
+        
+        $nSecondary = $secondary;
+
+        for ($n=0; $n < sizeof($nSecondary); $n++) { 
+            $nSecondary[$n]['rollingFCST'] = $rollingFCST[$n];
+            $nSecondary[$n]['lastRollingFCST'] = $lastRollingFCST[$n];
+            $nSecondary[$n]['clientRevenueCYear'] = $clientRevenueCYear[$n];
+            $nSecondary[$n]['clientRevenuePYear'] = $clientRevenuePYear[$n];  
+            $nSecondary[$n]['fcstAmountByStage'] = $fcstAmountByStage[$n];  
+
+            $nSecondary[$n]['higherValue'] = $rollingFCST[$n][16];            
+        }
+
+        usort($nSecondary, function($a, $b) {
+            return $b['higherValue'] <=> $a['higherValue'];
+        });
+        
+        return $nSecondary;
+        
+    }
+
 
     public function addBookingRollingFCST($fcst,$booking){
         $date = intval(date('n'))-1;

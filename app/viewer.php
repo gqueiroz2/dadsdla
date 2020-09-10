@@ -554,10 +554,8 @@ class viewer extends Model{
 		if ($currencies == 'USD') {
 			if ($source == 'CMAPS') {
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
-				var_dump("ola");
 			}else{
 				$pRate = 1.0;
-				var_dump("tchau");
 			}
 		}else{
 			if ($source == 'CMAPS') {

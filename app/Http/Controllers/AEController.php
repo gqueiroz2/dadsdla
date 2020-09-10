@@ -285,8 +285,6 @@ class AEController extends Controller{
 
         $forRender = $tmp;
 
-        //var_dump($forRender['rollingFCST']);
-
         $sourceSave = $forRender['sourceSave'];
         $client = $tmp['client'];
         $tfArray = array();
