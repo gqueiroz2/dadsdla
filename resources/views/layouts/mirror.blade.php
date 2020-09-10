@@ -125,43 +125,43 @@
 	                        <li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('baseGet') }}"> CMAPS </a>
+									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
 									<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
 								</div>
 							</li>
 						@endif
 
-					@if( ( $userLevel == "SU" ) )
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>
-								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
+						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>
 									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
 									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
 									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
-								@endif
-							</div>
-						</li>	
-					
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
-								<!--<a class="dropdown-item" href="#"> Insights </a>-->
-							</div>
-						</li>	
-					
+								</div>
+							</li>
+						@endif
 
-						<!--<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Teste Performance </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('individualGet')}}"> Individual </a>
-								<a class="dropdown-item"> Core </a>
-								<a class="dropdown-item"> Office </a>
-							</div>
-						</li>-->
-					@endif		
+						@if( ( $userLevel == "SU" ) )
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
+									<!--<a class="dropdown-item" href="#"> Insights </a>-->
+								</div>
+							</li>	
+						
+
+							<!--<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Teste Performance </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('individualGet')}}"> Individual </a>
+									<a class="dropdown-item"> Core </a>
+									<a class="dropdown-item"> Office </a>
+								</div>
+							</li>-->
+						@endif		
 					</ul>    
 
 					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
