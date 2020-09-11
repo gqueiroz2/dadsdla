@@ -98,6 +98,7 @@ class resultsPacingController extends Controller{
 
 
 
+                return view('adSales.results.7pacingPost',compact('render','region','brand','currency','regionCurrencies','preMtx'));                
                 
 
 		
