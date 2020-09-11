@@ -15,20 +15,16 @@ class resultsPacing extends Model{
             for ($m=0; $m < sizeof($months); $m++) { 
                 if ($brands[$b][1] != 'ONL' && $brands[$b][1] != 'VIX') {
                     if ($form == "cmaps") {
-                        $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                        $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $region, $value,$year);
                     }else{
-                        $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value);
+                        $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $region, $value,$year);
                     }
                 }else{
-                    if($year < 2020){
-                        $where[$b][$m] = $this->defineValues($con, "digital", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $year);       
+                    if ($form == "cmaps") {
+                        $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $region, $value, $year);
                     }else{
-                        if ($form == "cmaps") {
-                            $where[$b][$m] = $this->defineValues($con, "cmaps", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $year);
-                        }else{
-                            $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $year, $region, $value, $year);
-                        }   
-                    }
+                        $where[$b][$m] = $this->defineValues($con, "ytd", $currency, $brands[$b][0], $months[$m][1], $region, $value, $year);
+                    } 
                 }                
             }
         }
@@ -145,8 +141,8 @@ class resultsPacing extends Model{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
-            
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
             if($table == "cmaps"){                          
@@ -159,8 +155,6 @@ class resultsPacing extends Model{
 
 
         }
-
-        var_dump($rtr);
 
         return $rtr;
 
