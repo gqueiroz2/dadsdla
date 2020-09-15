@@ -86,15 +86,20 @@ class resultsPacingController extends Controller{
 
                 $month = $base->getMonth();
 
-                $preMtx = $rp->construct($con,$currency,$month,$brandID,$regionID,$value);
-
-
-
+                /*
                 var_dump($regionID);
                 var_dump($salesRegion);
                 var_dump($brandID);
                 var_dump($currencyID);
                 var_dump($value);
+                */
+                
+                $preMtx = $rp->construct($con,$currency,$month,$brandID,$regionID,$value);
+
+
+
+                return view('adSales.results.7pacingPost',compact('render','region','brand','currency','regionCurrencies','preMtx'));                
+                
 
 		
 	}

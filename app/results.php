@@ -249,7 +249,7 @@ class results extends base{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
