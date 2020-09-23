@@ -67,12 +67,6 @@ class resultsPacingController extends Controller{
                 $regionCurrencies = $base->currenciesByRegion();  
 
                 $regionID = Request::get('region');
-                $tmp = $r->getRegion($con,array($regionID));
-                if(is_array($tmp)){
-                        $salesRegion = $tmp[0]['name'];
-                }else{
-                        $salesRegion = $tmp['name'];
-                }
                 $brandTmp = Request::get('brand');
                 $brandID = $base->handleBrand($brandTmp);
                 $currencyID = Request::get("currency");
@@ -83,22 +77,24 @@ class resultsPacingController extends Controller{
 
                 $years = array($cYear,$pYear);
 
-
                 $month = $base->getMonth();
-
-                /*
-                var_dump($regionID);
-                var_dump($salesRegion);
-                var_dump($brandID);
-                var_dump($currencyID);
-                var_dump($value);
-                */
                 
-                $preMtx = $rp->construct($con,$currency,$month,$brandID,$regionID,$value);
+                $mtx = $rp->construct($con,$currency,$month,$brandID,$regionID,$value);
 
+                $mtx = $rp->assemble($mtx);
 
+                $mtxDN = $rp->addDN($mtx);
 
-                return view('adSales.results.7pacingPost',compact('render','region','brand','currency','regionCurrencies','preMtx'));                
+                $tmp = $r->getRegion($con,array($regionID));
+                if(is_array($tmp)){
+                        $salesRegion = $tmp[0]['name'];
+                }else{
+                        $salesRegion = $tmp['name'];
+                }
+
+                $currencyS = $currencyID;
+
+                return view('adSales.results.7pacingPost',compact('render','region','brand','currency','regionCurrencies','mtx','years','brandID','mtxDN','salesRegion','currencyS','value'));                
                 
 
 		

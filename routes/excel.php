@@ -67,7 +67,7 @@ Route::group(['middleware' => 'auth'],function(){
 			});
 
 			Route::group(['prefix'=>'dashboard'], function(){
-				Route::post('dashBV','dashboardExcelController@bv')
+				Route::post('dashBV','dashboardExcelController@dashBV')
 								    ->name('bvExcel');
 
 			});

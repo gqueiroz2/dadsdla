@@ -107,7 +107,7 @@ class dashboardsController extends Controller{
       $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
       $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
       $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
-      
+
       $monthsMidName = array("Jan",
                               "Feb",
                               "Mar",
@@ -124,11 +124,11 @@ class dashboardsController extends Controller{
 
       
 
-      $title = "Dashboard - BV";
-      $titlePdf = "Dashboard - BV.pdf";
 
 
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'title', 'titlePdf','infoPreviousYear'));
+      $title = "Dashboard - BV.xlsx";
+
+      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'title','infoPreviousYear'));
    }
 
 	public function overviewGet(){
