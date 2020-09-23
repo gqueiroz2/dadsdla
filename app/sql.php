@@ -199,6 +199,7 @@ class sql extends Model{
     }
 
     public function updateValues($con,$tableName,$set,$where){
+        $db = new Database();
         $default = $db->defaultConnection();
 
         $sql = "UPDATE $default.$tableName $set $where";
