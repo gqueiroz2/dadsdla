@@ -22,8 +22,6 @@ class relationshipRender extends Render{
 	}
 
 	public function constructAgency($structure){
-		
-
 		echo "<tr>";
 			echo "<th class='darkBlue'><center> Agency Group </center></th>";
 			echo "<th class='darkBlue'><center> Agency </center></th>";

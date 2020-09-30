@@ -243,12 +243,6 @@ class pacingReport extends Model
 
 		$base = new base();
 		
-		/*var_dump($value);
-		var_dump($currency);
-		var_dump($region);
-		var_dump($year);
-		var_dump($type);*/
-
 		$from = array("revenue");
 
 		if ($value == "gross") {
@@ -266,7 +260,8 @@ class pacingReport extends Model
 
 		for ($b=0; $b <sizeof($brands); $b++) { 
 			for ($m=0; $m <12; $m++) { 
-				$select[$b][$m] = "SELECT revenue FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (type_of_revenue = \"NET\") AND (currency_id = \"4\")";
+				$select[$b][$m] = "SELECT SUM(revenue) AS revenue FROM plan_by_brand WHERE (source = \"".$type."\") AND (year = \"".$year."\") AND (sales_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (type_of_revenue = \"NET\") AND (currency_id = \"4\")";
+
 				$res[$b][$m] = $con->query($select[$b][$m]);
 				$resp[$b][$m] = floatval($sql->fetch($res[$b][$m],$from,$from)[0]['revenue'])*$div*$mult;
 			}
