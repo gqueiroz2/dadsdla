@@ -20,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Chart\Layout;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-class bvTabExport implements FromView,WithEvents, WithTitle/*, WithCharts*/ {
+class bvTabExport implements FromView,WithEvents, WithTitle, WithCharts {
     
    	public function __construct($view, $data, $typeExport){
         $this->view = $view;
@@ -37,6 +37,27 @@ class bvTabExport implements FromView,WithEvents, WithTitle/*, WithCharts*/ {
 		return 'Overview - BV';
 	}
 
+	public function charts()
+    {
+        $labels     = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Products!$C$1', null)];
+        $categories = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Products!$A$2:$A$5', null)];
+        $values     = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Products!$C$2:$C$5', null)];
+
+        $chart1 = new Chart(
+            'chart',
+            new Title('Test Pie Chart'),
+            new Legend(),
+            new PlotArea(null, [
+                new DataSeries(DataSeries::TYPE_PIECHART, null, range(0, count($values) - 1), $labels, $categories, $values)
+            ])
+        );
+
+        $chart1->setTopLeftPosition('A1');
+        $chart1->setBottomRightPosition('H20');
+
+        return $chart1;
+    }
+	
 	public function registerEvents(): array{
 
 		return [
@@ -44,109 +65,19 @@ class bvTabExport implements FromView,WithEvents, WithTitle/*, WithCharts*/ {
 
 					//$cell = "A34";
 					//$event->sheet->getDelegate()->setBreak($cell, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
-/*
+
 					$event->sheet->setShowGridlines(false);
 					$event->sheet->getDelegate()->getPageSetup()
 	                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
 	                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 
 						
-				$spreadsheet = new Spreadsheet();
-						//create an excel worksheet and add some data for chart
-						$worksheet = $spreadsheet->getActiveSheet();
-						$var = $worksheet->fromArray([
-						 ['', 2010, 2011, 2012],
-						 ['Q1', 12, 15, 21],
-						 ['Q2', 56, 73, 86],
-						 ['Q3', 52, 61, 69],
-						 ['Q4', 30, 32, 0],
-						]);
+					$spreadsheet = new Spreadsheet();
+					//create an excel worksheet and add some data for chart
+					$worksheet = $spreadsheet->getActiveSheet();
+					
 
-						//Set the Labels for each data series we want to plot
-						// Datatype
-						// Cell reference for data
-						// Format Code
-						// Number of datapoints in series
-						// Data values
-						// Data Marker
-						$dataSeriesLabels = [
-						 new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('String', 'Worksheet!$G$5', null, 1), //  2011
-						];
-
-						//Set the X-Axis Labels
-						// Datatype
-						// Cell reference for data
-						// Format Code
-						// Number of datapoints in series
-						// Data values
-						// Data Marker
-						$xAxisTickValues = [
-						 new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('String', 'Worksheet!$M$5:$M$8', null, 4), //  Q1 to Q4
-						];
-
-						//Set the Data values for each data series we want to plot
-						// Datatype
-						// Cell reference for data
-						// Format Code
-						// Number of datapoints in series
-						// Data values
-						// Data Marker
-						$dataSeriesValues = [
-						 new \PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues('Number', 'Worksheet!G$6:$G$9', null, 4),
-						];
-
-						//  Build the dataseries
-						$series = new \PhpOffice\PhpSpreadsheet\Chart\DataSeries(
-						 \PhpOffice\PhpSpreadsheet\Chart\DataSeries::TYPE_PIECHART, // plotType
-						 null, // plotGrouping (Pie charts don't have any grouping)
-						 range(0, count($dataSeriesValues) - 1), // plotOrder
-						 $dataSeriesLabels, // plotLabel
-						 $xAxisTickValues, // plotCategory
-						 $dataSeriesValues          // plotValues
-						);
-
-						//  Set up a layout object for the Pie chart
-						$layout = new \PhpOffice\PhpSpreadsheet\Chart\Layout();
-						$layout->setShowVal(true);
-						$layout->setShowPercent(true);
-
-						//  Set the series in the plot area
-						$plotArea = new \PhpOffice\PhpSpreadsheet\Chart\PlotArea($layout, [$series]);
-						//  Set the chart legend
-						$legend = new \PhpOffice\PhpSpreadsheet\Chart\Legend(\PhpOffice\PhpSpreadsheet\Chart\Legend::POSITION_RIGHT, null, false);
-
-						$title = new \PhpOffice\PhpSpreadsheet\Chart\Title('Test Pie Chart');
-
-						//  Create the chart
-						$chart = new Chart(
-						 'chart', // name
-						 $title, // title
-						 $legend, // legend
-						 $plotArea, // plotArea
-						 true, // plotVisibleOnly
-						 'gap', // displayBlanksAs
-						 null, // xAxisLabel
-						 null   // yAxisLabel    - Pie charts don't have a Y-Axis
-						);
-
-						//Set the position where the chart should appear in the worksheet
-						$chart->setTopLeftPosition('G5');
-						$chart->setBottomRightPosition('H20');
-
-						//Add the chart to the worksheet
-						$worksheet->addChart($chart);
-
-						//Save Excel 2007 file
-						/*
-						$filename ='Test';
-						$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-						$writer->setIncludeCharts(true);
-						*/
-						$Excel_writer = new Xlsx($spreadsheet);
-
-						ob_end_clean();
-						$Excel_writer->setIncludeCharts(true);
-						$Excel_writer->save('php://output');*/
+						
 			},
 		];
 	}
