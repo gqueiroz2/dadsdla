@@ -55,6 +55,15 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPMonthSave');
 		});
 
+		Route::group(['prefix'=>'agencyandagviewer'],function(){
+			
+			Route::get('/','pandrAgencyAGViewerController@get')
+										->name('agencyAGroupViewerGet');
+
+			Route::post('/','pandrAgencyAGViewerController@post')
+										->name('agencyAGroupViewerPost');
+		});
+
 	});
 	Route::group(['prefix'=>'ajax'],function(){
 		Route::post('salesRepByRegionPandR','ajaxController@salesRepByRegionFiltered')

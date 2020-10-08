@@ -37,419 +37,328 @@ class pacingRender extends Render{
         $totalPrc2 = $forRender['totalPrc2'];
 
 
-		 echo "<div class='table-responsive' style='zoom:70%;'>";
-            echo "<table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>";
-                echo "<tr><th class='lightBlue'> Pacing Report - $cYear - ($currency/$value) </th></tr>";
-            echo "</table>";
+		echo "<div class='row'>";
+            echo "<div class='col lightBlue'>
+                    <center>
+                        <span style='font-size:24px;'> 
+                            (P&R) Pacing Report - $cYear - ($currency/". strtoupper($value).") 
+                        </span>
+                    </center>
+                  </div>";
         echo "</div>";
 
+        echo "<div class='row sticky-top'>";
+            echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                <tr class='center'>
+                    <td style='width: 7% !important; background-color: white;'> &nbsp; </td>
+                </tr>
+            </table>";
 
-        for ($b=0; $b <sizeof($brands) ; $b++) { 
-                echo "<div class='row mt-2'>";
-                echo "<div class='col-2'>";
-                    echo "<table style='width:100%; text-align:center; zoom:70%; font-size:18px;'>";
-                        echo "<tr>";
-                            echo "<td style='height:40px;'>&nbsp</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td rowspan='9' class=\"".strtolower($brands[$b]['name'])."\" style='width:35%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px; font-size:30px;'>".$brands[$b]['name']."</td>";
-                            echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'> $pYear Ad Sales </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $pYear SAP </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Target </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Fcst Asales - Current </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Fcst Corporate </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $cYear Ad Sales </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $cYear SAP </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> % ".$cYear."F/Fcst-$pYear </td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                            echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px; height:40px;'> % ".$cYear."F/Target </td>";
-                        echo "</tr>";
-                    echo "</table>";
-                echo "</div>";
-                echo "<div class='col linked table-responsive '>";
-            		echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; font-size:18px;'>";
-                        
-                        echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='quarter' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px;'>".$this->month[$m]."</td>";
+            echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>";
+                echo "<tr class='center'>";
+                    echo "<td class='darkBlue' style='width:10%;'>DN</td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='quarter' style='width:5%;'>".$this->month[$m]."</td>";
+                        }else{
+                            echo "<td class='smBlue' style='width:5%;'>".$this->month[$m]."</td>";
+                        }
+                    }
+                    echo "<td class='darkBlue' style='width:5%;'>Total</td>";
+                echo "</tr>";
+                /* BOOKING ANO PASSADO */
+                echo "<tr class='center'>";
+                    echo "<td class='odd' style='width:10%;'> $pYear Ad Sales </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='odd' style='width:5%;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* SAP ANO PASSADO */
+                echo "<tr class='center'>";
+                    echo "<td class='even' style='width:10%;'> $pYear SAP </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='even' style='width:5%;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* TARGET */
+                echo "<tr class='center'>";
+                    echo "<td class='odd' style='width:10%;'> Target </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalTarget[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='odd' style='width:5%;'>".number_format($totalTarget[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalTarget[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* FCST */
+                echo "<tr class='center'>";
+                    echo "<td class='even' style='width:10%;'> Fcst Ad Sales - Current </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='even' style='width:5%;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* Forecast Corporate */
+                echo "<tr class='center'>";
+                    echo "<td class='odd' style='width:10%;'> Fcst Corporate </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='odd' style='width:5%;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* BOOKING ANO ATUAL */
+                echo "<tr class='center'>";
+                    echo "<td class='even' style='width:10%;'> $cYear Ad Sales </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='even' style='width:5%;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* BOOKING ANO ATUAL */
+                echo "<tr class='center'>";
+                    echo "<td class='odd' style='width:10%;'> $cYear SAP </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:5%;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
+                        }else{
+                            echo "<td class='odd' style='width:5%;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:5%;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
+                echo "</tr>";
+                /* PORCENTAGEM ENTRE FCST ATUAL E BOOKING ANO PASSADO */
+                echo "<tr class='center'>";
+                    echo "<td class='even' style='width:10%;'> % ".$cYear."F/Fcst-$pYear </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            if($totalPrc1[$m] != 0 ){
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
                             }else{
-                                echo "<td class='smBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; height:40px;'>".$this->month[$m]."</td>";
+                                echo "<td class='medBlue' style='width:5%;'> - </td>";    
+                            }
+                        }else{
+                            if($totalPrc1[$m] != 0 ){
+                                echo "<td class='even' style='width:5%;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
+                            }else{
+                                echo "<td class='even' style='width:5%;'> - </td>";    
                             }
                         }
-                            echo "<td class='darkBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; height:40px;'>Total</td>";
-                        echo "</tr>";
+                    }
+                    if($totalPrc1[$m] != 0 ){
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
+                    }else{
+                        echo "<td class='smBlue' style='width:5%;'> - </td>";
+                    }
+                echo "</tr>";
+                /* PORCENTAGEM ENTRE FCST ATUAL E TARGET */
+                echo "<tr class='center'>";
+                    echo "<td class='odd' style='width:10%;'> % ".$cYear."F/Target </td>";
+                    for ($m=0; $m <sizeof($this->month); $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            if($totalPrc2[$m]){
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
+                            }else{
+                                echo "<td class='medBlue' style='width:5%;'> - </td>";
+                            }
+                        }else{
+                            if($totalPrc2[$m]){
+                                echo "<td class='odd' style='width:5%;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
+                            }else{
+                                echo "<td class='odd' style='width:5%;'> - </td>";
+                            }
+                        }
+                    }
+                    if($totalPrc2[$m]){
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
+                    }else{
+                        echo "<td class='smBlue' style='width:5%;'> - </td>";
+                    }
+                echo "</tr>";
+            echo "</table>";  
 
+            echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                <tr class='center'>
+                    <td style='width: 7% !important; background-color: white;'> &nbsp; </td>
+                </tr>
+            </table>";
 
-                        /*
-                            BOOKING ANO PASSADO
-                        */
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
+        echo "</div>";
+
+        for ($b=0; $b <sizeof($brands) ; $b++) { 
+            echo "<div class='row mt-2'>";                
+        		echo "<table style='width: 100%; zoom: 85%;font-size: 16px;'>";
+                    echo "<tr class='center'>";
+                        echo "<td class='lightBlue' style='width:10%;'>".$brands[$b]['name']."</td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='quarter' style='width:5%;'>".$this->month[$m]."</td>";
+                            }else{
+                                echo "<td class='smBlue' style='width:5%;'>".$this->month[$m]."</td>";
+                            }
+                        }
+                        echo "<td class='darkBlue' style='width:5%;'>Total</td>";
+                    echo "</tr>";
+                    /* BOOKING ANO PASSADO */
+                    echo "<tr class='center'>";
+                        echo "<td class='odd' style='width:10%;'> $pYear Ad Sales </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='odd' style='width:5%;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* SAP ANO PASSADO */
+                    echo "<tr class='center'>";
+                        echo "<td class='even' style='width:10%;'> $pYear SAP </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='even' style='width:5%;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* TARGET */
+                    echo "<tr class='center'>";
+                        echo "<td class='odd' style='width:10%;'> Target </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($target[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='odd' style='width:5%;'>".number_format($target[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($target[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* FCST */
+                    echo "<tr class='center'>";
+                        echo "<td class='even' style='width:10%;'> Fcst Ad Sales - Current </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='even' style='width:5%;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* Forecast Corporate */
+                    echo "<tr class='center'>";
+                        echo "<td class='odd' style='width:10%;'> Fcst Corporate </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='odd' style='width:5%;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* BOOKING ANO ATUAL */
+                    echo "<tr class='center'>";
+                        echo "<td class='even' style='width:10%;'> $cYear Ad Sales </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='even' style='width:5%;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* SAP ANO ATUAL */
+                    echo "<tr class='center'>";
+                        echo "<td class='odd' style='width:10%;'> $cYear SAP </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                echo "<td class='medBlue' style='width:5%;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
+                            }else{
+                                echo "<td class='odd' style='width:5%;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
+                            }
+                        }
+                        echo "<td class='smBlue' style='width:5%;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
+                    echo "</tr>";
+                    /* PORCENTAGEM ENTRE FCST ATUAL E BOOKING ANO PASSADO */
+                    echo "<tr class='center'>";
+                        echo "<td class='even' style='width:10%;'> % ".$cYear."F/Fcst-$pYear </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                if( $prc1[$b][$m] != 0 ){
+                                    echo "<td class='medBlue' style='width:5%;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
                                 }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5%;'> - </td>";
+                                }
+                            }else{
+                                if( $prc1[$b][$m] != 0 ){
+                                    echo "<td class='even' style='width:5%;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
+                                }else{
+                                    echo "<td class='even' style='width:5%;'> - </td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($bookingPYear[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-
-
-                        /*
-                             
-                            SAP ANO PASSADO
-
-                        */
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
+                        }
+                        if($prc1[$b][$m] != 0){
+                            echo "<td class='smBlue' style='width:5%;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
+                        }else{
+                            echo "<td class='smBlue' style='width:5%;'> - </td>";
+                        }
+                    echo "</tr>";
+                    /* PORCENTAGEM ENTRE FCST ATUAL E TARGET */
+                    echo "<tr class='center'>";
+                        echo "<td class='odd' style='width:10%;'> % ".$cYear."F/Target </td>";
+                        for ($m=0; $m <sizeof($this->month); $m++) { 
+                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                                if($prc2[$b][$m] != 0){
+                                    echo "<td class='medBlue' style='width:5%;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
                                 }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
+                                    echo "<td class='medBlue' style='width:5%;'> - </td>"; 
+                                }
+                            }else{
+                                if($prc2[$b][$m] != 0){
+                                    echo "<td class='odd' style='width:5%;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
+                                }else{
+                                    echo "<td class='odd' style='width:5%;'> - </td>";
                                 }
                             }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPPYear[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                        /*
-                            TARGET
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
-                                }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($target[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                        /*
-                            FCST
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
-                                }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($fcst[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                        /*
-
-                            Forecast Corporate
-
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
-                                }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($corporate[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                        /*
-
-                            BOOKING ANO ATUAL
-
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
-                                }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($bookingCYear[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                         /*
-
-                            BOOKING ANO ATUAL
-
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
-                                }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($SAPCYear[$b][$m],0,',','.')."</td>";
-                        echo "</tr>";
-
-                        /*
-
-                            PORCENTAGEM ENTRE FCST ATUAL E BOOKING ANO PASSADO
-    
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
-                                }else{
-                                    echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($prc1[$b][$m],0,',','.')."%</td>";
-                        echo "</tr>";
-
-
-                        /*
-
-                            PORCENTAGEM ENTRE FCST ATUAL E TARGET
-
-                        */
-
-                        echo "<tr>";
-                            for ($m=0; $m <sizeof($this->month); $m++) { 
-                                if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                    echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px; height:40px;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
-                                }else{
-                                    echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px; height:40px;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
-                                }
-                            }
-                            echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px; height:40px;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
-                        echo "</tr>";
-
-                	echo "</table>";
-                echo "</div>";
+                        }
+                        if($prc2[$b][$m] != 0){
+                            echo "<td class='smBlue' style='width:5%;'>".number_format($prc2[$b][$m],0,',','.')."%</td>";
+                        }else{
+                            echo "<td class='smBlue' style='width:5%;'> - </td>";
+                        }
+                    echo "</tr>";
+            	echo "</table>";
             echo "</div>";
        	}
 
-        echo "<div class='row mt-2'>";
-            echo "<div class='col-2'>";
-                echo "<table style='width:100%; text-align:center; zoom:70%; font-size:18px;'>";
-                    echo "<tr>";
-                        echo "<td style='height:40px;'>&nbsp</td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td rowspan='9' class=\"darkBlue\" style='width:35%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px; font-size:30px;'>Total</td>";
-                        echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'> $pYear Ad Sales </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $pYear SAP </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Target </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Fcst Asales - Current </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> Fcst Corporate </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $cYear Ad Sales </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> $cYear SAP </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='even' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'> % ".$cYear."F/Fcst-$pYear </td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                        echo "<td class='odd' style='width:65%; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px; height:40px;'> % ".$cYear."F/Target </td>";
-                    echo "</tr>";
-                echo "</table>";
-            echo "</div>";
-            echo "<div class='col linked table-responsive '>";
-                echo "<table style='width:100%; text-align:center; min-width:3000px; zoom:70%; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px; font-size:18px;'>";
-                    
-                    echo "<tr>";
-                    for ($m=0; $m <sizeof($this->month); $m++) { 
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='quarter' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px; height:40px;'>".$this->month[$m]."</td>";
-                        }else{
-                            echo "<td class='smBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 1px 0px; height:40px;'>".$this->month[$m]."</td>";
-                        }
-                    }
-                        echo "<td class='darkBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px; height:40px;'>Total</td>";
-                    echo "</tr>";
-
-                    /*
-                        BOOKING ANO PASSADO
-                    */
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px; height:40px;'>".number_format($totalBookingPYear[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-
-
-                    /*
-                         
-                        SAP ANO PASSADO
-
-                    */
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualPYear[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                    /*
-                        TARGET
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalTarget[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                    /*
-                        FCST
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalFcstValue[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                    /*
-
-                        Forecast Corporate
-
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalCorporate[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                    /*
-
-                        BOOKING ANO ATUAL
-
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalBookingCYear[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                     /*
-
-                        BOOKING ANO ATUAL
-
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
-                            }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalActualCYear[$m],0,',','.')."</td>";
-                    echo "</tr>";
-
-                    /*
-
-                        PORCENTAGEM ENTRE FCST ATUAL E BOOKING ANO PASSADO
-
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px; height:40px;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
-                            }else{
-                                echo "<td class='even' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; height:40px;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px; height:40px;'>".number_format($totalPrc1[$m],0,',','.')."%</td>";
-                    echo "</tr>";
-
-
-                    /*
-
-                        PORCENTAGEM ENTRE FCST ATUAL E TARGET
-
-                    */
-
-                    echo "<tr>";
-                        for ($m=0; $m <sizeof($this->month); $m++) { 
-                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px; height:40px;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
-                            }else{
-                                echo "<td class='odd' style='width:5.625%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px; height:40px;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
-                            }
-                        }
-                        echo "<td class='smBlue' style='width:10%; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px; height:40px;'>".number_format($totalPrc2[$m],0,',','.')."%</td>";
-                    echo "</tr>";
-
-                echo "</table>";
-            echo "</div>";
-        echo "</div>";
+        
 	}
 
 }

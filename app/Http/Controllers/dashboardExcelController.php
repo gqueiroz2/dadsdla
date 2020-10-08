@@ -19,7 +19,6 @@ use Validator;
 
 use App\dashboards;
 use App\makeChart;
-
 use App\Exports\bvExport;
 
 class dashboardExcelController extends Controller{
@@ -73,7 +72,7 @@ class dashboardExcelController extends Controller{
             $bands = $dash->bandsBV($con,$p,$type,$region,$currency,$value,$agencyGroup,$yearsBand);
             $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
             $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$region,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
-            
+
             $monthsMidName = array("Jan",
                                     "Feb",
                                     "Mar",
@@ -94,5 +93,12 @@ class dashboardExcelController extends Controller{
             $auxTitle = $title;
 
            return Excel::download(new bvExport($data, $label, $typeExport, $auxTitle), $title);
+
+
+
+
+
+
+
       }
 }

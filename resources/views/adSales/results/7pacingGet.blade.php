@@ -16,14 +16,11 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->newRegionFiltered($regionName,$regionID)}}
-						{{-- @if($userLevel == 'L0' || $userLevel == 'SU') 
+						@if($userLevel == 'L0' || $userLevel == 'SU') 
 							{{$render->region($region)}}						
-							
 						@else
-							{{$render->regionFiltered($region, $regionID, $special)}}
-						@endif
-						--}}
+							{{$render->newRegionFiltered($regionName,$regionID)}}
+						@endif						
 					</div>
 
 					<div class="col-sm">
@@ -59,7 +56,7 @@
 		</div>
 	</div>
 
-	<div class="row justify-content-end mt-2">
+	<div class="row justify-content-end mt-4">
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 			<span style="float: right;"> Pacing </span>
 		</div>
