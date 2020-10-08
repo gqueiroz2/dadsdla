@@ -16,14 +16,11 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->newRegionFiltered($regionName,$regionID)}}
-						{{-- @if($userLevel == 'L0' || $userLevel == 'SU') 
+						@if($userLevel == 'L0' || $userLevel == 'SU') 
 							{{$render->region($region)}}						
-							
 						@else
-							{{$render->regionFiltered($region, $regionID, $special)}}
-						@endif
-						--}}
+							{{$render->newRegionFiltered($regionName,$regionID)}}
+						@endif						
 					</div>
 
 					<div class="col-sm">

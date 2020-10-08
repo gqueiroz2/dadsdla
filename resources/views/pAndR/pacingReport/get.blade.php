@@ -54,7 +54,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Pacing
+				(P&R) Pacing Report - {{date('Y')}}
 			</div>
 		</div>
 	</div>

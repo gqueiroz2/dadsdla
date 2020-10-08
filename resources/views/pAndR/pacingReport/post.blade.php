@@ -71,17 +71,17 @@
 	</form>
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
-			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Pacing 
+			<div class="col-4" style="color: #0070c0;font-size: 25px;">
+				(P&R) Pacing Report - {{date('Y')}} - ({{$forRender['currency']}}/{{ strtoupper($forRender['value']) }})
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">		
-		<div class="row justify-content-center mt-2">
-			<div class="col" style="width: 100%; padding-right: 2%;">
-				<center>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col"> 
+				<div class="container-fluid" style='width: 100%; zoom: 85%;font-size: 16px;'>		
 					{{$render->pacingReport($brands,$forRender)}}
-				</center>
+				</div>
 			</div>
 		</div>
 	</div>
