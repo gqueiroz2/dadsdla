@@ -141,7 +141,7 @@
 									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
 									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> AG/Agency View </a>
+									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> Agency View </a>
 								</div>
 							</li>
 						@endif
