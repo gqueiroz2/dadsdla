@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'],function(){
 
 Route::group(['prefix' => 'ajaxResults'], function(){
 	Route::post('currencyByRegion','ajaxController@currencyByRegion');
+	Route::post('newCurrencyByRegion','ajaxController@newCurrencyByRegion');
 	Route::post('salesRepGroupByRegion','ajaxController@salesRepGroupByRegion');
 	Route::post('salesRepBySalesRepGroup','ajaxController@salesRepBySalesRepGroup');
 	Route::post('sourceByRegion','ajaxController@sourceByRegion');

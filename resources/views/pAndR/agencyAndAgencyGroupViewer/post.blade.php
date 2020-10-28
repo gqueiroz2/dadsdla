@@ -30,6 +30,13 @@
 					{{$render->year()}}
 				</div>
 				<div class="col">
+					<label class='labelLeft'><span class="bold">Type:</span></label>
+					@if($errors->has('type'))
+						<label style="color: red;">* Required</label>
+					@endif
+					{{$render->typeNojQuery()}}
+				</div>	
+				<div class="col">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
 						<label style="color: red;">* Required</label>
