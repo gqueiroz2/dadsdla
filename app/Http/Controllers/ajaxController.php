@@ -1031,6 +1031,29 @@ class ajaxController extends Controller{
         //echo $regionID;
     }
 
+    public function newCurrencyByRegion(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
+        $pr = new pRate();
+        $regionID = array(Request::get('regionID'));
+        
+        $currency = $pr->getCurrencyByRegion($con,$regionID);
+
+        if ($currency) {
+            for ($c=0; $c <sizeof($currency); $c++) {
+                if ($currency[$c]["name"] != "USD" && $currency[$c]['id'] <= 6) {
+                    echo "<option value='".$currency[$c]["name"]."'>".$currency[$c]["name"]."</option>";
+                }
+            }
+            echo "<option value='4'>USD</option>";
+        }else{
+            echo "<option value=''> There is no Currency for this Region </option>";
+        }
+        //echo $regionID;
+    }
+
     public function newSourceByRegion(){
         $region = Request::get('regionID');
 

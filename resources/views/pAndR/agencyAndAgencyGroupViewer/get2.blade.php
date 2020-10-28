@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Agency Viewer')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -29,13 +29,6 @@
 					@endif
 					{{$render->year()}}
 				</div>
-				<div class="col">
-					<label class='labelLeft'><span class="bold">Type:</span></label>
-					@if($errors->has('type'))
-						<label style="color: red;">* Required</label>
-					@endif
-					{{$render->typeNojQuery()}}
-				</div>				
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
@@ -84,7 +77,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Agency and Agency Group Viewer
+				Agency Viewer
 			</div>
 		</div>
 	</div>

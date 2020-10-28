@@ -498,6 +498,13 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function typeNojQuery(){
+        echo "<select id='type' name='type' style='width:100%;' class='form-control'>";
+            echo "<option value='agency'> Agency </option>";
+            echo "<option value='agencyGroup'> Agency Group </option>";
+        echo "</select>";
+    }
+
     public function type2(){
         echo "<select class='selectpicker' id='type2' name='type2[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='3' data-width='100%' data-live-search='true'>";
                 echo "<option selected='true' value=''> Select the previous field </option>";    
