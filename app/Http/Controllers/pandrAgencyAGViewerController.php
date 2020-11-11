@@ -20,7 +20,7 @@ use Validator;
 class pandrAgencyAGViewerController extends Controller{
 
 	public function get(){
-		/*
+		
                 $db = new dataBase();
                 $default = $db->defaultConnection();
                 $con = $db->openConnection($default);
@@ -38,8 +38,10 @@ class pandrAgencyAGViewerController extends Controller{
                 $typeMsg = false;
                 $msg = "";
 
-        	return view('pAndR.agencyAndAgencyGroupViewer.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-                */
+        	return view('pAndR.agencyAndAgencyGroupViewer.get2',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+                
+                /*
+
                 $db = new dataBase();
                 $default = $db->defaultConnection();
                 $con = $db->openConnection($default);
@@ -58,10 +60,12 @@ class pandrAgencyAGViewerController extends Controller{
                 $msg = "";
 
                 return view('pAndR.agencyAndAgencyGroupViewer.get2',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+
+                */
 	}
 
 	public function post(){
-		/*
+		
                 $db = new dataBase();
                 $render = new PAndRRender();
                 $r = new region();
@@ -84,12 +88,11 @@ class pandrAgencyAGViewerController extends Controller{
 
                 $temp = $ag->base($con,$r,$pr,$cYear,$pYear);
 
-                //=================================================
+                var_dump($temp);
 
-                //=================================================
         	return view('pAndR.agencyAndAgencyGroupViewer.post',compact('con','render','region','currency','permission','user','msg','typeMsg'));
 
-                */
+                /*
                 $db = new dataBase();
                 $render = new PAndRRender();
                 $r = new region();
@@ -142,7 +145,7 @@ class pandrAgencyAGViewerController extends Controller{
                 $manual = $forRender['rollingFCST'];
 
                 return view('pAndR.agencyAndAgencyGroupViewer.post2',compact('render','region','currency','forRender','client','agency',"tfArray","odd","even","error","sourceSave"));
-                
+                */
 
 	}
 
