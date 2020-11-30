@@ -461,7 +461,7 @@ class AgencyAGViewer extends AE{
         return $input;
     }
 
-    /*
+    
     public function base($con,$r,$pr,$cYear,$pYear){
 
     	$sr = new salesRep();        
@@ -472,7 +472,7 @@ class AgencyAGViewer extends AE{
        
         $regionID = Request::get('region');
         $salesRepID = array( Request::get('salesRep') );
-        var_dump($salesRepID);
+        
         $type = Request::get('type');
 
         $currencyID = Request::get('currency');
@@ -484,16 +484,52 @@ class AgencyAGViewer extends AE{
 
         $week = $this->weekOfMonth($data);
 
-        $listOfClients = $this->listAGorAGGByAE($con,$sql,$salesRepID,$cYear,$regionID,$type);
+        $listOfAgencies = $this->listAGorAGGByAE($con,$sql,$salesRepID,$cYear,$regionID,$type);
+        //var_dump($listOfAgencies);
 
-        $salesRep = $sr->getSalesRepById($con,$salesRepID);
+        if(sizeof($listOfAgencies) == 0){
+            return false;
+        }       
+
+        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
+        var_dump($regionName);
+        $salesRep = $sr->getSalesRepById($con,$salesRepID);        
         var_dump($salesRep);
+
+        $brand = $br->getBrandBinary($con);
+        var_dump($brand);
+        $month = $base->getMonth();
+        var_dump($month);
+        $tmp = array($cYear);
+
+        //valor da moeda para divisões
+        $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
+        var_dump($div);
+
+        //nome da moeda pra view
+        $tmp = array($currencyID);
+        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
+        var_dump($currency);
+
+        for ($b=0; $b < sizeof($brand); $b++) {
+            for ($m=0; $m < sizeof($month); $m++) {
+                if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
+                    $table[$b][$m] = "digital";
+                }else{
+                    $table[$b][$m] = "ytd";
+                }
+                //pega colunas
+                $sum[$b][$m] = $this->generateColumns($value,$table[$b][$m]);
+            }
+        }
+
+        var_dump($sum);
+
+        
     }
 
     public function listAGorAGGByAE($con,$sql,$salesRepID,$cYear,$regionID,$type){
 		var_dump($type);
-
-
     	$date = date('n')-1;
 
         $tmp = $salesRepID[0];
@@ -513,12 +549,51 @@ class AgencyAGViewer extends AE{
                     AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
     				ORDER BY 1
     	       "; 
-
-	        echo "<pre>".$sf."</pre>";
+	        
 	        $resSF = $con->query($sf);
 	    	$from = array("agencyName","agencyID","agencyGroupID","agencyGroupName");
 	    	$listSF = $sql->fetch($resSF,$from,$from);
-	    	var_dump($listSF);
+
+            $ytd = "SELECT DISTINCT                        
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName',
+                       ag.ID AS 'agencyGroupID',
+                       ag.name AS 'agencyGroupName'
+                    FROM ytd y
+                    LEFT JOIN client c ON c.ID = y.client_id
+                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    LEFT JOIN agency a ON a.ID = y.agency_id
+                    LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID
+                    WHERE (y.sales_rep_id = \"$tmp\" )
+                    AND (y.year = \"$cYear\" )
+                    AND (r.ID = \"".$regionID."\")
+                    ORDER BY 1
+               ";
+
+            $resYTD = $con->query($ytd);
+            $from = array("agencyName","agencyID","agencyGroupID","agencyGroupName");
+            $listYTD = $sql->fetch($resYTD,$from,$from);
+            $count = 0;
+            
+            $list = array();
+
+            if($listSF){
+                for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                    $list[$count] = $listSF[$sff];
+                    $count ++;
+                }
+            }
+            if($listYTD){
+                for ($y=0; $y < sizeof($listYTD); $y++) { 
+                    $list[$count] = $listYTD[$y];
+                    $count ++;
+                }
+            }
+
+            $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+            
+            $list = array_values($list);
+
         }else{
         	$tempSf = "SELECT DISTINCT         			   
                        ag.ID AS 'agencyGroupID',
@@ -556,71 +631,87 @@ class AgencyAGViewer extends AE{
 
 	    	$listSF = $tempListSF;
 
-	    	for ($l=0; $l < sizeof($listSF); $l++) { 
-	    		var_dump($listSF[$l]);
-	    	}
-	    	
+            $tempYTD = "SELECT DISTINCT                     
+                       ag.ID AS 'agencyGroupID',
+                       ag.name AS 'agencyGroupName'
+                    FROM ytd y
+                    LEFT JOIN agency a ON a.ID = y.agency_id
+                    LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID
+                    WHERE (y.sales_rep_id = \"$tmp\")
+                    AND ( y.sales_representant_office_id = \"".$regionID."\") 
+                    AND (y.year = \"$cYear\") 
+                    ORDER BY 1
+               "; 
+
+            //echo "<pre>".$tempYTD."</pre>";
+            $temResYTD = $con->query($tempYTD);
+            $from = array("agencyGroupID","agencyGroupName");
+            $tempListYTD = $sql->fetch($temResYTD,$from,$from);
+
+            for ($t=0; $t < sizeof($tempListYTD); $t++) {                
+                $ytd = "SELECT DISTINCT 
+                           a.name AS 'agencyName',
+                           a.ID AS 'agencyID'                          
+                        FROM ytd y
+                        LEFT JOIN agency a ON a.ID = y.agency_id
+                        LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID
+                        WHERE (ag.ID = ".$tempListYTD[$t]['agencyGroupID'].") 
+                        AND (y.sales_rep_id = \"$tmp\")
+                        AND (y.sales_representant_office_id = \"".$regionID."\") 
+                        AND (y.year = \"$cYear\") 
+                        ORDER BY 1
+                   ";  
+                //echo "<pre>".$ytd."</pre>";
+                $resYTD = $con->query($ytd);
+                $from = array("agencyName","agencyID");
+                $x = $sql->fetch($resYTD,$from,$from);
+                $tempListYTD[$t]['agency'] = $x;
+            }
+
+            $listYTD = $tempListYTD;
+
+            $list = array();
+            $count = 0;
+            if($listSF){
+                for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                    $list[$count] = $listSF[$sff];
+                    $count ++;
+                }
+            }
+            if($listYTD){
+                for ($y=0; $y < sizeof($listYTD); $y++) { 
+                    $list[$count] = $listYTD[$y];
+                    $count ++;
+                }
+            }
+            
+            $saved = array();
+
+            for ($l=0; $l < sizeof($list); $l++) {
+                for ($l2= $l+1; $l2 < sizeof($list); $l2++) { 
+                    if( $list[$l]['agencyGroupID'] == $list[$l2]['agencyGroupID'] ){
+                        array_push($saved,$l2);
+                        for ($m=0; $m < sizeof($list[$l2]['agency']); $m++) { 
+                           array_push($list[$l]['agency'], $list[$l2]['agency'][$m]);
+                        }
+                    }                    
+                }
+            }
+
+            for ($s=0; $s < sizeof($saved); $s++) { 
+                unset($list[$saved[$s]]);
+            }
+
+            $list = array_values($list);
+
+            for ($l=0; $l < sizeof($list); $l++) { 
+                $list[$l]['agency'] = array_map("unserialize", array_unique(array_map("serialize", $list[$l]['agency'])));
+            }
         }
 
-        /*
-    	$sf = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID',
-                       a.ID AS 'agencyID',
-                       a.name AS 'agencyName'
-    				FROM sf_pr s
-                    LEFT JOIN client c ON c.ID = s.client_id
-    				LEFT JOIN agency a ON a.ID = s.agency_id
-    				WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
-                    AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
-    				ORDER BY 1
-    	       ";   	
-        //var_dump($sf);
-    	$resSF = $con->query($sf);
-    	$from = array("clientName","clientID","agencyID","agencyName");
-    	$listSF = $sql->fetch($resSF,$from,$from);
-    	//GET FROM IBMS/BTS
-    	$ytd = "SELECT DISTINCT c.name AS 'clientName',
-    				   c.ID AS 'clientID',
-                       a.ID AS 'agencyID',
-                       a.name AS 'agencyName'
-    				FROM ytd y
-    				LEFT JOIN client c ON c.ID = y.client_id
-                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
-                    LEFT JOIN agency a ON a.ID = y.agency_id
-    				WHERE (y.sales_rep_id = \"$tmp\" )
-    				AND (y.year = \"$cYear\" )
-                    AND (r.ID = \"".$regionID."\")
-    				ORDER BY 1
-    	       ";
-    	$resYTD = $con->query($ytd);
-    	$from = array("clientName","clientID","agencyID","agencyName");
-    	$listYTD = $sql->fetch($resYTD,$from,$from);
-    	$count = 0;
-    	/*
-        $list = array();
-
-    	if($listSF){
-            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
-                $list[$count] = $listSF[$sff];
-                $count ++;
-            }
-    	}
-    	if($listYTD){
-    		for ($y=0; $y < sizeof($listYTD); $y++) { 
-    			$list[$count] = $listYTD[$y];
-    			$count ++;
-    		}
-    	}
-
-    	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
-        
-        $list = array_values($list);
-
-        usort($list, array($this,'orderClient'));
-        
-    	return $list;
+        return $list;
+       
     }
-    */
+    
 
 }
