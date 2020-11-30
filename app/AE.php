@@ -658,18 +658,13 @@ class AE extends pAndR{
 
     }
 
-    public function baseLoad($con,$r,$pr,$cYear,$pYear){
+    public function baseLoad($con,$r,$pr,$cYear,$pYear, $regionID,$salesRepID,$currencyID,$value){
     	
         $sr = new salesRep();        
         $br = new brand();
         $base = new base();    
         $sql = new sql();
         $reg = new region();
-       
-        $regionID = Request::get('region');
-        $salesRepID = array( Request::get('salesRep') );
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
 
         $actualMonth = date('n');
 
@@ -2300,6 +2295,61 @@ class AE extends pAndR{
         return ($a['clientName'] < $b['clientName']) ? -1 : 1;
     }
 
+    public function listOfBrands($con,$sql,$salesRepID,$cYear,$regionID){
+        $date = date('n')-1;
+
+        $tmp = $salesRepID[0];
+        //GET FROM SALES FORCE
+        $sf = "SELECT DISTINCT s.brand AS 'brandName',
+                               b.ID AS 'brandID'
+                    FROM sf_pr s
+                    LEFT JOIN brand b ON s.brand b.name 
+                    WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
+                    AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                    ORDER BY 1
+               ";       
+        $resSF = $con->query($sf);
+        $from = array("brandName","brandID");
+        $listSF = $sql->fetch($resSF,$from,$from);
+        //GET FROM IBMS/BTS
+        $ytd = "SELECT DISTINCT b.name AS 'brandName',
+                       y.brand_id AS 'brandID'
+                    FROM ytd y
+                    LEFT JOIN brand b ON b.ID = y.brand_id
+                    WHERE (y.sales_rep_id = \"$tmp\" )
+                    AND (y.year = \"$cYear\" )
+                    AND (r.ID = \"".$regionID."\")
+                    ORDER BY 1
+               ";
+        $resYTD = $con->query($ytd);
+        $from = array("brandName","brandID");
+        $listYTD = $sql->fetch($resYTD,$from,$from);
+        $count = 0;
+
+        $list = array();
+
+        if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
+        }
+        if($listYTD){
+            for ($y=0; $y < sizeof($listYTD); $y++) { 
+                $list[$count] = $listYTD[$y];
+                $count ++;
+            }
+        }
+
+        $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
+
+        return $list;
+
+    }
+
     public function listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID){
 
         $date = date('n')-1;
@@ -2318,7 +2368,6 @@ class AE extends pAndR{
                     AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
     				ORDER BY 1
     	       ";   	
-        //var_dump($sf);
     	$resSF = $con->query($sf);
     	$from = array("clientName","clientID","agencyID","agencyName");
     	$listSF = $sql->fetch($resSF,$from,$from);
