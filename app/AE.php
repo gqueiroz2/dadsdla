@@ -1053,7 +1053,7 @@ class AE extends pAndR{
             return $b['higherValue'] <=> $a['higherValue'];
         });
         
-        var_dump($nSecondary);
+        //var_dump($nSecondary);
 
         return $nSecondary;
         
