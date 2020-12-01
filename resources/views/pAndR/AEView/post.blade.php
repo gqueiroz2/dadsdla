@@ -103,8 +103,15 @@
             <div class="col-3" style="color: #0070c0;font-size: 25px;">
                 Account Executive Report
             </div>
+
+            <div class="col-2">
+                <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                    Generate Excel
+                </button>               
+            </div>            
         </div>
     </div>
+
     <br>
     <div class="container-fluid" id="body" style="display: none;">
         <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
@@ -115,10 +122,10 @@
                     <input type="button" class="btn btn-primary" value="{{$sourceSave}}" style="width: 100%;">
                     <input type="text" name="sourceSave" value="{{$sourceSave}}" style="display: none;">
                 </div>-->               
-                <div class="col-4" >
+                <div class="col" >
                     <div class="container-fluid">
                         <div class="row justify-content-end">
-                            <div class="col">
+                            <div class="col-2">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
                                     <label class="btn alert-primary active">
                                         <input type="radio" name="options" value='save' id="option1" autocomplete="off" checked> Save
@@ -127,16 +134,15 @@
                                     <label class="btn alert-success">
                                         <input type="radio" name="options" value='submit' id="option2" autocomplete="off"> Submit
                                     </label>
-                                </div>
+                                </div>     
                             </div>
-                            <div class="col">
+                            <div class="col-2">
                                 <input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">      
                             </div>
                         </div>
                     </div>
                 </div>  
             </div>
-
             <div class="row mt-2 justify-content-end">
                 <div class="col" style="width: 100%;">
                     <center>
@@ -153,13 +159,75 @@
         <br>
     </div>
 
-    <script>
-
-        
-    </script>
+    <div id="vlau"></div>
 
     <script type="text/javascript">
         $(document).ready(function(){
+
+            ajaxSetup();
+
+            $('#excel').click(function(event){
+                var yearExcel = "<?php echo $yearExcel; ?>";
+                var regionExcel = "<?php echo $regionExcel; ?>";
+                var valueExcel = "<?php echo $valueExcel; ?>";
+                var currencyExcel = "<?php echo $currencyExcel; ?>";
+                var salesRepExcel = "<?php echo $salesRepExcel; ?>";
+
+
+                var div = document.createElement('div');
+                var img = document.createElement('img');
+                img.src = '/loading_excel.gif';
+                div.innerHTML ="Generating File...</br>";
+                div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+                div.appendChild(img);
+                document.body.appendChild(div);
+
+                var typeExport = $("#excel").val();
+
+                var title = "<?php echo $titleExcel; ?>";
+                var auxTitle = "<?php echo $titleExcel; ?>";
+                    
+                    $.ajax({
+                        xhrFields: {
+                            responseType: 'blob',
+                        },
+                        url: "/generate/excel/pandr/aeView",
+                        type: "POST",
+                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,auxTitle},
+                        /*success: function(output){
+                            $("#vlau").html(output);
+                        },*/
+                        success: function(result,status,xhr){
+                            var disposition = xhr.getResponseHeader('content-disposition');
+                            var matches = /"([^"]*)"/.exec(disposition);
+                            var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                            //download
+                            var blob = new Blob([result], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+
+                            document.body.appendChild(link);
+
+                            link.click();
+                            document.body.removeChild(link);
+                            document.body.removeChild(div);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            document.body.removeChild(div);
+                            alert(xhr.status+" "+thrownError);
+                        }
+                    });                    
+                });
+            });
+    </script>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+
             var client = <?php echo json_encode($client); ?>;
 
             $('.linked').scroll(function(){
@@ -376,6 +444,7 @@
             $("#loading").css('display',"none");
         });
     </script>
+
 
 @endsection
 

@@ -446,7 +446,6 @@ class AgencyAGViewer extends AE{
             }
             
         }
-
         return $newArray;
 
     }
@@ -459,7 +458,6 @@ class AgencyAGViewer extends AE{
         }
 
         $input = array_values(array_map("unserialize", array_unique(array_map("serialize", $newList))));
-
         return $input;
     }
 

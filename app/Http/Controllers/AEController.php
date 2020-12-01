@@ -43,10 +43,10 @@ class AEController extends Controller{
         $value = json_decode( base64_decode( Request::get('value') ));
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
-        $brandsPerClient = json_decode( base64_decode( Request::get('brandsPerClient') ));
+        $brandsPerClient = json_decode( base64_decode (Request::get ('brandsPerClient') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
-
+        var_dump($brandsPerClient);
         $sourceSave = Request::get('sourceSave');
 
         $salesRepID = $salesRep->id;
@@ -260,13 +260,18 @@ class AEController extends Controller{
         $ae = new AE();        
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-        
+
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false);
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
+
+        $regionID = Request::get('region');
+        $salesRepID = array( Request::get('salesRep') );
+        $currencyID = Request::get('currency');
+        $value = Request::get('value');
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -279,8 +284,7 @@ class AEController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        
-        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear);
+        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
 
         if (!$tmp) {
             /* $msg = "Don't have a Forecast Saved"; $typeMsg = "Error"; return view ('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/
@@ -301,11 +305,16 @@ class AEController extends Controller{
         $pending = $forRender['pending'];
         $RFvsTarget = $forRender['RFvsTarget'];
 
-        //lines of clients table
-        $rollingClients = $forRender['lastRollingFCST'];
-        $manual = $forRender['rollingFCST'];
+        $yearExcel = $cYear;
+        $clientExcel = $client;
+        $currencyExcel = $currencyID;
+        $regionExcel = $regionID;
+        $valueExcel = $value;
+        $salesRepExcel = Request::get("salesRep");
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave"));
+        $titleExcel = "PandR - AE.xlsx";
+
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel"));
     }
 
     
