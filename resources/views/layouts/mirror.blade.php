@@ -83,6 +83,8 @@
 									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>
 									
 								@endif
+								<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Consolidate </a>									
+
 								<a class="dropdown-item" href="{{ route('resultsPacingGet') }}"> Pacing </a>
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>

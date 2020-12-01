@@ -265,7 +265,7 @@ class salesRep extends Management{
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$res = $sql->select($con,$columns,$table,$join,$where);
+		$res = $sql->selectDistinct($con,$columns,$table,$join,$where);
 		$from = array('id','salesRep','salesRepGroup','region');
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;

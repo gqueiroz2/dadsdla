@@ -498,6 +498,12 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function typeSelect(){
+        echo "<select id='typeSelect' name='typeSelect[]' style='width:100%;' class='selectpicker' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
     public function typeNojQuery(){
         echo "<select id='type' name='type' style='width:100%;' class='form-control'>";
             echo "<option value='agency'> Agency </option>";
