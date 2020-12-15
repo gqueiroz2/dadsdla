@@ -1,12 +1,12 @@
 <table>
 	<tr>
-		<th style="background-color: #0070c0; color: #FFFFFF;" colspan="27">{{$data['forRender']['salesRep']['salesRep']}} - {{$data['forRender']['currencyName']}} / {{$data['forRender']['valueView']}} </th>
+		<th style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="27">{{$data['forRender']['salesRep']['salesRep']}} - {{$data['forRender']['currencyName']}} / {{$data['forRender']['valueView']}} </th>
 	</tr>
 </table>
 
  <table>
     <tr>
-        <td style=" background-color: #0f243e; color: #FFFFFF; ">{{$data['forRender']['salesRep']['abName']}}</td>
+        <td style=" background-color: #0f243e; color: #FFFFFF; font-weight: bold; ">{{$data['forRender']['salesRep']['abName']}}</td>
         @for($m=0; $m < sizeof($data['month']); $m++)
             @if($m == 3 || $m == 7 || $m == 11 || $m == 15)
                 <td style="background-color: #4f81bd; font-weight: bold; color: #FFFFFF;">{{$data['month'][$m]}}</td>
