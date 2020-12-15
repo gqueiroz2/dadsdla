@@ -986,11 +986,7 @@ class AE extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
-        /*
-        var_dump($listOfClients);
-        var_dump($rollingFCST);
-        var_dump($lastRollingFCST);
-        */
+
         $secondary = $listOfClients;
 
         $nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
@@ -1057,6 +1053,8 @@ class AE extends pAndR{
             return $b['higherValue'] <=> $a['higherValue'];
         });
         
+        //var_dump($nSecondary);
+
         return $nSecondary;
         
     }

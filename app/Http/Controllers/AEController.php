@@ -46,7 +46,7 @@ class AEController extends Controller{
         $brandsPerClient = json_decode( base64_decode (Request::get ('brandsPerClient') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
-        var_dump($brandsPerClient);
+
         $sourceSave = Request::get('sourceSave');
 
         $salesRepID = $salesRep->id;
@@ -250,6 +250,9 @@ class AEController extends Controller{
     }
 
     public function post(){
+
+        var_dump("AKI");
+
         $db = new dataBase();
         $render = new PAndRRender();
         $r = new region();

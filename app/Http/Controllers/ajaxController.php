@@ -22,6 +22,65 @@ use App\subNewRanking;
 use App\base;
 
 class ajaxController extends Controller{
+    
+    public function typeSelectConsolidate(){
+        $type = Request::get('type');
+        $region = Request::get('region');
+
+        var_dump($type);
+        var_dump($region);
+
+        switch ($type) {
+            case 'brand':                    
+                $base = new base();
+                $db = new dataBase();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
+                $b = new brand();
+                $brand = $b->getBrand($con);
+                for ($i = 0; $i < sizeof($brand); $i++) { 
+                    if ($brand[$i]["name"] != "DN") {
+                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                        echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
+                    }
+                }
+                break;
+
+            case 'ae':                                
+                $regionID = $region;
+                $db = new dataBase();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
+                $cYear = intval(date('Y'));
+                $sr = new salesRep();
+                $regionID = array($regionID);
+                $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+                echo "<option selected='true' value=''>Select Sales Rep.</option>";
+                for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+                }
+                
+                break;
+
+            default:
+                echo "<option selected='true' value='all'> All </option>";
+                
+                break;
+        }
+
+
+    }
+
+    public function typeConsolidate(){
+        $type = array("Brand","AE","Advertiser","Agency","Agency Group");
+        $typeA = array("brand","ae","advertiser","agency","agencyGroup");
+
+        echo "<option value=''> Select </option>";
+        for ($t=0; $t < sizeof($type); $t++) { 
+            echo "<option value='".$typeA[$t]."'>".$type[$t]."</option>";
+        }
+
+    }
 
     public function BVAgencyGroup(){
 
