@@ -139,9 +139,17 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
-									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
-									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
-									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
+									@if($userLevel == 'SU')
+										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>	
+									@endif
+									{{--
+
+										Descomentar as Rotas Também
+
+									<a class="dropdown-item" href=""> Advertisers Adjust </a>
+									<a class="dropdown-item" href=""> Month Adjust </a>
+									<a class="dropdown-item" href=""> Pacing </a>
+									--}}
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> Agency View </a>
 								</div>

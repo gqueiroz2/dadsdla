@@ -27,9 +27,6 @@ class ajaxController extends Controller{
         $type = Request::get('type');
         $region = Request::get('region');
 
-        var_dump($type);
-        var_dump($region);
-
         switch ($type) {
             case 'brand':                    
                 $base = new base();
@@ -55,9 +52,9 @@ class ajaxController extends Controller{
                 $sr = new salesRep();
                 $regionID = array($regionID);
                 $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
-                echo "<option selected='true' value=''>Select Sales Rep.</option>";
+                //echo "<option selected='true' value=''>Select Sales Rep.</option>";
                 for ($s=0; $s < sizeof($resp); $s++) { 
-                    echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
                 }
                 
                 break;

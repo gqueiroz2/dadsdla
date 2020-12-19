@@ -33,38 +33,13 @@
 						
 					</div>
 
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> Year: </span></label>
-						@if($errors->has('year'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->year($regionID)}}					
-					</div>	
-
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold" style="color: red;" id="typeSelectLabel"> Select Region </span></label>
 						@if($errors->has('brand'))
 							<label style="color: red;">* Required</label>
 						@endif
 						{{$render->typeSelect()}}
-					</div>	
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> 1st Pos </span></label>
-						@if($errors->has('secondPos'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->position("second")}}
-					</div>				
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> 2st Pos </span></label>
-						@if($errors->has('thirdPos'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->position("third")}}
-					</div>				
+					</div>						
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>

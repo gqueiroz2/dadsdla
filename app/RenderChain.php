@@ -8,13 +8,19 @@ use App\Render;
 class RenderChain extends Render{
     
     public function yearMultiple(){
-    	
+    	$cMonth = date('m');
+        
         $cYear = intval( date('Y') );
+        $nYear = $cYear + 1  ;
         $pYear = $cYear -1;
         $ppYear = $pYear -1;
         $pppYear = $ppYear -1;
 
-        $year = array($cYear,$pYear,$ppYear,$pppYear);
+        if($cMonth == 12){
+            $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);
+        }else{
+            $year = array($cYear,$pYear,$ppYear,$pppYear);
+        }
         
     	echo "<select class='selectpicker' data-selected-text-format='count' multiple='true' name='year[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
 			for ($y=0; $y < sizeof($year); $y++) { 
@@ -29,13 +35,19 @@ class RenderChain extends Render{
     }
 
     public function year(){
-    	
+        $cMonth = date('m');
+
         $cYear = intval( date('Y') );
+        $nYear = $cYear + 1  ;
         $pYear = $cYear -1;
         $ppYear = $pYear -1;
         $pppYear = $ppYear -1;
 
-        $year = array($cYear,$pYear,$ppYear,$pppYear);
+        if($cMonth == 12){
+            $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);
+        }else{
+            $year = array($cYear,$pYear,$ppYear,$pppYear);
+        }
 
     	echo "<select class='form-control' name='year' data-width='100%'>";
 			for ($y=0; $y < sizeof($year); $y++) { 

@@ -331,6 +331,16 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function baseReportFilter(){
+        echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
+            echo "<option selected='true' value='brand'> Brand </option>";   
+            echo "<option selected='true' value='ae'> AE </option>";   
+            echo "<option selected='true' value='brand'> Advertiser </option>";   
+            echo "<option selected='true' value='brand'> Agency </option>";   
+            echo "<option selected='true' value='brand'> Agency Group </option>";   
+        echo "</select>";
+    }
+
     public function brandSS($brand){
         
         echo "<select id='brandSS' class='selectpicker' name='brand' data-size='7' data-width='100%'>";

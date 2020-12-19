@@ -92,7 +92,7 @@ class resultsPacingController extends Controller{
                         $salesRegion = $tmp['name'];
                 }
 
-                $currencyS = $currencyID;
+                $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
 
                 return view('adSales.results.7pacingPost',compact('render','region','brand','currency','regionCurrencies','mtx','years','brandID','mtxDN','salesRegion','currencyS','value'));                
                 
