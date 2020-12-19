@@ -144,7 +144,7 @@
 									@endif									
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> AG/Agency View </a>
-									<a class="dropdown-item" href="{{ route('byBrandGet') }}"> Brand View </a>
+								
 								</div>
 							</li>
 						@endif
