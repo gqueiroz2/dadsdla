@@ -141,17 +141,10 @@
 									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
 									@if($userLevel == 'SU')
 										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>	
-									@endif
-									{{--
-
-										Descomentar as Rotas Também
-
-									<a class="dropdown-item" href=""> Advertisers Adjust </a>
-									<a class="dropdown-item" href=""> Month Adjust </a>
-									<a class="dropdown-item" href=""> Pacing </a>
-									--}}
+									@endif									
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> Agency View </a>
+									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> AG/Agency View </a>
+									<a class="dropdown-item" href="{{ route('byBrandGet') }}"> Brand View </a>
 								</div>
 							</li>
 						@endif
