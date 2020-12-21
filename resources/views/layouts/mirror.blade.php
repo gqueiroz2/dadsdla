@@ -83,6 +83,8 @@
 									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>
 									
 								@endif
+								<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Consolidate </a>									
+
 								<a class="dropdown-item" href="{{ route('resultsPacingGet') }}"> Pacing </a>
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
@@ -137,11 +139,11 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
-									<a class="dropdown-item" href="{{ route('VPGet') }}"> Advertisers Adjust </a>
-									<a class="dropdown-item" href="{{ route('VPMonthGet') }}"> Month Adjust </a>
-									<a class="dropdown-item" href="{{ route('pacingReportGet') }}"> Pacing </a>
+									@if($userLevel == 'SU')
+										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>	
+									@endif									
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> Agency View </a>
+									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> AG/Agency View </a>
 								</div>
 							</li>
 						@endif

@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Agency Viewer')
+@section('title', 'AE Report')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -7,7 +7,7 @@
 @section('content')
 	
 
-	<form method="POST" action="{{ route('agencyAGroupViewerPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">
 			<div class="row">
@@ -29,13 +29,15 @@
 					@endif
 					{{$render->year()}}
 				</div>
+
 				<div class="col">
-					<label class='labelLeft'><span class="bold">Type:</span></label>
-					@if($errors->has('type'))
+					<label class='labelLeft'><span class="bold">Filter:</span></label>
+					@if($errors->has('baseFilter'))
 						<label style="color: red;">* Required</label>
 					@endif
-					{{$render->typeNojQuery()}}
+					{{$render->baseReportFilter()}}
 				</div>
+
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
@@ -84,7 +86,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Agency Viewer
+				Base Report
 			</div>
 		</div>
 	</div>

@@ -393,9 +393,7 @@ class pacingReport extends Model
 				$temp += $saida[$b][$m];
 			}
 		}
-
 		$temp += $checkNochannel;
-
 		return $saida;
 	}
 

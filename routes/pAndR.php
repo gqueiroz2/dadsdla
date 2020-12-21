@@ -14,7 +14,15 @@
 Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'pAndR'],function(){
 
+		Route::group(['prefix'=>'baseReport'],function(){
+			
+			Route::get('/','baseReportPandRController@get')
+										->name('BaseReportPandRGet');
+			Route::post('/','baseReportPandRController@post')
+										->name('BaseReportPandRPost');			
 
+		});
+		/*
 		Route::group(['prefix'=>'Pacing'],function(){
 			
 			Route::get('/','pacingReportController@get')
@@ -32,7 +40,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('save','VPController@save')
 										->name('VPSave');
 		});
-
+		*/
 		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
 			
 			Route::get('/','AEController@get')
@@ -43,7 +51,7 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('AESave');
 
 		});
-
+		/*
 		Route::group(['prefix'=>'MonthAdjust'],function(){
 			
 			Route::get('/','VPMonthController@get')
@@ -54,7 +62,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('save','VPMonthController@save')
 										->name('VPMonthSave');
 		});
-
+		*/ 
 		Route::group(['prefix'=>'agencyandagviewer'],function(){
 			
 			Route::get('/','pandrAgencyAGViewerController@get')
