@@ -190,6 +190,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection($default);
 
         $year  = Request::get("year");
+        var_dump($year);
         $client = $c->getClientByRegionCMAPS($con,$year);
 
         for ($c=0; $c < sizeof($client); $c++) { 
@@ -797,17 +798,26 @@ class ajaxController extends Controller{
     }
 
     public function yearByRegion(){
-        
+        $currentMonth = date('m');
         $regionID = Request::get('regionID');
         $cYear = intval(date('Y'));
+        $nYear = $cYear + 1;
         $pYear = $cYear - 1;
         $ppYear = $pYear - 1;
         $pppYear = $ppYear - 1;
 
         if($regionID == 1){
-            $year = array($cYear,$pYear,$ppYear,$pppYear);           
+            if($currentMonth == 12){
+                $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);           
+            }else{
+                $year = array($cYear,$pYear,$ppYear,$pppYear);           
+            }
         }else{
-            $year = array($cYear,$pYear);
+            if($currentMonth == 12){
+                $year = array($cYear,$pYear);
+            }else{
+                $year = array($nYear,$cYear,$pYear);
+            }
         }
         for ($y=0; $y < sizeof($year); $y++) { 
             if($y == 0){

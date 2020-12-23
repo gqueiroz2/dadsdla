@@ -94,13 +94,13 @@ class consolidateResults extends Model{
 				for ($b=0; $b < sizeof($typeSelect); $b++) { 
 		            for ($m=0; $m < sizeof($month); $m++) { 
 		                
-	                    $currentAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
-	                    $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+	                    $currentAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
+	                    $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
 		                
-		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET");
-		                $currentCorporate[$b][$m] = $this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "CORPORATE");
-		                $currentSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL");
-		                $previousSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
+		                $currentCorporate[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
+		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL");
+		                $previousSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL");
 		            }
 		        }
 
@@ -167,49 +167,13 @@ class consolidateResults extends Model{
                 $value .= "_revenue_prate";
                 break;
 
-            case 'plan_by_brand':
+            case 'plan_by_sales':
 
-                $columns = array("sales_office_id", "source", "type_of_revenue", "sales_rep_id", "year", "month", "currency_id");
-                $columnsValue = array($region, strtoupper($source), $value, $typeSelect, $year, $month, 4);
-                $value = "revenue";
+                $columns = array("region_id","type_of_revenue", "sales_rep_id", "year", "month", "currency_id");
+                $columnsValue = array($region, $value, $typeSelect, $year, $month, 4);
+                $value = "value";
                 break;
 
-            /*
-            case 'cmaps':
-                $columns = array("brand_id", "year", "month");
-                $columnsValue = array($brand, $year, $month);
-                break;           
-
-            case 'mini_header':
-                $sql = new sql();
-
-                $columns = array("sales_representant_office_id","campaign_currency_id","brand_id", "year", "month");
-                $columnsValue = array($region, $currency[0]['id'], $brand, $year, $month);
-
-                $value .= "_revenue";
-                break;
-
-            case 'digital':
-
-                $columns = array("region_id", "brand_id", "year", "month");
-                $columnsValue = array($region, $brand, $year, $month);
-                $value .= "_revenue";
-                if ($brand == '9') {
-                    $where = "WHERE ( month = \"".$month."\" ) 
-                                           AND ( year =  \" $year \")
-                                           AND (region_id = \"".$region."\")
-                                           AND (brand_id != '10')";
-                }else{
-                    $where = "WHERE ( month = \"".$month."\" ) 
-                                           AND ( year =  \" $year \")
-                                           AND (region_id = \"".$region."\")
-                                           AND (brand_id = '".$brand."')";
-                }
-
-                break;
-
-            
-			*/
             default:
                 $columns = false;
                 break;
@@ -230,13 +194,13 @@ class consolidateResults extends Model{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
             if($table == "cmaps"){                          
                 $rtr = $tmp/$pRate;
-            }else if($table == "plan_by_brand"){                          
+            }else if($table == "plan_by_sales"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
                 $rtr = $tmp*$pRate;
