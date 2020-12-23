@@ -39,8 +39,12 @@ class bvTabExport implements FromView,WithEvents, WithTitle, WithCharts {
 
 	public function charts()
     {
-        $labels     = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Products!$C$1', null)];
-        $categories = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Products!$A$2:$A$5', null)];
+
+    	//$phpexcel->setActiveSheetIndex(0);
+ 		//$sheet = $phpexcel->getActiveSheet();
+
+        $labels     = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$A$1', null)];
+        $categories = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$A$1:$A$2', null)];
         $values     = [new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Products!$C$2:$C$5', null)];
 
         $chart1 = new Chart(
@@ -52,10 +56,12 @@ class bvTabExport implements FromView,WithEvents, WithTitle, WithCharts {
             ])
         );
 
-        $chart1->setTopLeftPosition('A1');
-        $chart1->setBottomRightPosition('H20');
+        $chart1->setTopLeftPosition('G5');
+        $chart1->setBottomRightPosition('P20');
 
-        return $chart1;
+        $sheet->addChart($chart1);
+
+        return $sheet;
     }
 	
 	public function registerEvents(): array{

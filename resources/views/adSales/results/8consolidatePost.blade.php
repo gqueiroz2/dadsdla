@@ -70,8 +70,14 @@
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 			<span style="float: right;"> Consolidate </span>
 		</div>
+		<div class="col-2">
+            <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                Generate Excel
+            </button>               
+        </div>  
 	</div>	
 
+	<div class="row justify-content-end mt-2"></div>
 	</div>
 	<?php
 		$month = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -86,7 +92,6 @@
 				<div class="col"> 
 					<div class="container-fluid" style='width: 100%; zoom: 85%;font-size: 16px;'>
 						<div class="row">
-							
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
@@ -951,5 +956,69 @@
 </div>
 
 <div id="vlau"></div>
+
+<script type="text/javascript">
+        $(document).ready(function(){
+
+            ajaxSetup();
+
+            $('#excel').click(function(event){
+
+            	var typeExcel = "<?php echo $typeExcel; ?>";
+                var regionExcel = "<?php echo $regionExcel; ?>";
+                var valueExcel = "<?php echo $valueExcel; ?>";
+                var currencyExcel = "<?php echo $currencyExcel; ?>";
+	            var typeSelectExcel = "<?php echo base64_encode(json_encode($typeSelectExcel)); ?>";
+                
+                var div = document.createElement('div');
+                var img = document.createElement('img');
+                img.src = '/loading_excel.gif';
+                div.innerHTML ="Generating File...</br>";
+                div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+                div.appendChild(img);
+                document.body.appendChild(div);
+
+                var typeExport = $("#excel").val();
+
+                var title = "<?php echo $titleExcel; ?>";
+                var auxTitle = "<?php echo $titleExcel; ?>";
+
+                    $.ajax({
+                        xhrFields: {
+                            responseType: 'blob',
+                        },
+                        url: "/generate/excel/results/consolidate",
+                        type: "POST",
+                        data: {title, typeExport, auxTitle, typeExcel, regionExcel,typeSelectExcel,valueExcel, currencyExcel},
+                        /*success: function(output){
+                            $("#vlau").html(output);
+                        },*/
+                        success: function(result,status,xhr){
+                            var disposition = xhr.getResponseHeader('content-disposition');
+                            var matches = /"([^"]*)"/.exec(disposition);
+                            var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                            //download
+                            var blob = new Blob([result], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+
+                            document.body.appendChild(link);
+
+                            link.click();
+                            document.body.removeChild(link);
+                            document.body.removeChild(div);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            document.body.removeChild(div);
+                            alert(xhr.status+" "+thrownError);
+                        }
+                    });                    
+                });
+            });
+    </script>
 
 @endsection

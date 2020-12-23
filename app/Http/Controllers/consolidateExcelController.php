@@ -17,40 +17,20 @@ use App\resultsMQ;
 use App\renderMQ;
 use App\client;
 use App\agency;
-use Validator;
 use App\consolidateResults;
 
-class consolidateResultsController extends Controller{
-    public function get(){
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
-        $base = new base();
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-        $r = new region();
-        $b = new brand();
-        $pr = new pRate();
-        $render = new Render();
-        $region = $r->getRegion($con,false);
-        $brand = $b->getBrand($con);
-        $currency = $pr->getCurrency($con,false);
+use App\Exports\consolidateExport;
 
-        $regionCurrencies = $base->currenciesByRegion();
+class consolidateExcelController extends Controller{
+   
+   public function resultsConsolidate(){
 
-        return view('adSales.results.8consolidateGet',compact('render','region','brand','currency','regionCurrencies'));
-    }
-
-    public function post(){
-
-        $validator = Validator::make(Request::all(),[
-            'region' => 'required',                        
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-    	$base = new base();
+   		$base = new base();
         $db = new dataBase();
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
@@ -70,17 +50,30 @@ class consolidateResultsController extends Controller{
 
         $cR = new consolidateResults();
 
-        $regionID = Request::get('region');
-        $type = Request::get('type');
+        $regionID = Request::get('regionExcel');
+        $type = Request::get('typeExcel');
+
+	    $title = Request::get("title");
+	    
+	    $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        $typeSelect = json_decode(base64_decode(Request::get("typeSelectExcel")));
+
+        //$currencyID = Request::get("currencyExcel");
+        //$value = Request::get('valueExcel');   
+
+        $brandID = 0;
+
         switch ($type) {
             case 'brand':
-                $brandTmp = Request::get('typeSelect');
+                $brandTmp = $typeSelect;
                 $brandID = $base->handleBrand($brandTmp);
                 $typeSelect = $brandID;
                 $typeSelectS = false;
                 break;
             case 'ae':                
-                $typeSelect = Request::get('typeSelect');
+                $typeSelect = $typeSelect;
 
                 for ($t=0; $t < sizeof($typeSelect); $t++) { 
                     $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
@@ -107,9 +100,9 @@ class consolidateResultsController extends Controller{
                 $typeSelectS = false;
                 break;
         }
-        
+     
         $currencyID = Request::get("currency");
-        $value = Request::get('value');        
+        $value = Request::get('value');  
 
         $cYear = date('Y');
         $pYear = $cYear - 1;
@@ -133,17 +126,15 @@ class consolidateResultsController extends Controller{
 
         $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
 
-        $title = 'Results - Consolidate';
-        $titleExcel = 'Results - Consolidate.xlsx';
+        $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
+		$quarter = array("Q1","Q2","Q3","Q4");
 
-        $typeExcel = $type;
-        $regionExcel = $regionID;
-        $typeSelectExcel = Request::get('typeSelect');
-        $currencyExcel = $currencyID;
-        $valueExcel = $value;
 
-        return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel'));   
-        
-    	
-    }
+        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies, 'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'typeSelectS' => $typeSelectS, 'brandID' => $brandID);
+
+        $label = 'exports.results.consolidate.consolidateExport';
+
+	    return Excel::download(new consolidateExport($data, $label, $typeExport, $auxTitle), $title);
+
+	}
 }

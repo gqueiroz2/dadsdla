@@ -275,7 +275,6 @@ class dashboards extends rank{
         }else{
             $final = false;
         }
-
         return $final;
     }
 
