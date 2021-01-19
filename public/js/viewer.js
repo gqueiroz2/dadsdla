@@ -124,6 +124,12 @@ $(document).ready(function(){
       var currentTime = new Date();
 
       var year = currentTime.getFullYear();
+      var month = currentTime.getMonth();
+
+      if(month == 11){
+        year ++;
+      }
+
       var source = $('#sourceDataBase').val();
       $.ajax({
         url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",

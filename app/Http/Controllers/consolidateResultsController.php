@@ -82,10 +82,11 @@ class consolidateResultsController extends Controller{
                 break;
             case 'ae':                
                 $typeSelect = Request::get('typeSelect');
-
+                var_dump($typeSelect);
                 for ($t=0; $t < sizeof($typeSelect); $t++) { 
                     $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
                 }
+                var_dump($typeSelectS);
                 break;
             case 'advertiser':                
                 
