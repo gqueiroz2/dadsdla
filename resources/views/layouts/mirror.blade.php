@@ -83,9 +83,9 @@
 									<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>
 									
 								@endif
-								<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Consolidate </a>									
-
-								<a class="dropdown-item" href="{{ route('resultsPacingGet') }}"> Pacing </a>
+								@if($userLevel == "SU" ) 
+								<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>	
+								@endif								
 								<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 								<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 								<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
@@ -140,7 +140,7 @@
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
 									@if($userLevel == 'SU')
-										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>	
+										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>										
 									@endif									
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="{{ route('agencyAGroupViewerGet') }}"> AG/Agency View </a>

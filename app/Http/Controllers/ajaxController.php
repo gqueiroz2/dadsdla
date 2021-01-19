@@ -832,9 +832,10 @@ class ajaxController extends Controller{
     public function yearOnFcst(){
         
         $cYear = intval(date('Y'));
+        $pYear = $cYear - 1 ;
         $nYear = $cYear + 1;
 
-        $years = array($cYear,$nYear);
+        $years = array($cYear,$pYear,$nYear);
 
         for ($y=0; $y < sizeof($years); $y++) { 
             echo "<option value='".$years[$y]."'> ".$years[$y]." </option>";    
@@ -1010,6 +1011,60 @@ class ajaxController extends Controller{
             if($salesRep){
                 for ($s=0; $s < sizeof($salesRep); $s++) { 
                     echo "<option value='".$salesRep[$s]["id"]."'>"
+                        .$salesRep[$s]["salesRep"].
+                    "</option>";
+                }
+            }else{
+                echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+            }
+        }
+    }
+
+    public function salesRepByRegionFilteredMult(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $sr = new salesRep();
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');        
+        $userLevel = Request::session()->get('userLevel');
+        $special = Request::session()->get('special');
+        $salesRepGroupID = $sr->getSalesRepGroup($con,array($regionID));
+        for ($s=0; $s <sizeof($salesRepGroupID); $s++) { 
+            $salesRepGroupID[$s] = $salesRepGroupID[$s]['id'];
+        }
+
+        $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
+        $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+
+        if ($userLevel == "L4") {
+            $userName = Request::session()->get('userName');
+            $performanceName = Request::session()->get('performanceName');
+            $check = false;            
+            for ($s=0; $s <sizeof($salesRep) ; $s++) { 
+                if (!is_null($performanceName)) {
+                    if($salesRep[$s]["salesRep"] == $performanceName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }else{
+                    setlocale(LC_ALL, "en_US.utf8");
+                    $output = iconv("utf-8", "ascii//TRANSLIT", $userName);
+                    if( strpos($salesRep[$s]["salesRep"], $output)  !== false){
+                    //if($salesRep[$s]["salesRep"] == $userName){
+                        echo "<option value='".$salesRep[$s]["id"]."' selected='true'> ".$salesRep[$s]["salesRep"]." </option>";
+                        $check = true;
+                    }
+                }
+            }
+            if (!$check) {
+                echo "<option value=''> Sales Rep Not Found </option>";
+            }
+        }else{
+            if($salesRep){
+                for ($s=0; $s < sizeof($salesRep); $s++) { 
+                    echo "<option value='".$salesRep[$s]["id"]."' selected='true'>"
                         .$salesRep[$s]["salesRep"].
                     "</option>";
                 }

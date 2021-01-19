@@ -94,8 +94,8 @@
 						<div class="row">
 							<div class="col lightBlue">
 								<center>
-									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+									<span style='font-size:24px;'> 										
+										{{ $salesRegion }} - Consolidate - Brand : ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -221,7 +221,7 @@
 						        			<?php $clr = 'rcBlue'; ?>
 						        		@endif
 						        		<?php
-						        			if($mtxDN['previousAdSales'][$d] > 0){
+						        			if($mtxDN['currentTarget'][$d] > 0){
 						        				$temp = ($mtxDN['currentCorporate'][$d]/$mtxDN['currentTarget'][$d])*100;
 						        			}else{
 						        				$temp = 0.0;
@@ -384,7 +384,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - AE: ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -662,7 +662,24 @@
 	        </div>			
 		</div>
 
-	@elseif($type == "advertiser")	
+	@elseif($type == "advertiser" || $type == "agency" || $type == "agencyGroup") 	
+
+		@if($type == "advertiser")
+			<?php 
+				$index = 'client'; 
+				$typeShow = 'Advertiser';
+			?>
+		@elseif($type == "agency")
+			<?php 
+				$index = 'agency'; 
+				$typeShow = 'Agency';
+			?>
+		@elseif($type == "agencyGroup")
+			<?php 
+				$index = 'agencyGroup'; 
+				$typeShow = 'Agency Group';
+			?>
+		@endif
 
 		<div class="container-fluid">
 			<div class="row">
@@ -673,7 +690,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - {{$typeShow}} : ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -821,7 +838,12 @@
 						    <div class="row mt-2">
 						    	<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 						        	<tr class="center">
-						        		<td class='lightBlue center' style="width: 7% !important;"> {{$typeSelectS[$c]['client']}} </td>
+						        		<td class='lightBlue center' style="width: 7% !important;"> 
+						        			<?php
+						        				//$typeSelectS[$c][$index];
+						        				echo $newMtx[$c]['typeSelect'][$index];
+						        			?>
+						        		</td>
 							        	@for($m=0; $m < sizeof($month); $m++)
 							        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 							        	@endfor
@@ -840,7 +862,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousAdSales'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousAdSales'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -852,7 +874,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -864,7 +886,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentTarget'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentTarget'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 						        	
@@ -876,7 +898,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentCorporate'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentCorporate'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -888,7 +910,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentAdSales'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentAdSales'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -900,7 +922,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -913,8 +935,8 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif				        		 
 						        			<?php
-						        				if($mtx['previousAdSales'][$c][$d] > 0){
-						        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['previousAdSales'][$c][$d])*100; 
+						        				if($newMtx[$c]['previousAdSales'][$d] > 0){
+						        					$temp = ($newMtx[$c]['currentCorporate'][$d]/$newMtx[$c]['previousAdSales'][$d])*100; 
 						        				}else{
 						        					$temp = 0.0;
 						        				}
@@ -932,8 +954,8 @@
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
 							        		<?php
-						        				if($mtx['currentTarget'][$c][$d]){
-						        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['currentTarget'][$c][$d])*100;
+						        				if($newMtx[$c]['currentTarget'][$d]){
+						        					$temp = ($newMtx[$c]['currentCorporate'][$d]/$newMtx[$c]['currentTarget'][$d])*100;
 						        				}else{
 						        					$temp = 0.0;
 						        				}

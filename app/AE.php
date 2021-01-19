@@ -2286,7 +2286,7 @@ class AE extends pAndR{
 
     }
 
-    private static function orderClient($a, $b){
+    public static function orderClient($a, $b){
         if ($a == $b)
             return 0;
         

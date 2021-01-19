@@ -30,7 +30,8 @@ class consolidateResults extends Model{
 		            }
 		        }
 
-		        $rtr = array( "currentAdSales" => $currentAdSales,
+		        $rtr = array( "typeSelect" => $typeSelect,
+                              "currentAdSales" => $currentAdSales,
 		        			  "previousAdSales" => $previousAdSales,
 		        			  "currentTarget" => $currentTarget,
 		        			  "currentCorporate" => $currentCorporate,
@@ -54,7 +55,8 @@ class consolidateResults extends Model{
 		            }
 		        }
 
-		        $rtr = array( "currentAdSales" => $currentAdSales,
+		        $rtr = array( "typeSelect" => $typeSelect,
+                              "currentAdSales" => $currentAdSales,
 		        			  "previousAdSales" => $previousAdSales,
 		        			  "currentTarget" => $currentTarget,
 		        			  "currentCorporate" => $currentCorporate,
@@ -78,7 +80,8 @@ class consolidateResults extends Model{
 		            }
 		        }
 
-		        $rtr = array( "currentAdSales" => $currentAdSales,
+		        $rtr = array( "typeSelect" => $typeSelect,
+                              "currentAdSales" => $currentAdSales,
 		        			  "previousAdSales" => $previousAdSales,
 		        			  "currentTarget" => $currentTarget,
 		        			  "currentCorporate" => $currentCorporate,
@@ -87,6 +90,31 @@ class consolidateResults extends Model{
 		        );
 
 				break;
+
+            case 'agencyGroup':              
+                for ($b=0; $b < sizeof($typeSelect); $b++) { 
+                    for ($m=0; $m < sizeof($month); $m++) {
+                
+                        $currentAdSales[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
+                        $previousAdSales[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);                                              
+                        $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
+                        $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "CORPORATE");
+                        $currentSAP[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "ACTUAL");
+                        $previousSAP[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+                        
+                    }
+                }
+
+                $rtr = array( "typeSelect" => $typeSelect,
+                              "currentAdSales" => $currentAdSales,
+                              "previousAdSales" => $previousAdSales,
+                              "currentTarget" => $currentTarget,
+                              "currentCorporate" => $currentCorporate,
+                              "currentSAP" => $currentSAP,
+                              "previousSAP" => $previousSAP                   
+                );
+
+                break;
 
 			case 'ae':			
 				
@@ -99,12 +127,13 @@ class consolidateResults extends Model{
 		                
 		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
-		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL");
-		                $previousSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+		                $currentSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
+		                $previousSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $pYear, "ACTUAL");
 		            }
 		        }
 
-		        $rtr = array( "currentAdSales" => $currentAdSales,
+		        $rtr = array( "typeSelect" => $typeSelect,
+                              "currentAdSales" => $currentAdSales,
 		        			  "previousAdSales" => $previousAdSales,
 		        			  "currentTarget" => $currentTarget,
 		        			  "currentCorporate" => $currentCorporate,
@@ -194,7 +223,7 @@ class consolidateResults extends Model{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum2($con, $value, $as, $table, null, $where);
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
@@ -455,6 +484,137 @@ class consolidateResults extends Model{
         return $rtr;		
     }      
 
+    public function defineValuesAgencyGroup($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
+        $p = new pRate();
+
+        $year = $keyYear;
+
+        if ($table != "plan_by_brand" && $table != "digital") {
+            if ($currency[0]['name'] == "USD") {
+                if($table == "cmaps"){
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }else{
+                    $pRate = 1.0;
+                    $pRateSel = $pRate;
+                }
+            }else{
+                if($table == "cmaps"){
+                    $pRate = 1.0;
+                    $pRateSel = $pRate;
+                }else{
+                    
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                    
+                    $ccYear = date('Y');
+                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                }                
+            }    
+        }else{            
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+                $pRateSel = $pRate;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+            }            
+        }
+
+        switch ($table) {
+            case 'ytd':
+                $columns = array("sales_representant_office_id","agency_group_id", "year", "month");
+                $columnsValue = array($region,$typeSelect, $year, $month);
+                $value .= "_revenue_prate";
+                break;
+
+            case 'plan_by_brand':
+
+                $columns = array("sales_office_id", "source", "type_of_revenue", "sales_rep_id", "year", "month", "currency_id");
+                $columnsValue = array($region, strtoupper($source), $value, $typeSelect, $year, $month, 4);
+                $value = "revenue";
+                break;
+
+            /*
+            case 'cmaps':
+                $columns = array("brand_id", "year", "month");
+                $columnsValue = array($brand, $year, $month);
+                break;           
+
+            case 'mini_header':
+                $sql = new sql();
+
+                $columns = array("sales_representant_office_id","campaign_currency_id","brand_id", "year", "month");
+                $columnsValue = array($region, $currency[0]['id'], $brand, $year, $month);
+
+                $value .= "_revenue";
+                break;
+
+            case 'digital':
+
+                $columns = array("region_id", "brand_id", "year", "month");
+                $columnsValue = array($region, $brand, $year, $month);
+                $value .= "_revenue";
+                if ($brand == '9') {
+                    $where = "WHERE ( month = \"".$month."\" ) 
+                                           AND ( year =  \" $year \")
+                                           AND (region_id = \"".$region."\")
+                                           AND (brand_id != '10')";
+                }else{
+                    $where = "WHERE ( month = \"".$month."\" ) 
+                                           AND ( year =  \" $year \")
+                                           AND (region_id = \"".$region."\")
+                                           AND (brand_id = '".$brand."')";
+                }
+
+                break;
+
+            
+            */
+            default:
+                $columns = false;
+                break;
+        }
+
+        if (!$columns) {
+            $rtr = false;
+        }else{
+            $sql = new sql();
+
+            $as = "sum";
+
+            if ($table != "digital") {
+                $where = $sql->where($columns, $columnsValue);
+            }            
+
+            if($table == "digital"){
+                $table = "fw_digital";
+            }
+
+            $join = "LEFT JOIN agency a ON (y.agency_id = a.ID)
+                     LEFT JOIN agency_group ag ON (a.agency_group_id = ag.ID)
+                    ";
+
+            if($join){
+                $table .= " y";
+            }
+
+            $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
+            
+            $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+
+            if($table == "cmaps"){                          
+                $rtr = $tmp/$pRate;
+            }else if($table == "plan_by_brand"){                          
+                $rtr = $tmp*$pRateSel;
+            }else{
+                $rtr = $tmp*$pRate;
+            }
+        }
+        return $rtr;        
+    }      
+
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
 
         $p = new pRate();
@@ -620,6 +780,40 @@ class consolidateResults extends Model{
 		$mtx = $this->addQuarters($mtx);
 		return $mtx;
 	}
+
+    public function newOrder($mtx){
+
+        $typeSelect = $mtx["typeSelect"];
+        $currentAdSales = $mtx["currentAdSales"];
+        $previousAdSales = $mtx["previousAdSales"];
+        $currentTarget = $mtx["currentTarget"];
+        $currentCorporate = $mtx["currentCorporate"];
+        $currentSAP = $mtx["currentSAP"];
+        $previousSAP = $mtx["previousSAP"]; 
+
+        for ($t=0; $t < sizeof($typeSelect); $t++) { 
+            $newMtx[$t]['typeSelect'] = $typeSelect[$t];
+            $newMtx[$t]['totalYear'] = $currentAdSales[$t][12];
+            $newMtx[$t]['currentAdSales'] = $currentAdSales[$t];
+            $newMtx[$t]['previousAdSales'] = $previousAdSales[$t];
+            $newMtx[$t]['currentTarget'] = $currentTarget[$t];
+            $newMtx[$t]['currentCorporate'] = $currentCorporate[$t];
+            $newMtx[$t]['currentSAP'] = $currentSAP[$t];
+            $newMtx[$t]['previousSAP'] = $previousSAP[$t];
+
+        }
+
+        usort($newMtx, array($this,'orderValueYear'));
+
+        return $newMtx;
+    }
+
+    public static function orderValueYear($a, $b){
+        if ($a == $b)
+            return 0;
+        
+        return ($a['totalYear'] > $b['totalYear']) ? -1 : 1;
+    }
 
 	public function addQuarters($mtx){
 		for ($i=0; $i < sizeof($mtx['previousAdSales']); $i++) { 
