@@ -136,7 +136,7 @@
 
 						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' )
 							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> P&R </a>
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE </a>	
 									@if($userLevel == 'SU')

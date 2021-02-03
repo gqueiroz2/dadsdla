@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::group(['prefix'=>'pandr'], function(){
 				Route::post('aeView','aeExcelController@aeView')
 								    ->name('aeExcel');
+				Route::post('baseReport','PAndRBaseExcelController@baseReport')
+								    ->name('basePandRExcel');
 
 			});
 
