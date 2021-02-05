@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'],function(){
 				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
 											->name('yoyMonthExcel');
 
-				Route::post('consolidate', 'consolidateExcelController@resultsConsolidate')
+				Route::post('consolidate', 'consolidateExcelController@consolidate')
 											->name('consolidateExcel');
 			});
 

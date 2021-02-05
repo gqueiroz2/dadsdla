@@ -105,8 +105,6 @@ class consolidateResultsController extends Controller{
                 $typeSelect = $typeSelectS;
                 break; 
 
-
-
             default:
                 $typeSelect = "all";
                 $typeSelectS = false;
@@ -137,7 +135,8 @@ class consolidateResultsController extends Controller{
         }
 
         $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
-
+        
+        
         $title = 'Results - Consolidate';
         $titleExcel = 'Results - Consolidate.xlsx';
 
