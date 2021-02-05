@@ -90,6 +90,12 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('insightsExcel');
 			});
 
+			Route::group(['prefix'=>'salesManagement'], function(){
+				Route::post('customReport','customReportExcelController@customReport')
+								    ->name('customReportExcel');
+
+			});
+
 		});
 	});
 });

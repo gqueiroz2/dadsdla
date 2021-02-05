@@ -34,7 +34,7 @@
 						<td> Booking Gross </td>
 						<td> Booking Net </td>
 					</tr>
-					@for($t=0;$t<sizeof($bookings);$t++)
+					@for($t=0;$t< sizeof($bookings);$t++)
 						<tr>
 							<td> {{ $bookings[$t]['region'] }} </td>
 							<td> {{ $bookings[$t]['year'] }} </td>
@@ -62,7 +62,7 @@
 						<td> Type of Value </td>
 						<td> Value </td>
 					</tr>
-					@for($t=0;$t<sizeof($targetGross);$t++)
+					@for($t=0;$t< sizeof($targetGross);$t++)
 						<tr>
 							<td> {{ $targetGross[$t]['region'] }} </td>
 							<td> {{ $targetGross[$t]['year'] }} </td>
@@ -90,7 +90,7 @@
 						<td> Type of Value </td>
 						<td> Value </td>
 					</tr>
-					@for($t=0;$t<sizeof($targetGross);$t++)
+					@for($t=0;$t< sizeof($targetGross);$t++)
 						<tr>
 							<td> {{ $targetNet[$t]['region'] }} </td>
 							<td> {{ $targetNet[$t]['year'] }} </td>
