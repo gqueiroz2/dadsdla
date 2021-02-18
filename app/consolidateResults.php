@@ -4,7 +4,48 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class consolidateResults extends Model{
+
+    public function typeSelectN($con,$re,$region){
+
+        for ($r=0; $r < sizeof($region); $r++) { 
+            $tmp[$r] = $re->getRegion($con,array($region[$r]))[0];
+        }
+
+        return $tmp;
+
+    }
+
+    public function constructOffice($con,$currency,$month,$region,$value,$years){
+
+        $form = "bts";
+        $cYear = $years[0];
+        $pYear = $years[1];      
+        
+        for ($r=0; $r < sizeof($region); $r++) { 
+            for ($m=0; $m < sizeof($month); $m++) {                 
+                $currentAdSales[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value, $cYear);
+                $previousAdSales[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value,$pYear);                                   
+                $currentTarget[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "TARGET");
+                $currentCorporate[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "CORPORATE");
+                $currentSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "ACTUAL");
+                $previousSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL");
+            }
+        }
+
+        $rtr = array( "typeSelect" => $region,
+                      "currentAdSales" => $currentAdSales,
+                      "previousAdSales" => $previousAdSales,
+                      "currentTarget" => $currentTarget,
+                      "currentCorporate" => $currentCorporate,
+                      "currentSAP" => $currentSAP,
+                      "previousSAP" => $previousSAP                   
+        );
+
+        return $rtr;
+        
+    }
 
 	public function construct($con,$currency,$month,$type,$typeSelect,$region,$value){
 
@@ -613,7 +654,103 @@ class consolidateResults extends Model{
             }
         }
         return $rtr;        
-    }      
+    }
+
+    public function defineValuesOffice($con, $table, $currency, $month, $region, $value, $keyYear, $source=false){
+        $sql = new sql();
+        $p = new pRate();
+
+        $year = $keyYear;
+        
+        $pRate = 1.0;
+        $pRateSel = $pRate;
+        /*
+        if ($table != "plan_by_brand" && $table != "digital") {
+            if ($currency[0]['name'] == "USD") {
+                if($table == "cmaps"){
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }else{
+                    $pRate = 1.0;
+                    $pRateSel = $pRate;
+                }
+            }else{
+                if($table == "cmaps"){
+                    $pRate = 1.0;
+                    $pRateSel = $pRate;
+                }else{
+                    
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                    
+                    $ccYear = date('Y');
+                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                }                
+            }    
+        }else{            
+            if ($currency[0]['name'] == "USD") {
+                $pRate = 1.0;
+                $pRateSel = $pRate;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+            }            
+        }
+        */
+
+        switch ($table) {
+
+            case 'cmaps':
+                $columns = array("brand_id", "year", "month");
+                $columnsValue = array($brand, $year, $month);
+                break;
+
+            case 'ytd':
+                $columns = array("sales_representant_office_id","year", "month");                
+                $columnsValue = array($region,$year,$month);                
+                $value .= "_revenue_prate";
+                $where = $where = $sql->where($columns, $columnsValue);
+                break;
+
+            case 'plan_by_brand':
+
+                $columns = array("sales_office_id","source","type_of_revenue","year","month","currency_id");
+                $columnsValue = array($region,strtoupper($source),$value,$year,$month,4);
+                $value = "revenue";
+                $where = $where = $sql->where($columns, $columnsValue);
+                break;
+
+            default:
+                $columns = false;
+                break;
+        }
+
+        if (!$columns) {
+            $rtr = false;
+        }else{
+            $sql = new sql();
+
+            $as = "sum";
+
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            
+            $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+
+            if($table == "cmaps"){                          
+                $rtr = $tmp/$pRate;
+            }else if($table == "plan_by_brand"){                          
+                $rtr = $tmp*$pRateSel;
+            }else{
+                $rtr = $tmp*$pRate;
+            }           
+
+
+        }
+
+        return $rtr;
+        
+    }          
 
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
 
@@ -746,6 +883,8 @@ class consolidateResults extends Model{
         return $rtr;
 		
     }    
+
+
 
 
     public function addDN($mtx){

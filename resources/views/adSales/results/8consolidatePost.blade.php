@@ -46,7 +46,7 @@
 						@if($errors->has('currency'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->currency($currency)}}
+						{{$render->currency()}}
 					</div>
 
 					<div class="col-sm">
@@ -68,7 +68,7 @@
 
 	<div class="row justify-content-end mt-2">
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> Consolidate </span>
+			<span style="float: right;"> Pacing </span>
 		</div>
 		<div class="col-2">
             <button type="button" id="excel" class="btn btn-primary" style="width: 100%">

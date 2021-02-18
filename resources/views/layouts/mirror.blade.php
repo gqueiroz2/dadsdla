@@ -77,8 +77,16 @@
 					<ul class="navbar-nav mr-auto">
 						@if( $userRegionName != "Brazil" )
 							<li class="nav-item">
-						        <a class="nav-link" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+						        
 						    </li>
+
+						    <li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
+									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
+								</div>
+							</li>
 						@else
 							<li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
@@ -87,7 +95,8 @@
 									@if( ( $userLevel == "SU" ) )
 										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
 									@endif									
-									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>	
+									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 									<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 									<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 									<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
@@ -144,7 +153,7 @@
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>	
 								@if($userLevel == 'SU')
-									<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Base Report </a>										
+									<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>										
 								@endif									
 							</div>
 						</li>
@@ -174,7 +183,7 @@
 									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
 									<a class="dropdown-item" href="{{ route('planningHome') }}"> Planning </a>
 								@endif
-								<a class="dropdown-item" href="{{ route('salesManagementHome') }}"> CRM </a>
+								<a class="dropdown-item" href="{{ route('salesManagementHome') }}"> CRM Connection </a>
 								
 							</div>
 						</li>
