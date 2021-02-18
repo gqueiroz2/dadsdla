@@ -151,10 +151,8 @@
 						<li class="nav-item dropdown">
 							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>	
-								@if($userLevel == 'SU')
-									<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>										
-								@endif									
+								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>									
+								<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
 							</div>
 						</li>
 						
