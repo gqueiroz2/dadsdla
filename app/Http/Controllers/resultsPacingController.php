@@ -52,13 +52,7 @@ class resultsPacingController extends Controller{
                 if ($validator->fails()) {
                         return back()->withErrors($validator)->withInput();
                 }
-
-                $base = new base();
-                $db = new dataBase();
-                $default = $db->defaultConnection();
-                $con = $db->openConnection($default);
-                $r = new region();
-                $b = new brand();
+                
                 $pr = new pRate();
                 $render = new Render();
                 $region = $r->getRegion($con,false);

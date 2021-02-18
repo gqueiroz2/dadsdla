@@ -1,52 +1,29 @@
 @extends('layouts.mirror')
 @section('title', 'Monthly Results')
-@section('head')	
-	<script src="/js/consolidateResults.js"></script>
+@section('head')		
 	<?php include(resource_path('views/auth.php')); ?>
 @endsection
 @section('content')
 <div class="container-fluid">
 	<div class="row">
 		<div class="col">
-			<form method="POST" action="{{ route('consolidateResultsPost') }}" runat="server"  onsubmit="ShowLoading()">
+			<form method="POST" action="{{ route('consolidateResultsPostOffice') }}" runat="server"  onsubmit="ShowLoading()">
 				@csrf
 				<div class="row">
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Region: </span></label>
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
-						@endif
-						@if($userLevel == 'L0' || $userLevel == 'SU')
-							{{$render->region($region)}}							
-						@else
-							{{$render->regionFiltered($region, $regionID, $special)}}
-						@endif
-					</div>
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> Type: </span></label>
-						@if($errors->has('type'))
-							<label style="color: red;">* Required</label>
-						@endif
-						
-						{{$render->type()}}							
-						
-					</div>
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold" style="color: red;" id="typeSelectLabel"> Select Region </span></label>
-						@if($errors->has('brand'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->typeSelect()}}
-					</div>						
+						@endif						
+						{{$render->regionOffice($region)}}													
+					</div>												
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						@if($errors->has('currency'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->currency()}}
+						{{$render->currencyUSD()}}
 					</div>
 
 					<div class="col-sm">
@@ -54,7 +31,7 @@
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->value()}}
+						{{$render->value3()}}
 					</div>
 
 					<div class="col-sm">
@@ -68,7 +45,7 @@
 
 	<div class="row justify-content-end mt-2">
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> Pacing </span>
+			<span style="float: right;"> Pacing Office </span>
 		</div>
 	</div>	
 </div>

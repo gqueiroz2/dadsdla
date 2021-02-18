@@ -116,7 +116,7 @@ class PAndRBaseReportRender extends Render{
         echo "<div class='col-2' style='padding-right:1px;'>";
         echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
             echo "<tr>";
-                echo "<td class='darkBlue' style=' border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; height:40px; '> DN </td>";
+                echo "<td class='darkBlue' style='width:3.5% !important;border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; font-size:20px; height:40px; '> DN </td>";
             echo "</tr>";
             echo "<tr>";
                 echo "<td class='rcBlue' style='text-align:left; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>Target</td>";
@@ -143,7 +143,7 @@ class PAndRBaseReportRender extends Render{
         echo "</table>";
         echo "</div>";
 
-        echo "<div class='col linked table-responsive ' style='width:100%; padding-left:0px;'>";
+        echo "<div class='col linked table-responsive' style='width:95%; padding-left:0px;'>";
         //echo "<table style='min-width:3000px; width:80%; text-align:center; min-height:225px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>";
         echo "<table style='width:100%; text-align:center; min-height:225px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>";
             /*
@@ -154,12 +154,12 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) {
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='quarter' style='width:3.9%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".$this->month[$m]."</td>";
+                        echo "<td class='quarter' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>".$this->month[$m]."</td>";
                     }else{
-                        echo "<td class='smBlue' style='width:3.9%; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".$this->month[$m]."</td>";
+                        echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 1px 0px 0px 0px; height:40px;'>".$this->month[$m]."</td>";
                     }
                 }
-                echo "<td class='darkBlue' style='width:3.9%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>Total</td>";
+                echo "<td class='darkBlue' style='border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; height:40px;'>Total</td>";
             echo "</tr>";
             echo "</thead>";
             

@@ -143,6 +143,46 @@ class Render extends Model{
 	   echo "</select>";
     }
 
+    public function regionOffice($region){
+
+        $temp = array();
+
+        for ($r=0; $r < sizeof($region) ; $r++) { 
+            if ($region[$r]['role'] != "None") {
+                array_push($temp, $region[$r]['role']);
+            }
+        }
+
+        $temp = array_unique($temp);
+
+        $temp = array_values($temp);
+
+        $tempId = array(array());
+        $tempName = array(array());
+
+
+        for ($t=0; $t < sizeof($temp); $t++) {
+            $tempId[$t] = array();
+            $tempName[$t] = array();
+            for ($r=0; $r < sizeof($region) ; $r++) { 
+                if ($temp[$t] == $region[$r]['role']) {
+                    array_push($tempId[$t], $region[$r]["id"]);
+                    array_push($tempName[$t], $region[$r]["name"]);
+                }
+            }
+        }
+
+        echo "<select class='selectpicker' id='region' name='region[]' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-width='100%'>";
+            for ($t=0; $t < sizeof($temp) ; $t++) { 
+                echo "<optgroup label='".$temp[$t]."'>";
+                    for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
+                        echo "<option value='".$tempId[$t][$r]."' selected='true'>".$tempName[$t][$r]."</option>";
+                    }
+                echo "</optgroup>";
+            }
+       echo "</select>";
+    }
+
     public function regionArray($region){
 
         $temp = array();
@@ -449,6 +489,12 @@ class Render extends Model{
             echo "<option value=''> Select Region </option>";            
         echo "</select>";
     }
+
+    public function currencyUSD(){
+        echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
+            echo "<option value='4'> USD </option>";            
+        echo "</select>";
+    }
     
     public function newCurrency($regionName,$regionCurrencies){
     	echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
@@ -494,6 +540,13 @@ class Render extends Model{
         echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
             echo "<option value='gross'> Gross </option>";            
             echo "<option value='net'> Net </option>";            
+        echo "</select>";
+    }
+
+    public function value3(){
+        echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
+            echo "<option value='net'> Net </option>";            
+            echo "<option value='gross'> Gross </option>";        
         echo "</select>";
     }
 
