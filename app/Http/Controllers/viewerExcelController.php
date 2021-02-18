@@ -79,6 +79,8 @@ class viewerExcelController extends Controller {
 	    $typeExport = Request::get("typeExport");
         $auxTitle = Request::get("auxTitle");
 
+        var_dump(Request::all());
+
 	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
     }
 

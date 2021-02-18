@@ -166,7 +166,6 @@ class consolidateResultsController extends Controller{
             case 'agencyGroup':                               
                 $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
                 $typeSelect = $typeSelectS;
-                break;
             default:
                 $typeSelect = "all";
                 $typeSelectS = false;
@@ -197,7 +196,8 @@ class consolidateResultsController extends Controller{
         }
 
         $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
-
+        
+        
         $title = 'Results - Consolidate';
         $titleExcel = 'Results - Consolidate.xlsx';
 
