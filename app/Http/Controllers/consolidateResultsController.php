@@ -75,7 +75,13 @@ class consolidateResultsController extends Controller{
 
         $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
 
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN')); 
+        $regionExcel = $regionID;
+        $currencyExcel = $currencyID;
+        $valueExcel = $value;
+        $title = 'Results - Consolidate Office';
+        $titleExcel = 'Results - Consolidate Office.xlsx';
+
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel')); 
 
 
     }

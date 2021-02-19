@@ -26,9 +26,58 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 use App\Exports\consolidateExport;
+use App\Exports\consolidateOfficeExport;
 
 class consolidateExcelController extends Controller{
    
+   public function consolidateOffice(){
+
+        $base = new base();
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $r = new region();
+        $pr = new pRate();
+        $render = new Render();
+        $region = $r->getRegion($con,false);        
+        $cR = new consolidateResults();
+
+        $regionID = json_decode(base64_decode(Request::get('regionExcel')));
+        $currencyID = Request::get("currencyExcel");
+        $value = Request::get('valueExcel');  
+
+        $title = Request::get("title");
+        
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");      
+
+        $cYear = intval(date('Y'));
+        $pYear = $cYear - 1;
+
+        $years = array($cYear,$pYear);
+
+        $month = $base->getMonth();
+
+        $typeSelectN = $cR->typeSelectN($con,$r,$regionID);
+
+        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years);
+        $mtx = $cR->assemble($mtx);
+        $mtxDN = $cR->addDN($mtx);        
+
+        $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
+
+        $monthView = array("January","February","March","April","May","June","July","August","September","October","November","December");
+        $quarter = array("Q1","Q2","Q3","Q4");
+
+        $years = array($cYear, $pYear);
+
+        $data = array('typeSelectN' => $typeSelectN, 'mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years);
+
+        $label = 'exports.results.consolidate.consolidateOfficeExport';
+
+        return Excel::download(new consolidateOfficeExport($data, $label, $typeExport, $auxTitle), $title);
+   }
+
    public function consolidate(){
 
    		$base = new base();
