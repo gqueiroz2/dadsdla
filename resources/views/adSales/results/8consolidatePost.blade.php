@@ -70,8 +70,14 @@
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
 			<span style="float: right;"> Consolidate </span>
 		</div>
+		<div class="col-2">
+            <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                Generate Excel
+            </button>               
+        </div>  
 	</div>	
 
+	<div class="row justify-content-end mt-2"></div>
 	</div>
 	<?php
 		$month = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -86,11 +92,10 @@
 				<div class="col"> 
 					<div class="container-fluid" style='width: 100%; zoom: 85%;font-size: 16px;'>
 						<div class="row">
-							
 							<div class="col lightBlue">
 								<center>
-									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+									<span style='font-size:24px;'> 										
+										{{ $salesRegion }} - Consolidate - Brand : ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -216,7 +221,7 @@
 						        			<?php $clr = 'rcBlue'; ?>
 						        		@endif
 						        		<?php
-						        			if($mtxDN['previousAdSales'][$d] > 0){
+						        			if($mtxDN['currentTarget'][$d] > 0){
 						        				$temp = ($mtxDN['currentCorporate'][$d]/$mtxDN['currentTarget'][$d])*100;
 						        			}else{
 						        				$temp = 0.0;
@@ -379,7 +384,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - AE: ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -657,7 +662,24 @@
 	        </div>			
 		</div>
 
-	@elseif($type == "advertiser")	
+	@elseif($type == "advertiser" || $type == "agency" || $type == "agencyGroup") 	
+
+		@if($type == "advertiser")
+			<?php 
+				$index = 'client'; 
+				$typeShow = 'Advertiser';
+			?>
+		@elseif($type == "agency")
+			<?php 
+				$index = 'agency'; 
+				$typeShow = 'Agency';
+			?>
+		@elseif($type == "agencyGroup")
+			<?php 
+				$index = 'agencyGroup'; 
+				$typeShow = 'Agency Group';
+			?>
+		@endif
 
 		<div class="container-fluid">
 			<div class="row">
@@ -668,7 +690,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - {{$typeShow}} : ({{$currencyS}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -816,7 +838,12 @@
 						    <div class="row mt-2">
 						    	<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 						        	<tr class="center">
-						        		<td class='lightBlue center' style="width: 7% !important;"> {{$typeSelectS[$c]['client']}} </td>
+						        		<td class='lightBlue center' style="width: 7% !important;"> 
+						        			<?php
+						        				//$typeSelectS[$c][$index];
+						        				echo $newMtx[$c]['typeSelect'][$index];
+						        			?>
+						        		</td>
 							        	@for($m=0; $m < sizeof($month); $m++)
 							        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 							        	@endfor
@@ -835,7 +862,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousAdSales'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousAdSales'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -847,7 +874,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -859,7 +886,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentTarget'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentTarget'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 						        	
@@ -871,7 +898,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentCorporate'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentCorporate'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -883,7 +910,7 @@
 							        		@else
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentAdSales'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentAdSales'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -895,7 +922,7 @@
 							        		@else
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
+							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -908,8 +935,8 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif				        		 
 						        			<?php
-						        				if($mtx['previousAdSales'][$c][$d] > 0){
-						        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['previousAdSales'][$c][$d])*100; 
+						        				if($newMtx[$c]['previousAdSales'][$d] > 0){
+						        					$temp = ($newMtx[$c]['currentCorporate'][$d]/$newMtx[$c]['previousAdSales'][$d])*100; 
 						        				}else{
 						        					$temp = 0.0;
 						        				}
@@ -927,8 +954,8 @@
 							        			<?php $clr = 'rcBlue'; ?>
 							        		@endif
 							        		<?php
-						        				if($mtx['currentTarget'][$c][$d]){
-						        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['currentTarget'][$c][$d])*100;
+						        				if($newMtx[$c]['currentTarget'][$d]){
+						        					$temp = ($newMtx[$c]['currentCorporate'][$d]/$newMtx[$c]['currentTarget'][$d])*100;
 						        				}else{
 						        					$temp = 0.0;
 						        				}
@@ -951,5 +978,69 @@
 </div>
 
 <div id="vlau"></div>
+
+<script type="text/javascript">
+        $(document).ready(function(){
+
+            ajaxSetup();
+
+            $('#excel').click(function(event){
+
+            	var typeExcel = "<?php echo $typeExcel; ?>";
+                var regionExcel = "<?php echo $regionExcel; ?>";
+                var valueExcel = "<?php echo $valueExcel; ?>";
+                var currencyExcel = "<?php echo $currencyExcel; ?>";
+	            var typeSelectExcel = "<?php echo base64_encode(json_encode($typeSelectExcel)); ?>";
+                
+                var div = document.createElement('div');
+                var img = document.createElement('img');
+                img.src = '/loading_excel.gif';
+                div.innerHTML ="Generating File...</br>";
+                div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+                div.appendChild(img);
+                document.body.appendChild(div);
+
+                var typeExport = $("#excel").val();
+
+                var title = "<?php echo $titleExcel; ?>";
+                var auxTitle = "<?php echo $titleExcel; ?>";
+
+                    $.ajax({
+                        xhrFields: {
+                            responseType: 'blob',
+                        },
+                        url: "/generate/excel/results/consolidate",
+                        type: "POST",
+                        data: {title, typeExport, auxTitle, typeExcel, regionExcel,typeSelectExcel,valueExcel, currencyExcel},
+                        /*success: function(output){
+                            $("#vlau").html(output);
+                        },*/
+                        success: function(result,status,xhr){
+                            var disposition = xhr.getResponseHeader('content-disposition');
+                            var matches = /"([^"]*)"/.exec(disposition);
+                            var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                            //download
+                            var blob = new Blob([result], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = filename;
+
+                            document.body.appendChild(link);
+
+                            link.click();
+                            document.body.removeChild(link);
+                            document.body.removeChild(div);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            document.body.removeChild(div);
+                            alert(xhr.status+" "+thrownError);
+                        }
+                    });                    
+                });
+            });
+    </script>
 
 @endsection

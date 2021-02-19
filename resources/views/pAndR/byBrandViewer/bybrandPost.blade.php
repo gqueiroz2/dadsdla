@@ -1,13 +1,54 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Brand Viewer')
 @section('head')	
-    <?php include(resource_path('views/auth.php')); ?>
-    <script src="/js/pandrBaseReport.js"></script>
+    <?php include(resource_path('views/auth.php')); 
+    $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');?>
+    <script src="/js/pandr.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar{
+            height: 15px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #d9d9d9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #666666;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4d4d4d; 
+        }
+
+
+        #loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
+
+    </style>
 @endsection
 @section('content')
 	
 
-	<form method="POST" action="{{ route('BaseReportPandRPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('byBrandPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">
 			<div class="row">
@@ -29,23 +70,13 @@
 					@endif
 					{{$render->year()}}
 				</div>
-
 				<div class="col">
-					<label class='labelLeft'><span class="bold">Filter:</span></label>
-					@if($errors->has('baseFilter'))
-						<label style="color: red;">* Required</label>
-					@endif
-					{{$render->baseReportFilter()}}
-				</div>
-
-				<div class="col" style="display: none;">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
 						<label style="color: red;">* Required</label>
 					@endif
-					{{$render->salesRep()}}
+					{{$render->salesRep2()}}
 				</div>
-
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
@@ -66,16 +97,24 @@
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 				</div>			
 			</div>
-			<br>			
+			<br>
 		</div>
 	</form>
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Base Report
+				By Brand Viewer
 			</div>
 		</div>
 	</div>
+
+	<div class="row mt-2 justify-content-end">
+                <div class="col" style="width: 100%;">
+                    <center>
+                    	 {{$render->byBrand($forRender,$client,$tfArray,$odd,$even,$userName,$error,$brands)}}
+                    </center>
+                </div>
+            </div>
 	<div id="vlau">
 		
 	</div>

@@ -72,9 +72,20 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('agencyAGroupViewerPost');
 		});
 
+		Route::group(['prefix'=>'byBrandviewer'],function(){
+			
+			Route::get('/','byBrandViewerController@get')
+										->name('byBrandGet');
+
+			Route::post('/','byBrandViewerController@post')
+										->name('byBrandPost');
+		});
+
 	});
 	Route::group(['prefix'=>'ajax'],function(){
 		Route::post('salesRepByRegionPandR','ajaxController@salesRepByRegionFiltered')
+									->name('salesRepByRegionPandR');
+		Route::post('salesRepByRegionPandRMult','ajaxController@salesRepByRegionFilteredMult')
 									->name('salesRepByRegionPandR');
 	});
 });

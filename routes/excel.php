@@ -32,6 +32,9 @@ Route::group(['middleware' => 'auth'],function(){
 
 				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
 											->name('yoyMonthExcel');
+
+				Route::post('consolidate', 'consolidateExcelController@resultsConsolidate')
+											->name('consolidateExcel');
 			});
 
 			Route::group(['prefix'=>'performance'],function(){

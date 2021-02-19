@@ -1,13 +1,13 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Brand Viewer')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
-    <script src="/js/pandrBaseReport.js"></script>
+    <script src="/js/pandr.js"></script>
 @endsection
 @section('content')
 	
 
-	<form method="POST" action="{{ route('BaseReportPandRPost') }}" runat="server"  onsubmit="ShowLoading()">
+	<form method="POST" action="{{ route('byBrandPost') }}" runat="server"  onsubmit="ShowLoading()">
 		@csrf
 		<div class="container-fluid">
 			<div class="row">
@@ -29,23 +29,13 @@
 					@endif
 					{{$render->year()}}
 				</div>
-
 				<div class="col">
-					<label class='labelLeft'><span class="bold">Filter:</span></label>
-					@if($errors->has('baseFilter'))
-						<label style="color: red;">* Required</label>
-					@endif
-					{{$render->baseReportFilter()}}
-				</div>
-
-				<div class="col" style="display: none;">
 					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
 					@if($errors->has('salesRep'))
 						<label style="color: red;">* Required</label>
 					@endif
-					{{$render->salesRep()}}
+					{{$render->salesRep2()}}
 				</div>
-
 				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
@@ -66,13 +56,28 @@
 					<input style="width: 100%;" type="submit" value="Generate" class="btn btn-primary">		
 				</div>			
 			</div>
-			<br>			
+			<br>
+			<div class="row">
+				<center style="width: 100%;">
+					<div class="col-3">
+						@if($typeMsg == "Success")
+							<div class="alert alert-info">
+								{{$msg}}
+							</div>
+						@elseif($typeMsg == "Error")
+							<div class="alert alert-danger">
+								{{$msg}}
+							</div>
+						@endif
+					</div>
+				</center>
+			</div>
 		</div>
 	</form>
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Base Report
+				By Brand Viewer
 			</div>
 		</div>
 	</div>

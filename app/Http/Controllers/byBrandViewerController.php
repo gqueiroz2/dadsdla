@@ -6,23 +6,24 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\region;
 use App\PAndRRender;
+use App\byBrandRender;
 use App\salesRep;
 use App\pRate;
 use App\dataBase;
+use App\pacingReport;
+use App\byBrandReport;
 use App\brand;
 use App\base;
 use App\AE;
 use App\sql;
 use App\excel;
-use App\baseReportPandR;
 use Validator;
-use App\PAndRBaseReportRender;
 
-class baseReportPandRController extends Controller{
-    
+
+class byBrandViewerController extends Controller {
+
 	public function get(){
-
-		$db = new dataBase();
+        	$db = new dataBase();
                 $default = $db->defaultConnection();
                 $con = $db->openConnection($default);
                 $r = new region();
@@ -36,34 +37,33 @@ class baseReportPandRController extends Controller{
                 $region = $r->getRegion($con,null);
                 $currency = $pr->getCurrency($con,null);
 
-		return view('pAndR.baseReport.get',compact('con','render','region','currency','permission','user'));
+                $typeMsg = false;
+                $msg = "";
 
+	       return view('pAndR.byBrandViewer.byBrandGet',compact('con','render','region','currency','permission','user','msg','typeMsg'));
 	}
-
-	public function post(){
-
+    
+        public function post(){
                 $db = new dataBase();
-                $render = new PAndRBaseReportRender();                
+                $render = new byBrandRender();
                 $r = new region();
                 $pr = new pRate();
-                $br = new baseReportPandR();        
+                $ae = new AE();  
+                $b = new brand();
+                $br = new byBrandReport();              
                 $default = $db->defaultConnection();
                 $con = $db->openConnection($default);
-
+                
                 $cYear = intval( Request::get('year') );
                 $pYear = $cYear - 1;
+                //$region = intval( Request::get('region') );
+
                 $region = $r->getRegion($con,false);
+                //var_dump($region);
                 $currency = $pr->getCurrency($con,false);
                 $permission = Request::session()->get('userLevel');
                 $user = Request::session()->get('userName');
 
-                $regionID = Request::get('region');
-                $salesRepID = Request::get('salesRep');
-                $currencyID = Request::get('currency');
-                $value = Request::get('value');
-                $baseReport = Request::get('baseReport');                
-
-/*
                 $validator = Validator::make(Request::all(),[
                     'region' => 'required',
                     'year' => 'required',
@@ -75,18 +75,11 @@ class baseReportPandRController extends Controller{
                 if ($validator->fails()) {
                     return back()->withErrors($validator)->withInput();
                 }
-                $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
-*/
-          
-
-                $forRender = $br->baseLoadReport($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value,$baseReport);
-              
-
-
-                return view('pAndR.baseReport.post',compact('con','render','region','currency','permission','user','forRender','baseReport'));
                 
+                $tmp = $br->baseLoad($con,$r,$pr,$cYear,$pYear,$region);
 
-/*
+                $forRender = $tmp;
+                $brands = $b->getBrand($con);
                 $sourceSave = $forRender['sourceSave'];
                 $client = $tmp['client'];
                 $tfArray = array();
@@ -100,17 +93,10 @@ class baseReportPandRController extends Controller{
                 $pending = $forRender['pending'];
                 $RFvsTarget = $forRender['RFvsTarget'];
 
-                $yearExcel = $cYear;
-                $clientExcel = $client;
-                $currencyExcel = $currencyID;
-                $regionExcel = $regionID;
-                $valueExcel = $value;
-                $salesRepExcel = Request::get("salesRep");
+                //lines of clients table
+                $rollingClients = $forRender['lastRollingFCST'];
+                $manual = $forRender['rollingFCST'];
 
-                $titleExcel = "PandR - AE.xlsx";
-
-                return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel"));
-*/
-	}
-
+                return view('pAndR.byBrandViewer.byBrandPost',compact('render','region','currency','forRender', 'tfArray','odd','even','sourceSave','client','error','brands'));
+        }
 }

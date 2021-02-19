@@ -332,12 +332,12 @@ class Render extends Model{
     }
 
     public function baseReportFilter(){
-        echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
-            echo "<option selected='true' value='brand'> Brand </option>";   
-            echo "<option selected='true' value='ae'> AE </option>";   
-            echo "<option selected='true' value='brand'> Advertiser </option>";   
-            echo "<option selected='true' value='brand'> Agency </option>";   
-            echo "<option selected='true' value='brand'> Agency Group </option>";   
+        echo "<select class='selectpicker' name='baseReport' data-width='100%' data-size='2'>";
+            echo "<option value='brand'> Brand </option>";   
+            echo "<option value='ae'> AE </option>";   
+            echo "<option value='client'> Advertiser </option>";   
+            echo "<option value='agency'> Agency </option>";   
+            echo "<option value='agencyGroup'> Agency Group </option>";   
         echo "</select>";
     }
 
@@ -410,10 +410,18 @@ class Render extends Model{
     }
 
     public function salesRep(){
-    	echo "<select id='salesRep'class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='8' data-width='100%'>";
+    	echo "<select id='salesRep' class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='8' data-width='100%'>";
     		echo "<option value=''> Select Region </option>";
 
     	echo "</select>";	
+
+    }
+
+    public function salesRepHide(){
+        echo "<select id='salesRep' class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='8' data-width='100%' style='display:none'>";
+            echo "<option value=''> Select Region </option>";
+
+        echo "</select>";   
 
     }
 

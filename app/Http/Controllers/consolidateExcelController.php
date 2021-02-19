@@ -1,0 +1,140 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Request;
+use App\dataBase;
+use App\base;
+use App\monthly;
+use App\region;
+use App\salesRep;
+use App\share;
+use App\brand;
+use App\pRate;
+use App\Render;
+use App\quarterRender;
+use App\resultsMQ;
+use App\renderMQ;
+use App\client;
+use App\agency;
+use App\consolidateResults;
+
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
+
+use App\Exports\consolidateExport;
+
+class consolidateExcelController extends Controller{
+   
+   public function resultsConsolidate(){
+
+   		$base = new base();
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $r = new region();
+        $b = new brand();
+        $pr = new pRate();
+        $cl = new client();
+        $ag = new agency();
+        $render = new Render();
+        $region = $r->getRegion($con,false);
+        $brand = $b->getBrand($con);
+        $currency = $pr->getCurrency($con,false);
+        $sr = new salesRep();
+
+
+        $regionCurrencies = $base->currenciesByRegion();
+
+        $cR = new consolidateResults();
+
+        $regionID = Request::get('regionExcel');
+        $type = Request::get('typeExcel');
+
+	    $title = Request::get("title");
+	    
+	    $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        $typeSelect = json_decode(base64_decode(Request::get("typeSelectExcel")));
+
+        //$currencyID = Request::get("currencyExcel");
+        //$value = Request::get('valueExcel');   
+
+        $brandID = 0;
+
+        switch ($type) {
+            case 'brand':
+                $brandTmp = $typeSelect;
+                $brandID = $base->handleBrand($brandTmp);
+                $typeSelect = $brandID;
+                $typeSelectS = false;
+                break;
+            case 'ae':                
+                $typeSelect = $typeSelect;
+
+                for ($t=0; $t < sizeof($typeSelect); $t++) { 
+                    $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
+                }
+                break;
+            case 'advertiser':                
+                
+                $typeSelectS = $cl->getClientByRegion($con,array($regionID));
+
+                $typeSelect = $typeSelectS;
+
+                break;
+
+            case 'agency':                
+                
+                $typeSelectS = $ag->getAgencyByRegion($con,array($regionID));
+                $typeSelect = $typeSelectS;
+
+                break;            
+
+
+            default:
+                $typeSelect = "all";
+                $typeSelectS = false;
+                break;
+        }
+     
+        $currencyID = Request::get("currency");
+        $value = Request::get('value');  
+
+        $cYear = date('Y');
+        $pYear = $cYear - 1;
+
+        $years = array($cYear,$pYear);
+
+        $month = $base->getMonth();
+
+        $mtx = $cR->construct($con,$currency,$month,$type,$typeSelect,$regionID,$value);
+
+        $mtx = $cR->assemble($mtx);
+
+        $mtxDN = $cR->addDN($mtx);
+
+        $tmp = $r->getRegion($con,array($regionID));
+        if(is_array($tmp)){
+                $salesRegion = $tmp[0]['name'];
+        }else{
+                $salesRegion = $tmp['name'];
+        }
+
+        $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
+
+        $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
+		$quarter = array("Q1","Q2","Q3","Q4");
+
+
+        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies, 'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'typeSelectS' => $typeSelectS, 'brandID' => $brandID);
+
+        $label = 'exports.results.consolidate.consolidateExport';
+
+	    return Excel::download(new consolidateExport($data, $label, $typeExport, $auxTitle), $title);
+
+	}
+}

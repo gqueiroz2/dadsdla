@@ -251,8 +251,6 @@ class AEController extends Controller{
 
     public function post(){
 
-        var_dump("AKI");
-
         $db = new dataBase();
         $render = new PAndRRender();
         $r = new region();

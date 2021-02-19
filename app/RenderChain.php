@@ -39,6 +39,7 @@ class RenderChain extends Render{
 
         $cYear = intval( date('Y') );
         $nYear = $cYear + 1  ;
+
         $pYear = $cYear -1;
         $ppYear = $pYear -1;
         $pppYear = $ppYear -1;

@@ -73,6 +73,12 @@ class consolidateResultsController extends Controller{
         $regionID = Request::get('region');
         $type = Request::get('type');
 
+        $currencyID = Request::get("currency");
+        $value = Request::get('value');        
+
+        $cYear = date('Y');
+        $pYear = $cYear - 1;
+
         switch ($type) {
             case 'brand':
                 $brandTmp = Request::get('typeSelect');
@@ -82,40 +88,31 @@ class consolidateResultsController extends Controller{
                 break;
             case 'ae':                
                 $typeSelect = Request::get('typeSelect');
-                var_dump($typeSelect);
                 for ($t=0; $t < sizeof($typeSelect); $t++) { 
                     $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
                 }
-                var_dump($typeSelectS);
                 break;
             case 'advertiser':                
-                
-                $typeSelectS = $cl->getClientByRegion($con,array($regionID));
-
+                $typeSelectS = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
                 $typeSelect = $typeSelectS;
-
                 break;
-
-            case 'agency':                
-                
-                $typeSelectS = $ag->getAgencyByRegion($con,array($regionID));
+            case 'agency':                               
+                $typeSelectS = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
                 $typeSelect = $typeSelectS;
+                break; 
+            case 'agencyGroup':                               
+                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                $typeSelect = $typeSelectS;
+                break; 
 
-                break;            
 
 
             default:
                 $typeSelect = "all";
                 $typeSelectS = false;
                 break;
-        }
+        }      
         
-        $currencyID = Request::get("currency");
-        $value = Request::get('value');        
-
-        $cYear = date('Y');
-        $pYear = $cYear - 1;
-
         $years = array($cYear,$pYear);
 
         $month = $base->getMonth();
@@ -123,6 +120,12 @@ class consolidateResultsController extends Controller{
         $mtx = $cR->construct($con,$currency,$month,$type,$typeSelect,$regionID,$value);
 
         $mtx = $cR->assemble($mtx);
+
+        if($type == 'advertiser' || $type == 'agency' || $type == 'agencyGroup'){
+            $newMtx = $cR->newOrder($mtx);           
+        }else{
+            $newMtx = false;
+        }
 
         $mtxDN = $cR->addDN($mtx);
 
@@ -135,7 +138,16 @@ class consolidateResultsController extends Controller{
 
         $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
 
-        return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS'));   
+        $title = 'Results - Consolidate';
+        $titleExcel = 'Results - Consolidate.xlsx';
+
+        $typeExcel = $type;
+        $regionExcel = $regionID;
+        $typeSelectExcel = Request::get('typeSelect');
+        $currencyExcel = $currencyID;
+        $valueExcel = $value;
+
+        return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx'));   
         
     	
     }

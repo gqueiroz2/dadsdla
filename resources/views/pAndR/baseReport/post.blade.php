@@ -77,7 +77,16 @@
 		</div>
 	</div>
 	<div id="vlau">
-		
+
 	</div>
+	<div class="container-fluid" id="body">
+        <div class="row mt-2 justify-content-end">
+            <div class="col" style="width: 100%;">
+                <center>
+                    {{$render->AE1($forRender,$userName,$baseReport)}}
+                </center>
+            </div>
+        </div>
+    </div>
 
 @endsection
