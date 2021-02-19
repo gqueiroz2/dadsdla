@@ -2353,7 +2353,6 @@ class AE extends pAndR{
         $date = date('n')-1;
         $pYear = $cYear - 1;
 
-        var_dump($date);
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
@@ -2409,7 +2408,7 @@ class AE extends pAndR{
     	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
         
         $list = array_values($list);
-        var_dump(sizeof($list));
+
         usort($list, array($this,'orderClient'));
 
     	return $list;
