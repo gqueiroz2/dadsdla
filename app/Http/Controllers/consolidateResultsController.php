@@ -169,15 +169,14 @@ class consolidateResultsController extends Controller{
                 $typeSelectS = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
                 $typeSelect = $typeSelectS;
                 break; 
-            case 'agencyGroup':                               
+            case 'agencyGroup':  
                 $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
                 $typeSelect = $typeSelectS;
             default:
-                $typeSelect = "all";
-                $typeSelectS = false;
+                
                 break;
-        }      
-        
+        }     
+
         $years = array($cYear,$pYear);
 
         $month = $base->getMonth();
