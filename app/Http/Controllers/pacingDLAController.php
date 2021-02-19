@@ -20,66 +20,8 @@ use App\agency;
 use Validator;
 use App\consolidateResults;
 
-class consolidateResultsController extends Controller{
-    
-    public function getOffice(){
-
-        $base = new base();
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-        $r = new region();
-        $render = new Render();
-        $region = $r->getRegion($con,false);
-
-        $regionCurrencies = $base->currenciesByRegion();
-
-        return view('adSales.results.9consolidateGetOffice',compact('render','region'));
-    }
-
-    public function postOffice(){
-        $validator = Validator::make(Request::all(),[
-            'region' => 'required',                        
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $base = new base();
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-        $r = new region();
-        $pr = new pRate();
-        $render = new Render();
-        $region = $r->getRegion($con,false);        
-        $cR = new consolidateResults();
-
-        $regionID = Request::get('region');
-        $currencyID = Request::get("currency");
-        $value = Request::get('value');        
-
-        $cYear = intval(date('Y'));
-        $pYear = $cYear - 1;
-
-        $years = array($cYear,$pYear);
-
-        $month = $base->getMonth();
-
-        $typeSelectN = $cR->typeSelectN($con,$r,$regionID);
-
-        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years);
-        $mtx = $cR->assemble($mtx);
-        $mtxDN = $cR->addDN($mtx);        
-
-        $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
-
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN')); 
-
-
-    }
-
+class pacingDLAController extends Controller{
+	
     public function get(){
 
         $base = new base();

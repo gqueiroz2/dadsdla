@@ -2351,7 +2351,9 @@ class AE extends pAndR{
     public function listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID){
 
         $date = date('n')-1;
+        $pYear = $cYear - 1;
 
+        var_dump($date);
         $tmp = $salesRepID[0];
     	//GET FROM SALES FORCE
     	$sf = "SELECT DISTINCT c.name AS 'clientName',
@@ -2379,7 +2381,8 @@ class AE extends pAndR{
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
                     LEFT JOIN agency a ON a.ID = y.agency_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
-    				AND (y.year = \"$cYear\" )
+    				AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )
+                    
                     AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";
@@ -2406,7 +2409,7 @@ class AE extends pAndR{
     	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
         
         $list = array_values($list);
-
+        var_dump(sizeof($list));
         usort($list, array($this,'orderClient'));
 
     	return $list;

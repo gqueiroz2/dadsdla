@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'],function(){
 				Route::post('yoyMonth','resultsExcelController@resultsYoYMonth')
 											->name('yoyMonthExcel');
 
-				Route::post('consolidate', 'consolidateExcelController@resultsConsolidate')
+				Route::post('consolidate', 'consolidateExcelController@consolidate')
 											->name('consolidateExcel');
 			});
 
@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::group(['prefix'=>'pandr'], function(){
 				Route::post('aeView','aeExcelController@aeView')
 								    ->name('aeExcel');
+				Route::post('baseReport','PAndRBaseExcelController@baseReport')
+								    ->name('basePandRExcel');
 
 			});
 
@@ -86,6 +88,12 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('baseExcel');
 				Route::post('vInsights', 'viewerExcelController@viewerInsights')
 											->name('insightsExcel');
+			});
+
+			Route::group(['prefix'=>'salesManagement'], function(){
+				Route::post('customReport','customReportExcelController@customReport')
+								    ->name('customReportExcel');
+
 			});
 
 		});

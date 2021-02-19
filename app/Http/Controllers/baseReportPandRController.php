@@ -77,13 +77,19 @@ class baseReportPandRController extends Controller{
                 }
                 $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
 */
-          
 
                 $forRender = $br->baseLoadReport($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value,$baseReport);
-              
+                
+                $regionExcel = $regionID;
+                $salesRepExcel = $salesRepID;
+                $currencyExcel = $currencyID;
+                $valueExcel = $value;
+                $baseReportExcel = $baseReport;
+                $yearExcel = $cYear;
 
+                $titleExcel = "PandR - Base Report.xlsx";
 
-                return view('pAndR.baseReport.post',compact('con','render','region','currency','permission','user','forRender','baseReport'));
+                return view('pAndR.baseReport.post',compact('con','render','region','currency','permission','user','forRender','baseReport','regionExcel','salesRepExcel','currencyExcel','valueExcel','baseReportExcel','yearExcel', 'titleExcel'));
                 
 
 /*
