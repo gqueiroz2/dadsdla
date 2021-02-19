@@ -814,11 +814,13 @@ class ajaxController extends Controller{
             }
         }else{
             if($currentMonth == 12){
-                $year = array($cYear,$pYear);
-            }else{
                 $year = array($nYear,$cYear,$pYear);
+            }else{
+                $year = array($cYear,$pYear);                
             }
         }
+
+
         for ($y=0; $y < sizeof($year); $y++) { 
             if($y == 0){
                 echo "<option selected='true' value='".$year[$y]."'> ".$year[$y]." </option>";    
