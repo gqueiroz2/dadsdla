@@ -1001,7 +1001,7 @@ class consolidateResults extends Model{
 			array_push($mtx['currentTarget'][$i],$sum['currentTarget']['q1']);
 			array_push($mtx['currentTarget'][$i],$sum['currentTarget']['q2']);
 			array_push($mtx['currentTarget'][$i],$sum['currentTarget']['q3']);
-			array_push($mtx['currentTarget'][$i],$sum['previousAdSales']['q4']);
+			array_push($mtx['currentTarget'][$i],$sum['currentTarget']['q4']);
 
 			array_push($mtx['currentAdSales'][$i],$sum['currentAdSales']['q1']);
 			array_push($mtx['currentAdSales'][$i],$sum['currentAdSales']['q2']);
