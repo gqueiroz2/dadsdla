@@ -1,6 +1,12 @@
-<span style='font-size:24px;'> 										
+<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">									
 	DLA - Consolidate - : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
-</span>
+</td>
+
+<table>
+	<tr>
+		<td></td>
+	</tr>
+</table>
 
 <table>
 	<tr>
