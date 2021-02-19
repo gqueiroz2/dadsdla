@@ -137,15 +137,17 @@
 		                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
 		                        </div>
 	                        </li>
-                        
+                        @endif
 	                        <li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Viewer </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-									<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
+									@if( $userRegionName == "Brazil" )
+										<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
+									@endif
 								</div>
 							</li>
-						@endif
+						
 
 						
 						<li class="nav-item dropdown">
@@ -159,9 +161,9 @@
 
 						@if( ( $userLevel == "SU" ) )
 							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> . </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Panel </a>
+									<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Tracker </a>
 									<!--<a class="dropdown-item" href="#"> Insights </a>-->
 								</div>
 							</li>
