@@ -83,7 +83,8 @@
 						    <li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
-									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>									
+									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
 								</div>
 							</li>
 						@else
@@ -95,6 +96,7 @@
 										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
 									@endif									
 									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 									<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 									<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 									<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
