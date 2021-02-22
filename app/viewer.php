@@ -206,6 +206,7 @@ class viewer extends Model{
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
 								AND (r.ID = '$salesRegion')
+								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
 			
 
