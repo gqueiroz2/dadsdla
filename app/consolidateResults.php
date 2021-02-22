@@ -34,7 +34,8 @@ class consolidateResults extends Model{
             }
         }
 
-        $rtr = array( "typeSelect" => $region,
+        $rtr = array( 
+                      "typeSelect" => $region,
                       "currentAdSales" => $currentAdSales,
                       "previousAdSales" => $previousAdSales,
                       "currentTarget" => $currentTarget,
