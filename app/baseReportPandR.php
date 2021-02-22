@@ -619,6 +619,9 @@ class baseReportPandR extends pAndR{
     public function generateForecast($con,$sql,$baseReport,$region,$year,$month,$list,$sum,$value,$share){
 
         switch ($baseReport) {
+            case 'brand':
+                # code...
+                break;
             case 'ae':
                 $select =  "SELECT $sum AS sum,
                                 from_date AS fromDate,
