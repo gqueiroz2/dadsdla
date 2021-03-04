@@ -247,11 +247,18 @@ class salesRep extends Management{
 				sr.name AS 'salesRep',	
 				srg.name AS 'salesRepGroup',
 				r.name AS 'region',
+				r.ID AS 'regionID',
 				srs.status AS 'status'";
 		$where = "";
 		if($region){
-			$ids = implode(",", $region);
-			$where .= "WHERE r.ID IN ('$ids')";
+			$where .= "WHERE r.ID IN (";
+				for ($r=0; $r < sizeof($region); $r++) { 
+					$where .= "\"".$region[$r]."\"";
+					if($r < sizeof($region)-1){
+						$where .= ",";
+					}
+				}
+			$where .= ")";
 		}
 		if($notIN){
 			if(!$region){
@@ -265,7 +272,8 @@ class salesRep extends Management{
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$res = $sql->selectDistinct($con,$columns,$table,$join,$where);
+		$order = "5,1";
+		$res = $sql->selectDistinct($con,$columns,$table,$join,$where,$order);
 		$from = array('id','salesRep','salesRepGroup','region');
 		$salesRep = $sql->fetch($res,$from,$from);
     	return $salesRep;

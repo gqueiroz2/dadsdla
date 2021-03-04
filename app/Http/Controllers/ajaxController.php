@@ -23,6 +23,52 @@ use App\base;
 
 class ajaxController extends Controller{
     
+    public function typeSelectConsolidateDLA(){
+        $type = Request::get('type');
+        $region = Request::get('region');
+
+        switch ($type) {
+            case 'brand':                    
+                $base = new base();
+                $db = new dataBase();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
+                $b = new brand();
+                $brand = $b->getBrand($con);
+                for ($i = 0; $i < sizeof($brand); $i++) { 
+                    if ($brand[$i]["name"] != "DN") {
+                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                        echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
+                    }
+                }
+                break;
+
+            case 'ae':                                
+                $regionID = $region;
+                $db = new dataBase();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
+                $cYear = intval(date('Y'));
+                $sr = new salesRep();
+                $regionID = $regionID;                
+                
+                $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+                
+                for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." - ".$resp[$s]["region"]." </option>";
+                }
+                
+                break;
+
+            default:
+                echo "<option selected='true' value='all'> All </option>";
+                
+                break;
+        }
+
+
+    }
+
     public function typeSelectConsolidate(){
         $type = Request::get('type');
         $region = Request::get('region');

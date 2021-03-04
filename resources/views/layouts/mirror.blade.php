@@ -57,7 +57,7 @@
 		
 	</head>
 	<body>       
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light" style="z-index: 999;">
 			<!-- Image and text -->
 			<nav class="navbar navbar-light bg-light">
 				<a class="navbar-brand" href="{{ route('home')}}">
@@ -84,7 +84,9 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
-									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
+									@if($userLevel == 'L0' || $userLevel == 'SU')
+										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
+									@endif
 								</div>
 							</li>
 						@else
@@ -94,6 +96,7 @@
 									
 									@if( ( $userLevel == "SU" ) )
 										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
+										<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing X </a>
 									@endif									
 									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	

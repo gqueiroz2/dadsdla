@@ -7,6 +7,7 @@ use App\dataBase;
 use App\region;
 use App\base;
 use App\salesRep;
+use App\Http\Controllers\ajaxController;
 use App\sql;
 
 class Render extends Model{
@@ -172,7 +173,7 @@ class Render extends Model{
             }
         }
 
-        echo "<select class='selectpicker' id='region' name='region[]' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-width='100%'>";
+        echo "<select class='selectpicker' id='region' name='region[]' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-width='100%' style='z-index: 999;'>";
             for ($t=0; $t < sizeof($temp) ; $t++) { 
                 echo "<optgroup label='".$temp[$t]."'>";
                     for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
@@ -569,9 +570,26 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function typeOffice(){
+        $ajax = new ajaxController();
+
+        
+
+        echo "<select id='type' name='type' style='width:100%;' class='form-control'>";
+            //echo "<option value=''> Select Region </option>";
+            $ajax->typeConsolidate();
+        echo "</select>";
+    }
+
     public function typeSelect(){
         echo "<select id='typeSelect' name='typeSelect[]' style='width:100%;' class='selectpicker' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-size='4' data-width='100%'>";
             echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }
+
+    public function typeSelectOffice(){
+        echo "<select id='typeSelect' name='typeSelect[]' style='width:100%;' class='selectpicker' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+            echo "<option value='' selected='true'> Select Type </option>";
         echo "</select>";
     }
 
