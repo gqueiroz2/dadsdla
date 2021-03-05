@@ -384,7 +384,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										Consolidate - Brand : (USD/{{strtoupper($value)}})
+										Consolidate - AE : (USD/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
