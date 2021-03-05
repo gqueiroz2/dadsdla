@@ -978,16 +978,15 @@
 </div>
 
 <div id="vlau"></div>
-<!--
 <script type="text/javascript">
     $(document).ready(function(){
         ajaxSetup();
         $('#excel').click(function(event){
-            var typeExcel = "<?php //echo $typeExcel; ?>";
-            var regionExcel = "<?php //echo $regionExcel; ?>";
-            var valueExcel = "<?php //echo $valueExcel; ?>";
-            var currencyExcel = "<?php //echo $currencyExcel; ?>";
-            var typeSelectExcel = "<?php //echo base64_encode(json_encode($typeSelectExcel)); ?>";
+            var typeExcel = "<?php echo $typeExcel; ?>";
+            var regionExcel = "<?php echo base64_encode(json_encode($regionExcel)); ?>";
+            var valueExcel = "<?php echo $valueExcel; ?>";
+            var currencyExcel = "<?php echo $currencyExcel; ?>";
+            var typeSelectExcel = "<?php echo base64_encode(json_encode($typeSelectExcel)); ?>";
 
 
             var div = document.createElement('div');
@@ -998,17 +997,17 @@
             div.appendChild(img);
             document.body.appendChild(div);
 
-            //var typeExport = $("#excel").val();
+            var typeExport = $("#excel").val();
             var typeExport = "Excel";
 
-            var title = "<?php //echo $titleExcel; ?>";
-            var auxTitle = "<?php //echo $titleExcel; ?>";
+            var title = "<?php echo $titleExcel; ?>";
+            var auxTitle = "<?php echo $titleExcel; ?>";
                 
                 $.ajax({
                     xhrFields: {
                         responseType: 'blob',
                     },
-                    url: "/generate/excel/results/consolidate",
+                    url: "/generate/excel/results/consolidateDLA",
                     type: "POST",
                     data: {title, typeExport, auxTitle, typeExcel, regionExcel,typeSelectExcel,valueExcel, currencyExcel},
                     /*success: function(output){
@@ -1041,5 +1040,5 @@
             });
         });
 </script>
--->
+
 @endsection

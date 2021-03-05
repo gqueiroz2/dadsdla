@@ -207,8 +207,8 @@ class consolidateResultsController extends Controller{
         
         */
         
-        $title = 'Results - Consolidate';
-        $titleExcel = 'Results - Consolidate.xlsx';
+        $title = 'Results - Consolidate DLA';
+        $titleExcel = 'Results - Consolidate DLA.xlsx';
 
         $typeExcel = $type;
         $regionExcel = $regionID;

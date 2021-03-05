@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('consolidateExcel');
 				Route::post('consolidateOffice', 'consolidateExcelController@consolidateOffice')
 											->name('consolidateOfficeExcel');
+				Route::post('consolidateDLA', 'consolidateExcelController@consolidateDLA')
+											->name('consolidateDLAExcel');
 			});
 
 			Route::group(['prefix'=>'performance'],function(){
