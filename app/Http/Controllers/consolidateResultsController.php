@@ -162,15 +162,15 @@ class consolidateResultsController extends Controller{
                 }
                 break;
             case 'advertiser':                
-                $typeSelectS = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
+                $typeSelectS = $cl->getClientByRegionWithValue($con,$regionID,$cYear);
                 $typeSelect = $typeSelectS;
                 break;
             case 'agency':                               
-                $typeSelectS = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
+                $typeSelectS = $ag->getAgencyByRegionWithValue($con,$regionID,$cYear);
                 $typeSelect = $typeSelectS;
                 break; 
             case 'agencyGroup':  
-                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,$regionID,$cYear);
                 $typeSelect = $typeSelectS;
             default:
                 

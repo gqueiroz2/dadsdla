@@ -842,6 +842,8 @@
 						        			<?php
 						        				//$typeSelectS[$c][$index];
 						        				echo $newMtx[$c]['typeSelect'][$index];
+						        				echo " - ";
+						        				echo $newMtx[$c]['typeSelect']['region'];
 						        			?>
 						        		</td>
 							        	@for($m=0; $m < sizeof($month); $m++)
