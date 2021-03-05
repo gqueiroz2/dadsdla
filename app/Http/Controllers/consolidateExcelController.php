@@ -27,9 +27,117 @@ use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 use App\Exports\consolidateExport;
 use App\Exports\consolidateOfficeExport;
+use App\Exports\consolidateDLAExport;
+
 
 class consolidateExcelController extends Controller{
    
+    public function consolidateDLA(){
+
+       $base = new base();
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $r = new region();
+        $b = new brand();
+        $pr = new pRate();
+        $cl = new client();
+        $ag = new agency();
+        $render = new Render();
+        $region = $r->getRegion($con,false);
+        $brand = $b->getBrand($con);
+        $currency = $pr->getCurrency($con,false);
+        $sr = new salesRep();
+
+
+        $regionCurrencies = $base->currenciesByRegion();
+
+        $cR = new consolidateResults();
+
+        $regionID = json_decode(base64_decode(Request::get('regionExcel')));
+        $type = Request::get('typeExcel');
+
+        $title = Request::get("title");
+        
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+
+        $typeSelect = json_decode(base64_decode(Request::get("typeSelectExcel")));
+
+        $currencyID = Request::get("currencyExcel");
+        $tmp = $pr->getCurrency($con,array($currencyID));
+        $currencyIDs = $tmp;
+
+        $value = Request::get( "valueExcel");       
+
+        $cYear = intval(date('Y'));
+        $pYear = $cYear - 1;
+
+        $cYear = date('Y');
+        $pYear = $cYear - 1;
+
+        $brandID = 0;
+
+       switch ($type) {
+            case 'brand':
+                $brandTmp = $typeSelect;
+                $brandID = $base->handleBrand($brandTmp);
+                $typeSelect = $brandID;
+                $typeSelectS = false;
+                break;
+            case 'ae':                
+                $typeSelect = $typeSelect;
+                for ($t=0; $t < sizeof($typeSelect); $t++) { 
+                    $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
+                }
+                break;
+            case 'advertiser':                
+                $typeSelectS = $cl->getClientByRegionWithValue($con,$regionID,$cYear);
+                $typeSelect = $typeSelectS;
+                break;
+            case 'agency':                               
+                $typeSelectS = $ag->getAgencyByRegionWithValue($con,$regionID,$cYear);
+                $typeSelect = $typeSelectS;
+                break; 
+            case 'agencyGroup':  
+                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,$regionID,$cYear);
+                $typeSelect = $typeSelectS;
+            default:
+                
+                break;
+        }
+
+        $years = array($cYear,$pYear);
+
+        $month = $base->getMonth();
+
+        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value);
+
+        $mtx = $cR->assemble($mtx);
+
+        if($type == 'advertiser' || $type == 'agency' || $type == 'agencyGroup'){
+            $newMtx = $cR->newOrder($mtx);           
+        }else{
+            $newMtx = false;
+        }
+
+        $mtxDN = $cR->addDN($mtx);      
+
+        $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
+
+        $monthView = array("January","February","March","April","May","June","July","August","September","October","November","December");
+        $quarter = array("Q1","Q2","Q3","Q4");
+
+        $years = array($cYear, $pYear);
+
+        $data = array('mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years,  'typeSelect' => $typeSelect,  'typeSelectS' => $typeSelectS, 'type' => $type, 'brandID' => $brandID);
+
+        $label = 'exports.results.consolidate.consolidateDLAExport';
+
+        return Excel::download(new consolidateDLAExport($data, $label, $typeExport, $auxTitle), $title);
+   }
+
+
    public function consolidateOffice(){
 
         $base = new base();

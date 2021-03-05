@@ -16,6 +16,7 @@ Route::group(['middleware' => 'auth'],function(){
 
 		Route::post('typeConsolidate','ajaxController@typeConsolidate');
 		Route::post('typeSelectConsolidate','ajaxController@typeSelectConsolidate');
+		Route::post('typeSelectConsolidateDLA','ajaxController@typeSelectConsolidateDLA');
 
 		Route::group(['prefix'=>'adsales'],function(){
 			Route::post('salesRepByRegion','ajaxController@getSalesRepByRegion');

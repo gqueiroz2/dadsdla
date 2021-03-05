@@ -14,6 +14,11 @@ Route::group(['middleware' => 'auth'],function(){
 
 	Route::group(['prefix' => 'results'],function(){
 		
+		Route::get('consolidateDLA','consolidateResultsController@getDLA')
+							->name('consolidateResultsGetDLA');
+		Route::post('consolidateDLA','consolidateResultsController@postDLA')
+						->name('consolidateResultsPostDLA');
+
 		Route::get('consolidateOffice','consolidateResultsController@getOffice')
 							->name('consolidateResultsGetOffice');
 		Route::post('consolidateOffice','consolidateResultsController@postOffice')
