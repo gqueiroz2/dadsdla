@@ -265,7 +265,7 @@
 
 @elseif($data['type'] == 'ae')
 
-<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">{{ $data['salesRegion'] }} - Consolidate - AE : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
+<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">Consolidate - AE : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
 </td>
 
 <table>
@@ -530,7 +530,7 @@
 @endfor
 
 @elseif($data['type'] == 'advertiser')
-<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">{{ $data['salesRegion'] }} - Consolidate - Advertiser : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
+<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">Consolidate - Advertiser : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
 </td>
 
 <table>
@@ -796,7 +796,7 @@
 
 @elseif($data['type'] == 'agency')
 
-<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">{{ $data['salesRegion'] }} - Consolidate - Agency : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
+<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">Consolidate - Agency : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
 </td>
 
 <table>
@@ -1062,7 +1062,7 @@
 
 @elseif($data['type'] == 'agencyGroup')
 
-<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">{{ $data['salesRegion'] }} - Consolidate - Agency Group : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
+<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;" colspan="19">Consolidate - Agency Group : ({{$data['currencyS']}}/{{strtoupper($data['value'])}})
 </td>
 
 <table>
