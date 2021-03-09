@@ -373,8 +373,8 @@ class Render extends Model{
     }
 
     public function baseReportFilter(){
-        echo "<select class='selectpicker' name='baseReport' data-width='100%' data-size='2'>";
-            echo "<option value='brand'> Brand </option>";   
+        echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
+            //echo "<option value='brand'> Brand </option>";   
             echo "<option value='ae'> AE </option>";   
             echo "<option value='client'> Advertiser </option>";   
             echo "<option value='agency'> Agency </option>";   
