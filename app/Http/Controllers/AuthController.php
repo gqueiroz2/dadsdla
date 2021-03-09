@@ -10,6 +10,7 @@ class AuthController extends Controller
     public function loginGet(){
         return view('auth.login');
     }
+
     public function logout(){
     
         require_once('/var/simplesamlphp/lib/_autoload.php');
@@ -45,7 +46,29 @@ class AuthController extends Controller
         }
     }
 
+    public function autenticate2(){
+        $user = new User();
+        
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        
+        return view('auth.login');
+
+    }
+
     public function logoutGet(){
+        Request::session()->flush();       
+        $cookie_name = 'SimpleSAML';
+        unset($_COOKIE[$cookie_name]);
+        $res = setcookie($cookie_name, '', time() - 72000);
+        $cookie_name = 'SimpleSAMLAuthToken';
+        unset($_COOKIE[$cookie_name]);
+        $res = setcookie($cookie_name, '', time() - 72000);
+        return view('auth.logout');
+    }
+
+    public function logoutGet2(){
         Request::session()->flush();       
         $cookie_name = 'SimpleSAML';
         unset($_COOKIE[$cookie_name]);
