@@ -647,11 +647,11 @@ class PAndRRender extends Render{
                             echo "<td class='medBlue' name='fcstClient-$c-$m' style=' border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'><input type='text' readonly='true' id='clientRF-$c-$m' name='clientRF-$c-$m' value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'></td>";
                         }else{
                             echo "<td class='$odd[$m]' style='".$manualEstimation[$m]."'>";
-                                if (($ow && $ow != '(P)') || !$emptyCheck[$c]) {
+                                /*if (($ow && $ow != '(P)') || !$emptyCheck[$c]) {
                                     echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' readonly='true' value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
-                                }else{
+                                }else{*/
                                     echo "<input type='text' name='fcstClient-$c-$m' id='clientRF-$c-$m' ".$tfArray[$m]." value='".number_format($nSecondary[$c]['rollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
-                                }
+                                //}
                             echo "</td>";
                             # echo "<td class='odd' rowspan='5' style='width:4%; display:none; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;' id='newCol-$c-$m'>";
                             #    for ($ch=0; $ch <sizeof($this->channel) ; $ch++) { 
