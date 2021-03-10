@@ -83,6 +83,7 @@ class baseReportPandR extends pAndR{
 	            $targetValues[$l][$m] = $this->generateValuePandR($con,$sql,'target',$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],"value",$value)*$div;
 
 	            $bookings[$l][$m] = $this->generateValuePandR($con,$sql,'revenue',$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"ytd"),$value)*$div;
+
 	        }	
 
             $rollingFCST[$l] = $this->addQuartersAndTotalOnArray( array($rollingFCST[$l]) )[0];
@@ -92,7 +93,18 @@ class baseReportPandR extends pAndR{
 
             $rfVsCurrent[$l] = $this->subArrays($rollingFCST[$l],$bookings[$l]);        
 	        
-	    }     
+	    } 
+        
+        //var_dump($list);
+
+        /*
+        for ($b=0; $b < sizeof($bookings); $b++) { 
+            var_dump($b);
+            var_dump($list[$b]);
+            var_dump($bookings[$b]);            
+        } 
+        */       
+        
 
         $rollingFCSTTT = $this->mergeList($rollingFCST,$list);
 	    $lastYearTT = $this->mergeList($lastYear,$list);
@@ -103,7 +115,7 @@ class baseReportPandR extends pAndR{
         $rfVsTargetTT = $this->subArrays($rollingFCSTTT,$targetValuesTT);
         $targetAchievement = $this->divArrays($rollingFCSTTT,$targetValuesTT);
         
-        
+        /*
         switch ($baseReport) {
             case 'client':
 
@@ -217,7 +229,7 @@ class baseReportPandR extends pAndR{
         }else{
             $valueView = 'Net Net';
         }
-
+        
         $rtr = array(	
         				"cYear" => $cYear,
         				"pYear" => $pYear,        				
@@ -243,29 +255,7 @@ class baseReportPandR extends pAndR{
                         "valueView" => $valueView,
                         "currency" => $currencyName,
                         "value" => $valueView
-                        //"splitted" => $splitted,
-        				
-        				//"rollingFCST" => $rollingFCST, // ***
-                        //"lastRollingFCST" => $lastRollingFCST, // ***
-        				
-        				/*
-                        "executiveRF" => $executiveRF,
-                        "executiveRevenuePYear" => $executiveRevenuePYear,
-                        "executiveRevenueCYear" => $executiveRevenueCYear,
-						*/
                         
-                        
-                        
-                    
-                        
-                        /*
-                        "fcstAmountByStage" => $fcstAmountByStage, // ***
-                        "fcstAmountByStageEx" => $fcstAmountByStageEx,
-                        "brandsPerClient" => $brandsPerClient,
-                        "sourceSave" => $sourceSave,
-                        "emptyCheck" => $emptyCheck,
-                        "nSecondary" => $nSecondary,
-                        */
                     );
 
         return $rtr;
@@ -593,6 +583,7 @@ class baseReportPandR extends pAndR{
     }
 
     public function revenueShares($con,$sql,$region,$year,$month,$sum,$value){
+
         for ($m=0; $m < sizeof($month); $m++) { 
             $select = "SELECT SUM($sum) AS sum
                                 FROM ytd

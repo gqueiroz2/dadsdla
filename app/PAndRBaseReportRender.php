@@ -38,8 +38,8 @@ class PAndRBaseReportRender extends Render{
         }
         
 
-        $list = $forRender['list'];
-        //var_dump($list);
+        $list = $forRender['list'];        
+
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
         //$salesRep = $forRender['salesRep'];
@@ -333,32 +333,7 @@ class PAndRBaseReportRender extends Render{
             }else{
                 $ow = false;
             }
-            
-/*
-            if (round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) < 5 && round($lastRollingFCST[$c][16])-round($rollingFCST[$c][16]) > -5) {
-                $lastRollingFCST[$c][16] = $rollingFCST[$c][16];
-                $color = "";
-                $boolfcst = "1";
-            }elseif (round($lastRollingFCST[$c][16]) != round($rollingFCST[$c][16])) {
-                $color = "red";
-                $boolfcst = "0";
-            }else{
-                $color = "";
-                $boolfcst = "1";
-            }
-*//*
-            if (round($nSecondary[$c]['lastRollingFCST'][16])-round($nSecondary[$c]['rollingFCST'][16]) < 5 && round($nSecondary[$c]['lastRollingFCST'][16])-round($nSecondary[$c]['rollingFCST'][16]) > -5) {
-                $nSecondary[$c]['lastRollingFCST'][16] = $nSecondary[$c]['rollingFCST'][16];
-                $color = "";
-                $boolfcst = "1";
-            }elseif (round($nSecondary[$c]['lastRollingFCST'][16]) != round($nSecondary[$c]['rollingFCST'][16])) {
-                $color = "red";
-                $boolfcst = "0";
-            }else{
-                $color = "";
-                $boolfcst = "1";
-            }
-*/
+
             $color = "";
             $boolfcst = "1";
 
@@ -367,7 +342,11 @@ class PAndRBaseReportRender extends Render{
             echo "<div class='col-2' style='padding-right:1px;'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
                 echo "<tr>";                     
-                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span> ".$list[$c][$inside]." $ow </span>";
+                    echo "<td class='$clr' id='client-$c' rowspan='1' style=' text-align:center; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px; background-color: $color '><span> ".$list[$c][$inside]." $ow ";
+                        if($baseReport == 'client'){
+                            echo " - (".$list[$c]['agencyName'].")";
+                        }
+                    echo "</span>";
                 echo "</tr>";
                 if($baseReport == 'brand' || $baseReport == 'ae'){
                     echo "<tr>";
@@ -464,7 +443,7 @@ class PAndRBaseReportRender extends Render{
                     START OF BOOKING
 
                 */
-               
+                    
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
