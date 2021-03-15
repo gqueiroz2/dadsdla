@@ -32,6 +32,10 @@ class viewerExcelController extends Controller {
 	    $sql = new sql();
 
 	    $region = Request::get("regionExcel");
+        $r = new region();
+
+        //$region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($region))[0]['name'];
 
 	    $source = Request::get("sourceExcel");
 
@@ -70,7 +74,7 @@ class viewerExcelController extends Controller {
         
         $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
 
-        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total);
+        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total, 'regions' => $regions, 'currencies' => $currencies);
 
         $label = "exports.viewer.base.baseExport";
         
@@ -78,6 +82,7 @@ class viewerExcelController extends Controller {
 	    
 	    $typeExport = Request::get("typeExport");
         $auxTitle = Request::get("auxTitle");
+        //var_dump($regions);
 
 	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
     }
