@@ -521,9 +521,12 @@ class viewer extends Model{
 				$discount += $table[$t]['discount'];
 				$gross += $table[$t]['grossRevenue']/$pRate;
 				$net += $table[$t]['netRevenue']/$pRate;
-			}else{
+			}elseif($source == "BTS"){
 				$gross += $table[$t]['grossRevenue']*$pRate;
 				$net += $table[$t]['netRevenue']*$pRate;
+			}elseif ($source == "SF") {
+				$gross += $table[$t]['fcstAmountGross']/$pRate;
+				$net += $table[$t]['fcstAmountNet']/$pRate;
 			}
 			$c++;
 		}
@@ -655,10 +658,10 @@ class viewer extends Model{
 							$mtx[$m]['toDate'] = $base->intToMonth(array($mtx[$m]['toDate']))[0];
 						}
 						
-						if($mtx[$m][$value.'Revenue'] || $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
-							if ($mtx[$m][$value.'Revenue']) {
+						if(/*$mtx[$m][$value.'Revenue'] ||*/ $mtx[$m]['fcstAmountNet'] || $mtx[$m]['fcstAmountGross']){
+							/*if ($mtx[$m][$value.'Revenue']) {
 								$mtx[$m][$value.'Revenue'] = doubleval($mtx[$m][$value.'Revenue'])/$pRate;
-							}
+							}*/
 							if ($mtx[$m]['fcstAmountGross']) {
 								$mtx[$m]['fcstAmountGross'] = doubleval($mtx[$m]['fcstAmountGross'])/$pRate;
 							}
@@ -672,9 +675,9 @@ class viewer extends Model{
 						if ($mtx[$m]['successProbability']) {
 							$mtx[$m]['successProbability'] = $mtx[$m]['successProbability']/1;
 						}
-						if ($mtx[$m]['brand']) {
+						/*if ($mtx[$m]['brand']) {
 							$mtx[$m]['brand'] = explode(";",$mtx[$m]['brand']);
-						}
+						}*/
 						
 						break;
 				

@@ -2,7 +2,7 @@
 
 	@if($data['source'] == "cmaps")
 	<tr>
-		<th style="background-color: #0047b3;" colspan="14"> {{$data['region']}} - Viewer CMAPS {{$data['year']}} - ({{strtoupper($data['currency'])}})</th>		
+		<th style="background-color: #0047b3;" colspan="14"> {{$data['regions']}} - Viewer CMAPS {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
 		<tr>
 			<td style="background-color: #e6e6e6;">Map Number</td>
@@ -50,7 +50,7 @@
 		@endfor
 	@elseif($data['source'] == 'bts')
 	<tr>
-		<th style="background-color: #0047b3;" colspan="12"> {{$data['region']}} - Viewer BTS {{$data['year']}} - ({{strtoupper($data['currency'])}})</th>		
+		<th style="background-color: #0047b3;" colspan="12"> {{$data['regions']}} - Viewer BTS {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
 		<tr>
 			<td style="background-color: #e6e6e6;">Order Reference</td>
@@ -90,5 +90,48 @@
 				<td>{{$data['mtx'][$m]['netRevenue']}}</td>
 			</tr>
 		@endfor
+	@elseif($data['source'] == 'sf')
+	<tr>
+		<th style="background-color: #0047b3;" colspan="12"> {{$data['regions']}} - Viewer SalesForce {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
+	</tr>
+		<tr>
+			<td style="background-color: #e6e6e6;">Oppid</td>
+			<td style="background-color: #e6e6e6;">Oportunity Name</td>
+			<td style="background-color: #e6e6e6;">Brand</td>
+			<td style="background-color: #e6e6e6;">Agency</td>
+			<td style="background-color: #e6e6e6;">Client</td>
+			<td style="background-color: #e6e6e6;">Sales Rep Owner</td>
+			<td style="background-color: #e6e6e6;">Sales Rep Splitted</td>
+			<td style="background-color: #e6e6e6;">From Date</td>
+			<td style="background-color: #e6e6e6;">To Date</td>
+			<td style="background-color: #e6e6e6;">Agency Commission</td>			
+			<td style="background-color: #e6e6e6;">Amount Gross</td>
+			<td style="background-color: #e6e6e6;">Amount Net</td>
+		</tr>
+		<tr>
+			@for($t=0;$t < sizeof($data['total']); $t++)
+				<td style="background-color: #0f243e;">Total</td>
+				<td style="background-color: #0f243e;" colspan="9"></td>
+				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
+				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumNetRevenue']}}</td>
+			@endfor
+		</tr>
+		@for($m=0;$m < sizeof($data['mtx']); $m++)
+			<tr>
+				<td >{{$data['mtx'][$m]['oppid']}}</td>
+				<td>{{$data['mtx'][$m]['opportunityName']}}</td>
+				<td>{{$data['mtx'][$m]['brand']}}</td>
+				<td>{{$data['mtx'][$m]['agency']}}</td>
+				<td>{{$data['mtx'][$m]['client']}}</td>
+				<td>{{$data['mtx'][$m]['salesRepOwner']}}</td>
+				<td>{{$data['mtx'][$m]['salesRepSplitter']}}</td>
+				<td>{{$data['mtx'][$m]['fromDate']}}</td>
+				<td>{{$data['mtx'][$m]['toDate']}}</td>
+				<td>{{$data['mtx'][$m]['agencyCommission']}}</td>
+				<td>{{$data['mtx'][$m]['fcstAmountGross']}}</td>
+				<td>{{$data['mtx'][$m]['fcstAmountNet']}}</td>
+			</tr>
+		@endfor
 	@endif
+
 </table>

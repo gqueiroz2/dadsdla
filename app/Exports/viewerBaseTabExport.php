@@ -157,9 +157,27 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 						}
 					}
+				}elseif ($this->data['source'] == 'sf'){
+					$cellRange = 'A1';
+					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
+
+					$cellRange = 'A2:L2';
+					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
+
+					$cellRange = 'A3:L3';
+					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
+
+					$letter = 'L';
+
+					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
+						$cellRange = "A".($d+4).":".$letter.($d+4);
+						if (($d+3) % 2 == 0) {
+							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
+						}else{
+							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
+						}
+					}
 				}
-				
-				
 
 				if ($this->type != "Excel") {
 
@@ -173,13 +191,13 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 	public function columnFormats(): array{
 
-		if ($this->data['source'] == 'cmaps') {
+		if ($this->data['source'] == 'cmaps' ) {
 			return[
 			'J' => '0%',
 			'M' => '#,##0',
 			'N' => '#,##0'
 			];
-		}else{
+		}elseif ($this->data['source'] == 'bts'|| $this->data['source'] == 'sf') {
 			return[
 			'K' => '#,##0',
 			'L' => '#,##0'
