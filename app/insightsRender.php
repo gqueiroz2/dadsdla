@@ -71,17 +71,18 @@ class insightsRender extends Render{
 
 		echo "<table style='width: 100%;'>";
 			echo "<tr>";
-				echo "<th class='newBlue center' colspan='10' style='font-size:22px;'> $regions - Insights - ($newCurrency) </th>";
+				echo "<th class='newBlue center' colspan='11' style='font-size:22px;'> $regions - Insights - ($newCurrency) </th>";
 			echo "</tr>";
 		
 					echo "<tr class='newBlue center' style='font-size:15px;'>";
 						echo "<td style='width:3%;'>Brand</td>";
 						echo "<td style='width:5%;'>Sales Rep</td>";
-						echo "<td style='width:3%;'>Month</td>";
+						echo "<td style='width:4%;'>Month</td>";
+						echo "<td style='width:4%;'>Year</td>";
 						echo "<td style='width:10%;'>Client</td>";
 						echo "<td style='width:10%;'>Agency</td>";
 						echo "<td style='width:10%;'>Product</td>";
-						echo "<td style='width:25%;'>Program</td>";
+						echo "<td style='width:20%;'>Program</td>";
 						echo "<td style='width:5%;'>Num Spot</td>";						
 						echo "<td style='width:3%;'>Revenue</td>";
 						echo "<td style='width:3%;'>Net Revenue</td>";
@@ -90,7 +91,7 @@ class insightsRender extends Render{
 					echo "<tr style='font-size:14px;' class='darkBlue center'>";
 						for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td>Total</td>";
-							echo "<td colspan='6'></td>";
+							echo "<td colspan='7'></td>";
 							echo "<td>".number_format($total[$t]['averageNumSpot'])."</td>";
 							echo "<td>".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
 							echo "<td>".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
@@ -108,6 +109,7 @@ class insightsRender extends Render{
 							echo "<td>".$mtx[$m]['brand']."</td>";
 							echo "<td>".$mtx[$m]['salesRep']."</td>";
 							echo "<td>".$mtx[$m]['month']."</td>";
+							echo "<td>".$mtx[$m]['year']."</td>";
 							echo "<td>".$mtx[$m]['client']."</td>";
 							echo "<td>".$mtx[$m]['agency']."</td>";
 							echo "<td>".$mtx[$m]['product']."</td>";
