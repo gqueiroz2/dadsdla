@@ -15,7 +15,7 @@ class AuthController extends Controller
     
         require_once('/var/simplesamlphp/lib/_autoload.php');
         $as = new \SimpleSAML\Auth\Simple('default-sp');
-        var_dump($as);
+        
         //$as->logout(route('logoutGet'));
     }
    
@@ -65,7 +65,7 @@ class AuthController extends Controller
         $cookie_name = 'SimpleSAMLAuthToken';
         unset($_COOKIE[$cookie_name]);
         $res = setcookie($cookie_name, '', time() - 72000);
-        return view('auth.logout');
+       return view('auth.logout');
     }
 
     public function logoutGet2(){
