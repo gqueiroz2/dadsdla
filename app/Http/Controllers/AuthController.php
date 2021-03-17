@@ -68,15 +68,8 @@ class AuthController extends Controller
         return view('auth.logout');
     }
 
-    public function logoutGet2(){
-        Request::session()->flush();       
-        $cookie_name = 'SimpleSAML';
-        unset($_COOKIE[$cookie_name]);
-        $res = setcookie($cookie_name, '', time() - 72000);
-        $cookie_name = 'SimpleSAMLAuthToken';
-        unset($_COOKIE[$cookie_name]);
-        $res = setcookie($cookie_name, '', time() - 72000);
-        return view('auth.logout');
+    public function logoutGet2(){        
+        return view('auth.logout2');
     }
 
     public function loginPost(){
