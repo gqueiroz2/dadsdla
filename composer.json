@@ -28,6 +28,7 @@
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "nesbot/carbon": "^2.46",
         "phpmailer/phpmailer": "^6.0",
         "phpoffice/phpspreadsheet": "^1.7",
         "psr/simple-cache": "^1.0"
@@ -39,10 +40,9 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.5",
-	"tecnickcom/tcpdf": "^6.2",
+        "tecnickcom/tcpdf": "^6.2",
         "squizlabs/php_codesniffer": "^2.7",
         "dompdf/dompdf": "^0.8.0",
-        "mpdf/mpdf": "^7.0.0",
         "jpgraph/jpgraph": "^4.0",
         "friendsofphp/php-cs-fixer": "@stable"
     },

@@ -16,8 +16,7 @@ return [
     |
     */
 
-    //'driver' => env('MAIL_DRIVER', 'smtp'),
-    'driver' => env('MAIL_DRIVER', 'mailgun'),
+    'driver' => env('MAIL_DRIVER', 'smtp'),    
 
     /*
     |--------------------------------------------------------------------------
@@ -30,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'lucior.jr@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'DADS Ad Sales Portal'),
     ],
 
     /*
@@ -85,9 +84,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => 'lucior.jr@gmail.com',
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => 'jrbegmwgupeedluk',
 
     /*
     |--------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ItsolutionStuff.com</title>
+    <title> Teste </title>
 </head>
 <body>
-    <h1>{{ $details['title'] }}</h1>
-    <p>{{ $details['body'] }}</p>
+    <h1> Teste </h1>
+    <p> Teste de envio</p>
    
-    <p>Thank you</p>
+    <p>Obrigado</p>
 </body>
 </html>
