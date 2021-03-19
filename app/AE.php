@@ -675,8 +675,6 @@ class AE extends pAndR{
         //$select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
         $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\"  AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
 
-        echo "<pre>".($select)."</pre>";
-
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
         }
@@ -689,8 +687,6 @@ class AE extends pAndR{
 
         $save = $sql->fetch($result,$from,$from);
         
-        var_dump($save);
-
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
 
         if(sizeof($listOfClients) == 0){

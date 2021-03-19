@@ -5,6 +5,8 @@ use App\dataBase;
 use App\User;
 use App\password;
 use Session;
+
+
 class AuthController extends Controller
 {
     public function loginGet(){
@@ -68,15 +70,8 @@ class AuthController extends Controller
        return view('auth.logout');
     }
 
-    public function logoutGet2(){
-        Request::session()->flush();       
-        $cookie_name = 'SimpleSAML';
-        unset($_COOKIE[$cookie_name]);
-        $res = setcookie($cookie_name, '', time() - 72000);
-        $cookie_name = 'SimpleSAMLAuthToken';
-        unset($_COOKIE[$cookie_name]);
-        $res = setcookie($cookie_name, '', time() - 72000);
-        return view('auth.logout');
+    public function logoutGet2(){        
+        return view('auth.logout2');
     }
 
     public function loginPost(){
@@ -106,7 +101,16 @@ class AuthController extends Controller
         }
     }
     public function forgotPasswordGet(){
-        return view('auth.passwords.email');
+        $details = [
+            'title' => 'Mail from ItSolutionStuff.com',
+            'body' => 'This is for testing email using smtp'
+        ];
+       
+        \Mail::to('lucior.jr@gmail.com')->send(new \App\Mail\testMailOne($details));
+       
+        dd("Email is Sent.");
+
+        //return view('auth.passwords.email');
     }
     public function forgotPasswordPost(){
         
