@@ -103,7 +103,21 @@ $(document).ready(function(){
         var source = $(this).val();
         
         var sourceDataBase = $('#sourceDataBase').val();
+        
+        if (sourceDataBase == "SF") {
+          $('#stageFCST').html("Stage:");
+          
+          $('#stageFCST').val("");
+          $('#stageFCSTCol').css("display", "block");
+          $('#stageFCST').css("display", "block");
+        }else{
+          $('#stageFCST').val("0");
+          $('#stageFCSTCol').css("display", "none");
+          $('#stageFCST').css("display", "none");
+        }
+
         if(sourceDataBase == "CMAPS" || sourceDataBase == "SF"){
+
           if(sourceDataBase == "CMAPS"){
             $('#especificNumberName').html("PI:");
           }else{
@@ -226,6 +240,9 @@ $(document).ready(function(){
       $('#especificNumber').val("0");
       $('#especificNumberCol').css("display", "none");
       $('#especificNumber').css("display", "none");
+      $('#stageFCST').val("0");
+      $('#stageFCSTCol').css("display", "none");
+      $('#stageFCST').css("display", "none");
     }
 
   });

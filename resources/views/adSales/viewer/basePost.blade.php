@@ -105,6 +105,12 @@
                             @endif
                             {{$render->currency($currencies)}}
                         </div>
+
+                        <div class="col" id="stageFCSTCol" style="display:block;">
+                            <label class="labelLeft"><span class="bold" id="stageFCST"> Stage </span></label>
+                            {{$render->stageFCST()}}
+                        </div>
+
                         <div class="col" >
                             <label class="labelLeft"><span class="bold"> &nbsp; </span></label>                            
                         </div>
