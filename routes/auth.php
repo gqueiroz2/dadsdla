@@ -15,7 +15,7 @@ Route::group(['middleware' => ['auth']],function(){
 	Route::post('logout2','AuthController@logout2')->name('logout2');
 
 	Route::get('/','AuthController@loginGet')->name('loginGet');
-	Route::get('/dois','AuthController@loginGet2')->name('loginGet2');
+	Route::get('/login2','AuthController@loginGet2')->name('loginGet2');
 
 });
 
