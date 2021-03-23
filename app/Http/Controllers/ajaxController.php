@@ -981,6 +981,7 @@ class ajaxController extends Controller{
                 echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
             }
         }else{
+           
             if ($userLevel == "L3" || $userLevel == "L4") {
 
                 $groupID = Request::session()->get('userSalesRepGroupID');

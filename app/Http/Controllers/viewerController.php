@@ -234,6 +234,8 @@ class viewerController extends Controller{
 
         $especificNumber = Request::get("especificNumber");
 
+        $stage = Request::get("stageFCST");
+
         if (!is_null($especificNumber) ) {
             $checkEspecificNumber = true;
         }else{
@@ -279,7 +281,7 @@ class viewerController extends Controller{
             array_push($brand, "16");
         }
 
-        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
+        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$stage);
         
        // var_dump($table[0]);
         //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
