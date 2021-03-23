@@ -238,9 +238,6 @@ class password extends Model{
             return $bool;
         }
         
-        
-    
-        
         $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
 
         $sql = new sql();

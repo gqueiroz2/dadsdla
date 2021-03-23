@@ -20,7 +20,6 @@
 	                        <form method="Get" action="{{ route('autenticate2') }}">
                                 <input type="submit" style="width: 50%;" class="btn btn-primary" value="Continue">
     	                   </form>
-
                         </center>
                     </div>
                 </div>
