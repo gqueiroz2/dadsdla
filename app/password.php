@@ -213,35 +213,53 @@ class password extends Model{
     }    
 
     public function choosePassword($con, $email){
-        
+        $sql = new sql();
         date_default_timezone_set('America/Sao_Paulo');
 
         $password = Request::get('password');
+        $password_confirmation = Request::get('password_confirmation');
+        $token = Request::get('token');
 
-        $bool = $this->checkPassword($password);
-    
-        if ($bool['bool']) {
-            $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
+        $select = "SELECT token FROM user WHERE(email ='$email')";
 
-            $sql = new sql();
+        $from = array("token");
 
-            $time = mktime(0, 0, 0, 1, 1, 1970);
-            $time = date("Y-m-d h:i:s", $time);
+        $res = $con->query($select);
 
-            $columns = array('password', 'token', 'token_start_date', 'token_end_date', 'status');
-            $values = array($password, 'inicial', $time, $time, 1);
+        $tokenDataBase = $sql->fetch($res,$from,$from)[0]['token'];
+       
+        if($password != $password_confirmation){
+            $bool = array('bool' => false, 'msg' => 'Password does not match !','type' => 'password');
+            return $bool;
+        }
 
-
-            $set = $sql->setUpdate($columns, $values);
-            $where = "WHERE email=\"$email\"";
-
-            $resp = $sql->updateValues($con, 'user', $set, $where);
-        }else{
-            
+        if($token != $tokenDataBase){
+            $bool = array('bool' => false, 'msg' => 'Token incorrect !','type' => 'token');
+            return $bool;
         }
         
+        
+    
+        
+        $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 5]);
+
+        $sql = new sql();
+
+        $time = mktime(0, 0, 0, 1, 1, 1970);
+        $time = date("Y-m-d h:i:s", $time);
+
+        $columns = array('password', 'token', 'token_start_date', 'token_end_date', 'status');
+        $values = array($password, 'inicial', $time, $time, 1);
+
+
+        $set = $sql->setUpdate($columns, $values);
+        $where = "WHERE email=\"$email\"";
+
+        $resp = $sql->updateValues($con, 'user', $set, $where);
+
+        $bool = array('bool' => true, 'msg' => 'Password succesfully updated','type' => 'msg');
 
         return $bool;
-
+        
     }
 }
