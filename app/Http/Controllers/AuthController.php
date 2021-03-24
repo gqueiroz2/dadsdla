@@ -165,8 +165,8 @@ class AuthController extends Controller
 
         Mail::to($email)->send(new forgetPassword($token));
         if (Mail::failures()) {
-            var_dump(Mail::failures());
-            return false;
+            // return failed mails
+            return new Error(Mail::failures()); 
         }
 
         return true;        
