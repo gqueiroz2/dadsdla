@@ -168,7 +168,7 @@ class AuthController extends Controller
             // return failed mails
             return new Error(Mail::failures()); 
         }else{
-            var_dump("SEM ERROS");
+            
         }
 
         return true;        
