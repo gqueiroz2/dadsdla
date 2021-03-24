@@ -149,7 +149,7 @@ class AuthController extends Controller
                 if ($sendMail) {
                     return view('auth.reset',compact('email'));
                 }else{
-                    return redirect()->back()->withErrors(['error' => trans('A Network Error occurred. Please try again.')]);
+                    //return redirect()->back()->withErrors(['error' => trans('A Network Error occurred. Please try again.')]);
                 }    
             }else{
                 echo "Error: " . $update . "<br>" . $con->error;
@@ -164,6 +164,10 @@ class AuthController extends Controller
     public function sendResetEmail($email, $token){
 
         Mail::to($email)->send(new forgetPassword($token));
+        if (Mail::failures()) {
+            var_dump(Mail::failures());
+            return false;
+        }
 
         return true;        
 
