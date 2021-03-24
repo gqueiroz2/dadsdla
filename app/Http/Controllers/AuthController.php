@@ -12,6 +12,7 @@ use DB;
 use Carbon\Carbon;
 use App\Mail\forgetPassword;
 use Illuminate\Support\Facades\Session;
+use Mail;
 
 class AuthController extends Controller
 {
