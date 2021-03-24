@@ -23,7 +23,6 @@ class AuthController extends Controller
     
         require_once('/var/simplesamlphp/lib/_autoload.php');
         $as = new \SimpleSAML\Auth\Simple('default-sp');
-        var_dump($as);
         //$as->logout(route('logoutGet'));
     }
    
@@ -164,9 +163,12 @@ class AuthController extends Controller
     public function sendResetEmail($email, $token){
 
         Mail::to($email)->send(new forgetPassword($token));
+
         if (Mail::failures()) {
             // return failed mails
             return new Error(Mail::failures()); 
+        }else{
+            var_dump("SEM ERROS");
         }
 
         return true;        
@@ -197,8 +199,6 @@ class AuthController extends Controller
         return view('auth.passwords.password', compact('permission', 'email'));
     }
     public function resetPassword(){
-
-        var_dump(Request::all());
         
         $db = new dataBase();
         $default = $db->defaultConnection();
