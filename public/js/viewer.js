@@ -133,6 +133,33 @@ $(document).ready(function(){
           $('#especificNumberCol').css("display", "none");
           $('#especificNumber').css("display", "none");
         }
+
+        if (sourceDataBase == "CMAPS") {
+          $.ajax({
+            url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
+            method:"POST",
+            data:{regionID,year,source},
+            success: function(output){
+              $('#saleRep').html(output).selectpicker("refresh");
+              //$('#vlau').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });
+        }else{
+          $.ajax({
+            url:"/ajax/adsales/newSalesRepByRegion",
+            method:"POST",
+            data:{regionID},
+            success: function(output){
+              $('#salesRep').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          }); 
+        }
       });
 
       var currentTime = new Date();
@@ -145,18 +172,6 @@ $(document).ready(function(){
       }
 
       var source = $('#sourceDataBase').val();
-      $.ajax({
-        url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
-        method:"POST",
-        data:{regionID,year,source},
-        success: function(output){
-          $('#saleRep').html(output).selectpicker("refresh");
-          //$('#vlau').html(output).selectpicker("refresh");
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });
 
       $.ajax({
         url:"/ajax/adsales/agencyByRegionAndYear",
