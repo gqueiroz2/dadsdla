@@ -1,10 +1,11 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Consolidate View')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandrBaseReport.js"></script>
 @endsection
 @section('content')
+
 	
 
 	<form method="POST" action="{{ route('BaseReportPandRPost') }}" runat="server"  onsubmit="ShowLoading()">

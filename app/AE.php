@@ -1884,7 +1884,6 @@ class AE extends pAndR{
                     break;
                 }
             }
-
             for ($n=0; $n < sizeof($monthWQ); $n++) { 
                 if( $seek[$m] == strtoupper($monthWQ[$n]) ){
                     $pivot[$m] = $n;

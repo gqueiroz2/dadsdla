@@ -71,13 +71,6 @@
 					{{$render->year()}}
 				</div>
 				<div class="col">
-					<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
-					@if($errors->has('salesRep'))
-						<label style="color: red;">* Required</label>
-					@endif
-					{{$render->salesRep2()}}
-				</div>
-				<div class="col">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
@@ -111,7 +104,7 @@
 	<div class="row mt-2 justify-content-end">
                 <div class="col" style="width: 100%;">
                     <center>
-                    	 {{$render->byBrand($forRender,$client,$tfArray,$odd,$even,$userName,$error,$brands)}}
+                    	 {{$render->byBrand($forRender,$brands)}}
                     </center>
                 </div>
             </div>

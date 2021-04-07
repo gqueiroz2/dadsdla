@@ -140,7 +140,7 @@
                 <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>        
             @endif
         @endfor
-        echo "<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>
     </tr>
     
     <tr>
@@ -163,7 +163,7 @@
                 <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>        
             @endif
         @endfor
-        echo "<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>
     </tr>
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Var RF vs {{$data['pYear']}}</td>

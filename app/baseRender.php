@@ -144,7 +144,7 @@ class baseRender extends Render{
 					}			
 				}elseif ($source == 'SalesForce') {
 					echo "<tr>";	
-						echo "<th class='newBlue center' colspan='15' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+						echo "<th class='newBlue center' colspan='16' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
 					echo "</tr>";
 
 					echo "<tr class='center'>";
@@ -157,6 +157,7 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:5%;'>Sales Rep Splitted</td>";
 						echo "<td class='rcBlue' style='width:5%;'>From Date</td>";
 						echo "<td class='rcBlue' style='width:5%;'>To Date</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Stage</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Agency Commission</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Amount Gross</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Amount Net</td>";
@@ -167,7 +168,7 @@ class baseRender extends Render{
 					echo "<tr style='font-size:14px;'>";
 						for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue' colspan='10'></td>";
 							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
 							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
 						}	
@@ -189,6 +190,15 @@ class baseRender extends Render{
 						echo "<td class='$color'> ".$mtx[$m]['salesRepSplitter']."</td>";
 						echo "<td class='$color'> ".$mtx[$m]['fromDate']."</td>";
 						echo "<td class='$color'> ".$mtx[$m]['toDate']."</td>";
+						if ($mtx[$m]['stage'] == 1) {
+							echo "<td class='$color'> 1 - Qualification </td>";
+						}elseif ($mtx[$m]['stage'] == 2) {
+							echo "<td class='$color'> 2 - Proposal </td>";
+						}elseif ($mtx[$m]['stage'] == 3){
+							echo "<td class='$color'> 3 - Negotiation </td>";
+						}elseif ($mtx[$m]['stage'] == 4){
+							echo "<td class='$color'> 4 - Verbal </td>";
+						}
 						echo "<td class='$color'> ".$mtx[$m]['agencyCommission']."%</td>";
 						echo "<td class='$color'>".number_format($mtx[$m]['fcstAmountGross'],0,",",".")."</td>";
 						echo "<td class='$color'>".number_format($mtx[$m]['fcstAmountNet'],0,",",".")."</td>";

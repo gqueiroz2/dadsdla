@@ -68,8 +68,7 @@ class byBrandViewerController extends Controller {
                     'region' => 'required',
                     'year' => 'required',
                     'currency' => 'required',
-                    'value' => 'required',
-                    'salesRep' => 'required'
+                    'value' => 'required'
                 ]);
 
                 if ($validator->fails()) {
@@ -80,7 +79,7 @@ class byBrandViewerController extends Controller {
 
                 $forRender = $tmp;
                 $brands = $b->getBrand($con);
-                $sourceSave = $forRender['sourceSave'];
+                /*$sourceSave = $forRender['sourceSave'];
                 $client = $tmp['client'];
                 $tfArray = array();
                 $odd = array();
@@ -95,8 +94,8 @@ class byBrandViewerController extends Controller {
 
                 //lines of clients table
                 $rollingClients = $forRender['lastRollingFCST'];
-                $manual = $forRender['rollingFCST'];
+                $manual = $forRender['rollingFCST'];*/
 
-                return view('pAndR.byBrandViewer.byBrandPost',compact('render','region','currency','forRender', 'tfArray','odd','even','sourceSave','client','error','brands'));
+                return view('pAndR.byBrandViewer.byBrandPost',compact('render','region','currency','forRender', /*'tfArray','odd','even','sourceSave','client','error',*/'brands'));
         }
 }

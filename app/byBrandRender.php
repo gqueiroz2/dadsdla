@@ -12,9 +12,9 @@ class byBrandRender extends Render{
 
     protected $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-     public function bybrand($forRender,$client,$tfArray,$odd,$even,$userName,$error = false, $brands){
+     public function bybrand($forRender, $brands){
 
-        $cYear = $forRender['cYear'];
+        /*$cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
         $salesRep = $forRender['salesRep'];
         $client = $forRender['client'];
@@ -55,9 +55,9 @@ class byBrandRender extends Render{
         $nSecondary = $forRender["nSecondary"];
         //$bookingPYear = $forRender["bookingPYear"];
 		$brandValueCYear = $forRender["brandValueCYear"];
-		$brandValuePYear = $forRender["brandValuePYear"];
+		$brandValuePYear = $forRender["brandValuePYear"];*/
 
-        echo "<input type='hidden' id='salesRep' name='salesRep' value='".base64_encode(json_encode($salesRep))."'>";
+       /* echo "<input type='hidden' id='salesRep' name='salesRep' value='".base64_encode(json_encode($salesRep))."'>";
         echo "<input type='hidden' id='client' name='client' value='".base64_encode(json_encode($client)) ."'>";
         echo "<input type='hidden' id='currency' name='currency' value='".base64_encode(json_encode($currency))."'>";
         echo "<input type='hidden' id='splitted' name='splitted' value='".base64_encode(json_encode($splitted))."'>";
@@ -65,9 +65,9 @@ class byBrandRender extends Render{
         echo "<input type='hidden' id='region' name='region' value='".base64_encode(json_encode($region))."'>";
         echo "<input type='hidden' id='user' name='user' value='".base64_encode(json_encode($userName))."'>";
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
-        echo "<input type='hidden' id='year' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerRep))."'>";
+        echo "<input type='hidden' id='year' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerRep))."'>";*/
 
-        echo "<div class='table-responsive' style='zoom:80%;'>
+       /* echo "<div class='table-responsive' style='zoom:80%;'>
                     <table style=' border:solid; width:100%; text-align:center; border-width:1px; font-size:25px;'>
                         <tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>
                     </table>
@@ -100,13 +100,13 @@ class byBrandRender extends Render{
                     $totalTarget = 0.0;
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($targetValues[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                             $totalTarget += $targetValues[$m];
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($targetValues[$m],2,',','.')."</td>";
+                            echo "<td class='$even[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($targetValues[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'></td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
@@ -120,12 +120,12 @@ class byBrandRender extends Render{
                     echo "<td class='odd' style='text-align:left;'><span>Rolling Fcast ".$cYear."</span><br>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                         }else{
-                            echo "<td class='$odd[$m]'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                            echo "<td class='$odd[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'></td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][4],2,',','.')."</td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][7],2,',','.')."%</td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][0],2,',','.')."</td>";
@@ -139,12 +139,12 @@ class byBrandRender extends Render{
                     echo "<td class='rcBlue' style='text-align:left;'>Bookings</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($executiveRevenueCYear[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($executiveRevenueCYear[$m],2,',','.')."</td>";
+                            echo "<td class='$even[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($executiveRevenueCYear[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'></td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
@@ -158,12 +158,12 @@ class byBrandRender extends Render{
                     echo "<td class='odd' style='text-align:left;'>Pending</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($pending[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                         }else{
-                            echo "<td class='$odd[$m]'>".number_format($pending[$m],2,',','.')."</td>";
+                            echo "<td class='$odd[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($pending[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'></td>";
                     echo "<td class='odd'>&nbsp</td>";
                     echo "<td class='odd'>&nbsp</td>";
                     echo "<td class='odd'>&nbsp</td>";
@@ -177,12 +177,12 @@ class byBrandRender extends Render{
                     echo "<td class='rcBlue' style='text-align:left;'>".$pYear."</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($executiveRevenuePYear[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($executiveRevenuePYear[$m],2,',','.')."</td>";
+                            echo "<td class='$even[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($executiveRevenuePYear[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'></td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
@@ -196,12 +196,12 @@ class byBrandRender extends Render{
                     echo "<td class='odd' style='text-align:left;'>Var RF vs Target</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($RFvsTarget[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'></td>";
                         }else{
-                            echo "<td class='$odd[$m]'>".number_format($RFvsTarget[$m],2,',','.')."</td>";
+                            echo "<td class='$odd[$m]'></td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($RFvsTarget[$m],2,',','.')."</td>";                
+                    echo "<td class='smBlue'></td>";                
                     echo "<td class='odd'>&nbsp</td>";
                     echo "<td class='odd'>&nbsp</td>";
                     echo "<td class='odd'>&nbsp</td>";
@@ -215,12 +215,12 @@ class byBrandRender extends Render{
                     echo "<td class='rcBlue' style='text-align:left;'>% Target Achievement</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($targetAchievement[$m],2,',','.')."%</td>";
+                            echo "<td class='medBlue'>%</td>";
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($targetAchievement[$m],2,',','.')."%</td>";
+                            echo "<td class='$even[$m]'>%</td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($targetAchievement[$m],2,',','.')."%</td>";
+                    echo "<td class='smBlue'>%</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
@@ -261,9 +261,9 @@ class byBrandRender extends Render{
                     echo "<td class='rcBlue' style='text-align:left;'> Rolling Fcast ".$cYear." </td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 ) {
-                            echo "<td class='medBlue' >".number_format($brandValueCYear[$b][$m],0,',','.')."</td>";
+                            echo "<td class='medBlue' ></td>";
                         }else{
-                        	echo "<td class='$even[$m]'>".number_format($brandValueCYear[$b][$m],0,',','.')."</td>";
+                        	echo "<td class='$even[$m]'></td>";
                         }
                     }
                     echo "<td class='smBlue'></td>";
@@ -277,17 +277,17 @@ class byBrandRender extends Render{
                     echo "<td class='rcBlue'>0.00</td>";    
                     
                 echo "</tr>";
-                    /* BOOKING C YEAR */
+                    /* BOOKING C YEAR 
                     echo "<tr class='center'>";
                     	echo "<td class=' odd' style='text-align:left;'>Booking</td>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' >".number_format($brandValueCYear[$b][$m],0,',','.')."</td>";
+                                echo "<td class='medBlue' ></td>";
                             }else{
-                                echo "<td class='$odd[$m]' >".number_format($brandValueCYear[$b][$m],0,',','.')."</td>";
+                                echo "<td class='$odd[$m]' ></td>";
                             }
                         }
-                        echo "<td class='smBlue' >".number_format($brandValueCYear[$b][$m],0,',','.')."</td>";
+                        echo "<td class='smBlue' ></td>";
                         echo "<td class='odd'>&nbsp</td>";
 		                echo "<td class='odd'>&nbsp</td>";
 		                echo "<td class='odd'>&nbsp</td>";
@@ -298,17 +298,17 @@ class byBrandRender extends Render{
 		                echo "<td class='odd'>&nbsp</td>";
                     echo "</tr>";
 
-                     /* BOOKING P YEAR */
+                     /* BOOKING P YEAR 
                     echo "<tr class='center'>";
                     	echo "<td class='rcBlue' style='text-align:left;'>".$pYear."</td>";
                         for ($m=0; $m <sizeof($this->month); $m++) { 
                            if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue'>".number_format($brandValuePYear[$b][$m],0,',','.')."</td>";
+                                echo "<td class='medBlue'></td>";
                             }else{
-                                echo "<td class='$even[$m]'>".number_format($brandValuePYear[$b][$m],0,',','.')."</td>";
+                                echo "<td class='$even[$m]'></td>";
                             }
                         }
-                        echo "<td class='smBlue'>".number_format($brandValuePYear[$b][$m],0,',','.')."</td>";
+                        echo "<td class='smBlue'></td>";
                         echo "<td class='rcBlue'>&nbsp</td>";
 		                echo "<td class='rcBlue'>&nbsp</td>";
 		                echo "<td class='rcBlue'>&nbsp</td>";
@@ -345,7 +345,7 @@ class byBrandRender extends Render{
                 echo "<tr><td> &nbsp; </td></tr>";
                 }
             echo "</table>";
-        echo "</div>"; 
+        echo "</div>"; */
 
      }
 

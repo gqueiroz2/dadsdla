@@ -74,10 +74,13 @@ class baseReportPandR extends pAndR{
 
         $revenueShares = $this->revenueShares($con,$sql,$regionID,$pYear,$month,$this->generateColumns($value,"ytd"),$value);
 
+        $brandsValueLastYear = $this->lastYearBrand($con,$sql,$pr, $br->getBrand($con),($pYear),$value,$currency,$regionID,$currencyID);
+
         for ($l=0; $l < sizeof($list); $l++) { 
 	        for ($m=0; $m <sizeof($month) ; $m++) {
 	        	
-	        	$rollingFCST[$l][$m] = $this->generateForecast($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares)*$div;
+	        	$rollingFCST[$l][$m] = $this->generateForecast($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear )*$div;
+               
 	            $lastYear[$l][$m] = $this->generateValuePandR($con,$sql,'revenue',$baseReport,$regionID,$pYear,$month[$m][1],$list[$l],$this->generateColumns($value,"ytd"),$value)*$div;
 
 	            $targetValues[$l][$m] = $this->generateValuePandR($con,$sql,'target',$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],"value",$value)*$div;
@@ -607,11 +610,137 @@ class baseReportPandR extends pAndR{
         return $share;
     }
 
-    public function generateForecast($con,$sql,$baseReport,$region,$year,$month,$list,$sum,$value,$share){
+    public function generateForecast($con,$sql,$baseReport,$region,$year,$month,$list,$sum,$value,$share, $br, $lastYearBrand){
 
         switch ($baseReport) {
             case 'brand':
-                # code...
+
+                 $brands = $br->getBrand($con);
+                 
+                 $select =  "SELECT $sum AS sum,
+                                from_date AS fromDate,
+                                to_date AS toDate,
+                                year_from AS yearFrom,
+                                year_to AS yearTo,
+                                sales_rep_owner_id AS owner,
+                                brand AS brand,
+                                sales_rep_splitter_id AS splitter
+                                FROM sf_pr 
+                                WHERE (region_id = '".$region."') 
+                                AND (year_from = '".$year."' OR year_to = '".$year."') 
+                                AND (from_date = '".$month."' OR to_date = '".$month."')
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != 'Cr')
+                                ";  
+                //echo "<pre>".$select."</pre>";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','brand','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+
+                if ($fetched) {
+
+                     $soma = 0.0;
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {
+
+                        $fetched[$f]['total'] =0.0;
+                        $totalPrc[$f] = 0;
+                        $total[$f] = 0;
+                        $prcTemp[$f] = array();
+
+                        $fetched[$f]['brand'] = explode(";", $fetched[$f]['brand']);
+
+                        if ($fetched[$f]['brand'] == 'NOCHANNELS' || $fetched[$f]['brand'] == '') {
+                                $checkNochannel += $fetched[$f]['sum'];
+                        }
+
+                        for ($i=0; $i <sizeof($fetched[$f]['brand']); $i++) { 
+                            if ($fetched[$f]['brand'][$i] == 'ONL-G9' || $fetched[$f]['brand'][$i] == 'ONL-DSS') {
+                                $fetched[$f]['brand'][$i] = 'ONL';
+                            }elseif($fetched[$f]['brand'][$i] == 'NOCHANNELS' || $fetched[$f]['brand'][$i] == ''){
+                                unset($fetched[$f]['brand'][$i]);
+                            }
+                        }
+                        
+                        if(!empty($fetched[$f]['brand'])){
+                            if (sizeof($fetched[$f]['brand']) == 1) {
+                                for ($i=0; $i <sizeof($brands); $i++) { 
+                                    if ($fetched[$f]['brand'][0] == $brands[$i]['name']) {
+                                        //$fetched[$f] += $fetched[$f]['sum'];
+                                    }
+                                }
+                            }else{
+                                for ($b=0; $b <sizeof($brands) ; $b++) { 
+                                    for ($d=0; $d < sizeof($fetched[$f]['brand']); $d++) { 
+                                        if ($fetched[$f]['brand'][$d] == $brands[$b]['name']) {
+                                           $fetched[$f]['total'] += $lastYearBrand[$b];
+                                           $fetched[$f]['lastYearValue'][$d] = $lastYearBrand[$b];
+                                        } 
+                                    }
+                                }   
+
+                                for ($b=0; $b <sizeof($brands) ; $b++) {  
+                                    for ($d=0; $d < sizeof($fetched[$f]['brand']); $d++) {      
+
+                                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                                            $somat = 0.0;
+                                            for ($s=0; $s <= $size; $s++) { 
+                                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                                            }
+
+                                            for ($s=0; $s <= $size; $s++) { 
+                                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                                            }
+
+                                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                                if($newShare[$n]['month'] == $month){
+                                                    $percMult = $newShare[$n]['value'];
+                                                }
+                                            }
+                                        }else{
+                                            $percMult = 0;
+                                        }
+
+                                        if ($fetched[$f]['total'] == 0) {
+                                            $fetched[$f]['prc'][$d] = 0.0;
+                                        }else{
+                                            $fetched[$f]['prc'][$d] = $fetched[$f]['lastYearValue'][$d]/$fetched[$f]['total'];
+                                        }
+                                        
+                                        $totalPrc[$f] += $fetched[$f]['prc'][$d];
+                                        $prcTemp[$f][$b] = $fetched[$f]['prc'][$d];
+
+                                        $fetched[$f]['sum2'][$d]['brand'] = $fetched[$f]['brand'][$d];
+
+                                        if ($b == 0){
+                                            $fetched[$f]['sum2'][$d]['value'] = ($fetched[$f]['sum']*$fetched[$f]['prc'][$d]);
+                                        }else{
+                                            $fetched[$f]['sum2'][$d]['value'] += ($fetched[$f]['sum']*$fetched[$f]['prc'][$d]);
+                                        } 
+                                        
+                                        $fetched[$f]['sum2'][$d]['value'] *= $percMult;
+                                        $soma += $fetched[$f]['sum2'][$d]['value'];                                        
+                                    }
+                                }
+                            }    
+                        } 
+                    }
+                }
+
+                //var_dump($fetched);
+                //var_dump($soma);                      
+                
                 break;
             case 'ae':
                 $select =  "SELECT $sum AS sum,
@@ -631,7 +760,7 @@ class baseReportPandR extends pAndR{
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
                                 ";  
-                //echo "<pre>".$select."</pre>";
+               // echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
@@ -698,7 +827,8 @@ class baseReportPandR extends pAndR{
                 }else{
                     $soma = false;
                 }
-                //var_dump($soma);
+                //var_dump($fetched);
+                 //var_dump($soma);
                 //var_dump("================================");
 
                 break;
@@ -767,8 +897,8 @@ class baseReportPandR extends pAndR{
                     $soma = false;
                 }
                 
-                
-
+                //var_dump($fetched);
+                //var_dump($soma);
                 break;
 
             case 'agency':
@@ -1252,5 +1382,83 @@ class baseReportPandR extends pAndR{
             return 0;
         
         return ($a['clientName'] < $b['clientName']) ? -1 : 1;
+    }
+
+    public function lastYearBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID){
+        if ($value == "gross") {
+            $col = "gross_revenue_prate";
+            $colFW = "gross_revenue";
+        }else{
+            $col = "net_revenue_prate"; 
+            $colFW = "net_revenue";
+        }
+
+        $date = date('n')-1;
+
+        if($currency == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($year));
+        }
+
+        for ($b=0; $b <sizeof($brands); $b++) { 
+            for ($m=0; $m <12; $m++){
+                if ($m>=$date) {
+                    if ($brands[$b]['name'] == 'ONL') {
+                        //pegar ONL do FW
+                        $select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\")";
+                    }elseif($brands[$b]['name'] == 'VIX'){
+                        //pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
+                        $select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\")  AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
+                    }else{
+                        $select[$b] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
+                    }
+
+                    $res[$b] = $con->query($select[$b]);
+                    $resp[$b] = $sql->fetchSum($res[$b], "value")['value']*$div;
+                }/*else{
+                    $resp[$b][$m] = 0;
+                }*/
+            }
+        }
+        
+        //var_dump($select);
+        return $resp;
+    }
+
+    public function getBooking($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID,$salesRep){
+        
+        if ($value == "gross") {
+            $col = "gross_revenue_prate";
+            $colFW = "gross_revenue";
+        }else{
+            $col = "net_revenue_prate"; 
+            $colFW = "net_revenue";
+        }
+
+        if($currency == "USD"){
+            $div = 1.0;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array(date('Y')));
+        }
+
+        for ($b=0; $b <sizeof($brands); $b++) { 
+            for ($m=0; $m <12; $m++){
+                if ($brands[$b]['name'] == 'ONL') {
+                    //pegar ONL do FW
+                    $select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+                }elseif($brands[$b]['name'] == 'VIX'){
+                    //pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
+                    $select[$b][$m] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+                }else{
+                    $select[$b][$m] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+                }
+
+                $res[$b][$m] = $con->query($select[$b][$m]);
+                $resp[$b][$m] = $sql->fetchSum($res[$b][$m], "value")['value']*$div;
+            }
+        }
+        //var_dump($select);
+        return $resp;       
     }
 }
