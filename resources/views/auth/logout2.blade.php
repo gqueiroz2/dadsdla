@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <center>
 		                     <p style="width: 50%;">
-                                XXX TESTE XXX Discovery Communications, LLC uses your network username and password to login to D|ADS. Continue to login to D|ADS through your network.
+                                Discovery Communications, LLC uses your network username and password to login to D|ADS. Continue to login to D|ADS through your network.
                             </p>
 	                        <form method="Get" action="{{ route('autenticate2') }}">
                                 <input type="submit" style="width: 50%;" class="btn btn-primary" value="Continue">

@@ -28,7 +28,7 @@ class testMailOne extends Mailable
      */
     public function build(){
 
-        return $this->subject('Mail from ItSolutionStuff.com')
+        return $this->subject('Teste de Email')
                     ->view('mail.testemailone');
     }
 }
