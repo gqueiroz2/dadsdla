@@ -315,6 +315,8 @@ class rank extends Model{
 
         }
 
+        var_dump($pRate);
+
         $as = "total";
 
         $tableAbv = "a";
