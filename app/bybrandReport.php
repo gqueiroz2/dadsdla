@@ -24,7 +24,6 @@ class bybrandReport extends Model{
         $b = new brand();
        
         $regionID = Request::get('region');
-        $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
         $value = Request::get('value');
         $ae = new AE();
@@ -35,7 +34,7 @@ class bybrandReport extends Model{
 
         $week = $ae->weekOfMonth($data);
 
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
+        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
 
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
@@ -49,7 +48,7 @@ class bybrandReport extends Model{
 
         $save = $sql->fetch($result,$from,$from);
         
-        $listOfClients = $ae->listClientsByAE($con,$sql,$salesRepID,$cYear,$regionID);
+        $listOfClients = $this->listClientsByAE($con,$sql,$cYear,$regionID);
 
         if(sizeof($listOfClients) == 0){
             return false;
@@ -86,7 +85,6 @@ class bybrandReport extends Model{
 
         $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
 
-        $salesRep = $sr->getSalesRepById($con,$salesRepID);        
 
         $brand = $br->getBrandBinary($con);
         $month = $base->getMonth();
@@ -101,12 +99,6 @@ class bybrandReport extends Model{
 
         $readable = $ae->monthAnalise($base);
 
-        if($regionName == "Brazil"){
-            $splitted = $ae->isSplitted($con,$sql,$salesRepID,$listOfClients,$cYear,$pYear);
-        }else{
-            $splitted = false;
-        }
-
         for ($b=0; $b < sizeof($brand); $b++) {
             for ($m=0; $m < sizeof($month); $m++) {
                 if ($brand[$b][1] == "ONL" || $brand[$b][1] == "VIX") {
@@ -118,7 +110,7 @@ class bybrandReport extends Model{
                 $sum[$b][$m] = $ae->generateColumns($value,$table[$b][$m]);
             }
         }
-
+        
         for ($m=0; $m <sizeof($month) ; $m++) {
             $lastYear[$m] = $ae->generateValueWB($con,$sql,$regionID,$pYear,$month[$m][1], $ae->generateColumns($value,"ytd") ,"ytd",$value)*$div;
         }
@@ -126,27 +118,27 @@ class bybrandReport extends Model{
 
         for ($b=0; $b < sizeof($table); $b++){ 
             for ($m=0; $m <sizeof($table[$b]) ; $m++){
-                $targetValues[$b][$m] = $ae->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
+                $targetValues[$b][$m] = $ae->generateValue($con,$sql,$regionID,$cYear,$brand[$b],$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
             }
         }
 
-        $mergeTarget = $ae->mergeTarget($targetValues,$month);
+        /*$mergeTarget = $ae->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
 
-        $clientRevenueCYear = $ae->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
+        $clientRevenueCYear = $ae->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,false,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
 
         $clientRevenueCYearTMP = $clientRevenueCYear;
 
         $clientRevenueCYear = $ae->addQuartersAndTotalOnArray($clientRevenueCYear);
 
-        $clientRevenuePYear = $ae->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
+        $clientRevenuePYear = $ae->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,false,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
         $clientRevenuePYear = $ae->addQuartersAndTotalOnArray($clientRevenuePYear);
 
-        $tmp = $ae->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
+        $tmp = $ae->getBookingExecutive($con,$sql,$month,$regionID,$cYear,$value,$currency,$pr);
 
         $executiveRevenueCYear = $ae->addQuartersAndTotal($tmp);
 
-        $executiveRevenuePYear = $ae->consolidateAEFcst($clientRevenuePYear,$splitted);
+        $executiveRevenuePYear = $ae->consolidateAEFcst($clientRevenuePYear,false);
 
         if ($save){
 
@@ -328,9 +320,9 @@ class bybrandReport extends Model{
 
         $fcstAmountByStage = $ae->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
            
-        $fcstAmountByStageEx = $ae->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
+        $fcstAmountByStageEx = $ae->makeFcstAmountByStageEx($fcstAmountByStage,false);
 
-        $executiveRF = $ae->consolidateAEFcst($rollingFCST,$splitted);
+        $executiveRF = $ae->consolidateAEFcst($rollingFCST,false);
         $executiveRF = $ae->closedMonthEx($executiveRF,$executiveRevenueCYear);
         $executiveRF = $ae->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
         $pending = $ae->subArrays($executiveRF,$executiveRevenueCYear);
@@ -344,18 +336,20 @@ class bybrandReport extends Model{
         $fcstAmountByStageEx = $ae->adjustFcstAmountByStageEx($fcstAmountByStageEx);
 
         //booking ano atual para o fcst
-	    $brandValue = $this->getBookingPerBrand($con,$sql,$pr,$brands,$cYear,$value,$currency,$regionID,$currencyID,$salesRep);
+	    $brandValue = $this->getBookingPerBrand($con,$sql,$pr,$brands,$cYear,$value,$currency,$regionID,$currencyID);
 
         $brandValueCYear = $ae->addQuartersAndTotalOnArray($brandValue);
 
-        $brandValuePYear = $this->getBookingPerBrand($con,$sql,$pr,$brands,$pYear,$value,$currency,$regionID,$currencyID,$salesRep);
+        $brandValuePYear = $this->getBookingPerBrand($con,$sql,$pr,$brands,$pYear,$value,$currency,$regionID,$currencyID);
 
-        $brandValuePYear = $ae->addQuartersAndTotalOnArray($brandValuePYear);
+        $brandValuePYear = $ae->addQuartersAndTotalOnArray($brandValuePYear);*/
 
 	    //booking do ano passando para calculo de porcentagem
-	    $brandsValueLastYear = $this->lastYearBrand($con,$sql,$pr,$brands,($pYear),$value,$currency,$regionID,$currencyID,$salesRep);
+	    $brandsValueLastYear = $this->lastYearBrand($con,$sql,$pr,$brands,($pYear),$value,$currency,$regionID,$currencyID);
 
-        $brandsPerRep = $this->getBrandsPerSalesRep($con, $listOfClients, $salesRep,$value,$currency,$brands,$brandsValueLastYear,$currencyID, $cYear);
+        $sourceSave = "DISCOVERY CRM";
+
+        $brandsPerRep = $this->getBrandsPerSalesRep($con, $listOfClients,$value,$currency,$brands,$brandsValueLastYear,$currencyID, $cYear);
 
 
         //$rollingFcst = $this->addBookingRollingFCST($brandsPerRep,$brandValueCYear);
@@ -372,15 +366,14 @@ class bybrandReport extends Model{
 
         $secondary = $listOfClients;
 
-        $nSecondary = $ae->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
+        //$nSecondary = $ae->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
 
 
         $rtr = array(	
-        				"cYear" => $cYear,
+        				/*"cYear" => $cYear,
         				"pYear" => $pYear,
                         "readable" => $readable,
 
-        				"salesRep" => $salesRep[0],
         				"client" => $listOfClients,
                         "splitted" => $splitted,
         				"targetValues" => $targetValues,
@@ -406,28 +399,90 @@ class bybrandReport extends Model{
                         "valueView" => $valueView,
                         "currency" => $currencyName,
                         "value" => $valueView,
-                        "fcstAmountByStage" => $fcstAmountByStage, // ***
-                        "fcstAmountByStageEx" => $fcstAmountByStageEx,
+                        "fcstAmountByStage" => $fcstAmountByStage, */
+                       // "fcstAmountByStageEx" => $fcstAmountByStageEx,
                         "brandsPerRep" => $brandsPerRep,
-                        "sourceSave" => $sourceSave,
-                        "emptyCheck" => $emptyCheck,
-                        "nSecondary" => $nSecondary,
-                        "bookingPYear" => $brandsValueLastYear,
-                        "brandValueCYear" => $brandValueCYear,
-                        "brandValuePYear" => $brandValuePYear
+                        "sourceSave" => $sourceSave
+                        //"emptyCheck" => $emptyCheck,
+                        //"nSecondary" => $nSecondary,
+                        //"bookingPYear" => $brandsValueLastYear,
+                        //"brandValueCYear" => $brandValueCYear,
+                        //"brandValuePYear" => $brandValuePYear
                     );
 
         return $rtr;
 
     }
 
-    public function getBrandsPerSalesRep($con,$clients,$salesRep,$value,$currency,$brands,$lastYearBrand,$currencyID,$year){
+    public function listClientsByAE($con,$sql,$cYear,$regionID){
+
+        $date = date('n')-1;
+
+        //GET FROM SALES FORCE
+        $sf = "SELECT DISTINCT c.name AS 'clientName',
+                       c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
+                    FROM sf_pr s
+                    LEFT JOIN client c ON c.ID = s.client_id
+                    LEFT JOIN agency a ON a.ID = s.agency_id
+                    WHERE ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                    ORDER BY 1
+               ";       
+        $resSF = $con->query($sf);
+        $from = array("clientName","clientID","agencyID","agencyName");
+        $listSF = $sql->fetch($resSF,$from,$from);
+        //GET FROM IBMS/BTS
+        $ytd = "SELECT DISTINCT c.name AS 'clientName',
+                       c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
+                    FROM ytd y
+                    LEFT JOIN client c ON c.ID = y.client_id
+                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    LEFT JOIN agency a ON a.ID = y.agency_id
+                    WHERE (y.year = \"$cYear\" )
+                    AND (r.ID = \"".$regionID."\")
+                    ORDER BY 1
+               ";
+        $resYTD = $con->query($ytd);
+        $from = array("clientName","clientID","agencyID","agencyName");
+        $listYTD = $sql->fetch($resYTD,$from,$from);
+        $count = 0;
+
+        $list = array();
+
+        if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
+        }
+        if($listYTD){
+            for ($y=0; $y < sizeof($listYTD); $y++) { 
+                $list[$count] = $listYTD[$y];
+                $count ++;
+            }
+        }
+
+        $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
+
+        return $list;
+
+    }
+
+    public function getBrandsPerSalesRep($con,$clients,$value,$currency,$brands,$lastYearBrand,$currencyID,$year){
 
         $checkNochannel = 0;
+        $temp = 0;
         $sql = new sql();
         $pr = new pRate();
 
-        $from = array("brand", "value","fromDate");
+        $saida = array();
+        $from = array("brand", "value","fromDate", "toDate", "yearFrom", "yearTo");
 
         if ($value == "gross") {
             $col = "fcst_amount_gross";
@@ -443,77 +498,168 @@ class bybrandReport extends Model{
             $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($year));
         }
 
+        for ($m=0; $m <12 ; $m++) { 
+            for ($b=0; $b <sizeof($brands); $b++) { 
+                $saida[$b][$m] = 0;
+            }
+        }        
 
         for ($c=0; $c < sizeof($clients) ; $c++) { 
+            for ($m=0; $m <12; $m++) { 
+                $select[$c][$m] = "SELECT brand, SUM($col) AS 'value', from_date AS 'fromDate', to_date AS 'toDate', year_from AS 'yearFrom', year_to AS 'yearTo' FROM sf_pr WHERE (client_id = \"".$clients[$c]["clientID"]."\") AND (stage != \"5\" AND stage != \"6\" AND stage != \"7\") AND (from_date =  \"".($m+1)."\")";
 
-            $select[$c] = "SELECT brand, SUM($col) AS 'value', from_date AS 'fromDate' FROM sf_pr WHERE (client_id = \"".$clients[$c]["clientID"]."\") AND((sales_rep_splitter_id = \"".$salesRep[0]["id"]."\") OR (sales_rep_owner_id = \"".$salesRep[0]["id"]."\")) AND (stage != \"5\" AND stage != \"6\" AND stage != \"7\") AND (from_date >= $startMonthFcst)";
+                $res[$c][$m] = $con->query($select[$c][$m]);
 
-            $res[$c] = $con->query($select[$c]);
+                $saida[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0];
+                $saida[$c][$m]['total'] =0.0;
+                $totalPrc[$c][$m] = 0;
+                $total[$c][$m] = 0;
+                $prcTemp[$c][$m] = array();
 
-            $saida[$c] = $sql->fetch($res[$c],$from,$from)[0];
-            $saida[$c]['total'] =0.0;
-            $totalPrc[$c] = 0;
-            $total[$c] = 0;
-            $prcTemp[$c] = array();
+            	$saida[$c][$m]['brand'] = explode(";", $saida[$c][$m]['brand']);
 
-        	$saida[$c]['brand'] = explode(";", $saida[$c]['brand']);
-
-            if ($saida[$c]['brand'] == 'NOCHANNELS' || $saida[$c]['brand'] == '') {
-                    $checkNochannel += $saida[$c]['value'];
-            }
-
-            for ($i=0; $i <sizeof($saida[$c]['brand']); $i++) { 
-                if ($saida[$c]['brand'][$i] == 'ONL-G9' || $saida[$c]['brand'][$i] == 'ONL-DSS') {
-                    $saida[$c]['brand'][$i] = 'ONL';
-                }elseif($saida[$c]['brand'][$i] == 'NOCHANNELS' || $saida[$c]['brand'][$i] == ''){
-                    unset($saida[$c]['brand'][$i]);
+                if ($saida[$c][$m]['brand'] == 'NOCHANNELS' || $saida[$c][$m]['brand'] == '') {
+                        $checkNochannel += $saida[$c][$m]['value'];
                 }
-            }
-            
-            if(!empty($saida[$c]['brand'])){
-                if (sizeof($saida[$c]['brand']) == 1) {
-                    for ($i=0; $i <sizeof($brands); $i++) { 
-                        if ($saida[$c]['brand'][0] == $brands[$i]['name']) {
-                            //$saida[$c] += $saida[$c]['value'];
-                        }
+
+                for ($i=0; $i <sizeof($saida[$c][$m]['brand']); $i++) { 
+                    if ($saida[$c][$m]['brand'][$i] == 'ONL-G9' || $saida[$c][$m]['brand'][$i] == 'ONL-DSS') {
+                        $saida[$c][$m]['brand'][$i] = 'ONL';
+                    }elseif($saida[$c][$m]['brand'][$i] == 'NOCHANNELS' || $saida[$c][$m]['brand'][$i] == ''){
+                        unset($saida[$c][$m]['brand'][$i]);
                     }
-                }else{
-                    for ($b=0; $b <sizeof($brands) ; $b++) { 
-                        for ($d=0; $d < sizeof($saida[$c]['brand']); $d++) { 
-                            if ($saida[$c]['brand'][$d] == $brands[$b]['name']) {
-                               $saida[$c]['total'] += $lastYearBrand[$b];
-                               $saida[$c]['lastYearValue'][$d] = $lastYearBrand[$b];
-                            } 
-                        }
-                    }   
-
-                    for ($b=0; $b <sizeof($brands) ; $b++) { 
-                        for ($d=0; $d < sizeof($saida[$c]['brand']); $d++) {               
-                       
-                            if ( $saida[$c]['total'] == 0) {
-                                $saida[$c]['prc'][$d] = 0.0;
-                            }else{
-                                $saida[$c]['prc'][$d] = $saida[$c]['lastYearValue'][$d]/ $saida[$c]['total'];
-                            }
-                            
-                            $totalPrc[$c] += $saida[$c]['prc'][$d];
-                            $prcTemp[$c][$b] = $saida[$c]['prc'][$d];
-                            if ($b == 0){
-                                $saida[$c]['value2'][$d] = ($saida[$c]['value']*$saida[$c]['prc'][$d])*$div;    
-                            }else{
-                                $saida[$c]['value2'][$d] += ($saida[$c]['value']*$saida[$c]['prc'][$d])*$div; 
-                            }
-
-                            if ($saida[$c]['brand'] == $saida[$c]['brand']) {
-                                $saida[$c]['brand'] == array_unique($saida[$c]['brand']);
+                }
+                
+                if(!empty($saida[$c][$m]['brand'])){
+                    if (sizeof($saida[$c][$m]['brand']) == 1) {
+                        for ($i=0; $i <sizeof($brands); $i++) { 
+                            if ($saida[$c][$m]['brand'][0] == $brands[$i]['name']) {
+                                //$saida[$c][$m] += $saida[$c][$m]['value'];
                             }
                         }
-                    }                    
-                }    
-            }  
+                    }else{
+                        for ($b=0; $b <sizeof($brands) ; $b++) { 
+                            for ($d=0; $d < sizeof($saida[$c][$m]['brand']); $d++) { 
+                                if ($saida[$c][$m]['brand'][$d] == $brands[$b]['name']) {
+                                   $saida[$c][$m]['total'] += $lastYearBrand[$b];
+                                   $saida[$c][$m]['lastYearValue'][$d] = $lastYearBrand[$b];
+                                } 
+                            }
+                        }   
+
+                        for ($b=0; $b <sizeof($brands) ; $b++) {  
+                            for ($d=0; $d < sizeof($saida[$c][$m]['brand']); $d++) {               
+                           
+                                if ( $saida[$c][$m]['total'] == 0) {
+                                    $saida[$c][$m]['prc'][$d] = 0.0;
+                                }else{
+                                    $saida[$c][$m]['prc'][$d] = $saida[$c][$m]['lastYearValue'][$d]/ $saida[$c][$m]['total'];
+                                }
+                                
+                                $totalPrc[$c][$m] += $saida[$c][$m]['prc'][$d];
+                                $prcTemp[$c][$m][$b] = $saida[$c][$m]['prc'][$d];
+
+                                
+                                if ($b == 0){
+                                    $saida[$c][$m]['value2'][$d] = ($saida[$c][$m]['value']*$saida[$c][$m]['prc'][$d])*$div;    
+                                }else{
+                                    $saida[$c][$m]['value2'][$d] += ($saida[$c][$m]['value']*$saida[$c][$m]['prc'][$d])*$div; 
+                                }
+
+                                if ($saida[$c][$m]['brand'] == $saida[$c][$m]['brand']) {
+                                    $saida[$c][$m]['brand'] = array_unique($saida[$c][$m]['brand']);
+                                }
+                            }
+                        }
+                    }    
+                }
+            
+            //var_dump($saida[$c][$m]);  
+            }
         }
+
+        for ($b=0; $b <sizeof($saida); $b++) { 
+            for ($m=0; $m <sizeof($saida[$b]); $m++) { 
+                $temp += $saida[$b][$m];
+                var_dump($temp);
+            }
+        }
+
         //var_dump($saida);
         return $saida;
+    }
+
+    public function periodOfOpp($opp,$year){
+        $period = 0;
+        if($opp){
+            for ($o=0; $o < sizeof($opp); $o++){ 
+               $period[$o] = $this->monthOPP($opp[$o],$year);       
+            }
+        }else{
+            $period = false;
+        }
+
+
+        return $period;
+    }
+
+    public function monthOPP($opp,$year){
+      
+        $start = intval( $opp['fromDate'] );
+        $end = intval( $opp['toDate'] );
+
+        $yearStart = intval( $opp['yearFrom'] );
+        $yearEnd = intval( $opp['yearTo'] );
+
+        if($yearStart == $yearEnd){
+            $month = array();
+            for ($m = $start; $m <= $end; $m++) { 
+                array_push($month, $m);
+            }
+        }else{
+            $month = false;
+            if($year == $yearStart){
+                $month = array();
+                for ($m = $start; $m <= 12; $m++) { 
+                    array_push($month, $m);
+                }    
+            }else{
+                $month = array();
+                for ($m = 1; $m <= $end; $m++) { 
+                    array_push($month, $m);
+                }
+            }
+        }  
+        
+        //$month = $this->matchMonthWithArray($month);
+        
+        return $month;
+
+    }
+
+    public function matchMonthWithArray($monthOPP){
+        $base = new base();
+
+        $month = $base->month;
+        $monthWQ = $base->monthWQ;
+        
+        for ($m=0; $m < sizeof($monthOPP); $m++) { 
+            for ($o=0; $o < sizeof($month); $o++) { 
+                if($monthOPP[$m] == $month[$o][1]){
+                    $seek[$m] = $month[$o][0];
+                    break;
+                }
+            }
+            var_dump($seek);
+            for ($n=0; $n < sizeof($monthWQ); $n++) { 
+                if( $seek[$m] == strtoupper($monthWQ[$n]) ){
+                    $pivot[$m] = $n;
+                    break;
+                }
+            }
+        }
+        return $pivot;
+        
     }
 
     public function addBookingRollingFCST($fcst,$booking){
@@ -542,7 +688,7 @@ class bybrandReport extends Model{
         return $fcst;
     }
 
-	public function lastYearBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID,$salesRep){
+	public function lastYearBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID){
 		if ($value == "gross") {
 			$col = "gross_revenue_prate";
 			$colFW = "gross_revenue";
@@ -560,24 +706,24 @@ class bybrandReport extends Model{
         }
 
         for ($b=0; $b <sizeof($brands); $b++) { 
-			//for ($m=0; $m <12; $m++){
-			//	if ($m>=$date) {
+			for ($m=0; $m <12; $m++){
+			    if ($m>=$date) {
 					if ($brands[$b]['name'] == 'ONL') {
 						//pegar ONL do FW
-						$select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (brand_id != \"10\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+						$select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id != \"10\") AND (year = \"".$year."\")";
 					}elseif($brands[$b]['name'] == 'VIX'){
 						//pegar Vix do FW (diferente do ONL pq onl é tudo menos Vix)
-						$select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+						$select[$b] = "SELECT SUM($colFW) AS value FROM fw_digital WHERE (region_id = \"".$region."\")  AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
 					}else{
-						$select[$b] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\") AND (sales_rep_id = \"".$salesRep[0]["id"]."\")";
+						$select[$b] = "SELECT SUM($col) AS value FROM ytd WHERE (sales_representant_office_id = \"".$region."\") AND (month = \"".($m+1)."\") AND (brand_id = \"".$brands[$b]['id']."\") AND (year = \"".$year."\")";
 					}
 
 					$res[$b] = $con->query($select[$b]);
 					$resp[$b] = $sql->fetchSum($res[$b], "value")['value']*$div;
-			/*	}else{
+				}/*else{
 					$resp[$b][$m] = 0;
-				}
-			}*/
+				}*/
+			}
 		}
 		
         //var_dump($select);

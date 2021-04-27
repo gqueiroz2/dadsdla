@@ -92,7 +92,7 @@
 		@endfor
 	@elseif($data['source'] == 'sf')
 	<tr>
-		<th style="background-color: #0047b3;" colspan="12"> {{$data['regions']}} - Viewer SalesForce {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
+		<th style="background-color: #0047b3;" colspan="13"> {{$data['regions']}} - Viewer SalesForce {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
 		<tr>
 			<td style="background-color: #e6e6e6;">Oppid</td>
@@ -104,6 +104,7 @@
 			<td style="background-color: #e6e6e6;">Sales Rep Splitted</td>
 			<td style="background-color: #e6e6e6;">From Date</td>
 			<td style="background-color: #e6e6e6;">To Date</td>
+			<td style="background-color: #e6e6e6;">Stage</td>
 			<td style="background-color: #e6e6e6;">Agency Commission</td>			
 			<td style="background-color: #e6e6e6;">Amount Gross</td>
 			<td style="background-color: #e6e6e6;">Amount Net</td>
@@ -111,7 +112,7 @@
 		<tr>
 			@for($t=0;$t < sizeof($data['total']); $t++)
 				<td style="background-color: #0f243e;">Total</td>
-				<td style="background-color: #0f243e;" colspan="9"></td>
+				<td style="background-color: #0f243e;" colspan="10"></td>
 				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
 				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumNetRevenue']}}</td>
 			@endfor
@@ -127,6 +128,15 @@
 				<td>{{$data['mtx'][$m]['salesRepSplitter']}}</td>
 				<td>{{$data['mtx'][$m]['fromDate']}}</td>
 				<td>{{$data['mtx'][$m]['toDate']}}</td>
+				@if ($data['mtx'][$m]['stage'] == 1) 
+					<td> 1 - Qualification </td>
+				@elseif ($data['mtx'][$m]['stage'] == 2) 
+					<td> 2 - Proposal </td>
+				@elseif ($data['mtx'][$m]['stage'] == 3)
+					<td> 3 - Negotiation </td>
+				@elseif ($data['mtx'][$m]['stage'] == 4)
+					<td> 4 - Verbal </td>
+				@endif
 				<td>{{$data['mtx'][$m]['agencyCommission']}}</td>
 				<td>{{$data['mtx'][$m]['fcstAmountGross']}}</td>
 				<td>{{$data['mtx'][$m]['fcstAmountNet']}}</td>

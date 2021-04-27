@@ -394,6 +394,8 @@ class pacingReport extends Model
 			}
 		}
 		$temp += $checkNochannel;
+
+		var_dump($saida);
 		return $saida;
 	}
 

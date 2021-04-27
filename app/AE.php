@@ -861,7 +861,7 @@ class AE extends pAndR{
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
                 }
 
-                var_dump($saida);
+                //var_dump($saida);
 
                 if ($saida[$c]) {
                     for ($m=0; $m < sizeof($saida[$c]); $m++) { 
@@ -887,7 +887,7 @@ class AE extends pAndR{
                 
             }
 
-            var_dump($rollingFCST);
+            //var_dump($rollingFCST);
 
             $tmpRollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
@@ -1884,7 +1884,6 @@ class AE extends pAndR{
                     break;
                 }
             }
-
             for ($n=0; $n < sizeof($monthWQ); $n++) { 
                 if( $seek[$m] == strtoupper($monthWQ[$n]) ){
                     $pivot[$m] = $n;

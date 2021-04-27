@@ -14,6 +14,8 @@ class Render extends Model{
     
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
+    protected $stageFCST = array(' 1 - Qualification','2 - Proposal','3 - Negotiation','4 - Verbal');
+
     public function agencyForm(){
         
         echo "<select class='selectpicker agencyChange' id='agency' name='agency[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' data-live-search='true'>";
@@ -359,6 +361,14 @@ class Render extends Model{
         echo "<input type='text' id='especificNumber' name='especificNumber' value='' class='form-control' style='display: block;'>";
     }
 
+    public function stageFCST(){
+        echo "<select class='selectpicker' id='stageFCST' name='stageFCST[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='6' data-width='100%'>";
+            for ($m=0; $m < sizeof($this->stageFCST); $m++) { 
+                echo "<option selected='true' value='".($m+1)."'>".$this->stageFCST[$m]."</option>";
+            }
+        echo "</select>";
+    }
+
     public function brand($brand){
         
         echo "<select id='brand' class='selectpicker' data-selected-text-format='count' multiple='true' name='brand[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
@@ -374,7 +384,7 @@ class Render extends Model{
 
     public function baseReportFilter(){
         echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
-            //echo "<option value='brand'> Brand </option>";   
+            echo "<option value='brand'> Brand </option>";   
             echo "<option value='ae'> AE </option>";   
             echo "<option value='client'> Advertiser </option>";   
             echo "<option value='agency'> Agency </option>";   

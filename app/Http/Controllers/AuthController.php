@@ -1,15 +1,17 @@
 <?php
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\User;
 use App\password;
 use App\sql;
-use Session;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use DB;
 use Carbon\Carbon;
+use App\Mail\forgetPassword;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -21,7 +23,6 @@ class AuthController extends Controller
     
         require_once('/var/simplesamlphp/lib/_autoload.php');
         $as = new \SimpleSAML\Auth\Simple('default-sp');
-        
         //$as->logout(route('logoutGet'));
     }
    
@@ -125,8 +126,6 @@ class AuthController extends Controller
         $list = $sql->fetch($res,$from,$from)[0];
 
         if($list){
-            var_dump("EXISTE USUARIO");
-
             //Create Password Reset Token
             $update = "UPDATE user
                             SET 
@@ -137,68 +136,42 @@ class AuthController extends Controller
                             ";
 
             if ($con->query($update) === TRUE) {
-                echo "New record created successfully";
+                $selectToken = "SELECT token FROM user WHERE(email ='$email')";
+                $resToken = $con->query($selectToken);
+
+                $fromToken = array("token");
+
+                $tokenData = $sql->fetch($resToken,$fromToken,$fromToken)[0]['token'];
+
+                $sendMail = $this->sendResetEmail($email, $tokenData);
+
+                if ($sendMail) {
+                    return view('auth.reset',compact('email'));
+                }else{
+                    //return redirect()->back()->withErrors(['error' => trans('A Network Error occurred. Please try again.')]);
+                }    
             }else{
                 echo "Error: " . $update . "<br>" . $con->error;
             }
 
-            $selectToken = "SELECT token FROM user WHERE(email ='$email')";
-            $resToken = $con->query($selectToken);
-
-            $fromToken = array("token");
-
-            $tokenData = $sql->fetch($resToken,$fromToken,$fromToken)[0]['token'];
-
-            var_dump($tokenData);
-            $this->sendResetEmail($email, $tokenData);
-            /*
-            if ($this->sendResetEmail($email, $tokenData)) {
-                return redirect()->back()->with('status', trans('A reset link has been sent to your email address.'));
-            }else{
-                return redirect()->back()->withErrors(['error' => trans('A Network Error occurred. Please try again.')]);
-            }*/
-
-
+            
         }else{
             return redirect()->back()->withErrors(['email' => trans('User does not exist')]);
-        }
-
-        /*
-        $details = [
-            'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp'
-        ];
-   
-        Mail::to('lucior.jr@gmail.com')->send(new \App\Mail\testMailOne($details));
-   
-        dd("Email is Sent.");
-        /*
-        $db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-        $email = Request::get('email');
-        $pwd = new password();
-        $bool = $pwd->requestToEmail($con, $email);
-        /*if ($bool) {
-            return back()->with('response',"E-mail send with success");
-        }else{
-            return back()->with('error', "E-mail doesn't send");
-        }*/
+        }        
     }
 
     public function sendResetEmail($email, $token){
-        var_dump(config('base_url'));
 
-        $link = 'localhost/' . 'password/reset/' . $token . '?email=' . urlencode($email);
-        var_dump($link);
-        /*
-        try {
-        //Here send the link with CURL with an external email API 
-            return true;
-        } catch (\Exception $e) {
-            return false;
+        Mail::to($email)->send(new forgetPassword($token));
+
+        if (Mail::failures()) {
+            // return failed mails
+            return new Error(Mail::failures()); 
+        }else{
+            
         }
-        */
+
+        return true;        
 
     }
 
@@ -226,21 +199,21 @@ class AuthController extends Controller
         return view('auth.passwords.password', compact('permission', 'email'));
     }
     public function resetPassword(){
+        
         $db = new dataBase();
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-        
-        $permission = Request::get('permission');
+
         $email = Request::get("email");
         
         $pwd = new password();
-        $resp = $pwd->choosePassword($con, $email);
+        $bool = $pwd->choosePassword($con, $email);
         
-        if ($resp['bool']) {
-            return redirect('/');
+        if ($bool['bool']) {
+            return redirect('/logout2')->with("".$bool['type']."", $bool['msg']);
         }else{
-            \Session::flash('error', $resp['msg']);
-            return view('auth.passwords.password', compact('permission', 'email'));//->with('error',$resp['msg']);
+            return view('auth.reset',compact('email'))->withErrors(["".$bool['type']."" => trans($bool['msg'])]);
+         
         }
     }
 }

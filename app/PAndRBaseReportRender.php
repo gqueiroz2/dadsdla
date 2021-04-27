@@ -143,7 +143,7 @@ class PAndRBaseReportRender extends Render{
         echo "</table>";
         echo "</div>";
 
-        echo "<div class='col linked table-responsive' style='width:95%; padding-left:0px;'>";
+        echo "<div class='col linked table-responsive' style='width:80%; padding-left:0px;'>";
         //echo "<table style='min-width:3000px; width:80%; text-align:center; min-height:225px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>";
         echo "<table style='width:100%; text-align:center; min-height:225px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;'>";
             /*

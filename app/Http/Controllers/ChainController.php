@@ -156,6 +156,15 @@ class ChainController extends Controller{
                     $spreadSheet = array_values($spreadSheet);
                 }
                 break;
+            case 'sf_pr_brand':
+                
+                
+                unset($spreadSheet[0]);                
+                if($spreadSheet){
+                    $spreadSheet = array_values($spreadSheet);
+                }
+                var_dump($spreadSheet);
+                break;
             case 'digital':
                 $dg = new digital();
                 $spreadSheet = $dg->excelToBase($spreadSheet);
@@ -167,14 +176,14 @@ class ChainController extends Controller{
                 $spreadSheet = array_values($spreadSheet);
                 break;
 		}
-
-		$complete = $chain->handler($con,$table,$spreadSheet,$year);
         
+		$complete = $chain->handler($con,$table,$spreadSheet,$year);
+        /*
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
-		
-
+		*/
+            
     }
 
     public function secondChain(){

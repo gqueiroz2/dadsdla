@@ -11,7 +11,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Chain </b> </h4></center>
+						<center><h4> Data Management - <b> Chain X </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
