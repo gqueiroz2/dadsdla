@@ -52,7 +52,7 @@ class chain extends excel{
 
         $check = 0;               
         $mark = 0;
-        /*
+        
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
                 $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
@@ -70,7 +70,7 @@ class chain extends excel{
             $complete = false;
         }
         return $complete;
-        */
+        
         
     }    
 
