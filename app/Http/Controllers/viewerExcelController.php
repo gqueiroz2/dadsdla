@@ -51,6 +51,8 @@ class viewerExcelController extends Controller {
 
 	    $client = json_decode(base64_decode(Request::get("clientExcel")));
 
+        //$stage = array($stage);
+
 	    $currency = Request::get("currencyExcel");
 	    $p = new pRate();
         $currencies = $p->getCurrency($con,array($currency))[0]['name']; 

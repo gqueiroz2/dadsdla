@@ -8,7 +8,7 @@ use App\pRate;
 
 class viewer extends Model{
 
-	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient, $stage){
+	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
 		$base = new base();
 
 		$brandString = $base->arrayToString($brand,false,0);
@@ -17,7 +17,7 @@ class viewer extends Model{
 
 		$salesRepString = $base->arrayToString($salesRep,false,false);
 
-		$stageString = $base->arrayToString($stage,false,false);
+		//$stageString = $base->arrayToString($stage,false,false);
 
 		$clientString = $base->arrayToString($client,false,0);
 
@@ -326,7 +326,6 @@ class viewer extends Model{
 					WHERE (sf.year_from = '$year')
 							AND (r.ID = '$salesRegion')
 							AND (sr.ID IN ($salesRepString))
-							AND (sf.stage IN ($stageString))
 							AND (stage != '5')
                             AND (stage != '6')
                             AND (stage != 'Cr')
@@ -362,7 +361,6 @@ class viewer extends Model{
 						WHERE (sf.year_from = '$year')
 								AND (r.ID = '$salesRegion')
 								AND (sr.ID IN ($salesRepString))
-								AND (sf.stage IN ($stageString))
 								AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
