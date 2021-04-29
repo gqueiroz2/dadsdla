@@ -106,10 +106,10 @@
                             {{$render->currency($currencies)}}
                         </div>
 
-                        <div class="col" id="stageFCSTCol" style="display:block;">
+                        <!--<div class="col" id="stageFCSTCol" style="display:block;">
                             <label class="labelLeft"><span class="bold" id="stageFCST"> Stage </span></label>
                             {{$render->stageFCST()}}
-                        </div>
+                        </div>-->
 
                         <div class="col" >
                             <label class="labelLeft"><span class="bold"> &nbsp; </span></label>                            
@@ -252,7 +252,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                                 type: "POST",
-                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx,total},
+                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx,total,stageExcel},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/
