@@ -84,9 +84,9 @@ return [
     |
     */
 
-    'username' => 'lucior.jr@gmail.com',
+    'username' => 'lucio_cruz@discoverybrasil.com',
 
-    'password' => 'jrbegmwgupeedluk',
+    'password' => 'tnuozkwcpnbidloc',
 
     /*
     |--------------------------------------------------------------------------
