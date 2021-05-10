@@ -1313,7 +1313,7 @@ class chain extends excel{
                                 }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
-                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));                                    
                                 }
     						}else{
     							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);

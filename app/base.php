@@ -470,13 +470,20 @@ class base extends Model{
     }
 
     public function monthToInt($month){
+        
+
         $tmp = explode(" ",$month);
         $newMonth = trim($tmp[0]);
         
+        $intMonth = false;
         for ($m=0; $m < sizeof($this->month); $m++) { 
             if($newMonth == $this->month[$m][2]){
                 $intMonth = $this->month[$m][1];
             }
+        }
+
+        if(!$intMonth){
+            var_dump($newMonth);
         }
         return $intMonth;
     }
