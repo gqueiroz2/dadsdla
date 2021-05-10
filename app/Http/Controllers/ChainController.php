@@ -87,6 +87,7 @@ class ChainController extends Controller{
                 unset($spreadSheet[0]);
                 unset($spreadSheet[1]);
                 unset($spreadSheet[2]);
+                unset($spreadSheet[3]);
 
                 $tar = sizeof($spreadSheet);
                 unset($spreadSheet[$tar]);
@@ -177,6 +178,7 @@ class ChainController extends Controller{
                 break;
 		}
         
+        //var_dump($spreadSheet);
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
         
 		if($complete){

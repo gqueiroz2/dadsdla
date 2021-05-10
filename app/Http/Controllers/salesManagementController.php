@@ -20,7 +20,7 @@ use Validator;
 class salesManagementController extends Controller{
     
 	public function home(){
-		return view('salesManagement.home');
+		return view('SalesManagement.home');
 	}
 
 	public function CustomReportV1(){

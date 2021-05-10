@@ -723,6 +723,8 @@ class AE extends pAndR{
 
         $salesRep = $sr->getSalesRepById($con,$salesRepID);        
 
+        $brandIDS = $this->getBrandsWithOutSony($con);
+
         $brand = $br->getBrandBinary($con);
         $month = $base->getMonth();
 
@@ -1036,6 +1038,10 @@ class AE extends pAndR{
                     );
 
         return $rtr;
+
+    }
+
+    public function getBrandsWithOutSony(){
 
     }
 
