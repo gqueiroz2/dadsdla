@@ -240,17 +240,40 @@ class performanceExecutive extends performance
             for ($t=0; $t < sizeof($mtx["tier"]); $t++) { 
                 for ($m=0; $m < sizeof($month); $m++) { 
                     for ($b=0; $b < sizeof($brand); $b++) { 
-                        if (($brand[$b][1] == 'DC' || $brand[$b][1] == 'HH' || $brand[$b][1] == 'DK') && $mtx["tier"][$t] == "T1") {
+                        if (
+                                ($brand[$b][1] == 'DC' || $brand[$b][1] == 'HH' || $brand[$b][1] == 'DK') 
+                                    && 
+                                $mtx["tier"][$t] == "T1"
+                            ) {
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$s][$t] += $mtx["case4"]["planValues"][$s][$b][$m];    
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];                            
-                        }elseif($brand[$b][1] == 'OTH' && $mtx["tier"][$t] == "TOTH"){
+                        }elseif(
+                                    ($brand[$b][1] == 'OTH' || $brand[$b][1] == 'IAS')
+                                        && 
+                                    $mtx["tier"][$t] == "TOTH"){
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$s][$t] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];                            
-                        }elseif($mtx["tier"][$t] == "T2" && ($brand[$b][1] == 'AP' || $brand[$b][1] == 'TLC' || $brand[$b][1] == 'ID' || $brand[$b][1] == 'DT' || $brand[$b][1] == 'FN' || $brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX' || $brand[$b][1] == 'HGTV')){
+                        }elseif(    
+                                    $mtx["tier"][$t] == "T2" 
+                                        && 
+                                    ($brand[$b][1] == 'AP' 
+                                    || $brand[$b][1] == 'TLC' 
+                                    || $brand[$b][1] == 'ID' 
+                                    || $brand[$b][1] == 'DT' 
+                                    || $brand[$b][1] == 'FN' 
+                                    || $brand[$b][1] == 'ONL' 
+                                    || $brand[$b][1] == 'VIX' 
+                                    || $brand[$b][1] == 'HGTV'
+                                    || $brand[$b][1] == 'VOD'|| 
+                                    $brand[$b][1] == 'GC'|| 
+                                    $brand[$b][1] == 'HO' || 
+                                    $brand[$b][1] == 'ES'
+
+                                )){
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$s][$t] += $mtx["case4"]["planValues"][$s][$b][$m];                                
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
