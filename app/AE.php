@@ -723,7 +723,7 @@ class AE extends pAndR{
 
         $salesRep = $sr->getSalesRepById($con,$salesRepID);        
 
-        $brandIDS = $this->getBrandsWithOutSony($con);
+        $brandIDS = $this->getBrandsWithOutSony($con,$sql);
 
         $brand = $br->getBrandBinary($con);
         $month = $base->getMonth();
@@ -1041,8 +1041,8 @@ class AE extends pAndR{
 
     }
 
-    public function getBrandsWithOutSony(){
-
+    public function getBrandsWithOutSony($con,$sql){
+        
     }
 
     public function mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage){
