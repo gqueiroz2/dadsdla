@@ -18,8 +18,8 @@ Route::group(['prefix' => 'salesManagement'],function(){
 
 	Route::group(['prefix' => 'CRM'],function(){
 		
-		Route::get('customReportV1','salesManagementController@customReportV1')
-							->name('salesManagementCustomReportV1');
+		Route::post('customReportV1','salesManagementController@customReportV1')
+							->name('salesManagementCustomReportV1Post');
 
 		
 

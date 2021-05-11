@@ -25,6 +25,15 @@
 						<div class="container-fluid">
 							<div class="row mt-2 justify-content-center">
 								<div class="col">
+									<form method="POST" action="{{ route('salesManagementCustomReportV1Post') }}" runat="server"  onsubmit="ShowLoading()">
+										@csrf
+
+										<div class="col-sm">
+											<label> &nbsp; </label>
+											<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">		
+										</div>
+									</form>
+
 									<button class="btn btn-primary" style="width: 100%;" id="crm"> 
 										<a style="color: white">
 											Custom Report V1

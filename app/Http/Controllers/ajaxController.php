@@ -630,10 +630,13 @@ class ajaxController extends Controller{
             $db = new dataBase();
 
             $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
+            $con = $db->openConnection($default);
 
             $b = new brand();
             $brands = $b->getBrand($con);
+
+            var_dump($brands);
+
             for ($t=0; $t < sizeof($tiers); $t++) {
                 for ($b=0; $b < sizeof($brands); $b++) { 
                     $value[$b] = base64_encode(json_encode(array($brands[$b]['id'],$brands[$b]['name'])));
@@ -642,14 +645,27 @@ class ajaxController extends Controller{
                             echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";            
                         }
                     }elseif ($tiers[$t] == 'T2') {
-                        if ($brands[$b]['name'] == 'AP' || $brands[$b]['name'] == 'TLC' || $brands[$b]['name'] == 'ID' || $brands[$b]['name'] == 'DT' || $brands[$b]['name'] == 'FN' || $brands[$b]['name'] == 'ONL' || $brands[$b]['name'] == 'VIX' || $brands[$b]['name'] == 'HGTV'){
+                        if (    
+                            $brands[$b]['name'] == 'AP' || 
+                            $brands[$b]['name'] == 'TLC' || 
+                            $brands[$b]['name'] == 'ID' || 
+                            $brands[$b]['name'] == 'DT' || 
+                            $brands[$b]['name'] == 'FN' || 
+                            $brands[$b]['name'] == 'ONL' || 
+                            $brands[$b]['name'] == 'VIX' || 
+                            $brands[$b]['name'] == 'HGTV' || 
+                            $brands[$b]['name'] == 'VOD'|| 
+                            $brands[$b]['name'] == 'GC'|| 
+                            $brands[$b]['name'] == 'HO' || 
+                            $brands[$b]['name'] == 'ES'                            
+
+                        ){
                                 echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";               
                         }
                     }else{
-                        if ($brands[$b]['name'] == "OTH") {
+                        if ($brands[$b]['name'] == "OTH" || $brands[$b]['name'] == "IAS") {
                             echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";    
-                        }
-                        
+                        }                        
                     }
                 }  
 
