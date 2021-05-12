@@ -635,13 +635,19 @@ class ajaxController extends Controller{
             $b = new brand();
             $brands = $b->getBrand($con);
 
-            var_dump($brands);
 
             for ($t=0; $t < sizeof($tiers); $t++) {
                 for ($b=0; $b < sizeof($brands); $b++) { 
                     $value[$b] = base64_encode(json_encode(array($brands[$b]['id'],$brands[$b]['name'])));
                     if ($tiers[$t] == 'T1') {
-                        if ($brands[$b]['name'] == 'DC' || $brands[$b]['name'] == 'HH' || $brands[$b]['name'] == 'DK'){
+                        if (
+                            $brands[$b]['name'] == 'DC' || 
+                            $brands[$b]['name'] == 'HH' || 
+                            $brands[$b]['name'] == 'DK' || 
+                            $brands[$b]['name'] == 'AXN' || 
+                            $brands[$b]['name'] == 'AXD'  
+                            
+                           ){
                             echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";            
                         }
                     }elseif ($tiers[$t] == 'T2') {
@@ -657,9 +663,12 @@ class ajaxController extends Controller{
                             $brands[$b]['name'] == 'VOD'|| 
                             $brands[$b]['name'] == 'GC'|| 
                             $brands[$b]['name'] == 'HO' || 
-                            $brands[$b]['name'] == 'ES'                            
+                            $brands[$b]['name'] == 'SON' || 
+                            $brands[$b]['name'] == 'SD' || 
+                            $brands[$b]['name'] == 'ES' ||
+                            $brands[$b]['name'] == 'AC'                           
 
-                        ){
+                           ){
                                 echo "<option selected='true' value='".$value[$b]."'>".$brands[$b]['name']."</option>";               
                         }
                     }else{

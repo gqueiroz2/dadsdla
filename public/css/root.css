@@ -110,9 +110,45 @@ th{
 	color: white;
 }
 
+.axn{
+    background-color: #ff0000;
+    font-weight: bold;
+    color: white;
+}
+
+.axd{
+    background-color: #ff0000;
+    font-weight: bold;
+    color: white;
+}
+
 .onl{
 	background-color: #6600ff;
 	font-weight: bold;
+    color: white;
+}
+
+.gc{
+    background-color: #6600ff;
+    font-weight: bold;
+    color: white;
+}
+
+.ho{
+    background-color: #6600ff;
+    font-weight: bold;
+    color: white;
+}
+
+.ac{
+    background-color: #6600ff;
+    font-weight: bold;
+    color: white;
+}
+
+.es{
+    background-color: #6600ff;
+    font-weight: bold;
     color: white;
 }
 
@@ -122,7 +158,25 @@ th{
     color: white;
 }
 
+.son{
+    background-color: #004b84;
+    font-weight: bold;
+    color: white;
+}
+
+.sd{
+    background-color: #004b84;
+    font-weight: bold;
+    color: white;
+}
+
 .oth{
+    background-color: #808080;
+    font-weight: bold;
+    color: white;
+}
+
+.ias{
     background-color: #808080;
     font-weight: bold;
     color: white;
