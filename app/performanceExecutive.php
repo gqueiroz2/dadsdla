@@ -241,7 +241,14 @@ class performanceExecutive extends performance
                 for ($m=0; $m < sizeof($month); $m++) { 
                     for ($b=0; $b < sizeof($brand); $b++) { 
                         if (
-                                ($brand[$b][1] == 'DC' || $brand[$b][1] == 'HH' || $brand[$b][1] == 'DK') 
+                                (
+                                    $brand[$b][1] == 'DC' || 
+                                    $brand[$b][1] == 'HH' || 
+                                    $brand[$b][1] == 'DK' ||
+                                    $brand[$b][1] == 'AXN' || 
+                                    $brand[$b][1] == 'AXD' 
+                                    
+                                ) 
                                     && 
                                 $mtx["tier"][$t] == "T1"
                             ) {
@@ -250,7 +257,9 @@ class performanceExecutive extends performance
                             $tmp2["values"][$s][$t][$m] += $mtx["case4"]["values"][$s][$b][$m];
                             $mtx["case1"]["totalValueTier"][$s][$t] += $mtx["case4"]["values"][$s][$b][$m];                            
                         }elseif(
-                                    ($brand[$b][1] == 'OTH' || $brand[$b][1] == 'IAS')
+                                    (
+                                        $brand[$b][1] == 'OTH' || 
+                                        $brand[$b][1] == 'IAS')
                                         && 
                                     $mtx["tier"][$t] == "TOTH"){
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
@@ -260,18 +269,22 @@ class performanceExecutive extends performance
                         }elseif(    
                                     $mtx["tier"][$t] == "T2" 
                                         && 
-                                    ($brand[$b][1] == 'AP' 
-                                    || $brand[$b][1] == 'TLC' 
-                                    || $brand[$b][1] == 'ID' 
-                                    || $brand[$b][1] == 'DT' 
-                                    || $brand[$b][1] == 'FN' 
-                                    || $brand[$b][1] == 'ONL' 
-                                    || $brand[$b][1] == 'VIX' 
-                                    || $brand[$b][1] == 'HGTV'
-                                    || $brand[$b][1] == 'VOD'|| 
-                                    $brand[$b][1] == 'GC'|| 
-                                    $brand[$b][1] == 'HO' || 
-                                    $brand[$b][1] == 'ES'
+                                    (
+                                        $brand[$b][1] == 'AP' || 
+                                        $brand[$b][1] == 'TLC' || 
+                                        $brand[$b][1] == 'ID' || 
+                                        $brand[$b][1] == 'DT' || 
+                                        $brand[$b][1] == 'FN' || 
+                                        $brand[$b][1] == 'ONL' || 
+                                        $brand[$b][1] == 'VIX' || 
+                                        $brand[$b][1] == 'HGTV' || 
+                                        $brand[$b][1] == 'VOD'|| 
+                                        $brand[$b][1] == 'GC'|| 
+                                        $brand[$b][1] == 'HO' ||                                         
+                                        $brand[$b][1] == 'SON' || 
+                                        $brand[$b][1] == 'SD' || 
+                                        $brand[$b][1] == 'ES' ||
+                                        $brand[$b][1] == 'AC'                                         
 
                                 )){
                             $tmp2["planValues"][$s][$t][$m] += $mtx["case4"]["planValues"][$s][$b][$m];
