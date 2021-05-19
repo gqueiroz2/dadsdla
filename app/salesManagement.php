@@ -32,6 +32,13 @@ class salesManagement extends Model{
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					$temp[$m][$n]['region'] = $mtx[$m][$n]['region'];
 					$temp[$m][$n]['salesRep'] = $mtx[$m][$n]['salesRep'];
+					$temp[$m][$n]['currency'] = 'USD';				
+					if($mtx[$m][$n]['month'] < 10){
+						$month = "0".$mtx[$m][$n]['month'];
+					}else{
+						$month = $mtx[$m][$n]['month'];
+					}
+					$temp[$m][$n]['date'] = $month."/"."01/".date('Y');
 					$temp[$m][$n]['month'] = $mtx[$m][$n]['month'];
 					$temp[$m][$n]['brand'] = $mtx[$m][$n]['brand'];
 					$temp[$m][$n]['targetValue'] = $mtx[$m][$n]['targetValue'];
@@ -42,7 +49,7 @@ class salesManagement extends Model{
 				$temp[$m] = false;
 			}
 		}
-		
+
 		return $temp;
 	}
 
@@ -147,6 +154,8 @@ class salesManagement extends Model{
 		$res = $con->query($select);
 		$from = array('salesRep','salesRepID','regionID','region');
 		$array = $sql->fetch($res,$from,$from);
+
+
 		return $array;
 	}
 

@@ -25,9 +25,9 @@
 						<td> Bookings </td>
 					</tr>
 					<tr>
-						<td> Region </td>
-						<td> Year </td>
-						<td> Month </td>
+						<td> Region </td>						
+						<td> Date </td>
+						<td> Currency </td>
 						<td> Brand </td>
 						<td> AE </td>
 						<td> Target Value </td>
@@ -39,9 +39,9 @@
 						@if($temp[$m])
 							@for($n=0;$n< sizeof($temp[$m]);$n++)
 								<tr>
-									<td> {{ $temp[$m][$n]['region'] }} </td>
-									<td> 2021 </td>
-									<td> {{ $temp[$m][$n]['month'] }} </td>
+									<td> {{ $temp[$m][$n]['region'] }} </td>									
+									<td> {{ $temp[$m][$n]['date'] }} </td>
+									<td> {{ $temp[$m][$n]['currency'] }} </td>
 									<td> {{ $temp[$m][$n]['brand'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRep'] }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['targetValue'] ) }} </td>
