@@ -315,8 +315,14 @@ class base extends Model{
 
     public $nameReps = array(
                 "EC1" => array("New York International"),
-                "EC2" => array("Venezuela","Panama","Dominican Republic","Ecuador"),
-                "EC3" => array("Brazil","Argentina","Colombia","Miami","Mexico","Chile","Peru","Venezuela","Panama","Dominican Republic","Ecuador","Bolivia","Puerto Rico","New York International","US Hispanic")
+                "EC2" => array("Venezuela","Ecuador"),
+                "EC3" => array("Panama","Dominican Republic","Puerto Rico"),
+                "EC4" => array("Mexico","Panama","Dominican Republic","Puerto Rico"),
+                "EC5" => array("Miami","Panama","Dominican Republic","Puerto Rico"),
+                "EC6" => array("Panama","Dominican Republic"),
+                "EC7" => array("Chile","Peru"),
+
+
         );
 
     public $NameName = array(
