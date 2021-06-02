@@ -81,9 +81,9 @@ $(document).ready(function(){
               });
 
               $.ajax({
-                url:"/ajax/adsales/clientByRegionSize",
+                url:"/ajax/adsales/clientByRegion",
                 method:"POST",
-                data:{regionID,year},
+                data:{regionID},
                 success: function(output){
                   $('#sizeOfClient').val(output);
                 },
@@ -147,6 +147,30 @@ $(document).ready(function(){
               alert(xhr.status+" "+thrownError);
             }
           });
+
+          $.ajax({
+            url:"/ajax/adsales/agencyByRegionAndYear",
+            method:"POST",
+            data:{year},
+            success: function(output){
+              $('#agency').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });  
+
+          $.ajax({
+            url:"/ajax/adsales/clientByRegionAndYear",
+            method:"POST",
+            data:{year},
+            success: function(output){
+              $('#client').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });  
         }else{
           $.ajax({
             url:"/ajax/adsales/newSalesRepByRegion",
@@ -154,6 +178,30 @@ $(document).ready(function(){
             data:{regionID},
             success: function(output){
               $('#salesRep').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });
+
+          $.ajax({
+            url:"/ajax/adsales/clientByRegion",
+            method:"POST",
+            data:{regionID},
+            success: function(output){
+              $('#client').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });  
+
+          $.ajax({
+            url:"/ajax/adsales/agencyByRegion",
+            method:"POST",
+            data:{regionID},
+            success: function(output){
+              $('#agency').html(output).selectpicker("refresh");
             },
             error: function(xhr, ajaxOptions,thrownError){
               alert(xhr.status+" "+thrownError);
@@ -172,30 +220,6 @@ $(document).ready(function(){
       }
 
       var source = $('#sourceDataBase').val();
-
-      $.ajax({
-        url:"/ajax/adsales/agencyByRegionAndYear",
-        method:"POST",
-        data:{year},
-        success: function(output){
-          $('#agency').html(output).selectpicker("refresh");
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });
-
-      $.ajax({
-        url:"/ajax/adsales/clientByRegionAndYear",
-        method:"POST",
-        data:{year},
-        success: function(output){
-          $('#client').html(output).selectpicker("refresh");
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });      
 
       $.ajax({
         url:"/ajax/adsales/sourceByRegion",
@@ -353,9 +377,9 @@ $(document).ready(function(){
         });
 
         $.ajax({
-          url:"/ajax/adsales/agencyByRegionAndYear",
+          url:"/ajax/adsales/agencyByRegion",
           method:"POST",
-          data:{year},
+          data:{regionID},
           success: function(output){
             $('#agency').html(output).selectpicker("refresh");
           },
@@ -365,9 +389,9 @@ $(document).ready(function(){
         });
 
         $.ajax({
-          url:"/ajax/adsales/clientByRegionAndYear",
+          url:"/ajax/adsales/clientByRegion",
           method:"POST",
-          data:{year},
+          data:{regionID},
           success: function(output){
             $('#client').html(output).selectpicker("refresh");
           },

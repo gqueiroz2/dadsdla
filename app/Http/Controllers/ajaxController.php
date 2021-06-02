@@ -210,6 +210,37 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getAgencyByRegionSF(){
+        
+        $a = new agency;
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $region = Request::get("regionID");
+        $agency = $a->getAgencyByRegionSF($con,array($region));
+
+        for ($a=0; $a < sizeof($agency); $a++) { 
+            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        }
+    }
+
+    public function getClientByRegionSF(){
+        $c = new client;
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $region = Request::get("regionID");
+        $client = $c->getClientByRegionSF($con,array($region));
+
+        for ($c=0; $c < sizeof($client); $c++) { 
+            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+        }
+    }
+
     public function getAgencyByRegionAndYear(){        
         
         $a = new agency;

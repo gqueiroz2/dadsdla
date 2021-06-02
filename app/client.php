@@ -361,6 +361,54 @@ class client extends Management{
         return $client;
     }
 
+    public function getClientByRegionSF($con,$clientRegion=false,$year=false){
+     
+        $sql = new sql();
+
+        $table = "sf_pr sf";
+
+        $columns = "c.name AS 'client',
+                    c.ID AS 'id',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($clientRegion){
+            $clientRegions = implode(",",$clientRegion);
+            $where .= "WHERE region_id IN ('$clientRegions')";
+
+            if ($year) {
+                //$years = implode(",", $year);
+                $where .= " AND year_from IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";
+            }
+        }
+
+
+
+        $join = "LEFT JOIN client c ON c.ID = sf.client_id
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                 LEFT JOIN region r ON cg.region_id = r.ID
+                ";
+
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
+
+        $from = array('id','client','clientGroupID','clientGroup','region');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
     public function getClientByRegion($con,$clientRegion=false,$year=false){
      
         $sql = new sql();
