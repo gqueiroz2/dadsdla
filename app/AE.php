@@ -787,7 +787,7 @@ class AE extends pAndR{
         $revenueDiscovery = $this->addQuartersAndTotalOnArray($revenueDiscovery);
 
         $revenueDiscoveryPYear = $this->revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$brandIDS);
-        var_dump($revenueDiscoveryPYear);
+        //var_dump($revenueDiscoveryPYear);
 
         $revenueDiscoveryPYear = $this->addQuartersAndTotalOnArray($revenueDiscoveryPYear);
 
