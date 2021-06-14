@@ -98,10 +98,63 @@ class ajaxController extends Controller{
                 $sr = new salesRep();
                 $regionID = array($regionID);
                 $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
-                //echo "<option selected='true' value=''>Select Sales Rep.</option>";
-                for ($s=0; $s < sizeof($resp); $s++) { 
-                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+
+                $userLevel = Request::session()->get('userLevel');
+                $special = Request::session()->get('special');
+                $userRegionID = Request::session()->get('userRegionID');
+
+                if($userLevel == "L4"){
+                    $userName = Request::session()->get('userName');
+                    $performanceName = Request::session()->get('performanceName');
+                    $check = false;            
+                    for ($s=0; $s <sizeof($resp) ; $s++) { 
+                        if (!is_null($performanceName)) {
+                            if($resp[$s]["salesRep"] == $performanceName){
+                                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                                $check = true;
+                            }
+                        }else{
+                            setlocale(LC_ALL, "en_US.utf8");
+                            $output = iconv("utf-8", "ascii//TRANSLIT", $userName);
+                            if( strpos($resp[$s]["salesRep"], $output)  !== false){
+                                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                                $check = true;
+                            }
+                        }
+                    }
+                    if (!$check) {
+                        echo "<option value=''> Sales Rep Not Found </option>";
+                    }
+                }else if($userLevel == "L6"){
+                    if($regionID[0] == $userRegionID){
+                        $userName = Request::session()->get('userName');
+                        $performanceName = Request::session()->get('performanceName');
+                        $check = false; 
+                        for ($s=0; $s <sizeof($resp) ; $s++) {  
+                            $salesRepWithNoSpecialCharacters = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$resp[$s]['salesRep']);
+                            $salesRepWithNoSpecialCharacters1 = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$userName);
+                            if($salesRepWithNoSpecialCharacters == $salesRepWithNoSpecialCharacters1){                        
+                                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                            }
+                        }
+                    }else{
+                        if($resp){
+                            for ($s=0; $s < sizeof($resp); $s++) { 
+                                echo "<option value='".$resp[$s]["id"]."' selected='true'>"
+                                    .$resp[$s]["salesRep"].
+                                "</option>";
+                            }
+                        }else{
+                            echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+                        }   
+                    }
+                }else{
+                    for ($s=0; $s < sizeof($resp); $s++) { 
+                        echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                    }
                 }
+
+                
                 
                 break;
 
@@ -1060,8 +1113,7 @@ class ajaxController extends Controller{
                     echo "<option value=''> There is no Sales Rep. Groups for this region. </option>";
                 }
             }
-        }
-            
+        }        
 
         
     }
@@ -1076,6 +1128,8 @@ class ajaxController extends Controller{
         $year = Request::get('year');        
         $userLevel = Request::session()->get('userLevel');
         $special = Request::session()->get('special');
+        $userRegionID = Request::session()->get('userRegionID');
+
         $salesRepGroupID = $sr->getSalesRepGroup($con,array($regionID));
         for ($s=0; $s <sizeof($salesRepGroupID); $s++) { 
             $salesRepGroupID[$s] = $salesRepGroupID[$s]['id'];
@@ -1111,6 +1165,31 @@ class ajaxController extends Controller{
             if (!$check) {
                 echo "<option value=''> Sales Rep Not Found </option>";
             }
+        }else if($userLevel == "L6"){
+
+            if($regionID == $userRegionID){
+                $userName = Request::session()->get('userName');
+                $performanceName = Request::session()->get('performanceName');
+                $check = false; 
+                for ($s=0; $s <sizeof($salesRep) ; $s++) {  
+                    $salesRepWithNoSpecialCharacters = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$salesRep[$s]['salesRep']);
+                    $salesRepWithNoSpecialCharacters1 = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$userName);
+                    if($salesRepWithNoSpecialCharacters == $salesRepWithNoSpecialCharacters1){                        
+                        echo "<option value='".$salesRep[$s]["id"]."' > ".$salesRep[$s]["salesRep"]." </option>";
+                    }
+                }
+            }else{
+                if($salesRep){
+                    for ($s=0; $s < sizeof($salesRep); $s++) { 
+                        echo "<option value='".$salesRep[$s]["id"]."'>"
+                            .$salesRep[$s]["salesRep"].
+                        "</option>";
+                    }
+                }else{
+                    echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+                }   
+            }
+
         }else{
 
             if($salesRep){
