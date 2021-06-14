@@ -657,6 +657,53 @@ class agency extends Management{
 
     }
 
+    public function getAgencyByRegionSF($con,$agencyRegion=false,$year=false){
+
+        $sql = new sql();
+
+        $table = "sf_pr sf";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+            $where .= "WHERE region_id IN ('$agencyRegions')";
+
+            if ($year) {
+                //$years = implode(",", $year);
+                $where .= " AND year_from IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";
+            }
+        }
+
+        $join = "LEFT JOIN agency a ON a.id = sf.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON ag.region_id = r.ID
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
+
+        $from = array('id','agency','agencyGroup','agencyGroupID','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
     public function getAgencyByRegionWithValue($con,$agencyRegion=false,$year=false){
 
         $sql = new sql();

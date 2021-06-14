@@ -415,6 +415,9 @@ class AE extends pAndR{
 
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
+        //$clientRevenueDiscovery = $this->revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
+        //var_dump($clientRevenueDiscovery);
+
         $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
@@ -632,6 +635,8 @@ class AE extends pAndR{
                         "clientRevenueCYear" => $clientRevenueCYear,
                         "clientRevenuePYear" => $clientRevenuePYear,
 
+                        //"clientRevenueDiscovery" => $clientRevenueDiscovery,
+
                         "executiveRF" => $executiveRF,
                         "executiveRevenuePYear" => $executiveRevenuePYear,
                         "executiveRevenueCYear" => $executiveRevenueCYear,
@@ -667,7 +672,6 @@ class AE extends pAndR{
         $reg = new region();
 
         $actualMonth = date('n');
-
         $data = date('Y-m-d');
 
         $week = $this->weekOfMonth($data);
@@ -723,9 +727,11 @@ class AE extends pAndR{
 
         $salesRep = $sr->getSalesRepById($con,$salesRepID);        
 
-        $brandIDS = $this->getBrandsWithOutSony($con,$sql);
+        $brandIDS = $this->getBrandsWithOutSony($con,$sql,$salesRepID,$cYear,$regionID);
 
         $brand = $br->getBrandBinary($con);
+        //$brandId = $br->getBrand($con);
+        
         $month = $base->getMonth();
 
         $tmp = array($cYear);
@@ -776,7 +782,26 @@ class AE extends pAndR{
 
         $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
 
+        $revenueDiscovery = $this->revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brandIDS);
+
+        $revenueDiscovery = $this->addQuartersAndTotalOnArray($revenueDiscovery);
+
+        $revenueDiscoveryPYear = $this->revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$brandIDS);
+        //var_dump($revenueDiscoveryPYear);
+
+        $revenueDiscoveryPYear = $this->addQuartersAndTotalOnArray($revenueDiscoveryPYear);
+
+        $revenueSony = $this->revenueBySonyClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brand);
+
+        $revenueSony = $this->addQuartersAndTotalOnArray($revenueDiscovery);
+
+        $revenueSonyPYear = $this->revenueBySonyClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$brand);
+
+        $revenueSonyPYear = $this->addQuartersAndTotalOnArray($revenueSonyPYear);
+
+
         $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
+
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
         $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
@@ -995,8 +1020,7 @@ class AE extends pAndR{
 
         $secondary = $listOfClients;
 
-        $nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
-
+        $nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage,$revenueDiscovery,$revenueDiscoveryPYear,$revenueSony,$revenueSonyPYear);
 
         $rtr = array(	
         				"cYear" => $cYear,
@@ -1016,6 +1040,12 @@ class AE extends pAndR{
                         "executiveRF" => $executiveRF,
                         "executiveRevenuePYear" => $executiveRevenuePYear,
                         "executiveRevenueCYear" => $executiveRevenueCYear,
+
+                        "revenueDiscovery" => $revenueDiscovery,
+                        "revenueDiscoveryPYear" => $revenueDiscoveryPYear,
+
+                        "revenueSony" => $revenueSony,
+                        "revenueSonyPYear" => $revenueSonyPYear,
 
                         "pending" => $pending,
                         "RFvsTarget" => $RFvsTarget,
@@ -1041,11 +1071,65 @@ class AE extends pAndR{
 
     }
 
-    public function getBrandsWithOutSony($con,$sql){
+    public function getBrandsWithOutSony($con,$sql,$salesRepID,$cYear,$regionID){
+
+        $date = date('n')-1;
+        $pYear = $cYear - 1;
+
+        $tmp = $salesRepID[0];
+        //GET FROM SALES FORCE
+       /* $sf = "SELECT DISTINCT s.brand AS 'brand'
+                    FROM sf_pr s
+                    WHERE ( (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
+                    AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                    ORDER BY 1
+               ";       
+        $resSF = $con->query($sf);
+        $from = array("brand");
+        $listSF = $sql->fetch($resSF,$from,$from);*/
+        //GET FROM IBMS/BTS
+        $ytd = "SELECT DISTINCT b.name AS 'brandName',
+                       b.ID AS 'brandID'
+                    FROM ytd y
+                    LEFT JOIN brand b ON b.ID = y.brand_id
+                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    WHERE (y.sales_rep_id = \"$tmp\" )
+                    AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )
+                    AND (r.ID = \"".$regionID."\")
+                    AND (b.ID != \"21\") AND (b.ID != \"22\") AND (b.ID != \"23\") AND (b.ID != \"24\") AND (b.ID != \"25\") AND (b.ID != \"26\") AND (b.ID != \"27\")
+                    ORDER BY 1
+               ";
+        $resYTD = $con->query($ytd);
+        $from = array("brandName","brandID");
+        $listYTD = $sql->fetch($resYTD,$from,$from);
+        $count = 0;
+
+        $list = array();
+
+       /* if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
+        }*/
+        if($listYTD){
+            for ($y=0; $y < sizeof($listYTD); $y++) { 
+                $list[$count] = $listYTD[$y];
+                $count ++;
+            }
+        }
+
+        $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
         
+        $list = array_values($list);
+        
+        return $list;
+
     }
 
-    public function mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage){
+    public function mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage,$revenueDiscovery,$revenueDiscoveryPYear,$revenueSony,$revenueSonyPYear){
+
         
         $nSecondary = $secondary;
 
@@ -1054,8 +1138,11 @@ class AE extends pAndR{
             $nSecondary[$n]['lastRollingFCST'] = $lastRollingFCST[$n];
             $nSecondary[$n]['clientRevenueCYear'] = $clientRevenueCYear[$n];
             $nSecondary[$n]['clientRevenuePYear'] = $clientRevenuePYear[$n];  
-            $nSecondary[$n]['fcstAmountByStage'] = $fcstAmountByStage[$n];  
-
+            $nSecondary[$n]['fcstAmountByStage'] = $fcstAmountByStage[$n]; 
+            $nSecondary[$n]['revenueDiscovery'] = $revenueSony[$n];
+            $nSecondary[$n]['revenueDiscoveryPYear'] = $revenueDiscoveryPYear[$n];
+            $nSecondary[$n]['revenueSony'] = $revenueSony[$n];
+            $nSecondary[$n]['revenueSonyPYear'] = $revenueSonyPYear[$n];
             $nSecondary[$n]['higherValue'] = $rollingFCST[$n][16];            
         }
 
@@ -2261,7 +2348,6 @@ class AE extends pAndR{
                                 AND (agency_id = \"".$clients[$c]['agencyID']."\")
                                 AND (month = \"".$month[$m][1]."\")                                    
                                 AND (year = \"".$year."\")
-
                               ";
 
                 $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
@@ -2295,6 +2381,139 @@ class AE extends pAndR{
 
     }
 
+    public function revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
+
+        if($currency == "USD"){
+            $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+        }
+
+        if($value == "gross"){
+            $ytdColumn = "gross_revenue_prate";
+            $fwColumn = "gross_revenue";            
+        }else{
+            $ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
+        }
+
+        $table = "ytd";
+        $tableFW = "fw_digital"; 
+
+        for ($c=0; $c < sizeof($clients); $c++) { 
+              
+            for ($m=0; $m < sizeof($month); $m++) {
+
+                 for ($b=0; $b < sizeof($brand); $b++) { 
+                    /*
+                            FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
+                    */
+                    $select[$c][$m] = "
+                                    SELECT SUM($ytdColumn) AS sumValue
+                                    FROM $table
+                                    WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                    AND (agency_id = \"".$clients[$c]['agencyID']."\")
+                                    AND (month = \"".$month[$m][1]."\")
+                                    AND (year = \"".$year."\")
+                                    AND (brand_id != \"".$brand[$b]['brandID']."\")
+                                  ";
+
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                    FROM $tableFW
+                                    WHERE (client_id = \"".$clients[$c]["clientID"]."\")
+                                    AND (agency_id = \"".$clients[$c]['agencyID']."\")
+                                    AND (month = \"".$month[$m][1]."\")
+                                    AND (year = \"".$year."\")
+                                    AND (brand_id != \"".$brand[$b]['brandID']."\")
+                                    ";
+
+
+                    $res[$c][$m] = $con->query($select[$c][$m]);
+                    $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
+
+                    $from = array("sumValue");
+
+                    $rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
+                    $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;                    
+                    
+                    if( !is_null($revFW[$c][$m]) ){
+                        
+                        $rev[$c][$m] += ( $revFW[$c][$m] );
+                        
+                    }
+                }
+            }
+        }
+        return $rev;
+
+    }
+
+    public function revenueBySonyClient($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
+
+        if($currency == "USD"){
+            $div = 1;
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+        }
+
+        if($value == "gross"){
+            $ytdColumn = "gross_revenue_prate";
+            $fwColumn = "gross_revenue";            
+        }else{
+            $ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
+        }
+
+        $brands = array("21","22","23","24","25","26","27");
+
+        $brands = $base->arrayToString($brands,false,0);
+
+        for ($c=0; $c < sizeof($clients); $c++) {               
+            for ($m=0; $m < sizeof($month); $m++) {
+                    /*
+                            FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS
+                    */
+                    $select[$c][$m] = "
+                                    SELECT SUM($ytdColumn) AS sumValue
+                                    FROM ytd y
+                                    LEFT JOIN brand b ON b.id = y.brand_id
+                                    WHERE (y.client_id = \"".$clients[$c]['clientID']."\")
+                                    AND (y.agency_id = \"".$clients[$c]['agencyID']."\")
+                                    AND (y.month = \"".$month[$m][1]."\")                               
+                                    AND (y.year = \"".$year."\")
+                                    AND (b.id = $brands)                                   
+                                  ";
+
+                    $selectFW[$c][$m] = "SELECT SUM($fwColumn) AS sumValue 
+                                    FROM fw_digital f
+                                    LEFT JOIN brand b ON b.id = f.brand_id
+                                    WHERE (f.client_id = \"".$clients[$c]["clientID"]."\")
+                                    AND (f.agency_id = \"".$clients[$c]['agencyID']."\")
+                                    AND (f.month = \"".$month[$m][1]."\")
+                                    AND (f.year = \"".$year."\")
+                                    AND (b.id = \"".$brands."\")                               
+                                    ";
+
+
+                    $res[$c][$m] = $con->query($select[$c][$m]);
+                    $resFW[$c][$m] = $con->query($selectFW[$c][$m]);
+
+                    $from = array("sumValue");
+
+                    $rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;                   
+                    $revFW[$c][$m] = $sql->fetch($resFW[$c][$m],$from,$from)[0]['sumValue']*$div;
+
+                    if( !is_null($revFW[$c][$m]) ){
+                        
+                        $rev[$c][$m] += ( $revFW[$c][$m] );
+                        
+                    }
+            }
+        }
+        return $rev;
+
+    }
+
     public static function orderClient($a, $b){
         if ($a == $b)
             return 0;
@@ -2310,7 +2529,7 @@ class AE extends pAndR{
         $sf = "SELECT DISTINCT s.brand AS 'brandName',
                                b.ID AS 'brandID'
                     FROM sf_pr s
-                    LEFT JOIN brand b ON s.brand b.name 
+                    LEFT JOIN brand b ON s.brand = b.name 
                     WHERE (      (s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\")      )
                     AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
                     AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
@@ -2389,8 +2608,7 @@ class AE extends pAndR{
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
                     LEFT JOIN agency a ON a.ID = y.agency_id
     				WHERE (y.sales_rep_id = \"$tmp\" )
-    				AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )
-                    
+    				AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )                    
                     AND (r.ID = \"".$regionID."\")
     				ORDER BY 1
     	       ";

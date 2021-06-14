@@ -31,6 +31,9 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('agencyByRegion','ajaxController@getAgencyByRegion');
 			Route::post('clientByRegion','ajaxController@getClientByRegion');
 
+			Route::post('agencyByRegionSF','ajaxController@getAgencyByRegionSF');
+			Route::post('clientByRegionSF','ajaxController@getClientByRegionSF');
+
 			Route::post('agencyByRegionAndYear','ajaxController@getAgencyByRegionAndYear');
 			Route::post('clientByRegionAndYear','ajaxController@getClientByRegionAndYear');
 
