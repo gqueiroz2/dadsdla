@@ -48,8 +48,7 @@
         <div class="row">
             <div id="map" class="aligh-middle" >
                 <center>
-                    <img src="\warning.png" style="width: 65%; margin-top: 10%; height: auto;">
-                    
+                    <img src="\portalLogo.png" style="width: 65%; margin-top: 10%; height: auto;">                    
                 </center>                
                 <center>
                     <span style="font-weight: bold;font-size: 18px; margin-top:-5%;"> Contact Us 
