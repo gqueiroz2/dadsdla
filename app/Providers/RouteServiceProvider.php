@@ -71,6 +71,7 @@ class RouteServiceProvider extends ServiceProvider
                             require base_path('routes/analytics.php');
                             require base_path('routes/planning.php');
                             require base_path('routes/salesManagement.php');
+                            require base_path('routes/forecast.php');
                             require base_path('routes/test.php');
                      });
 /*

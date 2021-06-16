@@ -35,7 +35,7 @@
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold" style="color: red;" id="typeSelectLabel"> Select Region </span></label>
-						@if($errors->has('brand'))
+						@if($errors->has('typeSelect'))
 							<label style="color: red;">* Required</label>
 						@endif
 						{{$render->typeSelect()}}

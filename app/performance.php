@@ -60,6 +60,20 @@ class performance extends base{
         return $values;
     }
 
+    public function generateValueS($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$value=null){
+
+        if (is_array($salesRep)) {
+            for ($s=0; $s < sizeof($salesRep); $s++) {
+                $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand,$salesRep[$s],$month,$value);
+                $results[$s] = $sql->selectSum2($con,$sum,"sum",$table,false,$where[$s]);
+                $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
+            }   
+        }else{
+            $values = null;
+        }
+        return $values;
+    }
+
     public function createWhere($sql,$source,$region,$year,$brand,$salesRep,$month,$value=null){
         if ($source == "ytd") {
             $columns = array("sales_representant_office_id","year","brand_id","sales_rep_id","month");

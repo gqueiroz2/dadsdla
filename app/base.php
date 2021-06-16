@@ -488,9 +488,6 @@ class base extends Model{
             }
         }
 
-        if(!$intMonth){
-            var_dump($newMonth);
-        }
         return $intMonth;
     }
 

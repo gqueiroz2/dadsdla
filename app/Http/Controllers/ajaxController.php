@@ -320,7 +320,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection($default);
 
         $year  = Request::get("year");
-        var_dump($year);
+
         $client = $c->getClientByRegionCMAPS($con,$year);
 
         for ($c=0; $c < sizeof($client); $c++) { 

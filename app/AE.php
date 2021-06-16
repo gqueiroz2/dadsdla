@@ -1124,6 +1124,8 @@ class AE extends pAndR{
         
         $list = array_values($list);
         
+        var_dump($list);
+
         return $list;
 
     }

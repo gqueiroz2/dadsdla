@@ -243,7 +243,9 @@ class consolidateResultsController extends Controller{
     public function post(){
 
         $validator = Validator::make(Request::all(),[
-            'region' => 'required',                        
+            'region' => 'required',
+            'type' => 'required',
+            'typeSelect' => 'required'                        
         ]);
 
         if ($validator->fails()) {
