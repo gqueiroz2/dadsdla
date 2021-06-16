@@ -1,12 +1,8 @@
 $(document).ready(function(){
   $('#region').change(function(){
-
     var regionID = $(this).val();
-
     ajaxSetup();
-
     if (regionID != "") {
-      //$('#brand').empty().html("<option value='' selected='true'> Select Source </option>").selectpicker('refresh');
       $.ajax({ 
         url:"/ajax/adsales/yearByRegion",
         method:"POST",
@@ -29,6 +25,30 @@ $(document).ready(function(){
                 alert(xhr.status+" "+thrownError);
               }
             });
+
+            $.ajax({
+              url:"/ajax/adsales/agencyByRegionAndYear",
+              method:"POST",
+              data:{year},
+              success: function(output){
+                $('#agency').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });  
+
+            $.ajax({
+              url:"/ajax/adsales/clientByRegionAndYear",
+              method:"POST",
+              data:{year},
+              success: function(output){
+                $('#client').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            }); 
             
             $.ajax({
               url:"/ajax/adsales/thirdPosByRegion",
@@ -140,8 +160,7 @@ $(document).ready(function(){
             method:"POST",
             data:{regionID,year,source},
             success: function(output){
-              $('#saleRep').html(output).selectpicker("refresh");
-              //$('#vlau').html(output).selectpicker("refresh");
+              $('#saleRep').html(output).selectpicker("refresh");              
             },
             error: function(xhr, ajaxOptions,thrownError){
               alert(xhr.status+" "+thrownError);

@@ -776,7 +776,7 @@ class AE extends pAndR{
         $mergeTarget = $this->mergeTarget($targetValues,$month);
         $targetValues = $mergeTarget;
 
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
+        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brandIDS);
 
         $clientRevenueCYearTMP = $clientRevenueCYear;
 
@@ -800,7 +800,7 @@ class AE extends pAndR{
         $revenueSonyPYear = $this->addQuartersAndTotalOnArray($revenueSonyPYear);
 
 
-        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
+        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$brandIDS);
 
         $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
 
@@ -1124,6 +1124,8 @@ class AE extends pAndR{
         
         $list = array_values($list);
         
+        var_dump($list);
+
         return $list;
 
     }
@@ -2315,7 +2317,7 @@ class AE extends pAndR{
     }
 
 
-    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear){
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
 
     	if($currency == "USD"){
     		$div = 1;

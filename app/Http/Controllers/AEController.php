@@ -18,6 +18,94 @@ use Validator;
 
 class AEController extends Controller{
     
+    public function get(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $r = new region();
+        $sr = new salesRep();
+        $render = new PAndRRender();
+        $pr = new pRate();
+
+        $user = Request::session()->get('userName');
+        $permission = Request::session()->get('userLevel');
+
+        $region = $r->getRegion($con,null);
+        $currency = $pr->getCurrency($con,null);
+
+        $typeMsg = false;
+        $msg = "";
+
+        return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+    }
+
+    public function post(){
+
+        $db = new dataBase();
+        $render = new PAndRRender();
+        $r = new region();
+        $pr = new pRate();
+        $ae = new AE();        
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $cYear = intval( Request::get('year') );
+        $pYear = $cYear - 1;
+        $region = $r->getRegion($con,false);
+        $currency = $pr->getCurrency($con,false);
+        $permission = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
+
+        $regionID = Request::get('region');
+        $salesRepID = array( Request::get('salesRep') );
+        $currencyID = Request::get('currency');
+        $value = Request::get('value');
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+            'year' => 'required',
+            'currency' => 'required',
+            'value' => 'required',
+            'salesRep' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        
+        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
+
+        if (!$tmp) {
+            /* $msg = "Don't have a Forecast Saved"; $typeMsg = "Error"; return view ('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/
+        }
+
+        $forRender = $tmp;
+
+        $sourceSave = $forRender['sourceSave'];
+        $client = $tmp['client'];
+        $tfArray = array();
+        $odd = array();
+        $even = array();
+
+        $error = false;
+
+        //lines of sales rep table
+        $rollingSalesRep = $forRender['executiveRevenueCYear'];
+        $pending = $forRender['pending'];
+        $RFvsTarget = $forRender['RFvsTarget'];
+
+        $yearExcel = $cYear;
+        $clientExcel = $client;
+        $currencyExcel = $currencyID;
+        $regionExcel = $regionID;
+        $valueExcel = $value;
+        $salesRepExcel = Request::get("salesRep");
+
+        $titleExcel = "PandR - AE.xlsx";
+
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel"));
+    }
+    
     public function save(){
         $db = new dataBase();
         $sql = new sql();
@@ -228,93 +316,7 @@ class AEController extends Controller{
         
     }
 
-    public function get(){
-    	$db = new dataBase();
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-        $r = new region();
-        $sr = new salesRep();
-        $render = new PAndRRender();
-        $pr = new pRate();
-
-        $user = Request::session()->get('userName');
-        $permission = Request::session()->get('userLevel');
-
-        $region = $r->getRegion($con,null);
-        $currency = $pr->getCurrency($con,null);
-
-        $typeMsg = false;
-        $msg = "";
-
-		return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-    }
-
-    public function post(){
-
-        $db = new dataBase();
-        $render = new PAndRRender();
-        $r = new region();
-        $pr = new pRate();
-        $ae = new AE();        
-        $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
-
-        $cYear = intval( Request::get('year') );
-        $pYear = $cYear - 1;
-        $region = $r->getRegion($con,false);
-        $currency = $pr->getCurrency($con,false);
-        $permission = Request::session()->get('userLevel');
-        $user = Request::session()->get('userName');
-
-        $regionID = Request::get('region');
-        $salesRepID = array( Request::get('salesRep') );
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
-
-        $validator = Validator::make(Request::all(),[
-            'region' => 'required',
-            'year' => 'required',
-            'currency' => 'required',
-            'value' => 'required',
-            'salesRep' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-        
-        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
-
-        if (!$tmp) {
-            /* $msg = "Don't have a Forecast Saved"; $typeMsg = "Error"; return view ('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));*/
-        }
-
-        $forRender = $tmp;
-
-        $sourceSave = $forRender['sourceSave'];
-        $client = $tmp['client'];
-        $tfArray = array();
-        $odd = array();
-        $even = array();
-
-        $error = false;
-
-        //lines of sales rep table
-        $rollingSalesRep = $forRender['executiveRevenueCYear'];
-        $pending = $forRender['pending'];
-        $RFvsTarget = $forRender['RFvsTarget'];
-
-        $yearExcel = $cYear;
-        $clientExcel = $client;
-        $currencyExcel = $currencyID;
-        $regionExcel = $regionID;
-        $valueExcel = $value;
-        $salesRepExcel = Request::get("salesRep");
-
-        $titleExcel = "PandR - AE.xlsx";
-
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel"));
-    }
+    
 
     
 }
