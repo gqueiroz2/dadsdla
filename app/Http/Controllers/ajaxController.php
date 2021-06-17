@@ -88,7 +88,6 @@ class ajaxController extends Controller{
                     }
                 }
                 break;
-
             case 'ae':                                
                 $regionID = $region;
                 $db = new dataBase();
