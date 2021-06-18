@@ -155,18 +155,18 @@
 							</li>
 						
 
-						
-						<li class="nav-item dropdown">
-							<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								@if($userLevel == "SU")
-									<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Forecast by AE </a>
-								@endif
-								<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
-								<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
-							</div>
-						</li>
-						
+						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									@if($userLevel == "SU")
+										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Forecast by AE </a>
+									@endif
+									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
+									<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
+								</div>
+							</li>
+						@endif
 
 						@if( ( $userLevel == "SU" ) )
 							<li class="nav-item dropdown">
