@@ -6,6 +6,175 @@ use Illuminate\Database\Eloquent\Model;
 
 class forecastBase extends pAndR{
     
+	public function boolSplitted($con,$sql,$sR,$list,$year){
+        $rtr = array( "splitted" => false , "owner" => null );
+        
+        /*
+        
+        CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
+
+        */
+        $date = date('n')-1;
+
+        $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
+                        FROM ytd
+                        WHERE (client_id = \"".$list['clientID']."\")
+                        AND (agency_id = \"".$list['agencyID']."\")
+                        AND (year = \"".$year."\") 
+                        AND (from_date > \"".$date."\")                 
+                  ";
+
+
+        $res = $con->query($select);
+        $from = array("order_reference","sales_rep_id","client_id","agency_id");
+        $orderRef = $sql->fetch($res,$from,$from);
+        $cc = 0;
+        if($orderRef){
+            for ($o=0; $o < sizeof($orderRef); $o++) { 
+                if($o == 0){
+                    $comp[$cc]['sales_rep_id'] = $orderRef[$o]['sales_rep_id'];
+                    $comp[$cc]['agency_id'] = $orderRef[$o]['agency_id'];
+                }
+
+                if($comp[0]['agency_id'] == $orderRef[$o]['agency_id']){
+                    $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
+                    $cc++;    
+                }                
+                
+            }
+        }
+
+        if( isset( $splitted ) ){
+            $splitted = array_values(array_unique($splitted));
+            if(sizeof($splitted) > 1){
+                $rtr = array( "splitted" => true , "owner" => null );
+            }
+        } 
+
+        /*
+        
+        CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
+
+        */
+
+        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+                        FROM sf_pr
+                        WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
+                        AND (sales_rep_splitter_id != sales_rep_owner_id)
+                        AND (stage != \"5\")                      
+                        AND (stage != \"6\")                      
+                        AND (stage != \"7\")                      
+                  ";
+
+        $resSF = $con->query($selectSF);
+        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+        $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
+
+        if($oppid){
+            $rtr = array( "splitted" => true , "owner" => false );    
+            for ($o=0; $o < sizeof($oppid); $o++) {                 
+                if($sR == $oppid[$o]['sales_rep_owner_id']){
+                    $rtr = array( "splitted" => true , "owner" => true );
+                    break;
+                }
+            }
+        }else{
+            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+                        FROM sf_pr
+                        WHERE (client_id = \"".$list['clientID']."\") 
+                        AND (agency_id = \"".$list['agencyID']."\")
+                        AND (sales_rep_splitter_id = sales_rep_owner_id)
+                        AND (stage != \"5\")                      
+                        AND (stage != \"6\")                      
+                        AND (stage != \"7\")                      
+                  ";
+
+            $resSF = $con->query($selectSF);
+            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+            $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
+
+            if($oppid){
+                $rtr = array( "splitted" => false , "owner" => null );    
+            }
+
+        }        
+
+        /*
+
+        FIND A WAY TO USE YEAR TO CHECK FOR SPLIITING
+
+        */
+       
+        return $rtr;
+        
+    }
+
+    public function brandArrayToString($array){
+
+    	var_dump($array);
+
+    	$string = "";
+
+    	for ($a=0; $a < sizeof($array); $a++) { 
+    		$string .= $array[$a]['brandID'];
+    	}
+
+    	var_dump($string);
+
+    }
+
+    public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
+
+    	if($currency == "USD"){
+    		$div = 1;
+    	}else{
+    		$div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+    	}
+
+    	if($value == "gross"){
+    		$ytdColumn = "gross_revenue_prate";
+            $fwColumn = "gross_revenue";            
+    	}else{
+    		$ytdColumn = "net_revenue_prate";
+            $fwColumn = "net_revenue";
+    	}
+
+    	$table = "ytd";
+
+    	$brandString = $this->brandArrayToString($brand);
+
+    	var_dump($brandString);
+
+    	for ($c=0; $c < sizeof($clients); $c++) {     		  
+            for ($m=0; $m < sizeof($month); $m++) {
+    			/* FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS */
+                $select[$c][$m] = "SELECT SUM($ytdColumn) AS sumValue
+                                		FROM $table
+                                		WHERE (client_id = \"".$clients[$c]['clientID']."\")
+			                                AND (agency_id = \"".$clients[$c]['agencyID']."\")
+			                                AND (month = \"".$month[$m][1]."\")                                    
+			                                AND (year = \"".$year."\")
+                                  ";
+
+    			$res[$c][$m] = $con->query($select[$c][$m]);
+    			$from = array("sumValue");
+    			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;	    			
+    		}
+    	}
+    	return $rev;
+    }
+
+	public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
+        $soma = 0;
+
+        $splitted = array();
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);
+        }        
+        return $splitted;        
+    }
+
 	public function weekOfMonth($date) {
         $date = strtotime($date);
         //Get the first day of the month.

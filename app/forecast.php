@@ -10,7 +10,7 @@ use App\sql;
 
 class forecast extends forecastBase{
 
-    public function limitCheck($select,$regionID){
+    public function limitCheck($select,$regionID,$week){
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
         }
@@ -35,7 +35,7 @@ class forecast extends forecastBase{
             Verifica se há Forecast prévio salvo
         */        
         $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\"  AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
-        $select = $this->limitCheck($select,$regionID);        
+        $select = $this->limitCheck($select,$regionID,$week);        
         $select .= "ORDER BY last_modify_date DESC";        
         $result = $con->query($select);
         $from = array("oppid","ID","type_of_value","currency_id", "submitted");
@@ -122,20 +122,35 @@ class forecast extends forecastBase{
         /*Valores de Target para Canais Discovery */
         for ($b=0; $b < sizeof($tableDisc); $b++){ 
             for ($m=0; $m <sizeof($tableDisc[$b]) ; $m++){
-                $targetValues[$b][$m] = $this->generateValueS($con,$sql,$regionID,$cYear,$discoveryBrands[$b]['brandID'],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
+                $targetValuesDiscovery[$b][$m] = $this->generateValueS($con,$sql,$regionID,$cYear,$discoveryBrands[$b]['brandID'],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
             }
         }
+        $mergeTargetDiscovery = $this->mergeTarget($targetValuesDiscovery,$month);
+        $targetValuesDiscovery = $mergeTargetDiscovery;
+
+        /*Valores de Target para Canais Sony */
+        for ($b=0; $b < sizeof($tableSony); $b++){ 
+            for ($m=0; $m <sizeof($tableSony[$b]) ; $m++){
+                $targetValuesSony[$b][$m] = $this->generateValueS($con,$sql,$regionID,$cYear,$sonyBrands[$b]['brandID'],$salesRep,$month[$m][1],"value","plan_by_sales",$value)[0]*$div;            
+            }
+        }
+        $mergeTargetSony = $this->mergeTarget($targetValuesSony,$month);
+        $targetValuesSony = $mergeTargetSony;
+
+        /* Valores dos Clientes no Ano Atual - Discovery */
+        $clientRevenueCYearDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$discoveryBrands);
+        $clientRevenueCYearTMPDisc = $clientRevenueCYearDisc;
+        $clientRevenueCYearDisc = $this->addQuartersAndTotalOnArray($clientRevenueCYearDisc);
+
+        var_dump($discoveryBrands);
+
+        /* Valores dos Clientes no Ano Atual - Sony *//*
+        $clientRevenueCYearSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brandIDS);
+        $clientRevenueCYearTMPSony = $clientRevenueCYearSony;
+        $clientRevenueCYearSony = $this->addQuartersAndTotalOnArray($clientRevenueCYearSony);
+        */
 
         /*
-        $mergeTarget = $this->mergeTarget($targetValues,$month);
-        $targetValues = $mergeTarget;
-
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brandIDS);
-
-        $clientRevenueCYearTMP = $clientRevenueCYear;
-
-        $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
-
         $revenueDiscovery = $this->revenueByDiscoveryClient($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$brandIDS);
 
         $revenueDiscovery = $this->addQuartersAndTotalOnArray($revenueDiscovery);

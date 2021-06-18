@@ -65,7 +65,7 @@ class performance extends base{
         if (is_array($salesRep)) {
             for ($s=0; $s < sizeof($salesRep); $s++) {
                 $where[$s] = $this->createWhere($sql,$table,$region,$year,$brand,$salesRep[$s],$month,$value);
-                $results[$s] = $sql->selectSum2($con,$sum,"sum",$table,false,$where[$s]);
+                $results[$s] = $sql->selectSum($con,$sum,"sum",$table,false,$where[$s]);
                 $values[$s] = $sql->fetchSum($results[$s],"sum")["sum"]; 
             }   
         }else{
