@@ -97,7 +97,7 @@ class CheckElements extends Model{
 		}
 		
 		if($resultsFM){
-			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
 			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 			$new = $this->checkDifferencesAC('client',$distinctDLA,$distinctFM);
 			if($table != "cmaps"){
@@ -147,7 +147,7 @@ class CheckElements extends Model{
 		}
 
 		if($resultsFM){
-			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
 			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
 
 			$new = $this->checkDifferencesAC('agency',$distinctDLA,$distinctFM);
@@ -212,8 +212,8 @@ class CheckElements extends Model{
 		$fromDLA = array("name");
 		$from = array($something);
 
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
-		$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from,false,false);
+		$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
+		$distinctFM = $this->getDistinctNR($con,$something,$table,$sql,$from,false,false);
 
 		$new = $this->checkDifferences($distinctDLA,$distinctFM);
 
@@ -237,8 +237,8 @@ class CheckElements extends Model{
 			$fromDLA = array("name");
 			$from = array($something);
 
-			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-			$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from);
+			$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
+			$distinctFM = $this->getDistinctNR($con,$something,$table,$sql,$from);
 			
 			$new = $this->checkDifferences($distinctDLA,$distinctFM);
 			if($new){
@@ -484,6 +484,21 @@ class CheckElements extends Model{
 		return $distinct;	
 	}
 
+	public function getDistinctNR($con,$something,$table,$sql,$from){
+		
+		$select = "SELECT DISTINCT $something FROM $table ORDER BY $something";	
+
+		$res = $con->query($select);
+		$tmp = $sql->fetch($res,$from,$from);
+
+		for ($t=0; $t < sizeof($tmp); $t++) { 
+			for ($f=0; $f < sizeof($from); $f++) { 
+				$distinct[$t] = $tmp[$t][$from[$f]];
+			}
+		}
+		return $distinct;	
+	}
+
 	public function checkDifferencesAC($type,$dla,$fm){
 
 		$new = array();		
@@ -521,7 +536,8 @@ class CheckElements extends Model{
 		for ($f=0; $f < sizeof($fm); $f++) { 
 			$check = false;
 			for ($d=0; $d < sizeof($dla); $d++) { 
-				if($fm[$f] == $dla[$d]){
+				//if($fm[$f] == $dla[$d]){
+				if(strcasecmp($fm[$f],$dla[$d])){
 					$check = true;
 					break;
 				}
