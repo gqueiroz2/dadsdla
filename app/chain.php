@@ -23,74 +23,47 @@ class chain extends excel{
 	}
 
     public function firstChain($con,$table,$spreadSheet,$base,$year){
-
         $columns = $this->defineColumns($table,'first');
-        
-        if($table == "cmaps" || $table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand" || $table == "ytdFN" || $table == "bts" || $table == "insights"){
-            $parametter = $table;
-        }else{
-            $parametter = false;
-        }
-        
+        $parametter = $table;
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-        
-        /*
-        if($table == "insights"){
-            array_push($columns, 'year');
-        }
-        */
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
         }
 
-        $into = $this->into($columns);      
-        
-        if($table == "ytdFN"){
-            $table = "ytd";
+        if($table == 'sf_pr_brand'){
+            array_push($columns, 'net_revenue');
+            $spreadSheet = $this->addNetRevenuePandR($spreadSheet);
         }
 
+        $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
-        
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
-            if($table != 'fw_digital' || ($table == 'fw_digital' && $spreadSheet[$s]['gross_revenue'] > 0) ){
-                $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
-                if(!$error){
-                    $check++;
-                }
-            }else{
-                $mark++;
-            }
+            $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
+            if(!$error){
+                $check++;
+            }            
         }
 
-        if($check == (sizeof($spreadSheet) - $mark) ){
-            $complete = true;
-        }else{
-            $complete = false;
-        }
+        if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
+        else{ $complete = false; }
+
         return $complete;
-        
-        
     }    
 
 	public function secondChain($sql,$con,$fCon,$sCon,$table,$year = false){
-        /*
-            FAZER NOVA VERIFICAÇÃO COM CMAPS
-        */
+        /* FAZER NOVA VERIFICAÇÃO COM CMAPS */
 
         $base = new base();
         $columns = $this->defineColumns($table,'first');
-        if($table == "fw_digital"){
-            //unset($columns[0]);        
-        }
-
-        if($table == "insights"){
-            //array_push($columns, 'year');
-        }
 
         if($table == "cmaps"){
             array_push($columns, 'sales_rep_representatives');
+        }
+        if($table == 'sf_pr_brand'){
+            array_push($columns, 'net_revenue');            
         }
 
         $columns = array_values($columns);
@@ -109,16 +82,6 @@ class chain extends excel{
             $table = 'bts';
         }
 
-        if($table == "fw_digital"){
-            $current = $this->fixShareAccounts($current);
-            $current = $this->createNetRevenueAndCommission($current);
-            $current = $this->localCurrencyToDolar($con,$current,$year);
-        } 
-
-        if($table == "insights"){
-            $current = $this->fixShareAccounts($current);
-        }
-
         if($table == "data_hub"){
             $current = $this->fixShareAccountsDH($con,$current);
         }
@@ -132,13 +95,22 @@ class chain extends excel{
         if($table == 'data_hub'){
             $columns = $this->ytdColumnsF;
         }
-        
+
+        if($table == "sf_pr_brand"){
+            $current = $this->addSFInfo($fCon,$sql,$current,$columns);
+            array_push($columns, "sales_rep_splitter");
+        }
+
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
+
+        if($table == "sf_pr_brand"){
+            $next = $this->addSFValues($fCon,$sql,$next,$columns);
+        }   
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
-        return $complete;             
-    
+        return $complete;                     
+
     }  
 
     public function thirdChain($sql,$con,$sCon,$tCon,$table){
@@ -256,26 +228,7 @@ class chain extends excel{
                         $truncated = false;
                     }
                 }else{
-                    /*if($year == "2019"){
-                        for ($y=0; $y < sizeof($year); $y++) { 
-                            $delete[$y] = "DELETE FROM $table 
-                                                WHERE(year = '".$year[$y]."')
-                                                AND (brand_id != 8)   
-                                                AND (month < 10)                                         
-                                                ";     
-                            if($con->query($delete[$y])){
-                            }
-                            $delete2[$y] = "DELETE FROM $table 
-                                                WHERE(year = '".$year[$y]."')
-                                                AND (brand_id = '8')
-                                                AND ( month > 5 ) 
-                                                AND ( month < 10 )
-
-                                                ";     
-                            if($con->query($delete2[$y])){
-                            }
-                        }
-                    }else*/if($year == "2018"){
+                    if($year == "2018"){
                         for ($y=0; $y < sizeof($year); $y++) { 
                             $delete[$y] = "DELETE FROM $table 
                                                 WHERE(year = '".$year[$y]."')
@@ -309,14 +262,20 @@ class chain extends excel{
                 }
             }
         }   
-            
+        
 
-    	$columns = $this->defineColumns($table,'third');
-    	$into = $this->into($columns);
+        if($table == 'sf_pr_brand'){
+	        $columns = $this->defineColumns($table,'third');
+            $columnsT = $this->defineColumns($table,'DLA');
+        }else{
+            $columns = $this->defineColumns($table,'third');
+            $columnsT = $columns;
 
-        /*if($table == 'insights'){
-            $insert = ""
-        }*/
+        }
+
+
+    	$into = $this->into($columnsT);
+
 
         if($table == 'bts' || $table == 'data_hub'){
             if($table == 'bts'){    
@@ -325,23 +284,100 @@ class chain extends excel{
                 $tempBase = 'data_hub';
             }
             $table = 'ytd';
+        }elseif ($table == 'sf_pr_brand') {
+            $tempBase = "sf_pr_brand";
+            $table = "sf_pr";
         }else{
             $tempBase = false;
         }
-        if($tempBase && ($tempBase == "data_hub") ){
-    	    $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$tempBase,$columns),$columns);
+
+        if($tempBase && ($tempBase == "data_hub" || $tempBase == 'sf_pr_brand') ){
+            $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$tempBase,$columns),$columns);
         }else{
             $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
         }
-/*
-        if($tempBase){
-            $table = $tempBase;
-        }
-*/
-    	$bool = $this->insertToDLA($con,$table,$columns,$current,$into);
+
+    	$bool = $this->insertToDLA($con,$table,$columnsT,$current,$into);
 
         return $bool;
+
     }   
+
+    public function addSFInfo($fCon,$sql,$next,$columns){
+        for ($n=0; $n < sizeof($next); $n++) { 
+            $oppid[$n] = $next[$n]['oppid'];
+            $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);
+            $next[$n]['client'] = $tmp['client'];
+            $next[$n]['agency'] = $tmp['agency'];
+            $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
+            $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
+            $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_owner'];
+        }
+
+        return $next;
+    }
+
+    public function addSFValues($fCon,$sql,$next,$columns){
+
+        for ($n=0; $n < sizeof($next); $n++) { 
+            $oppid[$n] = $next[$n]['oppid'];
+            $amount[$n] = $next[$n]['gross_revenue'];
+            $fullAmount = $this->fullValueOfOPP($fCon,$sql,$oppid[$n]);
+            if($fullAmount > 0){                
+                $share = $amount[$n]/$fullAmount;
+            }else{
+                $share = 0.0;
+            }
+            $forecastValues = $this->forecastValuesFromOPP($fCon,$sql,$oppid[$n]);
+
+            $fcstAmountGross = $forecastValues['fcst_amount_gross'];
+            $fcstAmountNet = $forecastValues['fcst_amount_net'];
+            
+            $next[$n]['fcst_amount_gross'] = $fcstAmountGross*$share;
+            $next[$n]['fcst_amount_net'] = $fcstAmountNet*$share;
+        }
+
+        return $next;
+
+    }
+
+    public function forecastValuesFromOPP($con,$sql,$oppid){
+        $select = "SELECT fcst_amount_gross,fcst_amount_net FROM sf_pr WHERE(oppid = '".$oppid."')";
+        $res = $con->query($select);
+        $from = array("fcst_amount_gross","fcst_amount_net");
+        $tmp = $sql->fetch($res,$from,$from)[0];
+
+        return $tmp;
+
+    }
+
+    public function fullValueOfOPP($con,$sql,$oppid){
+
+        $selectSUM = "SELECT SUM(gross_revenue) AS amountSUM FROM sf_pr_brand WHERE(oppid = '".$oppid."')";
+        $res = $con->query($selectSUM);
+        $from = array("amountSUM");
+        $tmp = $sql->fetch($res,$from,$from)[0]['amountSUM'];
+
+        return $tmp;
+    }
+
+    public function getInfoFromSF($con,$sql,$oppid){
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name FROM sf_pr WHERE(oppid = '".$oppid."')";
+        $res = $con->query($select);
+        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name");
+        $tmp = $sql->fetch($res,$from,$from)[0];
+        return $tmp;
+    }
+
+    public function addNetRevenuePandR($spreadSheet){
+
+        for ($s=0; $s < sizeof($spreadSheet); $s++) { 
+            $spreadSheet[$s]['net_revenue'] = $spreadSheet[$s]['gross_revenue']*(1-$spreadSheet[$s]['agency_commission']);
+        }
+
+        return $spreadSheet;
+
+    }
 
     public function addSalesRepRepresentatives($spreadSheet){
 
@@ -353,23 +389,15 @@ class chain extends excel{
     }
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
-        
-        if($table == 'bts'){
-            $table = 'ytd';
-        }
 
+        if($table == 'bts'){ $table = 'ytd'; }
         $values = $this->values($spreadSheet,$columns);
-
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
-
-        
-
         if($con->query($ins) === TRUE ){
             $error = false;
             //var_dump($ins);
         }else{
-            var_dump($spreadSheet);
-            var_dump($ins);
+            var_dump($spreadSheet);            
             echo "<pre>".($ins)."</pre>";
             var_dump($con->error);
             $error = true;
@@ -671,12 +699,9 @@ class chain extends excel{
     }    
 
     public function selectFromCurrentTable($sql,$con,$table,$columns){
-        
     	$res = $sql->select($con,"*",$table);
         $current = $sql->fetch($res,$columns,$columns);
     	return $current;
-        
-
     }
 
     public function handleForLastTable($con,$table,$current,$columns){
@@ -690,7 +715,7 @@ class chain extends excel{
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,"Brazil",$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,"Brazil",$regionName,$current[$c]['client']);
 
-            }elseif($table == "fw_digital" || $table == "sf_pr"){
+            }elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
 
                 $regionName = $rr->getRegion($con,array($current[$c]['region_id']))[0]['name'];
 
@@ -781,15 +806,12 @@ class chain extends excel{
 					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
 				}
 			}
-
 		}elseif($column == 'package'){
-            
             if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
                 $bool = 1;
             }else{
                 $bool = 0;
             }
-
             $rtr =  array($bool,'package');
         }elseif($column == 'stage'){
             $stg = $this->defineStage($current);
@@ -1098,12 +1120,14 @@ class chain extends excel{
     	
         $sizeA = sizeof($array);
     	$sizeC = sizeof($columns);
+
     	for ($a=0; $a < $sizeA; $a++) { 
     		for ($c=0; $c < $sizeC; $c++) { 
     			$fix[$a][$columns[$c]] = $this->fix($columns[$c],$array[$a][$columns[$c]]);
     		}
     	}
     	return $fix;
+
     }
 
     public function fix($column,$toFix){
@@ -1162,15 +1186,12 @@ class chain extends excel{
 	}
 
 	public function assembler($spreadSheet,$columns,$base,$table = false){
+        
         $feed = array();
-
         $bd = new brand();
-
         $db = new dataBase();
-
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-
         $allBrands = $bd->getBrandUnit($con);
 
         for ($s=0; $s < sizeof($spreadSheet); $s++) { 
@@ -1195,7 +1216,8 @@ class chain extends excel{
                            $columns[$c] == 'fcst_amount_gross' ||
                            $columns[$c] == 'fcst_amount_net' ||
                            $columns[$c] == 'success_probability' ||
-                           $columns[$c] == 'gross_revenue_curr_prate' ||
+                           $columns[$c] == 'amount' ||
+                           $columns[$c] == 'amount_converted' ||
                            $columns[$c] == 'num_spot'
     				      ){
                             if ($columns[$c] == 'gross_revenue_prate'){
@@ -1509,7 +1531,23 @@ class chain extends excel{
                         return $this->sfPandRColumns;
                         break;
                 }
+                break;
 
+            case 'sf_pr_brand':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->sfPandRBrandColumnsF;
+                        break;                    
+                    case 'second':
+                        return $this->sfPandRBrandColumnsS;
+                        break;
+                    case 'third':
+                        return $this->sfPandRBrandColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->sfPandRBrandColumns;
+                        break;
+                }
                 break;
 
     		case 'cmaps':
@@ -1565,6 +1603,108 @@ class chain extends excel{
 
     }
 
+    public $sfPandRBrandColumnsF = array(
+                                  'oppid',
+                                  'region',          
+                                  'sales_rep_owner',
+                                  'client',
+                                  'agency',
+                                  'opportunity_name',
+                                  'agency_commission',
+                                  'stage',
+                                  'forecast_category',
+                                  'brand',
+                                  'currency',
+                                  'amount_currency',
+                                  'gross_revenue_loc',
+                                  'amount_converted_currency',
+                                  'gross_revenue',
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date',
+                                  'opportunity_record_type',
+                                  'is_split',
+                              );
+
+    public $sfPandRBrandColumnsS = array(
+                                  'oppid',
+                                  'region_id',          
+                                  'sales_rep_owner_id',
+                                  'sales_rep_splitter_id',
+                                  'client',
+                                  'agency',
+                                  'opportunity_name',
+                                  'agency_commission',
+                                  'stage',
+                                  'forecast_category',
+                                  'brand_id',
+                                  'currency_id',                                  
+                                  'gross_revenue_loc',                                  
+                                  'gross_revenue',
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date',
+                                  'opportunity_record_type',
+                                  'is_split',
+                                  'year_from',
+                                  'year_to',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',
+                                  'net_revenue'
+                              );
+
+    public $sfPandRBrandColumnsT = array(
+                                  'oppid',
+                                  'region_id',          
+                                  'sales_rep_owner_id',
+                                  'sales_rep_splitter_id',
+                                  'client_id',
+                                  'agency_id',
+                                  'opportunity_name',
+                                  'agency_commission',
+                                  'stage',
+                                  'forecast_category',
+                                  'brand_id',
+                                  'currency_id',                                  
+                                  'gross_revenue_loc',                                  
+                                  'gross_revenue',
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date',
+                                  'opportunity_record_type',
+                                  'is_split',
+                                  'year_from',
+                                  'year_to',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',
+                                  'net_revenue'
+                              );
+
+    public $sfPandRBrandColumns = array(
+                                  'oppid',
+                                  'region_id',
+                                  'sales_rep_owner_id',
+                                  'sales_rep_splitter_id',
+                                  'client_id',
+                                  'brand_id',
+                                  'currency_id', 
+                                  'opportunity_name',
+                                  'agency_id',
+                                  'agency_commission',
+                                  'stage',
+                                  'forecast_category',
+                                  'gross_revenue',
+                                  'net_revenue',
+                                  'fcst_amount_gross',
+                                  'fcst_amount_net',                                
+                                  'success_probability',
+                                  'from_date',
+                                  'to_date',                                  
+                                  'is_split',
+                                  'year_from',
+                                  'year_to',
+                              );  
+
     public $sfPandRColumnsF = array(
                                   'oppid',
                                   'region',                                  
@@ -1589,8 +1729,6 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'is_split'
-
-
                               );
 
     public $sfPandRColumnsS = array(

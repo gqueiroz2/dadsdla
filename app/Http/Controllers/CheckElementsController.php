@@ -33,6 +33,7 @@ class CheckElementsController extends Controller{
 	}
 
 	public function check(){
+
 		$rS = new RenderStuff();
 		$db = new dataBase();
 		$cE = new CheckElements();
@@ -42,7 +43,7 @@ class CheckElementsController extends Controller{
         $fM = $db->matchesConnection("first");
 		$conFM = $db->openConnection($fM);	
 		$table = Request::get('tableToCheck');
-		
+
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
 
 		echo "<center>
@@ -131,5 +132,6 @@ class CheckElementsController extends Controller{
 		      </center>";
 
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
+
 	}
 }

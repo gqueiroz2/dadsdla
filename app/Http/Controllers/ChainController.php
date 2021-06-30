@@ -32,7 +32,6 @@ class ChainController extends Controller{
         if($table == 'bts' || $table == 'ytdFN'){
             $table = 'ytd';
         }
-
         
     	$db = new dataBase();
 		
@@ -48,10 +47,7 @@ class ChainController extends Controller{
                 $something[$c] = "Tabela $table na dataBase ".$connections[$c]." foi Truncada ";
 
 				$check++;
-			}else{
-                //
-            }
-
+			}
 		}
 
 		if($check == sizeof($connections)){
@@ -159,13 +155,10 @@ class ChainController extends Controller{
                 }
                 break;
             case 'sf_pr_brand':
-                
-                
-                unset($spreadSheet[0]);                
+                unset($spreadSheet[0]);
                 if($spreadSheet){
                     $spreadSheet = array_values($spreadSheet);
                 }
-                var_dump($spreadSheet);
                 break;
             case 'digital':
                 $dg = new digital();
@@ -179,14 +172,11 @@ class ChainController extends Controller{
                 break;
 		}
         
-        //var_dump($spreadSheet);
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
-        
+
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }
-		
-            
+        }           
     }
 
     public function secondChain(){
@@ -210,16 +200,11 @@ class ChainController extends Controller{
 
     	$year = Request::get('year');
 
-        if($table == "ytdFN"){
-            $table = "ytd";
-        }
-
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
-
+        
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
-
     }
 
     public function thirdChain(){
@@ -248,10 +233,11 @@ class ChainController extends Controller{
         }
 
         $complete  = $chain->thirdChain($sql,$con,$sCon,$tCon,$table,$year);
-
+        
     	if($complete){
             return back()->with('thirdChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
+        
     }
 
     public function thirdToDLA(){
@@ -276,7 +262,7 @@ class ChainController extends Controller{
 		$truncate = (bool)intval(Request::get('truncate'));
 
     	$complete = $chain->thirdToDLA($sql,$con,$tCon,$table,$year,$truncate);
-
+        
     	if($complete){
             return back()->with('lastChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }

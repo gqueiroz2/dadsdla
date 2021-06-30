@@ -51,6 +51,10 @@ class forecastController extends Controller{
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false);
+
+        $typeMsg = false;
+        $msg = "";
+
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
 
@@ -75,5 +79,9 @@ class forecastController extends Controller{
         }
 
         $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
+        $forRender = $tmp;
+       
+        return view('pAndR.forecastByAE.post',compact('render','region','currency','forRender','msg','typeMsg'));
+
     }
 }
