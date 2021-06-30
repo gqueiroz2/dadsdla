@@ -1863,11 +1863,7 @@ class AE extends pAndR{
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
         
-        /*
-
-            GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP
-
-        */        
+        /* GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */        
 
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
@@ -1911,8 +1907,6 @@ class AE extends pAndR{
 
             }
         }        
-
-
 
         return $share;
     }
