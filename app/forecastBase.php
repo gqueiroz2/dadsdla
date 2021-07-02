@@ -564,6 +564,118 @@ class forecastBase extends pAndR{
 
     }
 
+    
+    public function sumDiscAndSonyTA($rd,$rs){
+
+        for ($r=0; $r < sizeof($rd); $r++){ 
+            for ($s=0; $s < sizeof($rd[$r]); $s++){ 
+                for ($t=0; $t < sizeof($rd[$r][$s]); $t++) {                     
+                    $rf[$r][$s][$t] = $rd[$r][$s][$t] + $rs[$r][$s][$t];
+                }
+            }           
+        }
+
+        return $rf;
+
+    }
+
+    public function sumDiscAndSonyMA($rd,$rs){
+
+        for ($r=0; $r < sizeof($rd); $r++){ 
+            for ($s=0; $s < sizeof($rd[$r]); $s++){ 
+                $rf[$r][$s] = $rd[$r][$s] + $rs[$r][$s];
+            }           
+        }
+
+        return $rf;
+
+    }
+
+    public function sumDiscAndSonyA($rd,$rs){
+        for ($r=0; $r < sizeof($rd); $r++){ 
+            $rf[$r] = $rd[$r] + $rs[$r];
+        }
+
+        return $rf;
+    }
+
+    public function closedMonthEx($fcst,$booking){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($m=0; $m <$date ; $m++) { 
+            $fcst[$m] = $booking[$m];
+        }
+
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+
+        return $fcst;
+    }
+
+    public function addBookingRollingFCST($fcst,$booking){
+        $date = intval(date('n'))-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($d=$date; $d <sizeof($fcst); $d++) {
+            $fcst[$d] += $booking[$d];
+        }
+
+        $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
+        $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
+        $fcst[11] = $fcst[8] + $fcst[9] + $fcst[10];
+        $fcst[15] = $fcst[12] + $fcst[13] + $fcst[14];
+
+        $fcst[16] = $fcst[3] + $fcst[7] + $fcst[11] + $fcst[15];
+
+        return $fcst;
+    }
+
+    public function subArrays($array1,$array2){
+        $exit = array();
+
+        for ($a=0; $a <sizeof($array1) ; $a++) { 
+            $exit[$a] = $array1[$a] - $array2[$a];
+        }
+
+        return $exit;
+    }
+
+    public function divArrays($array1,$array2){
+        $exit = array();
+
+        for ($a=0; $a <sizeof($array1) ; $a++) { 
+            if ($array2[$a] != 0) {
+                $exit[$a] = ($array1[$a] / $array2[$a])*100;
+            }else{
+                $exit[$a] = 0;
+            }
+        }
+
+        return $exit;
+    }
+
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
         $test = intval( date('n') );

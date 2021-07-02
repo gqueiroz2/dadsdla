@@ -321,19 +321,31 @@ class forecast extends forecastBase{
             $lastRollingFCSTSony = $rollingFCSTSony;
         }
 
-        var_dump($rollingFCSTDisc);
+        //var_dump($rollingFCSTDisc);
         
         $fcstAmountByStageDisc = $this->addLost($con,$listOfClients,$fcstAmountByStageDisc,$value,$div);
         $fcstAmountByStageExDisc = $this->makeFcstAmountByStageEx($fcstAmountByStageDisc,$splitted);
-/*
-      
+
+        $fcstAmountByStageSony = $this->addLost($con,$listOfClients,$fcstAmountByStageSony,$value,$div);
+        $fcstAmountByStageExSony = $this->makeFcstAmountByStageEx($fcstAmountByStageSony,$splitted);
+        
+        $fcstAmountByStage = $this->sumDiscAndSonyTA($fcstAmountByStageDisc,$fcstAmountByStageSony);
+        $fcstAmountByStageEx = $this->sumDiscAndSonyMA($fcstAmountByStageExDisc,$fcstAmountByStageExSony);
+
+        $rollingFCST = $this->sumDiscAndSonyMA($rollingFCSTDisc,$rollingFCSTSony);
+        $executiveRevenueCYear = $this->sumDiscAndSonyA($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
+        $targetValues = $this->sumDiscAndSonyA($targetValuesDiscovery,$targetValuesSony);
+
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
         $executiveRF = $this->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
+
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
-/*
+
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
+
+/*
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
@@ -359,6 +371,7 @@ class forecast extends forecastBase{
                         
                         "targetValuesDiscovery" => $targetValuesDiscovery,
                         "targetValuesSony" => $targetValuesSony,
+                        "targetValues" => $targetValues,
 
                         "rollingFCSTDisc" => $rollingFCSTDisc,
                         "rollingFCSTSony" => $rollingFCSTSony,
@@ -372,17 +385,19 @@ class forecast extends forecastBase{
                         "clientRevenuePYearDisc" => $clientRevenuePYearDisc, 
                         "clientRevenuePYearSony" => $clientRevenuePYearSony, 
 
-                        //"executiveRF" => $executiveRF,
+                        "executiveRF" => $executiveRF,
 
                         "executiveRevenuePYearDisc" => $executiveRevenuePYearDisc,
                         "executiveRevenuePYearSony" => $executiveRevenuePYearSony,
+                        "executiveRevenuePYear" => $executiveRevenuePYear,
                         
                         "executiveRevenueCYearDisc" => $executiveRevenueCYearDisc,
                         "executiveRevenueCYearSony" => $executiveRevenueCYearSony,
+                        "executiveRevenueCYear" => $executiveRevenueCYear,
 
-                        //"pending" => $pending,
-                        //"RFvsTarget" => $RFvsTarget,
-                        //"targetAchievement" => $targetAchievement,
+                        "pending" => $pending,
+                        "RFvsTarget" => $RFvsTarget,
+                        "targetAchievement" => $targetAchievement,
                     
                         "currency" => $currency, 
                         "value" => $value,
@@ -392,8 +407,16 @@ class forecast extends forecastBase{
                         "valueView" => $valueView,
                         //"currency" => $currencyName,
                         "value" => $valueView,
-                        //"fcstAmountByStage" => $fcstAmountByStage, // ***
-                        //"fcstAmountByStageEx" => $fcstAmountByStageEx,
+
+                        "fcstAmountByStageDisc" => $fcstAmountByStageDisc, 
+                        "fcstAmountByStageSony" => $fcstAmountByStageSony, 
+                        "fcstAmountByStage" => $fcstAmountByStage, 
+
+                        "fcstAmountByStageExDisc" => $fcstAmountByStageExDisc,
+                        "fcstAmountByStageExSony" => $fcstAmountByStageExSony,
+                        "fcstAmountByStageEx" => $fcstAmountByStageEx,                        
+
+
                         //"brandsPerClient" => $brandsPerClient,
                         "sourceSave" => $sourceSave,
 

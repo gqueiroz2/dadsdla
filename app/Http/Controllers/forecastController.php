@@ -37,8 +37,6 @@ class forecastController extends Controller{
     }
 
     public function byAEPost(){
-    	var_dump("POST");
-
     	$db = new dataBase();
         $render = new forecastRender();
         $r = new region();

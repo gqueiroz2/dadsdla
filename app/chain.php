@@ -25,12 +25,14 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
+        var_dump($parametter);
+        
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
         }
-
+        
         if($table == 'sf_pr_brand'){
             array_push($columns, 'net_revenue');
             $spreadSheet = $this->addNetRevenuePandR($spreadSheet);
@@ -161,27 +163,16 @@ class chain extends excel{
         if($table == "ytdFN"){
             if($year == "2019"){
                 for ($y=0; $y < sizeof($year); $y++) { 
-                    $delete[$y] = "DELETE FROM $table 
-                                        WHERE(year = '".$year[$y]."')
-                                        AND (brand_id = '8')
-                                        AND (month < '6')
-                                  ";     
-                    if($con->query($delete[$y])){
-                    }
+                    $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."') AND (brand_id = '8') AND (month < '6')";     
+                    if($con->query($delete[$y])){}
                 }
             }else{
                 for ($y=0; $y < sizeof($year); $y++) { 
-                    $delete[$y] = "DELETE FROM $table 
-                                        WHERE(year = '".$year[$y]."')
-                                        AND (brand_id = '8')                                        
-                                  ";     
-                    if($con->query($delete[$y])){
-                    }
+                    $delete[$y] = "DELETE FROM $table WHERE(year = '".$year[$y]."') AND (brand_id = '8')";     
+                    if($con->query($delete[$y])){}
                 }
             }
-
             $table = "ytd";
-
         }else if($table == "bts"){
             if($year == "2019"){
                 for ($y=0; $y < sizeof($year); $y++) { 
@@ -203,21 +194,12 @@ class chain extends excel{
                     }
                 }
             }
-
             $table = "ytd";
-
-        }elseif($table == "data_hub"){
-            
+        }elseif($table == "data_hub"){            
             for ($y=0; $y < sizeof($year); $y++) { 
-                $delete[$y] = "DELETE FROM ytd 
-                                    WHERE(year = '".$year[$y]."')
-                              ";     
-                if($con->query($delete[$y])){
-                }
+                $delete[$y] = "DELETE FROM ytd WHERE(year = '".$year[$y]."')";     
+                if($con->query($delete[$y])){}
             }
-
-            //$table = "ytd";
-
         }else{
             if($table == "ytd"){
                 if($truncate){
@@ -1325,15 +1307,12 @@ class chain extends excel{
                                     $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
                                 }
                             }elseif($columns[$c] == 'month'){
-                                if( $table && ($table == "ytdFN") ){
-                                    //$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
-                                    $spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
+                                if( $table && ($table == "cmaps") ){
+                                   $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else if( $table && ($table == "insights") ){
                                     $temp = $base->monthToIntInsights(trim($spreadSheet[$s][$c]));
                                     $spreadSheetV2[$s][$columns[$c]] = $temp[1];
                                     $spreadSheetV2[$s]['year'] = $temp[0];
-                                }else if( $table && ($table == "cmaps" || $table == "fw_digital" || $table = 'bts') ){
-                                   $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));                                    
                                 }
@@ -1348,7 +1327,6 @@ class chain extends excel{
 		} 
         
 		$spreadSheetV2 = array_values($spreadSheetV2);
-        //var_dump($spreadSheetV2);
 		return $spreadSheetV2;
 	}
 
