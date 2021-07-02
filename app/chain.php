@@ -1200,9 +1200,10 @@ class chain extends excel{
                            $columns[$c] == 'success_probability' ||
                            $columns[$c] == 'amount' ||
                            $columns[$c] == 'amount_converted' ||
-                           $columns[$c] == 'num_spot'
+                           $columns[$c] == 'num_spot' ||
+                           $columns[$c] == 'gross_revenue_curr_prate'
     				      ){
-                            if ($columns[$c] == 'gross_revenue_prate'){
+                            if ($columns[$c] == 'gross_revenue_prate' || $columns[$c] == 'gross_revenue_curr_prate'){
                                 explode("$", $columns[$c]);
                             }
 
