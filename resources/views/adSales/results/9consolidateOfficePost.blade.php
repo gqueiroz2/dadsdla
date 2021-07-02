@@ -366,6 +366,7 @@
                 var regionExcel = "<?php echo base64_encode(json_encode($regionExcel)); ?>";
                 var valueExcel = "<?php echo $valueExcel; ?>";
                 var currencyExcel = "<?php echo $currencyExcel; ?>";
+                var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
                 var div = document.createElement('div');
                 var img = document.createElement('img');
@@ -386,7 +387,7 @@
                         },
                         url: "/generate/excel/results/consolidateOffice",
                         type: "POST",
-                        data: {title, typeExport, regionExcel,valueExcel,currencyExcel,auxTitle},
+                        data: {title, typeExport, regionExcel,valueExcel,currencyExcel,auxTitle, userRegionExcel},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/

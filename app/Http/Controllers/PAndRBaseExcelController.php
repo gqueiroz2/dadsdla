@@ -44,6 +44,8 @@ class PAndRBaseExcelController extends Controller{
         $title = Request::get("title");
         $typeExport = Request::get("typeExport");
         $auxTitle = Request::get("auxTitle");
+        $userRegion = Request::get('userRegionExcel');
+
 
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
@@ -75,7 +77,7 @@ class PAndRBaseExcelController extends Controller{
 
 	    $head = array('Closed','$Cons.','Prop','Fcast','Total');
 
-       	$data = array('forRender' => $forRender, 'currency' => $currency, 'region' => $region, 'baseReportView' => $baseReportView, 'pYear' => $pYear, "cYear" => $cYear, 'month' => $month, 'channel' => $channel, 'head' => $head,'baseReport' => $baseReport);
+       	$data = array('forRender' => $forRender, 'currency' => $currency, 'region' => $region, 'baseReportView' => $baseReportView, 'pYear' => $pYear, "cYear" => $cYear, 'month' => $month, 'channel' => $channel, 'head' => $head,'baseReport' => $baseReport, 'userRegion' => $userRegion);
 
        	$label = "exports.PandR.baseReport.PandRBaseExport";
 

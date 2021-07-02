@@ -44,6 +44,7 @@ class baseReportPandR extends pAndR{
 		}
 
         $list = $this->listByAEMult($con,$sql,$salesRepID,$cYear,$regionID,$salesRepIDString,$baseReport);
+
         
         if(sizeof($list) == 0){
             return false;
@@ -97,7 +98,8 @@ class baseReportPandR extends pAndR{
             $rfVsCurrent[$l] = $this->subArrays($rollingFCST[$l],$bookings[$l]);        
 	        
 	    } 
-        
+
+         $rollingFCST = $this->addFcstWithBooking($bookings,$rollingFCST);//with bookings value 
         //var_dump($list);
 
         /*
@@ -271,16 +273,34 @@ class baseReportPandR extends pAndR{
         switch ($baseReport) {
         	case 'brand':
         		
-        		$bb = "SELECT ID AS 'brandID',
-        					  name AS 'brand'
-        		                 FROM brand
-        		                 ORDER BY 1";
+        		$sf = "SELECT DISTINCT s.brand_id AS 'brandID',
+        					  b.name AS 'brand'
+        		            FROM sf_pr s
+                            LEFT JOIN brand b ON b.ID = s.brand_id
+                            WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
+                            AND ( s.region_id = \"".$regionID."\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                            AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                            ORDER BY 1
+                        ";
 
-        		$resBB = $con->query($bb);
+        		$resSF = $con->query($sf);
+                $from = array("brandID","brand");
+                $listSF = $sql->fetch($resSF,$from,$from);
 
-        		$from = array("brandID","brand");
+                $ytd = "SELECT DISTINCT y.brand_id AS 'brandID',
+                               b.name AS 'brand'
+                            FROM ytd y
+                            LEFT JOIN brand b ON b.ID = sf.brand_id
+                            WHERE (y.sales_rep_id IN ($salesRepIDString) )
+                            AND (y.year = \"$cYear\" )
+                            AND (r.ID = \"".$regionID."\")
+                            ORDER BY 1
+                       ";
 
-        		$list = $sql->fetch($resBB,$from,$from);
+                $resYTD = $con->query($ytd);
+                $from =  array("brandID","brand");
+                $listYTD = $sql->fetch($resYTD,$from,$from);
+                $count = 0;
 
         		break;
 
@@ -438,47 +458,47 @@ class baseReportPandR extends pAndR{
         		# code...
         		break;
         }       
-		    	
-        if($baseReport == 'brand'){
 
-        }else{
-	        $list = array();
+        $list = array();
 
-	    	if($listSF){
-	            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
-	                $list[$count] = $listSF[$sff];
-	                $count ++;
-	            }
-	    	}
-	    	if($listYTD){
-	    		for ($y=0; $y < sizeof($listYTD); $y++) { 
-	    			$list[$count] = $listYTD[$y];
-	    			$count ++;
-	    		}
-	    	}
+    	if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
+    	}
+    	if($listYTD){
+    		for ($y=0; $y < sizeof($listYTD); $y++) { 
+    			$list[$count] = $listYTD[$y];
+    			$count ++;
+    		}
+    	}
 
-	    	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
-	        
-	        $list = array_values($list);
+    	$list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
 
-	        switch ($baseReport) {
-	        	case 'client':
-	        		usort($list, array($this,'orderClient'));
-	        		break;
-	        	case 'agency':
-	        		usort($list, array($this,'orderAgency'));
-	        		break;
-	        	case 'agencyGroup':
-	        		usort($list, array($this,'orderAgencyGroup'));
-	        		break;
-	        	case 'ae':
-	        		usort($list, array($this,'orderAE'));
-	        		break;
-	        	default:
-	        		# code...
-	        		break;
-	        }
-	    }
+        switch ($baseReport) {
+        	case 'client':
+        		usort($list, array($this,'orderClient'));
+        		break;
+        	case 'agency':
+        		usort($list, array($this,'orderAgency'));
+        		break;
+        	case 'agencyGroup':
+        		usort($list, array($this,'orderAgencyGroup'));
+        		break;
+        	case 'ae':
+        		usort($list, array($this,'orderAE'));
+        		break;
+            case 'brand':
+                usort($list, array($this,'orderBrand'));                
+                break;
+        	default:
+        		# code...
+        		break;
+        }
+	    
 
         
 
@@ -623,10 +643,10 @@ class baseReportPandR extends pAndR{
                                 year_from AS yearFrom,
                                 year_to AS yearTo,
                                 sales_rep_owner_id AS owner,
-                                brand AS brand,
                                 sales_rep_splitter_id AS splitter
                                 FROM sf_pr 
                                 WHERE (region_id = '".$region."') 
+                                AND (brand_id = '".$list['brandID']."') 
                                 AND (year_from = '".$year."' OR year_to = '".$year."') 
                                 AND (from_date = '".$month."' OR to_date = '".$month."')
                                 AND (stage != '5')
@@ -636,12 +656,10 @@ class baseReportPandR extends pAndR{
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum','fromDate','toDate','yearFrom','yearTo','brand','owner','splitter');
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
 
                 if ($fetched) {
-
-                     $soma = 0.0;
 
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
@@ -650,94 +668,39 @@ class baseReportPandR extends pAndR{
                     }
 
                     for ($f=0; $f < sizeof($fetched); $f++) {
-
-                        $fetched[$f]['total'] =0.0;
-                        $totalPrc[$f] = 0;
-                        $total[$f] = 0;
-                        $prcTemp[$f] = array();
-
-                        $fetched[$f]['brand'] = explode(";", $fetched[$f]['brand']);
-
-                        if ($fetched[$f]['brand'] == 'NOCHANNELS' || $fetched[$f]['brand'] == '') {
-                                $checkNochannel += $fetched[$f]['sum'];
-                        }
-
-                        for ($i=0; $i <sizeof($fetched[$f]['brand']); $i++) { 
-                            if ($fetched[$f]['brand'][$i] == 'ONL-G9' || $fetched[$f]['brand'][$i] == 'ONL-DSS') {
-                                $fetched[$f]['brand'][$i] = 'ONL';
-                            }elseif($fetched[$f]['brand'][$i] == 'NOCHANNELS' || $fetched[$f]['brand'][$i] == ''){
-                                unset($fetched[$f]['brand'][$i]);
-                            }
-                        }
-                        
-                        if(!empty($fetched[$f]['brand'])){
-                            if (sizeof($fetched[$f]['brand']) == 1) {
-                                for ($i=0; $i <sizeof($brands); $i++) { 
-                                    if ($fetched[$f]['brand'][0] == $brands[$i]['name']) {
-                                        //$fetched[$f] += $fetched[$f]['sum'];
-                                    }
-                                }
-                            }else{
-                                for ($b=0; $b <sizeof($brands) ; $b++) { 
-                                    for ($d=0; $d < sizeof($fetched[$f]['brand']); $d++) { 
-                                        if ($fetched[$f]['brand'][$d] == $brands[$b]['name']) {
-                                           $fetched[$f]['total'] += $lastYearBrand[$b];
-                                           $fetched[$f]['lastYearValue'][$d] = $lastYearBrand[$b];
-                                        } 
-                                    }
-                                }   
-
-                                for ($b=0; $b <sizeof($brands) ; $b++) {  
-                                    for ($d=0; $d < sizeof($fetched[$f]['brand']); $d++) {      
-
-                                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
                             
-                                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                                            $somat = 0.0;
-                                            for ($s=0; $s <= $size; $s++) { 
-                                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
-                                            }
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                            $somat = 0.0;
+                            for ($s=0; $s <= $size; $s++) { 
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                            }
 
-                                            for ($s=0; $s <= $size; $s++) { 
-                                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
-                                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                                            }
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
 
-                                            for ($n=0; $n < sizeof($newShare); $n++) { 
-                                                if($newShare[$n]['month'] == $month){
-                                                    $percMult = $newShare[$n]['value'];
-                                                }
-                                            }
-                                        }else{
-                                            $percMult = 0;
-                                        }
-
-                                        if ($fetched[$f]['total'] == 0) {
-                                            $fetched[$f]['prc'][$d] = 0.0;
-                                        }else{
-                                            $fetched[$f]['prc'][$d] = $fetched[$f]['lastYearValue'][$d]/$fetched[$f]['total'];
-                                        }
-                                        
-                                        $totalPrc[$f] += $fetched[$f]['prc'][$d];
-                                        $prcTemp[$f][$b] = $fetched[$f]['prc'][$d];
-
-                                        $fetched[$f]['sum2'][$d]['brand'] = $fetched[$f]['brand'][$d];
-
-                                        if ($b == 0){
-                                            $fetched[$f]['sum2'][$d]['value'] = ($fetched[$f]['sum']*$fetched[$f]['prc'][$d]);
-                                        }else{
-                                            $fetched[$f]['sum2'][$d]['value'] += ($fetched[$f]['sum']*$fetched[$f]['prc'][$d]);
-                                        } 
-                                        
-                                        $fetched[$f]['sum2'][$d]['value'] *= $percMult;
-                                        $soma += $fetched[$f]['sum2'][$d]['value'];                                        
-                                    }
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
                                 }
-                            }    
-                        } 
+                            }
+
+                            $fetched[$f]['sum'] *= $percMult;
+                        }
                     }
                 }
-
+                
+                if($fetched){
+                    $soma = 0.0;
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        $soma += $fetched[$f]['sum'];
+                    }
+                }else{
+                    $soma = false;
+                }
+                              
                 //var_dump($fetched);
                 //var_dump($soma);                      
                 
@@ -765,6 +728,7 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
+
                 //var_dump($fetched);
                 if($fetched){                    
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
@@ -777,10 +741,12 @@ class baseReportPandR extends pAndR{
                         if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
                             
                             $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s=0; $s <= $size; $s++) { 
-                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
-                            }
+
+                            $somat = 1;
+                            for ($s=0; $s <= $size; $s++) {
+                                $somat += (($fetched[$f]['fromDate']-1)+$s);
+                                //var_dump($somat);
+                            }                    
 
                             for ($s=0; $s <= $size; $s++) { 
                                 $newShare[$f][$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
@@ -797,6 +763,7 @@ class baseReportPandR extends pAndR{
                                 $newValue[$f][$s]['value'] = $newShare[$f][$s]['value']*$fetched[$f]['sum'];                                
                                 $newValue[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
                             }
+
                         }else{
                             $newValue[$f][0]['value'] = $fetched[$f]['sum'];                                
                             $newValue[$f][0]['month'] = $fetched[$f]['fromDate'];
@@ -855,6 +822,8 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
 
                 if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
@@ -883,7 +852,7 @@ class baseReportPandR extends pAndR{
                                 }
                             }
 
-                            $fetched[$f]['sum'] *= $percMult;
+                            //$fetched[$f]['sum'] *= $percMult;
                         }
                     }
                 }
@@ -923,6 +892,8 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
 
                 if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
@@ -991,6 +962,8 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
 
                 if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
@@ -1019,7 +992,7 @@ class baseReportPandR extends pAndR{
                                 }
                             }
 
-                            $fetched[$f]['sum'] *= $percMult;
+                            //$fetched[$f]['sum'] *= $percMult;
                         }
                     }
                 }
@@ -1383,6 +1356,12 @@ class baseReportPandR extends pAndR{
         
         return ($a['clientName'] < $b['clientName']) ? -1 : 1;
     }
+    public static function orderBrand($a, $b){
+        if ($a == $b)
+            return 0;
+        
+        return ($a['brand'] < $b['brand']) ? -1 : 1;
+    }
 
     public function lastYearBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID){
         if ($value == "gross") {
@@ -1460,5 +1439,31 @@ class baseReportPandR extends pAndR{
         }
         //var_dump($select);
         return $resp;       
+    }
+
+    public function addFcstWithBooking($booking,$fcst){
+
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+
+        for ($c=0; $c < sizeof($booking); $c++) { 
+            for ($f=0; $f < sizeof($booking[$c]); $f++) { 
+                if ($f<$date) {
+                    $sum[$c][$f] = $booking[$c][$f];
+                }else{
+                    $sum[$c][$f] = $fcst[$c][$f];
+                }
+            }
+        }        
+
+        return $sum;
     }
 }

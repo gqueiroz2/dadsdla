@@ -193,6 +193,7 @@
                     var especificNumber = "<?php echo $especificNumberExcel; ?>";
                     var mtx = <?php echo (json_encode($mtx)); ?>;
                     var total = <?php echo (json_encode($total)); ?>;
+                    var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
                     var div = document.createElement('div');
                     var img = document.createElement('img');
@@ -215,7 +216,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                             type: "POST",
-                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle, mtx,total},
+                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle, mtx,total, userRegionExcel},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/

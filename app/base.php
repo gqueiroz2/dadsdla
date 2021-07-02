@@ -1185,4 +1185,14 @@ class base extends Model{
             return false;
         }
     }
+
+    public function getRegionByUser($con,$user){
+
+        $select = "SELECT u.region_id FROM user u WHERE (u.name = '".$user."')";
+
+        $res = $con->query($select);
+        $fetched = $res->fetch_assoc();
+
+        return $fetched;
+    }
 }

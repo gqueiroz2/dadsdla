@@ -26,7 +26,7 @@ class consolidateDLATabExport implements FromView,WithEvents, ShouldAutoSize, Wi
     
 	public function title(): string{
 		
-		return 'Results - Consolidate';
+		return 'Results - Consolidate DLA';
 	}
 
 	public function registerEvents(): array{
@@ -44,8 +44,48 @@ class consolidateDLATabExport implements FromView,WithEvents, ShouldAutoSize, Wi
 
 	public function columnFormats(): array{
 
-		return[
-			/*'B10' => "0%	*/
-		];
+		if ($this->data['userRegion'] == 'Miami' ||$this->data['userRegion'] == 'Mexico' ) {
+			return[
+				'B' => "#.##0",
+				'C' => "#.##0", 
+				'D' => "#.##0",
+				'E' => "#.##0",
+			   	'F' => "#.##0",
+			   	'G' => "#.##0",
+			    'H' => "#.##0",
+			    'I' => "#.##0",
+			    'J' => "#.##0",
+			    'K' => "#.##0",
+			    'L' => "#.##0",
+			    'M' => "#.##0",
+			    'N' => "#.##0",
+			    'O' => "#.##0",
+			    'P' => "#.##0",
+			    'Q' => "#.##0",
+			    'R' => "#.##0",
+			    'S' => "#.##0"
+			];
+		}else{
+			return[
+				'B' => "#,##0",
+				'C' => "#,##0", 
+				'D' => "#,##0",
+				'E' => "#,##0",
+			   	'F' => "#,##0",
+			   	'G' => "#,##0",
+			    'H' => "#,##0",
+			    'I' => "#,##0",
+			    'J' => "#,##0",
+			    'K' => "#,##0",
+			    'L' => "#,##0",
+			    'M' => "#,##0",
+			    'N' => "#,##0",
+			    'O' => "#,##0",
+			    'P' => "#,##0",
+			    'Q' => "#,##0",
+			    'R' => "#,##0",
+			    'S' => "#.##0"
+			];
+		}
 	}
 }

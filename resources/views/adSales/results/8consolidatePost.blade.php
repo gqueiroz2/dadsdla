@@ -990,6 +990,7 @@
             var valueExcel = "<?php echo $valueExcel; ?>";
             var currencyExcel = "<?php echo $currencyExcel; ?>";
             var typeSelectExcel = "<?php echo base64_encode(json_encode($typeSelectExcel)); ?>";
+            var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
 
             var div = document.createElement('div');
@@ -1012,7 +1013,7 @@
                     },
                     url: "/generate/excel/results/consolidate",
                     type: "POST",
-                    data: {title, typeExport, auxTitle, typeExcel, regionExcel,typeSelectExcel,valueExcel, currencyExcel},
+                    data: {title, typeExport, auxTitle, typeExcel, regionExcel,typeSelectExcel,valueExcel, currencyExcel,userRegionExcel},
                     /*success: function(output){
                         $("#vlau").html(output);
                     },*/

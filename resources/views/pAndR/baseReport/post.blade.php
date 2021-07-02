@@ -109,6 +109,7 @@
                 var currencyExcel = "<?php echo $currencyExcel; ?>";
                 var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
                 var baseReportExcel = "<?php echo $baseReportExcel; ?>";
+                var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
 
                 var div = document.createElement('div');
@@ -130,7 +131,7 @@
                         },
                         url: "/generate/excel/pandr/baseReport",
                         type: "POST",
-                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,baseReportExcel,auxTitle},
+                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,baseReportExcel,auxTitle, userRegionExcel},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/

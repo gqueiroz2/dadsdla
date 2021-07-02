@@ -172,6 +172,7 @@
                 var valueExcel = "<?php echo $valueExcel; ?>";
                 var currencyExcel = "<?php echo $currencyExcel; ?>";
                 var salesRepExcel = "<?php echo $salesRepExcel; ?>";
+                var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
 
                 var div = document.createElement('div');
@@ -193,7 +194,7 @@
                         },
                         url: "/generate/excel/pandr/aeView",
                         type: "POST",
-                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,auxTitle},
+                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,auxTitle, userRegionExcel},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/

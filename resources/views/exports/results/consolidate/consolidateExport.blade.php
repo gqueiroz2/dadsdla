@@ -25,9 +25,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@else 
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
 		@endfor
 	</tr>
@@ -36,9 +36,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@endif
 			
 		@endfor
@@ -48,9 +48,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; "> {{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -59,9 +59,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -70,9 +70,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -81,9 +81,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -93,15 +93,15 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" font-style: 'percent' color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}%</td>
 				@else
-					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
 			@else
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style=" background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" background-color: #c3d8ef; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}%</td>
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
 			@endif
 		@endfor
@@ -112,22 +112,22 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -152,9 +152,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -163,9 +163,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -174,9 +174,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -185,9 +185,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -196,9 +196,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -207,9 +207,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -219,15 +219,15 @@
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
     		@else
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="background-color: #c3d8ef; font-weight: bold; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
     		@endif				        		 
     	@endfor
@@ -239,22 +239,22 @@
 
     		@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -291,9 +291,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@else 
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
 		@endfor
 	</tr>
@@ -302,9 +302,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@endif
 			
 		@endfor
@@ -314,9 +314,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; "> {{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -325,9 +325,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -336,9 +336,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -347,9 +347,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -359,15 +359,15 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
 			@else
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style=" background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" background-color: #c3d8ef; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
 			@endif
 		@endfor
@@ -378,22 +378,22 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -418,9 +418,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -429,9 +429,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -440,9 +440,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -451,9 +451,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -462,9 +462,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -473,9 +473,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -485,15 +485,15 @@
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
     		@else
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="background-color: #c3d8ef; font-weight: bold; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
     		@endif				        		 
     	@endfor
@@ -505,22 +505,22 @@
 
     		@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -556,9 +556,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@else 
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
 		@endfor
 	</tr>
@@ -567,9 +567,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@endif
 			
 		@endfor
@@ -579,9 +579,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; "> {{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -590,9 +590,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -601,9 +601,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -612,9 +612,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -624,15 +624,15 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
 			@else
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style=" background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" background-color: #c3d8ef; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
 			@endif
 		@endfor
@@ -643,22 +643,22 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -683,9 +683,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -694,9 +694,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -705,9 +705,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -716,9 +716,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -727,9 +727,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -738,9 +738,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -750,15 +750,15 @@
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
     		@else
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="background-color: #c3d8ef; font-weight: bold; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
     		@endif				        		 
     	@endfor
@@ -770,22 +770,22 @@
 
     		@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -822,9 +822,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@else 
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
 		@endfor
 	</tr>
@@ -833,9 +833,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@endif
 			
 		@endfor
@@ -845,9 +845,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; "> {{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -856,9 +856,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -867,9 +867,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -878,9 +878,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -890,15 +890,15 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
 			@else
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style=" background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" background-color: #c3d8ef; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
 			@endif
 		@endfor
@@ -909,22 +909,22 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -949,9 +949,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -960,9 +960,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -971,9 +971,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -982,9 +982,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -993,9 +993,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1004,9 +1004,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1016,15 +1016,15 @@
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
     		@else
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="background-color: #c3d8ef; font-weight: bold; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
     		@endif				        		 
     	@endfor
@@ -1036,22 +1036,22 @@
 
     		@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -1088,9 +1088,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@else 
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
 		@endfor
 	</tr>
@@ -1099,9 +1099,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['previousSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['previousSAP'][$d] }} </td>
 			@endif
 			
 		@endfor
@@ -1111,9 +1111,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #143052; color: #FFFFFF; font-weight: bold; "> {{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtxDN']['currentTarget'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtxDN']['currentTarget'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -1122,9 +1122,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentCorporate'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentCorporate'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -1133,9 +1133,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentAdSales'][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -1144,9 +1144,9 @@
 		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@else
-				<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtxDN']['currentSAP'][$d],2,',','.') }} </td>
+				<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -1156,15 +1156,15 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($d == 12)
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
 			@else
 				@if($data['mtxDN']['previousAdSales'][$d] > 0)
-					<td style=" background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])*100}}</td>
+					<td style=" background-color: #c3d8ef; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['previousAdSales'][$d])}}</td>
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
 			@endif
 		@endfor
@@ -1175,22 +1175,22 @@
 		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
 			@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif
@@ -1215,9 +1215,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][1] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
-				<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['previousAdSales'][$c][$d],2,',','.') }} </td>
+				<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1226,9 +1226,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['previousSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1237,9 +1237,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Target </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{ number_format($data['mtx']['currentTarget'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['mtx']['currentTarget'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1248,9 +1248,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][0] }} Corporate </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentCorporate'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentCorporate'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1259,9 +1259,9 @@
 		<td style="background-color: #c3d8ef; font-weight: bold;"> {{ $data['years'][0] }} Ad Sales </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentAdSales'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #c3d8ef; font-weight: bold; "> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1270,9 +1270,9 @@
 		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@else
-    			<td style="background-color: #dce6f1; font-weight: bold; text-align: left;"> {{ number_format($data['mtx']['currentSAP'][$c][$d],2,',','.') }} </td>
+    			<td style="background-color: #dce6f1; font-weight: bold; "> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -1282,15 +1282,15 @@
     	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
     		@if($d == 12)
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 				@endif
     		@else
     			@if($data['mtx']['previousAdSales'][$c][$d] > 0)
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])*100}}%</td> 
+					<td style="background-color: #c3d8ef; font-weight: bold; ">{{($data['mtx']['currentCorporate'][$c][$d]/$data['mtx']['previousAdSales'][$c][$d])}}%</td> 
 				@else
-					<td style="background-color: #c3d8ef; font-weight: bold; text-align: left;">0.0</td>
+					<td style="background-color: #c3d8ef; font-weight: bold; ">0.0</td>
 				@endif
     		@endif				        		 
     	@endfor
@@ -1302,22 +1302,22 @@
 
     		@if($data['mtxDN']['currentTarget'][$d] == 0)
 				@if($d == 12)
-					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0%</td>
+					<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0%</td>
 				@else
-					<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0%</td>
+					<td style="background-color: #dce6f1; font-weight: bold; ">0%</td>
 				@endif
 			@else
 				@if($d == 12)
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; text-align: left;">0.0</td>
+						<td style="color: #FFFFFF; font-weight: bold; background-color: #143052; ">0.0</td>
 					@endif 
 				@else
 					@if($data['mtxDN']['previousAdSales'][$d] > 0)
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])*100}}%</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">{{($data['mtxDN']['currentCorporate'][$d]/$data['mtxDN']['currentTarget'][$d])}}%</td>
 					@else
-						<td style="background-color: #dce6f1; font-weight: bold; text-align: left;">0.0</td>
+						<td style="background-color: #dce6f1; font-weight: bold; ">0.0</td>
 					@endif
 				@endif
 			@endif

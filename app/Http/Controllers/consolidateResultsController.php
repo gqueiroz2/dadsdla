@@ -75,13 +75,17 @@ class consolidateResultsController extends Controller{
 
         $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
 
+        $regionName = Request::session()->get('userRegion'); 
+        $userRegionExcel = $regionName;
+
+
         $regionExcel = $regionID;
         $currencyExcel = $currencyID;
         $valueExcel = $value;
         $title = 'Results - Consolidate Office';
         $titleExcel = 'Results - Consolidate Office.xlsx';
 
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel')); 
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel')); 
 
 
     }
@@ -192,20 +196,11 @@ class consolidateResultsController extends Controller{
         }
 
         $mtxDN = $cR->addDN($mtx);
+        $regionName = Request::session()->get('userRegion'); 
+        $userRegionExcel = $regionName;
 
-        /*
-        $tmp = $r->getRegion($con,array($regionID));
-        
 
-        if(is_array($tmp)){
-                $salesRegion = $tmp[0]['name'];
-        }else{
-                $salesRegion = $tmp['name'];
-        }
-        
-        $currencyS = $pr->getCurrencyByRegion($con,array($regionID))[0]['name'];
-        
-        */
+    
         
         $title = 'Results - Consolidate DLA';
         $titleExcel = 'Results - Consolidate DLA.xlsx';
@@ -216,7 +211,7 @@ class consolidateResultsController extends Controller{
         $currencyExcel = $currencyID;
         $valueExcel = $value;
 
-        return view('adSales.results.10consolidateDLAPost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx'));   
+        return view('adSales.results.10consolidateDLAPost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx', 'userRegionExcel'));   
         
     	
     }
@@ -280,7 +275,9 @@ class consolidateResultsController extends Controller{
         $tmp = $pr->getCurrency($con,array($currencyID));
         $currencyIDs = $tmp;
 
-        $value = Request::get('value');        
+        $value = Request::get('value');  
+
+        $regionName = Request::session()->get('userRegion');      
 
         $cYear = date('Y');
         $pYear = $cYear - 1;
@@ -348,10 +345,10 @@ class consolidateResultsController extends Controller{
         $typeSelectExcel = Request::get('typeSelect');
         $currencyExcel = $currencyID;
         $valueExcel = $value;
+        $userRegionExcel = $regionName;
 
 
-
-        return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx'));   
+        return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx', 'userRegionExcel'));   
         
         
     }

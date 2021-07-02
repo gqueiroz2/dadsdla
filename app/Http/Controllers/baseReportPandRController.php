@@ -61,7 +61,9 @@ class baseReportPandRController extends Controller{
                 $salesRepID = Request::get('salesRep');
                 $currencyID = Request::get('currency');
                 $value = Request::get('value');
-                $baseReport = Request::get('baseReport');                
+                $baseReport = Request::get('baseReport');   
+                $regionName = Request::session()->get('userRegion');
+             
 
 /*
                 $validator = Validator::make(Request::all(),[
@@ -86,10 +88,11 @@ class baseReportPandRController extends Controller{
                 $valueExcel = $value;
                 $baseReportExcel = $baseReport;
                 $yearExcel = $cYear;
+                $userRegionExcel = $regionName;
 
                 $titleExcel = "PandR - Base Report.xlsx";
 
-                return view('pAndR.baseReport.post',compact('con','render','region','currency','permission','user','forRender','baseReport','regionExcel','salesRepExcel','currencyExcel','valueExcel','baseReportExcel','yearExcel', 'titleExcel'));
+                return view('pAndR.baseReport.post',compact('con','render','region','currency','permission','user','forRender','baseReport','regionExcel','salesRepExcel','currencyExcel','valueExcel','baseReportExcel','yearExcel', 'titleExcel', 'userRegionExcel'));
                 
 
 /*
