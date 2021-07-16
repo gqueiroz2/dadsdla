@@ -49,6 +49,9 @@ class baseReportPandRController extends Controller{
                 $br = new baseReportPandR();        
                 $default = $db->defaultConnection();
                 $con = $db->openConnection($default);
+                $b = new brand();
+                $brands = $b->getBrand($con);
+                
 
                 $cYear = intval( Request::get('year') );
                 $pYear = $cYear - 1;

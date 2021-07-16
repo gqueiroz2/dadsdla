@@ -99,8 +99,8 @@ class baseReportPandR extends pAndR{
 	        
 	    } 
 
-         $rollingFCST = $this->addFcstWithBooking($bookings,$rollingFCST);//with bookings value 
-        //var_dump($list);
+        $rollingFCST = $this->addFcstWithBooking($bookings,$rollingFCST);//with bookings value 
+        //var_dump($rollingFCST);
 
         /*
         for ($b=0; $b < sizeof($bookings); $b++) { 
@@ -1360,7 +1360,7 @@ class baseReportPandR extends pAndR{
         if ($a == $b)
             return 0;
         
-        return ($a['brand'] < $b['brand']) ? -1 : 1;
+        //return ($a['brand'] < $b['brand']) ? -1 : 1;
     }
 
     public function lastYearBrand($con,$sql,$pr,$brands,$year,$value,$currency,$region,$currencyID){
@@ -1466,4 +1466,20 @@ class baseReportPandR extends pAndR{
 
         return $sum;
     }
+
+    public function generateColumns($value,$source){
+
+        if($value && $source == "ytd"){
+            $columns = $value."_revenue_prate";
+        }else if($value && $source == "crm"){
+            $columns = $value."_revenue";;
+        }elseif($value){
+            $columns = $value."_revenue";
+        }else{
+            $columns = false;
+        }
+
+        return $columns;
+    }
+
 }

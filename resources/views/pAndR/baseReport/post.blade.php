@@ -87,7 +87,7 @@
 
 	</div>
 
-	<div class="container-fluid" id="body">
+	<div class="container-fluid" id="body" >
         <div class="row mt-2 justify-content-end">
             <div class="col" style="width: 100%;">
                 <center>
@@ -96,6 +96,14 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+    	
+    	$('.linked').scroll(function(){
+    		$('.linked').scrollLeft($(this).scrollLeft());
+        });
+
+    </script>
 
      <script type="text/javascript">
         $(document).ready(function(){
