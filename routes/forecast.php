@@ -20,7 +20,9 @@ Route::group(['prefix'=>'forecast'],function(){
 			Route::get('/','forecastController@byAEGet')
 										->name('forecastByAEGet');
 			Route::post('/','forecastController@byAEPost')
-										->name('forecastByAEPost');			
+										->name('forecastByAEPost');		
+			Route::post('/save','forecastController@byAESave')
+										->name('forecastByAESave');			
 
 		});
 

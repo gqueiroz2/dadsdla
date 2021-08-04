@@ -172,10 +172,10 @@ class sql extends Model{
     }
 
     public function fetchSum($result,$sum){
-        
+
         if($result && $result->num_rows > 0){            
             $row = $result->fetch_assoc();                
-                $info[$sum] = doubleval($row[$sum]);               
+            $info[$sum] = doubleval($row[$sum]);               
         }else{
             $info = false;
         }

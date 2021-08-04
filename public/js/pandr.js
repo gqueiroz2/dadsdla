@@ -51,25 +51,29 @@ $(document).ready(function(){
 });
 
 function handleNumber(number){
+  number = number.replace(",","");
+  number = parseFloat(number);
+  /*
   number = number.replace(",",";");
-
   for (var i = 0; i < number.length/3; i++) {
     number = number.replace(".","");
   }
   number = number.replace(";",".");
-  
   number = parseFloat(number); 
-
+  */
   return number;
 }
 
-  function Comma(Num) { //function to add commas to textboxes
-      Num += '';
+  function Comma(x) { //function to add commas to textboxes
+      /*Num += '';
+      console.log(Num);
       x = Num.split('.');
       x1 = x[0];
       x2 = x.length > 1 ? ',' + x[1] : '';
-      
+      console.log(x1);
+      console.log(x2);
       if(x2){
+        console.log('if');
         if(x2[2]){
           x2 = x2[0]+x2[1]+x2[2];
         }else{
@@ -83,7 +87,8 @@ function handleNumber(number){
       while (rgx.test(x1))
           x1 = x1.replace(rgx, '$1' + '.' + '$2');
       return x1 + x2;
-
+      */
+      return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 
   }
 

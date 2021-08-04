@@ -69,6 +69,12 @@ th{
     color: white;
 }
 
+.sony{
+    background-color: #003c66;
+    font-weight: bold;
+    color: white;
+}
+
 .hh{
 	background-color: #ff6600;
     font-weight: bold;
@@ -242,7 +248,13 @@ th{
 
 .rcBlue{
     font-weight: bold;
-    background-color: #dce6f1;
+    background-color: #c8d8e9;
+}
+
+.rcBlueSony{
+    font-weight: bold;
+    background-color:#4d7eb3;
+    color:white;
 }
 
 .lightb{
@@ -280,6 +292,12 @@ th{
 	background-color: #e7eff9;
 }
 
+.oddSony{
+    background-color:#4571a1;
+    color:white;
+}
+
+
 .even{
 	background-color: #f9fbfd;
 }
@@ -289,6 +307,14 @@ th{
 }
 
 .evenGrey{
-    background-color: #bfbfbf;
+    background-color: #f2f2f2;
+}
+
+.oddGreySony{
+    background-color: #d9d9d9;
+}
+
+.evenGreySony{
+    background-color: #cccccc;
 }
 

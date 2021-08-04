@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 class forecastBase extends pAndR{
     
@@ -31,6 +32,7 @@ class forecastBase extends pAndR{
                 $shareSalesRep[$c] = false;
                 $fcst[$c] = false;
             }
+
             if($fcst[$c]){
                 $fcst[$c] = $this->adjustValues($fcst[$c]);
                 $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
@@ -42,6 +44,7 @@ class forecastBase extends pAndR{
             }
             
         }
+
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
 
@@ -324,7 +327,7 @@ class forecastBase extends pAndR{
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
         
-        /* GET INFO FROM 2018 AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */        
+        /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */        
 
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
@@ -338,7 +341,7 @@ class forecastBase extends pAndR{
                 }elseif($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
                     /*
                         IF THE CLINET DOES NOT HAVE REVENUE ON THE MONTH LAST YEAR GET THE SHARE OF THE REP ON THE SAME MONTH ON LAST YEAR
-                    */
+                    */  
                     if($lyRSP[$monthOPP[$l][$m]] > 0 && $lyRSP[16] > 0){
                         $share[$l][$m] = $lyRSP[$monthOPP[$l][$m]];//$lyRSP[16];  
                         $amount[$l] += $share[$l][$m];
@@ -350,8 +353,8 @@ class forecastBase extends pAndR{
                         $amount[$l] += $share[$l][$m];
                     }
                 }else{
-                    $share[$l][$m] = 0;
-                    $amount[$l] += 0;
+                    $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];;
+                    $amount[$l] += $share[$l][$m];
                 }
             }
 
@@ -372,8 +375,332 @@ class forecastBase extends pAndR{
         return $share;
     }
 
+    public function adjustFcstAmountByStage($fcstAmountByStage){
+
+        for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) {
+            if ($fcstAmountByStage[$c]) {
+                $fcstAmountByStage[$c][0][6] = 'Total';
+                $fcstAmountByStage[$c][1][6] = $fcstAmountByStage[$c][1][0] + $fcstAmountByStage[$c][1][1] + $fcstAmountByStage[$c][1][2] + $fcstAmountByStage[$c][1][3] + $fcstAmountByStage[$c][1][4];
+
+                $fcstAmountByStage[$c][0][7] = 'Var(%)';
+                if ($fcstAmountByStage[$c][1][6] != 0) {
+                    $fcstAmountByStage[$c][1][7] = ($fcstAmountByStage[$c][1][4]/$fcstAmountByStage[$c][1][6])*100;
+                }else{
+                    $fcstAmountByStage[$c][1][7] = 0;
+                }
+            }
+        }
+
+        return $fcstAmountByStage;
+    }
+
+    public function insertUpdate($con,$oppid,$region,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClientDISC,$manualEstimantionByClientSONY,$list,$splitted,$submit,$brandPerClient){
+        
+        $sql = new sql();
+        $sr = new salesRep();
+        $tmp = explode("-", $date);
+
+        if($tmp && isset($tmp[1])){
+            $month = $tmp[1];
+        }else{
+            $month = 0;
+        }
+
+        $user = Request::session()->get('userName');
+
+        if ($submit == "submit") {
+            $submit = 1;
+            $selectSubmit = "SELECT ID FROM forecast WHERE  sales_rep_id = \"".$salesRep->id."\" and submitted = \"1\" AND month = \"".intval($month)."\" AND year = \"".$year."\"";
+            if ($region == '1') {
+                $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $from = array("ID");
+
+            $resultSubmit = $con->query($selectSubmit);
+            
+            $resSubmit = $sql->fetch($resultSubmit,$from,$from)[0]["ID"];
+
+            if ($resSubmit != null) {
+                return "Already Submitted";
+            }
+
+            $selectVP = "SELECT ID FROM forecast WHERE year = \"".$year."\" AND month = \"".intval($month)."\" AND submitted = \"1\" AND region_id = \"".$region."\" AND type_of_forecast = \"V1\"";
+
+            if ($region == '1') {
+                $selectVP .=  " AND read_q = \"".intval($read)."\"";
+            }
+
+            $resultsVP = $con->query($selectVP);
+            
+            $resVP = $sql->fetch($resultsVP,$from,$from)[0]["ID"];
+
+
+            if ($resVP != null) {
+                return "Already Submitted";
+            }
+
+        }else{
+            $submit = 0;
+        }
+        
+        $tableFCST = "forecast";
+        $tableFCSTClient = "forecast_client";
+        $tableFCSTSalesRep = "forecast_sales_rep";
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        if ($id && !is_null($id) && $submit == 0 ) {
+            $update = "UPDATE $tableFCST SET read_q = \"".$read."\", 
+                                            last_modify_by = \"".$user."\",
+                                            last_modify_date = \"".$date."\", 
+                                            last_modify_time = \"".$time."\", 
+                                            oppid = \"".$oppid."\",
+                                            currency_id = \"".$currency['id']."\", 
+                                            year = \"".$year."\", 
+                                            type_of_value = \"".$value."\",
+                                            month = \"".$month."\" WHERE ID = \"".$id."\"";            
+            if($con->query($update) === true){}else{var_dump($con->error);return false;}
+            $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$id,$salesRep,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
+            $updateFCSTClientDISC = $this->updateFCSTClient($con,$id,$salesRep,$manualEstimantionByClientDISC,$tableFCSTClient,$list,$splitted, $brandPerClient,"DISC");
+            $updateFCSTClientSONY = $this->updateFCSTClient($con,$id,$salesRep,$manualEstimantionByClientSONY,$tableFCSTClient,$list,$splitted, $brandPerClient,"SONY");
+
+            return "Updated";           
+        }else{
+            $columns = "(
+                         oppid,
+                         region_id, sales_rep_id,
+                         year,month, read_q,date_m,
+                         currency_id, type_of_value,
+                         last_modify_by, last_modify_date, last_modify_time,
+                         submitted, type_of_forecast)";
+            $salesRepID = $sr->getSalesRepByName($con,$salesRep->salesRep)[0]['id'];
+            $values = "(
+                        \"".$oppid."\",
+                        \"".$region."\",\"".$salesRepID."\",
+                        \"".$year."\",\"".$month."\",\"".$read."\",\"".$date."\",
+                        \"".$currency['id']."\",\"".$value."\",
+                        \"".$user."\",\"".$date."\",\"".$time."\",
+                        \"".$submit."\", \"AE\"
+                      )";
+            $insertFCST = " INSERT INTO $tableFCST $columns VALUES $values";
+            if($con->query($insertFCST) === true){}else{var_dump($con->error);return false;}
+            $insertFCSTSalesRep = $this->FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
+            $insertFCSTClientDISC = $this->FCSTClient($con,$oppid,$manualEstimantionByClientDISC,$tableFCSTClient,$list,$splitted,$brandPerClient,"DISC");
+            $insertFCSTClientSONY = $this->FCSTClient($con,$oppid,$manualEstimantionByClientSONY,$tableFCSTClient,$list,$splitted,$brandPerClient,"SONY");
+         
+            return "Created";
+        }
+    }
+
+    public function FCSTSalesRep($con,$oppid,$manualEstimantionBySalesRep,$table){
+        $currentMonth = intval(date('m')) -1;
+
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        $columns = "(forecast_id,month,value)";
+        for ($m=0; $m <sizeof($manualEstimantionBySalesRep); $m++) { 
+            $values[$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".$manualEstimantionBySalesRep[$m]."\")";
+
+            $insert[$m] = "INSERT INTO $table $columns VALUES ".$values[$m]."";
+
+            if ($con->query($insert[$m]) === true) {
+      
+            }else{
+                //var_dump($con->error);
+                return false;
+            }
+        }
+    }
+
+    public function addClosedFcst($rolling,$tmpRolling){
+        $date = date('n')-1;
+
+        if ($date < 3) {
+        }elseif ($date < 6) {
+            $date ++;
+        }elseif ($date < 9) {
+            $date += 2;
+        }else{
+            $date += 3;
+        }
+        for ($r=0; $r <sizeof($rolling) ; $r++) { 
+            for ($m=0; $m <sizeof($rolling[$r]) ; $m++) { 
+                if ($m < $date) {
+                    $rolling[$r][$m] = $tmpRolling[$r][$m];
+                }
+            }
+        }
+
+        return $rolling;
+    }
+
+    public function FCSTClient($con,$oppid,$manualEstimantion,$table,$list,$splitted,$brandPerClient,$pattern){
+        $currentMonth = intval(date('m')) -1;
+        $sql = new sql();
+
+        $select = "SELECT ID FROM forecast WHERE oppid = \"".$oppid."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+
+        $columns = "(forecast_id,month,value,client_id,brand,agency_id,company)";
+        for ($c=0; $c <sizeof($list) ; $c++) {
+            if ($splitted) {
+                if ($splitted[$c]->splitted) {
+                    $div = 2;
+                }else{
+                    $div = 1;
+                }
+            }else{
+                $div = 1;
+            }
+            if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
+                for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                    $values[$c][$m] = "(\"".$id."\" ,\"".($m+1)."\",\"".($manualEstimantion[$c][$m])."\",\"".$list[$c]->clientID."\",\"".$brandPerClient[$c]."\",\"".$list[$c]->agencyID."\",\"".$pattern."\")";
+
+                    $insert[$c][$m] = "INSERT INTO $table $columns VALUES ".$values[$c][$m]."";
+
+                    if ($con->query($insert[$c][$m]) === true) {
+                        
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    public function updateFCSTSalesRep($con,$id,$salesRep,$manualEstimantion,$table){
+        $sql = new sql();
+/*
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+*/
+        for ($m=0; $m <sizeof($manualEstimantion) ; $m++) { 
+            $update[$m] = "UPDATE $table SET value = \"".$manualEstimantion[$m]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\"";
+
+            if ($con->query($update[$m]) === true) {
+            
+            }else{
+                var_dump($con->error);
+                return false;
+            }
+        }
+    }
+
+    public function updateFCSTClient($con,$id,$salesRep,$manualEstimantion,$table,$list,$splitted,$brandPerClient,$pattern){
+
+        $sql = new sql();
+/*
+        $select = "SELECT ID FROM forecast WHERE sales_rep_id = \"".$salesRep->id."\"";
+
+        $from = array("ID");
+
+        $result = $con->query($select);
+
+        $id = $sql->fetch($result,$from,$from)[0]["ID"];
+*/
+
+        for ($c=0; $c <sizeof($list) ; $c++) { 
+            if ($splitted) {
+                if ($splitted[$c]->splitted) {
+                    $div = 2;
+                }else{
+                    $div = 1;
+                }
+            }else{
+                $div = 1;
+            }
+            if (!$splitted || !$splitted[$c]->splitted || $splitted[$c]->owner) {
+                for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
+                    $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\" AND agency_id = \"".$list[$c]->agencyID."\" AND company = \"".$pattern."\"";
+
+                    if ($con->query($update[$c][$m]) === true) {
+                    }else{
+                        var_dump($con->error);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    public function adjustFcstAmountByStageEx($fcstAmountByStageEx){
+
+        $fcstAmountByStageEx[0][6] = 'Total';
+        $fcstAmountByStageEx[0][7] = 'Var(%)';
+
+        $fcstAmountByStageEx[1][6] = $fcstAmountByStageEx[1][0]+$fcstAmountByStageEx[1][1]+$fcstAmountByStageEx[1][2]+$fcstAmountByStageEx[1][3]+$fcstAmountByStageEx[1][4];
+
+        if ($fcstAmountByStageEx[1][6] == 0) {
+            $fcstAmountByStageEx[1][7] = 0.0;
+        }else{
+            $fcstAmountByStageEx[1][7] = ($fcstAmountByStageEx[1][4]/$fcstAmountByStageEx[1][6])*100;
+        }
+
+        return $fcstAmountByStageEx;   
+    }
+
+    public function generateID($con,$sql,$pr,$kind,$region,$year,$salesRep,$currency,$value,$week,$month){
+
+        if($kind == "save"){ $string = "SAV"; }
+        else{ $string = "TRS"; }
+        $value = strtoupper($value);
+        $string .= "-".preg_replace('/\s+/', '', $salesRep->region).    
+                   "-".$year.
+                   "-".$month.                   
+                   "-WEEK-".$week.                   
+                   "-".preg_replace('/\s+/', '', $salesRep->salesRep).
+                   "-".$currency.
+                   "-".$value
+                ;
+        return $string;
+    }
+
+    public function getBrandsClient($con,$clients,$salesRep){
+
+        $sql = new sql();
+
+        $from = array("brand");
+
+        for ($c=0; $c < sizeof($clients) ; $c++) { 
+            $select[$c] = "SELECT brand FROM sf_pr WHERE client_id = \"".$clients[$c]['clientID']."\" AND sales_rep_splitter_id = \"".$salesRep[0]["id"]."\" AND (stage != \"5\" AND stage != \"6\" AND stage != \"7\")";
+
+            $res[$c] = $con->query($select[$c]);
+
+            $saida[$c] = $sql->fetch($res[$c],$from,$from);
+        } 
+
+        return $saida;
+    }
+
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted,$div){
         
+        $brandString = $this->brandArrayToString($brand);        
+
         $date = date("n")-1;
 
         $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
@@ -384,12 +711,13 @@ class forecastBase extends pAndR{
                                 FROM sf_pr
                                 WHERE (client_id = \"".$clients['clientID']."\")
                                 AND (agency_id = \"".$clients['agencyID']."\")
-                                AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
-                                AND ( stage != '5')
+                                AND ( (sales_rep_splitter_id = \"".$salesRepID."\") OR (sales_rep_owner_id = \"".$salesRepID."\") )
+                                AND (brand_id IN ($brandString))
                                 AND ( stage != '6')
                                 AND ( stage != '7')
-                                AND (year_from = \"".$year."\")                                
-                                AND (from_date > \"".$date."\")";
+                                AND (year_from = \"".$year."\")";
+                                /*                                
+                                AND (from_date > \"".$date."\")";*/
 
         }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
             $select = "
@@ -397,12 +725,12 @@ class forecastBase extends pAndR{
                             FROM sf_pr
                             WHERE (client_id = \"".$clients['clientID']."\")
                             AND (agency_id = \"".$clients['agencyID']."\")
-                            AND ( sales_rep_splitter_id = \"".$salesRepID."\" )
-                            AND ( stage != '5')
+                            AND ( (sales_rep_splitter_id = \"".$salesRepID."\") OR (sales_rep_owner_id = \"".$salesRepID."\") )
+                            AND (brand_id IN ($brandString))
                             AND ( stage != '6')
-                            AND ( stage != '7')
-                            AND (from_date > \"".$date."\") 
+                            AND ( stage != '7')                            
                             AND (year_from = \"".$year."\")";
+                            /*AND (from_date > \"".$date."\")*/
         }
 
         $res = $con->query($select);
@@ -433,6 +761,103 @@ class forecastBase extends pAndR{
 
         return $rev;
 
+    }
+
+    public function aggregateShare($from,$to){
+        $sum = 0.0;
+        $sumFrom = 0.0;
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $sum += $from[$f];
+            $sumFrom += $from[$f];
+        }        
+
+        for ($t=0; $t < sizeof($to); $t++) { 
+            $sum += $to[$t];
+        }
+
+        for ($f=0; $f < sizeof($from); $f++) { 
+            $shareByMonth[$f] = $from[$f]/$sum;
+        } 
+
+        $share = $sumFrom/$sum;
+
+        return $share;
+        var_dump($share);
+
+
+    }
+
+    public function calculateRespectiveShare($con,$sql,$regionID,$value,$year,$month){
+        $pastYear = intval($year) - 1;
+
+        $from = array("amount");
+
+        for ($m=0; $m < sizeof($month); $m++) { 
+            /*
+                SE O ANO DO FORECAST FOR O ANO SEGUINTE VERIFICA SE O MES DE FORECAST É MENOR QUE O MES ATUAL, SE FOR MAIOR DIMINUI O ANO PASSADO PARA PEGAR O VALOR NO ANO ANTERIOR E NAO NO CORRENTE
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear--;
+                }
+            }
+
+            $select[$m] = "SELECT SUM(".$value."_revenue_prate) AS 'amount'
+                       FROM ytd
+                       WHERE (sales_representant_office_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $selectFW[$m] = "SELECT SUM(".$value."_revenue) AS 'amount'
+                       FROM fw_digital
+                       WHERE (region_id = \"".$regionID."\")
+                       AND (year = \"".$pastYear."\")
+                       AND (month = \"".$month[$m]."\")
+
+                      ";
+
+            $result[$m] = $con->query($select[$m]);
+            $resultFW[$m] = $con->query($selectFW[$m]);
+            $shareTV[$m] = $sql->fetch($result[$m],$from,$from)[0];
+            $shareFW[$m] = $sql->fetch($resultFW[$m],$from,$from)[0];
+            $share[$m] = $shareTV[$m]['amount'] + $shareFW[$m]['amount'];
+
+            /*
+                RETORNA O VALOR DO ANO PASSADO AO VALOR INICIAL
+            */
+            if($pastYear == date('Y')){
+                if($month[$m] >= date('m')){
+                    $pastYear++;
+                }
+            }
+        }
+
+        return $share;
+
+    }
+
+    public function makeMonths($param,$m){
+
+        $temp = intval($m);
+        $mm = array();
+
+        if($param == "from"){
+            while($temp <= 12){
+                array_push($mm, $temp);
+                $temp++;
+            }
+        }else{
+            $start = 1;
+            while($start <= $temp){
+                array_push($mm, $start);
+                $start++;
+            }
+        }
+
+        return $mm;
     }
 
     public function periodOfOpp($opp,$year){
@@ -880,6 +1305,9 @@ class forecastBase extends pAndR{
 			                                AND (year = \"".$year."\")
 			                                AND (brand_id IN ($brandString))
                                   ";
+
+                //echo "<pre>".$select[$c][$m]."</pre>";
+
     			$res[$c][$m] = $con->query($select[$c][$m]);
     			$from = array("sumValue");
     			$rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div;	   
@@ -926,7 +1354,6 @@ class forecastBase extends pAndR{
                     WHERE ((s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\"))
                     AND ( s.region_id = \"".$regionID."\") 
                     AND ( s.stage != \"6\") 
-                    AND ( s.stage != \"5\") 
                     AND ( s.stage != \"7\")
                     AND (s.year_from = \"$cYear\")
                     ORDER BY 1

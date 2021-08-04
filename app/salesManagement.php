@@ -32,6 +32,7 @@ class salesManagement extends Model{
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					$temp[$m][$n]['region'] = $mtx[$m][$n]['region'];
 					$temp[$m][$n]['salesRep'] = $mtx[$m][$n]['salesRep'];
+					$temp[$m][$n]['salesRepSfID'] = $mtx[$m][$n]['salesRepSfID'];
 					$temp[$m][$n]['currency'] = 'USD';				
 					if($mtx[$m][$n]['month'] < 10){
 						$month = "0".$mtx[$m][$n]['month'];
@@ -113,7 +114,8 @@ class salesManagement extends Model{
 								r.ID AS 'regionID', 
 								r.name AS 'region', 
 								sr.ID AS 'salesRepID', 
-								sr.name AS 'salesRep', 								
+								sr.name AS 'salesRep',
+								sr.sf_id AS 'salesRepSfID', 								
 								b.name AS 'brand',
 								b.ID AS 'brandID'
 						   FROM	plan_by_sales pbs						   
@@ -129,8 +131,8 @@ class salesManagement extends Model{
 			              ";			            
 			
 		    $res[$s] = $con->query($select[$s]);
-			$from = array('regionID','region','salesRepID','salesRep','year','month','brandID','brand','value');
-			$to = array('regionID','region','salesRepID','salesRep','year','month','brandID','brand','targetValue');
+			$from = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','value');
+			$to = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','targetValue');
 			$array[$s] = $sql->fetch($res[$s],$from,$to);			
 		}
 

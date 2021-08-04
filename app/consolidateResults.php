@@ -168,9 +168,9 @@ class consolidateResults extends Model{
 	                    $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
 		                
 		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
-		                $currentCorporate[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
-		                $currentSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
-		                $previousSAP[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
+		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
+		                $previousSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $pYear, "ACTUAL");
 		            }
 		        }
 
