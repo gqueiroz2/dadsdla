@@ -51,7 +51,7 @@ $(document).ready(function(){
 });
 
 function handleNumber(number){
-  number = number.replace(",","");
+  number = number.replaceAll(",","");
   number = parseFloat(number);
   /*
   number = number.replace(",",";");

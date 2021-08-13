@@ -131,6 +131,24 @@
     
     <script type="text/javascript">
         $(document).ready(function(){
+
+            $(".clickBool").click(function(e){
+                var myBool = $("#clickBool").val();
+                
+                if(myBool == 1){e
+                    $(".clickLoop").hide();
+                    myBool = 0;
+                   
+                }else{
+                    $(".clickLoop").show();
+                    myBool = 1;
+                }
+                 $("#clickBool").val(myBool);
+
+            });
+
+
+
             var client = <?php echo json_encode($forRender['client']); ?>;
 
             $('.linked').scroll(function(){
@@ -150,14 +168,14 @@
                 }
             });
 
-            
+            /**************** INICIO DAS MUDANÇAS NO CAMPO DISCOVERY ****************/
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($forRender['client']);$c++)
                     $("#clientRF-DISC-"+{{$c}}+"-"+{{$m}}).change(function(){
-                        
                         if ($(this).val() == '') {
                             $(this).val(0);
                         }
+                        /* INICIO DO AJUSTE DA LINHA MODIFICADA */
                         $(this).val(Comma(handleNumber($(this).val())));
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var value = Comma(
@@ -194,8 +212,7 @@
                                             );
                             $("#clientRF-DISC-"+{{$c}}+"-15").val(value);
                         }          
-
-                        var totalClient = Comma(
+                        var totalClientDisc = Comma(
                     						handleNumber($("#clientRF-DISC-"+{{$c}}+"-3").val()) 
                                             + 
                     						handleNumber($("#clientRF-DISC-"+{{$c}}+"-7").val()) 
@@ -204,12 +221,64 @@
                                             + 
                     						handleNumber($("#clientRF-DISC-"+{{$c}}+"-15").val())
                     						);
-                        console.log(totalClient);
-                        console.log(handleNumber(totalClient));
-                        console.log(Comma(handleNumber(totalClient)));
-                        $("#totalClient-DISC-"+{{$c}}).val(totalClient);
-                        Temp3 = handleNumber(totalClient);   
+                        $("#totalClient-DISC-"+{{$c}}).val(totalClientDisc);
+                        /* FIM DO AJUSTE DA LINHA MODIFICADA */
 
+                        /* INICIO DO AJUSTE DA SOMA SONY + DISCOVERY */
+                        var discPlusSonyAdjust = Comma(
+                                                        handleNumber($("#clientRF-DISC-"+{{$c}}+"-{{$m}}").val()) 
+                                                        + 
+                                                        handleNumber($("#clientRF-SONY-"+{{$c}}+"-{{$m}}").val())
+                                                        );
+                        $("#clientRF-TT-"+{{$c}}+"-{{$m}}").val(discPlusSonyAdjust);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-0").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-1").val())
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-2").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-4").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-5").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-6").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-8").val())+
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-9").val())+
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-10").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-12").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-13").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-14").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-15").val(value);
+                        }          
+                        var totalClient = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-3").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-7").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-11").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-15").val())
+                                            );
+                        $("#totalClient-TT-"+{{$c}}).val(totalClient);
+                        /* FIM DO AJUSTE DA SOMA SONY + DISCOVERY */
+
+                        /* INICIO DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
                         var rf = 0;
                         for(var c2=0;c2<client.length;c2++){
                             if ($("#splitted-"+c2).val() != false) {
@@ -217,12 +286,19 @@
                             }else{
                                 var mult = 1;
                             }
-                            rf += (handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())*mult);
+                            rf += ((
+                                        handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())
+                                        +
+                                        handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())                                    
+                                    )*mult);
                         }    
-
                         rf += handleNumber($("#bookingE-"+{{$m}}).val());
                         rf = Comma(rf);
+                        console.log(rf);
                         $("#rf-"+{{$m}}).val(rf);
+                        /* FIM DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
+
+                        /* INICIO DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
                             month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
@@ -246,239 +322,249 @@
                         }
                         var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
                         $("#total-total").val(total);
-                        for(var c2=0;c2<client.length;c2++){
-                            var temp = handleNumber($("#totalClient-DISC-"+c2).val())/handleNumber($("#total-total").val());
-                            temp = Comma(temp*100);
-                            $("#totalPP2-"+c2).val(temp);
-                            $("#totalPP3-"+c2).val(temp);
-                        }              
-                        var value = handleNumber($(this).val());
-                        var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
-                        var tmp = value - PY;
-                        tmp = Comma(tmp);
-                        $("#RFvsPY-DISC-"+{{$c}}+"-"+{{$m}}).val(tmp);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var value = Comma(
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-0").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-1").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-2").val())
+
+                        /* FIM DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+
+                        /* INICIO DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
+                        var pendingValue = Comma((
+                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        -
+                                        handleNumber($("#bookingE-"+{{$m}}).val())                                    
+                                    ));
+
+                        $("#pending-"+{{$m}}).val(pendingValue);
+                            /* INICIO DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-0").val()) + handleNumber($("#pending-1").val()) + handleNumber($("#pending-2").val());
+                                month = Comma(month);
+                                $("#pending-3").val(month);
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-4").val()) + handleNumber($("#pending-5").val()) + handleNumber($("#pending-6").val());
+                                month = Comma(month);
+                                $("#pending-7").val(month);
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-8").val()) + handleNumber($("#pending-9").val()) + handleNumber($("#pending-10").val());
+                                month = Comma(month);
+                                $("#pending-11").val(month);
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-12").val()) + handleNumber($("#pending-13").val()) + handleNumber($("#pending-14").val());
+                                month = Comma(month);
+                                $("#pending-15").val(month);
+                            }
+                            var total = Comma(handleNumber($("#pending-3").val()) + handleNumber($("#pending-7").val()) + handleNumber($("#pending-11").val()) + handleNumber($("#pending-15").val()));
+                            $("#totalPending").val(total);
+
+                            /* FIM DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */                        
+                        /* FIM DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
+
+                        /* INICIO DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
+                        var varValue = Comma((
+                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        -
+                                        handleNumber($("#target-"+{{$m}}).val())                                    
+                                    ));
+
+                        $("#RFvsTarget-"+{{$m}}).val(varValue);
+                            /* INICIO DO AJUSTE DO FORECAST - TARGET NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-0").val()) + handleNumber($("#RFvsTarget-1").val()) + handleNumber($("#RFvsTarget-2").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-3").val(month);
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-4").val()) + handleNumber($("#RFvsTarget-5").val()) + handleNumber($("#RFvsTarget-6").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-7").val(month);
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-8").val()) + handleNumber($("#RFvsTarget-9").val()) + handleNumber($("#RFvsTarget-10").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-11").val(month);
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-12").val()) + handleNumber($("#RFvsTarget-13").val()) + handleNumber($("#RFvsTarget-14").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-15").val(month);
+                            }
+                            var total = Comma(handleNumber($("#RFvsTarget-3").val()) + handleNumber($("#RFvsTarget-7").val()) + handleNumber($("#RFvsTarget-11").val()) + handleNumber($("#RFvsTarget-15").val()));
+                            $("#totalRFvsTarget").val(total);
+
+                            /* FIM DO AJUSTE DO FORECAST - TARGET NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */ 
+                        /* FIM DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
+
+                        /* INICIO DO AJUSTE DO VALOR DE TARGET ACHIEVEMENT DO EXECUTIVO */
+                        var varValue = Comma(
+                                            Math.round(
+                                                (
+                                                    handleNumber($("#rf-"+{{$m}}).val())
+                                                    /
+                                                    handleNumber($("#target-"+{{$m}}).val()) 
+                                                )*100                                   
+                                            )
                                             );
-                            $("#RFvsPY-DISC-"+{{$c}}+"-3").val(value);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var value = Comma(
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-4").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-5").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-6").val())
-                                            );
-                            $("#RFvsPY-DISC-"+{{$c}}+"-7").val(value);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var value = Comma(
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-8").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-9").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-10").val())
-                                            );
-                            $("#RFvsPY-DISC-"+{{$c}}+"-11").val(value);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var value = Comma(
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-12").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-13").val())
-                                            +
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-14").val())
-                                            );
-                            $("#RFvsPY-DISC-"+{{$c}}+"-15").val(value);
-                        }
-                        var Temp = Comma(
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-3").val()) 
-                                            + 
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-7").val()) 
-                                            + 
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-11").val()) 
-                                            + 
-                                            handleNumber($("#RFvsPY-DISC-"+{{$c}}+"-15").val())
-                                            );
-                        $("#totalRFvsPY-"+{{$c}}).val(Temp);
-                        var booking = handleNumber($("#bookingE-"+{{$m}}).val());
-                        var Temp2 = handleNumber($("#target-"+{{$m}}).val());
-                        rf = handleNumber(rf);
-                        var RFvsTarget = Comma(rf-Temp2);
-                        var pending = Comma(rf-booking);
-                        $("#pending-"+{{$m}}).val(pending);
-                        $("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
-                        if (Temp2 == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
-                        }
-                        $("#achievement-"+{{$m}}).val(Temp3);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-DISC-"+c2+"-3").val());
+
+                        $("#achievement-"+{{$m}}).val(varValue+"%");
+                            /* INICIO DO AJUSTE DO TARGET ACHIEVEMENT NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-3").val()) / handleNumber($("#target-3").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-3").val(variation+"%");
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-7").val()) / handleNumber($("#target-7").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-7").val(variation+"%");                                
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-11").val()) / handleNumber($("#target-11").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-11").val(variation+"%"); 
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-15").val()) / handleNumber($("#target-15").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-15").val(variation+"%"); 
                             }
-                            var target = handleNumber($("#target-0").val())
-                                         +
-                                         handleNumber($("#target-1").val())
-                                         +
-                                         handleNumber($("#target-2").val());
-                            var booking = handleNumber($("#bookingE-0").val())
-                                          +
-                                          handleNumber($("#bookingE-1").val())
-                                          +
-                                          handleNumber($("#bookingE-2").val());
-                            $("#pending-3").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-3").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-3").val(Temp3);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-DISC-"+c2+"-7").val());
-                            }
-                            var target = handleNumber($("#target-4").val())
-                                         +
-                                         handleNumber($("#target-5").val())
-                                         +
-                                         handleNumber($("#target-6").val());
-                            var booking = handleNumber($("#bookingE-4").val())
-                                          +
-                                          handleNumber($("#bookingE-5").val())
-                                          +
-                                          handleNumber($("#bookingE-6").val());
-                            $("#pending-7").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-7").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-7").val(Temp3);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-DISC-"+c2+"-11").val());
-                            }
-                            var target = handleNumber($("#target-8").val())
-                                         +
-                                         handleNumber($("#target-9").val())
-                                         +
-                                         handleNumber($("#target-10").val());
-                            var booking = handleNumber($("#bookingE-8").val())
-                                          +
-                                          handleNumber($("#bookingE-9").val())
-                                          +
-                                          handleNumber($("#bookingE-10").val());
-                            $("#pending-11").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-11").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-11").val(Temp3);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-DISC-"+c2+"-15").val());
-                            }
-                            var target = handleNumber($("#target-12").val())
-                                         +
-                                         handleNumber($("#target-13").val())
-                                         +
-                                         handleNumber($("#target-14").val());
-                            var booking = handleNumber($("#bookingE-12").val())
-                                          +
-                                          handleNumber($("#bookingE-13").val())
-                                          +
-                                          handleNumber($("#bookingE-14").val());
-                            $("#pending-15").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-15").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-15").val(Temp3);
-                        }
-                        var RF = handleNumber($("#rf-3").val()) 
-                                 + 
-                                 handleNumber($("#rf-7").val()) 
-                                 + 
-                                 handleNumber($("#rf-11").val()) 
-                                 + 
-                                 handleNumber($("#rf-15").val());
-                        var target = handleNumber($("#target-3").val()) 
-                                     + 
-                                     handleNumber($("#target-7").val()) 
-                                     + 
-                                     handleNumber($("#target-11").val()) 
-                                     + 
-                                     handleNumber($("#target-15").val());
-                        var booking = handleNumber($("#bookingE-3").val()) 
-                                      + 
-                                      handleNumber($("#bookingE-7").val()) 
-                                      + 
-                                      handleNumber($("#bookingE-11").val()) 
-                                      + 
-                                      handleNumber($("#bookingE-15").val());
-                        $("#totalPending").val(Comma(RF-booking));
-                        $("#TotalRFvsTarget").val(Comma(RF-target));
-                        if (target == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((RF/target)*100).toFixed(2))+"%";
-                        }
-                        $("#totalAchievement").val(Temp3);
+                            varRFcst = handleNumber($("#total-total").val());
+                            varTarget = handleNumber($("#totalTarget").val());
+                            var varTotal = Math.round((varRFcst/varTarget)*100);
+                            varTotal = Comma(varTotal)
+
+                            $("#totalAchievement").val(varTotal+"%");
+
+                            /* FIM DO AJUSTE DO TARGET ACHIEVEMENT NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */ 
+                        /* FIM DO AJUSTE DO VALOR DE TARGET ACHIEVEMENT DO EXECUTIVO */
                     });
                 @endfor
             @endfor
+            /**************** FIM DAS MUDANÇAS NO CAMPO DISCOVERY ****************/
 
+
+            /**************** INICIO DAS MUDANÇAS NO CAMPO SONY ****************/
             @for( $m=0;$m<16;$m++)
                 @for($c=0;$c< sizeof($forRender['client']);$c++)
                     $("#clientRF-SONY-"+{{$c}}+"-"+{{$m}}).change(function(){
-                        
                         if ($(this).val() == '') {
                             $(this).val(0);
                         }
+                        /* INICIO DO AJUSTE DA LINHA MODIFICADA */
                         $(this).val(Comma(handleNumber($(this).val())));
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var value = Comma(handleNumber($("#clientRF-SONY-"+{{$c}}+"-0").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-1").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-2").val()));
+                            var value = Comma(
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-0").val())
+                                            +
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-1").val())
+                                            + 
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-2").val())
+                                            );
                             $("#clientRF-SONY-"+{{$c}}+"-3").val(value);
                         }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var value = Comma(handleNumber($("#clientRF-SONY-"+{{$c}}+"-4").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-5").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-6").val()));
+                            var value = Comma(
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-4").val())
+                                            +
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-5").val())
+                                            +
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-6").val())
+                                            );
                             $("#clientRF-SONY-"+{{$c}}+"-7").val(value);
                         }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var value = Comma(handleNumber($("#clientRF-SONY-"+{{$c}}+"-8").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-9").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-10").val()));
+                            var value = Comma(
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-8").val())+
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-9").val())+
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-10").val())
+                                            );
                             $("#clientRF-SONY-"+{{$c}}+"-11").val(value);
                         }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var value = Comma(handleNumber($("#clientRF-SONY-"+{{$c}}+"-12").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-13").val())+handleNumber($("#clientRF-SONY-"+{{$c}}+"-14").val()));
+                            var value = Comma(
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-12").val())
+                                            +
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-13").val())
+                                            +
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-14").val())
+                                            );
                             $("#clientRF-SONY-"+{{$c}}+"-15").val(value);
                         }          
+                        var totalClientSONY = Comma(
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-3").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-7").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-11").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-SONY-"+{{$c}}+"-15").val())
+                                            );
+                        $("#totalClient-SONY-"+{{$c}}).val(totalClientSONY);
+                        /* FIM DO AJUSTE DA LINHA MODIFICADA */
 
+                        /* INICIO DO AJUSTE DA SOMA SONY + DISCOVERY */
+                        var discPlusSonyAdjust = Comma(
+                                                        handleNumber($("#clientRF-DISC-"+{{$c}}+"-{{$m}}").val()) 
+                                                        + 
+                                                        handleNumber($("#clientRF-SONY-"+{{$c}}+"-{{$m}}").val())
+                                                        );
+                        $("#clientRF-TT-"+{{$c}}+"-{{$m}}").val(discPlusSonyAdjust);
+                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-0").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-1").val())
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-2").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-3").val(value);
+                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-4").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-5").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-6").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-7").val(value);
+                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-8").val())+
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-9").val())+
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-10").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-11").val(value);
+                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                            var value = Comma(
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-12").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-13").val())
+                                            +
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-14").val())
+                                            );
+                            $("#clientRF-TT-"+{{$c}}+"-15").val(value);
+                        }          
                         var totalClient = Comma(
-                                                handleNumber($("#clientRF-SONY-"+{{$c}}+"-3").val()) + 
-                                                handleNumber($("#clientRF-SONY-"+{{$c}}+"-7").val()) + 
-                                                handleNumber($("#clientRF-SONY-"+{{$c}}+"-11").val()) + 
-                                                handleNumber($("#clientRF-SONY-"+{{$c}}+"-15").val())
-                                                );
-                        console.log(totalClient);
-                        $("#totalClient-SONY-"+{{$c}}).val(totalClient);
-                        Temp3 = handleNumber(totalClient);   
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-3").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-7").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-11").val()) 
+                                            + 
+                                            handleNumber($("#clientRF-TT-"+{{$c}}+"-15").val())
+                                            );
+                        $("#totalClient-TT-"+{{$c}}).val(totalClient);
+                        /* FIM DO AJUSTE DA SOMA SONY + DISCOVERY */
 
+                        /* INICIO DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
                         var rf = 0;
                         for(var c2=0;c2<client.length;c2++){
                             if ($("#splitted-"+c2).val() != false) {
@@ -486,12 +572,19 @@
                             }else{
                                 var mult = 1;
                             }
-                            rf += (handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())*mult);
+                            rf += ((
+                                        handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())
+                                        +
+                                        handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())                                    
+                                    )*mult);
                         }    
-
                         rf += handleNumber($("#bookingE-"+{{$m}}).val());
                         rf = Comma(rf);
+                        console.log(rf);
                         $("#rf-"+{{$m}}).val(rf);
+                        /* FIM DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
+
+                        /* INICIO DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
                             month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
@@ -515,124 +608,138 @@
                         }
                         var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
                         $("#total-total").val(total);
-                        for(var c2=0;c2<client.length;c2++){
-                            var temp = handleNumber($("#totalClient-SONY-"+c2).val())/handleNumber($("#total-total").val());
-                            temp = Comma(temp*100);
-                            $("#totalPP2-"+c2).val(temp);
-                            $("#totalPP3-"+c2).val(temp);
-                        }              
-                        var value = handleNumber($(this).val());
-                        var PY = handleNumber($("#PY-"+{{$c}}+"-"+{{$m}}).val());
-                        var tmp = value - PY;
-                        tmp = Comma(tmp);
-                        $("#RFvsPY-SONY-"+{{$c}}+"-"+{{$m}}).val(tmp);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-0").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-1").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-2").val()));
-                            $("#RFvsPY-SONY-"+{{$c}}+"-3").val(value);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-4").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-5").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-6").val()));
-                            $("#RFvsPY-SONY-"+{{$c}}+"-7").val(value);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-8").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-9").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-10").val()));
-                            $("#RFvsPY-SONY-"+{{$c}}+"-11").val(value);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var value = Comma(handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-12").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-13").val())+handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-14").val()));
-                            $("#RFvsPY-SONY-"+{{$c}}+"-15").val(value);
-                        }
-                        var Temp = Comma(handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-3").val()) + handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-7").val()) + handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-11").val()) + handleNumber($("#RFvsPY-SONY-"+{{$c}}+"-15").val()));
-                        $("#totalRFvsPY-"+{{$c}}).val(Temp);
-                        var booking = handleNumber($("#bookingE-"+{{$m}}).val());
-                        var Temp2 = handleNumber($("#target-"+{{$m}}).val());
-                        rf = handleNumber(rf);
-                        var RFvsTarget = Comma(rf-Temp2);
-                        var pending = Comma(rf-booking);
-                        $("#pending-"+{{$m}}).val(pending);
-                        $("#RFvsTarget-"+{{$m}}).val(RFvsTarget);
-                        if (Temp2 == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((rf/Temp2)*100).toFixed(2))+"%";
-                        }
-                        $("#achievement-"+{{$m}}).val(Temp3);
-                        if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-SONY-"+c2+"-3").val());
+
+                        /* FIM DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+
+                        /* INICIO DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
+                        var pendingValue = Comma((
+                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        -
+                                        handleNumber($("#bookingE-"+{{$m}}).val())                                    
+                                    ));
+
+                        $("#pending-"+{{$m}}).val(pendingValue);
+                            /* INICIO DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-0").val()) + handleNumber($("#pending-1").val()) + handleNumber($("#pending-2").val());
+                                month = Comma(month);
+                                $("#pending-3").val(month);
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-4").val()) + handleNumber($("#pending-5").val()) + handleNumber($("#pending-6").val());
+                                month = Comma(month);
+                                $("#pending-7").val(month);
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-8").val()) + handleNumber($("#pending-9").val()) + handleNumber($("#pending-10").val());
+                                month = Comma(month);
+                                $("#pending-11").val(month);
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var month =0;
+                                month = handleNumber($("#pending-12").val()) + handleNumber($("#pending-13").val()) + handleNumber($("#pending-14").val());
+                                month = Comma(month);
+                                $("#pending-15").val(month);
                             }
-                            var target = handleNumber($("#target-0").val())+handleNumber($("#target-1").val())+handleNumber($("#target-2").val());
-                            var booking = handleNumber($("#bookingE-0").val())+handleNumber($("#bookingE-1").val())+handleNumber($("#bookingE-2").val());
-                            $("#pending-3").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-3").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
+                            var total = Comma(handleNumber($("#pending-3").val()) + handleNumber($("#pending-7").val()) + handleNumber($("#pending-11").val()) + handleNumber($("#pending-15").val()));
+                            $("#totalPending").val(total);
+
+                            /* FIM DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */                        
+                        /* FIM DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
+
+                        /* INICIO DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
+                        var varValue = Comma((
+                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        -
+                                        handleNumber($("#target-"+{{$m}}).val())                                    
+                                    ));
+
+                        $("#RFvsTarget-"+{{$m}}).val(varValue);
+                            /* INICIO DO AJUSTE DO FORECAST - TARGET NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-0").val()) + handleNumber($("#RFvsTarget-1").val()) + handleNumber($("#RFvsTarget-2").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-3").val(month);
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-4").val()) + handleNumber($("#RFvsTarget-5").val()) + handleNumber($("#RFvsTarget-6").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-7").val(month);
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-8").val()) + handleNumber($("#RFvsTarget-9").val()) + handleNumber($("#RFvsTarget-10").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-11").val(month);
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var month =0;
+                                month = handleNumber($("#RFvsTarget-12").val()) + handleNumber($("#RFvsTarget-13").val()) + handleNumber($("#RFvsTarget-14").val());
+                                month = Comma(month);
+                                $("#RFvsTarget-15").val(month);
                             }
-                            $("#achievement-3").val(Temp3);
-                        }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-SONY-"+c2+"-7").val());
+                            var total = Comma(handleNumber($("#RFvsTarget-3").val()) + handleNumber($("#RFvsTarget-7").val()) + handleNumber($("#RFvsTarget-11").val()) + handleNumber($("#RFvsTarget-15").val()));
+                            $("#totalRFvsTarget").val(total);
+
+                            /* FIM DO AJUSTE DO FORECAST - TARGET NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */ 
+                        /* FIM DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
+
+                        /* INICIO DO AJUSTE DO VALOR DE TARGET ACHIEVEMENT DO EXECUTIVO */
+                        var varValue = Comma(
+                                            Math.round(
+                                                (
+                                                    handleNumber($("#rf-"+{{$m}}).val())
+                                                    /
+                                                    handleNumber($("#target-"+{{$m}}).val()) 
+                                                )*100                                   
+                                            )
+                                            );
+
+                        $("#achievement-"+{{$m}}).val(varValue+"%");
+                            /* INICIO DO AJUSTE DO TARGET ACHIEVEMENT NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
+
+                            if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-3").val()) / handleNumber($("#target-3").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-3").val(variation+"%");
+                            }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-7").val()) / handleNumber($("#target-7").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-7").val(variation+"%");                                
+                            }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-11").val()) / handleNumber($("#target-11").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-11").val(variation+"%"); 
+                            }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
+                                var variation = Math.round( 
+                                                    ( handleNumber($("#rf-15").val()) / handleNumber($("#target-15").val()) )*100
+                                                    );
+                                variation = Comma(variation);
+                                $("#achievement-15").val(variation+"%"); 
                             }
-                            var target = handleNumber($("#target-4").val())+handleNumber($("#target-5").val())+handleNumber($("#target-6").val());
-                            var booking = handleNumber($("#bookingE-4").val())+handleNumber($("#bookingE-5").val())+handleNumber($("#bookingE-6").val());
-                            $("#pending-7").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-7").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-7").val(Temp3);
-                        }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-SONY-"+c2+"-11").val());
-                            }
-                            var target = handleNumber($("#target-8").val())+handleNumber($("#target-9").val())+handleNumber($("#target-10").val());
-                            var booking = handleNumber($("#bookingE-8").val())+handleNumber($("#bookingE-9").val())+handleNumber($("#bookingE-10").val());
-                            $("#pending-11").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-11").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-11").val(Temp3);
-                        }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
-                            var month =0;
-                            for(var c2=0;c2<client.length;c2++){
-                                month += handleNumber($("#clientRF-SONY-"+c2+"-15").val());
-                            }
-                            var target = handleNumber($("#target-12").val())+handleNumber($("#target-13").val())+handleNumber($("#target-14").val());
-                            var booking = handleNumber($("#bookingE-12").val())+handleNumber($("#bookingE-13").val())+handleNumber($("#bookingE-14").val());
-                            $("#pending-15").val(Comma(month-booking));
-                            var RFvsTargetQ = Comma(month-target);
-                            $("#RFvsTarget-15").val(RFvsTargetQ);
-                            if (target == 0) {
-                                var Temp3 = 0+"%";
-                            }else{
-                                var Temp3 = Comma(((month/target)*100).toFixed(2))+"%";
-                            }
-                            $("#achievement-15").val(Temp3);
-                        }
-                        var RF = handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val());
-                        var target = handleNumber($("#target-3").val()) + handleNumber($("#target-7").val()) + handleNumber($("#target-11").val()) + handleNumber($("#target-15").val());
-                        var booking = handleNumber($("#bookingE-3").val()) + handleNumber($("#bookingE-7").val()) + handleNumber($("#bookingE-11").val()) + handleNumber($("#bookingE-15").val());
-                        $("#totalPending").val(Comma(RF-booking));
-                        $("#TotalRFvsTarget").val(Comma(RF-target));
-                        if (target == 0) {
-                            var Temp3 = 0+"%";
-                        }else{
-                            var Temp3 = Comma(((RF/target)*100).toFixed(2))+"%";
-                        }
-                        $("#totalAchievement").val(Temp3);
+                            varRFcst = handleNumber($("#total-total").val());
+                            varTarget = handleNumber($("#totalTarget").val());
+                            var varTotal = Math.round((varRFcst/varTarget)*100);
+                            varTotal = Comma(varTotal)
+
+                            $("#totalAchievement").val(varTotal+"%");
+
+                            /* FIM DO AJUSTE DO TARGET ACHIEVEMENT NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */ 
+                        /* FIM DO AJUSTE DO VALOR DE TARGET ACHIEVEMENT DO EXECUTIVO */
                     });
                 @endfor
-            @endfor 
+            @endfor
+            /**************** FIM DAS MUDANÇAS NO CAMPO SONY ****************/
+
+
 
 
             $("#body").css('display',"");
