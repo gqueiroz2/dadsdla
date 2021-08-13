@@ -121,6 +121,7 @@ class viewerController extends Controller{
 
         $tmp = Request::get("brand");
 
+
         for ($t=0; $t < sizeof($tmp); $t++) { 
             $brands[$t] = json_decode(base64_decode($tmp[$t]))[0];
         }
@@ -257,6 +258,9 @@ class viewerController extends Controller{
 
         $sizeOfClient = Request::get("sizeOfClient");
 
+        $regionName = Request::session()->get('userRegion');
+
+
         if($sizeOfClient == sizeof($client)){
             $checkClient = true;
         }else{
@@ -299,12 +303,13 @@ class viewerController extends Controller{
         $currencyExcel = $salesCurrency;
         $valueExcel = $value;
         $especificNumberExcel = $especificNumber;
+        $userRegionExcel = $regionName;
         
         $title = $source." - Viewer Base";
         $titleExcel = $source." - Viewer Base.xlsx";
         $titlePdf = $source." - Viewer Base.pdf";
 
-        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base","userRegionExcel"));
 
 	}
 

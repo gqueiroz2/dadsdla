@@ -68,7 +68,9 @@ class consolidateExcelController extends Controller{
         $tmp = $pr->getCurrency($con,array($currencyID));
         $currencyIDs = $tmp;
 
-        $value = Request::get( "valueExcel");       
+        $value = Request::get( "valueExcel"); 
+
+        $userRegion = Request::get('userRegionExcel');      
 
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;
@@ -130,7 +132,7 @@ class consolidateExcelController extends Controller{
 
         $years = array($cYear, $pYear);
 
-        $data = array('mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years,  'typeSelect' => $typeSelect,  'typeSelectS' => $typeSelectS, 'type' => $type, 'brandID' => $brandID);
+        $data = array('mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years,  'typeSelect' => $typeSelect,  'typeSelectS' => $typeSelectS, 'type' => $type, 'brandID' => $brandID, 'userRegion' => $userRegion);
 
         $label = 'exports.results.consolidate.consolidateDLAExport';
 
@@ -157,7 +159,9 @@ class consolidateExcelController extends Controller{
         $title = Request::get("title");
         
         $typeExport = Request::get("typeExport");
-        $auxTitle = Request::get("auxTitle");      
+        $auxTitle = Request::get("auxTitle");
+
+        $userRegion = Request::get('userRegionExcel');      
 
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;
@@ -179,7 +183,7 @@ class consolidateExcelController extends Controller{
 
         $years = array($cYear, $pYear);
 
-        $data = array('typeSelectN' => $typeSelectN, 'mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years);
+        $data = array('typeSelectN' => $typeSelectN, 'mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years, 'userRegion' => $userRegion);
 
         $label = 'exports.results.consolidate.consolidateOfficeExport';
 
@@ -219,6 +223,8 @@ class consolidateExcelController extends Controller{
 
         $currencyID = Request::get("currencyExcel");
         $value = Request::get( "valueExcel"); 
+
+        $userRegion = Request::get('userRegionExcel');
 
         $cYear = date('Y');
         $pYear = $cYear - 1;
@@ -284,7 +290,7 @@ class consolidateExcelController extends Controller{
         $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
 		$quarter = array("Q1","Q2","Q3","Q4");
 
-        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies,'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'typeSelectS' => $typeSelectS, 'brandID' => $brandID, 'newMtx' => $newMtx);
+        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies,'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'typeSelectS' => $typeSelectS, 'brandID' => $brandID, 'newMtx' => $newMtx, 'userRegion' => $userRegion);
 
         $label = 'exports.results.consolidate.consolidateExport';
 

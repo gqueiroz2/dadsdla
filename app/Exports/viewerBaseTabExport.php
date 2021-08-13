@@ -191,23 +191,44 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 	public function columnFormats(): array{
 
-		if ($this->data['source'] == 'cmaps' ) {
-			return[
-			'J' => '0%',
-			'M' => '#,##0',
-			'N' => '#,##0'
-			];
-		}elseif ($this->data['source'] == 'bts') {
-			return[
-			'K' => '#,##0',
-			'L' => '#,##0'
-			];
-		}elseif ($this->data['source'] == 'sf') {
-			return[
-			'L' => '#,##0',
-			'M' => '#,##0'
-			];
+		if ($this->data['userRegion'] == 'Miami' ||$this->data['userRegion'] == 'Mexico' ) {
+			if ($this->data['source'] == 'cmaps' ) {
+				return[
+				'J' => '0%',
+				'M' => '#.##0',
+				'N' => '#.##0'
+				];
+			}elseif ($this->data['source'] == 'bts') {
+				return[
+				'K' => '#.##0',
+				'L' => '#.##0'
+				];
+			}elseif ($this->data['source'] == 'sf') {
+				return[
+				'L' => '#.##0',
+				'M' => '#.##0'
+				];
+			}
+		}else{
+			if ($this->data['source'] == 'cmaps' ) {
+				return[
+				'J' => '0%',
+				'M' => '#,##0',
+				'N' => '#,##0'
+				];
+			}elseif ($this->data['source'] == 'bts') {
+				return[
+				'K' => '#,##0',
+				'L' => '#,##0'
+				];
+			}elseif ($this->data['source'] == 'sf') {
+				return[
+				'L' => '#,##0',
+				'M' => '#,##0'
+				];
+			}
 		}
+		
 	}		
 }
 

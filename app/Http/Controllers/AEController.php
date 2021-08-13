@@ -20,6 +20,7 @@ class AEController extends Controller{
     
     public function get(){
         $db = new dataBase();
+        $b = new base();
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
         $r = new region();
@@ -42,6 +43,7 @@ class AEController extends Controller{
     public function post(){
 
         $db = new dataBase();
+        $b = new base();
         $render = new PAndRRender();
         $r = new region();
         $pr = new pRate();
@@ -60,6 +62,9 @@ class AEController extends Controller{
         $salesRepID = array( Request::get('salesRep') );
         $currencyID = Request::get('currency');
         $value = Request::get('value');
+
+        $regionName = Request::session()->get('userRegion');
+
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -100,10 +105,11 @@ class AEController extends Controller{
         $regionExcel = $regionID;
         $valueExcel = $value;
         $salesRepExcel = Request::get("salesRep");
+        $userRegionExcel = $regionName;
 
         $titleExcel = "PandR - AE.xlsx";
 
-        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel"));
+        return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even","error","sourceSave", "titleExcel", "yearExcel",'tmp', "clientExcel","currencyExcel","regionExcel","valueExcel","salesRepExcel", 'userRegionExcel'));
     }
     
     public function save(){

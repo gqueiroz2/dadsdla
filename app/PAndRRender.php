@@ -75,7 +75,7 @@ class PAndRRender extends Render{
             echo "<div class=\"alert alert-danger\" style=\"width:50%;\">";
                 echo $error;
             echo "</div>";
-        }
+        } 
 
         echo "<br>";
 

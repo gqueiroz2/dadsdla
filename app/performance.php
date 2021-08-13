@@ -19,7 +19,7 @@ class performance extends base{
         if($value && $source == "ytd"){
             $columns = $value."_revenue_prate";
         }else if($value && $source == "crm"){
-            $columns = 'fcst_amount_'.$value;
+            $columns = $value."_revenue";;
         }elseif($value){
             $columns = $value."_revenue";
         }else{

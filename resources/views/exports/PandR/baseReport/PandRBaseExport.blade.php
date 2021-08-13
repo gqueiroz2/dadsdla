@@ -18,79 +18,79 @@
         <td style="background-color: #dce6f1; font-weight: bold;" >Target</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['targetValuesTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['targetValuesTT'][$m]}}</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['targetValuesTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #dce6f1; font-weight: bold;">{{$data['forRender']['targetValuesTT'][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['targetValuesTT'][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['targetValuesTT'][$m]}}</td>
     </tr>
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Rolling Fcast {{$data['cYear']}}</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-               <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['rollingFCSTTT'][$m],2,',','.')}}</td>
+               <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['rollingFCSTTT'][$m]}}</td>
             @else
-                <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['rollingFCSTTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['rollingFCSTTT'][$m]}}</td>
             @endif
         @endfor               
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rollingFCSTTT'][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['rollingFCSTTT'][$m]}}</td>
 
     </tr>
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold;">Bookings</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['bookingsTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['bookingsTT'][$m]}}</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['bookingsTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #dce6f1; font-weight: bold;">{{$data['forRender']['bookingsTT'][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['bookingsTT'][$m],2,',','.')}}</td>  
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['bookingsTT'][$m]}}</td>  
     </tr>
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Pending</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-               <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['pendingTT'][$m],2,',','.')}}</td>
+               <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['pendingTT'][$m]}}</td>
             @else
-                <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['pendingTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['pendingTT'][$m]}}</td>
             @endif
         @endfor               
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['pendingTT'][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['pendingTT'][$m]}}</td>
     </tr>
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{$data['pYear']}}</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['lastYearTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['lastYearTT'][$m]}}</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['lastYearTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #dce6f1; font-weight: bold;">{{$data['forRender']['lastYearTT'][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['lastYearTT'][$m],2,',','.')}}</td>  
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['lastYearTT'][$m]}}</td>  
     </tr>
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Var RF vs Target</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-               <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['rfVsTargetTT'][$m],2,',','.')}}</td>
+               <td style="background-color: #c3d8ef; font-weight: bold; ">{{$data['forRender']['rfVsTargetTT'][$m]}}</td>
             @else
-                <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['rfVsTargetTT'][$m],2,',','.')}}</td>
+                <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['rfVsTargetTT'][$m]}}</td>
             @endif
         @endfor               
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rfVsTargetTT'][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['rfVsTargetTT'][$m]}}</td>
     </tr>
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold;">% Target Achievement</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style="background-color: #c3d8ef; font-weight: bold; ">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}</td>
+                <td style="background-color: #dce6f1; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}</td>  
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>  
     </tr>           
 </table>
 
@@ -123,58 +123,58 @@
             <td style="background-color: #e7eff9; font-weight: bold;"> Target </td>
             @for ($m=0; $m < sizeof($data['month']) ; $m++) 
                 @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                    <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{number_format($data['forRender']['targetValues'][$c][$m],2,',','.')}}</td>
+                    <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{$data['forRender']['targetValues'][$c][$m]}}</td>
                 @else
-                    <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['targetValues'][$c][$m],2,',','.')}}</td>
+                    <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['targetValues'][$c][$m]}}</td>
                 @endif
             @endfor
-            <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['targetValues'][$c][$m],2,',','.')}}</td>
+            <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['targetValues'][$c][$m]}}</td>
         </tr>
     @endif
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold;"> Rolling Fcast {{$data['cYear']}} </td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                <td style="background-color: #c3d8ef; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold;">{{$data['forRender']['rollingFCST'][$c][$m]}}</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>        
+                <td style="background-color: #dce6f1; font-weight: bold;">{{$data['forRender']['rollingFCST'][$c][$m]}}</td>        
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rollingFCST'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['rollingFCST'][$c][$m]}}</td>
     </tr>
     
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Booking</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{number_format($data['forRender']['bookings'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{$data['forRender']['bookings'][$c][$m]}}</td>
             @else
-                <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['bookings'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['bookings'][$c][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['bookings'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['bookings'][$c][$m]}}</td>
     </tr>
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold; text-align: left;">{{$data['pYear']}}</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                <td style="background-color: #c3d8ef; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: bold;">{{$data['forRender']['lastYear'][$c][$m]}}</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>        
+                <td style="background-color: #dce6f1; font-weight: bold;">{{$data['forRender']['lastYear'][$c][$m]}}</td>        
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['lastYear'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['lastYear'][$c][$m]}}</td>
     </tr>
     <tr>
         <td style="background-color: #e7eff9; font-weight: bold;">Var RF vs {{$data['pYear']}}</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{number_format($data['forRender']['rfVsCurrent'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #c3d8ef; font-weight: #c3d8ef; font-weight: bold;">{{$data['forRender']['rfVsCurrent'][$c][$m]}}</td>
             @else
-                <td style="background-color: #e7eff9; font-weight: bold;">{{number_format($data['forRender']['rfVsCurrent'][$c][$m],2,',','.')}}</td>
+                <td style="background-color: #e7eff9; font-weight: bold;">{{$data['forRender']['rfVsCurrent'][$c][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{number_format($data['forRender']['rfVsCurrent'][$c][$m],2,',','.')}}</td>
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold;">{{$data['forRender']['rfVsCurrent'][$c][$m]}}</td>
 </tr>
 </table>
 

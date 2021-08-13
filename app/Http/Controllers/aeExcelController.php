@@ -49,6 +49,8 @@ class aeExcelController extends Controller{
         
         $salesRepID = array(Request::get('salesRepExcel'));
 
+        $userRegion = Request::get('userRegionExcel');
+
         $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
 
         $forRender = $tmp; 
@@ -103,7 +105,7 @@ class aeExcelController extends Controller{
      	
         $label = "exports.PandR.AE.aeExport";
 
-       	$data = array('forRender' => $forRender, 'tfArray' => $tfArray, 'error' => $error, 'cYear' => $cYear, "pYear" => $pYear, "odd" => $odd, "even" => $even, "tfArray" => $tfArray, "month" => $month, 'ow' => $ow);
+       	$data = array('forRender' => $forRender, 'tfArray' => $tfArray, 'error' => $error, 'cYear' => $cYear, "pYear" => $pYear, "odd" => $odd, "even" => $even, "tfArray" => $tfArray, "month" => $month, 'ow' => $ow, 'userRegion' => $userRegion);
 
        	return Excel::download(new aeExport($data, $label, $typeExport, $auxTitle), $title);
     }

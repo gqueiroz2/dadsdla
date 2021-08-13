@@ -44,6 +44,7 @@
 									<td> {{ $temp[$m][$n]['currency'] }} </td>
 									<td> {{ $temp[$m][$n]['brand'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRep'] }} </td>
+									<td> {{ $temp[$m][$n]['salesRepSfID'] }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['targetValue'] ) }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetCurrentYear'] ) }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetPreviousYear'] ) }} </td>

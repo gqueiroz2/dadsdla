@@ -51,6 +51,8 @@ class viewerExcelController extends Controller {
 
 	    $client = json_decode(base64_decode(Request::get("clientExcel")));
 
+        $userRegion = Request::get('userRegionExcel');
+
         //$stage = array($stage);
 
 	    $currency = Request::get("currencyExcel");
@@ -76,7 +78,7 @@ class viewerExcelController extends Controller {
         
         $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
 
-        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total, 'regions' => $regions, 'currencies' => $currencies);
+        $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total, 'regions' => $regions, 'currencies' => $currencies, "userRegion" => $userRegion);
 
         $label = "exports.viewer.base.baseExport";
         

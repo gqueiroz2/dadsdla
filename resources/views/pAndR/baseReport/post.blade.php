@@ -87,7 +87,7 @@
 
 	</div>
 
-	<div class="container-fluid" id="body">
+	<div class="container-fluid" id="body" >
         <div class="row mt-2 justify-content-end">
             <div class="col" style="width: 100%;">
                 <center>
@@ -96,6 +96,14 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+    	
+    	$('.linked').scroll(function(){
+    		$('.linked').scrollLeft($(this).scrollLeft());
+        });
+
+    </script>
 
      <script type="text/javascript">
         $(document).ready(function(){
@@ -109,6 +117,7 @@
                 var currencyExcel = "<?php echo $currencyExcel; ?>";
                 var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
                 var baseReportExcel = "<?php echo $baseReportExcel; ?>";
+                var userRegionExcel = "<?php echo $userRegionExcel; ?>";
 
 
                 var div = document.createElement('div');
@@ -130,7 +139,7 @@
                         },
                         url: "/generate/excel/pandr/baseReport",
                         type: "POST",
-                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,baseReportExcel,auxTitle},
+                        data: {title, typeExport, yearExcel,regionExcel,valueExcel,currencyExcel,salesRepExcel,baseReportExcel,auxTitle, userRegionExcel},
                         /*success: function(output){
                             $("#vlau").html(output);
                         },*/
