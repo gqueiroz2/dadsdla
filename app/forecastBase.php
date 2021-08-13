@@ -698,11 +698,9 @@ class forecastBase extends pAndR{
     }
 
     public function getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted,$div){
-        
+
         $brandString = $this->brandArrayToString($brand);        
-
         $date = date("n")-1;
-
         $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
         $to = array("sumValue",'fromDate','toDate','yearFrom','yearTo','stage','oppid','salesRepOwner');
         if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
@@ -730,6 +728,7 @@ class forecastBase extends pAndR{
                             AND ( stage != '6')
                             AND ( stage != '7')                            
                             AND (year_from = \"".$year."\")";
+                            //echo "<pre>".$select."</pre>";
                             /*AND (from_date > \"".$date."\")*/
         }
 
