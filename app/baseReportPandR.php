@@ -81,7 +81,8 @@ class baseReportPandR extends pAndR{
 	        for ($m=0; $m <sizeof($month) ; $m++) {
 	        	
 	        	$rollingFCST[$l][$m] = $this->generateForecast($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear )*$div;
-               
+               $generateManual[$l][$m] = $this->generateManual($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear,$currencyID );
+
 	            $lastYear[$l][$m] = $this->generateValuePandR($con,$sql,'revenue',$baseReport,$regionID,$pYear,$month[$m][1],$list[$l],$this->generateColumns($value,"ytd"),$value)*$div;
 
 	            $targetValues[$l][$m] = $this->generateValuePandR($con,$sql,'target',$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],"value",$value)*$div;
@@ -659,6 +660,393 @@ class baseReportPandR extends pAndR{
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
 
+                /*if ($fetched) {
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                            $somat = 0.0;
+                            for ($s=0; $s <= $size; $s++) { 
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                            }
+
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
+
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
+                                }
+                            }
+
+                            $fetched[$f]['sum'] *= $percMult;
+                        }
+                    }
+                }*/
+                
+                if($fetched){
+                    $soma = 0.0;
+                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        $soma += $fetched[$f]['sum'];
+                    }*/
+                }else{
+                    $soma = false;
+                }
+                              
+                //var_dump($fetched);
+                //var_dump($soma);                      
+                
+                break;
+            case 'ae':
+                $select =  "SELECT $sum AS sum,
+                                from_date AS fromDate,
+                                to_date AS toDate,
+                                year_from AS yearFrom,
+                                year_to AS yearTo,
+                                sales_rep_owner_id AS owner,
+                                sales_rep_splitter_id AS splitter
+                                FROM sf_pr 
+                                WHERE (region_id = '".$region."') 
+                                AND (sales_rep_owner_id = '".$list['salesRepID']."' OR sales_rep_splitter_id = '".$list['salesRepID']."') 
+                                AND (year_from = '".$year."' OR year_to = '".$year."') 
+                                AND (from_date >= '".$month."')
+                                AND (to_date <= '".$month."')
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != 'Cr')
+                                ";  
+               //echo "<pre>".$select."</pre>";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+
+                //var_dump($fetched);
+                if($fetched){                    
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+
+                            $somat = 1;
+                            for ($s=0; $s <= $size; $s++) {
+                                $somat += (($fetched[$f]['fromDate']-1)+$s);
+                                var_dump($somat);
+                            }                    
+
+                            /*for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$f][$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
+
+                            for ($n=0; $n < sizeof($newShare[$f]); $n++) { 
+                                if($newShare[$f][$n]['month'] == $month){
+                                    $percMult = $newShare[$f][$n]['value'];
+                                }
+                            }
+                            
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newValue[$f][$s]['value'] = $newShare[$f][$s]['value']*$fetched[$f]['sum'];                                
+                                $newValue[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }*/
+
+                        }else{
+                            $newValue[$f][0]['value'] = $fetched[$f]['sum'];                                
+                            $newValue[$f][0]['month'] = $fetched[$f]['fromDate'];
+                        }
+                    }
+                }else{
+                    $newValue = false;
+                }
+                //var_dump($fetched);
+                //var_dump($newValue);
+                
+                if($fetched){
+                    $soma = 0.0;                   
+
+                    /*for ($n=0; $n < sizeof($newValue); $n++) { 
+                        if(sizeof($newValue[$n]) > 1){
+                            for ($m=0; $m < sizeof($newValue[$n]); $m++) {                                     
+                                if($newValue[$n][$m]['month'] == $month){
+                                    $soma += $newValue[$n][$m]['value'];
+                                }
+                            }
+                        }else{
+                            for ($m=0; $m < sizeof($newValue[$n]); $m++) {  
+                                $soma += $newValue[$n][$m]['value'];
+                            }                                
+                        }
+                    } */                                  
+                }else{
+                    $soma = false;
+                }
+                //var_dump($fetched);
+                 //var_dump($soma);
+                //var_dump("================================");
+
+                break;
+
+            case 'client':
+                $select =  "SELECT $sum AS sum,
+                                from_date AS fromDate,
+                                to_date AS toDate,
+                                year_from AS yearFrom,
+                                year_to AS yearTo,
+                                sales_rep_owner_id AS owner,
+                                sales_rep_splitter_id AS splitter
+                                FROM sf_pr 
+                                WHERE (region_id = '".$region."') 
+                                AND (client_id = '".$list['clientID']."') 
+                                AND (year_from = '".$year."' OR year_to = '".$year."') 
+                                AND (from_date = '".$month."' OR to_date = '".$month."')
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != 'Cr')
+                                ";
+                //echo "<pre>".$select."</pre>";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
+
+                /*if($fetched){
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                            $somat = 0.0;
+                            for ($s=0; $s <= $size; $s++) { 
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                            }
+
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
+
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
+                                }
+                            }
+
+                            //$fetched[$f]['sum'] *= $percMult;
+                        }
+                    }
+                }*/
+                
+                if($fetched){
+                    $soma = 0.0;
+                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        $soma += $fetched[$f]['sum'];
+                    }*/
+                }else{
+                    $soma = false;
+                }
+                
+                //var_dump($fetched);
+                //var_dump($soma);
+                break;
+
+            case 'agency':
+                $select =  "SELECT $sum AS sum,
+                                from_date AS fromDate,
+                                to_date AS toDate,
+                                year_from AS yearFrom,
+                                year_to AS yearTo,
+                                sales_rep_owner_id AS owner,
+                                sales_rep_splitter_id AS splitter
+                                FROM sf_pr 
+                                WHERE (region_id = '".$region."') 
+                                AND (agency_id = '".$list['agencyID']."') 
+                                AND (year_from = '".$year."' OR year_to = '".$year."') 
+                                AND (from_date = '".$month."' OR to_date = '".$month."')
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != 'Cr')
+                                ";
+                //echo "<pre>".$select."</pre>";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
+
+                /*if($fetched){
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                            $somat = 0.0;
+                            for ($s=0; $s <= $size; $s++) { 
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                            }
+
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
+
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
+                                }
+                            }
+
+                            $fetched[$f]['sum'] *= $percMult;
+                        }
+                    }
+                }*/
+
+                if($fetched){
+                    $soma = 0.0;
+                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        $soma += $fetched[$f]['sum'];
+                    }*/
+                }else{
+                    $soma = false;
+                }
+                
+
+                break;
+
+            case 'agencyGroup':
+                $select =  "SELECT sf.$sum AS sum,
+                                sf.from_date AS fromDate,
+                                sf.to_date AS toDate,
+                                sf.year_from AS yearFrom,
+                                sf.year_to AS yearTo,
+                                sf.sales_rep_owner_id AS owner,
+                                sf.sales_rep_splitter_id AS splitter
+                                FROM sf_pr sf 
+                                LEFT JOIN agency a ON (a.ID = sf.agency_id)
+                                LEFT JOIN agency_group ag ON (a.agency_group_id = ag.ID)
+                                WHERE (sf.region_id = '".$region."') 
+                                AND (ag.ID = '".$list['agencyGroupID']."') 
+                                AND (sf.year_from = '".$year."' OR sf.year_to = '".$year."') 
+                                AND (sf.from_date = '".$month."' OR sf.to_date = '".$month."')
+                                AND (sf.stage != '5')
+                                AND (sf.stage != '6')
+                                AND (sf.stage != 'Cr')
+                                ";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+                $newValue = array();
+                $newShare = array();
+
+                /*if($fetched){
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] *= 2;
+                        }
+                    }
+
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
+                            
+                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
+                            $somat = 0.0;
+                            for ($s=0; $s <= $size; $s++) { 
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                            }
+
+                            for ($s=0; $s <= $size; $s++) { 
+                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
+
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
+                                }
+                            }
+
+                            //$fetched[$f]['sum'] *= $percMult;
+                        }
+                    }
+                }*/
+
+                if($fetched){
+                    $soma = 0.0;
+                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                        $soma += $fetched[$f]['sum'];
+                    }*/
+                }else{
+                    $soma = false;
+                }
+                
+
+                break;
+            
+            default:
+                $soma = false;
+                break;
+        }
+        
+        return $soma;
+
+    }
+    public function generateManual($con,$sql,$baseReport,$region,$year,$month,$list,$sum,$value,$share, $br, $lastYearBrand,$currency){
+
+        switch ($baseReport) {
+            case 'brand':
+
+                 $brands = $br->getBrand($con);
+                 
+                 $select =  "SELECT $sum AS sum,
+                                from_date AS fromDate,
+                                to_date AS toDate,
+                                year_from AS yearFrom,
+                                year_to AS yearTo,
+                                sales_rep_owner_id AS owner,
+                                sales_rep_splitter_id AS splitter
+                                FROM sf_pr 
+                                WHERE (region_id = '".$region."') 
+                                AND (brand_id = '".$list['brandID']."') 
+                                AND (year_from = '".$year."' OR year_to = '".$year."') 
+                                AND (from_date = '".$month."' OR to_date = '".$month."')
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != 'Cr')
+                                ";  
+                //echo "<pre>".$select."</pre>";
+
+                $res = $con->query($select);
+                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $fetched = $sql->fetch($res,$from,$from);
+
                 if ($fetched) {
 
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
@@ -706,224 +1094,120 @@ class baseReportPandR extends pAndR{
                 
                 break;
             case 'ae':
-                $select =  "SELECT $sum AS sum,
-                                from_date AS fromDate,
-                                to_date AS toDate,
-                                year_from AS yearFrom,
-                                year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
-                                FROM sf_pr 
-                                WHERE (region_id = '".$region."') 
-                                AND (sales_rep_owner_id = '".$list['salesRepID']."' OR sales_rep_splitter_id = '".$list['salesRepID']."') 
-                                AND (year_from = '".$year."' OR year_to = '".$year."') 
-                                AND (from_date >= '".$month."')
-                                AND (to_date <= '".$month."')
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+                $select =  "SELECT fsr.value AS sum,
+                                f.currency_id AS currency,
+                                f.region_id AS region,
+                                f.type_of_value AS value, 
+                                sales_rep_id AS salesRep,
+                                f.month AS month
+                                FROM forecast_sales_rep fsr 
+                                LEFT JOIN forecast f ON fsr.forecast_id = f.ID 
+                                WHERE (f.region_id = '".$region."') 
+                                AND (f.sales_rep_id = '".$list['salesRepID']."')
+                                AND (f.month >= '".$month."')
+                                AND (f.year = '".$year."')
                                 ";  
-               // echo "<pre>".$select."</pre>";
+                //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $from = array('sum','currency','region','value','salesRep','month');
                 $fetched = $sql->fetch($res,$from,$from);
 
                 //var_dump($fetched);
-                if($fetched){                    
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] *= 2;
-                        }
-                    }
 
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
-                            
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-
-                            $somat = 1;
-                            for ($s=0; $s <= $size; $s++) {
-                                $somat += (($fetched[$f]['fromDate']-1)+$s);
-                                //var_dump($somat);
-                            }                    
-
-                            for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$f][$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
-                                $newShare[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
-
-                            for ($n=0; $n < sizeof($newShare[$f]); $n++) { 
-                                if($newShare[$f][$n]['month'] == $month){
-                                    $percMult = $newShare[$f][$n]['value'];
-                                }
-                            }
-                            
-                            for ($s=0; $s <= $size; $s++) { 
-                                $newValue[$f][$s]['value'] = $newShare[$f][$s]['value']*$fetched[$f]['sum'];                                
-                                $newValue[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
-
-                        }else{
-                            $newValue[$f][0]['value'] = $fetched[$f]['sum'];                                
-                            $newValue[$f][0]['month'] = $fetched[$f]['fromDate'];
-                        }
-                    }
-                }else{
-                    $newValue = false;
-                }
-                //var_dump($fetched);
-                //var_dump($newValue);
-                
                 if($fetched){
-                    $soma = 0.0;                   
-
-                    for ($n=0; $n < sizeof($newValue); $n++) { 
-                        if(sizeof($newValue[$n]) > 1){
-                            for ($m=0; $m < sizeof($newValue[$n]); $m++) {                                     
-                                if($newValue[$n][$m]['month'] == $month){
-                                    $soma += $newValue[$n][$m]['value'];
-                                }
+                    for ($f=0; $f < sizeof($fetched); $f++) {    
+                        if($currency = $fetched[$f]['currency']){
+                            if($value = strtolower($fetched[$f]['value'])){
+                                $soma = $fetched[$f]['sum'];
+                                //var_dump($soma);
+                            }else{
+                                $soma = 0.0;
+                                //var_dump('else');
                             }
                         }else{
-                            for ($m=0; $m < sizeof($newValue[$n]); $m++) {  
-                                $soma += $newValue[$n][$m]['value'];
-                            }                                
+
+
+
                         }
-                    }                                   
-                }else{
-                    $soma = false;
+
+                    
+                    }     
                 }
                 //var_dump($fetched);
-                 //var_dump($soma);
+                $soma = 0;
                 //var_dump("================================");
 
                 break;
 
             case 'client':
-                $select =  "SELECT $sum AS sum,
-                                from_date AS fromDate,
-                                to_date AS toDate,
-                                year_from AS yearFrom,
-                                year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
-                                FROM sf_pr 
-                                WHERE (region_id = '".$region."') 
-                                AND (client_id = '".$list['clientID']."') 
-                                AND (year_from = '".$year."' OR year_to = '".$year."') 
-                                AND (from_date = '".$month."' OR to_date = '".$month."')
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+                $select =  "SELECT fc.value AS sum,
+                                f.currency_id AS currency,
+                                f.region_id AS region,
+                                f.type_of_value AS value, 
+                                client_id AS client
+                                FROM forecast_client fc  
+                                LEFT JOIN forecast f ON fc.forecast_id = f.ID     
+                                WHERE (f.region_id = '".$region."') 
+                                AND (f.month >= '".$month."')
+                                AND (f.client_id = '".$list['clientID']."') 
+                                AND (f.year = '".$year."')
                                 ";
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $from = array('sum','currency','region','value','client','month');
                 $fetched = $sql->fetch($res,$from,$from);
                 $newValue = array();
                 $newShare = array();
 
                 if($fetched){
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] *= 2;
+                    for ($f=0; $f < sizeof($fetched); $f++) {    
+                        if($currency = $fetched[$f]['currency']){
+                            if($value = strtolower($fetched[$f]['value'])){
+                                $soma = $fetched[$f]['sum'];
+
+                            }else{
+                                $soma = 0.0;
+                            }
+                        }else{
+
+
                         }
-                    }
 
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
-                            
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s=0; $s <= $size; $s++) { 
-                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
-                            }
-
-                            for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
-
-                            for ($n=0; $n < sizeof($newShare); $n++) { 
-                                if($newShare[$n]['month'] == $month){
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            //$fetched[$f]['sum'] *= $percMult;
-                        }
-                    }
+                    
+                    }     
                 }
-                
-                if($fetched){
-                    $soma = 0.0;
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        $soma += $fetched[$f]['sum'];
-                    }
-                }else{
                     $soma = false;
-                }
                 
                 //var_dump($fetched);
                 //var_dump($soma);
                 break;
 
             case 'agency':
-                $select =  "SELECT $sum AS sum,
-                                from_date AS fromDate,
-                                to_date AS toDate,
-                                year_from AS yearFrom,
-                                year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
-                                FROM sf_pr 
-                                WHERE (region_id = '".$region."') 
-                                AND (agency_id = '".$list['agencyID']."') 
-                                AND (year_from = '".$year."' OR year_to = '".$year."') 
-                                AND (from_date = '".$month."' OR to_date = '".$month."')
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+                $select =  "SELECT fc.value AS sum,
+                                f.currency_id AS currency,
+                                f.region_id AS region,
+                                f.type_of_value AS value, 
+                                agency_id AS agency
+                                FROM forecast_client fc  
+                                LEFT jOIN forecast f ON fc.forecast_id = f.ID     
+                                WHERE (f.region_id = '".$region."') 
+                                AND (f.month >= '".$month."')
+                                AND (f.client_id = '".$list['agencyID']."') 
+                                AND (f.year = '".$year."')
                                 ";
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $from = array('sum','currency','region','value','agency','month');
                 $fetched = $sql->fetch($res,$from,$from);
                 $newValue = array();
                 $newShare = array();
 
                 if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] *= 2;
-                        }
-                    }
-
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
-                            
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s=0; $s <= $size; $s++) { 
-                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
-                            }
-
-                            for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
-
-                            for ($n=0; $n < sizeof($newShare); $n++) { 
-                                if($newShare[$n]['month'] == $month){
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            $fetched[$f]['sum'] *= $percMult;
-                        }
+                       
                     }
                 }
 
@@ -940,60 +1224,29 @@ class baseReportPandR extends pAndR{
                 break;
 
             case 'agencyGroup':
-                $select =  "SELECT sf.$sum AS sum,
-                                sf.from_date AS fromDate,
-                                sf.to_date AS toDate,
-                                sf.year_from AS yearFrom,
-                                sf.year_to AS yearTo,
-                                sf.sales_rep_owner_id AS owner,
-                                sf.sales_rep_splitter_id AS splitter
-                                FROM sf_pr sf 
-                                LEFT JOIN agency a ON (a.ID = sf.agency_id)
+                $select =  "SELECT SELECT fc.value AS sum,
+                                f.currency_id as currency,
+                                f.region_id as region,
+                                f.type_of_value as value, 
+                                ag.ID AS agencyGroup
+                                FROM forecast_client fc
+                                LEFT JOIN agency a ON (a.ID = fC.agency_id)
                                 LEFT JOIN agency_group ag ON (a.agency_group_id = ag.ID)
-                                WHERE (sf.region_id = '".$region."') 
-                                AND (ag.ID = '".$list['agencyGroupID']."') 
-                                AND (sf.year_from = '".$year."' OR sf.year_to = '".$year."') 
-                                AND (sf.from_date = '".$month."' OR sf.to_date = '".$month."')
-                                AND (sf.stage != '5')
-                                AND (sf.stage != '6')
-                                AND (sf.stage != 'Cr')
+                                WHERE (f.region_id = '".$region."') 
+                                AND (f.month >= '".$month."')
+                                AND (f.client_id = '".$list['agencyGroupID']."') 
+                                AND (f.year = '".$year."')
                                 ";
 
                 $res = $con->query($select);
-                $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
+                $from = array('sum','currency','region','value','agencyGroup','month');
                 $fetched = $sql->fetch($res,$from,$from);
                 $newValue = array();
                 $newShare = array();
 
                 if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] *= 2;
-                        }
-                    }
-
-                    for ($f=0; $f < sizeof($fetched); $f++) {                         
-                        if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
-                            
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s=0; $s <= $size; $s++) { 
-                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
-                            }
-
-                            for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
-
-                            for ($n=0; $n < sizeof($newShare); $n++) { 
-                                if($newShare[$n]['month'] == $month){
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            //$fetched[$f]['sum'] *= $percMult;
-                        }
+                        
                     }
                 }
 
@@ -1017,7 +1270,6 @@ class baseReportPandR extends pAndR{
         return $soma;
 
     }
-    
 
     public function generateValuePandR($con,$sql,$kind,$baseReport,$region,$year,$month,$list,$sum,$value=null){
 
