@@ -61,7 +61,6 @@ class dataManagementController extends Controller{
             }
 
             if($check){
-                var_dump("TUDO FOI INSERIDO");
 
                 $select = "SELECT * FROM bv_band";
 

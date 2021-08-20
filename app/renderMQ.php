@@ -23,21 +23,21 @@ class renderMQ extends Render{
 						if(is_numeric($mtx[$m][$n][$o])){
 							if($n == 3){
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")." %</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
 								}else{
-									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")." %</td>";
+									echo "<td class='rcBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")." %</td>";
 								}
 							}elseif($n == 4){
 								if($o == 13){
-									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
+									echo "<td class='darkBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}else{
-									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
+									echo "<td class='medBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}
 							}else{
 								if($o == 13){
-									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
+									echo "<td class='smBlue center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}else{
-									echo "<td class='center'>".number_format($mtx[$m][$n][$o], 0, ",", ".")."</td>";
+									echo "<td class='center'>".number_format($mtx[$m][$n][$o], 2, ",", ".")."</td>";
 								}
 							}
 						}else{

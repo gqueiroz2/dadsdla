@@ -116,7 +116,7 @@ class PAndRBaseReportRender extends Render{
         echo "<div class='col-2' style='padding-right:1px;'>";
         echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
             echo "<tr>";
-                echo "<td class='darkBlue' style='width:3.5% !important; font-size:20px; height:40px; '> DN </td>";
+                echo "<td class='darkBlue' style='width:3.5% !important; font-size:20px; height:40px;'> DN </td>";
             echo "</tr>";
             echo "<tr>";
                 echo "<td class='rcBlue' style='text-align:left;'>Target</td>";

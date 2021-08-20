@@ -679,6 +679,8 @@ class AE extends pAndR{
         //$select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
         $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\"  AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
 
+        var_dump($select);
+
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
         }
@@ -882,7 +884,7 @@ class AE extends pAndR{
                         $select[$c][$m] .= " AND ".$salesRepsOR." ";
                     }
                     
-                    #echo "<pre>".$select[$c][$m]."</pre>";
+                    //echo "<pre>".$select[$c][$m]."</pre>";
 
                     $result[$c][$m] = $con->query($select[$c][$m]);
                     $saida[$c][$m] = $sql->fetchSum($result[$c][$m],$from);
