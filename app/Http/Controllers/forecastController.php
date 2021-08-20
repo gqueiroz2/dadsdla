@@ -43,6 +43,7 @@ class forecastController extends Controller{
     public function byAEPost(){
     	$db = new dataBase();
         $render = new forecastRender();
+        $base = new base();
         $r = new region();
         $pr = new pRate();
         $fcst = new forecast();        
@@ -58,6 +59,7 @@ class forecastController extends Controller{
         $msg = "";
 
         $permission = Request::session()->get('userLevel');
+        $regionName = Request::session()->get('userRegion');
         $user = Request::session()->get('userName');
 
         $regionID = Request::get('region');
@@ -79,8 +81,17 @@ class forecastController extends Controller{
 
         $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
         $forRender = $tmp;
+
+        $regionExcel = $regionID;
+        $salesRepExcel = Request::get('salesRep');
+        $valueExcel = $value;
+        $currencyExcel = $currencyID;
+        $yearExcel = $cYear;
+        $userRegionExcel = $regionName;
+
+        $titleExcel = "PandR - AE.xlsx";
        
-        return view('pAndR.forecastByAE.post',compact('render','region','currency','forRender','msg','typeMsg'));
+        return view('pAndR.forecastByAE.post',compact('render','region','currency','forRender','msg','typeMsg', 'regionExcel', 'salesRepExcel','valueExcel', 'currencyExcel','yearExcel','userRegionExcel', 'titleExcel'));
 
     }
 

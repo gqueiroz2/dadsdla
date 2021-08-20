@@ -38,7 +38,7 @@ class aeExcelController extends Controller{
         $title = Request::get("title");
 
         $typeExport = Request::get("typeExport");
-
+    
         $auxTitle = Request::get("auxTitle");
 
         $currencyID = Request::get('currencyExcel');
