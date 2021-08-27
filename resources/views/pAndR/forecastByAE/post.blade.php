@@ -200,15 +200,17 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
+            $('.clickLoop').hide();
+
             $(".clickBool").click(function(e){
                 var myBool = $("#clickBool").val();
                 
                 if(myBool == 1){e
-                    $(".clickLoop").hide();
+                    $(".clickLoop").show();
                     myBool = 0;
                    
                 }else{
-                    $(".clickLoop").show();
+                    $(".clickLoop").hide();
                     myBool = 1;
                 }
                  $("#clickBool").val(myBool);

@@ -679,7 +679,7 @@ class AE extends pAndR{
         //$select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\" AND (submitted = \"0\" OR submitted = \"1\") AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
         $select = "SELECT oppid,ID,type_of_value,currency_id,submitted FROM forecast WHERE sales_rep_id = \"".$salesRepID[0]."\"  AND month = \"$actualMonth\" AND year = \"$cYear\" AND type_of_forecast = \"AE\"";
 
-        var_dump($select);
+        //var_dump($select);
 
         if ($regionID == "1") {
             $select .= "AND read_q = \"$week\"";
@@ -1561,16 +1561,18 @@ class AE extends pAndR{
                 $even[$m] = "rcBlue";
                 $manualEstimation[$m] = "background-color:#235490;";
                 $color[$m] = "color:white;";
+                $color2[$m] = "color:red;";
             }else{
                 $tfArray[$m] = "readonly='true'";
                 $odd[$m] = "oddGrey";
                 $even[$m] = "evenGrey";
                 $manualEstimation[$m] = "";
                 $color[$m] = "";
+                $color2[$m] = "";
             }
         } 
 
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color, "color2" => $color2);    
 
         return $rtr;
     }

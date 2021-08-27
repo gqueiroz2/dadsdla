@@ -124,7 +124,7 @@ class viewerInsightsTabExport implements FromView,WithEvents, ShouldAutoSize, Wi
 				$cellRange = 'A3:J3';
 				$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
-				$letter = 'J';
+				$letter = 'K';
 
 				for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 					$cellRange = "A".($d+4).":".$letter.($d+4);
@@ -149,7 +149,8 @@ class viewerInsightsTabExport implements FromView,WithEvents, ShouldAutoSize, Wi
 
 		return[
 			'I' => '#,##0',
-			'J' => '#,##0'
+			'J' => '#,##0',
+			'K' => '#,##0'
 		];
 	}
 }

@@ -304,13 +304,13 @@ class viewer extends Model{
 			                  c.name AS 'client',
 			                  sf.opportunity_name AS 'opportunityName', 
 			                  sf.stage AS 'stage',
-			                  sf.fcst_category AS 'fcstCategory',
+			                  sf.forecast_category AS 'fcstCategory',
 			                  sf.success_probability AS 'successProbability',
 			                  sf.from_date AS 'fromDate',
 			                  sf.to_date AS 'toDate',
 			                  sf.year_from AS 'yearFrom',
 			                  sf.year_to AS 'yearTo', 
-			                  sf.brand AS 'brand',
+			                  b.name AS 'brand',
 			                  sf.agency_commission AS 'agencyCommission',
 			                  sf.fcst_amount_gross AS 'fcstAmountGross',                  
 			                  sf.gross_revenue AS 'grossRevenue',
@@ -323,12 +323,13 @@ class viewer extends Model{
 					LEFT JOIN region r ON sf.region_id = r.ID
 					LEFT JOIN agency a ON sf.agency_id = a.ID
 					LEFT JOIN client c ON sf.client_id = c.ID
+					LEFT JOIN brand b  ON b.ID = sf.brand_id
 					WHERE (sf.year_from = '$year')
 							AND (r.ID = '$salesRegion')
 							AND (sr.ID IN ($salesRepString))
-							AND (stage != '5')
                             AND (stage != '6')
                             AND (stage != 'Cr')
+                            AND (sf.brand_id IN ($brandString))
 							AND (sf.oppid LIKE '%".$especificNumber."%')
 					GROUP BY sf.oppid";
 			}else{
@@ -339,13 +340,13 @@ class viewer extends Model{
 				                  c.name AS 'client',
 				                  sf.opportunity_name AS 'opportunityName', 
 				                  sf.stage AS 'stage',
-				                  sf.fcst_category AS 'fcstCategory',
+				                  sf.forecast_category AS 'fcstCategory',
 				                  sf.success_probability AS 'successProbability',
 				                  sf.from_date AS 'fromDate',
 				                  sf.to_date AS 'toDate',
 				                  sf.year_from AS 'yearFrom',
 				                  sf.year_to AS 'yearTo', 
-				                  sf.brand AS 'brand',
+				                  b.name AS 'brand',
 				                  sf.agency_commission AS 'agencyCommission',
 				                  sf.fcst_amount_gross AS 'fcstAmountGross',                  
 				                  sf.gross_revenue AS 'grossRevenue',
@@ -358,10 +359,11 @@ class viewer extends Model{
 						LEFT JOIN region r ON sf.region_id = r.ID
 						LEFT JOIN agency a ON sf.agency_id = a.ID
 						LEFT JOIN client c ON sf.client_id = c.ID
+						LEFT JOIN brand b  ON b.ID = sf.brand_id
 						WHERE (sf.year_from = '$year')
 								AND (r.ID = '$salesRegion')
 								AND (sr.ID IN ($salesRepString))
-								AND (stage != '5')
+								AND (sf.brand_id IN ($brandString))
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
 						GROUP BY sf.oppid
@@ -382,7 +384,7 @@ class viewer extends Model{
 
 
 
-	public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
+	/*public function total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client){
 		$base = new base();
 		$p = new pRate();
 
@@ -499,7 +501,7 @@ class viewer extends Model{
 		}
 		return $total;
 			
-	}
+	}*/
 
 	public function totalFromTable($con,$table,$source,$salesRegion,$currencies){
 		$p = new pRate();
@@ -522,33 +524,41 @@ class viewer extends Model{
 		$net = 0.0;
 		$gross = 0.0;
 
-		$c = 0;
-
-		for ($t=0; $t < sizeof($table); $t++){ 
-			if($source == "CMAPS"){
-				$discount += $table[$t]['discount'];
-				$gross += $table[$t]['grossRevenue']/$pRate;
-				$net += $table[$t]['netRevenue']/$pRate;
-			}elseif($source == "BTS"){
-				$gross += $table[$t]['grossRevenue']*$pRate;
-				$net += $table[$t]['netRevenue']*$pRate;
-			}elseif ($source == "SF") {
-				$gross += $table[$t]['fcstAmountGross']/$pRate;
-				$net += $table[$t]['fcstAmountNet']/$pRate;
+		$c = 1;
+		//var_dump($table);
+		if ($table) {
+			for ($t=0; $t < sizeof($table); $t++){ 
+				if($source == "CMAPS"){
+					$discount += $table[$t]['discount'];
+					$gross += $table[$t]['grossRevenue']/$pRate;
+					$net += $table[$t]['netRevenue']/$pRate;
+				}elseif($source == "BTS"){
+					$gross += $table[$t]['grossRevenue']*$pRate;
+					$net += $table[$t]['netRevenue']*$pRate;
+				}elseif ($source == "SF") {
+					$gross += $table[$t]['fcstAmountGross']/$pRate;
+					$net += $table[$t]['fcstAmountNet']/$pRate;
+				}
+				$c++;
 			}
-			$c++;
+
+			$sumGrossRevenue = $gross;
+			$sumNetRevenue = $net;			
+			$averageDiscount = $discount/$c;
+			
+		}else{
+			$sumGrossRevenue = $gross;
+			$sumNetRevenue = $net;			
+			$averageDiscount = $discount/$c;
 		}
+			
+		
+		
 
-		$sumGrossRevenue = $gross;
-		$sumNetRevenue = $net;
-		$averageDiscount = $discount/$c;
-
-		$return = array(array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue  ));
+		$return = array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue );
 		//var_dump($return);
-		 
+		
 		return $return;
-
-
 	}
 
 
