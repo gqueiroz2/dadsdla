@@ -378,7 +378,7 @@ class viewer extends Model{
 		//echo "$result";
 
 		$mtx = $sql->fetch($result,$from,$from);
-
+		//var_dump($mtx);
 		return $mtx;
 	}
 
@@ -525,7 +525,6 @@ class viewer extends Model{
 		$gross = 0.0;
 
 		$c = 1;
-		//var_dump($table);
 		if ($table) {
 			for ($t=0; $t < sizeof($table); $t++){ 
 				if($source == "CMAPS"){
@@ -556,7 +555,6 @@ class viewer extends Model{
 		
 
 		$return = array('averageDiscount' => $averageDiscount, 'sumNetRevenue' => $sumNetRevenue, 'sumGrossRevenue' => $sumGrossRevenue );
-		//var_dump($return);
 		
 		return $return;
 	}
