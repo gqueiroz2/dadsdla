@@ -21,14 +21,12 @@
 			<td style="background-color: #e6e6e6;">Net Revenue</td>
 		</tr>
 		<tr>
-			@for($t=0;$t < sizeof($data['total']); $t++)
-				<td style="background-color: #0f243e;">Total</td>
-				<td style="background-color: #0f243e;" colspan="8"></td>
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['averageDiscount']/100}}</td>
-				<td style="background-color: #0f243e;" colspan="2"></td>				
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumNetRevenue']}}</td>
-			@endfor
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan="8"></td>
+			<td style="background-color: #0f243e;">{{$data['total']['averageDiscount']/100}}</td>
+			<td style="background-color: #0f243e;" colspan="2"></td>				
+			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
 		</tr>
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
 			<tr>				
@@ -67,12 +65,10 @@
 			<td style="background-color: #e6e6e6;">Net Revenue</td>
 		</tr>
 		<tr>
-			@for($t=0;$t < sizeof($data['total']); $t++)
-				<td style="background-color: #0f243e;">Total</td>
-				<td style="background-color: #0f243e;" colspan="9"></td>
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumGrossRevenue']}}</td>
-				<td style="background-color: #0f243e;">{{$data['total'][$t]['sumNetRevenue']}}</td>
-			@endfor
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan="9"></td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
 		</tr>
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
 			<tr>

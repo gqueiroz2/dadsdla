@@ -3239,6 +3239,25 @@ input[type=button].btn-block {
   position: relative;
 }
 
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+  
+.dropdown:hover .dropbtn {
+    color: #3490dc;
+}
+
+.dropbtn {
+    background-color: #f8f9fa;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
 .dropdown-toggle {
   white-space: nowrap;
 }
@@ -3258,7 +3277,7 @@ input[type=button].btn-block {
   margin-left: 0;
 }
 
-.dropdown-menu {
+.dropdown-menu{
   position: absolute;
   top: 100%;
   left: 0;

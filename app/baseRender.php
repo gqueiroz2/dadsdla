@@ -49,14 +49,14 @@ class baseRender extends Render{
 					echo "</tr>";
 
 					echo "<tr style='font-size:14px;'>";
-						for ($t=0; $t <sizeof($total) ; $t++){ 
+						//for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
 							echo "<td class='darkBlue' colspan='8'></td>";
-							echo "<td class='darkBlue center'>".number_format($total[$t]['averageDiscount'])."%</td>";
+							echo "<td class='darkBlue center'>".number_format($total['averageDiscount'])."%</td>";
 							echo "<td class='darkBlue' colspan='2'></td>";							
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
-						}	
+							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
+						//}	
 					echo"</tr>";
 
 					for ($m=0; $m < sizeof($mtx); $m++) {
@@ -107,12 +107,12 @@ class baseRender extends Render{
 					echo "</tr>";	
 
 					echo "<tr style='font-size:14px;'>";
-						for ($t=0; $t <sizeof($total) ; $t++){ 
+						//for ($t=0; $t <sizeof($total) ; $t++){ 
 							echo "<td class='darkBlue center'>Total</td>";
 							echo "<td class='darkBlue' colspan='9'></td>";
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sumGrossRevenue'],0,",",".")."</td>";
-							echo "<td class='darkBlue center' >".number_format($total[$t]['sumNetRevenue'],0,",",".")."</td>";
-						}	
+							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
+						//}	
 					echo"</tr>";
 
 					for ($m=0; $m <sizeof($mtx) ; $m++) {

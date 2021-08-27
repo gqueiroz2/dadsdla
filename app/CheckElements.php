@@ -508,7 +508,7 @@ class CheckElements extends Model{
 
 			for ($d=0; $d < sizeof($dla); $d++) { 
 				//if( trim( $fm[$f][$type] ) == trim( $dla[$d] ) || trim( strtolower($fm[$f][$type]) ) == trim( strtolower($dla[$d]) ) ){
-				if ( strcasecmp( trim($fm[$f][$type]) , trim($dla[$d]) ) ){	
+				if ( strcmp( trim($fm[$f][$type]) , trim($dla[$d]) ) ){	
 					$check = true;
 					break;
 				}
