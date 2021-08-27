@@ -171,7 +171,7 @@ class forecast extends forecastBase{
         $executiveRevenuePYearSony = $this->consolidateAEFcst($clientRevenuePYearSony,$splitted);
 
         $executiveRevenueCYear = $this->sumNetworks($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
-        $executiveRevenuePYear = $this->sumNetworks($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
+        $executiveRevenuePYear = $this->sumNetworks($executiveRevenuePYearDisc,$executiveRevenuePYearSony);
 
 
         if ($save){

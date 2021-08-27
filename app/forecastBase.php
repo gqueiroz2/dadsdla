@@ -1460,16 +1460,20 @@ class forecastBase extends pAndR{
                 $even[$m] = "rcBlue";
                 $manualEstimation[$m] = "background-color:#235490;";
                 $color[$m] = "color:white;";
+                $color2[$m] = "color:#799ed1;";
+                $font[$m] = "font-weight: bold;";
             }else{
                 $tfArray[$m] = "readonly='true'";
                 $odd[$m] = "oddGrey";
                 $even[$m] = "evenGrey";
                 $manualEstimation[$m] = "";
                 $color[$m] = "";
+                $color2[$m] = "";
+                $font[$m] = "";
             }
         } 
 
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color);    
+        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color, "color2" => $color2, "font" => $font);    
 
         return $rtr;
     }

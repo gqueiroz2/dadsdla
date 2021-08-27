@@ -27,7 +27,8 @@ class forecastRender extends Render{
         $even = $forRender["readable"]["even"];
         $tfArray = $forRender["readable"]["tfArray"];        
         $manualEstimation = $forRender["readable"]["manualEstimation"];
-        $color2 = $forRender["readable"]["color"];
+        $color = $forRender["readable"]["color"];
+        $color2 = $forRender["readable"]["color2"];
 
         $rollingFCSTDisc = $forRender['rollingFCSTDisc'];
         $rollingFCSTSony = $forRender['rollingFCSTSony'];
@@ -141,7 +142,7 @@ class forecastRender extends Render{
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='quarter' style='width:3%; height:40px;'>".$this->month[$m]."</td>";
 			                    }else{
-			                        echo "<td class='smBlue' style='width:3%; height:40px;'>".$this->month[$m]."</td>";
+			                        echo "<td style='".$color2[$m]."' class='smBlue' style='width:3%; height:40px;'>".$this->month[$m]."</td>";
 			                    }
 			                }
 			                echo "<td class='darkBlue' style='width:3%; height:40px;'>Total</td>";
@@ -173,7 +174,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                        $totalTarget += $targetValues[$m];
 			                    }else{
-			                        echo "<td class='$even[$m]'>
+			                        echo "<td class='even'>
 			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
 			                        					number_format(
 			                        						( $targetValues[$m] )
@@ -208,7 +209,7 @@ class forecastRender extends Render{
 			                        			."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
 			                        	  </td>";
 			                    }else{
-			                        echo "<td class='$odd[$m]'>
+			                        echo "<td class='odd'>
 			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
 			                        				number_format(
 			                        					$executiveRF[$m]
@@ -260,7 +261,7 @@ class forecastRender extends Render{
 			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYear[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
-			                        echo "<td class='$even[$m]'>"; 
+			                        echo "<td class='even'>"; 
 			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYear[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
@@ -285,7 +286,7 @@ class forecastRender extends Render{
 			                        	echo "<input type='text' readonly='true' name='pending-$m' id='pending-$m' value='".number_format($pending[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
-			                        echo "<td class='$odd[$m]'>";
+			                        echo "<td class='odd'>";
 			                        	echo "<input type='text' readonly='true' id='pending-$m' value='".number_format($pending[$m])."' name='pending-$m' style='width:100%; border:none;  font-weight:bold; text-align:center; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
@@ -310,7 +311,7 @@ class forecastRender extends Render{
 			                        	echo "<input type='text' readonly='true' id='oldY-$m' name='oldY-$m' value='".number_format($executiveRevenuePYear[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
-			                        echo "<td class='$even[$m]'>"; 
+			                        echo "<td class='even'>"; 
 			                        	echo "<input type='text' readonly='true' id='oldY-$m' value='".number_format($executiveRevenuePYear[$m])."' name='oldY-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
 			                       	echo "</td>";
 			                    }
@@ -335,7 +336,7 @@ class forecastRender extends Render{
 			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTarget[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
-			                        echo "<td class='$odd[$m]'>";
+			                        echo "<td class='odd'>";
 			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTarget[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
@@ -358,7 +359,7 @@ class forecastRender extends Render{
 			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
-			                        echo "<td class='$even[$m]'>";
+			                        echo "<td class='even'>";
 			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
@@ -415,15 +416,42 @@ class forecastRender extends Render{
             		echo "<div class='col-2' style='padding-right:1px;'>";
             			echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
 
-                    		echo "<tr class='clickBool'>";
+                    		echo "<tr>";
                     			
                     			echo "<td> &nbsp; </td>";
-                    			echo "<td class='darkBlue' id='client-$c' style='text-align:center; height:30px; width:25%;'>
+                    			echo "<td  class='darkBlue' id='client-$c' style='text-align:center; height:30px; width:25%;'>
                     					<span style='font-size:14px;'>";
                     						echo "".$client[$c]['clientName']." - ".$client[$c]["agencyName"] ." $ow"; 
                     						echo "</span>";
                     			echo "</td>";
                 			echo "</tr>";
+
+                			 /* INICIO TT */
+			                echo "<tr class='clickBool'>";
+                    			echo "<td class='darkBlue' id='client-$c' rowspan='6' style='text-align:center; background-color: $color; width:5.5%;'>
+                    					<span style='font-size:12px;'>";
+                    						echo " TT $ow"; 
+                    						echo "</span>";
+                    			echo "</td>";
+                    		echo "</tr>";
+
+			                
+			                echo "<tr>";
+			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:25px;'> Rolling Fcast ".$cYear." </td>";
+			                echo "</tr>";
+			                echo "<tr>";
+			                    echo "<td style='background-color:#c9d8e8; text-align:left; height:25px;'>Manual Estimation";
+			                echo "</tr>";
+			                echo "<tr>";
+			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:25px;'>Booking</td>";
+			                echo "</tr>";
+			                echo "<tr>";
+			                    echo "<td style='background-color:#c9d8e8;text-align:left; height:25px;'>".$pYear."</td>";
+			                echo "</tr>";
+			                echo "<tr style='border-bottom: 1pt solid black;'>";
+			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:25px;'>Var RF vs ".$pYear."</td>";
+			                echo "</tr>";
+			                /* FIM TT */
 
                 			/*INICIO DISC */
                 			echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
@@ -480,32 +508,7 @@ class forecastRender extends Render{
 			                echo "</tr>";
 			                /* FIM SONY */
 
-			                /* INICIO TT */
-			                echo "<tr>";
-                    			echo "<td class='darkBlue' id='client-$c' rowspan='6' style='text-align:center; background-color: $color; width:5.5%;'>
-                    					<span style='font-size:12px;'>";
-                    						echo " TT $ow"; 
-                    						echo "</span>";
-                    			echo "</td>";
-                    		echo "</tr>";
-
-			                
-			                echo "<tr>";
-			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:25px;'> Rolling Fcast ".$cYear." </td>";
-			                echo "</tr>";
-			                echo "<tr>";
-			                    echo "<td style='background-color:#c9d8e8; text-align:left; height:25px;'>Manual Estimation";
-			                echo "</tr>";
-			                echo "<tr>";
-			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:25px;'>Booking</td>";
-			                echo "</tr>";
-			                echo "<tr>";
-			                    echo "<td style='background-color:#c9d8e8;text-align:left; height:25px;'>".$pYear."</td>";
-			                echo "</tr>";
-			                echo "<tr style='border-bottom: 1pt solid black;'>";
-			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:25px;'>Var RF vs ".$pYear."</td>";
-			                echo "</tr>";
-			                /* FIM TT */
+			               
 
             			echo "</table>";
             		echo "</div>";
@@ -522,9 +525,9 @@ class forecastRender extends Render{
                     echo "</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='quarter' id='quarter-$c-$m' rowspan='1' style='width:3%;'>".$this->month[$m]."</td>";
+                            echo "<td class='quarter' id='quarter-$c-$m'  style='width:3%;'>".$this->month[$m]."</td>";
                         }else{
-                            echo "<td class='smBlue' colspan='1' id='month-$c-$m' style='width:3%;  height:30px;'>".$this->month[$m]."</td>";
+                            echo "<td style='".$color2[$m]."' class='smBlue' id='month-$c-$m' style='width:3%;  height:30px;'>".$this->month[$m]."</td>";
                         }
                     }
                     echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:3%;'>Total</td>";
@@ -540,6 +543,119 @@ class forecastRender extends Render{
 
                 echo "</tr>";
                 /* END OF CLIENT NAME AND MONTHS */
+
+                /* START OF CLIENT ROLLING FORECAST TT*/
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='even' style='height:25px;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";                    
+                        }
+                    }
+                    echo "<td class='smBlue'>";
+                    	echo "<input type='text' id='passTT-Total-$c' name='passTT-Total-$c' readonly='true' value='".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'>";
+                    echo "</td>";
+ 							
+                    if ($fcstAmountByStageSony[$c]) {
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][4] + $fcstAmountByStageSony[$c][1][4])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][7] + $fcstAmountByStageSony[$c][1][7])."%</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][0] + $fcstAmountByStageSony[$c][1][0])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][1] + $fcstAmountByStageSony[$c][1][1])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][2] + $fcstAmountByStageSony[$c][1][2])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][3] + $fcstAmountByStageSony[$c][1][3])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][6] + $fcstAmountByStageSony[$c][1][6])."</td>";
+                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][5] + $fcstAmountByStageSony[$c][1][5])."</td>";                       
+                    }else{
+	                    for ($i=0; $i < 8; $i++) { 
+	                    	echo "<td class='rcBlue'>&nbsp</td>";
+	                    }   
+                    }
+                echo "</tr>";
+                /* END OF CLIENT ROLLING FORECAST TT*/ 
+
+                /* START OF CLIENT MANUAL ESTIMATION TT*/            
+                echo "<tr>";
+                        //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' name='fcstClient-$c-$m'>";
+                            	echo "<input type='text' readonly='true' id='clientRF-TT-$c-$m' name='clientRF-TT-$c-$m' value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>"; 
+                            echo "</td>";
+                        }else{
+                            echo "<td class='odd' style='height:25px;'>";
+                                echo "<input type='text' readonly='true' name='fcstClient-TT-$c-$m' id='clientRF-TT-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
+                            echo "</td>";                            
+                        }
+                    }
+                    echo "<td class='smBlue'>";
+                   		echo "<input type='text' readonly='true' id='totalClient-TT-$c' name='totalClient-TT-$c' value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'>"; 
+                   	echo "</td>";
+                    for ($i=0; $i < 8; $i++) { 
+                    	echo "<td class='odd'>&nbsp</td>";
+                    }  
+                echo "</tr>";
+                /* END OF CLIENT MANUAL ESTIMATION TT*/
+
+                /* START OF CLIENT BOOKING TT*/          
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='even' style='height:25px;'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
+                            echo "<td id='booking-TT-$c-$m' style='display:none;'> </td>";
+                        }
+                    }
+                    echo "<td class='smBlue'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
+                    for ($i=0; $i < 8; $i++) { 
+                    	echo "<td class='rcBlue'>&nbsp</td>";
+                    }
+                echo "</tr>";
+                /* END OF CLIENT BOOKING TT*/ 
+                
+                /* START OF CLIENT PAST YEAR TT*/            
+                echo "<tr>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='odd' style='height:25px;'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
+                            echo "<td id='lastYear-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
+                    for ($i=0; $i < 8; $i++) { 
+                    	echo "<td class='odd'>&nbsp</td>";
+                    }
+                echo "</tr>";
+
+
+                /* END OF CLIENT PAST YEAR TT*/               
+
+                /* START OF CLIENT RF VS PYEAR TT*/         
+                echo "<tr style='border-bottom: 1pt solid black;'>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        $tmp = ($rollingFCSTDisc[$c][$m] + $rollingFCSTSony[$c][$m]) - ($clientRevenuePYearDisc[$c][$m] + $clientRevenuePYearSony[$c][$m]) ;
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue'>".number_format($tmp)."</td>";
+                        }else{
+                            echo "<td class='even' style='height:25px;'>".number_format($tmp)."</td>";
+                            echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue'>".number_format(($rollingFCSTDisc[$c][$m] + $rollingFCSTSony[$c][$m]) - ($clientRevenuePYearDisc[$c][$m] + $clientRevenuePYearSony[$c][$m]) )."</td>";
+                    for ($i=0; $i < 8; $i++) { 
+                    	echo "<td class='rcBlue'>&nbsp</td>";
+                    }
+                echo "</tr>";
+                /* END OF CLIENT RF VS PYEAR TT*/
+
+                /**********************************************************************************************************************************************************/
+				/**********************************************************************************************************************************************************/
+				/**********************************************************************************************************************************************************/
+
+
                 
                 /* START OF CLIENT ROLLING FORECAST DISC */
                 echo "<tr class='clickLoop'>";
@@ -547,7 +663,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($lastRollingFCSTDisc[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($lastRollingFCSTDisc[$c][$m])."</td>";                    
+                            echo "<td class='even' style='height:25px;'>".number_format($lastRollingFCSTDisc[$c][$m])."</td>";                    
                         }
                     }
                     echo "<td class='smBlue'>";
@@ -585,8 +701,8 @@ class forecastRender extends Render{
                             	echo "<input type='text' readonly='true' id='clientRF-DISC-$c-$m' name='clientRF-DISC-$c-$m' value='".number_format($rollingFCSTDisc[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>";
                             echo "</td>";
                         }else{
-                            echo "<td class='$odd[$m]' style='height:25px; ".$manualEstimation[$m]."'>";
-                                echo "<input type='text' name='fcstClient-DISC-$c-$m' id='clientRF-DISC-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTDisc[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
+                            echo "<td class='odd' style='height:25px;'>";
+                                echo "<input type='text' name='fcstClient-DISC-$c-$m' id='clientRF-DISC-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTDisc[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
                             echo "</td>";                            
                         }
                     }
@@ -605,7 +721,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($clientRevenueCYearDisc[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($clientRevenueCYearDisc[$c][$m])."</td>";
+                            echo "<td class='even' style='height:25px;'>".number_format($clientRevenueCYearDisc[$c][$m])."</td>";
                             echo "<td id='booking-$c-$m' style='display:none;'> </td>";
                         }
                     }
@@ -622,7 +738,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($clientRevenuePYearDisc[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$odd[$m]' style='height:25px;'>".number_format($clientRevenuePYearDisc[$c][$m])."</td>";
+                            echo "<td class='odd' style='height:25px;'>".number_format($clientRevenuePYearDisc[$c][$m])."</td>";
                             echo "<td id='lastYear-$c-$m' style='display:none;'></td>";
                         }
                     }
@@ -640,7 +756,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($tmp)."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($tmp)."</td>";
+                            echo "<td class='even' style='height:25px;'>".number_format($tmp)."</td>";
                             echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
                         }
                     }
@@ -663,7 +779,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";                    
+                            echo "<td class='even' style='height:25px;'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";                    
                         }
                     }
                     echo "<td class='smBlue'>";
@@ -696,8 +812,8 @@ class forecastRender extends Render{
                             	echo "<input type='text' readonly='true' id='clientRF-SONY-$c-$m' name='clientRF-SONY-$c-$m' value='".number_format($rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>"; 
                             echo "</td>";
                         }else{
-                            echo "<td class='$odd[$m]' style='height:25px; ".$manualEstimation[$m]."'>";
-                                echo "<input type='text' name='fcstClient-SONY-$c-$m' id='clientRF-SONY-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
+                            echo "<td class='odd' style='height:25px;'>";
+                                echo "<input type='text' name='fcstClient-SONY-$c-$m' id='clientRF-SONY-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;'>";
                             echo "</td>";                            
                         }
                     }
@@ -716,7 +832,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
+                            echo "<td class='even' style='height:25px;'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
                             echo "<td id='booking-$c-$m' style='display:none;'> </td>";
                         }
                     }
@@ -733,7 +849,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($clientRevenuePYearSony[$c][$m])."</td>";
                         }else{
-                            echo "<td class='$odd[$m]' style='height:25px;'>".number_format($clientRevenuePYearSony[$c][$m])."</td>";
+                            echo "<td class='odd' style='height:25px;'>".number_format($clientRevenuePYearSony[$c][$m])."</td>";
                             echo "<td id='lastYear-$c-$m' style='display:none;'></td>";
                         }
                     }
@@ -753,7 +869,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue'>".number_format($tmp)."</td>";
                         }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($tmp)."</td>";
+                            echo "<td class='even' style='height:25px;'>".number_format($tmp)."</td>";
                             echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
                         }
                     }
@@ -767,114 +883,6 @@ class forecastRender extends Render{
                 /**********************************************************************************************************************************************************/
 				/**********************************************************************************************************************************************************/
 				/**********************************************************************************************************************************************************/
-
-
-                /* START OF CLIENT ROLLING FORECAST TT*/
-                echo "<tr>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";
-                        }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";                    
-                        }
-                    }
-                    echo "<td class='smBlue'>";
-                    	echo "<input type='text' id='passTT-Total-$c' name='passTT-Total-$c' readonly='true' value='".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'>";
-                    echo "</td>";
- 							
-                    if ($fcstAmountByStageSony[$c]) {
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][4] + $fcstAmountByStageSony[$c][1][4])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][7] + $fcstAmountByStageSony[$c][1][7])."%</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][0] + $fcstAmountByStageSony[$c][1][0])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][1] + $fcstAmountByStageSony[$c][1][1])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][2] + $fcstAmountByStageSony[$c][1][2])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][3] + $fcstAmountByStageSony[$c][1][3])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][6] + $fcstAmountByStageSony[$c][1][6])."</td>";
-                        echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][5] + $fcstAmountByStageSony[$c][1][5])."</td>";                       
-                    }else{
-	                    for ($i=0; $i < 8; $i++) { 
-	                    	echo "<td class='rcBlue'>&nbsp</td>";
-	                    }   
-                    }
-                echo "</tr>";
-                /* END OF CLIENT ROLLING FORECAST TT*/ 
-
-                /* START OF CLIENT MANUAL ESTIMATION TT*/            
-                echo "<tr>";
-                        //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' name='fcstClient-$c-$m'>";
-                            	echo "<input type='text' readonly='true' id='clientRF-TT-$c-$m' name='clientRF-TT-$c-$m' value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center'>"; 
-                            echo "</td>";
-                        }else{
-                            echo "<td class='$odd[$m]' style='height:25px; ".$manualEstimation[$m]."'>";
-                                echo "<input type='text' readonly='true' name='fcstClient-TT-$c-$m' id='clientRF-TT-$c-$m' ".$tfArray[$m]." value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center;".$color2[$m]."'>";
-                            echo "</td>";                            
-                        }
-                    }
-                    echo "<td class='smBlue'>";
-                   		echo "<input type='text' readonly='true' id='totalClient-TT-$c' name='totalClient-TT-$c' value='".number_format($rollingFCSTDisc[$c][$m]+$rollingFCSTSony[$c][$m])."' style='width:100%; border:none; font-weight:bold; background-color:transparent; color:white; text-align:center'>"; 
-                   	echo "</td>";
-                    for ($i=0; $i < 8; $i++) { 
-                    	echo "<td class='odd'>&nbsp</td>";
-                    }  
-                echo "</tr>";
-                /* END OF CLIENT MANUAL ESTIMATION TT*/
-
-                /* START OF CLIENT BOOKING TT*/          
-                echo "<tr>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
-                        }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
-                            echo "<td id='booking-TT-$c-$m' style='display:none;'> </td>";
-                        }
-                    }
-                    echo "<td class='smBlue'>".number_format($clientRevenueCYearDisc[$c][$m]+$clientRevenueCYearSony[$c][$m])."</td>";
-                    for ($i=0; $i < 8; $i++) { 
-                    	echo "<td class='rcBlue'>&nbsp</td>";
-                    }
-                echo "</tr>";
-                /* END OF CLIENT BOOKING TT*/ 
-                
-                /* START OF CLIENT PAST YEAR TT*/            
-                echo "<tr>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
-                        }else{
-                            echo "<td class='$odd[$m]' style='height:25px;'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
-                            echo "<td id='lastYear-$c-$m' style='display:none;'></td>";
-                        }
-                    }
-                    echo "<td class='smBlue'>".number_format($clientRevenuePYearDisc[$c][$m]+$clientRevenuePYearSony[$c][$m])."</td>";
-                    for ($i=0; $i < 8; $i++) { 
-                    	echo "<td class='odd'>&nbsp</td>";
-                    }
-                echo "</tr>";
-
-
-                /* END OF CLIENT PAST YEAR TT*/               
-
-                /* START OF CLIENT RF VS PYEAR TT*/         
-                echo "<tr style='border-bottom: 1pt solid black;'>";
-                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
-                        $tmp = ($rollingFCSTDisc[$c][$m] + $rollingFCSTSony[$c][$m]) - ($clientRevenuePYearDisc[$c][$m] + $clientRevenuePYearSony[$c][$m]) ;
-                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($tmp)."</td>";
-                        }else{
-                            echo "<td class='$even[$m]' style='height:25px;'>".number_format($tmp)."</td>";
-                            echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
-                        }
-                    }
-                    echo "<td class='smBlue'>".number_format(($rollingFCSTDisc[$c][$m] + $rollingFCSTSony[$c][$m]) - ($clientRevenuePYearDisc[$c][$m] + $clientRevenuePYearSony[$c][$m]) )."</td>";
-                    for ($i=0; $i < 8; $i++) { 
-                    	echo "<td class='rcBlue'>&nbsp</td>";
-                    }
-                echo "</tr>";
-                /* END OF CLIENT RF VS PYEAR TT*/
 
             echo "</table>";         
 
