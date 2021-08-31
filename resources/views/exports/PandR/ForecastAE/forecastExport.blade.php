@@ -27,6 +27,7 @@
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: left;">Total</td>
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: left;">Lost</td>
 	</tr>
+	
 	<tr>
 		<td style="background-color: #c8d8e9;
 		font-weight: bold; ">Target</td>
