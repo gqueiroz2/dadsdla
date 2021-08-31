@@ -81,7 +81,7 @@ class baseReportPandR extends pAndR{
 	        for ($m=0; $m <sizeof($month) ; $m++) {
 	        	
 	        	$rollingFCST[$l][$m] = $this->generateForecast($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear )*$div;
-               $generateManual[$l][$m] = $this->generateManual($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear,$currencyID );
+               //$generateManual[$l][$m] = $this->generateManual($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear,$currencyID );
 
 	            $lastYear[$l][$m] = $this->generateValuePandR($con,$sql,'revenue',$baseReport,$regionID,$pYear,$month[$m][1],$list[$l],$this->generateColumns($value,"ytd"),$value)*$div;
 
@@ -659,8 +659,9 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
-
-                /*if ($fetched) {
+                //var_dump($fetched);
+                if ($fetched) {
+                   
 
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
@@ -673,31 +674,37 @@ class baseReportPandR extends pAndR{
                             
                             $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
                             $somat = 0.0;
+                            $newShare = array();
+                            $percMult = 0.0;
                             for ($s=0; $s <= $size; $s++) { 
-                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];                                                                
+                                $somat += $share[(($fetched[$f]['fromDate']-1)+$s)];
                             }
 
                             for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['value'] = (($fetched[$f]['fromDate']-1)+$s)/$somat;                                
                                 $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }
+                                  
 
+                            }
+                            //var_dump($newShare);
                             for ($n=0; $n < sizeof($newShare); $n++) { 
                                 if($newShare[$n]['month'] == $month){
                                     $percMult = $newShare[$n]['value'];
                                 }
                             }
+                            //var_dump($percMult);
 
                             $fetched[$f]['sum'] *= $percMult;
+                            //var_dump($fetched[$f]['sum']);
                         }
                     }
-                }*/
+                }
                 
                 if($fetched){
                     $soma = 0.0;
-                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
                         $soma += $fetched[$f]['sum'];
-                    }*/
+                    }
                 }else{
                     $soma = false;
                 }
@@ -731,6 +738,11 @@ class baseReportPandR extends pAndR{
                 $fetched = $sql->fetch($res,$from,$from);
 
                 //var_dump($fetched);
+                $somat = 0.0;
+                $newShare = array();
+                $newValue = array();
+                $percMult = 0.0;
+
                 if($fetched){                    
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
@@ -740,35 +752,33 @@ class baseReportPandR extends pAndR{
 
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
-                            
+
                             $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
 
-                            $somat = 1;
                             for ($s=0; $s <= $size; $s++) {
                                 $somat += (($fetched[$f]['fromDate']-1)+$s);
-                                var_dump($somat);
                             }                    
 
-                            /*for ($s=0; $s <= $size; $s++) { 
+                            for ($s=0; $s <= $size; $s++) { 
                                 $newShare[$f][$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
                                 $newShare[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
                             }
-
-                            for ($n=0; $n < sizeof($newShare[$f]); $n++) { 
-                                if($newShare[$f][$n]['month'] == $month){
-                                    $percMult = $newShare[$f][$n]['value'];
+                            for ($n=0; $n < sizeof($newShare); $n++) { 
+                                if($newShare[$n]['month'] == $month){
+                                    $percMult = $newShare[$n]['value'];
                                 }
                             }
                             
                             for ($s=0; $s <= $size; $s++) { 
-                                $newValue[$f][$s]['value'] = $newShare[$f][$s]['value']*$fetched[$f]['sum'];                                
-                                $newValue[$f][$s]['month'] = (($fetched[$f]['fromDate'])+$s);
-                            }*/
+                                $newValue[$s]['value'] = $newShare[$s]['value']*$fetched[$f]['sum'];                                
+                                $newValue[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
+                            }
 
                         }else{
                             $newValue[$f][0]['value'] = $fetched[$f]['sum'];                                
                             $newValue[$f][0]['month'] = $fetched[$f]['fromDate'];
                         }
+                        
                     }
                 }else{
                     $newValue = false;
@@ -780,23 +790,25 @@ class baseReportPandR extends pAndR{
                     $soma = 0.0;                   
 
                     /*for ($n=0; $n < sizeof($newValue); $n++) { 
-                        if(sizeof($newValue[$n]) > 1){
-                            for ($m=0; $m < sizeof($newValue[$n]); $m++) {                                     
-                                if($newValue[$n][$m]['month'] == $month){
-                                    $soma += $newValue[$n][$m]['value'];
+                        var_dump($newValue[$n]);
+                        if(sizeof($newValue) > 1){
+                            for ($m=0; $m < sizeof($newValue); $m++) {                                     
+                                
+                                /*if($newValue[$m]['month'] == $month){
+                                    $soma += $newValue[$m]['value'];
                                 }
                             }
                         }else{
                             for ($m=0; $m < sizeof($newValue[$n]); $m++) {  
-                                $soma += $newValue[$n][$m]['value'];
+                                $soma += $newValue[$m]['value'];
                             }                                
                         }
-                    } */                                  
+                    }*/                                   
                 }else{
                     $soma = false;
                 }
                 //var_dump($fetched);
-                 //var_dump($soma);
+                //var_dump($soma);
                 //var_dump("================================");
 
                 break;
@@ -823,10 +835,12 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
-                $newValue = array();
+                $somat = 0.0;
                 $newShare = array();
+                $newValue = array();
+                $percMult = 0.0;
 
-                /*if($fetched){
+                if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
                             $fetched[$f]['sum'] *= 2;
@@ -843,7 +857,7 @@ class baseReportPandR extends pAndR{
                             }
 
                             for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['value'] = (($fetched[$f]['fromDate']-1)+$s)/$somat;                                
                                 $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
                             }
 
@@ -853,16 +867,16 @@ class baseReportPandR extends pAndR{
                                 }
                             }
 
-                            //$fetched[$f]['sum'] *= $percMult;
+                            $fetched[$f]['sum'] *= $percMult;
                         }
                     }
-                }*/
+                }
                 
                 if($fetched){
                     $soma = 0.0;
-                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
                         $soma += $fetched[$f]['sum'];
-                    }*/
+                    }
                 }else{
                     $soma = false;
                 }
@@ -893,10 +907,12 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
-                $newValue = array();
+                $somat = 0.0;
                 $newShare = array();
+                $newValue = array();
+                $percMult = 0.0;
 
-                /*if($fetched){
+                if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
                             $fetched[$f]['sum'] *= 2;
@@ -913,7 +929,7 @@ class baseReportPandR extends pAndR{
                             }
 
                             for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['value'] = (($fetched[$f]['fromDate']-1)+$s)/$somat;                                
                                 $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
                             }
 
@@ -926,13 +942,13 @@ class baseReportPandR extends pAndR{
                             $fetched[$f]['sum'] *= $percMult;
                         }
                     }
-                }*/
+                }
 
                 if($fetched){
                     $soma = 0.0;
-                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
                         $soma += $fetched[$f]['sum'];
-                    }*/
+                    }
                 }else{
                     $soma = false;
                 }
@@ -963,10 +979,12 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
-                $newValue = array();
+                $somat = 0.0;
                 $newShare = array();
+                $newValue = array();
+                $percMult = 0.0;
 
-                /*if($fetched){
+                if($fetched){
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
                             $fetched[$f]['sum'] *= 2;
@@ -983,7 +1001,7 @@ class baseReportPandR extends pAndR{
                             }
 
                             for ($s=0; $s <= $size; $s++) { 
-                                $newShare[$s]['value'] = $share[(($fetched[$f]['fromDate']-1)+$s)]/$somat;                                
+                                $newShare[$s]['value'] = (($fetched[$f]['fromDate']-1)+$s)/$somat;                                
                                 $newShare[$s]['month'] = (($fetched[$f]['fromDate'])+$s);
                             }
 
@@ -993,16 +1011,16 @@ class baseReportPandR extends pAndR{
                                 }
                             }
 
-                            //$fetched[$f]['sum'] *= $percMult;
+                            $fetched[$f]['sum'] *= $percMult;
                         }
                     }
-                }*/
+                }
 
                 if($fetched){
                     $soma = 0.0;
-                    /*for ($f=0; $f < sizeof($fetched); $f++) {                         
+                    for ($f=0; $f < sizeof($fetched); $f++) {                         
                         $soma += $fetched[$f]['sum'];
-                    }*/
+                    }
                 }else{
                     $soma = false;
                 }
@@ -1046,6 +1064,7 @@ class baseReportPandR extends pAndR{
                 $res = $con->query($select);
                 $from = array('sum','fromDate','toDate','yearFrom','yearTo','owner','splitter');
                 $fetched = $sql->fetch($res,$from,$from);
+                var_dump($fetched);
 
                 if ($fetched) {
 
@@ -1055,7 +1074,7 @@ class baseReportPandR extends pAndR{
                         }
                     }
 
-                    for ($f=0; $f < sizeof($fetched); $f++) {
+                    /*for ($f=0; $f < sizeof($fetched); $f++) {
                         if($fetched[$f]['fromDate'] != $fetched[$f]['toDate']){
                             
                             $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
@@ -1077,7 +1096,9 @@ class baseReportPandR extends pAndR{
 
                             $fetched[$f]['sum'] *= $percMult;
                         }
-                    }
+                    }*/
+                }else{
+
                 }
                 
                 if($fetched){
