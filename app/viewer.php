@@ -156,7 +156,7 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( cl.ID IN ($clientString)  )
+										AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}
