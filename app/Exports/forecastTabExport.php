@@ -45,7 +45,7 @@ class forecastTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 		if ($this->data['regionName'] == 'Miami' || $this->data['regionName'] == 'Mexico' ) {
 			return[
 				//'B' => "#.##",
-				//'C' => "#.##0", 
+				'C' => "#.##0", 
 				'D' => "#.##0",
 				'E' => "#.##0",
 			   	'F' => "#.##0",
