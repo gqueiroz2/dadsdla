@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col">
                 <form method="POST" action="{{ route('basePost') }}" runat="server"  onsubmit="ShowLoading()">
-                    @csrf
+                    @csrf <!-- {{ csrf_field() }} -->
                     <div class="row">                        
 
                         <div class="col">
