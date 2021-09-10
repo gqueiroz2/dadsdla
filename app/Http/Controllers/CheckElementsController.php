@@ -46,6 +46,8 @@ class CheckElementsController extends Controller{
 
 		$newValues = $cE->newValuesNoRegion($con,$conFM,$table);
 
+		//var_dump($newValues);
+
 		echo "<center>
 				<table class='table table-triped'>";
 		echo "<tr> 

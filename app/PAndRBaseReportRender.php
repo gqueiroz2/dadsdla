@@ -620,13 +620,13 @@ class PAndRBaseReportRender extends Render{
                     $totalTarget = 0.0;
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($targetValues[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'>".number_format($executiveRF[$m],0,',','.')."</td>";
                             $totalTarget += $targetValues[$m];
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($targetValues[$m],2,',','.')."</td>";
+                            echo "<td class='$even[$m]'>".number_format($executiveRF[$m],0,',','.')."</td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($targetValues[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'>".number_format($executiveRF[$m],0,',','.')."</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
@@ -640,12 +640,12 @@ class PAndRBaseReportRender extends Render{
                     echo "<td class='odd' style='text-align:left;'><span>Rolling Fcast ".$cYear."</span><br>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                            echo "<td class='medBlue'>".number_format($executiveRF[$m])."</td>";
                         }else{
-                            echo "<td class='$odd[$m]'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                            echo "<td class='$odd[$m]'>".number_format($executiveRF[$m])."</td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
+                    echo "<td class='smBlue'>".number_format($executiveRF[$m])."</td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][4],2,',','.')."</td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][7],2,',','.')."%</td>";
                     echo "<td class='odd'>".number_format($fcstAmountByStageEx[1][0],2,',','.')."</td>";
