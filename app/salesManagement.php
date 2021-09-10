@@ -128,7 +128,8 @@ class salesManagement extends Model{
 						   AND(pbs.currency_id = '4')
 						   AND (pbs.year = '".$cYear."')
 						   AND (pbs.type_of_revenue = 'NET')						   
-			              ";			            
+			              ";	
+
 			
 		    $res[$s] = $con->query($select[$s]);
 			$from = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','value');
@@ -202,6 +203,7 @@ class salesManagement extends Model{
 						WHERE ( year = '$cYear' OR year = '$pYear' )
 						ORDER BY 6,8,2,1
 		          ";
+		          echo "<pre>$select</pre>";	
 		$res = $con->query($select);
 		$from = array('region','regionID','year','month','salesRep','salesRepID','bookingGross','bookingNet'/*,'bookingNetNet'*/);
 		$array = $sql->fetch($res,$from,$from);

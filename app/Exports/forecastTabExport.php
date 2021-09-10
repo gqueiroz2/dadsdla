@@ -42,7 +42,7 @@ class forecastTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 
 	public function columnFormats(): array{
 
-		if ($this->data['regionName'] == 'Miami' || $this->data['regionName'] == 'Mexico' ) {
+		/*if ($this->data['regionName'] == 'Miami' || $this->data['regionName'] == 'Mexico' ) {
 			return[
 				//'B' => "#.##",
 				'C' => "#.##0", 
@@ -70,7 +70,7 @@ class forecastTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 			    'Z' => "#.##0",
 			    'AA' => "#.##0"
 			];
-		}else{
+		}else{*/
 			return[
 				//'B' => "#,##",
 				'C' => "#,##0", 
@@ -98,7 +98,7 @@ class forecastTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 			    'Z' => "#,##0",
 			    'AA' => "#,##0"
 			];
-		}
+		//}
 	}
 }
 
