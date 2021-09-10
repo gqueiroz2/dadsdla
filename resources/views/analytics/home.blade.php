@@ -9,7 +9,7 @@
 
 @section('content')
     
-@csrf <!-- {{ csrf_field() }} -->
+@csrf 
     <div class="container-fluid mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-sm-10">
