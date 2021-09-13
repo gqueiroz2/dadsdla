@@ -6,6 +6,11 @@ function ajaxSetup(){
 }
 
 function analytics(userName,userRegion,userEmail,date,hour,url,shortUrl,ipV1){
+	$.ajaxSetup({
+		headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+		type:"POST"
+	});
+
 	$.ajax({
 		url:"/analytics/base",
 		method:"POST",
