@@ -1,6 +1,6 @@
 <table>
 	<tr>
-		<td colspan="27" style="background-color: #0070c0; color: #ffffff; font-weight: bold; text-align: left;">{{$data['forRender']['salesRep']['salesRep']}} - {{$data['forRender']['currencyName']}}/{{$data['forRender']['valueView']}}</td>
+		<td colspan="28" style="background-color: #0070c0; color: #ffffff; font-weight: bold; text-align: left;">{{$data['forRender']['salesRep']['salesRep']}} - {{$data['forRender']['currencyName']}}/{{$data['forRender']['valueView']}}</td>
 	</tr>
 </table>
 
@@ -141,6 +141,7 @@
 		font-weight: bold; text-align: right;"></td>
 		@endfor
 	</tr>
+
 	<tr>
 		<td></td>		
 		<td style="background-color: #c8d8e9;

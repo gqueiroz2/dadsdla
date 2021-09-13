@@ -7,12 +7,12 @@
         <td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold;"> DN </td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style= "background-color: #4f81bd; font-weight: bold; color: #FFFFFF;">{{$data['month'][$m]}}</td>
+                <td style= "background-color: #4f81bd; font-weight: bold; color: #FFFFFF; text-align: right;">{{$data['month'][$m]}}</td>
             @else
-                <td style= "background-color: #143052; font-weight: bold; color: #FFFFFF;">{{$data['month'][$m]}}</td>
+                <td style= "background-color: #143052; font-weight: bold; color: #FFFFFF; text-align: right;">{{$data['month'][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold;">Total</td>
+        <td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold; text-align: right;">Total</td>
     </tr>
     <tr>
         <td style="background-color: #dce6f1; font-weight: bold;" >Target</td>
@@ -85,12 +85,12 @@
         <td style="background-color: #dce6f1; font-weight: bold;">% Target Achievement</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style="background-color: #c3d8ef; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>
+                <td style="background-color: #c3d8ef; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],0)}}%</td>
             @else
-                <td style="background-color: #dce6f1; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>
+                <td style="background-color: #dce6f1; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],0)}}%</td>
             @endif
         @endfor
-        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],2,',','.')}}%</td>  
+        <td style="background-color: #143052; color: #FFFFFF; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],0)}}%</td>  
     </tr>           
 </table>
 
@@ -111,12 +111,12 @@
     	@endif
     	@for ($m=0; $m < sizeof($data['month']) ; $m++)
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style= "background-color: #4f81bd; font-weight: bold; color: #FFFFFF;">{{$data['month'][$m]}}</td>
+                <td style= "background-color: #4f81bd; font-weight: bold; color: #FFFFFF; text-align: right;">{{$data['month'][$m]}}</td>
             @else
-                <td style= "background-color: #143052; font-weight: bold; color: #FFFFFF;">{{$data['month'][$m]}}</td>
+                <td style= "background-color: #143052; font-weight: bold; color: #FFFFFF; text-align: right;">{{$data['month'][$m]}}</td>
             @endif
         @endfor
-        <td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold;">Total</td> 
+        <td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold; text-align: right;">Total</td> 
     </tr>
     @if($data['baseReport'] == 'brand' || $data['baseReport'] == 'ae'){
         <tr>
