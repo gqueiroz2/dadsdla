@@ -138,9 +138,9 @@
 							<!-- <div class="row justify-content-end mt-2">          
 						 		<div class="col">		
 							    	<button id="PedingStuffByRegions" class="btn btn-primary" style="width: 100%;"> Check New Regions </button>
-								</div> -->
+								</div> 
 								
-							</div>
+							</div>-->
 							<div id="vlau"></div>
 							<form action="{{ route('checkElementsPost') }}" method="POST" runat="server"  onsubmit="ShowLoading()">
 							@csrf
