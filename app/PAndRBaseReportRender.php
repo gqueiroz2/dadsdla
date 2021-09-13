@@ -171,13 +171,13 @@ class PAndRBaseReportRender extends Render{
                 //$totalTarget = 0.0;
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($targetValuesTT[$m],2,',','.')."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($targetValuesTT[$m],0)."</td>";
                         //$totalTarget += $targetValues[$m];
                     }else{
-                        echo "<td class='rcBlue'>".number_format($targetValuesTT[$m],2,',','.')."</td>";
+                        echo "<td class='rcBlue'>".number_format($targetValuesTT[$m],0)."</td>";
                     }
                 }
-                echo "<td class='smBlue' style=''>".number_format($targetValuesTT[$m],2,',','.')."</td>";                
+                echo "<td class='smBlue' style=''>".number_format($targetValuesTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END OF TARGET INFO
@@ -189,12 +189,12 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($rollingFCSTTT[$m],2,',','.')."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($rollingFCSTTT[$m],0)."</td>";
                     }else{                        
-                        echo "<td class='odd'>".number_format($rollingFCSTTT[$m],2,',','.')."</td>";
+                        echo "<td class='odd'>".number_format($rollingFCSTTT[$m],0)."</td>";
                     }
                 }                
-                echo "<td class='smBlue' style=''>".number_format($rollingFCSTTT[$m],2,',','.')."</td>";                
+                echo "<td class='smBlue' style=''>".number_format($rollingFCSTTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END OF ROLLING FCST INFO
@@ -206,12 +206,12 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($bookingsTT[$m],2,',','.')."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($bookingsTT[$m],0)."</td>";
                     }else{
-                        echo "<td class='rcBlue'>".number_format($bookingsTT[$m],2,',','.')."</td>";
+                        echo "<td class='rcBlue'>".number_format($bookingsTT[$m],0)."</td>";
                     }
                 }
-                echo "<td class='smBlue' style=''>".number_format($bookingsTT[$m],2,',','.')."</td>";                
+                echo "<td class='smBlue' style=''>".number_format($bookingsTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END OF BOOKED BY SALES REP INFO
@@ -223,15 +223,15 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        //echo "<td class='medBlue' style=''>".number_format($pending[$m],2,',','.')."</td>";
-                        echo "<td class='medBlue' style=''>".number_format($pendingTT[$m],2,',','.')."</td>";
+                        //echo "<td class='medBlue' style=''>".number_format($pending[$m],0)."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($pendingTT[$m],0)."</td>";
                     }else{
-                        //echo "<td class='$odd[$m]'>".number_format($pending[$m],2,',','.')."</td>";
-                        echo "<td class='odd'>".number_format($pendingTT[$m],2,',','.')."</td>";
+                        //echo "<td class='$odd[$m]'>".number_format($pending[$m],0)."</td>";
+                        echo "<td class='odd'>".number_format($pendingTT[$m],0)."</td>";
                     }
                 }
-                //echo "<td class='smBlue' style=''>".number_format($pending[$m],2,',','.')."</td>";                
-                echo "<td class='smBlue' style=''>".number_format($pendingTT[$m],2,',','.')."</td>";                
+                //echo "<td class='smBlue' style=''>".number_format($pending[$m],0)."</td>";                
+                echo "<td class='smBlue' style=''>".number_format($pendingTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END OF PENDING INFO
@@ -243,12 +243,12 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($lastYearTT[$m],2,',','.')."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($lastYearTT[$m],0)."</td>";
                     }else{
-                        echo "<td class='rcBlue'>".number_format($lastYearTT[$m],2,',','.')."</td>";
+                        echo "<td class='rcBlue'>".number_format($lastYearTT[$m],0)."</td>";
                     }
                 }
-                echo "<td class='smBlue' style='border-style:solid; border-width: 0px 1px 0px 0px;'>".number_format($lastYearTT[$m],2,',','.')."</td>";                
+                echo "<td class='smBlue' style='border-style:solid; border-width: 0px 1px 0px 0px;'>".number_format($lastYearTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END OF PYEAR
@@ -262,12 +262,12 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($rfVsTargetTT[$m],2,',','.')."</td>";
+                        echo "<td class='medBlue' style=''>".number_format($rfVsTargetTT[$m],0)."</td>";
                     }else{
-                        echo "<td class='odd'>".number_format($rfVsTargetTT[$m],2,',','.')."</td>";
+                        echo "<td class='odd'>".number_format($rfVsTargetTT[$m],0)."</td>";
                     }
                 }
-                echo "<td class='smBlue' style='border-style:solid; border-width: 0px 1px 0px 0px;' >".number_format($rfVsTargetTT[$m],2,',','.')."</td>";                
+                echo "<td class='smBlue' style='border-style:solid; border-width: 0px 1px 0px 0px;' >".number_format($rfVsTargetTT[$m],0)."</td>";                
             echo "</tr>";
             /*
                 END VAR RF VS TARGET
@@ -279,13 +279,13 @@ class PAndRBaseReportRender extends Render{
             echo "<tr>";
                 for ($m=0; $m <sizeof($this->month) ; $m++) { 
                     if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                        echo "<td class='medBlue' style=''>".number_format($targetAchievement[$m],2,',','.')."%</td>";
+                        echo "<td class='medBlue' style=''>".number_format($targetAchievement[$m],0)."%</td>";
                         
                     }else{
-                        echo "<td class='rcBlue' style=''>".number_format($targetAchievement[$m],2,',','.')."%</td>";                        
+                        echo "<td class='rcBlue' style=''>".number_format($targetAchievement[$m],0)."%</td>";                        
                     }
                 }
-                echo "<td class='smBlue' style='' >".number_format($targetAchievement[$m],2,',','.')."%</td>";                
+                echo "<td class='smBlue' style='' >".number_format($targetAchievement[$m],0)."%</td>";                
                 
             echo "</tr>";
             /*
@@ -404,12 +404,12 @@ class PAndRBaseReportRender extends Render{
                         echo "</td>";
                         for ($m=0; $m <sizeof($this->month) ; $m++) { 
                             if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                                echo "<td class='medBlue' style=''>".number_format($targetValues[$c][$m],2,',','.')."</td>";
+                                echo "<td class='medBlue' style=''>".number_format($targetValues[$c][$m],0)."</td>";
                             }else{
-                                echo "<td class='odd'>".number_format($targetValues[$c][$m],2,',','.')."</td>";
+                                echo "<td class='odd'>".number_format($targetValues[$c][$m],0)."</td>";
                             }
                         }
-                        echo "<td class='smBlue' style=''>".number_format($targetValues[$c][$m],2,',','.')."</td>";                    
+                        echo "<td class='smBlue' style=''>".number_format($targetValues[$c][$m],0)."</td>";                    
                     echo "</tr>";
                 }
                 /* 
@@ -422,16 +422,16 @@ class PAndRBaseReportRender extends Render{
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            //echo "<td class='medBlue' style=''>".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."</td>";
-                            echo "<td class='medBlue' style=''>".number_format($rollingFCST[$c][$m],2,',','.')."</td>";
+                            //echo "<td class='medBlue' style=''>".number_format($nSecondary[$c]['lastRollingFCST'][$m],0)."</td>";
+                            echo "<td class='medBlue' style=''>".number_format($rollingFCST[$c][$m],0)."</td>";
                         }else{
-                            //echo "<td class='$even[$m]'>".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."</td>";
-                            echo "<td class='rcBlue'>".number_format($rollingFCST[$c][$m],2,',','.')."</td>";
+                            //echo "<td class='$even[$m]'>".number_format($nSecondary[$c]['lastRollingFCST'][$m],0)."</td>";
+                            echo "<td class='rcBlue'>".number_format($rollingFCST[$c][$m],0)."</td>";
                     
                         }
                     }
-                    //echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' name='passTotal-$c' readonly='true' value='".number_format($nSecondary[$c]['lastRollingFCST'][$m],2,',','.')."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
-                    echo "<td class='smBlue''>".number_format($rollingFCST[$c][$m],2,',','.')."</td>";
+                    //echo "<td class='smBlue' style='border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;'><input type='text' id='passTotal-$c' name='passTotal-$c' readonly='true' value='".number_format($nSecondary[$c]['lastRollingFCST'][$m],0)."' style='width:100%; border:none; font-weight:bold; background-color:transparent; text-align:center; color:white;'></td>";
+                    echo "<td class='smBlue''>".number_format($rollingFCST[$c][$m],0)."</td>";
                     
                 echo "</tr>";
                  /* 
@@ -450,13 +450,13 @@ class PAndRBaseReportRender extends Render{
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style=''>".number_format($bookings[$c][$m],2,',','.')."</td>";
+                            echo "<td class='medBlue' style=''>".number_format($bookings[$c][$m],0)."</td>";
                         }else{
-                            echo "<td class='odd'>".number_format($bookings[$c][$m],2,',','.')."</td>";                            
+                            echo "<td class='odd'>".number_format($bookings[$c][$m],0)."</td>";                            
                         }
                     }
-                    //echo "<td class='smBlue''>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],2,',','.')."</td>";
-                    echo "<td class='smBlue''>".number_format($bookings[$c][$m],2,',','.')."</td>";
+                    //echo "<td class='smBlue''>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],0)."</td>";
+                    echo "<td class='smBlue''>".number_format($bookings[$c][$m],0)."</td>";
                 echo "</tr>";
                 /* 
 
@@ -472,13 +472,13 @@ class PAndRBaseReportRender extends Render{
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style=''>".number_format($lastYear[$c][$m],2,',','.')."</td>";
+                            echo "<td class='medBlue' style=''>".number_format($lastYear[$c][$m],0)."</td>";
                         }else{
-                            echo "<td class='rcBlue'>".number_format($lastYear[$c][$m],2,',','.')."</td>";                            
+                            echo "<td class='rcBlue'>".number_format($lastYear[$c][$m],0)."</td>";                            
                         }
                     }
-                    //echo "<td class='smBlue''>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],2,',','.')."</td>";
-                    echo "<td class='smBlue''>".number_format($lastYear[$c][$m],2,',','.')."</td>";
+                    //echo "<td class='smBlue''>".number_format($nSecondary[$c]['clientRevenueCYear'][$m],0)."</td>";
+                    echo "<td class='smBlue''>".number_format($lastYear[$c][$m],0)."</td>";
                 echo "</tr>";                
                 /* 
 
@@ -511,13 +511,13 @@ class PAndRBaseReportRender extends Render{
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style=''>".number_format($rfVsCurrent[$c][$m],2,',','.')."</td>";
+                            echo "<td class='medBlue' style=''>".number_format($rfVsCurrent[$c][$m],0)."</td>";
                         }else{
-                            echo "<td class='odd' style=''>".number_format($rfVsCurrent[$c][$m],2,',','.')."</td>";
+                            echo "<td class='odd' style=''>".number_format($rfVsCurrent[$c][$m],0)."</td>";
                             echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
                         }
                     }
-                    echo "<td class='smBlue' style=''>".number_format($rfVsCurrent[$c][$m],2,',','.')."</td>";                    
+                    echo "<td class='smBlue' style=''>".number_format($rfVsCurrent[$c][$m],0)."</td>";                    
                 echo "</tr>";
                 /* 
 
@@ -620,13 +620,13 @@ class PAndRBaseReportRender extends Render{
                     $totalTarget = 0.0;
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue'>".number_format($executiveRF[$m],0,',','.')."</td>";
+                            echo "<td class='medBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
                             $totalTarget += $targetValues[$m];
                         }else{
-                            echo "<td class='$even[$m]'>".number_format($executiveRF[$m],0,',','.')."</td>";
+                            echo "<td class='$even[$m]'>".number_format($executiveRF[$m],2,',','.')."</td>";
                         }
                     }
-                    echo "<td class='smBlue'>".number_format($executiveRF[$m],0,',','.')."</td>";
+                    echo "<td class='smBlue'>".number_format($executiveRF[$m],2,',','.')."</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
                     echo "<td class='rcBlue'>&nbsp</td>";
