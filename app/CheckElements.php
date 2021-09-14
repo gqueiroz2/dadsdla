@@ -188,7 +188,7 @@ class CheckElements extends Model{
 		$tmp = array_merge($distinctFM1,$distinctFM2);
 		$distinctFM = array_values(array_unique($tmp));
 
-		$new = $this->checkDifferences($distinctDLA,$distinctFM);
+		$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
 
 		return $new;
 
@@ -214,7 +214,7 @@ class CheckElements extends Model{
 		$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
 		$distinctFM = $this->getDistinctNR($con,$something,$table,$sql,$from,false,false);
 
-		$new = $this->checkDifferences($distinctDLA,$distinctFM);
+		$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
 
 		if($new){
 			$new = array_values(array_unique($new));
@@ -239,7 +239,7 @@ class CheckElements extends Model{
 			$distinctDLA = $this->getDistinctNR($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
 			$distinctFM = $this->getDistinctNR($con,$something,$table,$sql,$from);
 
-			$new = $this->checkDifferences($distinctDLA,$distinctFM);
+			$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
 			if($new){
 				$new = array_values(array_unique($new));
 			}
@@ -256,77 +256,18 @@ class CheckElements extends Model{
 			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
 			$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from,false,false);
 
-			$new = $this->checkDifferences($distinctDLA,$distinctFM);
+			$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
 			if($new){
 				$new = array_values(array_unique($new));
 			}
 		}
 
-		$tp = $new;
-		$missing = array();
-
-		if( is_array($new) ){
-			$prop = array();
-			for ($n=0; $n < sizeof($new); $n++) {
-				$son =  explode("/",$new[$n]);
-
-				$temp = explode(",",$new[$n]);
-				unset($tp[$n]);
-				if(sizeof($temp) > 1){
-					$sales0 = trim($temp[0]);
-					$sales1 = trim($temp[1]);
-					array_push($prop, $sales0);
-					array_push($prop, $sales1);
-				}else{
-					$temp2 =  explode("/",$new[$n]);
-					if(sizeof($temp2) > 1){
-						$sales0 = trim($temp2[0]);
-						$sales1 = trim($temp2[1]);
-						array_push($prop, $sales0);
-						array_push($prop, $sales1);
-					}else{
-						$temp3 =  explode("|",$new[$n]);
-
-						if(sizeof($temp3) > 1){
-							$sales0 = trim($temp3[0]);
-							$sales1 = trim($temp3[1]);
-							array_push($prop, $sales0);
-							array_push($prop, $sales1);
-						}else{
-							array_push($prop,$new[$n]);
-						}
-					}
-				}
-			}
-
-			$prop = array_values(array_unique($prop));
-
-			for ($p=0; $p < sizeof($prop); $p++) {
-				$check[$p] = $sr->getSalesRepUnitByName($conDLA,$prop[$p])[0]['salesRepUnit'];
-				if(!$check[$p]){
-					array_push($missing, $prop[$p]);
-				}
-			}
-
+		if(empty($new)){
+			$rtr = false;
+		}else{
+			$rtr = $new;
 		}
-
-		$rtr = false;
-
-		$zz = 0;
-
-		if(!empty($missing)){
-			for ($m=0; $m < sizeof($missing); $m++) {
-				$rtr[$zz] = $missing[$m];
-				$zz++;
-			}
-		}
-
-		if(!empty($tp)){
-			for ($t=0; $t < sizeof($tp); $t++) {
-				$rtr[$zz] = $tp[$t];
-				$zz++;
-			}
-		}
+		
 		return $rtr;
 	}
 
@@ -702,22 +643,56 @@ class CheckElements extends Model{
 
 	}
 
-	public function checkDifferences($dla,$fm){
+	public function checkDifferences($dla, $fm, $table){
+		
 		$new = array();
+		$test = array();
+		$formattedName = array();
+		var_dump($fm);
+		var_dump($dla);
 
-		for ($f=0; $f < sizeof($fm); $f++) {
-			$check = false;
-			for ($d=0; $d < sizeof($dla); $d++) {
-				//if($fm[$f] == $dla[$d]){
-				if(strcmp($fm[$f],$dla[$d])){
-					$check = true;
-					break;
-				}
+		for ($f = 0; $f < sizeof($fm); $f++) {
+			$fmName[] = $this->remove_accents($fm[$f]);
+		}
+
+		for ($d = 0; $d < sizeof($dla); $d++) {
+			$dlaName[] = $this->remove_accents($dla[$d]);
+		}
+
+		//var_dump($fmName);
+		//var_dump($dlaName);
+
+		$typeName = array_udiff($fmName, $dlaName, 'strcasecmp');
+		//var_dump($typeName);
+
+		$regionID = array_keys($typeName);
+		//var_dump($regionID);
+
+		for ($j = 0; $j < sizeof($typeName); $j++) {
+			$formattedName[] = $fm[$regionID[$j]];
+		}
+		
+		//var_dump($formattedName);
+
+		//var_dump($table);
+
+		if ($table != 'cmaps') {
+			for ($r = 0; $r < sizeof($typeName); $r++) {
+				$region[] = $fm[$regionID[$r]]['region'];
 			}
 
-			if(!$check){
-				$new[] = $fm[$f];
-			}
+			for ($x = 0; $x < sizeof($formattedName); $x++){
+				$test[] = $formattedName[$x];
+				$test['region'] = $region[$x];
+				$new[$x] = $test;
+			} 
+		} else {
+
+			for ($x = 0; $x < sizeof($formattedName); $x++){
+				$test[] = $formattedName[$x];
+				$test['region'] = 'BRAZIL';
+				$new[$x] = $test;
+			} 
 		}
 
 		if(empty($new)){
@@ -726,7 +701,9 @@ class CheckElements extends Model{
 			$rtr = $new;
 		}
 
+		//var_dump($rtr);
 		return $rtr;
+
 
 
 	}
