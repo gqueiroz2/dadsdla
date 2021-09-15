@@ -43,6 +43,8 @@ class forecastRender extends Render{
         $clientRevenuePYearSony = $forRender['clientRevenuePYearSony'];
 
         $executiveRF = $forRender["executiveRF"];
+        $executiveRFDisc = $forRender["executiveRFDisc"];
+        $executiveRFSony = $forRender["executiveRFSony"];
         $executiveRevenueCYearDisc = $forRender["executiveRevenueCYearDisc"];
         $executiveRevenueCYearSony = $forRender["executiveRevenueCYearSony"];
         $executiveRevenueCYear = $forRender["executiveRevenueCYear"];
@@ -52,8 +54,14 @@ class forecastRender extends Render{
         $executiveRevenuePYear = $forRender["executiveRevenuePYear"];
 
         $pending = $forRender["pending"];
+        $pendingDisc = $forRender["pendingDisc"];
+        $pendingSony = $forRender["pendingSony"];
         $RFvsTarget = $forRender["RFvsTarget"];
+        $RFvsTargetDisc = $forRender["RFvsTargetDisc"];
+        $RFvsTargetSony = $forRender["RFvsTargetSony"];
         $targetAchievement = $forRender["targetAchievement"];
+        $targetAchievementDisc = $forRender["targetAchievementDisc"];
+        $targetAchievementSony = $forRender["targetAchievementSony"];
 
         $currency = $forRender["currency"];
         $value = $forRender["value"];
@@ -107,8 +115,17 @@ class forecastRender extends Render{
        			echo "<div class='col-2' style='padding-right:1px;'>";
         			echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
             			echo "<tr>";
-                			echo "<td class='darkBlue' style='font-size:18px; height:40px; '>".$salesRep['abName']."</td>";
+            				echo "<td></td>";
+                			echo "<td class='darkBlue' style='text-align:center;  width:25%;'>
+                    					<span style='font-size:18px;'>".$salesRep['abName']." </span></td>";
             			echo "</tr>";
+            			echo "<tr class='clickBool'>";
+                			echo "<td class='darkBlue' id='' rowspan='8' style='text-align:center;  width:5.5%;'>
+                					<span style='font-size:12px;'>";
+                						echo " TT "; 
+                						echo "</span>";
+                			echo "</td>";
+                		echo "</tr>";
 			            echo "<tr>";
 			                echo "<td class='rcBlue' style='text-align:left;'>Target</td>";
 			            echo "</tr>";
@@ -130,9 +147,73 @@ class forecastRender extends Render{
 			            echo "<tr>";
 			                echo "<td class='rcBlue' style='text-align:left;'>% Target Achievement</td>";
 			            echo "</tr>";
+
+			            /* INICIO DISC */
+			            echo "<tr class='clickLoop' class='clickLoop' style='border-bottom: 1pt solid black;'>";
+                			echo "<td class='dc' id='' rowspan='8' style=' text-align:center;  width:5.5%;'>
+                					<span style='font-size:12px;'>";
+                						echo " DISC "; 
+                						echo "</span>";
+                			echo "</td>";
+                		echo "</tr>";
+
+		                echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'><span>Rolling Fcast ".$cYear."</span><br>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>Bookings</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'>Pending</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>".$pYear."</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'>Var RF vs Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop' >";
+			                echo "<td class='rcBlue' style='text-align:left;'>% Target Achievement</td>";
+			            echo "</tr>";
+		                /* FIM  DISC */
+
+
+			                /* INICIO SONY */
+		                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+                			echo "<td class='sony' id='' rowspan='9' style='text-align:center;  width:5.5%;'>
+                					<span style='font-size:12px;'>";
+                						echo " SONY "; 
+                					echo "</span>";
+                			echo "</td>";
+                		echo "</tr>";
+		                
+		               echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'><span>Rolling Fcast ".$cYear."</span><br>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>Bookings</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'>Pending</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>".$pYear."</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='odd' style='text-align:left;'>Var RF vs Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoop'>";
+			                echo "<td class='rcBlue' style='text-align:left;'>% Target Achievement</td>";
+		                /* FIM SONY */
+
         			echo "</table>";
         		echo "</div>";
-
         		echo "<div class='col linked table-responsive ' style='width:100%; padding-left:0px;'>";
         			echo "<table style='min-width:3000px; width:80%; text-align:center; min-height:225px;'>";
 			            /* START OF SALES REP AND SALES REP TOTAL MONTHS */
@@ -140,9 +221,9 @@ class forecastRender extends Render{
 			            echo "<tr>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) {
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-			                        echo "<td class='quarter' style='width:3%; height:40px;'>".$this->month[$m]."</td>";
-			                    }else{
-			                        echo "<td style='".$color2[$m]."' class='smBlue' style='width:3%; height:40px;'>".$this->month[$m]."</td>";
+			                       echo "<td class='quarter' id='quarter-$m'  style='width:3%;'>".$this->month[$m]."</td>";
+		                        }else{
+		                            echo "<td style='".$color2[$m]."' class='smBlue' id='month-$m' style='width:3%;  height:30px;'>".$this->month[$m]."</td>";
 			                    }
 			                }
 			                echo "<td class='darkBlue' style='width:3%; height:40px;'>Total</td>";
@@ -158,6 +239,8 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            echo "</thead>";			            
 			            /* END OF SALES REP AND SALES REP TOTAL MONTHS */
+
+			            /*TT SALES REP*/
 
 			            /* START OF TARGET BY SALES REP INFO */
 			            echo "<tbody>";
@@ -352,7 +435,7 @@ class forecastRender extends Render{
 			            /* END VAR RF VS TARGET BY SALES REP */
 
 			            /* START % TARGET ACHIEVEMENT */
-			            echo "<tr>";
+			            echo "<tr style='border-bottom: 1pt solid black;'>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
@@ -374,6 +457,437 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            /* END % TARGET ACHIEVEMENT */
 
+			             /*DISC SALES REP*/
+
+			            /* START OF TARGET BY SALES REP INFO */
+			            echo "<tbody>";
+			            echo "<tr class='clickLoop'>";
+			                $totalTarget = 0.0;
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue''>
+			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        				number_format(
+			                        						($targetValuesDiscovery[$m])
+			                        						)
+			                        				."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                        $totalTarget += $targetValuesDiscovery[$m];
+			                    }else{
+			                        echo "<td class='even'>
+			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        					number_format(
+			                        						( $targetValuesDiscovery[$m] )
+			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>
+			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                				number_format(
+			                					( $targetValuesDiscovery[$m] )
+			                					)
+			                				."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>
+			                	  </td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+			                	echo "<td class='rcBlue'>&nbsp</td>";
+			                }
+			                echo "<td class='rcBlue'>&nbsp</td>";
+			            echo "</tr>";			            
+			            /* END OF TARGET BY SALES REP INFO */
+
+			            /* START OF ROLLING FCST BY SALES REP INFO */ 
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>
+			                        			<input type='text' readonly='true' id='rf-$m' name='rf-$m' value='".
+			                        				number_format(
+			                        					$executiveRFDisc[$m]
+			                        				)
+			                        			."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                    }else{
+			                        echo "<td class='odd'>
+			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        				number_format(
+			                        					$executiveRFDisc[$m]
+			                        				)
+			                        			."' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'></td>";
+			                    }
+			                }
+			                echo "<td class='smBlue''>
+			                			<input type='text' name='total-total' readonly='true' id='total-total' value='".
+			                				number_format(
+			                					$executiveRFDisc[$m]
+			                					)
+			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'>
+			                	 </td>";
+			                echo "<td>&nbsp</td>";
+			                echo "<td class='odd'>".
+			                			number_format($fcstAmountByStageExDisc[1][4])
+			                	 ."</td>";
+			                echo "<td class='odd'>".
+			                			number_format($fcstAmountByStageExDisc[1][7])
+			                	  ."% </td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][0])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][1])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][2])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][3])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][6])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExDisc[1][5])
+			                  	 ."</td>";
+			            echo "</tr>";
+			            /* END OF ROLLING FCST BY SALES REP INFO */ 
+
+			            /* START OF BOOKED BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF BOOKED BY SALES REP INFO */ 
+
+			            /* START OF PENDING BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' name='pending-$m' id='pending-$m' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'>";
+			                        	echo "<input type='text' readonly='true' id='pending-$m' value='".number_format($pendingDisc[$m])."' name='pending-$m' style='width:100%; border:none;  font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalPending' name='totalPending' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>";
+			                "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF PENDING BY SALES REP INFO */ 
+
+			            /* START OF PYEAR */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' id='oldY-$m' name='oldY-$m' value='".number_format($executiveRevenuePYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo "<input type='text' readonly='true' id='oldY-$m' value='".number_format($executiveRevenuePYearDisc[$m])."' name='oldY-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                       	echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalOldYear' name='totalOldYear' value='".number_format($executiveRevenuePYearDisc[$m])."' style='width:100%; border:none; color:white; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF PYEAR */ 
+
+
+			            /* START VAR RF VS TARGET BY SALES REP */ 
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>";
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            /* END VAR RF VS TARGET BY SALES REP */
+
+			            /* START % TARGET ACHIEVEMENT */
+			            echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>";
+			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }			                
+			            echo "</tr>";
+
+			             /*Sony SALES REP*/
+
+			            /* START OF TARGET BY SALES REP INFO */
+			            echo "<tbody>";
+			            echo "<tr class='clickLoop'>";
+			                $totalTarget = 0.0;
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue''>
+			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        				number_format(
+			                        						($targetValuesSony[$m])
+			                        						)
+			                        				."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                        $totalTarget += $targetValuesSony[$m];
+			                    }else{
+			                        echo "<td class='even'>
+			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        					number_format(
+			                        						( $targetValuesSony[$m] )
+			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>
+			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                				number_format(
+			                					( $targetValuesSony[$m] )
+			                					)
+			                				."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>
+			                	  </td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+			                	echo "<td class='rcBlue'>&nbsp</td>";
+			                }
+			                echo "<td class='rcBlue'>&nbsp</td>";
+			            echo "</tr>";			            
+			            /* END OF TARGET BY SALES REP INFO */
+
+			            /* START OF ROLLING FCST BY SALES REP INFO */ 
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>
+			                        			<input type='text' readonly='true' id='rf-$m' name='rf-$m' value='".
+			                        				number_format(
+			                        					$executiveRFSony[$m]
+			                        				)
+			                        			."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>
+			                        	  </td>";
+			                    }else{
+			                        echo "<td class='odd'>
+			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        				number_format(
+			                        					$executiveRFSony[$m]
+			                        				)
+			                        			."' style='width:100%; border:none; text-align:center; font-weight:bold;  background-color:transparent;'></td>";
+			                    }
+			                }
+			                echo "<td class='smBlue''>
+			                			<input type='text' name='total-total' readonly='true' id='total-total' value='".
+			                				number_format(
+			                					$executiveRFSony[$m]
+			                					)
+			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'>
+			                	 </td>";
+			                echo "<td>&nbsp</td>";
+			                echo "<td class='odd'>".
+			                			number_format($fcstAmountByStageExSony[1][4])
+			                	 ."</td>";
+			                echo "<td class='odd'>".
+			                			number_format($fcstAmountByStageExSony[1][7])
+			                	  ."% </td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][0])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][1])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][2])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][3])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][6])
+			                  	 ."</td>";
+			                echo "<td class='odd'>".
+			                  			number_format($fcstAmountByStageExSony[1][5])
+			                  	 ."</td>";
+			            echo "</tr>";
+			            /* END OF ROLLING FCST BY SALES REP INFO */ 
+
+			            /* START OF BOOKED BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF BOOKED BY SALES REP INFO */ 
+
+			            /* START OF PENDING BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' name='pending-$m' id='pending-$m' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'>";
+			                        	echo "<input type='text' readonly='true' id='pending-$m' value='".number_format($pendingSony[$m])."' name='pending-$m' style='width:100%; border:none;  font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalPending' name='totalPending' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>";
+			                "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF PENDING BY SALES REP INFO */ 
+
+			            /* START OF PYEAR */ 
+			            
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' id='oldY-$m' name='oldY-$m' value='".number_format($executiveRevenuePYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo "<input type='text' readonly='true' id='oldY-$m' value='".number_format($executiveRevenuePYearSony[$m])."' name='oldY-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                       	echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalOldYear' name='totalOldYear' value='".number_format($executiveRevenuePYearSony[$m])."' style='width:100%; border:none; color:white; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            
+			            /* END OF PYEAR */ 
+
+
+			            /* START VAR RF VS TARGET BY SALES REP */ 
+			            echo "<tr class='clickLoop'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>";
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+			            echo "</tr>";
+			            /* END VAR RF VS TARGET BY SALES REP */
+
+			            /* START % TARGET ACHIEVEMENT */
+			            echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>";
+			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>";
+			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue'>";
+			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td>&nbsp</td>";
+			                for ($i=0; $i < 8; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }			                
+			            echo "</tr>";
            
             			echo "</tbody>";
         			echo "</table>";

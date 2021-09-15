@@ -140,7 +140,6 @@ class forecast extends forecastBase{
 
         $mergeTargetSony = $this->mergeTarget($targetValuesSony,$month);
         $targetValuesSony = $mergeTargetSony;
-
         /* Valores dos Clientes no Ano Atual - Discovery */
         $clientRevenueCYearDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$discoveryBrands);
         $clientRevenueCYearTMPDisc = $clientRevenueCYearDisc;
@@ -424,10 +423,24 @@ class forecast extends forecastBase{
 
         $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
 
+        $executiveRFDisc = $this->consolidateAEFcst($rollingFCSTDisc,$splitted);
+        $executiveRFDisc = $this->closedMonthEx($executiveRFDisc,$executiveRevenueCYearDisc);
+        $executiveRFDisc = $this->addBookingRollingFCST($executiveRFDisc,$executiveRevenueCYearDisc);
+
+        $executiveRFSony = $this->consolidateAEFcst($rollingFCSTSony,$splitted);
+        $executiveRFSony = $this->closedMonthEx($executiveRFSony,$executiveRevenueCYearSony);
+        $executiveRFSony = $this->addBookingRollingFCST($executiveRFSony,$executiveRevenueCYearSony);
+
         $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
+        $RFvsTargetDisc = $this->subArrays($executiveRFDisc,$targetValuesDiscovery);
+        $RFvsTargetSony = $this->subArrays($executiveRFSony,$targetValuesSony);
         $targetAchievement = $this->divArrays($executiveRF,$targetValues);
-
-
+        $targetAchievementDisc = $this->divArrays($executiveRFDisc,$targetValuesDiscovery);
+        $targetAchievementSony = $this->divArrays($executiveRFDisc,$targetValuesSony);               
+        
+        $pendingDisc = $this->subArrays($executiveRFDisc,$executiveRevenueCYearDisc);
+        $pendingSony = $this->subArrays($executiveRFSony,$executiveRevenueCYearSony);        
+        
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
         $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
         $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
@@ -473,6 +486,8 @@ class forecast extends forecastBase{
                         "clientRevenuePYearSony" => $clientRevenuePYearSony, 
 
                         "executiveRF" => $executiveRF,
+                        "executiveRFDisc" => $executiveRFDisc,
+                        "executiveRFSony" => $executiveRFSony,
 
                         "executiveRevenuePYearDisc" => $executiveRevenuePYearDisc,
                         "executiveRevenuePYearSony" => $executiveRevenuePYearSony,
@@ -483,7 +498,13 @@ class forecast extends forecastBase{
                         "executiveRevenueCYear" => $executiveRevenueCYear,
 
                         "pending" => $pending,
+                        "pendingDisc" => $pendingDisc,
+                        "pendingSony" => $pendingSony,
                         "RFvsTarget" => $RFvsTarget,
+                        "RFvsTargetDisc" => $RFvsTargetDisc,
+                        "RFvsTargetSony" => $RFvsTargetSony,
+                        "targetAchievementDisc" => $targetAchievementDisc,
+                        "targetAchievementSony" => $targetAchievementSony,
                         "targetAchievement" => $targetAchievement,
                     
                         "currency" => $currency, 
