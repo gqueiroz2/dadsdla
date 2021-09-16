@@ -110,17 +110,17 @@ class forecastRender extends Render{
         */
 
         echo "<br>";
-        echo "<div class='sticky-top' style='zoom:80%; scroll-margin-botton: 10px;'>";
+        echo "<div class='sticky-top' style='zoom:75%; scroll-margin-botton: 10px;'>";
         	echo "<div class='row'>";
        			echo "<div class='col-2' style='padding-right:1px;'>";
         			echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
             			echo "<tr>";
-            				echo "<td style='height:30px;'>&nbsp;</td>";
+            				echo "<td style='height:30px; background-color: #FFFFFF;'>&nbsp;</td>";
                 			echo "<td class='darkBlue' style='text-align:center;  width:25%;'>
                     					<span style='font-size:18px;'>".$salesRep['abName']." </span></td>";
             			echo "</tr>";
             			echo "<tr class='clickBool'>";
-                			echo "<td class='darkBlue' id='' rowspan='7' style='text-align:center;  width:5.5%;'>
+                			echo "<td class='darkBlue' id='' rowspan='7' style='text-align:center; border-bottom: 1pt solid black;  width:5.5%;'>
                 					<span style='font-size:12px;'>";
                 						echo " TT "; 
                 						echo "</span>";
@@ -142,14 +142,14 @@ class forecastRender extends Render{
 								echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
+								echo "<td class='rcBlue' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>% Target Achievement</td>";
 							echo "</tr>";
 						echo "</tr>";
 						
 
 			            /* INICIO DISC */
 			            echo "<tr class='clickLoop' class='clickLoop' style='border-bottom: 1pt solid black;'>";
-                			echo "<td class='dc' id='' rowspan='8' style=' text-align:center;  width:5.5%; height:25px;'>
+                			echo "<td class='dc' id='' rowspan='8' style=' text-align:center; border-bottom: 1pt solid black; width:5.5%; height:25px;'>
                 					<span style='font-size:12px;'>";
                 						echo " DISC "; 
                 						echo "</span>";
@@ -175,14 +175,14 @@ class forecastRender extends Render{
 			                echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
 			            echo "</tr>";
 			            echo "<tr class='clickLoop' >";
-			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
+			                echo "<td class='rcBlue' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>% Target Achievement</td>";
 			            echo "</tr>";
 		                /* FIM  DISC */
 
 
 			                /* INICIO SONY */
 		                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
-                			echo "<td class='sony' id='' rowspan='9' style='text-align:center;  width:5.5%; height:25px;'>
+                			echo "<td class='sony' id='' rowspan='9' style='text-align:center; border-bottom: 1pt solid black; width:5.5%; height:25px;'>
                 					<span style='font-size:12px;'>";
                 						echo " SONY "; 
                 					echo "</span>";
@@ -208,7 +208,7 @@ class forecastRender extends Render{
 			                echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
 			            echo "</tr>";
 			            echo "<tr class='clickLoop'>";
-			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px; border-bottom: 1pt solid black;'>% Target Achievement</td>";
 		                /* FIM SONY */
 
         			echo "</table>";
@@ -924,7 +924,7 @@ class forecastRender extends Render{
             $color = "";
             $boolfcst = "1";
 
-            echo "<div class='' style='zoom:80%;'>";
+            echo "<div class='' style='zoom:75%;'>";
             	echo "<div class='row mt-3'>";
             		echo "<div class='col-2' style='padding-right:1px;'>";
             			echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
