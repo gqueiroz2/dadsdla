@@ -110,7 +110,7 @@ class forecastRender extends Render{
         */
 
         echo "<br>";
-        echo "<div class='sticky-top' style='zoom:80%; scroll-margin-botton: 10px;'>";
+        echo "<div class='sticky-top' style='zoom:75%; scroll-margin-botton: 10px;'>";
         	echo "<div class='row'>";
        			echo "<div class='col-2' style='padding-right:1px;'>";
         			echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
@@ -924,7 +924,7 @@ class forecastRender extends Render{
             $color = "";
             $boolfcst = "1";
 
-            echo "<div class='' style='zoom:80%;'>";
+            echo "<div class='' style='zoom:75%;'>";
             	echo "<div class='row mt-3'>";
             		echo "<div class='col-2' style='padding-right:1px;'>";
             			echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 180px;' >";
