@@ -54,6 +54,7 @@ class viewer extends Model{
 				        'grossRevenue'
 
 			);
+			
 
 			if ($checkEspecificNumber) {
 

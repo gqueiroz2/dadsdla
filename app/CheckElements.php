@@ -648,8 +648,8 @@ class CheckElements extends Model{
 		$new = array();
 		$test = array();
 		$formattedName = array();
-		var_dump($fm);
-		var_dump($dla);
+		//var_dump($fm);
+		//var_dump($dla);
 
 		for ($f = 0; $f < sizeof($fm); $f++) {
 			$fmName[] = $this->remove_accents($fm[$f]);
