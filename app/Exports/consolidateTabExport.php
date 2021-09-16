@@ -41,7 +41,7 @@ class consolidateTabExport implements FromView,WithEvents, ShouldAutoSize, WithT
 
 	public function columnFormats(): array{
 
-		if ($this->data['userRegion'] == 'Miami' ||$this->data['userRegion'] == 'Mexico' ) {
+		/*if ($this->data['userRegion'] == 'Miami' ||$this->data['userRegion'] == 'Mexico' ) {
 			return[
 				'B' => "#.##0",
 				'C' => "#.##0", 
@@ -62,7 +62,7 @@ class consolidateTabExport implements FromView,WithEvents, ShouldAutoSize, WithT
 			    'R' => "#.##0",
 			    'S' => "#.##0"
 			];
-		}else{
+		}else{*/
 			return[
 				'B' => "#,##0",
 				'C' => "#,##0", 
@@ -81,8 +81,8 @@ class consolidateTabExport implements FromView,WithEvents, ShouldAutoSize, WithT
 			    'P' => "#,##0",
 			    'Q' => "#,##0",
 			    'R' => "#,##0",
-			    'S' => "#.##0"
+			    'S' => "#,##0"
 			];
-		}
+		//}
 	}
 }
