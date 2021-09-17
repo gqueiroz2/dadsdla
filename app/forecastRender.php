@@ -449,7 +449,7 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 8; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }			                
@@ -666,7 +666,7 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 8; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }			                
@@ -882,7 +882,7 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:center; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 8; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }			                
@@ -1040,7 +1040,7 @@ class forecastRender extends Render{
                         }
                     }
                     echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:3%;'>Total</td>";
-                    echo "<td rowspan='16' id='division-$c' style='width:0.5%;'>&nbsp</td>";
+                    echo "<td rowspan='16' id='division-$c' style='width:0.5%; border-bottom: 1pt solid white;'>&nbsp</td>";
                     echo "<td id='sideTable-$c-0' rowspan='1' class='lightGrey' style='width:3%;'>Closed</td>";
                     echo "<td id='sideTable-$c-1' rowspan='1' class='lightGrey' style='width:3%;'>Cons.(%)</td>";
                     echo "<td id='sideTable-$c-2' rowspan='1' class='lightGrey' style='width:3%;'>Exp</td>";
@@ -1379,7 +1379,7 @@ class forecastRender extends Render{
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($tmp)."</td>";
                         }else{
                             echo "<td class='even' style='height:30px; width:3%'>".number_format($tmp)."</td>";
-                            echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
+                            echo "<td id='RFxLY-$c-$m' style='display:none; border-bottom: 1pt solid black;'></td>";
                         }
                     }
                     echo "<td class='smBlue'>".number_format($rollingFCSTSony[$c][$m] - $clientRevenuePYearSony[$c][$m])."</td>";
