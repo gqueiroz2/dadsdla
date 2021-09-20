@@ -213,7 +213,7 @@ class forecastBase extends pAndR{
             $res = $con->query($select[$c]);
 
             $result[$c] = $sql->fetchSum($res,"value");
-            
+
             $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 

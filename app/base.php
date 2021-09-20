@@ -949,7 +949,7 @@ class base extends Model{
         }else{
             $div = $pr->getPRateByRegionAndYear($con,$region,$year);            
         }
-
+ 
         return $div; 
 
     }
