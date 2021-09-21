@@ -113,7 +113,7 @@ class forecastRender extends Render{
         echo "<div class='sticky-top' style='zoom:75%; scroll-margin-botton: 10px;'>";
         	echo "<div class='row'>";
        			echo "<div class='col-2' style='padding-right:1px;'>";
-        			echo "<table class='' id='example' style='width:100%; text-align:center; min-height:225px;'>";
+        			echo "<table id='example' style='width:100%; text-align:center; min-height:225px;'>";
             			echo "<tr>";
             				echo "<td style='height:30px; background-color: #FFFFFF;'>&nbsp;</td>";
                 			echo "<td class='darkBlue' style='text-align:center;  width:25%;'>
@@ -1068,7 +1068,7 @@ class forecastRender extends Render{
                 echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";
+                            echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";
                         }else{
                             echo "<td class='even' style='height:30px; width:3%;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";                    
                         }
