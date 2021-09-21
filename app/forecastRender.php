@@ -220,20 +220,21 @@ class forecastRender extends Render{
 			            echo "<tr>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) {
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-			                       echo "<td class='quarter' id='quarter-$m'  style='text-align:right; width:3%; height:30px;'>".$this->month[$m]."  </td>";
+			                       echo "<td class='quarter' id='quarter-$m'  style='text-align:right; width:3%; height:30px;'>".$this->month[$m]." &nbsp &nbsp </td>";
 		                        }else{
-		                            echo "<td style='text-align:right; ".$color2[$m]."' class='smBlue' id='month-$m' style='text-align:right; width:3%;  height:30px;'>".$this->month[$m]."  </td>";
+		                            echo "<td style='text-align:right; ".$color2[$m]."' class='smBlue' id='month-$m' style='text-align:right; width:3%;  height:30px;'>".$this->month[$m]."&nbsp &nbsp</td>";
 			                    }
 			                }
-			                echo "<td class='darkBlue' style=' text-align:right; width:3%; height:30px;'>Total</td>";
+			                echo "<td class='darkBlue' style=' text-align:right; width:3%; height:30px;'>Total &nbsp &nbsp</td>";
 			                echo "<td style=' text-align:right; width:0.5%; background-color: #ffffff;'>&nbsp</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Closed</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Cons. (%)</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Exp</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Prop</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Adv</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Contr</td>";
-			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Total</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Closed &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Cons. (%) &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Exp &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Prop &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Adv &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Contr &nbsp &nbsp</td>";
+			                echo "<td class='lightGrey' style=' text-align:right; width:3%;'>Total &nbsp &nbsp</td>";
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            echo "</thead>";			            
 			            /* END OF SALES REP AND SALES REP TOTAL MONTHS */
@@ -274,7 +275,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 			                	echo "<td class='rcBlue'>&nbsp</td>";
 			                }
-			               
+			               	echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";			            
 			            /* END OF TARGET BY SALES REP INFO */
 
@@ -327,6 +328,7 @@ class forecastRender extends Render{
 			                echo "<td class='odd' style='text-align:right;'>".
 			                  			number_format($fcstAmountByStageEx[1][6])
 			                  	 ."</td>";
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END OF ROLLING FCST BY SALES REP INFO */ 
 
@@ -351,6 +353,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
@@ -376,6 +379,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PENDING BY SALES REP INFO */ 
@@ -401,6 +405,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PYEAR */ 
@@ -426,6 +431,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END VAR RF VS TARGET BY SALES REP */
 
@@ -448,7 +454,8 @@ class forecastRender extends Render{
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }			                
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
 			            echo "</tr>";
 			            /* END % TARGET ACHIEVEMENT */
 
@@ -488,7 +495,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 			                	echo "<td class='rcBlue'>&nbsp</td>";
 			                }
-			                
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";			            
 			            /* END OF TARGET BY SALES REP INFO */
 
@@ -541,6 +548,7 @@ class forecastRender extends Render{
 			                echo "<td class='odd'>".
 			                  			number_format($fcstAmountByStageExDisc[1][6])
 			                  	 ."</td>";
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END OF ROLLING FCST BY SALES REP INFO */ 
 
@@ -565,6 +573,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
@@ -590,6 +599,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PENDING BY SALES REP INFO */ 
@@ -615,6 +625,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PYEAR */ 
@@ -640,6 +651,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END VAR RF VS TARGET BY SALES REP */
 
@@ -662,7 +674,8 @@ class forecastRender extends Render{
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }			                
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
 			            echo "</tr>";
 
 			             /*Sony SALES REP*/
@@ -701,6 +714,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 			                	echo "<td class='rcBlue'>&nbsp</td>";
 			                }
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";			            
 			            /* END OF TARGET BY SALES REP INFO */
 
@@ -753,6 +767,7 @@ class forecastRender extends Render{
 			                echo "<td class='odd'>".
 			                  			number_format($fcstAmountByStageExSony[1][6])
 			                  	 ."</td>";
+			                echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END OF ROLLING FCST BY SALES REP INFO */ 
 
@@ -777,6 +792,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
@@ -802,6 +818,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PENDING BY SALES REP INFO */ 
@@ -827,6 +844,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            
 			            /* END OF PYEAR */ 
@@ -852,6 +870,7 @@ class forecastRender extends Render{
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='odd'>&nbsp</td>";
 		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
 			            echo "</tr>";
 			            /* END VAR RF VS TARGET BY SALES REP */
 
@@ -874,7 +893,8 @@ class forecastRender extends Render{
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }			                
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";	                
 			            echo "</tr>";
            
             			echo "</tbody>";
@@ -1025,20 +1045,21 @@ class forecastRender extends Render{
                     echo "</td>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-                            echo "<td class='quarter' id='quarter-$c-$m' style='width:3%; height:30px;'>".$this->month[$m]."</td>";
+                            echo "<td class='quarter' id='quarter-$c-$m' style='width:3%; height:30px;'>".$this->month[$m]." &nbsp &nbsp</td>";
                         }else{
-                            echo "<td style='".$color2[$m]."' class='smBlue' id='month-$c-$m' style='width:3%; height:30px;'>".$this->month[$m]."</td>";
+                            echo "<td style='".$color2[$m]."' class='smBlue' id='month-$c-$m' style='width:3%; height:30px;'>".$this->month[$m]." &nbsp &nbsp</td>";
                         }
                     }
-                    echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:3%;'>Total</td>";
+                    echo "<td class='darkBlue' id='TotalTitle-$c' rowspan='1' style='width:3%;'>Total &nbsp &nbsp</td>";
                     echo "<td rowspan='16' id='division-$c' style='width:0.5%; border-bottom: 1pt solid white;'>&nbsp</td>";
-                    echo "<td id='sideTable-$c-0' rowspan='1' class='lightGrey' style='width:3%;'>Closed</td>";
-                    echo "<td id='sideTable-$c-1' rowspan='1' class='lightGrey' style='width:3%;'>Cons.(%)</td>";
-                    echo "<td id='sideTable-$c-2' rowspan='1' class='lightGrey' style='width:3%;'>Exp</td>";
-                    echo "<td id='sideTable-$c-3' rowspan='1' class='lightGrey' style='width:3%;'>Prop</td>";
-                    echo "<td id='sideTable-$c-4' rowspan='1' class='lightGrey' style='width:3%;'>Adv</td>";
-                    echo "<td id='sideTable-$c-5' rowspan='1' class='lightGrey' style='width:3%;'>Contr</td>";
-                    echo "<td id='sideTable-$c-6' rowspan='1' class='lightGrey' style='width:3%;'>Total</td>";
+                    echo "<td id='sideTable-$c-0' rowspan='1' class='lightGrey' style='width:3%;'>Closed &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-1' rowspan='1' class='lightGrey' style='width:3%;'>Cons.(%) &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-2' rowspan='1' class='lightGrey' style='width:3%;'>Exp &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-3' rowspan='1' class='lightGrey' style='width:3%;'>Prop &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-4' rowspan='1' class='lightGrey' style='width:3%;'>Adv &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-5' rowspan='1' class='lightGrey' style='width:3%;'>Contr &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-6' rowspan='1' class='lightGrey' style='width:3%;'>Total &nbsp &nbsp</td>";
+                    echo "<td id='sideTable-$c-6' rowspan='1' style='width:0.42%; border-bottom:1pt solid white;' colspan=6;> &nbsp</td>";
 
                 echo "</tr>";
                 /* END OF CLIENT NAME AND MONTHS */
@@ -1069,6 +1090,7 @@ class forecastRender extends Render{
 	                    for ($i=0; $i < 7; $i++) { 
 	                    	echo "<td class='rcBlue'>&nbsp</td>";
 	                    }   
+	                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                     }
                 echo "</tr>";
                 /* END OF CLIENT ROLLING FORECAST TT*/ 
@@ -1092,7 +1114,8 @@ class forecastRender extends Render{
                    	echo "</td>";
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
-                    }  
+                    } 
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT MANUAL ESTIMATION TT*/
 
@@ -1110,6 +1133,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT BOOKING TT*/ 
                 
@@ -1127,6 +1151,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
 
 
@@ -1147,6 +1172,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR TT*/
 
@@ -1177,6 +1203,7 @@ class forecastRender extends Render{
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][2])."</td>";
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][3])."</td>";
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageDisc[$c][1][6])."</td>";
+                        echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                    
                     }else{
                         echo "<td class='rcBlue'>0.00</td>";
@@ -1186,6 +1213,7 @@ class forecastRender extends Render{
                         echo "<td class='rcBlue'>0.00</td>";
                         echo "<td class='rcBlue'>0.00</td>";
                         echo "<td class='rcBlue'>0.00</td>";
+                        echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                     }
                 echo "</tr>";
                 /* END OF CLIENT ROLLING FORECAST DISC */ 
@@ -1210,6 +1238,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT MANUAL ESTIMATION DISC*/
 
@@ -1227,6 +1256,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT BOOKING DISC*/ 
                 
@@ -1244,6 +1274,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT PAST YEAR DISC*/               
 
@@ -1262,6 +1293,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR DISC*/
 
@@ -1292,10 +1324,12 @@ class forecastRender extends Render{
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageSony[$c][1][2])."</td>";
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageSony[$c][1][3])."</td>";
                         echo "<td class='rcBlue'>".number_format($fcstAmountByStageSony[$c][1][6])."</td>";
+                        echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                     }else{
 	                    for ($i=0; $i < 7; $i++) { 
 	                    	echo "<td class='rcBlue'>&nbsp</td>";
-	                    }   
+	                    } 
+	                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>"; 
                     }
                 echo "</tr>";
                 /* END OF CLIENT ROLLING FORECAST SONY*/ 
@@ -1319,7 +1353,8 @@ class forecastRender extends Render{
                    	echo "</td>";
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
-                    }  
+                    } 
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT MANUAL ESTIMATION SONY*/
 
@@ -1337,6 +1372,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT BOOKING SONY*/ 
                 
@@ -1354,6 +1390,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
 
 
@@ -1374,6 +1411,7 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR SONY*/
 
