@@ -25,6 +25,7 @@ class forecast extends forecastBase{
         $base = new base();    
         $sql = new sql();
         $reg = $r;
+        $rollingFCSTSony = array();
 
         $actualMonth = date('n');
         $data = date('Y-m-d');
@@ -352,7 +353,7 @@ class forecast extends forecastBase{
             }
             $rollingFCSTSony = $this->addClosedFcst($rollingFCSTSony,$tmpRollingFCSTSony);
             $rollingFCSTSony = $this->adjustFCST($rollingFCSTSony);
-
+     
             $fcstAmountByStageSony = $this->addClosed($fcstAmountByStageSony,$rollingFCSTSony);//Adding Closed to fcstByStage
 
             $fcstAmountByStageExSony = $this->makeFcstAmountByStageEx($fcstAmountByStageSony,$splitted);
@@ -382,12 +383,15 @@ class forecast extends forecastBase{
 
             
             $fcstDisc = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
+            $closedFcstDisc = $this->calculateClosedForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
+            $closedAmountDisc = $closedFcstDisc['fcstAmountByStage'];
             $fcstAmountByStageDisc = $fcstDisc['fcstAmountByStage'];
             $toRollingFCSTDisc = $fcstDisc['fcstAmount'];
             $rollingFCSTDisc = $this->addQuartersAndTotalOnArray($rollingFCSTDisc);
             $rollingFCSTDisc = $this->addFcstWithBooking($rollingFCSTDisc,$toRollingFCSTDisc);//Meses fechados e abertos
             $rollingFCSTDisc = $this->adjustFCST($rollingFCSTDisc);
-            $fcstAmountByStageDisc = $this->addClosed($fcstAmountByStageDisc,$rollingFCSTDisc);//Adding Closed to fcstByStage
+            //var_dump($rollingFCSTDisc);
+            $fcstAmountByStageDisc = $this->addClosed($closedAmountDisc,$rollingFCSTDisc);//Adding Closed to fcstByStage
             $emptyCheckDisc = $this->checkEmpty($toRollingFCSTDisc);
             $lastRollingFCSTDisc = $rollingFCSTDisc;
             
@@ -406,7 +410,7 @@ class forecast extends forecastBase{
         
         $fcstAmountByStageDisc = $this->addLost($con,$listOfClients,$fcstAmountByStageDisc,$value,$div);
         $fcstAmountByStageExDisc = $this->makeFcstAmountByStageEx($fcstAmountByStageDisc,$splitted);
-
+        
         $fcstAmountByStageSony = $this->addLost($con,$listOfClients,$fcstAmountByStageSony,$value,$div);
         $fcstAmountByStageExSony = $this->makeFcstAmountByStageEx($fcstAmountByStageSony,$splitted);
         

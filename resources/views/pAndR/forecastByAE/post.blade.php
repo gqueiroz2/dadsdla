@@ -200,6 +200,23 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
+            $('.clickLoopHeader').hide();
+
+            $(".clickBoolHeader").click(function(e){
+                var myBool = $("#clickBoolHeader").val();
+                
+                if(myBool == 1){e
+                    $(".clickLoopHeader").show();
+                    myBool = 0;
+                   
+                }else{
+                    $(".clickLoopHeader").hide();
+                    myBool = 1;
+                }
+                 $("#clickBoolHeader").val(myBool);
+
+            });
+
             $('.clickLoop').hide();
 
             $(".clickBool").click(function(e){

@@ -15,6 +15,44 @@ class forecastBase extends pAndR{
         return $tt;
     }
 
+    public function calculateClosedForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
+
+        if($currency == "USD"){ $div = 1; }else{ $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year)); }
+        if($value == "gross"){ $fwColumn = "gross_revenue"; $sfColumn = $fwColumn; }else{ $fwColumn = "net_revenue"; $sfColumn = $fwColumn; }        
+
+        for ($c=0; $c < sizeof($clients); $c++) {
+            $someFCST[$c] = $this->getClosedValue($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
+            //var_dump($someFCST);
+            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+            //var_dump($monthOPP);
+
+            if($monthOPP[$c]){
+                $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
+                $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
+            }else{
+                $shareSalesRep[$c] = false;
+                $fcst[$c] = false;
+            }
+
+            if($fcst[$c]){
+                $fcst[$c] = $this->adjustValues($fcst[$c]);
+                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
+                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP[$c],$splitted[$c],$salesRepID);
+                $fcstAmount[$c] = $this->adjustValuesForecastAmount($fcstAmount[$c]);
+            }else{
+                $fcstAmountByStage[$c] = false;
+                $fcstAmount[$c] = false;
+            }
+            
+        }
+
+
+        $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
+
+
+        return $rtr;        
+    }    
+
 	public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
 
         if($currency == "USD"){ $div = 1; }else{ $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year)); }
@@ -24,6 +62,7 @@ class forecastBase extends pAndR{
             $someFCST[$c] = $this->getValuePeriodAndStageFromOPP($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
             
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
+
 
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
@@ -124,7 +163,7 @@ class forecastBase extends pAndR{
                 }
             }
         }        
-
+        //var_dump($sum);
         return $sum;
     }
 
@@ -179,8 +218,10 @@ class forecastBase extends pAndR{
         }else{
             $fechado += 3;
         }
-
+        //var_dump($fcstAmountByStage);
         for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
+            //var_dump($fcstAmountByStage[$c]);
+
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
@@ -213,7 +254,7 @@ class forecastBase extends pAndR{
             $res = $con->query($select[$c]);
 
             $result[$c] = $sql->fetchSum($res,"value");
-            
+
             $fcstStages[$c][1][5] = $result[$c]['value']*$div;
         }
 
@@ -727,6 +768,69 @@ class forecastBase extends pAndR{
                             AND (brand_id IN ($brandString))
                             AND ( stage != '6')
                             AND ( stage != '7')                            
+                            AND (year_from = \"".$year."\")";
+                            //echo "<pre>".$select."</pre>";
+                            /*AND (from_date > \"".$date."\")*/
+        }
+
+        $res = $con->query($select);
+        $rev = $sql->fetch($res,$from,$to);
+
+        if ($rev) {
+            for ($r=0; $r <sizeof($rev); $r++) { 
+                $rev[$r]["sumValue"] = doubleval($rev[$r]["sumValue"])*$div;
+            }
+        }
+
+        /*
+            AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+        */
+        if($rev){
+            for ($r=0; $r < sizeof($rev); $r++) { 
+                if($rev[$r]['yearFrom'] != $rev[$r]['yearTo']){
+                    $fromArray = $this->makeMonths("from",$rev[$r]['fromDate']);
+                    $toArray = $this->makeMonths("to",$rev[$r]['toDate']);
+                    $fromShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearFrom'],$fromArray);
+                    $toShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearTo'],$toArray);
+                    $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
+
+                    $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                }                
+            }
+        }
+
+        return $rev;
+
+    }
+
+    public function getClosedValue($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted,$div){
+
+        $brandString = $this->brandArrayToString($brand);        
+        $date = date("n")-1;
+        $from = array($sfColumn,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
+        $to = array("sumValue",'fromDate','toDate','yearFrom','yearTo','stage','oppid','salesRepOwner');
+        if($splitted){ /* SF FCST FROM BRAZIL, WHERE THERE IS AE SPLITT SALES */
+                $select = "
+                                SELECT oppid, from_date , to_date, year_from, year_to, stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
+                                FROM sf_pr
+                                WHERE (client_id = \"".$clients['clientID']."\")
+                                AND (agency_id = \"".$clients['agencyID']."\")
+                                AND ( (sales_rep_splitter_id = \"".$salesRepID."\") OR (sales_rep_owner_id = \"".$salesRepID."\") )
+                                AND (brand_id IN ($brandString))
+                                AND ( stage = '5')
+                                AND (year_from = \"".$year."\")";
+                                /*                                
+                                AND (from_date > \"".$date."\")";*/
+
+        }else{/* SF FCST FROM OTHER REGIONS , WHERE THERE IS NOT AE SPLITT SALES */
+            $select = "
+                            SELECT oppid, from_date , to_date,year_from, year_to,stage , stage , $sfColumn , sales_rep_owner_id AS 'salesRepOwner'
+                            FROM sf_pr
+                            WHERE (client_id = \"".$clients['clientID']."\")
+                            AND (agency_id = \"".$clients['agencyID']."\")
+                            AND ( (sales_rep_splitter_id = \"".$salesRepID."\") OR (sales_rep_owner_id = \"".$salesRepID."\") )
+                            AND (brand_id IN ($brandString))
+                            AND ( stage = '5')
                             AND (year_from = \"".$year."\")";
                             //echo "<pre>".$select."</pre>";
                             /*AND (from_date > \"".$date."\")*/
