@@ -161,18 +161,40 @@ class forecast extends forecastBase{
 
 
         /* --------------- VERIFICAR --------------- */
-        $tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
-        $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);
+        $executiveRevenueCYearDisc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for ($s=0; $s < sizeof($clientRevenueCYearDisc); $s++) {
+            for ($x=0; $x < sizeof($clientRevenueCYearDisc[$s]); $x++) { 
+                $executiveRevenueCYearDisc[$x] += ($clientRevenueCYearDisc[$s][$x]);            
+            }
+            
+        }
+
         $executiveRevenuePYearDisc = $this->consolidateAEFcst($clientRevenuePYearDisc,$splitted);
+        /*$tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
+        $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);
+        */        
 
         /* --------------- VERIFICAR --------------- */
-        $tmpSony = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$sonyBrands);
-        $executiveRevenueCYearSony = $this->addQuartersAndTotal($tmpSony);
+        $executiveRevenueCYearSony = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for ($s=0; $s < sizeof($clientRevenueCYearSony); $s++) {
+            for ($x=0; $x < sizeof($clientRevenueCYearSony[$s]); $x++) { 
+                $executiveRevenueCYearSony[$x] += ($clientRevenueCYearSony[$s][$x]);            
+            }
+            
+        }
+
         $executiveRevenuePYearSony = $this->consolidateAEFcst($clientRevenuePYearSony,$splitted);
 
+        /*$tmpSony = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$sonyBrands);
+        $executiveRevenueCYearSony = $this->addQuartersAndTotal($tmpSony);        
+        */
+
+
+        /* --------------- TOTAL EXECUTIVE --------------- */
         $executiveRevenueCYear = $this->sumNetworks($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
         $executiveRevenuePYear = $this->sumNetworks($executiveRevenuePYearDisc,$executiveRevenuePYearSony);
 
+        
 
         if ($save){
             if($submitted == 1){ $sourceSave = "LAST SUBMITTED"; }else{ $sourceSave = "LAST SAVED"; }

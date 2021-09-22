@@ -1207,10 +1207,19 @@ class forecastBase extends pAndR{
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
         $test = intval( date('n') );
-        if ($test < 4) { $test++; }
-        elseif ($test < 7) { $test += 2; }
-        elseif ($test < 10) { $test += 3; }
-        else{ $test += 4; }
+        if ($test < 4) {
+            $test++; 
+        }
+        elseif ($test < 7) {
+            $test += 2; 
+        }
+        elseif ($test < 10) {
+            $test += 3; 
+        }
+        else {
+            $test += 4; 
+        }
+        
         for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
             $return[$m] = 0;
         }
