@@ -26,7 +26,6 @@
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Adv</td>
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Contr</td>
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Total</td>
-        <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Lost</td>
 	</tr>
 
 	<tr>
@@ -45,7 +44,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['targetValues'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -69,7 +68,6 @@
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageEx'][1][2]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageEx'][1][3]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageEx'][1][6]}} </td>
-        <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageEx'][1][5]}} </td>
 	</tr>
 	<tr>
 		<td style="background-color: #c8d8e9;
@@ -83,7 +81,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenueCYear'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -100,7 +98,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['pending'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -117,7 +115,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenuePYear'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -134,7 +132,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['RFvsTarget'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -152,7 +150,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievement'][$m],0)}} %</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -176,7 +174,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['targetValuesDiscovery'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -200,7 +198,6 @@
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExDisc'][1][2]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExDisc'][1][3]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExDisc'][1][6]}} </td>
-        <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExDisc'][1][5]}} </td>
 	</tr>
 	<tr>
 		<td style="background-color: #c8d8e9;
@@ -214,7 +211,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenueCYearDisc'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -231,7 +228,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['pendingDisc'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -248,7 +245,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenuePYearDisc'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -265,7 +262,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['RFvsTargetDisc'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -283,7 +280,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievementDisc'][$m],0)}} %</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -307,7 +304,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['targetValuesSony'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -331,7 +328,6 @@
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExSony'][1][2]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExSony'][1][3]}} </td>
         <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExSony'][1][6]}} </td>
-        <td style="background-color: #e7eff9; font-weight: bold; text-align: right;"> {{$data['forRender']['fcstAmountByStageExSony'][1][5]}} </td>
 	</tr>
 	<tr>
 		<td style="background-color: #c8d8e9;
@@ -345,7 +341,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenueCYearSony'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -362,7 +358,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['pendingSony'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -379,7 +375,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['executiveRevenuePYearSony'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -396,7 +392,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{$data['forRender']['RFvsTargetSony'][$m]}}</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #e7eff9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -414,7 +410,7 @@
 		@endfor
 		<td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: right;">{{number_format($data['forRender']['targetAchievementSony'][$m],0)}} %</td>
 		<td></td>
-		@for($i=0; $i < 8; $i++)
+		@for($i=0; $i < 7; $i++)
 			<td style="background-color: #c8d8e9;
 		font-weight: bold; text-align: right;"></td>
 		@endfor
@@ -442,7 +438,6 @@
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Adv</td>
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Contr</td>
         <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Total</td>
-        <td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">Lost</td>
 	</tr>
 
 	<!-- ------------TOTAL------------ -->
@@ -471,7 +466,7 @@
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][2] + $data['forRender']['fcstAmountByStageDisc'][$c][1][2]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][3] + $data['forRender']['fcstAmountByStageDisc'][$c][1][3]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][6] + $data['forRender']['fcstAmountByStageDisc'][$c][1][6]}} </td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][5] + $data['forRender']['fcstAmountByStageDisc'][$c][1][5]}} </td>                        
+	                                
 	    @else
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00%</td>
@@ -480,21 +475,19 @@
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>    
 	    @endif
     </tr>
     <tr>
         <td style="background-color:#c9d8e8; text-align:left; font-weight: bold;">Manual Estimation</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m] + $data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m] + $data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
             @else
-                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m] + $data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m] + $data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
             @endif
         @endfor
-        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m] + $data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m] + $data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
         <td></td>
-        <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
@@ -514,7 +507,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m] + $data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right"></td>
         @endfor
     </tr>
@@ -536,7 +529,6 @@
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
-        <td style="background-color: #e6e6e6;"></td>
     </tr>
     <tr>
         <td style="background-color:#dbe5f0; text-align:left; font-weight: bold;">Var RF vs {{$data['pYear']}}</td>
@@ -549,7 +541,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{($data['forRender']['rollingFCSTSony'][$c][$m] - $data['forRender']['clientRevenuePYearSony'][$c][$m]) + ($data['forRender']['rollingFCSTDisc'][$c][$m] - $data['forRender']['clientRevenuePYearDisc'][$c][$m])}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right;"></td>
         @endfor
     </tr>
@@ -574,13 +566,13 @@
 	    <td></td>			
 	    @if ($data['forRender']['fcstAmountByStageDisc'][$c])             	
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][4]}} </td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{number_format(number_format($data['forRender']['fcstAmountByStageDisc'][$c][1][7],0),0)}} %</td>
+	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{number_format($data['forRender']['fcstAmountByStageDisc'][$c][1][7],0)}} %</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][0]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][1]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][2]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][3]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][6]}} </td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageDisc'][$c][1][5]}} </td>                        
+	        
 	    @else
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00%</td>
@@ -589,21 +581,19 @@
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>    
 	    @endif
     </tr>
     <tr>
         <td style="background-color:#c9d8e8; text-align:left; font-weight: bold;">Manual Estimation</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
             @else
-                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
             @endif
         @endfor
-        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
+        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
         <td></td>
-        <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
@@ -623,7 +613,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{$data['forRender']['clientRevenueCYearDisc'][$c][$m]}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right;"></td>
         @endfor
     </tr>
@@ -645,7 +635,6 @@
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
-        <td style="background-color: #e6e6e6;"></td>
     </tr>
     <tr>
         <td style="background-color:#dbe5f0; text-align:left; font-weight: bold;">Var RF vs {{$data['pYear']}}</td>
@@ -658,7 +647,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{$data['forRender']['rollingFCSTDisc'][$c][$m] - $data['forRender']['clientRevenuePYearDisc'][$c][$m]}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right;"></td>
         @endfor
     </tr>
@@ -689,7 +678,7 @@
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][2]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][3]}} </td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][6]}} </td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">{{$data['forRender']['fcstAmountByStageSony'][$c][1][5]}} </td>                        
+	        
 	    @else
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00%</td>
@@ -698,21 +687,19 @@
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
 	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>
-	        <td style="background-color: #c8d8e9; font-weight: bold; text-align:right;">0.00</td>    
 	    @endif
     </tr>
     <tr>
         <td style="background-color:#c9d8e8; text-align:left; font-weight: bold;">Manual Estimation</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
-                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m]}}</td>
+                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m]}}</td>
             @else
-                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m]}}</td>
+                <td style=" background-color: #e6e6e6; font-weight: bold; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m]}}</td>
             @endif
         @endfor
-        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenuePYearSony'][$c][$m]}}</td>
+        <td style=" background-color: #143052; font-weight: bold; color: #ffffff; text-align:right;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m]}}</td>
         <td></td>
-        <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
@@ -732,7 +719,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{$data['forRender']['clientRevenueCYearSony'][$c][$m]}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right;"></td>
         @endfor
     </tr>
@@ -754,7 +741,6 @@
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
         <td style="background-color: #e6e6e6;"></td>
-        <td style="background-color: #e6e6e6;"></td>
     </tr>
     <tr>
         <td style="background-color:#dbe5f0; text-align:left; font-weight: bold;">Var RF vs {{$data['pYear']}}</td>
@@ -767,7 +753,7 @@
         @endfor
         <td style="background-color: #143052; text-align: right; font-weight: bold; color: #ffffff;">{{$data['forRender']['rollingFCSTSony'][$c][$m] - $data['forRender']['clientRevenuePYearSony'][$c][$m]}}</td>
         <td></td>
-        @for ($i=0; $i < 8; $i++) 
+        @for ($i=0; $i < 7; $i++) 
         	<td style="background-color: #c8d8e9; font-weight: bold; text-align: right;"></td>
         @endfor
     </tr>
