@@ -1070,7 +1070,7 @@ class forecastRender extends Render{
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";
                         }else{
-                            echo "<td class='even' style='height:30px; width:3%;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";                    
+                            echo "<td class='even' style='height:30px; width:3%;'>".number_format($lastRollingFCSTDisc[$c][$m]+$lastRollingFCSTSony[$c][$m])."</td>";             
                         }
                     }
                     echo "<td class='smBlue' style='width:3%;'>";

@@ -294,6 +294,7 @@ class forecast extends forecastBase{
                         $rollingFCSTDisc[$c][$m] = 0;
                     }
                 }
+                //var_dump($rollingFCSTDisc);
 
                 if ($saidaSony[$c]) {
                     for ($m=0; $m < sizeof($saidaSony[$c]); $m++) { 
@@ -411,12 +412,13 @@ class forecast extends forecastBase{
             $fcstAmountByStageDisc = $fcstDisc['fcstAmountByStage'];
             $toRollingFCSTDisc = $fcstDisc['fcstAmount'];
             $rollingFCSTDisc = $this->addQuartersAndTotalOnArray($rollingFCSTDisc);
-            $rollingFCSTDisc = $this->addFcstWithBooking($rollingFCSTDisc,$toRollingFCSTDisc);//Meses fechados e abertos
+            $rollingFCSTDisc = $this->addFcstWithBooking($clientRevenueCYearDisc,$toRollingFCSTDisc);//Meses fechados e abertos
             $rollingFCSTDisc = $this->adjustFCST($rollingFCSTDisc);
             //var_dump($rollingFCSTDisc);
             $fcstAmountByStageDisc = $this->addClosed($fcstAmountByStageDisc,$closedFCSTDisc);//Adding Closed to fcstByStage
             $emptyCheckDisc = $this->checkEmpty($toRollingFCSTDisc);
             $lastRollingFCSTDisc = $rollingFCSTDisc;
+            //var_dump($lastRollingFCSTDisc);
             
 
             $fcstSony = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$sonyBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTSony,$splitted,$clientRevenuePYearSony,$executiveRevenuePYearSony,$lastYearDisc);
@@ -424,7 +426,7 @@ class forecast extends forecastBase{
             $fcstAmountByStageSony = $fcstSony['fcstAmountByStage'];
             $toRollingFCSTSony = $fcstSony['fcstAmount'];
             $rollingFCSTSony = $this->addQuartersAndTotalOnArray($rollingFCSTSony);
-            $rollingFCSTSony = $this->addFcstWithBooking($rollingFCSTSony,$toRollingFCSTSony);//Meses fechados e abertos
+            $rollingFCSTSony = $this->addFcstWithBooking($clientRevenueCYearSony,$toRollingFCSTSony);//Meses fechados e abertos
             $rollingFCSTSony = $this->adjustFCST($rollingFCSTSony);
             $fcstAmountByStageSony = $this->addClosed($fcstAmountByStageSony,$rollingFCSTSony);//Adding Closed to fcstByStage
             $emptyCheckSony = $this->checkEmpty($toRollingFCSTSony);

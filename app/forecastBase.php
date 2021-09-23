@@ -1108,6 +1108,7 @@ class forecastBase extends pAndR{
 	public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
 		
 		$brandString = $this->brandArrayToString($brand);
+        $revACT = array();
 		
         $currentYear = intval(date('Y'));
         $currentMonth = intval( date("m") );
@@ -1159,7 +1160,6 @@ class forecastBase extends pAndR{
     		}
 
     	}
-
     	return $rev;
 
     }
