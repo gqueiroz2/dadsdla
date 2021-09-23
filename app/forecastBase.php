@@ -218,21 +218,20 @@ class forecastBase extends pAndR{
         }else{
             $fechado += 3;
         }
-        //var_dump($fcstAmountByStage);
+
         for ($c=0; $c < sizeof($fcstAmountByStage); $c++) { 
-            //var_dump($fcstAmountByStage[$c]);
 
             if (!$fcstAmountByStage[$c]) {
                 $fcstAmountByStage[$c][0] = array('1','2','3','4','5','6');
                 $fcstAmountByStage[$c][1] = array(0.0,0.0,0.0,0.0,0.0,0.0);
             }
 
-            for ($m=0; $m < $fechado; $m++) {
+            /*for ($m=0; $m < $fechado; $m++) {
                 if ($m == 3 || $m == 7 || $m == 11 || $m == 15 || $m == 16) {
                 }else{
                     $fcstAmountByStage[$c][1][4] += $rollingFCST[$c][$m];
                 }
-            }
+            }*/
         }
         
         return $fcstAmountByStage;
@@ -1032,6 +1031,79 @@ class forecastBase extends pAndR{
         return $pivot;
         
     }
+    
+    public function closedByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
+        
+        $brandString = $this->brandArrayToString($brand);
+        
+        $currentYear = intval(date('Y'));
+        $currentMonth = intval( date("m") );
+        if($currency == "USD"){
+            $div = 1; 
+        }else{
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year)); 
+        }
+        
+        if($value == "gross"){
+            $sfColumn = "fcst_amount_gross";
+        }else{
+            $sfColumn = "fcst_amount_net";
+        }
+        
+        $table = "sf_pr";
+        
+        for ($c=0; $c < sizeof($clients); $c++) {
+            if ($splitted) {
+                if ($splitted[$c]['splitted'] == true) { $mult = 2; }else{ $mult = 1; }
+            }else{
+                $mult = 1;
+            }
+
+            for ($m=0; $m < sizeof($month); $m++) {                 
+                /* FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS */
+                if($year == $currentYear){
+                    $from = array("sumValue");
+                    $select[$c][$m] = "
+                                        SELECT SUM($sfColumn) AS sumValue
+                                        FROM $table
+                                        WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                        AND (agency_id = \"".$clients[$c]['agencyID']."\")
+                                        AND (from_date = \"".$month[$m][1]."\")
+                                        AND (to_date = \"".$month[$m][1]."\")
+                                        AND (year_from = \"".$year."\")
+                                        AND (sales_rep_owner_id = \"".$salesRepID."\")
+                                        AND (sales_rep_splitter_id = \"".$salesRepID."\")
+                                        AND (brand_id IN ($brandString))
+                                        AND (stage = 5)
+                                      ";  
+                    $res[$c][$m] = $con->query($select[$c][$m]);
+                    $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div*$mult;
+                  
+                    $rev[$c][$m] = $revACT[$c][$m];
+                }else{
+                    $from = array("sumValue");
+                    $select[$c][$m] = "
+                                        SELECT SUM($sfColumn) AS sumValue
+                                        FROM $table
+                                        WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                        AND (from_date = \"".$month[$m][1]."\")
+                                        AND (to_date = \"".$month[$m][1]."\")
+                                        AND (year_from = \"".$year."\")
+                                        AND (brand_id IN ($brandString))
+                                      ";                                                
+                    $res[$c][$m] = $con->query($select[$c][$m]);
+                    $rev[$c][$m] = $revACT[$c][$m];
+                }
+                
+
+            }
+
+
+        }
+        //var_dump($select);
+        return $rev;
+
+    }
 
 	public function rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$splitted){
 		
@@ -1219,7 +1291,7 @@ class forecastBase extends pAndR{
         else {
             $test += 4; 
         }
-        
+
         for ($m=0; $m <sizeof($matrix[0]) ; $m++) { 
             $return[$m] = 0;
         }

@@ -399,21 +399,22 @@ class forecast extends forecastBase{
 
             /* BTS meses Fechado para Discovery */
             $rollingFCSTDisc = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
-
+            $closedFCSTDisc = $this->closedByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);
+            //var_dump($closedFCSTDisc);
             /* BTS meses Fechado para Sony */
             $rollingFCSTSony = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$sonyBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             
             $fcstDisc = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
-            $closedFcstDisc = $this->calculateClosedForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
-            $closedAmountDisc = $closedFcstDisc['fcstAmountByStage'];
+            //$closedFcstDisc = $this->calculateClosedForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
+            //$closedAmountDisc = $closedFcstDisc['fcstAmountByStage'];
             $fcstAmountByStageDisc = $fcstDisc['fcstAmountByStage'];
             $toRollingFCSTDisc = $fcstDisc['fcstAmount'];
             $rollingFCSTDisc = $this->addQuartersAndTotalOnArray($rollingFCSTDisc);
             $rollingFCSTDisc = $this->addFcstWithBooking($rollingFCSTDisc,$toRollingFCSTDisc);//Meses fechados e abertos
             $rollingFCSTDisc = $this->adjustFCST($rollingFCSTDisc);
             //var_dump($rollingFCSTDisc);
-            $fcstAmountByStageDisc = $this->addClosed($closedAmountDisc,$rollingFCSTDisc);//Adding Closed to fcstByStage
+            $fcstAmountByStageDisc = $this->addClosed($fcstAmountByStageDisc,$closedFCSTDisc);//Adding Closed to fcstByStage
             $emptyCheckDisc = $this->checkEmpty($toRollingFCSTDisc);
             $lastRollingFCSTDisc = $rollingFCSTDisc;
             
