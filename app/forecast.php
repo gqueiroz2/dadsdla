@@ -161,18 +161,40 @@ class forecast extends forecastBase{
 
 
         /* --------------- VERIFICAR --------------- */
-        $tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
-        $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);
+        $executiveRevenueCYearDisc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for ($s=0; $s < sizeof($clientRevenueCYearDisc); $s++) {
+            for ($x=0; $x < sizeof($clientRevenueCYearDisc[$s]); $x++) { 
+                $executiveRevenueCYearDisc[$x] += ($clientRevenueCYearDisc[$s][$x]);            
+            }
+            
+        }
+
         $executiveRevenuePYearDisc = $this->consolidateAEFcst($clientRevenuePYearDisc,$splitted);
+        /*$tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
+        $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);
+        */        
 
         /* --------------- VERIFICAR --------------- */
-        $tmpSony = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$sonyBrands);
-        $executiveRevenueCYearSony = $this->addQuartersAndTotal($tmpSony);
+        $executiveRevenueCYearSony = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for ($s=0; $s < sizeof($clientRevenueCYearSony); $s++) {
+            for ($x=0; $x < sizeof($clientRevenueCYearSony[$s]); $x++) { 
+                $executiveRevenueCYearSony[$x] += ($clientRevenueCYearSony[$s][$x]);            
+            }
+            
+        }
+
         $executiveRevenuePYearSony = $this->consolidateAEFcst($clientRevenuePYearSony,$splitted);
 
+        /*$tmpSony = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$sonyBrands);
+        $executiveRevenueCYearSony = $this->addQuartersAndTotal($tmpSony);        
+        */
+
+
+        /* --------------- TOTAL EXECUTIVE --------------- */
         $executiveRevenueCYear = $this->sumNetworks($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
         $executiveRevenuePYear = $this->sumNetworks($executiveRevenuePYearDisc,$executiveRevenuePYearSony);
 
+        
 
         if ($save){
             if($submitted == 1){ $sourceSave = "LAST SUBMITTED"; }else{ $sourceSave = "LAST SAVED"; }
@@ -272,6 +294,7 @@ class forecast extends forecastBase{
                         $rollingFCSTDisc[$c][$m] = 0;
                     }
                 }
+                //var_dump($rollingFCSTDisc);
 
                 if ($saidaSony[$c]) {
                     for ($m=0; $m < sizeof($saidaSony[$c]); $m++) { 
@@ -377,23 +400,25 @@ class forecast extends forecastBase{
 
             /* BTS meses Fechado para Discovery */
             $rollingFCSTDisc = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
-
+            $closedFCSTDisc = $this->closedByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);
+            //var_dump($closedFCSTDisc);
             /* BTS meses Fechado para Sony */
             $rollingFCSTSony = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$sonyBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
 
             
             $fcstDisc = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
-            $closedFcstDisc = $this->calculateClosedForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
-            $closedAmountDisc = $closedFcstDisc['fcstAmountByStage'];
+            //$closedFcstDisc = $this->calculateClosedForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$discoveryBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTDisc,$splitted,$clientRevenuePYearDisc,$executiveRevenuePYearDisc,$lastYearDisc);
+            //$closedAmountDisc = $closedFcstDisc['fcstAmountByStage'];
             $fcstAmountByStageDisc = $fcstDisc['fcstAmountByStage'];
             $toRollingFCSTDisc = $fcstDisc['fcstAmount'];
             $rollingFCSTDisc = $this->addQuartersAndTotalOnArray($rollingFCSTDisc);
-            $rollingFCSTDisc = $this->addFcstWithBooking($rollingFCSTDisc,$toRollingFCSTDisc);//Meses fechados e abertos
+            $rollingFCSTDisc = $this->addFcstWithBooking($clientRevenueCYearDisc,$toRollingFCSTDisc);//Meses fechados e abertos
             $rollingFCSTDisc = $this->adjustFCST($rollingFCSTDisc);
             //var_dump($rollingFCSTDisc);
-            $fcstAmountByStageDisc = $this->addClosed($closedAmountDisc,$rollingFCSTDisc);//Adding Closed to fcstByStage
+            $fcstAmountByStageDisc = $this->addClosed($fcstAmountByStageDisc,$closedFCSTDisc);//Adding Closed to fcstByStage
             $emptyCheckDisc = $this->checkEmpty($toRollingFCSTDisc);
             $lastRollingFCSTDisc = $rollingFCSTDisc;
+            //var_dump($lastRollingFCSTDisc);
             
 
             $fcstSony = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$sonyBrands,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCSTSony,$splitted,$clientRevenuePYearSony,$executiveRevenuePYearSony,$lastYearDisc);
@@ -401,7 +426,7 @@ class forecast extends forecastBase{
             $fcstAmountByStageSony = $fcstSony['fcstAmountByStage'];
             $toRollingFCSTSony = $fcstSony['fcstAmount'];
             $rollingFCSTSony = $this->addQuartersAndTotalOnArray($rollingFCSTSony);
-            $rollingFCSTSony = $this->addFcstWithBooking($rollingFCSTSony,$toRollingFCSTSony);//Meses fechados e abertos
+            $rollingFCSTSony = $this->addFcstWithBooking($clientRevenueCYearSony,$toRollingFCSTSony);//Meses fechados e abertos
             $rollingFCSTSony = $this->adjustFCST($rollingFCSTSony);
             $fcstAmountByStageSony = $this->addClosed($fcstAmountByStageSony,$rollingFCSTSony);//Adding Closed to fcstByStage
             $emptyCheckSony = $this->checkEmpty($toRollingFCSTSony);
