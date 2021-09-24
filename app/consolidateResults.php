@@ -53,6 +53,7 @@ class consolidateResults extends Model{
 		$form = "bts";
 		$year = date('Y');
 		$pYear = $year - 1;
+        //var_dump("aki");
 
 		switch ($type) {
 			case 'brand':				

@@ -194,7 +194,7 @@
 					        	</tr>
 
 					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
 						        		@if($d == 12)
 						        			<?php $clr = 'smBlue'; ?>
@@ -327,7 +327,7 @@
 						        	</tr>
 
 						        	<tr class="center">
-						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
 							        		@if($d == 12)
 							        			<?php $clr = 'smBlue'; ?>
@@ -483,7 +483,7 @@
 					        	</tr>
 
 					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
 						        		@if($d == 12)
 						        			<?php $clr = 'smBlue'; ?>
@@ -616,7 +616,7 @@
 						        	</tr>
 
 						        	<tr class="center">
-						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
 							        		@if($d == 12)
 							        			<?php $clr = 'smBlue'; ?>
@@ -789,7 +789,7 @@
 					        	</tr>
 
 					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+					        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
 						        		@if($d == 12)
 						        			<?php $clr = 'smBlue'; ?>
@@ -929,7 +929,7 @@
 						        	</tr>
 
 						        	<tr class="center">
-						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - 2019) </td>
+						        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
 							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
 							        		@if($d == 12)
 							        			<?php $clr = 'smBlue'; ?>
