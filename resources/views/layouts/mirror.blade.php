@@ -76,76 +76,8 @@
 			@if($userName != null)
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
-						@if( $userRegionName != "Brazil" )
-							<li class="nav-item">
-						        
-						    </li>
-
+					 @if($userLevel == 'L7' )
 						    <li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
-									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
-									@if($userLevel == 'L0' || $userLevel == 'SU')
-										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
-										@if($userLevel == 'SU')
-											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
-										@endif
-									@endif
-								</div>
-							</li>
-						@else
-							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									
-									@if( ( $userLevel == "SU" ) )
-										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
-										<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
-									@endif									
-									<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
-									<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
-									<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
-									<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
-									<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
-									<a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY - Brand </a>
-									<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
-								</div>
-							</li>
-						@endif
-						@if( $userRegionName == "Brazil" )
-							@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )						
-								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Individual </a>
-										<a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
-										<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
-									</div>
-								</li>
-							@endif
-
-							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-									@if($userRegionName == "Brazil" && ( $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'SU') )
-										<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
-									@endif
-								</div>
-							</li>
-
-	                       <li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
-		                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
-									<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
-									<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
-		                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
-		                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
-		                        </div>
-	                        </li>
-                        @endif
-	                        <li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
@@ -154,29 +86,108 @@
 									@endif
 								</div>
 							</li>
-						
+						@else
+							@if( $userRegionName != "Brazil" )
+								<li class="nav-item">
+							        
+							    </li>
+							    <li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
+										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+										@if($userLevel == 'L0' || $userLevel == 'SU')
+											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>
+											@if($userLevel == 'SU')
+												<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
+											@endif
+										@endif
+									</div>
+								</li>
+							@else
+								<li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										
+										@if( ( $userLevel == "SU" ) )
+											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
+											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
+										@endif									
+										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
+										<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
+										<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
+										<a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY - Brand </a>
+										<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
+									</div>
+								</li>
+							@endif
+							@if( $userRegionName == "Brazil" )
+								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )						
+									<li class="nav-item dropdown">
+										<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
+										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+											<a class="dropdown-item" href="{{route('executivePerformanceGet')}}"> Individual </a>
+											<a class="dropdown-item" href="{{route('corePerformanceGet')}}"> Core </a>
+											<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
+										</div>
+									</li>
+								@endif
 
-						@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )
-							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									@if($userLevel == "SU")
-										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
-									@endif
-									<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
-									<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
-							</li>
+								<li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
+										@if($userRegionName == "Brazil" && ( $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'SU') )
+											<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
+										@endif
+									</div>
+								</li>
+
+		                       <li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
+			                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
+										<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
+										<a class="nav-link" href="{{ route('churnGet') }}"> Churn </a>
+			                         			   	<a class="nav-link" href="{{ route('rankingGet') }}"> Ranking <span class="sr-only">(current)</span></a>
+			                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
+			                        </div>
+		                        </li>
+		                    @endif
+		                        <li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
+										<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
+										@if( $userRegionName == "Brazil" )
+											<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
+										@endif
+									</div>
+								</li>
+							
+
+							@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )
+								<li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										@if($userLevel == "SU")
+											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
+										@endif
+										<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
+										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
+								</li>
+							@endif
+
+							@if( ( $userLevel == "SU" ) )
+								<li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> . </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Tracker </a>
+										<!--<a class="dropdown-item" href="#"> Insights </a>-->
+									</div>
+								</li>
+							@endif		
 						@endif
-
-						@if( ( $userLevel == "SU" ) )
-							<li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> . </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('analyticsPanel') }}"> Tracker </a>
-									<!--<a class="dropdown-item" href="#"> Insights </a>-->
-								</div>
-							</li>
-						@endif		
 					</ul>    
 
 					<ul class="navbar-nav mr-right" style="margin-right: 1.5%;">
