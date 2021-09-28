@@ -752,7 +752,30 @@ class consolidateResults extends Model{
 
         return $rtr;
         
-    }          
+    }
+    
+    public function getPreviousYear(string $con, int $pyear, int $salesRepId, int $regionId, int $month, string $type){
+        switch ($type){
+            case 'brand':
+                break;
+            case 'ae':
+                $select = "SELECT y.net_revenue_prate
+                            FROM ytd y
+                            LEFT JOIN sales_rep sr ON y.sales_rep_id = sr.ID 
+                            LEFT JOIN region r on y.sales_representant_office_id = r.ID 
+                            WHERE (y.year = \"$pyear\") 
+                            AND (y.month = \"".$month."\")
+                            AND (r.id = \"".$regionId."\")
+                            AND (sr.ID = \"".$salesRepId."\")";
+                break;
+            case 'advertiser':
+                break;
+            case 'agency':
+                break;
+            case 'agency group':
+                break;
+        }
+    }
 
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
 
@@ -798,6 +821,7 @@ class consolidateResults extends Model{
 
             case 'cmaps':
                 $columns = array("brand_id", "year", "month");
+                
                 $columnsValue = array($brand, $year, $month);
                 break;
 
@@ -868,6 +892,7 @@ class consolidateResults extends Model{
             }
 
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            //var_dump($selectSum);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
