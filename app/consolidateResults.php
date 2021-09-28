@@ -166,12 +166,16 @@ class consolidateResults extends Model{
 		            for ($m=0; $m < sizeof($month); $m++) { 
 		                
 	                    $currentAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
-	                    $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
-		                
+	                    $previousAdSales[$b][$m] = $this->getPreviousYear($con, $pYear, $typeSelect[$b], $region, $month[$m][1], $type, $currency,$value);
+                        
+                        //$previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
+		                //var_dump($previousAdSales[$b][$m]);
 		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
 		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
 		                $previousSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+                        //var_dump($typeSelect[$b]);
+                        
 		            }
 		        }
 
@@ -754,19 +758,47 @@ class consolidateResults extends Model{
         
     }
     
-    public function getPreviousYear(string $con, int $pyear, int $salesRepId, int $regionId, int $month, string $type){
+    public function getPreviousYear($con, $pYear, $salesRepId, $regionId, $month, $type, $currency,$value){
+        
+        $sql = new sql();
+        $p = new pRate();
+        $result = 0;
+
+        if ($currency[0]['name'] == "USD") {
+            $pRate = 1.0;
+        }else{
+            $pRate = $p->getPRateByRegionAndYear($con,array($regionId),array($pYear));
+        }
+
+        if($value == "gross"){
+            $sum = "gross_revenue_prate";
+        }else{
+            $sum = "net_revenue_prate";
+        }
+
+        $from = array('sum');
+        //var_dump($pRate);
+        
         switch ($type){
             case 'brand':
                 break;
             case 'ae':
-                $select = "SELECT y.net_revenue_prate
+                $select = "SELECT SUM(y.".$sum.") AS 'sum'
                             FROM ytd y
                             LEFT JOIN sales_rep sr ON y.sales_rep_id = sr.ID 
                             LEFT JOIN region r on y.sales_representant_office_id = r.ID 
-                            WHERE (y.year = \"$pyear\") 
+                            WHERE (y.year = \"$pYear\") 
                             AND (y.month = \"".$month."\")
                             AND (r.id = \"".$regionId."\")
                             AND (sr.ID = \"".$salesRepId."\")";
+
+                $res = $con->query($select);
+                //var_dump($select);
+
+                $result = $sql->fetch($res,$from,$from);
+
+                $mtx = doubleval($result[0]['sum'])*$pRate;
+                
                 break;
             case 'advertiser':
                 break;
@@ -774,7 +806,10 @@ class consolidateResults extends Model{
                 break;
             case 'agency group':
                 break;
+
         }
+
+        return $mtx;
     }
 
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
