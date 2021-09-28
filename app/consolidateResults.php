@@ -895,6 +895,7 @@ class consolidateResults extends Model{
             //var_dump($selectSum);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+            //var_dump($value);
 
             if($table == "cmaps"){                          
                 $rtr = $tmp/$pRate;
