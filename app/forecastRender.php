@@ -524,7 +524,7 @@ class forecastRender extends Render{
 			                				number_format(
 			                					$executiveRFDisc[$m]
 			                					)
-			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'>
+			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:right'>
 			                	 </td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                echo "<td class='odd'>".
@@ -743,7 +743,7 @@ class forecastRender extends Render{
 			                				number_format(
 			                					$executiveRFSony[$m]
 			                					)
-			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:center'>
+			                			."' style='width:100%; border:none; font-weight:bold; color:white; background-color:transparent; text-align:right'>
 			                	 </td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                echo "<td class='odd'>".

@@ -867,9 +867,10 @@ class consolidateResults extends Model{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);            
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+            //var_dump($value);
 
             if($table == "cmaps"){                          
                 $rtr = $tmp/$pRate;
