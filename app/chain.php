@@ -523,6 +523,7 @@ class chain extends excel{
     public function fixShareAccountsDH($con,$current){
         $r = new region();
         $pRate = new pRate();
+        $cYear = date('Y');
 
         for ($c=0; $c < sizeof($current); $c++) { 
             $current[$c]['campaign_sales_office'] = $this->fixBTSRegion($current[$c]['holding_company']);
@@ -533,7 +534,10 @@ class chain extends excel{
 
             if( $current[$c]['month'] < $currentMonth){
                 $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_curr_prate'];
+            } elseif ($current[$c]['month'] <= 12 && $current[$c]['year'] == $cYear -1){
+                $current[$c]['gross_revenue_prate'] = $current[$c]['gross_revenue_curr_prate'];
             }
+        
             $current[$c]['brand'] = $current[$c]['master_channel'];
             $current[$c]['brand_feed'] = $current[$c]['channel'];
 

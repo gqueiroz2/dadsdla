@@ -166,12 +166,13 @@ class consolidateResults extends Model{
 		            for ($m=0; $m < sizeof($month); $m++) { 
 		                
 	                    $currentAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
-	                    $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
-		                
+                        $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
 		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
 		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
 		                $previousSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $pYear, "ACTUAL");
+                        //var_dump($typeSelect[$b]);
+                        
 		            }
 		        }
 
@@ -752,8 +753,8 @@ class consolidateResults extends Model{
 
         return $rtr;
         
-    }          
-
+    }
+    
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
 
         $p = new pRate();
@@ -798,6 +799,7 @@ class consolidateResults extends Model{
 
             case 'cmaps':
                 $columns = array("brand_id", "year", "month");
+                
                 $columnsValue = array($brand, $year, $month);
                 break;
 
@@ -867,7 +869,8 @@ class consolidateResults extends Model{
                 $table = "fw_digital";
             }
 
-            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);            
+            $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
+            //var_dump($selectSum);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
             //var_dump($value);
