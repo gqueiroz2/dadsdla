@@ -16,15 +16,21 @@ class salesManagement extends Model{
 		
 		$salesRep = $this->base($con,$sql);
 
+		$booking = $this->bookings($con,$sql,$cYear,$pYear);
+
+
 		$temp = $this->assemblyPlanBySales($con,$sql,$cYear,$pYear,$salesRep);
 		
 		$temp2 = $this->joinBookings($con,$sql,$temp);
+
+		//var_dump($temp2);
 
 		$mtx = $this->assembly($temp2);
 
 		return $mtx;
 
 	}
+
 	public function assembly($mtx){
 
 		for ($m=0; $m < sizeof($mtx); $m++) { 
@@ -33,6 +39,10 @@ class salesManagement extends Model{
 					$temp[$m][$n]['region'] = $mtx[$m][$n]['region'];
 					$temp[$m][$n]['salesRep'] = $mtx[$m][$n]['salesRep'];
 					$temp[$m][$n]['salesRepSfID'] = $mtx[$m][$n]['salesRepSfID'];
+					$tmp[$m][$n]['agency'] = $mtx[$m][$n]['agency'];
+					$tmp[$m][$n]['agencyId'] = $mtx[$m][$n]['agencyId'];
+					$tmp[$m][$n]['client'] = $mtx[$m][$n]['client'];
+					$tmp[$m][$n]['clientId'] = $mtx[$m][$n]['clientId'];
 					$temp[$m][$n]['currency'] = 'USD';				
 					if($mtx[$m][$n]['month'] < 10){
 						$month = "0".$mtx[$m][$n]['month'];
@@ -50,7 +60,6 @@ class salesManagement extends Model{
 				$temp[$m] = false;
 			}
 		}
-
 		return $temp;
 	}
 
@@ -62,8 +71,14 @@ class salesManagement extends Model{
 			if($mtx[$m]){
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					//var_dump($mtx[$m][$n]);
-					$select[$m][$n] = "SELECT SUM(y.net_revenue_prate) AS 'netRevenue'
-									   FROM	ytd y									   
+					$select[$m][$n] = "SELECT SUM(y.net_revenue_prate) AS 'netRevenue',
+									   c.name AS 'client',
+									   c.ID AS 'clientId',
+									   a.name AS 'agency',
+									   a.ID as 'agencyId'
+									   FROM	ytd y
+									   LEFT JOIN agency a ON y.agency_id = a.ID
+									   LEFT JOIN client c ON y.client_id = c.ID									   
 									   WHERE (y.sales_representant_office_id = '".$mtx[$m][$n]['regionID']."')
 									   AND (y.sales_rep_id = '".$mtx[$m][$n]['salesRepID']."')									   
 									   AND (y.year = '".$mtx[$m][$n]['year']."')									   
@@ -73,26 +88,40 @@ class salesManagement extends Model{
 
 					//echo "<pre>".$select[$m][$n]."</pre>";
 					$res[$m][$n] = $con->query($select[$m][$n]);
-					$from = array('netRevenue');					
+					$from = array('netRevenue', 'client', 'clientId', 'agency', 'agencyId');					
 					$array[$m][$n] = $sql->fetch($res[$m][$n],$from,$from)[0];
 					//var_dump($array[$m][$n]['netRevenue']);
 					$tmp[$m][$n]['bookingsNetCurrentYear'] = $array[$m][$n]['netRevenue'];
+					$tmp[$m][$n]['agency'] = $array[$m][$n]['agency'];
+					$tmp[$m][$n]['agencyId'] = $array[$m][$n]['agencyId'];
+					$tmp[$m][$n]['client'] = $array[$m][$n]['client'];
+					$tmp[$m][$n]['clientId'] = $array[$m][$n]['clientId'];
 
-					$select2[$m][$n] = "SELECT SUM(y.net_revenue_prate) AS 'netRevenue'
-									   FROM	ytd y									   
-									   WHERE (y.sales_representant_office_id = '".$mtx[$m][$n]['regionID']."')
-									   AND (y.sales_rep_id = '".$mtx[$m][$n]['salesRepID']."')									   
-									   AND (y.year = '".($mtx[$m][$n]['year']-1)."')									   
-									   AND (y.month = '".$mtx[$m][$n]['month']."')									   
-									   AND (y.brand_id = '".$mtx[$m][$n]['brandID']."')									   
+					$select2[$m][$n] = "SELECT SUM(y.net_revenue_prate) AS 'netRevenue',
+									    c.name AS 'client',
+										c.ID AS 'clientId',
+										a.name AS 'agency',
+										a.ID as 'agencyId'
+									    FROM	ytd y
+									    LEFT JOIN agency a ON y.agency_id = a.ID
+									    LEFT JOIN client c ON y.client_id = c.ID									   
+									    WHERE (y.sales_representant_office_id = '".$mtx[$m][$n]['regionID']."')
+									    AND (y.sales_rep_id = '".$mtx[$m][$n]['salesRepID']."')									   
+									    AND (y.year = '".($mtx[$m][$n]['year']-1)."')									   
+									    AND (y.month = '".$mtx[$m][$n]['month']."')									   
+									    AND (y.brand_id = '".$mtx[$m][$n]['brandID']."')									   
 						              ";
 
 					//echo "<pre>".$select[$m][$n]."</pre>";
 					$res2[$m][$n] = $con->query($select2[$m][$n]);
-					$from = array('netRevenue');					
+					$from = array('netRevenue', 'client', 'clientId', 'agency', 'agencyId');					
 					$array2[$m][$n] = $sql->fetch($res2[$m][$n],$from,$from)[0];
 					//var_dump($array[$m][$n]['netRevenue']);
 					$tmp[$m][$n]['bookingsNetPreviousYear'] = $array2[$m][$n]['netRevenue'];
+					$tmp[$m][$n]['agency'] = $array2[$m][$n]['agency'];
+					$tmp[$m][$n]['agencyId'] = $array2[$m][$n]['agencyId'];
+					$tmp[$m][$n]['client'] = $array2[$m][$n]['client'];
+					$tmp[$m][$n]['clientId'] = $array2[$m][$n]['clientId'];
 
 				}
 			}			
@@ -117,7 +146,11 @@ class salesManagement extends Model{
 								sr.name AS 'salesRep',
 								sr.sf_id AS 'salesRepSfID', 								
 								b.name AS 'brand',
-								b.ID AS 'brandID'
+								b.ID AS 'brandID',
+								pbs.month AS 'client',
+								pbs.month AS 'clientId',
+								pbs.month AS 'agency',
+								pbs.month as 'agencyId'
 						   FROM	plan_by_sales pbs						   
 						   LEFT JOIN brand b ON b.ID = pbs.brand_id 
 						   LEFT JOIN sales_rep sr ON sr.ID = pbs.sales_rep_id
@@ -130,10 +163,10 @@ class salesManagement extends Model{
 						   AND (pbs.type_of_revenue = 'NET')						   
 			              ";	
 
-			
+			//echo "<pre>$select[$s]</pre>";	
 		    $res[$s] = $con->query($select[$s]);
-			$from = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','value');
-			$to = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','targetValue');
+			$from = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','value', 'client', 'clientId', 'agency', 'agencyId');
+			$to = array('regionID','region','salesRepID','salesRep','salesRepSfID','year','month','brandID','brand','targetValue', 'client', 'clientId', 'agency', 'agencyId');
 			$array[$s] = $sql->fetch($res[$s],$from,$to);			
 		}
 
@@ -196,16 +229,22 @@ class salesManagement extends Model{
 						r.ID AS 'regionID', 
 						r.name AS 'region', 
 						sr.ID AS 'salesRepID', 
-						sr.name AS 'salesRep' 
+						sr.name AS 'salesRep', 
+						c.name AS 'client',
+						c.ID AS 'clientId',
+						a.name AS 'agency',
+						a.ID as 'agencyId'
 						FROM ytd y
 						LEFT JOIN sales_rep sr ON y.sales_rep_id = sr.ID
+						LEFT JOIN agency a ON y.agency_id = a.ID
+						LEFT JOIN client c ON y.client_id = c.ID
 						LEFT JOIN region r ON y.sales_representant_office_id = r.ID
 						WHERE ( year = '$cYear' OR year = '$pYear' )
 						ORDER BY 6,8,2,1
 		          ";
-		          echo "<pre>$select</pre>";	
+		          //echo "<pre>$select</pre>";	
 		$res = $con->query($select);
-		$from = array('region','regionID','year','month','salesRep','salesRepID','bookingGross','bookingNet'/*,'bookingNetNet'*/);
+		$from = array('region','regionID','year','month','salesRep','salesRepID','bookingGross','bookingNet', 'client', 'clientId', 'agency', 'agencyId'/*,'bookingNetNet'*/);
 		$array = $sql->fetch($res,$from,$from);
 
 		return $array;

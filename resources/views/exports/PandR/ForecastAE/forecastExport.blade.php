@@ -586,7 +586,7 @@
     <tr>
         <td style="background-color:#c9d8e8; text-align:left; font-weight: bold;">Manual Estimation</td>
         @for ($m=0; $m < sizeof($data['month']) ; $m++) 
-            @if($data['forRender']['rollingFCSTDisc'][$c])
+            @if($data['forRender']['rollingFCSTDisc'][$c] || $data['forRender']['rollingFCSTDisc'][$c] != null)
 	            @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 )
 	                <td style=" background-color: #c3d8ef; font-weight: bold; text-align:right;">{{$data['forRender']['rollingFCSTDisc'][$c][$m]}}</td>
 	            @else

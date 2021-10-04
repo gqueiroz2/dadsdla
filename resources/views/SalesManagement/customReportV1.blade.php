@@ -30,7 +30,11 @@
 						<td> Currency </td>
 						<td> Brand </td>
 						<td> AE </td>
-						<td> Target Value </td>
+						<td> SF ID </td>
+						<td> Client </td>
+						<td> Client ID </td>
+						<td> Agency </td>
+						<td> Agency ID</td>
 						<td> Booking Current Year </td>
 						<td> Booking Previous Year </td>
 					</tr>
@@ -45,7 +49,7 @@
 									<td> {{ $temp[$m][$n]['brand'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRep'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRepSfID'] }} </td>
-									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['targetValue'] ) }} </td>
+									
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetCurrentYear'] ) }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetPreviousYear'] ) }} </td>
 								</tr>

@@ -46,6 +46,6 @@ class customReportExcelController extends Controller{
 
 		$data = array('temp' => $temp);
 
-		//return Excel::download(new customReportExport($data, $label, $typeExport, $auxTitle), $title);
+		return Excel::download(new customReportExport($data, $label, $typeExport, $auxTitle), $title);
 	}
 }
