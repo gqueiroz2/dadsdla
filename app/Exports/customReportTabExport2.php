@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class customReportTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
+class customReportTabExport2 implements FromView,WithEvents, ShouldAutoSize, WithTitle, WithColumnFormatting {
 
 	protected $view;
 	protected $data;
@@ -26,7 +26,7 @@ class customReportTabExport implements FromView,WithEvents, ShouldAutoSize, With
     
 	public function title(): string{
 		
-		return 'Client';
+		return 'AE';
 	}
 
 	public function registerEvents(): array{

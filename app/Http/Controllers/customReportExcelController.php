@@ -34,7 +34,7 @@ class customReportExcelController extends Controller{
 
 		$temp = $sM->customReportV1($con);
 
-		var_dump($temp);
+		//var_dump($temp);
 
 		$typeExport = Request::get("typeExport");
 
@@ -42,10 +42,10 @@ class customReportExcelController extends Controller{
 
 		$auxTitle = $title;
 
-		$label = array("exports.salesManagement.customReport.customReportVFinal");
+		$label = array("exports.salesManagement.customReport.customReport","exports.salesManagement.customReport.customReportTab2");
 
 		$data = array('temp' => $temp);
 
-		//return Excel::download(new customReportExport($data, $label, $typeExport, $auxTitle), $title);
+		return Excel::download(new customReportExport($data, $label, $typeExport, $auxTitle), $title);
 	}
 }

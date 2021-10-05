@@ -30,8 +30,7 @@ class customReportExport implements FromArray, WithMultipleSheets, WithTitle {
     	$sheet = array();
 
         array_push($sheet, new customReportTabExport($this->labels[0], $this->sheets, $this->typeExport));
-        array_push($sheet, new customReportTabExport($this->labels[1], $this->sheets, $this->typeExport));
-        array_push($sheet, new customReportTabExport($this->labels[2], $this->sheets, $this->typeExport));   
+        array_push($sheet, new customReportTabExport2($this->labels[1], $this->sheets, $this->typeExport));
 
         return $sheet;
     }
