@@ -44,12 +44,15 @@
 							@for($n=0;$n< sizeof($temp[$m]);$n++)
 								<tr>
 									<td> {{ $temp[$m][$n]['region'] }} </td>									
-									<td> {{ $temp[$m][$n]['date'] }} </td>
-									<td> {{ $temp[$m][$n]['currency'] }} </td>
+									<td> {{ date("m-d-Y H:i:s") }} </td>
+									<td> USD </td>
 									<td> {{ $temp[$m][$n]['brand'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRep'] }} </td>
 									<td> {{ $temp[$m][$n]['salesRepSfID'] }} </td>
-									
+									<td> {{ $temp[$m][$n]['client'] }} </td>
+									<td> {{ $temp[$m][$n]['clientId'] }} </td>
+									<td> {{ $temp[$m][$n]['agency'] }} </td>
+									<td> {{ $temp[$m][$n]['agencyId'] }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetCurrentYear'] ) }} </td>
 									<td style=" text-align: left;"> {{ number_format( $temp[$m][$n]['bookingsNetPreviousYear'] ) }} </td>
 								</tr>

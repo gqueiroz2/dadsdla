@@ -33,12 +33,14 @@
 											<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">		
 										</div>
 									</form>
-
-									<button class="btn btn-primary" style="width: 100%;" id="crm"> 
-										<a style="color: white">
-											Custom Report V1
-										</a>
-									</button>
+									<div class="row mt-2"></div>
+									<div class='col'>
+										<button class="btn btn-primary" style="width: 100%;" id="crm"> 
+											<a style="color: white">
+												Custom Report V1
+											</a>
+										</button>
+									</div>
 								</div>
 							</div>						
 						</div>

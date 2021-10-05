@@ -25,15 +25,17 @@ class salesManagement extends Model{
 
 		//var_dump($temp2);
 
-		$mtx = $this->assembly($temp2);
+		//$mtx = $this->assembly($temp2);
 
-		return $mtx;
+		return $temp2;
 
 	}
 
 	public function assembly($mtx){
 
-		for ($m=0; $m < sizeof($mtx); $m++) { 
+		//$hour = "H:i:s";
+
+		for ($m=0; $m < sizeof($mtx); $m++) { 			
 			if($mtx[$m]){
 				for ($n=0; $n < sizeof($mtx[$m]); $n++) { 
 					$temp[$m][$n]['region'] = $mtx[$m][$n]['region'];
@@ -59,8 +61,10 @@ class salesManagement extends Model{
 			}else{
 				$temp[$m] = false;
 			}
+			//var_dump($temp);
+			return $temp;
 		}
-		return $temp;
+		
 	}
 
 	public function joinBookings($con,$sql,$mtx){
