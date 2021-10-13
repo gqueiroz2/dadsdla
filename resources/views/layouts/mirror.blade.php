@@ -170,7 +170,7 @@
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										@if($userLevel == "SU")
+										@if($userLevel == "SU" || $userName == "Mario Aguilar")
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 										@endif
 										<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
