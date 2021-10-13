@@ -20,10 +20,16 @@ class relationship extends Model{
 			case 'client':
 				$this->sortP = "client";
 				$ins = new client();
-				$list = $ins->getRelationshipClient($con,array($region));
+				$list = $ins->getRelationshipClient($con,$region);
+				//var_dump($this->sortP);
+				/*$a = array($this->sortP, 'compare');
+				//var_dump($a);
+				for ($c=0; $c <sizeof($list) ; $c++) { 
+					$test
+					//usort($list[$c]['client'], $a);
+				}*/
 				usort($list, array($this,'compare'));
 				$childOfList = $this->getChild($con,$ins,$region,$type,$list);
-
 				break;
 
 			case 'agency':
