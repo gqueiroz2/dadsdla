@@ -1557,7 +1557,7 @@ class forecastBase extends pAndR{
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
                     LEFT JOIN agency a ON a.ID = y.agency_id
                     WHERE (y.sales_rep_id = \"$tmp\" )
-                    AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )                    
+                    AND ((y.year = \"$cYear\"))                    
                     AND (r.ID = \"".$regionID."\")
                     ORDER BY 1
                ";

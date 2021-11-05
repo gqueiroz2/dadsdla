@@ -314,7 +314,7 @@ class consolidateResultsController extends Controller{
         $years = array($cYear,$pYear);
 
         $month = $base->getMonth();
-
+        //var_dump($typeSelect);
         $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value);
 
         $mtx = $cR->assemble($mtx);

@@ -146,6 +146,13 @@ class forecast extends forecastBase{
         $clientRevenueCYearTMPDisc = $clientRevenueCYearDisc;
         $clientRevenueCYearDisc = $this->addQuartersAndTotalOnArray($clientRevenueCYearDisc);
 
+        //for ($t=0; $t <=$clientRevenueCYearDisc; $t++) { 
+            //var_dump($clientRevenueCYearDisc);
+            /*if ($clientRevenueCYearDisc[$t][16] > 0) {
+                var_dump($listOfClients);
+            }*/
+        //}
+
         /* Valores dos Clientes no Ano Atual - Sony */
         $clientRevenueCYearSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$sonyBrands);
         $clientRevenueCYearTMPSony = $clientRevenueCYearSony;
@@ -433,19 +440,19 @@ class forecast extends forecastBase{
             $lastRollingFCSTSony = $rollingFCSTSony;
         }
         
-        $fcstAmountByStageDisc = $this->addLost($con,$listOfClients,$fcstAmountByStageDisc,$value,$div);
+        //$fcstAmountByStageDisc = $this->addLost($con,$listOfClients,$fcstAmountByStageDisc,$value,$div);
         $fcstAmountByStageExDisc = $this->makeFcstAmountByStageEx($fcstAmountByStageDisc,$splitted);
         
-        $fcstAmountByStageSony = $this->addLost($con,$listOfClients,$fcstAmountByStageSony,$value,$div);
+        //$fcstAmountByStageSony = $this->addLost($con,$listOfClients,$fcstAmountByStageSony,$value,$div);
         $fcstAmountByStageExSony = $this->makeFcstAmountByStageEx($fcstAmountByStageSony,$splitted);
-        
+        //var_dump($fcstAmountByStageExSony);
         $fcstAmountByStage = $this->sumDiscAndSonyTA($fcstAmountByStageDisc,$fcstAmountByStageSony);
         $fcstAmountByStageEx = $this->sumDiscAndSonyMA($fcstAmountByStageExDisc,$fcstAmountByStageExSony);
 
         $rollingFCST = $this->sumDiscAndSonyMA($rollingFCSTDisc,$rollingFCSTSony);
         $executiveRevenueCYear = $this->sumDiscAndSonyA($executiveRevenueCYearDisc,$executiveRevenueCYearSony);
         $targetValues = $this->sumDiscAndSonyA($targetValuesDiscovery,$targetValuesSony);
-
+        //var_dump($rollingFCST);
         $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
         $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
         $executiveRF = $this->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
