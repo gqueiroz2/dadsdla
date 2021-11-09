@@ -53,12 +53,13 @@ class consolidateResults extends Model{
 		$form = "bts";
 		$year = date('Y');
 		$pYear = $year - 1;
-        //var_dump("aki");
+        //var_dump($currency);
 
 		switch ($type) {
 			case 'brand':				
 				for ($b=0; $b < sizeof($typeSelect); $b++) { 
 		            for ($m=0; $m < sizeof($month); $m++) { 
+                        //var_dump($typeSelect);
 		                if ($typeSelect[$b][1] != 'ONL' && $typeSelect[$b][1] != 'VIX') {
 		                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
 		                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
