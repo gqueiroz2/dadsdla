@@ -1216,7 +1216,6 @@ class baseReportPandR extends pAndR{
                 $where = $this->createWhere($sql,$seek,$baseReport,$region,$year,$list,$month,$value, strtoupper($kind));
                 $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
                 $values = $sql->fetchSum($results,"sum")["sum"];
-                var_dump($where);
             }else{
                 $where = $this->createWhere($sql,$seek,$baseReport,$region,$year,$list,$month,$value);
                 $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
