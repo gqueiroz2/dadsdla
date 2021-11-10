@@ -33,7 +33,7 @@ class salesManagementController extends Controller{
 		$sM = new salesManagement();
 
 		$temp = $sM->customReportV1($con);
-
+		//var_dump($temp);
 		return view('salesManagement.customReportV1',compact('temp'));
 	}
 

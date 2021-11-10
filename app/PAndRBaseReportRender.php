@@ -342,7 +342,7 @@ class PAndRBaseReportRender extends Render{
             echo "<div class='col-2' style='padding-right:1px;'>";
             echo "<table id='table-$c' style='width:100%; text-align:center; overflow:auto; min-height: 225px;' >";
                 echo "<tr>";                     
-                    echo "<td  class='$clr' id='client-$c' style='width:3.5% !important; text-align:center; background-color: $color '><span style='font-size:18px;'> ".$list[$c][$inside]." $ow </td>";
+                    echo "<td  class='$clr' id='client-$c' style='width:3.5% !important; text-align:center; background-color: $color; height:40px '><span style='font-size:18px;'> ".$list[$c][$inside]." $ow </td>";
 
                         if($baseReport == 'client'){
                             echo " - (".$list[$c]['agencyName'].")";

@@ -35,7 +35,7 @@ class insertController extends Controller{
 		$in = new insertPlan();
 		$rtr = $in->baseBrand();
 		if($rtr){
-			return back()->with('insertSuccess',"There insetions was successfully made :( ");	
+			return back()->with('insertSuccess',"There insetions was successfully made :) ");	
 		}
 	}
 

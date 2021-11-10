@@ -1075,6 +1075,7 @@ class forecastBase extends pAndR{
                                         AND (sales_rep_splitter_id = \"".$salesRepID."\")
                                         AND (brand_id IN ($brandString))
                                         AND (stage = 5)
+                                        
                                       ";  
                     $res[$c][$m] = $con->query($select[$c][$m]);
                     $revACT[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']*$div*$mult;
@@ -1488,7 +1489,7 @@ class forecastBase extends pAndR{
 			                                AND (month = \"".$month[$m][1]."\")                                    
 			                                AND (year = \"".$year."\")
 			                                AND (brand_id IN ($brandString))
-                                  ";
+                                            AND (sales_rep_id = \"".$salesRep."\")";
 
                 //echo "<pre>".$select[$c][$m]."</pre>";
 
@@ -1557,7 +1558,7 @@ class forecastBase extends pAndR{
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
                     LEFT JOIN agency a ON a.ID = y.agency_id
                     WHERE (y.sales_rep_id = \"$tmp\" )
-                    AND ((y.year = \"$cYear\") OR (y.year = \"$pYear\") )                    
+                    AND ((y.year = \"$cYear\"))                    
                     AND (r.ID = \"".$regionID."\")
                     ORDER BY 1
                ";
