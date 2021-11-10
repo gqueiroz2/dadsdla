@@ -120,6 +120,7 @@ class baseReportPandR extends pAndR{
         $pendingTT = $this->subArrays($rollingFCSTTT,$bookingsTT);
         $rfVsTargetTT = $this->subArrays($rollingFCSTTT,$targetValuesTT);
         $targetAchievement = $this->divArrays($rollingFCSTTT,$targetValuesTT);
+ 
         
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
@@ -1203,7 +1204,6 @@ class baseReportPandR extends pAndR{
     		$seek = 'ytd';
     		$table = 'ytd';
     	}
-
         if($table){
             if($baseReport == 'agencyGroup'){
                 $where = $this->createWhere($sql,$seek,$baseReport,$region,$year,$list,$month,$value);
@@ -1296,13 +1296,13 @@ class baseReportPandR extends pAndR{
 	    	if($table){
                 if ($baseReport == 'brand'){
                     $columns = array($regionC,"year","month",$listC,"currency_id","type_of_revenue", "source");
-	                $arrayWhere = array($region,$year,$month,$listT,'4',$value, $kind);
-	                $where = $sql->where($columns,$arrayWhere);
+                    $arrayWhere = array($region,$year,$month,$listT,'4',$value, $kind);
+                    $where = $sql->where($columns,$arrayWhere);
                 } else {
                     $columns = array($regionC,"year","month",$listC,"currency_id","type_of_revenue");
-	                $arrayWhere = array($region,$year,$month,$listT,'4',$value);
-	                $where = $sql->where($columns,$arrayWhere);	
-                }
+                    $arrayWhere = array($region,$year,$month,$listT,'4',$value);
+                    $where = $sql->where($columns,$arrayWhere); 
+                }	            
 	        }else{
 	        	$where = false;
 	        }
