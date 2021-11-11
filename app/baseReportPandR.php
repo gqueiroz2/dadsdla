@@ -120,111 +120,7 @@ class baseReportPandR extends pAndR{
         $pendingTT = $this->subArrays($rollingFCSTTT,$bookingsTT);
         $rfVsTargetTT = $this->subArrays($rollingFCSTTT,$targetValuesTT);
         $targetAchievement = $this->divArrays($rollingFCSTTT,$targetValuesTT);
-        
-        /*
-        switch ($baseReport) {
-            case 'client':
-
-                for ($r=0; $r < sizeof($rollingFCST); $r++) { 
-                    $newRollingFcst[$r]['value'] = $rollingFCST[$r][16];
-                    $newRollingFcst[$r]['clientName'] = $list[$r]['clientName'];
-                    $newRollingFcst[$r]['clientID'] = $list[$r]['clientID'];
-                    $newRollingFcst[$r]['agencyName'] = $list[$r]['agencyName'];
-                    $newRollingFcst[$r]['agencyID'] = $list[$r]['agencyID'];
-
-                    usort($newRollingFcst, array($this,'orderByValue'));
-                }   
-
-                for ($n=0; $n < sizeof($newRollingFcst); $n++) { 
-                    $newList[$n]['clientName'] = $newRollingFcst[$n]['clientName'];
-                    $newList[$n]['clientID'] = $newRollingFcst[$n]['clientID'];
-                    $newList[$n]['agencyName'] = $newRollingFcst[$n]['agencyName'];
-                    $newList[$n]['agencyID'] = $newRollingFcst[$n]['agencyID'];
-                }
-
-                $list = $newList;
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-        
-
-        
-
-
-/*
-        $mergeTarget = $this->mergeTarget($targetValues,$month);
-        $targetValues = $mergeTarget;
-
-        $clientRevenueCYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear);
-
-        $clientRevenueCYearTMP = $clientRevenueCYear;
-
-        $clientRevenueCYear = $this->addQuartersAndTotalOnArray($clientRevenueCYear);
-
-        $clientRevenuePYear = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear);
-        $clientRevenuePYear = $this->addQuartersAndTotalOnArray($clientRevenuePYear);
-
-        $tmp = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr);
-
-        $executiveRevenueCYear = $this->addQuartersAndTotal($tmp);
-
-        $executiveRevenuePYear = $this->consolidateAEFcst($clientRevenuePYear,$splitted);
-
-        
-        $sourceSave = "DISCOVERY CRM";
-        $rollingFCST = $this->rollingFCSTByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$splitted);//Ibms meses fechados e fw total
-
-        $fcst = $this->calculateForecast($con,$sql,$base,$pr,$regionID,$cYear,$month,$brand,$currency,$currencyID,$value,$listOfClients,$salesRepID[0],$rollingFCST,$splitted,$clientRevenuePYear,$executiveRevenuePYear,$lastYear);
-
-        $fcstAmountByStage = $fcst['fcstAmountByStage'];
-
-        $toRollingFCST = $fcst['fcstAmount'];
-
-        $rollingFCST = $this->addQuartersAndTotalOnArray($rollingFCST);
-
-        $rollingFCST = $this->addFcstWithBooking($rollingFCST,$toRollingFCST);//Meses fechados e abertos
-
-        $rollingFCST = $this->adjustFCST($rollingFCST);
-        
-        $fcstAmountByStage = $this->addClosed($fcstAmountByStage,$rollingFCST);//Adding Closed to fcstByStage
-
-        $emptyCheck = $this->checkEmpty($toRollingFCST);
-
-        //$rollingFCST = $this->closedMonth($rollingFCST,$clientRevenueCYear);
-        //$rollingFCST = $this->adjustFCST($rollingFCST);
-
-        $lastRollingFCST = $rollingFCST;
-            
-        
-
-        $fcstAmountByStage = $this->addLost($con,$listOfClients,$fcstAmountByStage,$value,$div);
-           
-        $fcstAmountByStageEx = $this->makeFcstAmountByStageEx($fcstAmountByStage,$splitted);
-
-        $executiveRF = $this->consolidateAEFcst($rollingFCST,$splitted);
-        $executiveRF = $this->closedMonthEx($executiveRF,$executiveRevenueCYear);
-        $executiveRF = $this->addBookingRollingFCST($executiveRF,$executiveRevenueCYear);
-        $pending = $this->subArrays($executiveRF,$executiveRevenueCYear);
-        $RFvsTarget = $this->subArrays($executiveRF,$targetValues);
-        $targetAchievement = $this->divArrays($executiveRF,$targetValues);
-
-        
-
-        $fcstAmountByStage = $this->adjustFcstAmountByStage($fcstAmountByStage);
-
-        $fcstAmountByStageEx = $this->adjustFcstAmountByStageEx($fcstAmountByStageEx);
-
-        $brandsPerClient = $this->getBrandsClient($con, $listOfClients, $salesRep);
-
-        
-
-        $secondary = $listOfClients;
-
-        $nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage);
-		*/
+ 
         
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
@@ -1316,6 +1212,10 @@ class baseReportPandR extends pAndR{
                                 LEFT JOIN agency_group ag ON (a.agency_group_id = ag.ID)";
                 $results = $sql->selectSum($con,$sum,"sum",$table,$join,$where);
                 $values = $sql->fetchSum($results,"sum")["sum"]; 
+            } elseif($baseReport == 'brand'){
+                $where = $this->createWhere($sql,$seek,$baseReport,$region,$year,$list,$month,$value, strtoupper($kind));
+                $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
+                $values = $sql->fetchSum($results,"sum")["sum"];
             }else{
                 $where = $this->createWhere($sql,$seek,$baseReport,$region,$year,$list,$month,$value);
                 $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
@@ -1332,7 +1232,7 @@ class baseReportPandR extends pAndR{
 
     }
 
-    public function createWhere($sql,$source,$baseReport,$region,$year,$list,$month,$value=null){
+    public function createWhere($sql,$source,$baseReport,$region,$year,$list,$month,$value=null, $kind=null){
 
     	switch ($baseReport) {
     		case 'brand':
@@ -1394,9 +1294,15 @@ class baseReportPandR extends pAndR{
 	    			break;
 	    	}
 	    	if($table){
-	            $columns = array($regionC,"year","month",$listC,"currency_id","type_of_revenue");
-	            $arrayWhere = array($region,$year,$month,$listT,'4',$value);
-	            $where = $sql->where($columns,$arrayWhere);	            
+                if ($baseReport == 'brand'){
+                    $columns = array($regionC,"year","month",$listC,"currency_id","type_of_revenue", "source");
+                    $arrayWhere = array($region,$year,$month,$listT,'4',$value, $kind);
+                    $where = $sql->where($columns,$arrayWhere);
+                } else {
+                    $columns = array($regionC,"year","month",$listC,"currency_id","type_of_revenue");
+                    $arrayWhere = array($region,$year,$month,$listT,'4',$value);
+                    $where = $sql->where($columns,$arrayWhere); 
+                }	            
 	        }else{
 	        	$where = false;
 	        }
