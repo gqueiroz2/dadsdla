@@ -173,7 +173,7 @@
 										@if($userLevel == "SU" || $userName == "Mario Aguilar")
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 										@endif
-										<a class="dropdown-item" href="{{ route('AEGet') }}"> AE - Forecast </a>							
+										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
 								</li>
 							@endif
