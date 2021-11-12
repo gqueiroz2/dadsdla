@@ -96,7 +96,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 										
-										{{ $salesRegion }} - Consolidate - Brand : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - Brand : ({{$currencyName}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -385,7 +385,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate - AE: ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - AE: ({{$currencyName }}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
@@ -691,7 +691,7 @@
 							<div class="col lightBlue">
 								<center>
 									<span style='font-size:24px;'> 
-										{{ $salesRegion }} - Consolidate - {{$typeShow}} : ({{$currencyS}}/{{strtoupper($value)}})
+										{{ $salesRegion }} - Consolidate - {{$typeShow}} : ({{$currencyName}}/{{strtoupper($value)}})
 									</span>
 								</center>
 							</div>
