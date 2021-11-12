@@ -869,7 +869,7 @@ class consolidateResults extends Model{
             if($table == "digital"){
                 $table = "fw_digital";
             }
-
+            //var_dump($where);
             $selectSum = $sql->selectSum($con, $value, $as, $table, null, $where);
             //var_dump($selectSum);
             
