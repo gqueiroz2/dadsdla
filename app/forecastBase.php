@@ -1239,9 +1239,9 @@ class forecastBase extends pAndR{
             $date += 3;
         }
 
-        for ($d=$date; $d <sizeof($fcst); $d++) {
+        /*for ($d=$date; $d <sizeof($fcst); $d++) {
             $fcst[$d] += $booking[$d];
-        }
+        }*/
 
         $fcst[3] = $fcst[0] + $fcst[1] + $fcst[2];
         $fcst[7] = $fcst[4] + $fcst[5] + $fcst[6];
