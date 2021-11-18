@@ -639,6 +639,8 @@ class baseReportPandR extends pAndR{
                 $newValue = array();
                 $percMult = 0.0;
 
+                var_dump($fetched);
+
                 if($fetched){                    
                     for ($f=0; $f < sizeof($fetched); $f++) {                         
                         if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
@@ -685,21 +687,21 @@ class baseReportPandR extends pAndR{
                 if($fetched){
                     $soma = 0.0;                   
 
-                    /*for ($n=0; $n < sizeof($newValue); $n++) { 
+                    for ($n=0; $n < sizeof($newValue); $n++) { 
                         var_dump($newValue[$n]);
                         if(sizeof($newValue) > 1){
                             for ($m=0; $m < sizeof($newValue); $m++) {                                     
                                 
-                                /*if($newValue[$m]['month'] == $month){
-                                    $soma += $newValue[$m]['value'];
+                                if($newValue[$m][0]['month'] == $month){
+                                    $soma += $newValue[$m][0]['value'];
                                 }
                             }
                         }else{
                             for ($m=0; $m < sizeof($newValue[$n]); $m++) {  
-                                $soma += $newValue[$m]['value'];
+                                $soma += $newValue[$m][0]['value'];
                             }                                
                         }
-                    }*/                                   
+                    }                                   
                 }else{
                     $soma = false;
                 }
