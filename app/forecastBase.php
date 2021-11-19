@@ -63,7 +63,7 @@ class forecastBase extends pAndR{
             
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
 
-
+           //var_dump($someFCST);
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
@@ -71,7 +71,7 @@ class forecastBase extends pAndR{
                 $shareSalesRep[$c] = false;
                 $fcst[$c] = false;
             }
-
+            var_dump($fcst);
             if($fcst[$c]){
                 $fcst[$c] = $this->adjustValues($fcst[$c]);
                 $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
@@ -86,7 +86,7 @@ class forecastBase extends pAndR{
 
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
-
+        //var_dump($rtr);
 
         return $rtr;        
     }
@@ -794,6 +794,7 @@ class forecastBase extends pAndR{
                     $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
 
                     $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                    //var_dump($rev[$r]['sumValue']);
                 }                
             }
         }
