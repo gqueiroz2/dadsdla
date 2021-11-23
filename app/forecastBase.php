@@ -71,7 +71,7 @@ class forecastBase extends pAndR{
                 $shareSalesRep[$c] = false;
                 $fcst[$c] = false;
             }
-            var_dump($fcst);
+           // var_dump($fcst);
             if($fcst[$c]){
                 $fcst[$c] = $this->adjustValues($fcst[$c]);
                 $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
@@ -367,7 +367,8 @@ class forecastBase extends pAndR{
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
         
-        /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */        
+        /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */      
+        //var_dump($lyRSP); 
 
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
