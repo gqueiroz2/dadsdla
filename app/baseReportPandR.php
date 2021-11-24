@@ -558,18 +558,17 @@ class baseReportPandR extends pAndR
 
                 $brands = $br->getBrand($con);
 
-                $select =  "SELECT $sum AS sum,
+                $select =  "SELECT $sum AS sumValue,
                                 from_date AS fromDate,
                                 to_date AS toDate,
                                 year_from AS yearFrom,
                                 year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
+                                brand_id AS brandID,
+                                stage as stage
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (brand_id = '" . $list['brandID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (from_date = '" . $month . "' OR to_date = '" . $month . "')
                                 AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
@@ -577,58 +576,68 @@ class baseReportPandR extends pAndR
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter');
+                $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'brandID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
                 //var_dump($fetched);
                 if ($fetched) {
 
-
+                    /*
+                        AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+                    */
                     for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['owner'] != $fetched[$f]['splitter']) {
-                            $fetched[$f]['sum'] *= 2;
+                        if ($fetched[$f]['yearFrom'] != $fetched[$f]['yearTo']) {
+
+                            $fromArray = $fb->makeMonths("from", $fetched[$f]['fromDate']);
+                            $toArray = $fb->makeMonths("to", $fetched[$f]['toDate']);
+                            $fromShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearFrom'], $fromArray);
+                            $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
+                            $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
+
+                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
+                            //var_dump($fetched[$f]['sumValue']);
+
+                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
+                        }*/
                         }
                     }
 
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['fromDate'] != $fetched[$f]['toDate']) {
-
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            $newShare = array();
-                            $percMult = 0.0;
-                            for ($s = 0; $s <= $size; $s++) {
-                                $somat += $share[(($fetched[$f]['fromDate'] - 1) + $s)];
-                            }
-
-                            for ($s = 0; $s <= $size; $s++) {
-                                $newShare[$s]['value'] = (($fetched[$f]['fromDate'] - 1) + $s) / $somat;
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate']) + $s);
-                            }
-                            //var_dump($newShare);
-                            for ($n = 0; $n < sizeof($newShare); $n++) {
-                                if ($newShare[$n]['month'] == $month) {
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-                            //var_dump($percMult);
-
-                            $fetched[$f]['sum'] *= $percMult;
-                            //var_dump($fetched[$f]['sum']);
+                    if ($fetched) {
+                        for ($o = 0; $o < sizeof($fetched); $o++) {
+                            //var_dump($fetched);              
+                            $period[$o] = $fb->monthOPP($fetched[$o], $year);
                         }
+                    } else {
+                        $period = false;
+                    }
+                    //var_dump($period);
+
+                    if ($period) {
+
+                        //var_dump($lastYearRevenue);
+                        $shareSalesRep = $this->salesRepShareOnPeriod(null, $lastYearRevenue[$cont], $period);
+                        //var_dump($shareSalesRep);
+
+                        //var_dump($splitted);
+                        $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['brandID'],$splitted);
+                        //var_dump($fcst);
+
+                    }else{
+                        $shareSalesRep = false;
+                        $fcst = false;
+                    }
+
+                    if ($fcst) {
+                        $fcst = $fb->adjustValues($fcst);
+                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['brandID']);
+                        $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
+
+                        //var_dump($fcstAmount);
+                    }else{
+                        $fcstAmount = false;
                     }
                 }
-
-                if ($fetched) {
-                    $soma = 0.0;
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        $soma += $fetched[$f]['sum'];
-                    }
-                } else {
-                    $soma = false;
-                }
-
-                //var_dump($fetched);
-                //var_dump($soma);                      
+                return $fcstAmount;                      
 
                 break;
 
@@ -719,18 +728,17 @@ class baseReportPandR extends pAndR
                 break;
 
             case 'client':
-                $select =  "SELECT $sum AS sum,
+                $select =  "SELECT $sum AS sumValue,
                                 from_date AS fromDate,
                                 to_date AS toDate,
                                 year_from AS yearFrom,
                                 year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
+                                client_id AS clientID,
+                                stage AS stage
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (client_id = '" . $list['clientID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (from_date = '" . $month . "' OR to_date = '" . $month . "')
                                 AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
@@ -738,73 +746,84 @@ class baseReportPandR extends pAndR
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter');
+                $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'clientID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-                $somat = 0.0;
-                $newShare = array();
-                $newValue = array();
-                $percMult = 0.0;
-                //var_dump($fetched);
 
                 if ($fetched) {
-                    //var_dump($fetched);
+
+                    /*
+                        AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+                    */
                     for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['owner'] != $fetched[$f]['splitter']) {
-                            $fetched[$f]['sum'] *= 2;
+                        if ($fetched[$f]['yearFrom'] != $fetched[$f]['yearTo']) {
+
+                            $fromArray = $fb->makeMonths("from", $fetched[$f]['fromDate']);
+                            $toArray = $fb->makeMonths("to", $fetched[$f]['toDate']);
+                            $fromShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearFrom'], $fromArray);
+                            $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
+                            $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
+
+                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
+                            //var_dump($fetched[$f]['sumValue']);
+
+                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
+                        }*/
                         }
                     }
 
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['fromDate'] != $fetched[$f]['toDate']) {
-
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s = 0; $s <= $size; $s++) {
-                                $somat += $share[(($fetched[$f]['fromDate'] - 1) + $s)];
-                            }
-
-                            for ($s = 0; $s <= $size; $s++) {
-                                $newShare[$s]['value'] = (($fetched[$f]['fromDate'] - 1) + $s) / $somat;
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate']) + $s);
-                            }
-
-                            for ($n = 0; $n < sizeof($newShare); $n++) {
-                                if ($newShare[$n]['month'] == $month) {
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            $fetched[$f]['sum'] *= $percMult;
+                    if ($fetched) {
+                        for ($o = 0; $o < sizeof($fetched); $o++) {
+                            //var_dump($fetched);              
+                            $period[$o] = $fb->monthOPP($fetched[$o], $year);
                         }
+                    } else {
+                        $period = false;
+                    }
+                    //var_dump($period);
+
+                    if ($period) {
+
+                        //var_dump($lastYearRevenue);
+                        $shareSalesRep = $this->salesRepShareOnPeriod(null, $lastYearRevenue[$cont], $period);
+                        //var_dump($shareSalesRep);
+
+                        //var_dump($splitted);
+                        $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['clientID'],$splitted);
+                        //var_dump($fcst);
+
+                    }else{
+                        $shareSalesRep = false;
+                        $fcst = false;
+                    }
+                    //var_dump($fcst);
+
+                    if ($fcst) {
+                        $fcst = $fb->adjustValues($fcst);
+                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['clientID']);
+                        $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
+
+                        var_dump($fcstAmount);
+                    }else{
+                        $fcstAmount = false;
                     }
                 }
+                //return $fcstAmount;
 
-                if ($fetched) {
-                    $soma = 0.0;
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        $soma += $fetched[$f]['sum'];
-                    }
-                } else {
-                    $soma = false;
-                }
-
-                //var_dump($fetched);
-                //var_dump($soma);
                 break;
 
             case 'agency':
-                $select =  "SELECT $sum AS sum,
+                $select =  "SELECT $sum AS sumValue,
                                 from_date AS fromDate,
                                 to_date AS toDate,
                                 year_from AS yearFrom,
                                 year_to AS yearTo,
-                                sales_rep_owner_id AS owner,
-                                sales_rep_splitter_id AS splitter
+                                agency_id AS agencyID,
+                                stage AS stage
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (agency_id = '" . $list['agencyID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (from_date = '" . $month . "' OR to_date = '" . $month . "')
                                 AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != 'Cr')
@@ -812,135 +831,157 @@ class baseReportPandR extends pAndR
                 //echo "<pre>".$select."</pre>";
 
                 $res = $con->query($select);
-                $from = array('sum', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter');
+                $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'agencyID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-                $somat = 0.0;
-                $newShare = array();
-                $newValue = array();
-                $percMult = 0.0;
-
                 if ($fetched) {
+
+                    /*
+                        AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+                    */
                     for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['owner'] != $fetched[$f]['splitter']) {
-                            $fetched[$f]['sum'] *= 2;
+                        if ($fetched[$f]['yearFrom'] != $fetched[$f]['yearTo']) {
+
+                            $fromArray = $fb->makeMonths("from", $fetched[$f]['fromDate']);
+                            $toArray = $fb->makeMonths("to", $fetched[$f]['toDate']);
+                            $fromShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearFrom'], $fromArray);
+                            $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
+                            $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
+
+                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
+                            //var_dump($fetched[$f]['sumValue']);
+
+                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
+                        }*/
                         }
                     }
 
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['fromDate'] != $fetched[$f]['toDate']) {
-
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s = 0; $s <= $size; $s++) {
-                                $somat += $share[(($fetched[$f]['fromDate'] - 1) + $s)];
-                            }
-
-                            for ($s = 0; $s <= $size; $s++) {
-                                $newShare[$s]['value'] = (($fetched[$f]['fromDate'] - 1) + $s) / $somat;
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate']) + $s);
-                            }
-
-                            for ($n = 0; $n < sizeof($newShare); $n++) {
-                                if ($newShare[$n]['month'] == $month) {
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            $fetched[$f]['sum'] *= $percMult;
+                    if ($fetched) {
+                        for ($o = 0; $o < sizeof($fetched); $o++) {
+                            //var_dump($fetched);              
+                            $period[$o] = $fb->monthOPP($fetched[$o], $year);
                         }
+                    } else {
+                        $period = false;
                     }
-                }
+                    //var_dump($period);
 
-                if ($fetched) {
-                    $soma = 0.0;
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        $soma += $fetched[$f]['sum'];
+                    if ($period) {
+
+                        //var_dump($lastYearRevenue);
+                        $shareSalesRep = $this->salesRepShareOnPeriod(null, $lastYearRevenue[$cont], $period);
+                        //var_dump($shareSalesRep);
+
+                        //var_dump($splitted);
+                        $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['agencyID'],$splitted);
+                        //var_dump($fcst);
+
+                    }else{
+                        $shareSalesRep = false;
+                        $fcst = false;
                     }
-                } else {
-                    $soma = false;
+
+                    if ($fcst) {
+                        $fcst = $fb->adjustValues($fcst);
+                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['salesRepID']);
+                        $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
+
+                        //var_dump($fcstAmount);
+                    }else{
+                        $fcstAmount = false;
+                    }
                 }
+                return $fcstAmount;
 
 
                 break;
 
             case 'agencyGroup':
-                $select =  "SELECT sf.$sum AS sum,
+                $select =  "SELECT sf.$sum AS sumValue,
                                 sf.from_date AS fromDate,
                                 sf.to_date AS toDate,
                                 sf.year_from AS yearFrom,
                                 sf.year_to AS yearTo,
-                                sf.sales_rep_owner_id AS owner,
-                                sf.sales_rep_splitter_id AS splitter
+                                af.ID AS agencyGroupID,
+                                sf.stage AS stage
                                 FROM sf_pr sf 
                                 LEFT JOIN agency a ON (a.ID = sf.agency_id)
                                 LEFT JOIN agency_group ag ON (a.agency_group_id = ag.ID)
                                 WHERE (sf.region_id = '" . $region . "') 
                                 AND (ag.ID = '" . $list['agencyGroupID'] . "') 
                                 AND (sf.year_from = '" . $year . "' OR sf.year_to = '" . $year . "') 
-                                AND (sf.from_date = '" . $month . "' OR sf.to_date = '" . $month . "')
                                 AND (sf.stage != '5')
                                 AND (sf.stage != '6')
                                 AND (sf.stage != 'Cr')
                                 ";
 
                 $res = $con->query($select);
-                $from = array('sum', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter');
+                $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'agencyGroupID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-                $somat = 0.0;
-                $newShare = array();
-                $newValue = array();
-                $percMult = 0.0;
-
+                
                 if ($fetched) {
+
+                    /*
+                        AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+                    */
                     for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['owner'] != $fetched[$f]['splitter']) {
-                            $fetched[$f]['sum'] *= 2;
+                        if ($fetched[$f]['yearFrom'] != $fetched[$f]['yearTo']) {
+
+                            $fromArray = $fb->makeMonths("from", $fetched[$f]['fromDate']);
+                            $toArray = $fb->makeMonths("to", $fetched[$f]['toDate']);
+                            $fromShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearFrom'], $fromArray);
+                            $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
+                            $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
+
+                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
+                            //var_dump($fetched[$f]['sumValue']);
+
+                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
+                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
+                        }*/
                         }
                     }
 
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        if ($fetched[$f]['fromDate'] != $fetched[$f]['toDate']) {
-
-                            $size = $fetched[$f]['toDate'] - $fetched[$f]['fromDate'];
-                            $somat = 0.0;
-                            for ($s = 0; $s <= $size; $s++) {
-                                $somat += $share[(($fetched[$f]['fromDate'] - 1) + $s)];
-                            }
-
-                            for ($s = 0; $s <= $size; $s++) {
-                                $newShare[$s]['value'] = (($fetched[$f]['fromDate'] - 1) + $s) / $somat;
-                                $newShare[$s]['month'] = (($fetched[$f]['fromDate']) + $s);
-                            }
-
-                            for ($n = 0; $n < sizeof($newShare); $n++) {
-                                if ($newShare[$n]['month'] == $month) {
-                                    $percMult = $newShare[$n]['value'];
-                                }
-                            }
-
-                            $fetched[$f]['sum'] *= $percMult;
+                    if ($fetched) {
+                        for ($o = 0; $o < sizeof($fetched); $o++) {
+                            //var_dump($fetched);              
+                            $period[$o] = $fb->monthOPP($fetched[$o], $year);
                         }
+                    } else {
+                        $period = false;
+                    }
+                    //var_dump($period);
+
+                    if ($period) {
+
+                        //var_dump($lastYearRevenue);
+                        $shareSalesRep = $this->salesRepShareOnPeriod(null, $lastYearRevenue[$cont], $period);
+                        //var_dump($shareSalesRep);
+
+                        //var_dump($splitted);
+                        $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['agencyGroupID'],$splitted);
+                        //var_dump($fcst);
+
+                    }else{
+                        $shareSalesRep = false;
+                        $fcst = false;
+                    }
+
+                    if ($fcst) {
+                        $fcst = $fb->adjustValues($fcst);
+                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['agencyGroupID']);
+                        $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
+
+                        //var_dump($fcstAmount);
+                    }else{
+                        $fcstAmount = false;
                     }
                 }
+                return $fcstAmount;
 
-                if ($fetched) {
-                    $soma = 0.0;
-                    for ($f = 0; $f < sizeof($fetched); $f++) {
-                        $soma += $fetched[$f]['sum'];
-                    }
-                } else {
-                    $soma = false;
-                }
-
-
-                break;
-
-            default:
-                $soma = false;
                 break;
         }
 
-        return $soma;
     }
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$monthOPP){
