@@ -114,9 +114,9 @@ class baseReportPandR extends pAndR
             $targetValues[$l] = $this->addQuartersAndTotalOnArray(array($targetValues[$l]))[0];
             $bookings[$l] = $this->addQuartersAndTotalOnArray(array($bookings[$l]))[0];
 
-            $rollingFCST = $this->addFcstWithBooking($bookings,$rollingFCST);//with bookings value 
+            $rollingFCST[$l] = $this->addFcstWithBooking($bookings[$l],$rollingFCST[$l]);//with bookings value 
             //var_dump($rollingFCST[$l]);
-            $rollingFCST[$l] = $this->addQuartersAndTotalOnArray(array($rollingFCST[$l]))[0];
+            $rollingFCST[$l] = $this->addQuartersAndTotalRF($rollingFCST[$l]);
 
             $rfVsCurrent[$l] = $this->subArrays($rollingFCST[$l], $bookings[$l]);
         }
@@ -636,8 +636,9 @@ class baseReportPandR extends pAndR
                     }else{
                         $fcstAmount = false;
                     }
-                }
-                return $fcstAmount;                      
+
+                    return $fcstAmount;
+                }                      
 
                 break;
 
@@ -722,8 +723,9 @@ class baseReportPandR extends pAndR
                     }else{
                         $fcstAmount = false;
                     }
+
+                    return $fcstAmount;
                 }
-                return $fcstAmount;
 
                 break;
 
@@ -803,12 +805,13 @@ class baseReportPandR extends pAndR
                         $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['clientID']);
                         $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
 
-                        var_dump($fcstAmount);
+                        
                     }else{
                         $fcstAmount = false;
                     }
+
+                    return $fcstAmount;
                 }
-                //return $fcstAmount;
 
                 break;
 
@@ -883,16 +886,16 @@ class baseReportPandR extends pAndR
 
                     if ($fcst) {
                         $fcst = $fb->adjustValues($fcst);
-                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['salesRepID']);
+                        $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['agencyID']);
                         $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
 
                         //var_dump($fcstAmount);
                     }else{
                         $fcstAmount = false;
                     }
-                }
-                return $fcstAmount;
 
+                    return $fcstAmount;
+                }
 
                 break;
 
@@ -985,6 +988,7 @@ class baseReportPandR extends pAndR
     }
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$monthOPP){
+        //var_dump($lyRSP);
         
         /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */      
         //var_dump($lyRSP); 
@@ -1624,41 +1628,39 @@ class baseReportPandR extends pAndR
 
         for ($a = 0; $a < sizeof($rf); $a++) {
             //JAN,FEB,MAR
-            $rfWQ[$a][0] = $rf[$a][0];
-            $rfWQ[$a][1] = $rf[$a][1];
-            $rfWQ[$a][2] = $rf[$a][2];
+            $rfWQ[0] = $rf[0];
+            $rfWQ[1] = $rf[1];
+            $rfWQ[2] = $rf[2];
 
             // Q1
-            $rfWQ[$a][3] = $rfWQ[$a][0] + $rfWQ[$a][1] + $rfWQ[$a][2];
+            $rfWQ[3] = $rfWQ[0] + $rfWQ[1] + $rfWQ[2];
 
             //APR,MAI,JUN
-            $rfWQ[$a][4] = $rf[$a][3];
-            $rfWQ[$a][5] = $rf[$a][4];
-            $rfWQ[$a][6] = $rf[$a][5];
+            $rfWQ[4] = $rf[4];
+            $rfWQ[5] = $rf[5];
+            $rfWQ[6] = $rf[6];
             
             // Q2
-            $rfWQ[$a][7] = $rfWQ[$a][4] + $rfWQ[$a][5] + $rfWQ[$a][6];
+            $rfWQ[7] = $rfWQ[4] + $rfWQ[5] + $rfWQ[6];
 
             //JUL,AUG,SEP
-            $rfWQ[$a][8] = $rf[$a][6];
-            $rfWQ[$a][9] = $rf[$a][7];
-            $rfWQ[$a][10] = $rf[$a][8];
+            $rfWQ[8] = $rf[8];
+            $rfWQ[9] = $rf[9];
+            $rfWQ[10] = $rf[10];
 
             // Q3
-            $rfWQ[$a][11] = $rfWQ[$a][8] + $rfWQ[$a][9] + $rfWQ[$a][10];
+            $rfWQ[11] = $rfWQ[8] + $rfWQ[9] + $rfWQ[10];
 
             //OCT,NOV,DEC
-            $rfWQ[$a][12] = $rf[$a][9];
-            $rfWQ[$a][13] = $rf[$a][10];
-            $rfWQ[$a][14] = $rf[$a][11];
+            $rfWQ[12] = $rf[12];
+            $rfWQ[13] = $rf[13];
+            $rfWQ[14] = $rf[14];
 
             // Q4
-            $rfWQ[$a][15] = $rfWQ[$a][12] + $rfWQ[$a][13] + $rfWQ[$a][14];
+            $rfWQ[15] = $rfWQ[12] + $rfWQ[13] + $rfWQ[14];
 
-            $rfWQ[$a][16] = $rfWQ[$a][3] + $rfWQ[$a][7] + $rfWQ[$a][11] + $rfWQ[$a][15];
+            $rfWQ[16] = $rfWQ[3] + $rfWQ[7] + $rfWQ[11] + $rfWQ[15];
         }
-
-        var_dump($rfWQ);
         return $rfWQ;
     }
 
@@ -1804,13 +1806,12 @@ class baseReportPandR extends pAndR
         }
 
         for ($c = 0; $c < sizeof($booking); $c++) {
-            for ($f = 0; $f < sizeof($booking[$c]); $f++) {
-                if ($f < $date) {
-                    $sum[$c][$f] = $booking[$c][$f];
-                } else {
-                    $sum[$c][$f] = $fcst[$c][$f];
-                }
+            if ($c < $date) {
+                $sum[$c] = $booking[$c];
+            } else {
+                $sum[$c] = $fcst[$c];
             }
+            
         }
         return $sum;
     }
