@@ -94,9 +94,13 @@ class baseReportPandR extends pAndR
 
         //var_dump($rollingFCST);
         for ($l = 0; $l < sizeof($list); $l++) {
+
+            $cont = $l;
+            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont);
+
             for ($m = 0; $m < sizeof($month); $m++) {
 
-                //$rollingFCST[$l][$m] = $this->generateForecast($con,$sql,$baseReport,$regionID,$cYear,$month[$m][1],$list[$l],$this->generateColumns($value,"crm"),$value,$revenueShares,$br,$brandsValueLastYear, $fb,$lastYearRevenue,$splitted)*$div;
+                $rollingFCST[$l][$m] = $rollingFCST[$l][$m]*$div;
 
                 $lastYear[$l][$m] = $this->generateValuePandR($con, $sql, 'revenue', $baseReport, $regionID, $pYear, $month[$m][1], $list[$l], $this->generateColumns($value, "ytd"), $value) * $div;
 
@@ -104,9 +108,6 @@ class baseReportPandR extends pAndR
 
                 $bookings[$l][$m] = $this->generateValuePandR($con, $sql, 'revenue', $baseReport, $regionID, $cYear, $month[$m][1], $list[$l], $this->generateColumns($value, "ytd"), $value) * $div;
             }
-
-            $cont = $l;
-            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont);
 
             //$rollingFCST[$l] = $this->addQuartersAndTotalOnArray(array($rollingFCST[$l]))[0];
             //var_dump($rollingFCST);
@@ -199,7 +200,7 @@ class baseReportPandR extends pAndR
                             LEFT JOIN brand b ON b.ID = s.brand_id
                             WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
                             AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-                            AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                            AND (s.year_from = \"$cYear\") 
                             ORDER BY 1
                         ";
 
@@ -235,7 +236,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN agency a ON a.ID = s.agency_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
 		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-		                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
                 $resSF = $con->query($sf);
@@ -273,7 +274,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN agency a ON a.ID = s.agency_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
 		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-		                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
                 $resSF = $con->query($sf);
@@ -311,7 +312,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
 		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-		                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
                 $resSF = $con->query($sf);
@@ -321,7 +322,7 @@ class baseReportPandR extends pAndR
                 //GET FROM IBMS/BTS
                 $ytd = "SELECT DISTINCT 
 		    				   ag.name AS 'agencyGroup',
-		                       ag.ID AS 'agencyGroupID'			                       
+		                       ag.ID AS 'agencyGroupID'	                       
 		    				FROM ytd y
 		    				LEFT JOIN client c ON c.ID = y.client_id
 		                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
@@ -348,7 +349,7 @@ class baseReportPandR extends pAndR
 		                    LEFT JOIN sales_rep sr ON sr.ID = s.sales_rep_owner_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
 		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-		                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
 
@@ -441,7 +442,7 @@ class baseReportPandR extends pAndR
     				LEFT JOIN agency a ON a.ID = s.agency_id
     				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
                     AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
-                    AND (s.year_from = \"$cYear\") AND (s.from_date > \"$date\")
+                    AND (s.year_from = \"$cYear\") 
     				ORDER BY 1
     	       ";
         $resSF = $con->query($sf);
@@ -571,9 +572,7 @@ class baseReportPandR extends pAndR
                                 WHERE (region_id = '" . $region . "') 
                                 AND (brand_id = '" . $list['brandID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+
                                 ";
                 //echo "<pre>".$select."</pre>";
 
@@ -657,9 +656,7 @@ class baseReportPandR extends pAndR
                                 WHERE (region_id = '" . $region . "') 
                                 AND (sales_rep_owner_id = '" . $list['salesRepID'] . "' OR sales_rep_splitter_id = '" . $list['salesRepID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+
                                 ";
                 //echo "<pre>".$select."</pre>";
 
@@ -744,9 +741,7 @@ class baseReportPandR extends pAndR
                                 AND (client_id = '" . $list['clientID'] . "') 
                                 AND (agency_id = '" . $list['agencyID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+
                                 ";
                 //echo "<pre>".$select."</pre>";
 
@@ -831,9 +826,7 @@ class baseReportPandR extends pAndR
                                 WHERE (region_id = '" . $region . "') 
                                 AND (agency_id = '" . $list['agencyID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-                                AND (stage != '5')
-                                AND (stage != '6')
-                                AND (stage != 'Cr')
+
                                 ";
                 //echo "<pre>".$select."</pre>";
 
@@ -910,7 +903,7 @@ class baseReportPandR extends pAndR
                                 sf.to_date AS toDate,
                                 sf.year_from AS yearFrom,
                                 sf.year_to AS yearTo,
-                                af.ID AS agencyGroupID,
+                                ag.ID AS agencyGroupID,
                                 sf.stage AS stage
                                 FROM sf_pr sf 
                                 LEFT JOIN agency a ON (a.ID = sf.agency_id)
@@ -918,15 +911,12 @@ class baseReportPandR extends pAndR
                                 WHERE (sf.region_id = '" . $region . "') 
                                 AND (ag.ID = '" . $list['agencyGroupID'] . "') 
                                 AND (sf.year_from = '" . $year . "' OR sf.year_to = '" . $year . "') 
-                                AND (sf.stage != '5')
-                                AND (sf.stage != '6')
-                                AND (sf.stage != 'Cr')
                                 ";
 
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'agencyGroupID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-                
+                //echo "<pre>$select</pre>";
                 if ($fetched) {
 
                     /*
@@ -990,8 +980,6 @@ class baseReportPandR extends pAndR
 
                 break;
         }
-
-        //return $fcstAmount;
 
     }
 
