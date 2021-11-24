@@ -13,6 +13,7 @@ use App\pRate;
 use App\AE;
 use App\performance;
 use App\forecastBase;
+use App\client;
 
 class baseReportPandR extends pAndR
 {
@@ -20,6 +21,7 @@ class baseReportPandR extends pAndR
     {
 
         $sr = new salesRep();
+        $cl = new client();
         $br = new brand();
         $base = new base();
         $sql = new sql();
@@ -48,7 +50,7 @@ class baseReportPandR extends pAndR
         }
 
         $list = $this->listByAEMult($con, $sql, $salesRepID, $cYear, $regionID, $salesRepIDString, $baseReport);
-
+        //var_dump($list);
 
         if (sizeof($list) == 0) {
             return false;
@@ -637,7 +639,7 @@ class baseReportPandR extends pAndR
                         $fcstAmount = false;
                     }
                 }
-                return $fcstAmount;                      
+                                      
 
                 break;
 
@@ -723,7 +725,7 @@ class baseReportPandR extends pAndR
                         $fcstAmount = false;
                     }
                 }
-                return $fcstAmount;
+                
 
                 break;
 
@@ -738,6 +740,7 @@ class baseReportPandR extends pAndR
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (client_id = '" . $list['clientID'] . "') 
+                                AND (agency_id = '" . $list['agencyID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
                                 AND (stage != '5')
                                 AND (stage != '6')
@@ -785,12 +788,12 @@ class baseReportPandR extends pAndR
                     if ($period) {
 
                         //var_dump($lastYearRevenue);
-                        $shareSalesRep = $this->salesRepShareOnPeriod(null, $lastYearRevenue[$cont], $period);
+                        $shareSalesRep = $this->salesRepShareOnPeriod(null, null, $period, $lastYearRevenue[$cont]);
                         //var_dump($shareSalesRep);
 
                         //var_dump($splitted);
                         $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['clientID'],$splitted);
-                        //var_dump($fcst);
+                        ///var_dump($fcst);
 
                     }else{
                         $shareSalesRep = false;
@@ -803,13 +806,15 @@ class baseReportPandR extends pAndR
                         $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['clientID']);
                         $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
 
-                        var_dump($fcstAmount);
+                        //var_dump($fcstAmount);
                     }else{
                         $fcstAmount = false;
                     }
-                }
-                //return $fcstAmount;
 
+                    return $fcstAmount;
+                }
+                //var_dump($fcstAmount);
+                
                 break;
 
             case 'agency':
@@ -891,7 +896,7 @@ class baseReportPandR extends pAndR
                         $fcstAmount = false;
                     }
                 }
-                return $fcstAmount;
+                
 
 
                 break;
@@ -977,14 +982,16 @@ class baseReportPandR extends pAndR
                         $fcstAmount = false;
                     }
                 }
-                return $fcstAmount;
+                
 
                 break;
         }
 
+        //return $fcstAmount;
+
     }
 
-    public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$monthOPP){
+    public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$monthOPP,$lyRClient){
         
         /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */      
         //var_dump($lyRSP); 
@@ -1007,6 +1014,13 @@ class baseReportPandR extends pAndR
                         $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];//$lyRCompany[16];
                         $amount[$l] += $share[$l][$m];
                     }
+                }elseif($lyRClient[$monthOPP[$l][$m]] > 0 && $lyRClient[16] > 0){
+                    /*
+                        GET THE SHARE OF THE CLIENT ON THE SAME MONTH ON LAST YEAR
+                    */
+                    $share[$l][$m] = $lyRClient[$monthOPP[$l][$m]];//$lyRClient[16];
+                    $amount[$l] += $share[$l][$m];
+
                 }else{
                     $share[$l][$m] = $lyRCompany[$monthOPP[$l][$m]];;
                     $amount[$l] += $share[$l][$m];
@@ -1360,8 +1374,10 @@ class baseReportPandR extends pAndR
                 $listT = $list['salesRepID'];
                 break;
             case 'client':
-                $dbColumn = 'client_id';
+                $clientColumn = 'client_id';
+                $agencyColumn = 'agency_id';
                 $listT = $list['clientID'];
+                $listA = $list['agencyID'];
                 break;
             case 'agency':
                 $dbColumn = 'agency_id';
@@ -1376,11 +1392,19 @@ class baseReportPandR extends pAndR
         if ($source == "ytd") {
             if ($baseReport == 'agencyGroup') {
                 $columns = array("y.sales_representant_office_id", "ag." . $dbColumn, "y.year", "y.month");
-            } else {
+            }elseif ($baseReport == 'client') {
+                $columns = array("sales_representant_office_id", $clientColumn, $agencyColumn, "year", "month");
+            }else {
                 $columns = array("sales_representant_office_id", $dbColumn, "year", "month");
             }
-            $arrayWhere = array($region, $listT, $year, $month);
-            $where = $sql->where($columns, $arrayWhere);
+            if ($baseReport == 'client') {
+                $arrayWhere = array($region, $listT, $listA, $year, $month);
+                $where = $sql->where($columns, $arrayWhere);
+            }else{
+                $arrayWhere = array($region, $listT, $year, $month);
+                $where = $sql->where($columns, $arrayWhere);    
+            }
+            
         } elseif ($source == "plan") {
 
             switch ($baseReport) {
