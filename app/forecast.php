@@ -175,7 +175,7 @@ class forecast extends forecastBase{
             }
             
         }
-
+        //var_dump($clientRevenueCYearDisc);
         $executiveRevenuePYearDisc = $this->consolidateAEFcst($clientRevenuePYearDisc,$splitted);
         /*$tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
         $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);

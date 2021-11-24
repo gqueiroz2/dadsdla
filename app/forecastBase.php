@@ -15,44 +15,6 @@ class forecastBase extends pAndR{
         return $tt;
     }
 
-    public function calculateClosedForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
-
-        if($currency == "USD"){ $div = 1; }else{ $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year)); }
-        if($value == "gross"){ $fwColumn = "gross_revenue"; $sfColumn = $fwColumn; }else{ $fwColumn = "net_revenue"; $sfColumn = $fwColumn; }        
-
-        for ($c=0; $c < sizeof($clients); $c++) {
-            $someFCST[$c] = $this->getClosedValue($con,$sql,$base,$pr,$sfColumn,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients[$c],$salesRepID,$splitted[$c],$div); // PERIOD OF FCST , VALUES AND STAGE
-            //var_dump($someFCST);
-            $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
-            //var_dump($monthOPP);
-
-            if($monthOPP[$c]){
-                $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
-                $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
-            }else{
-                $shareSalesRep[$c] = false;
-                $fcst[$c] = false;
-            }
-
-            if($fcst[$c]){
-                $fcst[$c] = $this->adjustValues($fcst[$c]);
-                $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
-                $fcstAmount[$c] = $this->fcstAmount($fcst[$c],$monthOPP[$c],$splitted[$c],$salesRepID);
-                $fcstAmount[$c] = $this->adjustValuesForecastAmount($fcstAmount[$c]);
-            }else{
-                $fcstAmountByStage[$c] = false;
-                $fcstAmount[$c] = false;
-            }
-            
-        }
-
-
-        $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
-
-
-        return $rtr;        
-    }    
-
 	public function calculateForecast($con,$sql,$base,$pr,$regionID,$year,$month,$brand,$currency,$currencyID,$value,$clients,$salesRepID,$rollingFCST,$splitted,$lastYearRevClient,$lastYearRevSalesRep,$lastYearRevCompany){
 
         if($currency == "USD"){ $div = 1; }else{ $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($year)); }
@@ -63,7 +25,7 @@ class forecastBase extends pAndR{
             
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
 
-
+           //var_dump($someFCST);
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
@@ -71,7 +33,7 @@ class forecastBase extends pAndR{
                 $shareSalesRep[$c] = false;
                 $fcst[$c] = false;
             }
-
+           // var_dump($fcst);
             if($fcst[$c]){
                 $fcst[$c] = $this->adjustValues($fcst[$c]);
                 $fcstAmountByStage[$c] = $this->fcstAmountByStage($fcst[$c],$monthOPP[$c]);
@@ -86,7 +48,7 @@ class forecastBase extends pAndR{
 
 
         $rtr = array("fcstAmount" => $fcstAmount ,"fcstAmountByStage" => $fcstAmountByStage);
-
+        //var_dump($rtr);
 
         return $rtr;        
     }
@@ -367,7 +329,8 @@ class forecastBase extends pAndR{
 
     public function salesRepShareOnPeriod($lyRCompany ,$lyRSP,$lyRClient,$monthOPP,$someF){
         
-        /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */        
+        /* GET INFO FROM PREVIOUS YEAR AND MAKE SHARE BY MONTH WHEN THERE IS NO CLIENT OR SALES REP */      
+        //var_dump($lyRSP); 
 
         for ($l=0; $l < sizeof($monthOPP); $l++){
             $amount[$l] = 0.0;
@@ -794,6 +757,7 @@ class forecastBase extends pAndR{
                     $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
 
                     $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                    //var_dump($rev[$r]['sumValue']);
                 }                
             }
         }
