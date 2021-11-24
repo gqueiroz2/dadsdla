@@ -94,13 +94,7 @@ class baseReportPandR extends pAndR
 
         //var_dump($rollingFCST);
         for ($l = 0; $l < sizeof($list); $l++) {
-
-            $cont = $l;
-            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont);
-
             for ($m = 0; $m < sizeof($month); $m++) {
-
-                $rollingFCST[$l][$m] = $rollingFCST[$l][$m]*$div;
 
                 $lastYear[$l][$m] = $this->generateValuePandR($con, $sql, 'revenue', $baseReport, $regionID, $pYear, $month[$m][1], $list[$l], $this->generateColumns($value, "ytd"), $value) * $div;
 
@@ -109,8 +103,10 @@ class baseReportPandR extends pAndR
                 $bookings[$l][$m] = $this->generateValuePandR($con, $sql, 'revenue', $baseReport, $regionID, $cYear, $month[$m][1], $list[$l], $this->generateColumns($value, "ytd"), $value) * $div;
             }
 
-            //$rollingFCST[$l] = $this->addQuartersAndTotalOnArray(array($rollingFCST[$l]))[0];
+            $cont = $l;
+            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont, $div);
             //var_dump($rollingFCST);
+
             $lastYear[$l] = $this->addQuartersAndTotalOnArray(array($lastYear[$l]))[0];
             //var_dump($lastYear);
 
@@ -123,18 +119,6 @@ class baseReportPandR extends pAndR
 
             $rfVsCurrent[$l] = $this->subArrays($rollingFCST[$l], $lastYear[$l]);
         }
-        //var_dump($rollingFCST);
-        //$rollingFCST = $this->addQuartersAndTotalRF($rollingFCST);
-        //var_dump($rollingFCST);
-
-        /*
-        for ($b=0; $b < sizeof($bookings); $b++) { 
-            var_dump($b);
-            var_dump($list[$b]);
-            var_dump($bookings[$b]);            
-        } 
-        */
-
 
         $rollingFCSTTT = $this->mergeList($rollingFCST, $list);
         $lastYearTT = $this->mergeList($lastYear, $list);
@@ -553,7 +537,7 @@ class baseReportPandR extends pAndR
         return $share;
     }
 
-    public function generateForecast($con, $sql, $baseReport, $region, $year, $list, $sum, $value, $share, $br, $lastYearBrand, $fb, $lastYearRevenue, $splitted, $cont)
+    public function generateForecast($con, $sql, $baseReport, $region, $year, $list, $sum, $value, $share, $br, $lastYearBrand, $fb, $lastYearRevenue, $splitted, $cont, $div)
     {
 
         switch ($baseReport) {
@@ -574,8 +558,7 @@ class baseReportPandR extends pAndR
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
 
                                 ";
-                //echo "<pre>".$select."</pre>";
-
+                
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'brandID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
@@ -594,12 +577,8 @@ class baseReportPandR extends pAndR
                             $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
                             $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
 
-                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
-                            //var_dump($fetched[$f]['sumValue']);
-
-                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
-                        }*/
+                            $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
+                           
                         }
                     }
 
@@ -658,8 +637,7 @@ class baseReportPandR extends pAndR
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
 
                                 ";
-                //echo "<pre>".$select."</pre>";
-
+                
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
@@ -678,13 +656,9 @@ class baseReportPandR extends pAndR
                             $fromShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearFrom'], $fromArray);
                             $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
                             $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
-
-                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
-                            //var_dump($fetched[$f]['sumValue']);
-
-                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
-                        }*/
+                            
+                            $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
+                            
                         }
                     }
 
@@ -763,12 +737,8 @@ class baseReportPandR extends pAndR
                             $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
                             $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
 
-                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
-                            //var_dump($fetched[$f]['sumValue']);
-
-                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
-                        }*/
+                            $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
+                        
                         }
                     }
 
@@ -847,12 +817,7 @@ class baseReportPandR extends pAndR
                             $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
                             $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
 
-                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
-                            //var_dump($fetched[$f]['sumValue']);
-
-                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
-                        }*/
+                            $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
                         }
                     }
 
@@ -931,12 +896,8 @@ class baseReportPandR extends pAndR
                             $toShare = $fb->calculateRespectiveShare($con, $sql, $region, $value, $fetched[$f]['yearTo'], $toArray);
                             $shareFromCYear = $fb->aggregateShare($fromShare, $toShare);
 
-                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $shareFromCYear;
-                            //var_dump($fetched[$f]['sumValue']);
-
-                            /*if($fetched[$f]['owner'] != $fetched[$f]['splitter']){
-                            $fetched[$f]['sum'] = $fetched[$f]['sum']/2;
-                        }*/
+                            $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
+                        
                         }
                     }
 
