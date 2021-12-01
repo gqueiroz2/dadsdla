@@ -35,7 +35,7 @@ class insertController extends Controller{
 		$in = new insertPlan();
 		$rtr = $in->baseBrand();
 		if($rtr){
-			return back()->with('insertSuccess',"There insetions was successfully made :) ");	
+			return view('dataManagement.insert.planByBrandPost');	
 		}
 	}
 
@@ -71,7 +71,7 @@ class insertController extends Controller{
 		
 		$rtr = $in->baseSales();
 
-		var_dump($rtr);
+		return view('dataManagement.insert.planByBrandPost');
 
 	}
 

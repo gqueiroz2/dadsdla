@@ -36,7 +36,7 @@ class rankingController extends Controller {
     }
 
     public function post(){
-var_dump("AM");
+
     	$base = new base();
 
     	$db = new dataBase();
