@@ -962,13 +962,13 @@ class ajaxController extends Controller{
 
         if($regionID == 1){
             if($currentMonth == 12){
-                $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);           
+                $year = array($cYear,$nYear,$pYear,$ppYear,$pppYear);           
             }else{
                 $year = array($cYear,$pYear,$ppYear,$pppYear);           
             }
         }else{
             if($currentMonth == 12){
-                $year = array($nYear,$cYear,$pYear);
+                $year = array($cYear,$nYear,$pYear);
             }else{
                 $year = array($cYear,$pYear);                
             }

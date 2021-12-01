@@ -204,6 +204,10 @@ th{
 	float: left;	
 }
 
+.labelCenter{
+    float: center;    
+}
+
 .bold{
 	font-weight: bold;
 }
