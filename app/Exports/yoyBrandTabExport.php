@@ -323,6 +323,32 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             return $this->hgtv;
         }elseif ($name == "DN") {
             return $this->dn;
+        }elseif ($name == "GC"){
+            return $this->dc;
+        }elseif ($name == "HO"){
+            return $this->dc;
+        }elseif ($name == "ATV"){
+            return $this->dc;
+        }elseif ($name == "AXN"){
+            return $this->dc;
+        }elseif ($name == "SON"){
+            return $this->dc;
+        }elseif ($name == "AC"){
+            return $this->dc;
+        }elseif ($name == "SD"){
+            return $this->dc;
+        }elseif ($name == "AXD"){
+            return $this->dc;
+        }elseif ($name == "ES"){
+            return $this->dc;
+        }elseif ($name == "IAS"){
+            return $this->dc;
+        }elseif ($name == "DF"){
+            return $this->dc;
+        }elseif ($name == "EUS"){
+            return $this->dc;
+        }elseif ($name == "TP"){
+            return $this->dc;
         }
     }
 
@@ -351,6 +377,9 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
                         $cellRange = "A".$a;
                         $a = $a + 7;
                     }
+                    
+                    //$bName = array($this->data['mtx'][$b][0][0]);
+                    //var_dump($bName);
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->brandName($this->data['mtx'][$b][0][0]));
                 }
 
