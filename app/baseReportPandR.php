@@ -212,30 +212,24 @@ class baseReportPandR extends pAndR
             case 'client':
                 //GET FROM SALES FORCE
                 $sf = "SELECT DISTINCT c.name AS 'clientName',
-		    				   c.ID AS 'clientID',
-		                       a.ID AS 'agencyID',
-		                       a.name AS 'agencyName'
+		    				   c.ID AS 'clientID'
 		    				FROM sf_pr s
 		                    LEFT JOIN client c ON c.ID = s.client_id
-		    				LEFT JOIN agency a ON a.ID = s.agency_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
 		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
 		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
                 $resSF = $con->query($sf);
-                $from = array("clientName", "clientID", "agencyID", "agencyName");
+                $from = array("clientName", "clientID");
                 $listSF = $sql->fetch($resSF, $from, $from);
 
                 //GET FROM IBMS/BTS
                 $ytd = "SELECT DISTINCT c.name AS 'clientName',
-		    				   c.ID AS 'clientID',
-		                       a.ID AS 'agencyID',
-		                       a.name AS 'agencyName'
+		    				   c.ID AS 'clientID'
 		    				FROM ytd y
 		    				LEFT JOIN client c ON c.ID = y.client_id
 		                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
-		                    LEFT JOIN agency a ON a.ID = y.agency_id
 		    				WHERE (y.sales_rep_id IN ($salesRepIDString) )
 		    				AND (y.year = \"$cYear\" )
 		                    AND (r.ID = \"" . $regionID . "\")
@@ -243,7 +237,7 @@ class baseReportPandR extends pAndR
 		    	       ";
 
                 $resYTD = $con->query($ytd);
-                $from = array("clientName", "clientID", "agencyID", "agencyName");
+                $from = array("clientName", "clientID");
                 $listYTD = $sql->fetch($resYTD, $from, $from);
                 $count = 0;
                 break;
@@ -713,7 +707,6 @@ class baseReportPandR extends pAndR
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (client_id = '" . $list['clientID'] . "') 
-                                AND (agency_id = '" . $list['agencyID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
 
                                 ";
@@ -1085,10 +1078,9 @@ class baseReportPandR extends pAndR
                 $listT = $list['salesRepID'];
                 break;
             case 'client':
-                $clientColumn = 'client_id';
-                $agencyColumn = 'agency_id';
+                $dbColumn = 'client_id';
                 $listT = $list['clientID'];
-                $listA = $list['agencyID'];
+
                 break;
             case 'agency':
                 $dbColumn = 'agency_id';
@@ -1103,18 +1095,18 @@ class baseReportPandR extends pAndR
         if ($source == "ytd") {
             if ($baseReport == 'agencyGroup') {
                 $columns = array("y.sales_representant_office_id", "ag." . $dbColumn, "y.year", "y.month");
-            }elseif ($baseReport == 'client') {
-                $columns = array("sales_representant_office_id", $clientColumn, $agencyColumn, "year", "month");
+            /*}elseif ($baseReport == 'client') {
+                $columns = array("sales_representant_office_id", $clientColumn, $agencyColumn, "year", "month");*/
             }else {
                 $columns = array("sales_representant_office_id", $dbColumn, "year", "month");
             }
-            if ($baseReport == 'client') {
+            /*if ($baseReport == 'client') {
                 $arrayWhere = array($region, $listT, $listA, $year, $month);
                 $where = $sql->where($columns, $arrayWhere);
-            }else{
+            }else{*/
                 $arrayWhere = array($region, $listT, $year, $month);
                 $where = $sql->where($columns, $arrayWhere);    
-            }
+            //}
             
         } elseif ($source == "plan") {
 
