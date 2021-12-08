@@ -69,11 +69,6 @@ th{
     color: white;
 }
 
-.son{
-    background-color: #003c66;
-    font-weight: bold;
-    color: white;
-}
 
 .hh{
 	background-color: #ff6600;
@@ -99,7 +94,7 @@ th{
 }
 
 .id{
-    background-color: #000000;
+    background-color: #eb3e09;
     font-weight: bold;
     color: white;
 }
@@ -111,19 +106,19 @@ th{
 }
 
 .fn{
-	background-color: #ff0000;
+	background-color: #91203a;
 	font-weight: bold;
 	color: white;
 }
 
 .axn{
-    background-color: #ff0000;
+    background-color: #ba1111;
     font-weight: bold;
     color: white;
 }
 
 .axd{
-    background-color: #ff0000;
+    background-color: #ba1111;
     font-weight: bold;
     color: white;
 }
@@ -135,43 +130,61 @@ th{
 }
 
 .gc{
-    background-color: #6600ff;
+    background-color: #8f60a6;
     font-weight: bold;
     color: white;
 }
 
 .ho{
-    background-color: #6600ff;
+    background-color: #4ba396;
     font-weight: bold;
     color: white;
 }
 
 .ac{
-    background-color: #6600ff;
+    background-color: #968d69;
     font-weight: bold;
     color: white;
 }
 
 .es{
-    background-color: #6600ff;
+    background-color: #27247d;
     font-weight: bold;
     color: white;
 }
 
 .vix{
-	background-color: #004b84;
+	background-color: #29233d;
+    font-weight: bold;
+    color: white;
+}
+
+.tp{
+	background-color: #bbcc5e;
+    font-weight: bold;
+    color: white;
+}
+
+.df{
+	background-color: #616161;
     font-weight: bold;
     color: white;
 }
 
 .son{
-    background-color: #004b84;
+    background-color: #000000;
     font-weight: bold;
     color: white;
 }
 
 .sd{
-    background-color: #004b84;
+    background-color: #000000;
+    font-weight: bold;
+    color: white;
+}
+
+.eus{
+    background-color: #000000;
     font-weight: bold;
     color: white;
 }
@@ -183,7 +196,7 @@ th{
 }
 
 .ias{
-    background-color: #808080;
+    background-color: #21346b;
     font-weight: bold;
     color: white;
 }
@@ -197,6 +210,11 @@ th{
 .dn{
     background-color: #0f243e;
     color: white;
+    font-weight: bold;
+}
+
+.atv{
+    background-color: #26ff00;
     font-weight: bold;
 }
 
