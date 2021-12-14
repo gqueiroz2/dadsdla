@@ -287,7 +287,7 @@ class performanceCore extends performance
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];
                             $mtx["case1"]["totalPlanValueTier"][$sg][$t] += $tmp1["planValues"][$sg][$b][$m];
-                        }elseif($mtx["tier"][$t] == "T2" && ($brand[$b][1] == 'AP' || $brand[$b][1] == 'TLC' || $brand[$b][1] == 'ID' || $brand[$b][1] == 'DT' || $brand[$b][1] == 'FN' || $brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX' || $brand[$b][1] == 'HGTV')){
+                        }elseif($mtx["tier"][$t] == "T2" && ($brand[$b][1] == 'AP' || $brand[$b][1] == 'TLC' || $brand[$b][1] == 'ID' || $brand[$b][1] == 'DT' || $brand[$b][1] == 'FN' || $brand[$b][1] == 'ONL' || $brand[$b][1] == 'VIX' || $brand[$b][1] == 'HGTV'||  $brand[$b][1] == 'GC' ||  $brand[$b][1] == 'HO' ||  $brand[$b][1] == 'SON' ||  $brand[$b][1] == 'AC' ||  $brand[$b][1] == 'SD' ||  $brand[$b][1] == 'ES' ||  $brand[$b][1] == 'IAS' ||  $brand[$b][1] == 'AXN' ||  $brand[$b][1] == 'AXD')){
                             $tmp2["values"][$sg][$t][$m] += $tmp1["values"][$sg][$b][$m];
                             $tmp2["planValues"][$sg][$t][$m] += $tmp1["planValues"][$sg][$b][$m];
                             $mtx["case1"]["totalValueTier"][$sg][$t] += $tmp1["values"][$sg][$b][$m];

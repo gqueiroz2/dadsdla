@@ -262,6 +262,259 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
             'wrapText' => true
         ],
     ];
+
+    protected $axn = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => 'ba1111',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $axd = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => 'ba1111',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $gc = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '8f60a6',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+
+    protected $ho = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '4ba396',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+   
+
+    protected $ac = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '968d69',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $es = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '27247d',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ]; 
+   
+
+
+    protected $tp = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => 'bbcc5e',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $df = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '616161',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $son = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '000000',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $sd = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '000000',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $eus = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '000000',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+
+    protected $ias = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '21346b',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
+    protected $atv = [
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => [
+                'rgb' => '26ff00',
+            ],
+        ],
+        'font' => [
+            'name' => 'Verdana',
+            'size' => 12,
+            'color' => array('rgb' => 'FFFFFF')
+        ],
+        'alignment' => [
+            'horizontal' => 'center',
+            'vertical' => 'center',
+            'wrapText' => true
+        ],
+    ];
+
     protected $dn = [
         'fill' => [
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -324,31 +577,31 @@ class yoyBrandTabExport implements FromView, WithEvents, ShouldAutoSize, WithTit
         }elseif ($name == "DN") {
             return $this->dn;
         }elseif ($name == "GC"){
-            return $this->dc;
+            return $this->gc;
         }elseif ($name == "HO"){
-            return $this->dc;
+            return $this->ho;
         }elseif ($name == "ATV"){
-            return $this->dc;
+            return $this->atv;
         }elseif ($name == "AXN"){
-            return $this->dc;
+            return $this->axn;
         }elseif ($name == "SON"){
-            return $this->dc;
+            return $this->son;
         }elseif ($name == "AC"){
-            return $this->dc;
+            return $this->ac;
         }elseif ($name == "SD"){
-            return $this->dc;
+            return $this->sd;
         }elseif ($name == "AXD"){
-            return $this->dc;
+            return $this->axd;
         }elseif ($name == "ES"){
-            return $this->dc;
+            return $this->es;
         }elseif ($name == "IAS"){
-            return $this->dc;
+            return $this->ias;
         }elseif ($name == "DF"){
-            return $this->dc;
+            return $this->df;
         }elseif ($name == "EUS"){
-            return $this->dc;
+            return $this->eus;
         }elseif ($name == "TP"){
-            return $this->dc;
+            return $this->tp;
         }
     }
 
