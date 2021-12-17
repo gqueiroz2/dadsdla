@@ -365,11 +365,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<label><b> Year(s): </b></label> 
+											<label><b> Year: </b></label> 
 											@if($errors->has('year'))
 												<label style="color: red;">* Required</label>
 											@endif
-											{{$rC->yearMultiple()}}					
+											{{$rC->year()}}					
 										</div>
 									</div>
 								</div>
@@ -406,8 +406,9 @@
 									</div>
 								</div>
 							</form>
+							<br><hr>
 
-							<div class="row mt-3">
+							<!--<div class="row mt-3">
 								<div class="col">
 									<center><span style="font-size: 18px;"> FIX SALES FORCE </span></center>
 								</div>
@@ -434,7 +435,7 @@
 								    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
 									</div>
 								</div>
-							</form>
+							</form>-->
 						</div>
 					</div>
 				</div>
