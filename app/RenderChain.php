@@ -17,11 +17,11 @@ class RenderChain extends Render{
         $pppYear = $ppYear -1;
 
         if($cMonth == 12){
-            $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);
+            $year = array($cYear,$nYear,$pYear,$ppYear,$pppYear);
         }else{
             $year = array($cYear,$pYear,$ppYear,$pppYear);
         }
-        
+
     	echo "<select class='selectpicker' data-selected-text-format='count' multiple='true' name='year[]' multiple data-actions-box='true' data-size='3 ' data-width='100%'>";
 			for ($y=0; $y < sizeof($year); $y++) { 
                 if($y == 0){
@@ -45,7 +45,7 @@ class RenderChain extends Render{
         $pppYear = $ppYear -1;
 
         if($cMonth == 12){
-            $year = array($nYear,$cYear,$pYear,$ppYear,$pppYear);
+            $year = array($cYear,$nYear,$pYear,$ppYear,$pppYear);
         }else{
             $year = array($cYear,$pYear,$ppYear,$pppYear);
         }

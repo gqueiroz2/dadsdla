@@ -365,11 +365,11 @@
 								<div class="row justify-content-center">          
 							 		<div class="col">		
 										<div class="form-group">
-											<label><b> Year: </b></label> 
+											<label><b> Year(s): </b></label> 
 											@if($errors->has('year'))
 												<label style="color: red;">* Required</label>
 											@endif
-											{{$rC->year()}}					
+											{{$rC->yearMultiple()}}					
 										</div>
 									</div>
 								</div>
