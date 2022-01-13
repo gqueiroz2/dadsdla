@@ -747,6 +747,13 @@ class dashboards extends rank{
         $sql = new sql(); 
         $brands = $this->getBrands($con);
 
+        array_push($brands, array(13, "ONL-SM"));
+        array_push($brands, array(14, "ONL-DSS"));
+        array_push($brands, array(15, "ONL-G9"));
+        array_push($brands, array(16, "VOD"));
+
+        //var_dump($brands);
+
         if (is_array($secondaryFilter)) {
             $secondaryFilter = implode(",", $secondaryFilter);
         }
@@ -757,63 +764,43 @@ class dashboards extends rank{
                 if($type == "agencyGroup"){
                     $smt = "agency_group";
                     $join = "LEFT JOIN agency a ON a.ID = y.agency_id";
-                    if ($brands[$b][0] == '9') {
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                    AND (brand_id != \"10\")
-                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")
-                                    AND (agency_id IN (".$secondaryFilter."))";
-                    }else{
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                    AND (brand_id = \"".$brands[$b][0]."\")
-                                    AND ( ".$smt."_id = \"".$baseFilter->id."\")
-                                    AND (agency_id IN (".$secondaryFilter."))";
-                    }
+                    $where = "WHERE(year = \"".$years[$y]."\")
+                            AND (brand_id = \"".$brands[$b][0]."\")
+                            AND ( ".$smt."_id = \"".$baseFilter->id."\")
+                            AND (agency_id IN (".$secondaryFilter."))";
                 }elseif ($type == "agency") {
                     $join = false;
-                    if ($brands[$b][0] == '9') {
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                AND (brand_id != \"10\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")
-                                AND (client_id IN (".$secondaryFilter."))";
-                    }else{
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                AND (brand_id = \"".$brands[$b][0]."\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")
-                                AND (client_id IN (".$secondaryFilter."))";    
-                    }
+                    $where = "WHERE(year = \"".$years[$y]."\")
+                            AND (brand_id = \"".$brands[$b][0]."\")
+                            AND ( ".$type."_id = \"".$baseFilter->id."\")
+                            AND (client_id IN (".$secondaryFilter."))";    
                 }else{
                     $join = false;
-                    if ($brands[$b][0] == '9') {
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                AND (brand_id != \"10\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")
-                                AND (agency_id IN (".$secondaryFilter."))";
-                    }else{
-                        $where = "WHERE(year = \"".$years[$y]."\")
-                                AND (brand_id = \"".$brands[$b][0]."\")
-                                AND ( ".$type."_id = \"".$baseFilter->id."\")
-                                AND (agency_id IN (".$secondaryFilter."))";    
-                    }
+                    $where = "WHERE(year = \"".$years[$y]."\")
+                            AND (brand_id = \"".$brands[$b][0]."\")
+                            AND ( ".$type."_id = \"".$baseFilter->id."\")
+                            AND (agency_id IN (".$secondaryFilter."))";    
+                    
                 }           
 
-                if ($brands[$b][0] == '9' || $brands[$b][0] == '10') {
-                    $some[$y][$b] = "SELECT SUM($columnD) AS mySum 
-                                FROM fw_digital y
-                                $join
-                                $where";
-                }else{
-                    $some[$y][$b] = "SELECT SUM($column) AS mySum 
+                $some[$y][$b] = "SELECT SUM($column) AS mySum 
                                 FROM $table y
                                 $join
                                 $where";
-                }
-
+                //var_dump($some[$y][$b]);
+        
                 $res[$y][$b] = $con->query($some[$y][$b]);
                 $from = array("mySum");
-                $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                
+                if ($brands[$b][0] == 13 || $brands[$b][0] == 14 || $brands[$b][0] == 15 || $brands[$b][0] == 16){
+                    $values[$y][8] += $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                }else{
+                    $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                }
             }
         }
 
+        //var_dump($values);
         return $values;
     }
 
