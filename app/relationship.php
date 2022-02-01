@@ -69,7 +69,7 @@ class relationship extends Model{
 				} else {
 					for ($m=0; $m < sizeof($temp[$l]); $m++) {
 						//var_dump($temp[$l]); 
-						var_dump($child[$l]);
+						//var_dump($child[$l]);
 						if( !is_null($temp[$l][$m]['agency']) ){						
 							$child[$l]['agency'][$m]['name'] = $temp[$l][$m]['agency'];
 							$child[$l]['agency'][$m]['id'] = $temp[$l][$m]['agencyID'];
