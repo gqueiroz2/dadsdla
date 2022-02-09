@@ -159,7 +159,7 @@ class PAndRBaseReportRender extends Render{
                         echo "<td class='smBlue' style='width:3.9%; border-width: 1px 0px 0px 0px; height:40px;'>".$this->month[$m]."</td>";
                     }
                 }
-                echo "<td class='darkBlue' style='width:3.9%; height:40px;'>Total</td>";
+                echo "<td class='darkBlue' style='width:5%; height:40px;'>Total</td>";
             echo "</tr>";
             echo "</thead>";
             
@@ -390,7 +390,7 @@ class PAndRBaseReportRender extends Render{
                             echo "<td class='smBlue' style='width:3.9%; height:40px;'>".$this->month[$m]."</td>";
                         }
                     }
-                    echo "<td class='darkBlue' style='width:3.9%; height:40px;'>Total</td>";
+                    echo "<td class='darkBlue' style='width:5%; height:40px;'>Total</td>";
                 echo "</tr>";
                 /* 
                     END OF CLIENT NAME AND MONTHS
