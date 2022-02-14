@@ -1501,10 +1501,10 @@ class forecastBase extends pAndR{
                     LEFT JOIN client c ON c.ID = s.client_id
                     LEFT JOIN agency a ON a.ID = s.agency_id
                     WHERE ((s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\"))
-                    AND ( s.region_id = \"".$regionID."\") 
+                    AND ( s.region_id = \"$regionID\") 
                     AND ( s.stage != \"6\") 
                     AND ( s.stage != \"7\")
-                    AND (s.year_from = \"$cYear\")
+                    AND s.year_from IN (\"$cYear\", \"$pYear\")
                     ORDER BY 1
                ";
         // AND (s.from_date > \"$date\")    ----> Retirada a verificação de pegar apesar forecast de meses abertos -- 2021-06-16
@@ -1522,8 +1522,8 @@ class forecastBase extends pAndR{
                     LEFT JOIN region r ON r.ID = y.sales_representant_office_id
                     LEFT JOIN agency a ON a.ID = y.agency_id
                     WHERE (y.sales_rep_id = \"$tmp\" )
-                    AND ((y.year = \"$cYear\"))                    
-                    AND (r.ID = \"".$regionID."\")
+                    AND y.year IN (\"$cYear\", \"$pYear\")                    
+                    AND (r.ID = \"$regionID\")
                     ORDER BY 1
                ";
         $resYTD = $con->query($ytd);
