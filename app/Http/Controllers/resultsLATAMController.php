@@ -2,20 +2,12 @@
 
 namespace App\Http\Controllers;
 
- use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Request;
 use App\dataBase;
 use App\base;
-use App\monthly;
 use App\region;
-use App\salesRep;
-use App\share;
-use App\brand;
 use App\pRate;
 use App\Render;
-use App\quarterRender;
-use App\resultsMQ;
-use App\renderMQ;
-use Validator;
 
 class resultsLATAMController extends Controller{
     public function get(){
@@ -24,14 +16,12 @@ class resultsLATAMController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
         $r = new region();
-        $b = new brand();
         $pr = new pRate();
         $render = new Render();
         $region = $r->getRegion($con,false);
-        $brand = $b->getBrand($con);
         $currency = $pr->getCurrency($con,false);
 
-    	return view('adSales.results.6LATAMGet',compact('render','region','brand','currency'));
+    	return view('adSales.results.6LATAMGet',compact('render','region','currency'));
     }
 
     public function post(){
@@ -40,16 +30,14 @@ class resultsLATAMController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
         $r = new region();
-        $b = new brand();
         $pr = new pRate();
         $render = new Render();
         $region = $r->getRegion($con,false);
-        $brand = $b->getBrand($con);
         $currency = $pr->getCurrency($con,false);
     	
     	var_dump(Request::all());
     	
-    	return view('adSales.results.6LATAMPost',compact('render','region','brand','currency'));
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency'));
 
     }
 }
