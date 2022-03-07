@@ -35,19 +35,18 @@ class resultsLATAMController extends Controller{
         $render = new Render();
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false);
-        
-    	var_dump(Request::all());
 
         $regionID = Request::get('region');
         $currencyID = Request::get('currency');
         $value = Request::get('value');
         $log = Request::get('log');
+        //var_dump(Request::all());
 
         $dr = new DailyResults();
 
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
         $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));
-        var_dump($pRate);
+        //var_dump($pRate);
 
         // == Objeto que constroi a matriz para população da tabela == //
         $table = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate);
