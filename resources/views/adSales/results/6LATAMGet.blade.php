@@ -16,31 +16,19 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->regionArray($region)}}							
+						@if($userLevel == 'L0' || $userLevel == 'SU')
+							{{$render->region($region)}}							
+						@else
+							{{$render->regionFiltered($region, $regionID, $special)}}
+						@endif							
 					</div>
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> Year: </span></label>
-						@if($errors->has('year'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->yearLATAM()}}					
-					</div>	
-
-					<div class="col-sm">
-						<label class="labelLeft"><span class="bold"> Brand: </span></label>
-						@if($errors->has('brand'))
-							<label style="color: red;">* Required</label>
-						@endif
-						{{$render->brand($brand)}}
-					</div>	
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						@if($errors->has('currency'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->currencyLATAM()}}
+						{{$render->currency()}}
 					</div>
 
 					<div class="col-sm">
@@ -48,8 +36,20 @@
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->valueNet()}}
+						{{$render->value2()}}
 					</div>
+
+					<div class="row justify-content-center">          
+						<div class="col">       
+							<div class="form-group">
+								<label><b> Log: </b></label> 
+								@if($errors->has('log'))
+									<label style="color: red;">* Required</label>
+								@endif
+								<input type="date" class="form-control" name="log" value="{{date("m/d/Y")}}">
+							</div>
+						</div>
+					</div>  
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
@@ -62,7 +62,7 @@
 
 	<div class="row justify-content-end mt-2">
 		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-			<span style="float: right;"> Month </span>
+			<span style="float: right;"> Daily Results </span>
 		</div>
 	</div>	
 </div>
