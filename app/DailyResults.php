@@ -92,7 +92,6 @@ class DailyResults extends Model{
         $anualSAP = array(0, 0, 0);
         $anualPSAP = array(0, 0, 0);
 
-
         $table = array();
 
         for ($i = 0; $i < 3; $i++){
@@ -172,7 +171,7 @@ class DailyResults extends Model{
             $pSap = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year - 2);
             //var_dump($pSap);
 
-            // == Esse 'for' faz a separação correspondente ao segmento somando ao valor anterior no array sendo (0 => TV, 1 => ONL e 2 => TOTAL) == //
+            // == Esse 'for' faz a separação do valor correspondente ao segmento somando ao valor anterior no array sendo (0 => TV, 1 => ONL e 2 => TOTAL) == //
             for ($j = 0; $j < 3; $j++) {
                 $anualYTD[$j] += $ytd[$j];
                 $anualPLAN[$j] += $plan[$j];
@@ -182,7 +181,7 @@ class DailyResults extends Model{
             }
         }
 
-        // == O calcúlo é feito separado pois é necessario fazer somente uma vez, separando os segmentos == //
+        // == O calcúlo é feito separado do "for" pois é necessario fazer somente uma vez, separando os segmentos == //
         for ($i = 0; $i < 3; $i++){
             $anualYOY = $anualSAP[$i] - $anualYTD[$i];
             $anualPerPLAN = $this->percentageCalculator($anualYTD[$i],$anualPLAN[$i]);
@@ -195,7 +194,7 @@ class DailyResults extends Model{
        
         array_push($table, $anualValues);
 
-        var_dump($table);
+        //var_dump($table);
         return $table;
     }
 }

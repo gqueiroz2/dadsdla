@@ -42,7 +42,7 @@
 					<div class="row justify-content-center">          
 						<div class="col">       
 							<div class="form-group">
-								<label><b> Log: </b></label> 
+								<label><b> Date: </b></label> 
 								@if($errors->has('log'))
 									<label style="color: red;">* Required</label>
 								@endif
