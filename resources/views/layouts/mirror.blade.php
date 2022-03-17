@@ -81,9 +81,6 @@
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-									@if( $userRegionName == "Brazil" )
-										<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
-									@endif
 								</div>
 							</li>
 						@else
@@ -170,10 +167,8 @@
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										@if($userLevel == "SU" || $userName == "Mario Aguilar" || $userLevel == 'L1' ||  $userLevel == 'L4')
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 											<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
-										@endif
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>

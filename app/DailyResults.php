@@ -92,7 +92,6 @@ class DailyResults extends Model{
         $anualSAP = array(0, 0, 0);
         $anualPSAP = array(0, 0, 0);
 
-
         $table = array();
 
         for ($i = 0; $i < 3; $i++){

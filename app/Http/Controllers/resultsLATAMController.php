@@ -41,7 +41,6 @@ class resultsLATAMController extends Controller{
         $value = Request::get('value');
         $log = Request::get('log');
         //var_dump(Request::all());
-
         $dr = new DailyResults();
 
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
@@ -50,8 +49,29 @@ class resultsLATAMController extends Controller{
 
         // == Objeto que constroi a matriz para população da tabela == //
         $table = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate);
+
+        $month = date('m', strtotime($log));
+        
+        //$month = $base->intToMonth2($month);
+
+        $day = date('d', strtotime($log));
+
+        $cYear = date('Y', strtotime($log));
+
+        $pYear = $cYear - 1;
+
+        $ppYear = $pYear - 1;
+
+        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
+        /*for ($i=0; $i <sizeof($table) ; $i++) { 
+            //for ($l=0; $l <sizeof($table[$l]) ; $l++) { 
+                var_dump($table[$i][0]);
+            //}
+            # code...
+        }*/
+        
     	
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency'));
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value','table', 'cYear', 'pYear', 'ppYear'));
 
     }
 }
