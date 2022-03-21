@@ -800,7 +800,7 @@ class ajaxController extends Controller{
 
         if (is_null($regionID)) {
             
-        }elseif($permission == 'L7' && $user != "Joyce Santos") {
+        }elseif($permission == 'L8') {
                 //$regionID = array($regionID);
                 //$resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
                 //for ($s=0; $s < sizeof($resp); $s++) { 
@@ -874,7 +874,7 @@ class ajaxController extends Controller{
         if($regionName == 'Brazil'){
             if (is_null($regionID)) {
                 
-            }elseif($permission == 'L7' && $user != "Joyce Santos") {
+            }elseif($permission == 'L8') {
                 //$regionID = array($regionID);
                 //$resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
                 //for ($s=0; $s < sizeof($resp); $s++) { 

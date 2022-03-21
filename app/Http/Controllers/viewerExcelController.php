@@ -74,7 +74,7 @@ class viewerExcelController extends Controller {
         
 	    $viewer = new viewer();
 
-        if ($permission == "L7" && $user != "Joyce Santos") {
+        if ($permission == "L8") {
             $table = $viewer->getTablesReps($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false,$user);
         }else{
             $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);

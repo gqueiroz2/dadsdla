@@ -292,7 +292,7 @@ class viewerController extends Controller{
             array_push($brand, "16");
         }
 
-        if ($permission == "L7" && $user != "Joyce Santos") {
+        if ($permission == "L8" ) {
             $table = $viewer->getTablesReps($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$user);
         }else{
             $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
