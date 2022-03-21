@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Monthly Results')
+@section('title', 'Pacing Office')
 @section('head')		
 	<?php include(resource_path('views/auth.php')); ?>
 @endsection
@@ -16,7 +16,15 @@
 							<label style="color: red;">* Required</label>
 						@endif						
 						{{$render->regionOffice($region)}}													
-					</div>												
+					</div>	
+
+					<div class="col-sm">
+						<label class="labelLeft"><span class="bold"> Company: </span></label>
+						@if($errors->has('company'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->company()}}
+					</div>										
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>

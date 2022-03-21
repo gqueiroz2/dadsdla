@@ -16,6 +16,14 @@
 							<label style="color: red;">* Required</label>
 						@endif						
 						{{$render->regionOffice($region)}}													
+					</div>	
+
+					<div class="col-sm">
+						<label class="labelLeft"><span class="bold"> Company: </span></label>
+						@if($errors->has('company'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->company()}}
 					</div>												
 
 					<div class="col-sm">
