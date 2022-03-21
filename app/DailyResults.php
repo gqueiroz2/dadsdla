@@ -8,16 +8,31 @@ use App\sql;
 class DailyResults extends Model{
 
     // == Essa função é usada para consultar a tabela 'CMAPS' ou 'YTD' de acordo com a região == //
-    public function ytd($con, $sql, Int $region, Float $pRate, String $value, String $day, String $month, String $year){
+    public function ytd($con, $sql, Int $region, Float $pRate, String $value, String $day, String $month, String $year, String $brands){
         if ($region == 1) {
             // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario (ainda a ser implementado) == //
             $regionYtd = "CMAPS";
 
-            $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id NOT IN (9, 13, 14, 15) AND year = $year AND month = $month";
-            //var_dump($querryTV);
-
-            $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9, 13, 14, 15) AND year = $year AND month = $month";
-            //var_dump($querryONL);
+            switch ($brands){
+                case "total":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id NOT IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+                case "discovery":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id NOT IN (9, 10, 13, 14, 15, 16, 22, 23, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9, 13, 14, 15, 16) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+                case "sony":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (22, 23) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+            }
         } else {
             // == Caso a região não seja "Brazil (1)", ele leva em consideração a base do YTD e ignora o valor do log diario (levando só em consideração o mês e o ano) == //
             $regionYtd = "YTD";
@@ -29,11 +44,27 @@ class DailyResults extends Model{
                 $value = "net_revenue";
             }
 
-            $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN (9, 13, 14, 15) AND year = $year AND month = $month";
-            //var_dump($querryTV);
-
-            $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9, 13, 14, 15) AND year = $year AND month = $month";
-            //var_dump($querryONL);
+            switch ($brands){
+                case "total":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+                case "discovery":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 22, 23, 25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9, 13, 14, 15, 16) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+                case "sony":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN IN (22, 23) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+            }
+            
         }
 
         $resultTV = $con->query($querryTV);
@@ -49,12 +80,27 @@ class DailyResults extends Model{
     }
 
     // == Essa função é usada para consultar a tabela 'plan_by_brand' == //
-    public function plan($con, $sql, Int $region, Float $pRate, String $value, String $source, String $month, String $year){
-        $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (9, 13, 14, 15) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
-        //var_dump($querryTV);
-
-        $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9, 13, 14, 15) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
-        //var_dump($querryONL);
+    public function plan($con, $sql, Int $region, Float $pRate, String $value, String $source, String $month, String $year, String $brands){
+        switch ($brands){
+            case "total":
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9, 10, 13, 14, 15, 16, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryONL);
+                break;
+            case "discovery":
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 22, 23, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9, 13, 14, 15, 16) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryONL);
+                break;
+            case "sony":
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (22, 23) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryONL);
+                break;
+        }
 
         $resultTV = $con->query($querryTV);
         $valueTV = $sql->fetchSUM($resultTV, $value);
@@ -79,12 +125,14 @@ class DailyResults extends Model{
     }
 
     // == Função construtora de matriz, ela é a responsavel em enviar para o front-end o formato final da tabela com os calculos realizados == //
-    public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate){
+    public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate, String $brands){
         $sql = new sql();
 
         $day = date('d', strtotime($log));
         $month = date('m', strtotime($log));
         $year = date('Y', strtotime($log));
+        $pYear = $year - 1;
+        $ppYear = $pYear - 1;
 
         $anualYTD = array(0, 0, 0);
         $anualPLAN = array(0, 0, 0);
@@ -98,27 +146,27 @@ class DailyResults extends Model{
             $monthValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $year);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $year, $brands);
             //var_dump($ytd);
 
             // == Calculo mensal do PLAN(target) == //
             $source = "target";
-            $plan = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year);
+            $plan = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year, $brands);
             //var_dump($plan);
 
             // == Calculo mensal do FCST(corporate) == //
             $source = "corporate";
-            $fcst = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year);
+            $fcst = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year, $brands);
             //var_dump($fcst);
 
             // == Calculo mensal do SAP(actual) do ano anterior == //
             $source = "actual";
-            $sap = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year - 1);
+            $sap = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $pYear, $brands);
             //var_dump($sap);
 
             // == Calculo mensal do SAP(actual) do ano retrasado == //
             $source = "actual";
-            $pSap = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $year - 2);
+            $pSap = $this->plan($con, $sql, $region, $pRate, $value, $source, $month + $i, $ppYear, $brands);
             //var_dump($pSap);
 
             // == Visto que as funções de consulta já trazem os valores separados de TV, ONL e TOTAL, esse 'for' faz a separação correspondente ao segmento e realiza os calcúlos necessarios == //
@@ -127,15 +175,28 @@ class DailyResults extends Model{
                 $monthPLAN = $plan[$j];
                 $monthFCST = $fcst[$j];
                 $monthSAP = $sap[$j];
+                $monthpSAP = $pSap[$j];
 
-                $monthYOY = $sap[$j] - $ytd[$j];
+                // == Enquanto não tiver a base, o valor sera 0 == //
+                $monthSs = 0;
+                $monthPerSs = 0;
 
                 $monthPerPLAN = $this->percentageCalculator($ytd[$j],$plan[$j]);
                 $monthPerFCST = $this->percentageCalculator($ytd[$j],$fcst[$j]);
                 $monthPerSAP = $this->percentageCalculator($ytd[$j],$sap[$j]);
                 $monthPerPSAP = $this->percentageCalculator($ytd[$j],$pSap[$j]);
 
-                $monthCalcs = array($monthYTD, $monthPLAN, $monthFCST, $monthSAP, $monthYOY, $monthPerPLAN, $monthPerFCST, $monthPerSAP, $monthPerPSAP);
+                $monthCalcs = array("YTD/CMAPS $year" => $monthYTD, 
+                                    "PLAN $year" => $monthPLAN, 
+                                    "FCST $year" => $monthFCST, 
+                                    "SCREENSHOT $pYear" => $monthSs, 
+                                    "SAP $pYear" => $monthSAP, 
+                                    "SAP $ppYear"  => $monthpSAP, 
+                                    "PLAN % $year" => $monthPerPLAN, 
+                                    "FCST % $year" => $monthPerFCST, 
+                                    "SCREENSHOT % $year" => $monthPerSs, 
+                                    "SAP % $pYear" => $monthPerSAP, 
+                                    "SAP % $ppYear" => $monthPerPSAP);
                 array_push($monthValues, $monthCalcs);
             }
 
@@ -148,27 +209,27 @@ class DailyResults extends Model{
             $anualValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $year);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $year, $brands);
             //var_dump($ytd);
 
             // == Calculo mensal do PLAN(target) == //
             $source = "target";
-            $plan = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year);
+            $plan = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year, $brands);
             //var_dump($plan);
 
             // == Calculo mensal do FCST(corporate) == //
             $source = "corporate";
-            $fcst = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year);
+            $fcst = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year, $brands);
             //var_dump($fcst);
 
             // == Calculo mensal do SAP(actual) do ano anterior == //
             $source = "actual";
-            $sap = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year - 1);
+            $sap = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $pYear, $brands);
             //var_dump($sap);
 
             // == Calculo mensal do SAP(actual) do ano retrasado == //
             $source = "actual";
-            $pSap = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $year - 2);
+            $pSap = $this->plan($con, $sql, $region, $pRate, $value, $source, $i, $ppYear, $brands);
             //var_dump($pSap);
 
             // == Esse 'for' faz a separação do valor correspondente ao segmento somando ao valor anterior no array sendo (0 => TV, 1 => ONL e 2 => TOTAL) == //
@@ -178,17 +239,31 @@ class DailyResults extends Model{
                 $anualFCST[$j] += $fcst[$j];
                 $anualSAP[$j] += $sap[$j];
                 $anualPSAP[$j] += $pSap[$j];
+
+                // == Enquanto não tiver a base, o valor sera 0 == //
+                $anualSs = 0;
+                $anualPerSs = 0;
             }
         }
 
         // == O calcúlo é feito separado do "for" pois é necessario fazer somente uma vez, separando os segmentos == //
         for ($i = 0; $i < 3; $i++){
-            $anualYOY = $anualSAP[$i] - $anualYTD[$i];
             $anualPerPLAN = $this->percentageCalculator($anualYTD[$i],$anualPLAN[$i]);
             $anualPerFCST = $this->percentageCalculator($anualYTD[$i],$anualFCST[$i]);
             $anualPerSAP = $this->percentageCalculator($anualYTD[$i],$anualSAP[$i]);
             $anualPerPSAP = $this->percentageCalculator($anualYTD[$i],$anualPSAP[$i]);
-            $anualCalcs = array($anualYTD[$i], $anualPLAN[$i], $anualFCST[$i], $anualSAP[$i], $anualYOY, $anualPerPLAN, $anualPerFCST, $anualPerSAP, $anualPerPSAP);
+            $anualCalcs = array("YTD/CMAPS $year" => $anualYTD[$i],
+                                "PLAN $year" => $anualPLAN[$i], 
+                                "FCST $year" => $anualFCST[$i], 
+                                "SCREENSHOT $pYear" => $anualSs, 
+                                "SAP $pYear" => $anualSAP[$i], 
+                                "SAP $ppYear" => $anualPSAP[$i], 
+                                "PLAN % $year" => $anualPerPLAN, 
+                                "FCST % $year" => $anualPerFCST, 
+                                "SCREENSHOT % $year" => $anualPerSs, 
+                                "SAP % $pYear" => $anualPerSAP, 
+                                "SAP % $ppYear" => $anualPerPSAP);
+
             array_push($anualValues, $anualCalcs);
         }
        
