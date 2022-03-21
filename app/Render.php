@@ -388,6 +388,7 @@ class Render extends Model{
             echo "<option value='spt' selected='true'> Sony </option>";   
         echo "</select>";
     }
+
     public function baseReportFilter(){
         echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
             echo "<option value='brand'> Brand </option>";   
