@@ -113,21 +113,21 @@
 						 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{strtoupper($month + $m)}} </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> 0 </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['YTD/CMAPS 2022'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['PLAN 2022'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[0][$m]['FCST 2022'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['SCREENSHOT 2021'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[0][$m]['SAP 2021'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[0][$m]['SAP 2020'])}} </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['PLAN % 2022'])}} % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['FCST % 2022'])}} % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['SCREENSHOT % 2022'])}} % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[0][$m]['SAP % 2021'])}} % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[0][$m]['SAP % 2020'])}} % </td>
 					    	</tr>
 					    	<tr>
 					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> 0 </td>
+					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[1][$m]['YTD/CMAPS 2022'])}} </td>
 					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> 0 </td>
 					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> 0 </td>
 					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> 0 </td>
