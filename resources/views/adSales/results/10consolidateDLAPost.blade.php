@@ -101,7 +101,7 @@
 							</div>
 						</div>
 
-						<div class="row sticky-top">
+						<div class="row sticky-top" style= "z-index: 1 !important;">
 							<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 								<tr class="center">
 					        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
