@@ -166,6 +166,11 @@ class viewerController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
+        $permission = Request::session()->get('userLevel');
+        $regionName = Request::session()->get('userRegion');
+        $user = Request::session()->get('userName');
+        //var_dump($user);
+
         $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
         $render = new Render();
         $bRender = new baseRender();
@@ -181,7 +186,7 @@ class viewerController extends Controller{
 
         $v = new viewer();
 
-        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand","bs"));
+        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand","bs", "permission", "user"));
 	}
 
 
@@ -260,6 +265,10 @@ class viewerController extends Controller{
 
         $regionName = Request::session()->get('userRegion');
 
+        $permission = Request::session()->get('userLevel');
+        $regionName = Request::session()->get('userRegion');
+        $user = Request::session()->get('userName');
+
 
         if($sizeOfClient == sizeof($client)){
             $checkClient = true;
@@ -283,7 +292,12 @@ class viewerController extends Controller{
             array_push($brand, "16");
         }
 
-        $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
+        if ($permission == "L8" ) {
+            $table = $viewer->getTablesReps($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$user);
+        }else{
+            $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
+        }
+        
         
        // var_dump($table[0]);
         //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$salesRegion,$agency,$client);
@@ -309,7 +323,7 @@ class viewerController extends Controller{
         $titleExcel = $source." - Viewer Base.xlsx";
         $titlePdf = $source." - Viewer Base.pdf";
 
-        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base","userRegionExcel"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base","userRegionExcel", "user", "permission"));
 
 	}
 

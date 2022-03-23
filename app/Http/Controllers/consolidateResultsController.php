@@ -58,7 +58,9 @@ class consolidateResultsController extends Controller{
 
         $regionID = Request::get('region');
         $currencyID = Request::get("currency");
-        $value = Request::get('value');        
+        $value = Request::get('value');
+        //$company = Request::get('company');
+        //var_dump(Request::all());      
 
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;

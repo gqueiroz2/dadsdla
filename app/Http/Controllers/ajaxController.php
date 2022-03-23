@@ -775,7 +775,7 @@ class ajaxController extends Controller{
             $db = new dataBase();
 
             $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
+            $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -794,13 +794,23 @@ class ajaxController extends Controller{
     public function getNewSalesRepByRegion(){
         $regionID = Request::get('regionID');
 
+        $permission = Request::session()->get('userLevel');
+        //$regionName = Request::session()->get('userRegion');
+        $user = Request::session()->get('userName');
+
         if (is_null($regionID)) {
             
+        }elseif($permission == 'L8') {
+                //$regionID = array($regionID);
+                //$resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
+                //for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$user."' selected='true'> ".$user." </option>";
+                //} 
         }else{
             $db = new dataBase();
 
             $default = $db->defaultConnection();
-        $con = $db->openConnection($default);
+            $con = $db->openConnection($default);
             $cYear = intval(date('Y'));
             $sr = new salesRep();
 
@@ -851,6 +861,10 @@ class ajaxController extends Controller{
         var_dump($regionID);
         $year = Request::get('year');
         $source = Request::get('source');
+        $permission = Request::session()->get('userLevel');
+        //$regionName = Request::session()->get('userRegion');
+        $user = Request::session()->get('userName');
+
 
         var_dump($source);
 
@@ -860,6 +874,12 @@ class ajaxController extends Controller{
         if($regionName == 'Brazil'){
             if (is_null($regionID)) {
                 
+            }elseif($permission == 'L8') {
+                //$regionID = array($regionID);
+                //$resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
+                //for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$user."' selected='true'> ".$user." </option>";
+                //}
             }else{
                 $regionID = array($regionID);
                 $resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);

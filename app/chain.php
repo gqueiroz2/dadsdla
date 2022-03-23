@@ -41,7 +41,7 @@ class chain extends excel{
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
-        //var_dump($spreadSheet);
+
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             $error = $this->insert($con,$spreadSheet[$s],$columns,$table,$into);         
             if(!$error){

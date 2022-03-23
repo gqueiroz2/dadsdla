@@ -53,6 +53,9 @@ class viewerExcelController extends Controller {
 
         $userRegion = Request::get('userRegionExcel');
 
+        $permission = Request::session()->get('userLevel');
+        //$regionName = Request::session()->get('userRegion');
+        $user = Request::session()->get('userName');
         //$stage = array($stage);
 
 	    $currency = Request::get("currencyExcel");
@@ -71,7 +74,13 @@ class viewerExcelController extends Controller {
         
 	    $viewer = new viewer();
 
-	    $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
+        if ($permission == "L8") {
+            $table = $viewer->getTablesReps($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false,$user);
+        }else{
+            $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
+        }
+
+	    //$table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
 
         //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region,$agency,$client);
         $total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);

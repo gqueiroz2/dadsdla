@@ -16,6 +16,14 @@
 							<label style="color: red;">* Required</label>
 						@endif						
 						{{$render->regionOffice($region)}}													
+					</div>	
+
+					<div class="col-sm">
+						<label class="labelLeft"><span class="bold"> Company: </span></label>
+						@if($errors->has('company'))
+							<label style="color: red;">* Required</label>
+						@endif
+						{{$render->company()}}
 					</div>												
 
 					<div class="col-sm">
@@ -81,14 +89,14 @@
 						</div>
 					</div>
 
-					<div class="row sticky-top">
+					<div class="row sticky-top" style= "z-index: 1 !important;">
 						<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 							<tr class="center">
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
 				        </table>
-
-						<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+						
+						<table style='width: 100%; zoom: 85%; font-size: 16px;'>
 							<tr class="center">
 				        		<td class='darkBlue center' style="width: 7% !important;"> DN </td>
 					        	@for($m=0; $m < sizeof($month); $m++)

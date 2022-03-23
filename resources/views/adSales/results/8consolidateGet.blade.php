@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Monthly Results')
+@section('title', 'Pacing')
 @section('head')	
 	<script src="/js/consolidateResults.js"></script>
 	<?php include(resource_path('views/auth.php')); ?>

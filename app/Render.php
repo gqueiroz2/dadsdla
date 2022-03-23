@@ -382,6 +382,13 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function company(){
+        echo "<select id='company' class='selectpicker' data-selected-text-format='count' multiple='true'  multiple data-actions-box='true' data-size='2' data-width='100%'>";
+            echo "<option value='dc' selected='true'> Discovery </option>";   
+            echo "<option value='spt' selected='true'> Sony </option>";   
+        echo "</select>";
+    }
+
     public function baseReportFilter(){
         echo "<select class='selectpicker' name='baseReport' data-width='100%'>";
             echo "<option value='brand'> Brand </option>";   

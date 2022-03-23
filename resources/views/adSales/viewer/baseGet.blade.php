@@ -74,7 +74,7 @@
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->salesRep()}}
+                                {{$render->salesRep()}}
                         </div>
 {{--
                         <div class="col">
