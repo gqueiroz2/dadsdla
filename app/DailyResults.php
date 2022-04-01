@@ -117,7 +117,7 @@ class DailyResults extends Model{
     // == Função para calculo de porcentagem == //
     public function percentageCalculator(Float $value1, Float $value2){
         if ($value1 > 0 && $value2 > 0){
-            $result = number_format(($value2 / $value1) * 100);
+            $result = number_format(($value1 / $value2) * 100);
             return $result;
         } else {
             return $result = 0;
@@ -186,17 +186,17 @@ class DailyResults extends Model{
                 $monthPerSAP = $this->percentageCalculator($ytd[$j],$sap[$j]);
                 $monthPerPSAP = $this->percentageCalculator($ytd[$j],$pSap[$j]);
 
-                $monthCalcs = array("YTD/CMAPS $year" => $monthYTD, 
-                                    "PLAN $year" => $monthPLAN, 
-                                    "FCST $year" => $monthFCST, 
-                                    "SCREENSHOT $pYear" => $monthSs, 
-                                    "SAP $pYear" => $monthSAP, 
-                                    "SAP $ppYear"  => $monthpSAP, 
-                                    "PLAN % $year" => $monthPerPLAN, 
-                                    "FCST % $year" => $monthPerFCST, 
-                                    "SCREENSHOT % $year" => $monthPerSs, 
-                                    "SAP % $pYear" => $monthPerSAP, 
-                                    "SAP % $ppYear" => $monthPerPSAP);
+                $monthCalcs = array("currentYTD" => $monthYTD, 
+                                    "currentPlan" => $monthPLAN, 
+                                    "currentFcst" => $monthFCST, 
+                                    "previousSS" => $monthSs, 
+                                    "previousSap" => $monthSAP, 
+                                    "pPSap"  => $monthpSAP, 
+                                    "currentPlanPercent" => $monthPerPLAN, 
+                                    "currentFcstPercent" => $monthPerFCST, 
+                                    "ssPercent" => $monthPerSs, 
+                                    "pSapPercent" => $monthPerSAP, 
+                                    "ppSapPercent" => $monthPerPSAP);
                 array_push($monthValues, $monthCalcs);
             }
 
@@ -252,17 +252,17 @@ class DailyResults extends Model{
             $anualPerFCST = $this->percentageCalculator($anualYTD[$i],$anualFCST[$i]);
             $anualPerSAP = $this->percentageCalculator($anualYTD[$i],$anualSAP[$i]);
             $anualPerPSAP = $this->percentageCalculator($anualYTD[$i],$anualPSAP[$i]);
-            $anualCalcs = array("YTD/CMAPS $year" => $anualYTD[$i],
-                                "PLAN $year" => $anualPLAN[$i], 
-                                "FCST $year" => $anualFCST[$i], 
-                                "SCREENSHOT $pYear" => $anualSs, 
-                                "SAP $pYear" => $anualSAP[$i], 
-                                "SAP $ppYear" => $anualPSAP[$i], 
-                                "PLAN % $year" => $anualPerPLAN, 
-                                "FCST % $year" => $anualPerFCST, 
-                                "SCREENSHOT % $year" => $anualPerSs, 
-                                "SAP % $pYear" => $anualPerSAP, 
-                                "SAP % $ppYear" => $anualPerPSAP);
+            $anualCalcs = array("currentYTD" => $anualYTD[$i],
+                                "currentPlan" => $anualPLAN[$i], 
+                                "currentFcst" => $anualFCST[$i], 
+                                "previousSS" => $anualSs, 
+                                "previousSap" => $anualSAP[$i], 
+                                "pPSap" => $anualPSAP[$i], 
+                                "currentPlanPercent" => $anualPerPLAN, 
+                                "currentFcstPercent" => $anualPerFCST, 
+                                "ssPercent" => $anualPerSs, 
+                                "pSapPercent" => $anualPerSAP, 
+                                "ppSapPercent" => $anualPerPSAP);
 
             array_push($anualValues, $anualCalcs);
         }
