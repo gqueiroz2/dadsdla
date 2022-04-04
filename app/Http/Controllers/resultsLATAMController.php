@@ -53,7 +53,7 @@ class resultsLATAMController extends Controller{
         $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "discovery");
         //var_dump($disc);
         $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "sony");
-        
+        //var_dump($total);
         //var_dump($sony);
 
         $month = date('m', strtotime($log));
