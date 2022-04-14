@@ -88,7 +88,18 @@ class consolidateResultsController extends Controller{
         $title = 'Results - Consolidate Office';
         $titleExcel = 'Results - Consolidate Office.xlsx';
 
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','company')); 
+        if (sizeof($company) == 1) {
+            if ($company[0] == 'dc') {
+                $companyView = "DN";
+            }else{
+                $companyView = strtoupper($company[0]);    
+            }
+            
+        }else{
+            $companyView = "SPT/DN";
+        }
+
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','companyView')); 
 
 
     }
