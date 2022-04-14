@@ -83,7 +83,7 @@
 						<div class="col lightBlue">
 							<center>
 								<span style='font-size:24px;'> 										
-									DLA - Consolidate - : ({{$currencyS}}/{{strtoupper($value)}})
+									DLA - Consolidate - ({{$currencyS}}/{{strtoupper($value)}})
 								</span>
 							</center>
 						</div>

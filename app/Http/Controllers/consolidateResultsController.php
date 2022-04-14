@@ -88,7 +88,7 @@ class consolidateResultsController extends Controller{
         $title = 'Results - Consolidate Office';
         $titleExcel = 'Results - Consolidate Office.xlsx';
 
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel')); 
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','company')); 
 
 
     }

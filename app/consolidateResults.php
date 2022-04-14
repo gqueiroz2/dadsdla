@@ -22,7 +22,7 @@ class consolidateResults extends Model{
         $form = "bts";
         $cYear = $years[0];
         $pYear = $years[1];    
-        var_dump($company); 
+        
         
         for ($r=0; $r < sizeof($region); $r++) { 
             for ($m=0; $m < sizeof($month); $m++) {                 
@@ -708,8 +708,18 @@ class consolidateResults extends Model{
         switch ($table) {
 
             case 'cmaps':
-                $columns = array("brand_id", "year", "month");
-                $columnsValue = array($brand, $year, $month);
+                if (sizeof($company) == 1) {
+                    if ($company[0] == 'dc' ) {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"1");
+                    }elseif ($company[0] = 0) {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"2");
+                    }
+                }else{
+                    $columns = array("brand_id", "year", "month");
+                    $columnsValue = array($brand, $year, $month);
+                }
                 $join = "LEFT JOIN brand b ON (c.brand_id = b.ID)";
                 
                 $table .= " c";
@@ -717,17 +727,19 @@ class consolidateResults extends Model{
 
             case 'ytd':
                //for ($c=0; $c < sizeof($company); $c++) { 
-                    if ($company = 'dc' ) {
+                 if (sizeof($company) == 1) {
+                    if ($company[0] == 'dc' ) {
                         $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
                         $columnsValue = array($region,$year,$month, "1");                    
-                    }elseif ($company = 'spt') {
-                        var_dump("aki");
+                    }elseif ($company[0] == 'spt') {
+                        
                         $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
                         $columnsValue = array($region,$year,$month,"2");                
-                    }else{
-                        $columns = array("y.sales_representant_office_id","y.year", "y.month");                
-                        $columnsValue = array($region,$year,$month,);                
-                    }    
+                    }
+                }else{
+                    $columns = array("y.sales_representant_office_id","y.year", "y.month");                
+                    $columnsValue = array($region,$year,$month);                
+                }    
                 //}
                 
 
@@ -738,15 +750,17 @@ class consolidateResults extends Model{
                 break;
 
             case 'plan_by_brand':
-                if ($company = 'dc') {
-                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '1');
-                }elseif ($company = 'spt') {
-                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '2');
+                if (sizeof($company) == 1) {
+                    if ($company[0] == 'dc') {
+                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
+                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '1');
+                    }elseif ($company[0] == 'spt') {
+                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
+                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '2');
+                    }    
                 }else{
-                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, "1,2");    
+                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id");
+                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4);    
                 }
                 
                 $value = "revenue";
