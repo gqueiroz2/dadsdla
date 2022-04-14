@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Monthly Results')
+@section('title', 'Pacing Office')
 @section('head')		
 	<?php include(resource_path('views/auth.php')); ?>
 @endsection
