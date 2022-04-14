@@ -17,6 +17,7 @@
 						@endif						
 						{{$render->regionOffice($region)}}													
 					</div>	
+
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Company: </span></label>
 						@if($errors->has('company'))
@@ -24,6 +25,7 @@
 						@endif
 						{{$render->company()}}
 					</div>												
+
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						@if($errors->has('currency'))

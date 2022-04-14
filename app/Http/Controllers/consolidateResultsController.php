@@ -60,7 +60,8 @@ class consolidateResultsController extends Controller{
         $currencyID = Request::get("currency");
         $value = Request::get('value');
         $company = Request::get('company');
-        var_dump(Request::all());      
+
+        //var_dump(Request::all());      
 
         $cYear = intval(date('Y'));
         $pYear = $cYear - 1;
@@ -71,7 +72,7 @@ class consolidateResultsController extends Controller{
 
         $typeSelectN = $cR->typeSelectN($con,$r,$regionID);
 
-        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years);
+        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years,$company);
         $mtx = $cR->assemble($mtx);
         $mtxDN = $cR->addDN($mtx);        
 
