@@ -1443,6 +1443,13 @@ class ajaxController extends Controller{
         echo "<option value='agency'> Agency </option>";
     }
 
+    public function company(){
+        echo "<select id='company' class='selectpicker form-control' data-selected-text-format='count' multiple='true'  multiple data-actions-box='true' data-size='2' data-width='100%' >";
+            echo "<option value='dc' selected='true'> Discovery </option>";   
+            echo "<option value='spt' selected='true'> Sony </option>";   
+        echo "</select>";
+    }
+
     public function firstPosYear(){
         
         $cYear = intval(date('Y'));

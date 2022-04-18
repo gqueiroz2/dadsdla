@@ -59,7 +59,8 @@ class consolidateResultsController extends Controller{
         $regionID = Request::get('region');
         $currencyID = Request::get("currency");
         $value = Request::get('value');
-        //$company = Request::get('company');
+        $company = Request::get('company');
+
         //var_dump(Request::all());      
 
         $cYear = intval(date('Y'));
@@ -71,7 +72,7 @@ class consolidateResultsController extends Controller{
 
         $typeSelectN = $cR->typeSelectN($con,$r,$regionID);
 
-        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years);
+        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years,$company);
         $mtx = $cR->assemble($mtx);
         $mtxDN = $cR->addDN($mtx);        
 
@@ -87,7 +88,18 @@ class consolidateResultsController extends Controller{
         $title = 'Results - Consolidate Office';
         $titleExcel = 'Results - Consolidate Office.xlsx';
 
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel')); 
+        if (sizeof($company) == 1) {
+            if ($company[0] == 'dc') {
+                $companyView = "DN";
+            }else{
+                $companyView = strtoupper($company[0]);    
+            }
+            
+        }else{
+            $companyView = "SPT/DN";
+        }
+
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','companyView')); 
 
 
     }

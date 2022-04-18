@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Monthly Results')
+@section('title', 'Pacing Office')
 @section('head')		
 	<?php include(resource_path('views/auth.php')); ?>
 @endsection
@@ -17,7 +17,7 @@
 						@endif						
 						{{$render->regionOffice($region)}}													
 					</div>	
-<!--
+
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Company: </span></label>
 						@if($errors->has('company'))
@@ -25,7 +25,7 @@
 						@endif
 						{{$render->company()}}
 					</div>												
--->
+
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						@if($errors->has('currency'))
@@ -83,7 +83,7 @@
 						<div class="col lightBlue">
 							<center>
 								<span style='font-size:24px;'> 										
-									DLA - Consolidate - : ({{$currencyS}}/{{strtoupper($value)}})
+									DLA - Consolidate - ({{$currencyS}}/{{strtoupper($value)}}) - {{$companyView}}
 								</span>
 							</center>
 						</div>
