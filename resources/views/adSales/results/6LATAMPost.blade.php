@@ -123,7 +123,7 @@
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentFcstPercent'])}} % </td>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['ssPercent'])}} % </td>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['ppSapPercent'])}} % </td>
+					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{$total[$m][0]['ppSapPercent']}} % </td>
 					    	</tr>
 					    	<tr>
 					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
