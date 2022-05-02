@@ -25,7 +25,7 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
-        var_dump($parametter);
+        //ar_dump($parametter);
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         if($table == 'cmaps'){

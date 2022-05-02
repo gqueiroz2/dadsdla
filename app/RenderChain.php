@@ -66,7 +66,7 @@ class RenderChain extends Render{
 
     	echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
             echo "<option value='data_hub'> DATA HUB </option>";            
-            echo "<option value='cmaps'> CMAPS </option>";            
+            //echo "<option value='cmaps'> CMAPS </option>";            
             echo "<option value='sf_pr'> SF P&R </option>";
             echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";            
             //echo "<option value='ytd'> YTD </option>";
@@ -81,7 +81,7 @@ class RenderChain extends Render{
 
     	echo "<select class='form-control' name='$name' data-width='100%'>";
     		echo "<option value=''> Select </option>";
-    		echo "<option value='cmaps'> CMAPS </option>";            
+    		//echo "<option value='cmaps'> CMAPS </option>";            
             echo "<option value='data_hub'> DATA HUB </option>";
             echo "<option value='sf_pr'> SF P&R </option>";
             echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";
@@ -96,6 +96,24 @@ class RenderChain extends Render{
 
     }
 
+    public function tableCmaps($name){
+        echo "<select class='form-control' name='$name' data-width='100%'>";
+            echo "<option value='cmaps'> CMAPS </option>";
+        echo "</select>";
+    }
+
+    public function dailyResults($name){
+        echo "<select class='form-control' name='$name' data-width='100%'>";
+            echo "<option value='daily'> DAILY RESULTS </option>";
+        echo "</select>";
+    }
+
+    public function reportCmaps(){
+        echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
+            echo "<option value='cmaps'> CMAPS </option>";            
+        echo "</select>";
+    }
+
    public function tableinsights($name){
         echo "<select class='form-control' name='$name' data-width='100%'>";
             echo "<option value='insights'> INSIGHTS </option>";
@@ -107,6 +125,8 @@ class RenderChain extends Render{
             echo "<option value='insights'> INSIGHTS </option>";            
         echo "</select>";
     }
+
+    
 
 
 }
