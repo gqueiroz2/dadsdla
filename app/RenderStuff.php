@@ -15,18 +15,7 @@ class RenderStuff extends Model{
     	echo "<div class='container-fluid'>";
 
 
-    		if($base->truncateTableName($table) == 'CMAPS'){
-    			echo "<div class='row mt-2 justify-content-end'>
-					<div class='col-3'>
-						<button class='btn btn-primary' style='width: 100%;' id='agency'> 
-							<a href='".route('chainCmaps')."' style='color: white'>
-								Chain
-							</a>
-						</button>
-					</div>
-				</div>";	
-    		}else{
-    			echo "<div class='row mt-2 justify-content-end'>
+	    	echo "<div class='row mt-2 justify-content-end'>
 					<div class='col-3'>
 						<button class='btn btn-primary' style='width: 100%;' id='agency'> 
 							<a href='".route('chain')."' style='color: white'>
@@ -34,8 +23,7 @@ class RenderStuff extends Model{
 							</a>
 						</button>
 					</div>
-				</div>";	
-    		}    	
+				</div>";
 
 
 			echo "<div class='row'> 

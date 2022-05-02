@@ -126,23 +126,6 @@ Route::group(['middleware' => ['auth']],function(){
 							
 		});
 
-		Route::group(['prefix'=> 'chainCmaps'], function(){
-			Route::get('chainCmaps','chainCmapsController@chainGet')
-							->name('chainCmaps');
-			Route::post('cmapstruncate','chainCmapsController@truncate')
-							->name('truncate');
-			Route::post('cmapsfirstC','chainCmapsController@firstChain')
-							->name('cmapsFirstC');
-			Route::post('cmapsSecondC','chainCmapsController@secondChain')
-							->name('cmapsSecondC');
-			Route::post('cmapstruncatethirdC','chainCmapsController@thirdChain')
-							->name('thirdChainCmaps');
-			Route::post('cmapsToDLA','chainCmapsController@thirdToDLA')
-							->name('cmapsToDLA');
-			Route::post('dailyResultsChain', 'chainCmapsController@dailyResultsChain')
-							->name('dailyResults');
-		});
-
 		Route::group(['prefix'=> 'insightsChain'], function(){
 			Route::get('insightsChain','chainInsightsController@INSIGHTSGet')
 							->name('insightsChain');
