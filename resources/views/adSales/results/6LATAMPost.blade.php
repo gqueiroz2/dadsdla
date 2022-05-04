@@ -87,7 +87,7 @@
 				    </tr>
 				    <tr>
 				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$day}}/{{$month}} </td>
+				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
@@ -215,7 +215,7 @@
 				    </tr>
 				    <tr>
 				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$day}}/{{$month}} </td>
+				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
@@ -343,7 +343,7 @@
 				    </tr>
 				    <tr>
 				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$day}}/{{$month}} </td>
+				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
 				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>

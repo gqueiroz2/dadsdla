@@ -41,6 +41,7 @@ class resultsLATAMController extends Controller{
         $currencyID = Request::get('currency');
         $value = Request::get('value');
         $log = Request::get('log');
+
         //var_dump(Request::all());
 
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
@@ -48,6 +49,9 @@ class resultsLATAMController extends Controller{
         //var_dump($pRate);
 
         // == Objetos que constroem a matriz para população da tabela == //
+        // -- Real Date -- //
+        $realDate = $dr->getLog($con, $log, $regionID);
+        //var_dump($realDate);
         $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "total");
         //var_dump($total);
         $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "discovery");
@@ -64,7 +68,7 @@ class resultsLATAMController extends Controller{
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
         
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony'));
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate'));
 
     }
 }
