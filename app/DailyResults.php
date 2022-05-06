@@ -340,10 +340,15 @@ class DailyResults extends Model{
             $result = $con->query($querry);
             $from = array("log");
             $value = $sql->fetch($result, $from, $from);
-            $realDate = $value[0]['log'];
-            $day = date('d', strtotime($realDate));
-            $month = date('m', strtotime($realDate));
-            $formattedDate = date("$day/$month");
+            if ($value) {
+               $realDate = $value[0]['log'];
+                $day = date('d', strtotime($realDate));
+                $month = date('m', strtotime($realDate));
+                $formattedDate = date("$day/$month");
+            }else{
+                $formattedDate = null;
+            }
+            
             return $formattedDate;
         }else{
             $day = date('d', strtotime($log));
@@ -353,4 +358,5 @@ class DailyResults extends Model{
         
 
     }
+
 }

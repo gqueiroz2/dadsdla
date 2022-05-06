@@ -15,8 +15,8 @@ Route::group(['middleware' => 'auth'],function(){
 	Route::group(['prefix'=>'generate'],function(){
 		Route::group(['prefix'=>'excel'],function(){
 			Route::group(['prefix'=>'results'], function(){
-				Route::post('summary','resultsExcelController@resultsSummary')
-								->name('summaryExcel');
+				Route::post('daily','DailyExcelController@dailyExcel')
+								->name('dailyExcel');
 
 				Route::post('month','resultsExcelController@resultsMonth')
 											->name('monthExcel');

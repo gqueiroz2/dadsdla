@@ -80,385 +80,389 @@
 		        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 		        	</tr>
 		        </table>
-
-				<table style='width: 100%; zoom: 85%;'>
-					<tr class="center">
-				        <td class='grey center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery + Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
-				    </tr>
-				    <tr>
-				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
-				    </tr>				   
-				    <tr>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
-				    </tr>
-				    @for($m = 0; $m < 3; $m++)
-						 <tr>
-						 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{strtoupper($month + $m)}} </td>
+		        @if($realDate != null)
+					<table style='width: 100%; zoom: 85%;'>
+						<tr class="center">
+					        <td class='grey center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery + Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					    </tr>
+					    <tr>
+					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
+					    </tr>				   
+					    <tr>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
+					    </tr>
+					    @for($m = 0; $m < 3; $m++)
+					    	<div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
+							 <tr>
+							 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{$monthForm}} </td>
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['ppSapPercent'])}} % </td>	
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    </tr>
+						@endfor
+						<tr>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-@if($month < 10){{$base->intToMonth(explode('0',$month))[0]}} @else {{$base->intToMonth($month)[0]}} @endif)  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{$total[$m][0]['ppSapPercent']}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['ppSapPercent'])}} % </td>
+						    	</tr>
 					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[$m][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[$m][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$total[$m][1]['ppSapPercent']}} % </td>	
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($total[$m][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{$total[$m][2]['ppSapPercent']}} % </td>
-					    	</tr>				    	
 					    </tr>
-					@endfor
-					<tr>
-				    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{strtoupper($month)}}) </td>
-				    	<tr>
-				    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['ppSapPercent'])}} % </td>
-					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($total[3][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($total[3][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$total[3][1]['ppSapPercent']}} % </td>
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{$total[3][2]['ppSapPercent']}} % </td>
-					    	</tr>
-				    	</tr>
-				    </tr>
-				</table>
+					</table>
 
-				<table style='width: 100%; zoom: 85%;font-size: 16px;'>
-					<tr class="center">
-		        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-		        	</tr>
-		        </table>
+					<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+						<tr class="center">
+			        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+			        	</tr>
+			        </table>
 
-				<table style='width: 100%; zoom: 85%;'>
-					<tr class="center">
-				        <td class='dc center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery ( {{$currencyName}} / {{strtoupper($value)}} )</td>
-				    </tr>
-				    <tr>
-				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
-				    </tr>				   
-				    <tr>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
-				    </tr>
-				    @for($m = 0; $m < 3; $m++)
-						 <tr>
-						 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{strtoupper($month + $m)}} </td>
+					<table style='width: 100%; zoom: 85%;'>
+						<tr class="center">
+					        <td class='dc center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					    </tr>
+					    <tr>
+					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
+					    </tr>				   
+					    <tr>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
+					    </tr>
+					    @for($m = 0; $m < 3; $m++)
+					    <div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
+							 <tr>
+							 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{$monthForm}} </td>
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['ppSapPercent'])}} % </td>	
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    </tr>
+						@endfor
+						<tr>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-@if($month < 10){{$base->intToMonth(explode('0',$month))[0]}} @else {{$base->intToMonth($month)[0]}} @endif) </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['ppSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['ppSapPercent'])}} % </td>
+						    	</tr>
 					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[$m][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[$m][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$disc[$m][1]['ppSapPercent']}} % </td>	
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($disc[$m][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{$disc[$m][2]['ppSapPercent']}} % </td>
-					    	</tr>				    	
 					    </tr>
-					@endfor
-					<tr>
-				    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{strtoupper($month)}}) </td>
-				    	<tr>
-				    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['ppSapPercent'])}} % </td>
-					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($disc[3][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($disc[3][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$disc[3][1]['ppSapPercent']}} % </td>
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{$disc[3][2]['ppSapPercent']}} % </td>
-					    	</tr>
-				    	</tr>
-				    </tr>
-				</table>
+					</table>
 
-				<table style='width: 100%; zoom: 85%;font-size: 16px;'>
-					<tr class="center">
-		        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-		        	</tr>
-		        </table>
+					<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+						<tr class="center">
+			        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+			        	</tr>
+			        </table>
 
-				<table style='width: 100%; zoom: 85%;'>
-					<tr class="center">
-				        <td class='sony center' style="width: 100% !important; font-size: 22px;" colspan="13"> Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
-				    </tr>
-				    <tr>
-				    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
-				    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
-				    </tr>				   
-				    <tr>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
-				    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
-				    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
-				    </tr>
-				    @for($m = 0; $m < 3; $m++)
-						 <tr>
-						 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{strtoupper($month + $m)}} </td>
+					<table style='width: 100%; zoom: 85%;'>
+						<tr class="center">
+					        <td class='sony center' style="width: 100% !important; font-size: 22px;" colspan="13"> Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					    </tr>
+					    <tr>
+					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 0px;"> {{$realDate}} </td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="3"> {{$cYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="2"> {{$pYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="1"> {{$ppYear}}</td>
+					    	<td class="grey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;" colspan="5"> VAR % </td>
+					    </tr>				   
+					    <tr>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
+					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Plan {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Fcst {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SS {{$cYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> Sap {{$pYear}} (%) </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> Sap {{$ppYear}} (%) </td>
+					    </tr>
+					    @for($m = 0; $m < 3; $m++)
+					    <div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
+							 <tr>
+							 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{$monthForm}} </td>
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['ppSapPercent'])}} % </td>	
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    </tr>
+						@endfor
+						<tr>
+					    		<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-@if($month < 10){{$base->intToMonth(explode('0',$month))[0]}} @else {{$base->intToMonth($month)[0]}} @endif)  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['ppSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['ppSapPercent'])}} % </td>
+						    	</tr>
+						    	<tr>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['currentYTD'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['currentPlan'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['currentFcst'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['previousSS'])}}</td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['previousSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['pPSap'])}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['currentPlanPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['currentFcstPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['ssPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['pSapPercent'])}} % </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['ppSapPercent'])}} % </td>
+						    	</tr>				    	
+						    	<tr>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentYTD'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlan'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['currentFcst'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['previousSS'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['previousSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['pPSap'])}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlanPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentFcstPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['ssPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['pSapPercent'])}} % </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['ppSapPercent'])}} % </td>
+						    	</tr>
 					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[$m][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[$m][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$sony[$m][1]['ppSapPercent']}} % </td>	
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; "> {{number_format($sony[$m][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{$sony[$m][2]['ppSapPercent']}} % </td>
-					    	</tr>				    	
-					    </tr>
-					@endfor
-					<tr>
-				    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{strtoupper($month)}}) </td>
-				    	<tr>
-				    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['ppSapPercent'])}} % </td>
-					    	</tr>
-					    	<tr>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['currentYTD'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['currentPlan'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['currentFcst'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;"> {{number_format($sony[3][1]['previousSS'])}}</td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['previousSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['pPSap'])}} </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['currentPlanPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['currentFcstPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['ssPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px;">{{number_format($sony[3][1]['pSapPercent'])}} % </td>
-					    		<td class="even center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$sony[3][1]['ppSapPercent']}} % </td>
-					    	</tr>				    	
-					    	<tr>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentYTD'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlan'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['currentFcst'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['previousSS'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['previousSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['pPSap'])}} </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlanPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentFcstPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['ssPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['pSapPercent'])}} % </td>
-					    		<td class="odd center" style="width: 7% !important;  font-size: 18px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{$sony[3][2]['ppSapPercent']}} % </td>
-					    	</tr>
-				    	</tr>
-				    </tr>
-				</table>
-
+					</table>
+				@else
+					<p> THERE IS NO DATA FOR THIS DATE </p>
+				@endif
 				<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 					<tr class="center">
 		        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
@@ -471,5 +475,69 @@
 </div>
 
 <div id="vlau"></div>
+
+<script type="text/javascript">
+            
+    $(document).ready(function(){
+
+        ajaxSetup();
+
+        $('#excel').click(function(event){
+
+            var regionExcel = "<?php echo $regionExcel; ?>";
+            var currencyExcel = "<?php echo $currencyExcel; ?>";
+            var valueExcel = "<?php echo $valueExcel; ?>";
+            var logExcel = "<?php echo $logExcel; ?>";
+
+            var div = document.createElement('div');
+            var img = document.createElement('img');
+            img.src = '/loading_excel.gif';
+            div.innerHTML ="Generating File...</br>";
+            div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+            div.appendChild(img);
+            document.body.appendChild(div);
+
+            var typeExport = $("#excel").val();
+
+            var title = "<?php echo $titleExcel; ?>";
+            var auxTitle = "<?php echo $titleExcel; ?>";
+                
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                url: "/generate/excel/results/daily",
+                type: "POST",
+                data: {regionExcel,currencyExcel,valueExcel,title, typeExport, auxTitle,logExcel},
+                /*success: function(output){
+                    $("#vlau").html(output);
+                },*/
+                success: function(result,status,xhr){
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                    //download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                    document.body.removeChild(div);
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    document.body.removeChild(div);
+                    alert(xhr.status+" "+thrownError);
+                }
+            });                    
+        });
+    });
+</script>
 	
 @endsection

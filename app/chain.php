@@ -25,7 +25,7 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
-        //ar_dump($parametter);
+        //var_dump($columns);
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         if($table == 'cmaps'){
@@ -37,7 +37,13 @@ class chain extends excel{
             array_push($columns, 'net_revenue');
             $spreadSheet = $this->addNetRevenuePandR($spreadSheet);
         }
-
+        if ($table == "sf_pr") {
+            for ($c=0; $c < sizeof($spreadSheet); $c++) { 
+                if ($spreadSheet[$c]['sales_rep_owner'] == $spreadSheet[$c]['sales_rep_splitter']) {
+                    $spreadSheet[$c]['is_split'] = "0";
+                }
+            }
+        }
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
@@ -48,7 +54,7 @@ class chain extends excel{
                 $check++;
             }            
         }
-
+        //var_dump($spreadSheet);
         if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
         else{ $complete = false; }
 
@@ -101,8 +107,9 @@ class chain extends excel{
         if($table == "sf_pr_brand"){
             $current = $this->addSFInfo($fCon,$sql,$current,$columns);
             array_push($columns, "sales_rep_splitter");
+            
         }
-
+        //var_dump($current);
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         if($table == "sf_pr_brand"){
@@ -288,14 +295,21 @@ class chain extends excel{
     public function addSFInfo($fCon,$sql,$next,$columns){
         for ($n=0; $n < sizeof($next); $n++) { 
             $oppid[$n] = $next[$n]['oppid'];
-            $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);
+            //var_dump($next);
+            $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);    
+            var_dump($tmp);
+            
             $next[$n]['client'] = $tmp['client'];
             $next[$n]['agency'] = $tmp['agency'];
             $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
             $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
-            $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_owner'];
+            $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
+            $next[$n]['is_split'] = $tmp['is_split'];
+
+
         }
 
+        //print_r($next);
         return $next;
     }
 
@@ -344,7 +358,14 @@ class chain extends excel{
     }
 
     public function getInfoFromSF($con,$sql,$oppid){
-        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name FROM sf_pr WHERE(oppid = '".$oppid."')";
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name, is_split FROM sf_pr WHERE(oppid = '".$oppid."')";
+        $res = $con->query($select);
+        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name","is_split");
+        $tmp = $sql->fetch($res,$from,$from)[0];
+        return $tmp;
+    }
+    public function getInfoFromSF2($con,$sql,$oppid){
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name FROM sf_pr WHERE(oppid = '".$oppid."') AND (is_split = 1)";
         $res = $con->query($select);
         $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name");
         $tmp = $sql->fetch($res,$from,$from)[0];

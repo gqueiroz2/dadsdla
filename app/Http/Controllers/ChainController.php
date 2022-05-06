@@ -108,6 +108,7 @@ class ChainController extends Controller{
                     $spreadSheet = array_values($spreadSheet);
                 }
                 break;
+
 			case 'ytd':
 				unset($spreadSheet[0]);
 				unset($spreadSheet[1]);
@@ -171,12 +172,12 @@ class ChainController extends Controller{
                 $spreadSheet = array_values($spreadSheet);
                 break;
 		}
-        
+        //var_dump($spreadSheet);
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
 
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }           
+        }
     }
 
     public function secondChain(){
@@ -202,10 +203,10 @@ class ChainController extends Controller{
 
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
         
-    	if($complete){
+    	/*if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }
-    }
+        }*/
+   }
 
     public function thirdChain(){
     	$validator = Validator::make(Request::all(),[
