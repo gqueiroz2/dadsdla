@@ -8,12 +8,13 @@ use App\sql;
 class DailyResults extends Model{
 
     // == Essa função é usada para consultar a tabela 'CMAPS' ou 'YTD' de acordo com a região == //
-    public function ytd($con, $sql, Int $region, Float $pRate, String $value, String $day, String $month, String $year, String $brands){
+    public function ytd($con, $sql, Int $region, Float $pRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands){
         if ($region == 1) {
             // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario (ainda a ser implementado) == //
             $regionYtd = "daily_results";
             $month = $month + 0;
-            $date = date("$year-$month-$day");
+            $realMonth = $realMonth + 0;
+            $date = date("$year-$realMonth-$day");
 
             switch ($brands){
                 case "total":
@@ -175,6 +176,7 @@ class DailyResults extends Model{
 
         $day = date('d', strtotime($log));
         $month = date('m', strtotime($log));
+        $realMonth = date('m', strtotime($log));
         $year = date('Y', strtotime($log));
         $pYear = $year - 1;
         $ppYear = $pYear - 1;
@@ -191,14 +193,14 @@ class DailyResults extends Model{
             $monthValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $year, $brands);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $realMonth, $year, $brands);
             //var_dump($ytd);
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
                 $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $month + $i, $year, $brands);
             } else {
-                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $year -1, $brands);
+                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $realMonth, $year -1, $brands);
             }
             
             // == Calculo mensal do PLAN(target) == //
@@ -259,14 +261,14 @@ class DailyResults extends Model{
             $anualValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month, $year, $brands);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $realMonth ,$year, $brands);
             //var_dump($ytd);
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
-                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $month + $i, $year, $brands);
+                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $i, $year, $brands);
             } else {
-                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $year -1, $brands);
+                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $realMonth, $year -1, $brands);
             }
 
             // == Calculo mensal do PLAN(target) == //

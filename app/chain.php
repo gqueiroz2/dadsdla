@@ -297,7 +297,7 @@ class chain extends excel{
             $oppid[$n] = $next[$n]['oppid'];
             //var_dump($next);
             $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);    
-            var_dump($tmp);
+            //var_dump($tmp);
             
             $next[$n]['client'] = $tmp['client'];
             $next[$n]['agency'] = $tmp['agency'];
