@@ -203,9 +203,9 @@ class ChainController extends Controller{
 
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
         
-    	/*if($complete){
+    	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
-        }*/
+        }
    }
 
     public function thirdChain(){
