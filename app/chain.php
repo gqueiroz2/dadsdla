@@ -37,6 +37,7 @@ class chain extends excel{
             array_push($columns, 'net_revenue');
             $spreadSheet = $this->addNetRevenuePandR($spreadSheet);
         }
+
         if ($table == "sf_pr") {
             for ($c=0; $c < sizeof($spreadSheet); $c++) { 
                 if ($spreadSheet[$c]['sales_rep_owner'] == $spreadSheet[$c]['sales_rep_splitter']) {
@@ -84,7 +85,7 @@ class chain extends excel{
             $tempBase = false;
         }
 
-        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);        
+        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);   
 
         if($tempBase){
             $table = 'bts';
@@ -109,7 +110,6 @@ class chain extends excel{
             array_push($columns, "sales_rep_splitter");
             
         }
-        //var_dump($current);
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
         if($table == "sf_pr_brand"){
@@ -293,24 +293,65 @@ class chain extends excel{
     }   
 
     public function addSFInfo($fCon,$sql,$next,$columns){
+        
+        
         for ($n=0; $n < sizeof($next); $n++) { 
             $oppid[$n] = $next[$n]['oppid'];
+
             //var_dump($next);
-            $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);    
-            //var_dump($tmp);
+
+            if ($next[$n]['region'] == "Brazil") {
+
+                $sizeOpp = $this->countOpp($fCon, $sql,$oppid[$n]);
+
+                if ($sizeOpp['oppidCount'] == '2') {
+
+                    $tmp = $this->getInfoFromSF2($fCon,$sql,$oppid[$n]);             
+
+                    $next[$n]['client'] = $tmp['client'];
+                    $next[$n]['agency'] = $tmp['agency'];
+                    $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
+                    $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
+                    $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
+
+                }else{
+                    //var_dump($sizeOpp[$n][0]['oppidCount']);
+                    $tmp = $this->getInfoFromSF($fCon,$sql,$oppid[$n]);
+                    //var_dump($tmp);
+
+                    $next[$n]['client'] = $tmp['client'];
+                    $next[$n]['agency'] = $tmp['agency'];
+                    $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
+                    $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
+                    $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];        
+                }
+            }else{
+                $tmp = $this->getInfoSFRegions($fCon,$sql,$oppid[$n]);
+
+                $next[$n]['client'] = $tmp['client'];
+                $next[$n]['agency'] = $tmp['agency'];
+                $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
+                $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
+                $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
+            }
+                      
+            //var_dump($sizeOpp);
             
-            $next[$n]['client'] = $tmp['client'];
-            $next[$n]['agency'] = $tmp['agency'];
-            $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
-            $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
-            $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
-            $next[$n]['is_split'] = $tmp['is_split'];
-
-
         }
 
         //print_r($next);
         return $next;
+    }
+
+    #essa função pega o oppid do SALES FORCE e conta pra saber se é compartilhado, se o resultado do COUNT for diferente de 1 é porque a oportunidade é compartilhada
+    public function countOpp($con, $sql,$oppid){
+        $select = "SELECT COUNT(oppid) as oppidCount from sf_pr where (oppid = '".$oppid."')";
+        $res = $con->query($select);
+        //var_dump($select);
+        $from = array("oppidCount");
+        $tmp = $sql->fetch($res,$from,$from)[0];
+        //var_dump($tmp);
+        return $tmp;
     }
 
     public function addSFValues($fCon,$sql,$next,$columns){
@@ -358,16 +399,25 @@ class chain extends excel{
     }
 
     public function getInfoFromSF($con,$sql,$oppid){
-        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name, is_split FROM sf_pr WHERE(oppid = '".$oppid."')";
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name, is_split, oppid FROM sf_pr WHERE (oppid = '".$oppid."') AND (is_split = 0)";
         $res = $con->query($select);
-        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name","is_split");
+        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name","is_split","oppid");
         $tmp = $sql->fetch($res,$from,$from)[0];
         return $tmp;
     }
+
     public function getInfoFromSF2($con,$sql,$oppid){
-        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name FROM sf_pr WHERE(oppid = '".$oppid."') AND (is_split = 1)";
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name, is_split, oppid FROM sf_pr WHERE (oppid = '".$oppid."') AND (is_split = 1)";
         $res = $con->query($select);
-        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name");
+        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name","is_split","oppid");
+        $tmp = $sql->fetch($res,$from,$from)[0];
+        return $tmp;
+    }
+
+    public function getInfoSFRegions($con,$sql,$oppid){
+        $select = "SELECT sales_rep_owner,sales_rep_splitter,client,agency,opportunity_name, is_split, oppid FROM sf_pr WHERE (oppid = '".$oppid."')";
+        $res = $con->query($select);
+        $from = array("sales_rep_owner","sales_rep_splitter","client","agency","opportunity_name","is_split","oppid");
         $tmp = $sql->fetch($res,$from,$from)[0];
         return $tmp;
     }

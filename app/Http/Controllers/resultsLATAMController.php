@@ -62,8 +62,8 @@ class resultsLATAMController extends Controller{
         $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "sony");
         //var_dump($total);
         //var_dump($sony);
-
-        $month = date('m', strtotime($log));
+        
+        $month = date('m');
         $day = date('d', strtotime($log));
         $cYear = date('Y', strtotime($log));
         $pYear = $cYear - 1;

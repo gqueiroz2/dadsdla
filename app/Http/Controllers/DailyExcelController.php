@@ -56,7 +56,7 @@ class DailyExcelController extends Controller{
                 //var_dump($total);
                 //var_dump($sony);
 
-                $month = date('m', strtotime($log));
+                $month = date('m');
                 $day = date('d', strtotime($log));
                 $cYear = date('Y', strtotime($log));
                 $pYear = $cYear - 1;

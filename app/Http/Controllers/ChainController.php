@@ -206,7 +206,7 @@ class ChainController extends Controller{
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
-   }
+    }
 
     public function thirdChain(){
     	$validator = Validator::make(Request::all(),[
