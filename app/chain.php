@@ -313,6 +313,7 @@ class chain extends excel{
                     $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
                     $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
                     $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
+                    $next[$n]['is_split'] = $tmp['is_split'];
 
                 }else{
                     //var_dump($sizeOpp[$n][0]['oppidCount']);
@@ -323,7 +324,8 @@ class chain extends excel{
                     $next[$n]['agency'] = $tmp['agency'];
                     $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
                     $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
-                    $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];        
+                    $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];  
+                    $next[$n]['is_split'] = $tmp['is_split'];      
                 }
             }else{
                 $tmp = $this->getInfoSFRegions($fCon,$sql,$oppid[$n]);
@@ -333,6 +335,7 @@ class chain extends excel{
                 $next[$n]['opportunity_name'] = $tmp['opportunity_name'];
                 $next[$n]['sales_rep_owner'] = $tmp['sales_rep_owner'];
                 $next[$n]['sales_rep_splitter'] = $tmp['sales_rep_splitter'];
+                $next[$n]['is_split'] = $tmp['is_split']; 
             }
                       
             //var_dump($sizeOpp);

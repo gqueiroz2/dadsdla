@@ -92,7 +92,7 @@ class forecast extends forecastBase{
         }else{
             $splitted = false;
         }
-
+        //var_dump($splitted);
 
         /* Gerando Soma para Canais Discovery */
         for ($b=0; $b < sizeof($discoveryBrands); $b++) {
@@ -245,7 +245,7 @@ class forecast extends forecastBase{
             for ($c=0; $c < sizeof($listOfClients); $c++) {
                 if ($splitted) {
                     if ($splitted[$c]["splitted"]) {
-                        $mul = 2;
+                        $mul = 1;
                     }else{
                         $mul = 1;
                     }

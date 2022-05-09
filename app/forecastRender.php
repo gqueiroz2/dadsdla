@@ -912,21 +912,14 @@ class forecastRender extends Render{
         for ($c=0; $c < sizeof($client); $c++) {
 
             if($splitted){
-                if($splitted[$c]['splitted']){ $clr = "lightBlue"; }
-                else{ $clr = "lightBlue"; }   
-                if($splitted[$c]['splitted']){
-                    if(is_null($splitted[$c]['owner'])){
-                        $ow = "(?)";
-                    }else{
-                        if($splitted[$c]['owner']){
-                            $ow = "(P)";
-                        }else{
-                            $ow = "(S)";
-                        }
-                    }
-                }else{
-                    $ow = "";
-                }
+                if($splitted[$c]['splitted']){ 
+                	$clr = "lightBlue";
+                	$ow = false;
+                }else{ 
+                	$clr = "lightBlue"; 
+                	$ow = false;
+                }   
+                
             }else{
                 $clr = "lightBlue";     
                 $ow = false;               

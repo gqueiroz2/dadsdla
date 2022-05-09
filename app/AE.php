@@ -1638,7 +1638,7 @@ class AE extends pAndR{
 
         */
 
-        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand_id
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (agency_id = \"".$list['agencyID']."\")
@@ -1649,7 +1649,7 @@ class AE extends pAndR{
                   ";
 
         $resSF = $con->query($selectSF);
-        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand_id");
         $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
 
         if($oppid){
@@ -1661,7 +1661,7 @@ class AE extends pAndR{
                 }
             }
         }else{
-            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand_id
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (agency_id = \"".$list['agencyID']."\")
@@ -1672,7 +1672,7 @@ class AE extends pAndR{
                   ";
 
             $resSF = $con->query($selectSF);
-            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand_id");
             $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
 
             if($oppid){
