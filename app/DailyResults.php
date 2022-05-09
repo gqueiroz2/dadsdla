@@ -20,7 +20,7 @@ class DailyResults extends Model{
                 case "total":
                     $querryTV = "SELECT SUM(real_dsc_tv + real_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM(real_dsc_onl + real_spt_onl) AS $value FROM $regionYtd real_date = '$date' AND month = '$month'";
+                    $querryONL = "SELECT SUM(real_dsc_onl + real_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                     //var_dump($querryONL);
                     break;
                 case "discovery":
@@ -85,31 +85,34 @@ class DailyResults extends Model{
         return $monthValues;
     }
 
-    public function ssRead($con, $sql, Float $pRate, String $value, String $day, String $month, String $year, String $brands){
+    public function ssRead($con, $sql, Float $pRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands){
         
         $regionYtd = "daily_results";
         $month = $month + 0;
         $date = date("$year-$month-$day");
-            switch ($brands){
-                case "total":
-                    $querryTV = "SELECT SUM(read_dsc_tv + read_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                    //var_dump($querryTV);
-                    $querryONL = "SELECT SUM(read_dsc_onl + read_spt_onl) AS $value FROM $regionYtd real_date = '$date' AND month = '$month'";
-                    //var_dump($querryONL);
-                    break;
-                case "discovery":
-                    $querryTV = "SELECT SUM(read_dsc_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                    //var_dump($querryTV);
-                    $querryONL = "SELECT SUM(read_dsc_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                    //var_dump($querryONL);
-                    break;
-                case "sony":
-                    $querryTV = "SELECT SUM(read_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                    //var_dump($querryTV);
-                    $querryONL = "SELECT SUM(read_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                    //var_dump($querryONL);
-                    break;
-            }
+        $realMonth = $realMonth + 0;
+        $date = date("$year-$realMonth-$day");
+
+        switch ($brands){
+            case "total":
+                $querryTV = "SELECT SUM(read_dsc_tv + read_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(read_dsc_onl + read_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryONL);
+                break;
+            case "discovery":
+                $querryTV = "SELECT SUM(read_dsc_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(read_dsc_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryONL);
+                break;
+            case "sony":
+                $querryTV = "SELECT SUM(read_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(read_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryONL);
+                break;
+        }
         
         $resultTV = $con->query($querryTV);
         $valueTV = $sql->fetchSUM($resultTV, $value);
@@ -129,19 +132,19 @@ class DailyResults extends Model{
     public function plan($con, $sql, Int $region, Float $pRate, String $value, String $source, String $month, String $year, String $brands){
         switch ($brands){
             case "total":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9, 10, 13, 14, 15, 16, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9,10,13,14,15,16,25,26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
                 break;
             case "discovery":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 22, 23, 25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9, 13, 14, 15, 16) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9,10,13,14,15,16) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
                 break;
             case "sony":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id NOT IN (22, 23) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (22, 23) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
                 $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
@@ -186,6 +189,7 @@ class DailyResults extends Model{
         $anualFCST = array(0, 0, 0);
         $anualSAP = array(0, 0, 0);
         $anualPSAP = array(0, 0, 0);
+        $anualSs = array(0, 0, 0);
 
         $table = array();
 
@@ -198,7 +202,7 @@ class DailyResults extends Model{
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
-                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $month + $i, $year, $brands);
+                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $month + $i, $realMonth, $year, $brands);
             } else {
                 $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $realMonth, $year -1, $brands);
             }
@@ -266,7 +270,7 @@ class DailyResults extends Model{
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
-                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $i, $year, $brands);
+                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $i, $realMonth, $year, $brands);
             } else {
                 $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $realMonth, $year -1, $brands);
             }
@@ -298,7 +302,7 @@ class DailyResults extends Model{
                 $anualFCST[$j] += $fcst[$j];
                 $anualSAP[$j] += $sap[$j];
                 $anualPSAP[$j] += $pSap[$j];
-                $anualSs[$j] = $ss[$j];
+                $anualSs[$j] += $ss[$j];
                 
             }
         }

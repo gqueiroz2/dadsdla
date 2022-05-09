@@ -44,17 +44,13 @@ class resultsLATAMController extends Controller{
         $value = Request::get('value');
         $log = Request::get('log');
 
-        //var_dump(Request::all());
-
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
-        if ($currencyID == '1') {
+        if ($currencyID == '4') {
             $pRate = 1.0;
         }else{
             $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));    
         }
         
-        //var_dump($pRate);
-
         // == Objetos que constroem a matriz para população da tabela == //
         // -- Real Date -- //
         $realDate = $dr->getLog($con, $log, $regionID);
