@@ -8,7 +8,7 @@ use App\sql;
 class DailyResults extends Model{
 
     // == Essa função é usada para consultar a tabela 'CMAPS' ou 'YTD' de acordo com a região == //
-    public function ytd($con, $sql, Int $region, Float $pRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands){
+    public function ytd($con, $sql, Int $region, Float $pRate, Float $brlPRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands, Int $currencyID){
         if ($region == 1) {
             // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario (ainda a ser implementado) == //
             $regionYtd = "daily_results";
@@ -75,17 +75,25 @@ class DailyResults extends Model{
 
         $resultONL = $con->query($querryONL);
         $valueONL = $sql->fetchSUM($resultONL, $value);
-
-
-        if ($region == 1 && $value == 'net') {
+    
+        if ($region == 1 && $currencyID == 1 && $value == 'net') {
+            $monthValues = array(($valueTV[$value]) * 0.8, ($valueONL[$value]) * 0.8, (($valueTV[$value] + $valueONL[$value])) * 0.8);
+        }elseif($region == 1 && $currencyID == 1 && $value == 'gross'){
+            $monthValues = array(($valueTV[$value]), ($valueONL[$value]), (($valueTV[$value] + $valueONL[$value])));
+        }elseif($region == 1 && $currencyID != 1 && $value == 'net'){
+            $monthValues = array(($valueTV[$value] / $brlPRate) * 0.8, ($valueONL[$value] / $brlPRate) * 0.8, (($valueTV[$value] + $valueONL[$value] / $brlPRate) * 0.8));
+        }elseif($region == 1 && $currencyID != 1 && $value == 'gross'){
+            $monthValues = array($valueTV[$value] / $brlPRate, $valueONL[$value] / $brlPRate, ($valueTV[$value] + $valueONL[$value]) / $brlPRate);
+        }elseif($region != 1 && $value == 'net'){
             $monthValues = array(($valueTV[$value] * $pRate) * 0.8, ($valueONL[$value] * $pRate) * 0.8, (($valueTV[$value] + $valueONL[$value]) * $pRate) * 0.8);
-        } else {
+        }elseif($region != 1 && $value == 'gross'){
             $monthValues = array($valueTV[$value] * $pRate, $valueONL[$value] * $pRate, ($valueTV[$value] + $valueONL[$value]) * $pRate);
         }
+       
         return $monthValues;
     }
 
-    public function ssRead($con, $sql, Float $pRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands){
+    public function ssRead($con, $sql, Int $region, Float $pRate, Float $brlPRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands, Int $currencyID){
         
         $regionYtd = "daily_results";
         $month = $month + 0;
@@ -120,11 +128,20 @@ class DailyResults extends Model{
         $resultONL = $con->query($querryONL);
         $valueONL = $sql->fetchSUM($resultONL, $value);
 
-        if ($value == 'net') {
+        if ($region == 1 && $currencyID == 1 && $value == 'net') {
+            $monthValues = array(($valueTV[$value]) * 0.8, ($valueONL[$value]) * 0.8, (($valueTV[$value] + $valueONL[$value])) * 0.8);
+        }elseif($region == 1 && $currencyID == 1 && $value == 'gross'){
+            $monthValues = array(($valueTV[$value]), ($valueONL[$value]), (($valueTV[$value] + $valueONL[$value])));
+        }elseif($region == 1 && $currencyID != 1 && $value == 'net'){
+            $monthValues = array(($valueTV[$value] / $brlPRate) * 0.8, ($valueONL[$value] / $brlPRate) * 0.8, (($valueTV[$value] + $valueONL[$value] / $brlPRate) * 0.8));
+        }elseif($region == 1 && $currencyID != 1 && $value == 'gross'){
+            $monthValues = array($valueTV[$value] / $brlPRate, $valueONL[$value] / $brlPRate, ($valueTV[$value] + $valueONL[$value]) / $brlPRate);
+        }elseif($region != 1 && $value == 'net'){
             $monthValues = array(($valueTV[$value] * $pRate) * 0.8, ($valueONL[$value] * $pRate) * 0.8, (($valueTV[$value] + $valueONL[$value]) * $pRate) * 0.8);
-        } else {
+        }elseif($region != 1 && $value == 'gross'){
             $monthValues = array($valueTV[$value] * $pRate, $valueONL[$value] * $pRate, ($valueTV[$value] + $valueONL[$value]) * $pRate);
         }
+       
         return $monthValues;
     }
 
@@ -173,12 +190,28 @@ class DailyResults extends Model{
         }
     }
 
+    public function getActiveMonth(){
+        $actualDay = date("d") + 0;
+        $actualMonth = date("m") + 0;
+
+        if($actualDay <= 5){
+            $month = $actualMonth - 1;
+        }else{
+            $month = $actualMonth;
+        }
+
+        return $month;
+    }
+
     // == Função construtora de matriz, ela é a responsavel em enviar para o front-end o formato final da tabela com os calculos realizados == //
-    public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate, String $brands){
+    public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate, Float $brlPRate, String $brands, Int $currencyID){
         $sql = new sql();
 
+        $actualDate = date("m");
+        //var_dump($actualDate);
+
         $day = date('d', strtotime($log));
-        $month = date('m', strtotime($log));
+        $month = $this->getActiveMonth();
         $realMonth = date('m', strtotime($log));
         $year = date('Y', strtotime($log));
         $pYear = $year - 1;
@@ -197,14 +230,14 @@ class DailyResults extends Model{
             $monthValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $realMonth, $year, $brands);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $brlPRate, $value, $day, $month + $i, $realMonth, $year, $brands, $currencyID);
             //var_dump($ytd);
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
-                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $month + $i, $realMonth, $year, $brands);
+                $ss = $this->ssRead($con, $sql, $region ,$pRate, $brlPRate ,$value, $day, $month + $i, $realMonth, $year, $brands, $currencyID);
             } else {
-                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $month + $i, $realMonth, $year -1, $brands);
+                $ss = $this->ytd($con, $sql, $region, $pRate, $brlPRate, $value, $day, $month + $i, $realMonth, $year -1, $brands, $currencyID);
             }
             
             // == Calculo mensal do PLAN(target) == //
@@ -265,14 +298,14 @@ class DailyResults extends Model{
             $anualValues = array();
 
             // == Calculo mensal do CMAPS/YTD == //
-            $ytd = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $realMonth ,$year, $brands);
+            $ytd = $this->ytd($con, $sql, $region, $pRate, $brlPRate,$value, $day, $i, $realMonth ,$year, $brands, $currencyID);
             //var_dump($ytd);
 
             // == Calculo mensal do CMAPS/YTD do Ano anterior == //
             if($region == 1){
-                $ss = $this->ssRead($con, $sql, $pRate, $value, $day, $i, $realMonth, $year, $brands);
+                $ss = $this->ssRead($con, $sql, $region, $pRate, $brlPRate, $value, $day, $i, $realMonth, $year, $brands, $currencyID);
             } else {
-                $ss = $this->ytd($con, $sql, $region, $pRate, $value, $day, $i, $realMonth, $year -1, $brands);
+                $ss = $this->ytd($con, $sql, $region, $pRate, $brlPRate, $value, $day, $i, $realMonth, $year -1, $brands, $currencyID);
             }
 
             // == Calculo mensal do PLAN(target) == //
