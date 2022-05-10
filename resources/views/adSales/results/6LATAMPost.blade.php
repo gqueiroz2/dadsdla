@@ -83,7 +83,7 @@
 		        @if($realDate != null)
 					<table style='width: 100%; zoom: 85%;'>
 						<tr class="center">
-					        <td class='grey center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery + Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					        <td class='grey center' style="width: 100% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;" colspan="13"> Discovery + Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
 					    </tr>
 					    <tr>
 					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
@@ -96,7 +96,11 @@
 					    <tr>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 18px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
+					    	@if($regionID == "1")
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> CMAPS </td>
+					    	@else
+					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> YTD </td>
+					    	@endif
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px; "> FCAST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 18px;"> SCREENSHOT </td>
@@ -212,7 +216,7 @@
 
 					<table style='width: 100%; zoom: 85%;'>
 						<tr class="center">
-					        <td class='dc center' style="width: 100% !important; font-size: 22px;" colspan="13"> Discovery ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					        <td class='dc center' style="width: 100% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;" colspan="13"> Discovery ( {{$currencyName}} / {{strtoupper($value)}} )</td>
 					    </tr>
 					    <tr>
 					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>
@@ -341,7 +345,7 @@
 
 					<table style='width: 100%; zoom: 85%;'>
 						<tr class="center">
-					        <td class='sony center' style="width: 100% !important; font-size: 22px;" colspan="13"> Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
+					        <td class='sony center' style="width: 100% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;" colspan="13"> Sony ( {{$currencyName}} / {{strtoupper($value)}} )</td>
 					    </tr>
 					    <tr>
 					    	<td class='grey center' style="width: 7% !important; font-size: 22px; border-style:solid; border-color:black; border-width: 1px 0px 1px 1px;"> LOG </td>

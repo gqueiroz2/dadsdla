@@ -80,8 +80,9 @@ class resultsLATAMController extends Controller{
         $currencyExcel = $currencyID;
         $valueExcel = $value;
         $logExcel = $log; 
-                
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel'));
+            
+        //var_dump($regionID);
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID'));
 
     }
 }

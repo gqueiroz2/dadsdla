@@ -106,7 +106,7 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
 										@if( ( $userLevel == "SU" ) )
-											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
+											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>										
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
 										@endif									
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
