@@ -10,7 +10,7 @@ class DailyResults extends Model{
     // == Essa função é usada para consultar a tabela 'CMAPS' ou 'YTD' de acordo com a região == //
     public function ytd($con, $sql, Int $region, Float $pRate, Float $brlPRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands, Int $currencyID){
         if ($region == 1) {
-            // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario (ainda a ser implementado) == //
+            // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario == //
             $regionYtd = "daily_results";
             $month = $month + 0;
             $realMonth = $realMonth + 0;
@@ -39,6 +39,8 @@ class DailyResults extends Model{
         } else {
             // == Caso a região não seja "Brazil (1)", ele leva em consideração a base do YTD e ignora o valor do log diario (levando só em consideração o mês e o ano) == //
             $regionYtd = "YTD";
+            $month = $month + 0;
+            $realMonth = $realMonth + 0;
 
             // == Alteração na $value para usar como parametro de consulta, de acordo como esta no banco == //
             if ($value == "gross") {
@@ -49,15 +51,15 @@ class DailyResults extends Model{
 
             switch ($brands){
                 case "total":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9, 10, 13, 14, 15, 16, 25, 26) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9,10,13,14,15,16,25,26) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "discovery":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN (9, 10, 13, 14, 15, 16, 22, 23, 25, 26) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9, 13, 14, 15, 16) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9,10,13,14,15,16) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "sony":
@@ -84,9 +86,7 @@ class DailyResults extends Model{
             $monthValues = array(($valueTV[$value] / $brlPRate) * 0.8, ($valueONL[$value] / $brlPRate) * 0.8, (($valueTV[$value] + $valueONL[$value] / $brlPRate) * 0.8));
         }elseif($region == 1 && $currencyID != 1 && $value == 'gross'){
             $monthValues = array($valueTV[$value] / $brlPRate, $valueONL[$value] / $brlPRate, ($valueTV[$value] + $valueONL[$value]) / $brlPRate);
-        }elseif($region != 1 && $value == 'net'){
-            $monthValues = array(($valueTV[$value] * $pRate) * 0.8, ($valueONL[$value] * $pRate) * 0.8, (($valueTV[$value] + $valueONL[$value]) * $pRate) * 0.8);
-        }elseif($region != 1 && $value == 'gross'){
+        }elseif($value == 'gross_revenue' || $value == 'net_revenue'){
             $monthValues = array($valueTV[$value] * $pRate, $valueONL[$value] * $pRate, ($valueTV[$value] + $valueONL[$value]) * $pRate);
         }
        
