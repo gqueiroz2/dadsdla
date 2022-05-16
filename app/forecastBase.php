@@ -1249,6 +1249,7 @@ class forecastBase extends pAndR{
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
         $test = intval( date('n') );
+        $div = 1;
         if ($test < 4) {
             $test++; 
         }
@@ -1270,7 +1271,7 @@ class forecastBase extends pAndR{
                 if ($splitted[$c]['splitted']) {
                     $div = 1;
                 }
-                
+
                 for ($m=0; $m <sizeof($matrix[$c]); $m++) {
                     $return[$m] += $matrix[$c][$m]/$div;
                 }
