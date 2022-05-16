@@ -74,12 +74,14 @@ class forecastBase extends pAndR{
                 $factor = 1;
         
             }elseif($splitted['splitted'] == true && $salesRepUser == $splitted['sales_rep_splitter_id']){
-                $factor = 0.5;
+                $factor = 0.25;
+                var_dump("entrou aqui");
             }else{
                 $factor = 1;
             }
 
-            $adjustedValue = $sFCST[$i]['sumValue']* $factor;
+            $adjustedValue = $sFCST[$i]['sumValue'] * $factor;
+
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
 
