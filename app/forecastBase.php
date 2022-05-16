@@ -74,8 +74,8 @@ class forecastBase extends pAndR{
                 $factor = 1;
         
             }elseif($splitted['splitted'] == true && $salesRepUser == $splitted['sales_rep_splitter_id']){
-                $factor = 0.25;
-                var_dump("entrou aqui");
+                $factor = 0.5;
+                //var_dump("entrou aqui");
             }else{
                 $factor = 1;
             }
@@ -236,11 +236,8 @@ class forecastBase extends pAndR{
 
         for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
             if ($splitted) {
-                if ($splitted[$c]['splitted']) {
-                    $div = 2;
-                }else{
-                    $div = 1;
-                }
+                $div = 1;
+                
                 $resp[1][0] += $fcstAmountByStage[$c][1][0]/$div;
                 $resp[1][1] += $fcstAmountByStage[$c][1][1]/$div;
                 $resp[1][2] += $fcstAmountByStage[$c][1][2]/$div;
@@ -1271,10 +1268,9 @@ class forecastBase extends pAndR{
         if ($splitted) {
             for ($c=0; $c <sizeof($matrix); $c++) {
                 if ($splitted[$c]['splitted']) {
-                    $div = 2;
-                }else{
                     $div = 1;
                 }
+                
                 for ($m=0; $m <sizeof($matrix[$c]); $m++) {
                     $return[$m] += $matrix[$c][$m]/$div;
                 }
