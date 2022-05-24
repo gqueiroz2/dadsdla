@@ -41,22 +41,27 @@ class DailyExcelController extends Controller{
                 //var_dump(Request::all());
 
                 // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
-                $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));
-                //var_dump($pRate);
+                if ($currencyID == '4') {
+                    $pRate = 1.0;
+                }else{
+                    $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));    
+                }
+
+                $brlPRate = $pr->getPrateByCurrencyAndYear($con, 1, $year = date('Y'));
 
                 // == Objetos que constroem a matriz para população da tabela == //
                 // -- Real Date -- //
                 $realDate = $dr->getLog($con, $log, $regionID);
                 //var_dump($realDate);
-                $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "total");
+                $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate,"total", $currencyID);
                 //var_dump($total);
-                $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "discovery");
+                $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "discovery", $currencyID);
                 //var_dump($disc);
-                $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "sony");
+                $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "sony", $currencyID);
                 //var_dump($total);
                 //var_dump($sony);
 
-                $month = date('m');
+                $month = $dr->getActiveMonth();
                 $day = date('d', strtotime($log));
                 $cYear = date('Y', strtotime($log));
                 $pYear = $cYear - 1;

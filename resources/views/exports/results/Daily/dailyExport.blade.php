@@ -1,6 +1,6 @@
 <table>
 <tr>
-    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="13"> Discovery + Sony ( {{$data['currencyName']}} / {{strtoupper($data['value'])}} )</td>
+    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="13"> Discovery + SPT ( {{$data['currencyName']}} / {{strtoupper($data['value'])}} )</td>
 </tr>
 
 <tr>
@@ -9,7 +9,7 @@
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="3"> {{$data['cYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="2"> {{$data['pYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="1"> {{$data['ppYear']}}</td>
-    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> VAR % </td>
+    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> {{$data['cYear']}} VAR (%)</td>
 </tr>   
 
 <tr>
@@ -17,15 +17,15 @@
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCAST </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Plan {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Fcst {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SS {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['pYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['ppYear']}} (%) </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -141,7 +141,7 @@
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="3"> {{$data['cYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="2"> {{$data['pYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="1"> {{$data['ppYear']}}</td>
-    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> VAR % </td>
+    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> {{$data['cYear']}} VAR (%) </td>
 </tr>   
 
 <tr>
@@ -149,15 +149,15 @@
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCAST </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Plan {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Fcst {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SS {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['pYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['ppYear']}} (%) </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST  </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -273,7 +273,7 @@
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="3"> {{$data['cYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="2"> {{$data['pYear']}}</td>
     <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="1"> {{$data['ppYear']}}</td>
-    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> VAR % </td>
+    <td style="background-color: #757171; color: #ffffff; font-weight: bold; text-align: center;" colspan="5"> {{$data['cYear']}} VAR (%) </td>
 </tr>   
 
 <tr>
@@ -281,15 +281,15 @@
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCAST </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Plan {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Fcst {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SS {{$data['cYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['pYear']}} (%) </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> Sap {{$data['ppYear']}} (%) </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST  </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
