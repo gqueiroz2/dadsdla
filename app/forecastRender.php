@@ -914,7 +914,7 @@ class forecastRender extends Render{
             if($splitted){
                 if($splitted[$c]['splitted']){ 
                 	$clr = "lightBlue";
-                	$ow = false;
+                	$ow = "";
                 }else{ 
                 	$clr = "lightBlue"; 
                 	$ow = false;
@@ -923,6 +923,24 @@ class forecastRender extends Render{
             }else{
                 $clr = "lightBlue";     
                 $ow = false;               
+            }
+
+            if($splitted){
+                if($splitted[$c]['splitted']){
+                    if(is_null($splitted[$c]['owner'])){
+                        $ow = "(?)";
+                    }else{
+                        if($splitted[$c]['sales_rep_owner_id'] == $salesRep['id']){
+                            $ow = "(P)";
+                        }else{
+                            $ow = "(S)";
+                        }
+                    }
+                }else{
+                    $ow = "";
+                }
+            }else{
+                $ow = false;
             }
 
             $color = "";

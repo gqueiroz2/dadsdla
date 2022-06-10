@@ -145,6 +145,8 @@ class AEController extends Controller{
 
         $salesRepID = $salesRep->id;
 
+        var_dump($brandsPerClient);
+
         $currentMonth = intval(date('m')) -1;
 
         for ($c=0; $c < sizeof($brandsPerClient); $c++) {
@@ -186,7 +188,6 @@ class AEController extends Controller{
         for ($m=0; $m < sizeof($monthWQ); $m++) { 
             $manualEstimantionBySalesRep[$m] = $excel->fixExcelNumberWithComma(Request::get("fcstSalesRep-$m"));
         }
-
         unset($manualEstimantionBySalesRep[3]);
         unset($manualEstimantionBySalesRep[7]);
         unset($manualEstimantionBySalesRep[11]);

@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('BaseReportPandRPost');			
 
 		});
-		/*
+		
 		Route::group(['prefix'=>'Pacing'],function(){
 			
 			Route::get('/','pacingReportController@get')
@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('save','VPController@save')
 										->name('VPSave');
 		});
-		*/
+		
 		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
 			
 			Route::get('/','AEController@get')

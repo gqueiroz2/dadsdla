@@ -47,6 +47,7 @@ class excel extends Model{
 	}
 
 	public function fixExcelNumberWithComma($number){
+		//var_dump($number);
 		$number = str_replace('$', '', $number);
 		$number = str_replace('.', '', $number);
 		$number = str_replace(',', '.', $number);
