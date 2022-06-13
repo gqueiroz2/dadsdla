@@ -25,7 +25,7 @@
         "dompdf/dompdf": "^0.8.3",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^6.0",
+        "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "^2.46",
@@ -39,18 +39,13 @@
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-<<<<<<< HEAD
-	"tecnickcom/tcpdf": "^6.2",
-        "squizlabs/php_codesniffer": "^2.7",
-        "dompdf/dompdf": "^0.8.0",
-        "mpdf/mpdf": "^7.0.0",
-=======
+
         "phpunit/phpunit": "^7.5",
         "tecnickcom/tcpdf": "^6.2",
         "squizlabs/php_codesniffer": "^2.7",
         "dompdf/dompdf": "^0.8.0",
         "jpgraph/jpgraph": "^4.0",
->>>>>>> 098404f749050da0fa453f719e0ef740bb318f8e
+
         "friendsofphp/php-cs-fixer": "@stable"
     },
     "config": {
