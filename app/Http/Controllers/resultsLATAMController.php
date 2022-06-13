@@ -8,9 +8,11 @@ use App\base;
 use App\region;
 use App\pRate;
 use App\Render;
+use App\excel;
 use App\DailyResults;
 
 class resultsLATAMController extends Controller{
+
     public function get(){
     	$base = new base();
         $db = new dataBase();
@@ -41,30 +43,46 @@ class resultsLATAMController extends Controller{
         $currencyID = Request::get('currency');
         $value = Request::get('value');
         $log = Request::get('log');
-        //var_dump(Request::all());
 
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
-        $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));
-        //var_dump($pRate);
+        if ($currencyID == '4') {
+            $pRate = 1.0;
+        }else{
+            $pRate = $pr->getPrateByCurrencyAndYear($con, $currencyID, $year = date('Y'));    
+        }
 
+        $brlPRate = $pr->getPrateByCurrencyAndYear($con, 1, $year = date('Y'));
+        
         // == Objetos que constroem a matriz para população da tabela == //
-        $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "total");
+        // -- Real Date -- //
+        $realDate = $dr->getLog($con, $log, $regionID);
+        //var_dump($realDate);
+        $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate,"total", $currencyID);
         //var_dump($total);
-        $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "discovery");
+        $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "discovery", $currencyID);
         //var_dump($disc);
-        $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, "sony");
+        $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "sony", $currencyID);
         //var_dump($total);
         //var_dump($sony);
 
-        $month = date('m', strtotime($log));
+        $month = $dr->getActiveMonth();
         $day = date('d', strtotime($log));
         $cYear = date('Y', strtotime($log));
         $pYear = $cYear - 1;
-        $ppYear = $pYear - 1;
+        $ppYear = $pYear - 1;        
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
-        
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony'));
+
+        $title = "Daily Results";
+        $titleExcel = "Daily Results.xlsx";
+
+        $regionExcel = $regionID;
+        $currencyExcel = $currencyID;
+        $valueExcel = $value;
+        $logExcel = $log; 
+            
+        //var_dump($regionID);
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID'));
 
     }
 }

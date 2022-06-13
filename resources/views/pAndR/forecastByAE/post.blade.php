@@ -118,13 +118,23 @@
                     </div>
                 </div>  
             </div>
-            <div class="row mt-2 justify-content-end">
-                <div class="col" style="width: 100%;">
-                    <center>
-                        {{$render->loadForecast($forRender)}}
-                    </center>
+            @if($forRender != null)
+                <div class="row mt-2 justify-content-end">
+                    <div class="col" style="width: 100%;">
+                        <center>
+                            {{$render->loadForecast($forRender)}}
+                        </center>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="row mt-2 justify-content-end">
+                    <div class="col" style="width: 100%;">
+                        <center>
+                            <p>THERE IS NO DATA FOR THIS REP !!!</p>
+                        </center>
+                    </div>
+                </div>
+            @endif
 
         </form>
     </div>

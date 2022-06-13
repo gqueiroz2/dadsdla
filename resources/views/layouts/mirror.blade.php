@@ -105,8 +105,11 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
-										@if( ( $userLevel == "SU" ) )
-											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Summary </a>										
+										@if( ( $userLevel == "SU") ||  ( $userLevel == "L1" ) ||  ( $userLevel == "L3" ) ||  ( $userLevel == "SU" ) ||  ( $userName == "Rodrigo Tamer" ) )
+											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>		
+										@endif
+
+										@if( ( $userLevel == "SU" ) )								
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
 										@endif									
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
@@ -169,6 +172,7 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 											<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
+											<a class="dropdown-item" href="{{ route('AEGet') }}"> Test </a>
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>
@@ -178,6 +182,7 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
+
 
 							@endif
 

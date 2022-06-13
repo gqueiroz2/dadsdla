@@ -81,6 +81,7 @@ class forecastController extends Controller{
 
         $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
         $forRender = $tmp;
+        //var_dump($forRender['splitted']);
 
         $regionExcel = $regionID;
         $salesRepExcel = Request::get('salesRep');
@@ -120,7 +121,7 @@ class forecastController extends Controller{
         $value = json_decode( base64_decode( Request::get('value') ));
         $user = json_decode( base64_decode( Request::get('user') ));
         $year = json_decode( base64_decode( Request::get('year') ));
-        $brandsPerClient = json_decode( base64_decode (Request::get ('brandsPerClient') ));
+        $brandPerClient = json_decode( base64_decode (Request::get ('brandsPerClient') ));
         $splitted = json_decode( base64_decode( Request::get('splitted') ));
         $submit = Request::get('options');
 
@@ -130,42 +131,6 @@ class forecastController extends Controller{
 
         $currentMonth = intval(date('m')) -1;
 
-        /*
-
-                CONCERTAR BRANDS PER CLIENT
-
-        */        
-        for ($c=0; $c < sizeof($brandsPerClient); $c++) {
-            $saida[$c] = array();
-            $brandPerClient[$c] = "";
-            if($brandsPerClient[$c]){
-                for ($p=0; $p < sizeof($brandsPerClient[$c]); $p++) {
-                    $brandsPerClient[$c][$p] = explode(";", $brandsPerClient[$c][$p]->brand);
-                }
-                for($p=0; $p <sizeof($brandsPerClient[$c]) ; $p++){
-                    for ($b=0; $b <sizeof($brandsPerClient[$c][$p]) ; $b++) { 
-                        array_push($saida[$c], $brandsPerClient[$c][$p][$b]);
-                    }
-                }
-                $saida[$c] = array_unique($saida[$c]);
-                $saida[$c] = array_values($saida[$c]);
-                for ($s=0; $s <sizeof($saida[$c]); $s++) { 
-                    if ($s == (sizeof($saida[$c])-1)) {
-                        $brandPerClient[$c] .= $saida[$c][$s];
-                    }else{
-                        $brandPerClient[$c] .= $saida[$c][$s].";";
-                    }
-                }
-            }else{
-                $saida[$c] = false;
-                $brandPerClient[$c] = false;
-            }
-        }
-        /*
-
-                CONCERTAR BRANDS PER CLIENT
-
-        */ 
 
         $date = date('Y-m-d');
         $time = date('H:i');
@@ -186,15 +151,26 @@ class forecastController extends Controller{
 
         $manualEstimantionBySalesRep = array_values($manualEstimantionBySalesRep);
 
+
+
         for ($c=0; $c < sizeof($client); $c++) { 
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                $manualEstimantionByClientDISC[$c][$m] = $excel->fixExcelNumberWithComma(str_replace(".", "", Request::get("fcstClient-DISC-$c-$m")));
+                //var_dump(Request::get("fcstClient-DISC-$c-$m"));
+                if (Request::get("fcstClient-DISC-$c-$m") == null) {
+                    $manualEstimantionByClientDISC[$c][$m] = '0';    
+                }else{
+                    $manualEstimantionByClientDISC[$c][$m] = str_replace(',', '',Request::get("fcstClient-DISC-$c-$m"));     
+                }                
             }
         }
 
         for ($c=0; $c < sizeof($client); $c++) { 
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                $manualEstimantionByClientSONY[$c][$m] = $excel->fixExcelNumberWithComma(str_replace(".", "", Request::get("fcstClient-SONY-$c-$m")));
+                if (Request::get("fcstClient-SONY-$c-$m") == null) {
+                    $manualEstimantionByClientSONY[$c][$m] = '0';    
+                }else{
+                    $manualEstimantionByClientSONY[$c][$m] = str_replace(',', '',Request::get("fcstClient-SONY-$c-$m"));    
+                }
             }
         }
 
@@ -220,9 +196,12 @@ class forecastController extends Controller{
 
         $somaSeTemFcst = 0.0;
 
+        
+
         for ($h=0; $h < sizeof($holderDISC); $h++) { 
             for ($i=0; $i < sizeof($holderDISC[$h]); $i++) { 
                 if($i >= $currentMonth){
+                    //var_dump($holderDISC[$h][$i]);
                     $somaSeTemFcst += $holderDISC[$h][$i];
                 }
             }
@@ -236,8 +215,9 @@ class forecastController extends Controller{
             }
         }
 
+        
         if($somaSeTemFcst <= 0 ){
-            /*
+            
             $msg = "No FCST Value to Submit";
 
             if($value == "Gross"){$value = "gross";}else{$value = "net";}
@@ -254,11 +234,11 @@ class forecastController extends Controller{
             $error = "Cannot Submit, There is no forecast on CRM Discovery (Sales Force)";
         
             return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
-            */
+            
         }
 
-        /*
-            FUNÇÃO RESPONSÁVEL POR VALIDAR DE O MANUAL ESTIMATION CORRESPONDE AO ROLLINGFCST, REVALIDAR PARA FUTURO AO SER IMPLEMENTADO
+        
+            //FUNÇÃO RESPONSÁVEL POR VALIDAR DE O MANUAL ESTIMATION CORRESPONDE AO ROLLINGFCST, REVALIDAR PARA FUTURO AO SER IMPLEMENTADO
 
         for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumberWithComma(Request::get("passTotal-$c"));
@@ -289,7 +269,7 @@ class forecastController extends Controller{
             }
         }
 
-        */
+        
 
         for ($c=0; $c < sizeof($client); $c++) { 
             
@@ -318,6 +298,7 @@ class forecastController extends Controller{
         $currency = $pr->getCurrencybyName($con,$currencyID);
         
         $bool = $fcst->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClientDISC,$manualEstimantionByClientSONY,$client,$splitted,$submit,$brandPerClient);
+
         
         if ($bool == "Updated") {
             $msg = "Forecast Updated";

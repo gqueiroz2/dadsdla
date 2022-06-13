@@ -59,21 +59,29 @@ class forecastBase extends pAndR{
 
         $monthWQ = $base->monthWQ;
 
+        
+
         for ($i=0; $i < sizeof($sFCST); $i++){
             for ($m=0; $m < sizeof($monthWQ); $m++) { 
                 $fcst[$i][$m]['stage'] = false;
                 $fcst[$i][$m]['value'] = 0.0;
             }
         }
-
+        //var_dump($splitted);
         for ($i=0; $i < sizeof($sFCST); $i++){
+
             if($splitted == null || !$splitted['splitted']){
                 $factor = 1;
+        
+            }elseif($splitted['splitted'] == true && $salesRepUser == $splitted['sales_rep_splitter_id']){
+                $factor = 0.5;
+                //var_dump("entrou aqui");
             }else{
-                $factor = 2;
+                $factor = 1;
             }
 
-            $adjustedValue = $sFCST[$i]['sumValue']* $factor;
+            $adjustedValue = $sFCST[$i]['sumValue'] * $factor;
+
             for ($j=0; $j < sizeof($mOPP[$i]); $j++) { 
                 $fcst[$i][$mOPP[$i][$j]]['stage'] = $sFCST[$i]['stage'];
 
@@ -228,11 +236,8 @@ class forecastBase extends pAndR{
 
         for ($c=0; $c <sizeof($fcstAmountByStage) ; $c++) { 
             if ($splitted) {
-                if ($splitted[$c]['splitted']) {
-                    $div = 2;
-                }else{
-                    $div = 1;
-                }
+                $div = 1;
+                
                 $resp[1][0] += $fcstAmountByStage[$c][1][0]/$div;
                 $resp[1][1] += $fcstAmountByStage[$c][1][1]/$div;
                 $resp[1][2] += $fcstAmountByStage[$c][1][2]/$div;
@@ -1244,6 +1249,7 @@ class forecastBase extends pAndR{
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
         $test = intval( date('n') );
+        $div = 1;
         if ($test < 4) {
             $test++; 
         }
@@ -1263,10 +1269,9 @@ class forecastBase extends pAndR{
         if ($splitted) {
             for ($c=0; $c <sizeof($matrix); $c++) {
                 if ($splitted[$c]['splitted']) {
-                    $div = 2;
-                }else{
                     $div = 1;
                 }
+
                 for ($m=0; $m <sizeof($matrix[$c]); $m++) {
                     $return[$m] += $matrix[$c][$m]/$div;
                 }
@@ -1356,48 +1361,49 @@ class forecastBase extends pAndR{
 
         */
 
-        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+        $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand_id
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id != sales_rep_owner_id)
                         AND (stage != \"5\")                      
-                        AND (stage != \"6\")                      
-                        AND (stage != \"7\")                      
+                    
                   ";
-
+                //var_dump($selectSF);
         $resSF = $con->query($selectSF);
-        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+        $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand_id");
         $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
+        //var_dump($oppid);
 
         if($oppid){
             $rtr = array( "splitted" => true , "owner" => false );    
             for ($o=0; $o < sizeof($oppid); $o++) {                 
-                if($sR == $oppid[$o]['sales_rep_owner_id']){
-                    $rtr = array( "splitted" => true , "owner" => true );
+                //if($sR == $oppid[$o]['sales_rep_owner_id']){
+                    $rtr = array( "splitted" => true , "owner" => true, "sales_rep_owner_id" => $oppid[$o]['sales_rep_owner_id'], "sales_rep_splitter_id" => $oppid[$o]['sales_rep_splitter_id']);
                     break;
-                }
+                //}
             }
         }else{
-            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
+            $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand_id
                         FROM sf_pr
                         WHERE (client_id = \"".$list['clientID']."\") 
                         AND (agency_id = \"".$list['agencyID']."\")
                         AND (sales_rep_splitter_id = sales_rep_owner_id)
                         AND (stage != \"5\")                      
-                        AND (stage != \"6\")                      
-                        AND (stage != \"7\")                      
+                    
                   ";
 
             $resSF = $con->query($selectSF);
-            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand");
+            $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand_id");
             $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
 
             if($oppid){
                 $rtr = array( "splitted" => false , "owner" => null );    
             }
 
-        }        
+        }    
+
+        //var_dump($rtr);    
 
         /*
 
@@ -1467,7 +1473,7 @@ class forecastBase extends pAndR{
 
 	public function isSplitted($con,$sql,$sR,$list,$cY,$pY){
         $soma = 0;
-
+        //var_dump($list);
         $splitted = array();
         for ($l=0; $l < sizeof($list); $l++) { 
             $splitted[$l] = $this->boolSplitted($con,$sql,$sR[0],$list[$l],$cY);

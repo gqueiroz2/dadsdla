@@ -912,13 +912,25 @@ class forecastRender extends Render{
         for ($c=0; $c < sizeof($client); $c++) {
 
             if($splitted){
-                if($splitted[$c]['splitted']){ $clr = "lightBlue"; }
-                else{ $clr = "lightBlue"; }   
+                if($splitted[$c]['splitted']){ 
+                	$clr = "lightBlue";
+                	$ow = "";
+                }else{ 
+                	$clr = "lightBlue"; 
+                	$ow = false;
+                }   
+                
+            }else{
+                $clr = "lightBlue";     
+                $ow = false;               
+            }
+
+            if($splitted){
                 if($splitted[$c]['splitted']){
                     if(is_null($splitted[$c]['owner'])){
                         $ow = "(?)";
                     }else{
-                        if($splitted[$c]['owner']){
+                        if($splitted[$c]['sales_rep_owner_id'] == $salesRep['id']){
                             $ow = "(P)";
                         }else{
                             $ow = "(S)";
@@ -928,8 +940,7 @@ class forecastRender extends Render{
                     $ow = "";
                 }
             }else{
-                $clr = "lightBlue";     
-                $ow = false;               
+                $ow = false;
             }
 
             $color = "";
