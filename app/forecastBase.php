@@ -1369,7 +1369,7 @@ class forecastBase extends pAndR{
                         AND (stage != \"5\")                      
                     
                   ";
-
+                //var_dump($selectSF);
         $resSF = $con->query($selectSF);
         $fromSF = array("oppid","sales_rep_owner_id","sales_rep_splitter_id","client_id", "brand_id");
         $oppid = $sql->fetch($resSF,$fromSF,$fromSF);
