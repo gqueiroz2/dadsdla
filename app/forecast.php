@@ -541,7 +541,7 @@ class forecast extends forecastBase{
 
             if($rev){
                 for ($o=0; $o < sizeof($rev); $o++){                 
-                    $period[$o] = $this->monthOPP($rev[$o], 2022);       
+                    $period[$o] = $this->monthOPP($rev[$o], $cYear);       
                 }
             }else{
                 $period = false;
