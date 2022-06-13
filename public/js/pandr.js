@@ -88,7 +88,11 @@ function handleNumber(number){
           x1 = x1.replace(rgx, '$1' + '.' + '$2');
       return x1 + x2;
       */
-      return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+      if(x == Infinity){
+        return 0
+      } else {
+        return x
+      }
 
   }
 

@@ -493,8 +493,89 @@ class forecast extends forecastBase{
         else{ $valueView = 'Net Net'; }
 
         //$secondary = $listOfClients;
-
         //$nSecondary = $this->mergeSecondary($secondary,$rollingFCST,$lastRollingFCST,$clientRevenueCYear,$clientRevenuePYear,$fcstAmountByStage,$revenueDiscovery,$revenueDiscoveryPYear,$revenueSony,$revenueSonyPYear);
+
+        // == Se mudarem de ideia sobre o RF do Brasil ser diferente da soma dos clientes, comenta esse bloco de código == //
+        if ($regionID == 1){
+            if($value == 'gross') {$queryValue = 'gross_revenue';}
+            elseif($value == 'net') {$queryValue = 'net_revenue';}
+            $from = array($queryValue,'from_date','to_date','year_from','year_to','stage','oppid','salesRepOwner');
+            $to = array("sumValue",'fromDate','toDate','yearFrom','yearTo','stage','oppid','salesRepOwner');
+            $select = "         SELECT $queryValue, oppid, from_date , to_date, year_from, year_to, stage , is_split , sales_rep_owner_id AS 'salesRepOwner'
+                                FROM sf_pr
+                                WHERE ( (sales_rep_splitter_id = \"".$salesRepID[0]."\") OR (sales_rep_owner_id = \"".$salesRepID[0]."\") )
+                                AND (is_split = 1)
+                                AND (stage != '5')
+                                AND (stage != '6')
+                                AND (stage != '7')
+                                AND (year_from = $cYear)";
+            //var_dump($select);
+            $res = $con->query($select);
+            $rev = $sql->fetch($res,$from,$to);
+
+            if ($rev) {
+                for ($r=0; $r <sizeof($rev); $r++) { 
+                    $rev[$r]["sumValue"] = doubleval($rev[$r]["sumValue"])*$div;
+                }
+            }
+
+            /*
+                AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
+            */
+            if($rev){
+                for ($r=0; $r < sizeof($rev); $r++) { 
+                    if($rev[$r]['yearFrom'] != $rev[$r]['yearTo']){
+                        $fromArray = $this->makeMonths("from",$rev[$r]['fromDate']);
+                        $toArray = $this->makeMonths("to",$rev[$r]['toDate']);
+                        $fromShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearFrom'],$fromArray);
+                        $toShare = $this->calculateRespectiveShare($con,$sql,$regionID,$value,$rev[$r]['yearTo'],$toArray);
+                        $shareFromCYear = $this->aggregateShare($fromShare,$toShare);
+
+                        $rev[$r]['sumValue'] = $rev[$r]['sumValue']*$shareFromCYear;
+                        //var_dump($rev[$r]['sumValue']);
+                    }                
+                }
+            }
+
+            //var_dump($rev);
+
+            if($rev){
+                for ($o=0; $o < sizeof($rev); $o++){                 
+                    $period[$o] = $this->monthOPP($rev[$o], 2022);       
+                }
+            }else{
+                $period = false;
+            }
+
+            if($period){
+                $shareSalesRep = $this->salesRepShareOnPeriod(null ,$executiveRevenuePYearDisc , null, $period, $rev);
+                $fcst = $this->fillFCST($rev, $period, $shareSalesRep,$salesRepID[0], null);
+            }else{
+                $shareSalesRep = false;
+                $fcst = false;
+            }
+
+            if($fcst){
+                $fcst = $this->adjustValues($fcst);
+                $sharedFcstByStage = $this->fcstAmountByStage($fcst, $period);
+                $sharedFcst = $this->fcstAmount($fcst, $period, null, $salesRepID[0]);
+                $sharedFcst = $this->adjustValuesForecastAmount($sharedFcst);
+            }else{
+                $sharedFcstByStage = false;
+                $sharedFcst = false;
+            }  
+
+            //$testValue = $this->addFcstWithBooking($executiveRevenueCYear,$executiveRF);
+            //$testResult = $this->addQuartersAndTotal($sharedFcst);
+            //var_dump($executiveRF);
+
+            for ($i = 0; $i < sizeof($executiveRF); $i++){
+                $executiveRF[$i] = $executiveRF[$i] - ($sharedFcst[$i] / 2);
+            }
+            //var_dump($executiveRF);
+        }
+
+        // == Comenta até aqui == //
         
         $rtr = array(   
                         "cYear" => $cYear,
