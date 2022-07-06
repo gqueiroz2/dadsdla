@@ -238,7 +238,7 @@ class forecastController extends Controller{
         }
 
         
-            //FUNÇÃO RESPONSÁVEL POR VALIDAR DE O MANUAL ESTIMATION CORRESPONDE AO ROLLINGFCST, REVALIDAR PARA FUTURO AO SER IMPLEMENTADO
+        //FUNÇÃO RESPONSÁVEL POR VALIDAR DE O MANUAL ESTIMATION CORRESPONDE AO ROLLINGFCST, REVALIDAR PARA FUTURO AO SER IMPLEMENTADO
 
         for ($c=0; $c < sizeof($client); $c++) { 
             $passTotal[$c] = $excel->fixExcelNumberWithComma(Request::get("passTotal-$c"));
@@ -268,7 +268,7 @@ class forecastController extends Controller{
 
             }
         }
-
+        //TERMINO DA FUNÇÃO
         
 
         for ($c=0; $c < sizeof($client); $c++) { 

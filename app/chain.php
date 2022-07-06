@@ -653,11 +653,13 @@ class chain extends excel{
             $region = "New York International";
         }else if($region == 'MIAMI INTL.'){
             $region = "Miami";
+        }else if($region == 'SINGAPORE INTL.'){
+            $region = "Singapore";
         }else{
             $region = ucfirst(strtolower($region));
         }
 
-        if($region == "Spain" || $region == "SPAIN"){
+        if($region == "Spain" || $region == "SPAIN"){ 
             $region = "Europe";
         }
         
