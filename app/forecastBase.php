@@ -475,6 +475,7 @@ class forecastBase extends pAndR{
                                             type_of_value = \"".$value."\",
                                             month = \"".$month."\" WHERE ID = \"".$id."\"";            
             if($con->query($update) === true){}else{var_dump($con->error);return false;}
+            
             $updateFCSTSalesRep = $this->updateFCSTSalesRep($con,$id,$salesRep,$manualEstimantionBySalesRep,$tableFCSTSalesRep);
             $updateFCSTClientDISC = $this->updateFCSTClient($con,$id,$salesRep,$manualEstimantionByClientDISC,$tableFCSTClient,$list,$splitted, $brandPerClient,"DISC");
             $updateFCSTClientSONY = $this->updateFCSTClient($con,$id,$salesRep,$manualEstimantionByClientSONY,$tableFCSTClient,$list,$splitted, $brandPerClient,"SONY");
@@ -646,6 +647,7 @@ class forecastBase extends pAndR{
                 for ($m=0; $m <sizeof($manualEstimantion[$c]); $m++) { 
                     $update[$c][$m] = "UPDATE $table SET value = \"".($manualEstimantion[$c][$m])."\", brand = \"".$brandPerClient[$c]."\" WHERE month = \"".($m+1)."\" AND forecast_id = \"".$id."\" AND client_id = \"".$list[$c]->clientID."\" AND agency_id = \"".$list[$c]->agencyID."\" AND company = \"".$pattern."\"";
 
+                    //var_dump($update);
                     if ($con->query($update[$c][$m]) === true) {
                     }else{
                         var_dump($con->error);
@@ -1249,7 +1251,7 @@ class forecastBase extends pAndR{
     public function consolidateAEFcst($matrix,$splitted){
         $return = array();
         $test = intval( date('n') );
-        $div = 1;
+        //var_dump("aki");
         if ($test < 4) {
             $test++; 
         }
@@ -1268,7 +1270,9 @@ class forecastBase extends pAndR{
         }
         if ($splitted) {
             for ($c=0; $c <sizeof($matrix); $c++) {
-                if ($splitted[$c]['splitted']) {
+                if ($splitted[$c]['splitted'] == true) {
+                    $div = 2;
+                }else{
                     $div = 1;
                 }
 
@@ -1494,6 +1498,105 @@ class forecastBase extends pAndR{
         }
     }
 
+    public function listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID){
+
+        // ----> Retirada a verificação de pegar apesar forecast de meses abertos -- 2021-06-16 $date = date('n')-1; // Último mês fechado ( mês atual - 1 )
+
+        $tmp = $salesRepID[0];
+        //GET FROM SALES FORCE
+        $sf = "SELECT DISTINCT c.name AS 'clientName',
+                       c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
+                    FROM sf_pr s
+                    LEFT JOIN client c ON c.ID = s.client_id
+                    LEFT JOIN agency a ON a.ID = s.agency_id
+                    WHERE ((s.sales_rep_owner_id = \"$tmp\") OR (s.sales_rep_splitter_id = \"$tmp\"))
+                    AND ( s.region_id = \"$regionID\") 
+                    AND ( s.stage != \"6\") 
+                    AND ( s.stage != \"7\")
+                    AND s.year_from IN (\"$cYear\", \"$pYear\")
+                    ORDER BY 1
+               ";
+
+        // AND (s.from_date > \"$date\")    ----> Retirada a verificação de pegar apesar forecast de meses abertos -- 2021-06-16
+        $resSF = $con->query($sf);
+        $from = array("clientName","clientID","agencyID","agencyName");
+        $listSF = $sql->fetch($resSF,$from,$from);
+        
+        //GET FROM IBMS/BTS
+        $ytd = "SELECT DISTINCT c.name AS 'clientName',
+                       c.ID AS 'clientID',
+                       a.ID AS 'agencyID',
+                       a.name AS 'agencyName'
+                    FROM ytd y
+                    LEFT JOIN client c ON c.ID = y.client_id
+                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
+                    LEFT JOIN agency a ON a.ID = y.agency_id
+                    WHERE (y.sales_rep_id = \"$tmp\" )
+                    AND y.year IN (\"$cYear\", \"$pYear\")                    
+                    AND (r.ID = \"$regionID\")
+                    ORDER BY 1
+               ";
+        $resYTD = $con->query($ytd);
+        $from = array("clientName","clientID","agencyID","agencyName");
+        $listYTD = $sql->fetch($resYTD,$from,$from);
+
+        /*
+            Juntando clientes do CRM e do BTS
+        */
+
+        $cmaps = "SELECT DISTINCT c.name AS 'clientName',
+                         c.ID AS 'clientID',
+                         a.ID AS 'agencyID',
+                         a.name AS 'agencyName'
+                  FROM cmaps cm
+                  LEFT JOIN client c ON c.ID = cm.client_id
+                  LEFT JOIN agency a ON a.ID = cm.agency_id
+                  WHERE (cm.sales_rep_id = \"$tmp\" )
+                  AND cm.year IN (\"$cYear\", \"$pYear\")                   
+                  ORDER BY 1
+
+                ";
+        $resCMAPS = $con->query($cmaps);
+        $from = array("clientName","clientID","agencyID","agencyName");
+        $listCMAPS = $sql->fetch($resCMAPS,$from,$from);
+        //var_dump($cmaps);
+
+        $count = 0;
+        $list = array();
+
+        if($listSF){
+            for ($sff=0; $sff < sizeof($listSF); $sff++) { 
+                $list[$count] = $listSF[$sff];
+                $count ++;
+            }
+        }
+        
+        if($listYTD){
+            for ($y=0; $y < sizeof($listYTD); $y++) { 
+                $list[$count] = $listYTD[$y];
+                $count ++;
+            }
+        }
+
+        if($listCMAPS){
+            for ($C=0; $C < sizeof($listCMAPS); $C++) { 
+                $list[$count] = $listCMAPS[$C];
+                $count ++;
+            }
+        }
+
+        $list = array_map("unserialize", array_unique(array_map("serialize", $list)));
+        
+        $list = array_values($list);
+
+        usort($list, array($this,'orderClient'));
+        //var_dump($list);
+
+        return $list;
+    }
+
     public function listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID){
 
         // ----> Retirada a verificação de pegar apesar forecast de meses abertos -- 2021-06-16 $date = date('n')-1; // Último mês fechado ( mês atual - 1 )
@@ -1514,6 +1617,7 @@ class forecastBase extends pAndR{
                     AND s.year_from IN (\"$cYear\", \"$pYear\")
                     ORDER BY 1
                ";
+
         // AND (s.from_date > \"$date\")    ----> Retirada a verificação de pegar apesar forecast de meses abertos -- 2021-06-16
         $resSF = $con->query($sf);
         $from = array("clientName","clientID","agencyID","agencyName");

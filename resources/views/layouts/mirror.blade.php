@@ -111,9 +111,9 @@
 
 										@if( ( $userLevel == "SU" ) )								
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
+											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 										@endif									
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
-										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 										<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 										<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 										<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
@@ -172,7 +172,7 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 											<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
-											<a class="dropdown-item" href="{{ route('AEGet') }}"> Test </a>
+											<!--<a class="dropdown-item" href="{{ route('AEGet') }}"> Test </a>-->
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>
@@ -182,8 +182,7 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE - SPT + DSC </a>
 										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
-
-
+								</li>
 							@endif
 
 							@if( ( $userLevel == "SU" ) )

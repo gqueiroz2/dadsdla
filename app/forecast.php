@@ -42,6 +42,8 @@ class forecast extends forecastBase{
 
         /* Lista os clientes do SF e do BTS*/
         $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
+
+        $test = $this->listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
         
         if(sizeof($listOfClients) == 0){
             return false;
@@ -212,18 +214,62 @@ class forecast extends forecastBase{
             
             if ($regionID == "1") {
                 $from2 = array("sales_reps");
+                $splitFrom = array("split","ownerID","splitterID");
+
                 for ($c=0; $c <sizeof($listOfClients); $c++) { 
+
+                    //VERIFICANDO SE A CONTA É COMPARTILHADA E QUEM É O DONO
+
+                    $split[$c] = "SELECT DISTINCT is_split AS split, sales_rep_owner_id AS ownerID, sales_rep_splitter_id AS splitterID
+                              FROM sf_pr 
+                              WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
+                              AND stage != '6'
+                              AND stage != '7'";
+                    $querySplit[$c] = $con->query($split[$c]);
+                    $splitResult[$c] = $sql->fetch($querySplit[$c],$splitFrom,$splitFrom);
+                    //var_dump($split[$c]);
+
+                    //TERMINA VERIFICAÇÃO
                     
-                    $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps 
-                                        FROM sf_pr 
-                                        WHERE sales_rep_splitter_id = \"".$salesRepID[0]."\" 
-                                        AND client_id = \"".$listOfClients[$c]["clientID"]."\"                                         
-                                        AND stage != '6' 
-                                        AND stage != '7'";
+                    if ($splitResult[$c] != false) {
+                        for ($x=0; $x <sizeof($splitResult[$c]); $x++) { 
+                    
+                            if ($splitResult[$c][$x]['split'] == 1) {
+                                if ($splitResult[$c][$x]['ownerID'] == $salesRepID[0]) {
 
-                    $result2[$c] = $con->query($select2[$c]);
-                    $salesReps[$c] = $sql->fetch($result2[$c],$from2,$from2);
+                                    $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps 
+                                                    FROM sf_pr 
+                                                    WHERE (sales_rep_owner_id = \"".$salesRepID[0]."\" )
+                                                    AND client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                                    AND stage != '6'                                
+                                                    AND stage != '7'";
 
+                               }else{
+                                     $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps 
+                                                FROM sf_pr 
+                                                WHERE (sales_rep_splitter_id = \"".$salesRepID[0]."\" )
+                                                AND client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                                AND stage != '6' 
+                                                AND stage != '7'"; 
+                               }
+                            }else{
+                                $select2[$c] = "SELECT DISTINCT sales_rep_owner_id AS sales_reps 
+                                                FROM sf_pr 
+                                                WHERE (sales_rep_owner_id = \"".$salesRepID[0]."\" ) OR (sales_rep_splitter_id = \"".$salesRepID[0]."\" )
+                                                AND client_id = \"".$listOfClients[$c]["clientID"]."\" 
+                                                AND stage != '6' 
+                                                AND stage != '7'";    
+                            }                                   
+                        }
+
+                        $result2[$c] = $con->query($select2[$c]);
+                        $salesReps[$c] = $sql->fetch($result2[$c],$from2,$from2);
+
+                    }elseif($splitResult[$c] == false){
+                        $salesReps[$c] =  array(array('sales_reps' => $salesRepID[0]));
+
+                    }
+                    
                     if ($salesReps[$c]) {
                         $salesRepsOR[$c] = "( f2.sales_rep_id = \"".$salesReps[$c][0]['sales_reps']."\"";
                         if (sizeof($salesReps[$c])>1) {
@@ -231,10 +277,13 @@ class forecast extends forecastBase{
                                 $salesRepsOR[$c] .= " OR f2.sales_rep_id = \"".$salesReps[$c][$s]['sales_reps']."\"";
                             }
                         }
+                        
                         $salesRepsOR[$c] .= ")";
                     }else{
                         $salesRepsOR[$c] = "";
                     }
+
+                    //var_dump($salesRepsOR);
                 }
             }else{
                 $salesRepsOR = "sales_rep_id = \"".$salesRepID[0]."\"";
@@ -267,12 +316,17 @@ class forecast extends forecastBase{
                     //echo "<pre>".$selectDisc[$c][$m]."</pre>";
 
                     if($regionID == "1") {
+                        //var_dump($salesRepsOR);
                         $selectDisc[$c][$m] .= " AND read_q = \"".$week."\" AND ".$salesRepsOR[$c]." ";
                     }else{
                         $selectDisc[$c][$m] .= " AND ".$salesRepsOR." ";
                     }
+
                     $resultDisc[$c][$m] = $con->query($selectDisc[$c][$m]);
                     $saidaDisc[$c][$m] = $sql->fetchSum($resultDisc[$c][$m],$from);
+
+                    //var_dump($selectDisc);
+                    //echo "<pre>".$selectDisc[$c][$m]."</pre>";
 
                     $selectSony[$c][$m] = "SELECT SUM(value) AS value 
                                             FROM forecast_client f 
@@ -567,11 +621,11 @@ class forecast extends forecastBase{
 
             //$testValue = $this->addFcstWithBooking($executiveRevenueCYear,$executiveRF);
             //$testResult = $this->addQuartersAndTotal($sharedFcst);
-            //var_dump($executiveRF);
+            //var_dump($sharedFcst);
 
-            for ($i = 0; $i < sizeof($executiveRF); $i++){
+            /*for ($i = 0; $i < sizeof($executiveRF); $i++){
                 $executiveRF[$i] = $executiveRF[$i] - ($sharedFcst[$i] / 2);
-            }
+            }*/
             //var_dump($executiveRF);
         }
 
