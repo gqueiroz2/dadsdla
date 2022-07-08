@@ -1472,6 +1472,8 @@ class forecastRender extends Render{
         $cmapsDisc = $forRender['cmapsDisc'];
         $cmapsSony = $forRender['cmapsSony'];
 
+        $cmapsTotal = $forRender['cmapsTotal'];
+
         $cmapsClientDisc = $forRender['cmapsClientDisc'];
         $cmapsClientSony = $forRender['cmapsClientSony'];
 
@@ -1569,10 +1571,10 @@ class forecastRender extends Render{
 								echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
+								echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
+								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
 							echo "</tr>";
 							echo "<tr>";
 								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
@@ -1603,11 +1605,12 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            echo "<tr class='clickLoopHeader'>";
 			                echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
-			          	echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
-						echo "</tr>";
+			          	echo "</tr>";
 						echo "<tr class='clickLoopHeader'>";
 							echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
+						echo "</tr>";
+						echo "<tr class='clickLoopHeader'>";
+							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
 						echo "</tr>";
 						echo "<tr class='clickLoopHeader'>";
 							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
@@ -1639,11 +1642,11 @@ class forecastRender extends Render{
 			            echo "<tr class='clickLoopHeader'>";
 			                echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
 			            echo "</tr>";
-			            echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
-						echo "</tr>";
 						echo "<tr class='clickLoopHeader'>";
 							echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
+						echo "</tr>";
+						echo "<tr class='clickLoopHeader'>";
+							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
 						echo "</tr>";
 						echo "<tr class='clickLoopHeader'>";
 							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
@@ -1780,6 +1783,7 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            /* END OF ROLLING FCST BY SALES REP INFO */ 
 
+
 			            /* START OF BOOKED BY SALES REP INFO */ 
 			            
 			            echo "<tr>";
@@ -1805,6 +1809,31 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
+
+			            /* START OF CMAPS BY SALES REP INFO */ 
+
+
+			             echo "<tr>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue' style='width:3%;'>"; 
+			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even' style='width:3%;'>"; 
+			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsTotal[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='width:3%; height:25px;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+			            echo "</tr>";
 
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            
@@ -2026,6 +2055,30 @@ class forecastRender extends Render{
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
 
+			            /* START OF CMAPS BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoopHeader'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsDisc[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='height:25px;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+			            echo "</tr>";
+
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            
 			            echo "<tr class='clickLoopHeader'>";
@@ -2244,6 +2297,31 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
+
+			            /* START OF BOOKED BY SALES REP INFO */ 
+			            
+			            echo "<tr class='clickLoopHeader'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue'>"; 
+			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='even'>"; 
+			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsSony[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='height:25px;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='rcBlue'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+			            echo "</tr>";
+
 
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            

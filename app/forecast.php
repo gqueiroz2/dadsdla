@@ -144,8 +144,6 @@ class forecast extends forecastBase{
 
             $cmapsDisc = $this->addQuartersAndTotalOnArray(array($cmapsDisc))[0];
 
-
-
             /*valores de Sony CMAPS*/
 
             for ($m=0; $m <sizeof($month) ; $m++) { 
@@ -155,6 +153,9 @@ class forecast extends forecastBase{
             } 
 
             $cmapsSony = $this->addQuartersAndTotalOnArray(array($cmapsSony))[0];
+
+
+            $cmapsTotal = $this->sumNetworks($cmapsDisc,$cmapsSony);
 
 
              /*Valor do CMAPS por cliente tanto SONY quanto DISCOVERY*/
@@ -170,6 +171,7 @@ class forecast extends forecastBase{
             $cmapsSony = 0;
             $cmapsClientSony = 0;
             $cmapsClientDisc = 0;
+            $cmapsTotal = 0;
 
         }
         
@@ -766,7 +768,8 @@ class forecast extends forecastBase{
                         "cmapsDisc" => $cmapsDisc,
                         "cmapsSony" => $cmapsSony,
                         "cmapsClientDisc" => $cmapsClientDisc,
-                        "cmapsClientSony" => $cmapsClientSony
+                        "cmapsClientSony" => $cmapsClientSony,
+                        "cmapsTotal" => $cmapsTotal
                         //"nSecondary" => $nSecondary,
                     );
 
