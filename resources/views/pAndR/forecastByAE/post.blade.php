@@ -383,86 +383,83 @@
                             }else{
                                 var mult = 1;
                             }
-                            rf += ((
-                                        handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())
-                                        +
-                                        handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())                                    
-                                    )*mult);
+                            rf += (handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())*mult);
                         }    
                         rf += handleNumber($("#bookingE-"+{{$m}}).val());
                         rf = Comma(rf);
                         console.log(rf);
-                        $("#rf-"+{{$m}}).val(rf);
+                        $("#rfD-"+{{$m}}).val(rf);
                         /* FIM DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
 
                         /* INICIO DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
-                            month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
+                            month = handleNumber($("#rfD-0").val()) + handleNumber($("#rfD-1").val()) + handleNumber($("#rfD-2").val());
                             month = Comma(month);
-                            $("#rf-3").val(month);
+                            $("#rfD-3").val(month);
                         }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
-                            month = handleNumber($("#rf-4").val()) + handleNumber($("#rf-5").val()) + handleNumber($("#rf-6").val());
+                            month = handleNumber($("#rfD-4").val()) + handleNumber($("#rfD-5").val()) + handleNumber($("#rfD-6").val());
                             month = Comma(month);
-                            $("#rf-7").val(month);
+                            $("#rfD-7").val(month);
                         }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
-                            month = handleNumber($("#rf-8").val()) + handleNumber($("#rf-9").val()) + handleNumber($("#rf-10").val());
+                            month = handleNumber($("#rfD-8").val()) + handleNumber($("#rfD-9").val()) + handleNumber($("#rfD-10").val());
                             month = Comma(month);
-                            $("#rf-11").val(month);
+                            $("#rfD-11").val(month);
                         }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
-                            month = handleNumber($("#rf-12").val()) + handleNumber($("#rf-13").val()) + handleNumber($("#rf-14").val());
+                            month = handleNumber($("#rfD-12").val()) + handleNumber($("#rfD-13").val()) + handleNumber($("#rfD-14").val());
                             month = Comma(month);
-                            $("#rf-15").val(month);
+                            $("#rfD-15").val(month);
                         }
-                        var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
-                        $("#total-total").val(total);
+                        var total = Comma(handleNumber($("#rfD-3").val()) + handleNumber($("#rfD-7").val()) + handleNumber($("#rfD-11").val()) + handleNumber($("#rfD-15").val()));
+                        $("#total-totalDisc").val(total);
+                        $("#total-total").val(total + handleNumber($("#total-totalSony").val()));
 
                         /* FIM DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
 
-
                         /* INICIO DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
                         var pendingValue = Comma((
-                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        handleNumber($("#rfD-"+{{$m}}).val())
                                         -
                                         handleNumber($("#bookingE-"+{{$m}}).val())                                    
                                     ));
 
-                        $("#pending-"+{{$m}}).val(pendingValue);
+                        $("#pendingD-"+{{$m}}).val(pendingValue);
                             /* INICIO DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
 
                             if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-0").val()) + handleNumber($("#pending-1").val()) + handleNumber($("#pending-2").val());
+                                month = handleNumber($("#pendingD-0").val()) + handleNumber($("#pendingD-1").val()) + handleNumber($("#pendingD-2").val());
                                 month = Comma(month);
-                                $("#pending-3").val(month);
+                                $("#pendingD-3").val(month);
                             }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-4").val()) + handleNumber($("#pending-5").val()) + handleNumber($("#pending-6").val());
+                                month = handleNumber($("#pendingD-4").val()) + handleNumber($("#pendingD-5").val()) + handleNumber($("#pendingD-6").val());
                                 month = Comma(month);
-                                $("#pending-7").val(month);
+                                $("#pendingD-7").val(month);
                             }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-8").val()) + handleNumber($("#pending-9").val()) + handleNumber($("#pending-10").val());
+                                month = handleNumber($("#pendingD-8").val()) + handleNumber($("#pendingD-9").val()) + handleNumber($("#pendingD-10").val());
                                 month = Comma(month);
-                                $("#pending-11").val(month);
+                                $("#pendingD-11").val(month);
                             }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-12").val()) + handleNumber($("#pending-13").val()) + handleNumber($("#pending-14").val());
+                                month = handleNumber($("#pendingD-12").val()) + handleNumber($("#pendingD-13").val()) + handleNumber($("#pendingD-14").val());
                                 month = Comma(month);
-                                $("#pending-15").val(month);
+                                $("#pendingD-15").val(month);
                             }
-                            var total = Comma(handleNumber($("#pending-3").val()) + handleNumber($("#pending-7").val()) + handleNumber($("#pending-11").val()) + handleNumber($("#pending-15").val()));
-                            $("#totalPending").val(total);
+                            var total = Comma(handleNumber($("#pendingD-3").val()) + handleNumber($("#pendingD-7").val()) + handleNumber($("#pendingD-11").val()) + handleNumber($("#pendingD-15").val()));
+                            $("#totalPendingDisc").val(total);
+                            $("#totalPending").val(total + handleNumber($("#totalPendingSony").val()));
 
                             /* FIM DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */                        
                         /* FIM DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
 
                         /* INICIO DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
                         var varValue = Comma((
-                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        handleNumber($("#rfD-"+{{$m}}).val())
                                         -
                                         handleNumber($("#target-"+{{$m}}).val())                                    
                                     ));
@@ -501,7 +498,7 @@
                         var varValue = Comma(
                                             Math.round(
                                                 (
-                                                    handleNumber($("#rf-"+{{$m}}).val())
+                                                    handleNumber($("#rfD-"+{{$m}}).val())
                                                     /
                                                     handleNumber($("#target-"+{{$m}}).val()) 
                                                 )*100                                   
@@ -513,30 +510,30 @@
 
                             if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-3").val()) / handleNumber($("#target-3").val()) )*100
+                                                    ( handleNumber($("#rfD-3").val()) / handleNumber($("#target-3").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-3").val(variation+"%");
                             }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-7").val()) / handleNumber($("#target-7").val()) )*100
+                                                    ( handleNumber($("#rfD-7").val()) / handleNumber($("#target-7").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-7").val(variation+"%");                                
                             }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-11").val()) / handleNumber($("#target-11").val()) )*100
+                                                    ( handleNumber($("#rfD-11").val()) / handleNumber($("#target-11").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-11").val(variation+"%"); 
                             }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-15").val()) / handleNumber($("#target-15").val()) )*100
+                                                    ( handleNumber($("#rfD-15").val()) / handleNumber($("#target-15").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-15").val(variation+"%"); 
                             }
-                            varRFcst = handleNumber($("#total-total").val());
+                            varRFcst = handleNumber($("#total-totalDisc").val());
                             varTarget = handleNumber($("#totalTarget").val());
                             var varTotal = Math.round((varRFcst/varTarget)*100);
                             varTotal = Comma(varTotal)
@@ -669,86 +666,83 @@
                             }else{
                                 var mult = 1;
                             }
-                            rf += ((
-                                        handleNumber($("#clientRF-DISC-"+c2+"-"+{{$m}}).val())
-                                        +
-                                        handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())                                    
-                                    )*mult);
+                            rf += (handleNumber($("#clientRF-SONY-"+c2+"-"+{{$m}}).val())*mult);
                         }    
                         rf += handleNumber($("#bookingE-"+{{$m}}).val());
                         rf = Comma(rf);
                         console.log(rf);
-                        $("#rf-"+{{$m}}).val(rf);
+                        $("#rfS-"+{{$m}}).val(rf);
                         /* FIM DO AJUSTE DA LINHA E COLUNA NO VALOR DE EXECUTIVO TOTAL */
 
                         /* INICIO DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
                         if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                             var month =0;
-                            month = handleNumber($("#rf-0").val()) + handleNumber($("#rf-1").val()) + handleNumber($("#rf-2").val());
+                            month = handleNumber($("#rfS-0").val()) + handleNumber($("#rfS-1").val()) + handleNumber($("#rfS-2").val());
                             month = Comma(month);
-                            $("#rf-3").val(month);
+                            $("#rfS-3").val(month);
                         }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                             var month =0;
-                            month = handleNumber($("#rf-4").val()) + handleNumber($("#rf-5").val()) + handleNumber($("#rf-6").val());
+                            month = handleNumber($("#rfS-4").val()) + handleNumber($("#rfS-5").val()) + handleNumber($("#rfS-6").val());
                             month = Comma(month);
-                            $("#rf-7").val(month);
+                            $("#rfS-7").val(month);
                         }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                             var month =0;
-                            month = handleNumber($("#rf-8").val()) + handleNumber($("#rf-9").val()) + handleNumber($("#rf-10").val());
+                            month = handleNumber($("#rfS-8").val()) + handleNumber($("#rfS-9").val()) + handleNumber($("#rfS-10").val());
                             month = Comma(month);
-                            $("#rf-11").val(month);
+                            $("#rfS-11").val(month);
                         }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                             var month =0;
-                            month = handleNumber($("#rf-12").val()) + handleNumber($("#rf-13").val()) + handleNumber($("#rf-14").val());
+                            month = handleNumber($("#rfS-12").val()) + handleNumber($("#rfS-13").val()) + handleNumber($("#rfS-14").val());
                             month = Comma(month);
-                            $("#rf-15").val(month);
+                            $("#rfS-15").val(month);
                         }
-                        var total = Comma(handleNumber($("#rf-3").val()) + handleNumber($("#rf-7").val()) + handleNumber($("#rf-11").val()) + handleNumber($("#rf-15").val()));
-                        $("#total-total").val(total);
-
+                        var total = Comma(handleNumber($("#rfS-3").val()) + handleNumber($("#rfS-7").val()) + handleNumber($("#rfS-11").val()) + handleNumber($("#rfS-15").val()));
+                        $("#total-totalSony").val(total);
+                        $("#total-total").val(total + handleNumber($("#total-totalDisc").val()));
                         /* FIM DO AJUSTE DOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
 
 
                         /* INICIO DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
                         var pendingValue = Comma((
-                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        handleNumber($("#rfS-"+{{$m}}).val())
                                         -
                                         handleNumber($("#bookingE-"+{{$m}}).val())                                    
                                     ));
 
-                        $("#pending-"+{{$m}}).val(pendingValue);
+                        $("#pendingS-"+{{$m}}).val(pendingValue);
                             /* INICIO DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */
 
                             if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-0").val()) + handleNumber($("#pending-1").val()) + handleNumber($("#pending-2").val());
+                                month = handleNumber($("#pendingS-0").val()) + handleNumber($("#pendingS-1").val()) + handleNumber($("#pendingS-2").val());
                                 month = Comma(month);
-                                $("#pending-3").val(month);
+                                $("#pendingS-3").val(month);
                             }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-4").val()) + handleNumber($("#pending-5").val()) + handleNumber($("#pending-6").val());
+                                month = handleNumber($("#pendingS-4").val()) + handleNumber($("#pendingS-5").val()) + handleNumber($("#pendingS-6").val());
                                 month = Comma(month);
-                                $("#pending-7").val(month);
+                                $("#pendingS-7").val(month);
                             }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-8").val()) + handleNumber($("#pending-9").val()) + handleNumber($("#pending-10").val());
+                                month = handleNumber($("#pendingS-8").val()) + handleNumber($("#pendingS-9").val()) + handleNumber($("#pendingS-10").val());
                                 month = Comma(month);
-                                $("#pending-11").val(month);
+                                $("#pendingS-11").val(month);
                             }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                                 var month =0;
-                                month = handleNumber($("#pending-12").val()) + handleNumber($("#pending-13").val()) + handleNumber($("#pending-14").val());
+                                month = handleNumber($("#pendingS-12").val()) + handleNumber($("#pendingS-13").val()) + handleNumber($("#pendingS-14").val());
                                 month = Comma(month);
-                                $("#pending-15").val(month);
+                                $("#pendingS-15").val(month);
                             }
-                            var total = Comma(handleNumber($("#pending-3").val()) + handleNumber($("#pending-7").val()) + handleNumber($("#pending-11").val()) + handleNumber($("#pending-15").val()));
-                            $("#totalPending").val(total);
+                            var total = Comma(handleNumber($("#pendingS-3").val()) + handleNumber($("#pendingS-7").val()) + handleNumber($("#pendingS-11").val()) + handleNumber($("#pendingS-15").val()));
+                            $("#totalPendingSony").val(total);
+                            $("#totalPending").val(total + handleNumber($("#totalPendingDisc").val()));
 
                             /* FIM DO AJUSTE DO PENDING NOS QUARTERS E DO TOTAL NO EXECUTIVO TOTAL */                        
                         /* FIM DO AJUSTE DO VALOR DE PENDING DO EXECUTIVO */
 
                         /* INICIO DO AJUSTE DO VALOR DE FORECAST - TARGET DO EXECUTIVO */
                         var varValue = Comma((
-                                        handleNumber($("#rf-"+{{$m}}).val())
+                                        handleNumber($("#rfS-"+{{$m}}).val())
                                         -
                                         handleNumber($("#target-"+{{$m}}).val())                                    
                                     ));
@@ -787,7 +781,7 @@
                         var varValue = Comma(
                                             Math.round(
                                                 (
-                                                    handleNumber($("#rf-"+{{$m}}).val())
+                                                    handleNumber($("#rfS-"+{{$m}}).val())
                                                     /
                                                     handleNumber($("#target-"+{{$m}}).val()) 
                                                 )*100                                   
@@ -799,30 +793,30 @@
 
                             if ({{$m}} == 0 || {{$m}} == 1 || {{$m}} == 2 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-3").val()) / handleNumber($("#target-3").val()) )*100
+                                                    ( handleNumber($("#rfS-3").val()) / handleNumber($("#target-3").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-3").val(variation+"%");
                             }else if ({{$m}} == 4 || {{$m}} == 5 || {{$m}} == 6 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-7").val()) / handleNumber($("#target-7").val()) )*100
+                                                    ( handleNumber($("#rfS-7").val()) / handleNumber($("#target-7").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-7").val(variation+"%");                                
                             }else if ({{$m}} == 8 || {{$m}} == 9 || {{$m}} == 10 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-11").val()) / handleNumber($("#target-11").val()) )*100
+                                                    ( handleNumber($("#rfS-11").val()) / handleNumber($("#target-11").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-11").val(variation+"%"); 
                             }else if ({{$m}} == 12 || {{$m}} == 13 || {{$m}} == 14 ) {
                                 var variation = Math.round( 
-                                                    ( handleNumber($("#rf-15").val()) / handleNumber($("#target-15").val()) )*100
+                                                    ( handleNumber($("#rfS-15").val()) / handleNumber($("#target-15").val()) )*100
                                                     );
                                 variation = Comma(variation);
                                 $("#achievement-15").val(variation+"%"); 
                             }
-                            varRFcst = handleNumber($("#total-total").val());
+                            varRFcst = handleNumber($("#total-totalSony").val());
                             varTarget = handleNumber($("#totalTarget").val());
                             var varTotal = Math.round((varRFcst/varTarget)*100);
                             varTotal = Comma(varTotal)
