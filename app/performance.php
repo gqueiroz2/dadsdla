@@ -20,13 +20,34 @@ class performance extends base{
             $columns = $value."_revenue_prate";
         }else if($value && $source == "crm"){
             $columns = $value."_revenue";;
-        }elseif($value){
+        }else if ($value && $source == "cmaps") {
+            $columns = $value;
+        }else if($value){
             $columns = $value."_revenue";
         }else{
             $columns = false;
         }
 
         return $columns;
+    }
+
+    public function generateValueCmaps($con,$sql,$region,$year,$salesRep,$month,$sum,$table,$value=null,$type){
+
+        $select = "SELECT SUM($value) AS sum 
+                   FROM $table c
+                   LEFT JOIN brand b ON b.ID = c.brand_id 
+                   WHERE (year = \"".$year."\")
+                   AND (month = \"".$month."\")
+                   AND (b.brand_group_id  = \"".$type."\")
+                   AND (sales_rep_id = \"".$salesRep[0]."\")
+                   ORDER BY 1";
+        //var_dump($select);
+        $result = $con->query($select);
+        $values = $sql->fetchSum($result,"sum")["sum"];
+        //var_dump($values);
+
+            
+        return $values;
     }
 
     public function generateValueWB($con,$sql,$region,$year,$month,$sum,$table,$value=null){
@@ -86,6 +107,14 @@ class performance extends base{
         }elseif ($source == "ytdWB") {
             $columns = array("sales_representant_office_id","year","month");
             $arrayWhere = array($region,$year,$month);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
+                $where = $sql->where($columns,$arrayWhere);
+            }
+        }elseif ($source == "cmaps") {
+            $columns = array("year","month","sales_rep_id","brand_id");
+            $arrayWhere = array($year,$month,$salesRep,$brand);
             if($brand == 9){
                 $where = $sql->whereONLAdjust($columns,$arrayWhere);
             }else{

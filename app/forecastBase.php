@@ -1434,6 +1434,40 @@ class forecastBase extends pAndR{
     	return $string;
     }
 
+    public function cmapsByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
+
+        if($currency == "USD"){
+            $div = $pr->getPRateByRegionAndYear($con,array($regionID),array($cYear));
+        }else{
+            $div = 1;
+        }
+
+        $table = "cmaps";
+
+        $brandString = $this->brandArrayToString($brand);
+
+        for ($c=0; $c < sizeof($clients); $c++) {             
+            for ($m=0; $m < sizeof($month); $m++) {
+                /* FAZER A DIFERENCIAÇÃO ENTRE OS CANAIS */
+                $select[$c][$m] = "SELECT SUM($value) AS sumValue
+                                        FROM $table
+                                        WHERE (client_id = \"".$clients[$c]['clientID']."\")
+                                            AND (agency_id = \"".$clients[$c]['agencyID']."\")
+                                            AND (month = \"".$month[$m][1]."\")                                    
+                                            AND (year = \"".$year."\")
+                                            AND (brand_id IN ($brandString))
+                                            AND (sales_rep_id = \"".$salesRep."\")";
+
+                //echo "<pre>".$select[$c][$m]."</pre>";
+
+                $res[$c][$m] = $con->query($select[$c][$m]);
+                $from = array("sumValue");
+                $rev[$c][$m] = $sql->fetch($res[$c][$m],$from,$from)[0]['sumValue']/$div;      
+            }
+        }
+        return $rev;
+    }
+
     public function revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$year,$month,$salesRep,$splitted,$currency,$currencyID,$value,$clients,$typeOfYear,$cYear,$brand){
 
     	if($currency == "USD"){

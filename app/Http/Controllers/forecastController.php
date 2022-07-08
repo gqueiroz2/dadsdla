@@ -81,7 +81,7 @@ class forecastController extends Controller{
 
         $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
         $forRender = $tmp;
-        //var_dump($forRender['splitted']);
+        //var_dump($forRender['salesRep']['region']);
 
         $regionExcel = $regionID;
         $salesRepExcel = Request::get('salesRep');

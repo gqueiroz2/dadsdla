@@ -30,6 +30,9 @@ class forecast extends forecastBase{
         $actualMonth = date('n');
         $data = date('Y-m-d');
 
+        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];        
+        $salesRep = $sr->getSalesRepById($con,$salesRepID);
+
         $week = $this->weekOfMonth($data);
 
         /* Verifica se há Forecast prévio salvo */        
@@ -40,11 +43,15 @@ class forecast extends forecastBase{
         $from = array("oppid","ID","type_of_value","currency_id", "submitted");
         $save = $sql->fetch($result,$from,$from);        
 
-        /* Lista os clientes do SF e do BTS*/
-        $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
-
-        $test = $this->listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
         
+        if($regionName == "Brazil"){
+            /* Lista os clientes do CMAPS, SF e do BTS */
+            $listOfClients = $this->listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
+        }else{
+            /* Lista os clientes do SF e do BTS */
+            $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID);    
+        }        
+
         if(sizeof($listOfClients) == 0){
             return false;
         }
@@ -75,10 +82,6 @@ class forecast extends forecastBase{
             $valueCheck = $temp2["valueCheck"][0];
             $multValue = $temp2["multValue"][0];
         }
-
-        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];        
-        $salesRep = $sr->getSalesRepById($con,$salesRepID);
-
 
         $temp = $this->getSeparatedBrands($con,$sql,$salesRepID,$cYear,$regionID);
 
@@ -111,6 +114,66 @@ class forecast extends forecastBase{
                 $sumSony[$s][$m] = $this->generateColumns($value,$tableSony[$s][$m]);
             }
         }
+
+
+        //PARTE PARA TRAZER CMAPS INTEGRADO AO FORECAST PARA BRAZIL
+
+        if ($regionName == "Brazil") {
+            /*Gerando soma PARA canais Sony CMAPS*/
+            for ($s=0; $s < sizeof($sonyBrands); $s++) {
+                for ($m=0; $m < sizeof($month); $m++) {
+                    $tableSonyCMAPS[$s][$m] = "cmaps";
+                    $sumSonyCMAPS[$s][$m] = $this->generateColumns($value,$tableSonyCMAPS[$s][$m]);
+                }
+            }        
+
+            /*Gerando soma PARA canais Discovery CMAPS*/
+            for ($s=0; $s < sizeof($discoveryBrands); $s++) {
+                for ($m=0; $m < sizeof($month); $m++) {
+                    $tableDiscCMAPS[$s][$m] = "cmaps";
+                    $sumDiscCMAPS[$s][$m] = $this->generateColumns($value,$tableDiscCMAPS[$s][$m]);
+                }
+            }       
+
+            /*valores de Discovery CMAPS*/
+            for ($m=0; $m <sizeof($month) ; $m++) { 
+                    //var_dump($discoveryBrands[$d]);
+                $cmapsDisc[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"1");   
+                 
+            } 
+
+            $cmapsDisc = $this->addQuartersAndTotalOnArray(array($cmapsDisc))[0];
+
+
+
+            /*valores de Sony CMAPS*/
+
+            for ($m=0; $m <sizeof($month) ; $m++) { 
+                    //var_dump($discoveryBrands[$d]);
+                $cmapsSony[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"2");   
+                 
+            } 
+
+            $cmapsSony = $this->addQuartersAndTotalOnArray(array($cmapsSony))[0];
+
+
+             /*Valor do CMAPS por cliente tanto SONY quanto DISCOVERY*/
+
+            $cmapsClientDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$discoveryBrands);
+            $cmapsClientDisc = $this->addQuartersAndTotalOnArray($cmapsClientDisc);
+
+            $cmapsClientSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$sonyBrands);
+            $cmapsClientSony = $this->addQuartersAndTotalOnArray($cmapsClientSony);
+
+        }else{
+            $cmapsDisc = 0;
+            $cmapsSony = 0;
+            $cmapsClientSony = 0;
+            $cmapsClientDisc = 0;
+
+        }
+        
+        //FINAL DO CMAPS
 
         /* Valores do Ano anterior de Discovery */
         
@@ -218,7 +281,7 @@ class forecast extends forecastBase{
 
                 for ($c=0; $c <sizeof($listOfClients); $c++) { 
 
-                    //VERIFICANDO SE A CONTA É COMPARTILHADA E QUEM É O DONO
+                    //VERIFICA SE A CONTA É COMPARTILHADA E QUEM É O DONO
 
                     $split[$c] = "SELECT DISTINCT is_split AS split, sales_rep_owner_id AS ownerID, sales_rep_splitter_id AS splitterID
                               FROM sf_pr 
@@ -700,6 +763,10 @@ class forecast extends forecastBase{
 
                         "emptyCheckDisc" => $emptyCheckDisc,
                         "emptyCheckSony" => $emptyCheckSony,
+                        "cmapsDisc" => $cmapsDisc,
+                        "cmapsSony" => $cmapsSony,
+                        "cmapsClientDisc" => $cmapsClientDisc,
+                        "cmapsClientSony" => $cmapsClientSony
                         //"nSecondary" => $nSecondary,
                     );
 

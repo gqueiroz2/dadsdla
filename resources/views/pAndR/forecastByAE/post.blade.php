@@ -122,7 +122,13 @@
                 <div class="row mt-2 justify-content-end">
                     <div class="col" style="width: 100%;">
                         <center>
-                            {{$render->loadForecast($forRender)}}
+                            @if($forRender['salesRep']['region'] == "Brazil")
+                                {{$render->loadFcstBrazil($forRender)}}
+                            @else
+                                {{$render->loadForecast($forRender)}}
+                            @endif
+                            
+                            
                         </center>
                     </div>
                 </div>

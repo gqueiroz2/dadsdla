@@ -1545,13 +1545,14 @@ class baseReportPandR extends pAndR
         if ($value && $source == "ytd") {
             $columns = $value . "_revenue_prate";
         } else if ($value && $source == "crm") {
-            $columns = $value . "_revenue";;
-        } elseif ($value) {
             $columns = $value . "_revenue";
-        } else {
+        }elseif ($value && $source == "cmaps") {
+            $columns = $value;
+        }elseif ($value) {
+            $columns = $value . "_revenue";
+        }else {
             $columns = false;
         }
-
         return $columns;
     }
 }
