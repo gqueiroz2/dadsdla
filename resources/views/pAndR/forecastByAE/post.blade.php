@@ -122,11 +122,11 @@
                 <div class="row mt-2 justify-content-end">
                     <div class="col" style="width: 100%;">
                         <center>
-                            @if($forRender['salesRep']['region'] == "Brazil")
+                           {{-- @if($forRender['salesRep']['region'] == "Brazil")
                                 {{$render->loadFcstBrazil($forRender)}}
-                            @else
+                            @else--}}
                                 {{$render->loadForecast($forRender)}}
-                            @endif
+                            {{--@endif--}}
                             
                             
                         </center>
@@ -148,6 +148,45 @@
 	<div id="vlau">
 		
 	</div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('.clickLoopHeader').hide();
+
+            $(".clickBoolHeader").click(function(e){
+                var myBool = $("#clickBoolHeader").val();
+                
+                if(myBool == 1){e
+                    $(".clickLoopHeader").show();
+                    myBool = 0;
+                   
+                }else{
+                    $(".clickLoopHeader").hide();
+                    myBool = 1;
+                }
+                 $("#clickBoolHeader").val(myBool);
+
+            });
+
+            $('.clickLoop').hide();
+
+            $(".clickBool").click(function(e){
+                var myBool = $("#clickBool").val();
+                
+                if(myBool == 1){e
+                    $(".clickLoop").show();
+                    myBool = 0;
+                   
+                }else{
+                    $(".clickLoop").hide();
+                    myBool = 1;
+                }
+                 $("#clickBool").val(myBool);
+
+            });
+        })
+    </script>
 
     <script type="text/javascript">
         $(document).ready(function(){
@@ -215,43 +254,6 @@
     
     <script type="text/javascript">
         $(document).ready(function(){
-
-            $('.clickLoopHeader').hide();
-
-            $(".clickBoolHeader").click(function(e){
-                var myBool = $("#clickBoolHeader").val();
-                
-                if(myBool == 1){e
-                    $(".clickLoopHeader").show();
-                    myBool = 0;
-                   
-                }else{
-                    $(".clickLoopHeader").hide();
-                    myBool = 1;
-                }
-                 $("#clickBoolHeader").val(myBool);
-
-            });
-
-            $('.clickLoop').hide();
-
-            $(".clickBool").click(function(e){
-                var myBool = $("#clickBool").val();
-                
-                if(myBool == 1){e
-                    $(".clickLoop").show();
-                    myBool = 0;
-                   
-                }else{
-                    $(".clickLoop").hide();
-                    myBool = 1;
-                }
-                 $("#clickBool").val(myBool);
-
-            });
-
-
-
             var client = <?php echo json_encode($forRender['client']); ?>;
 
             $('.linked').scroll(function(){

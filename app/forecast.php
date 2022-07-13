@@ -44,13 +44,13 @@ class forecast extends forecastBase{
         $save = $sql->fetch($result,$from,$from);        
 
         
-        if($regionName == "Brazil"){
-            /* Lista os clientes do CMAPS, SF e do BTS */
+        /*if($regionName == "Brazil"){
+            /* Lista os clientes do CMAPS, SF e do BTS 
             $listOfClients = $this->listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
-        }else{
+        }else{*/
             /* Lista os clientes do SF e do BTS */
             $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID);    
-        }        
+        //}        
 
         if(sizeof($listOfClients) == 0){
             return false;
@@ -156,6 +156,7 @@ class forecast extends forecastBase{
 
 
             $cmapsTotal = $this->sumNetworks($cmapsDisc,$cmapsSony);
+            //var_dump($cmapsTotal);
 
 
              /*Valor do CMAPS por cliente tanto SONY quanto DISCOVERY*/
