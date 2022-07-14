@@ -292,7 +292,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd' style='text-align:right; width:3%;'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        			<input type='text' name='rf-$m' readonly='true' id='rf-$m' value='".
 			                        				number_format(
 			                        					$executiveRF[$m]
 			                        				)
@@ -425,7 +425,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTarget' name='totalRFvsTarget' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -468,7 +468,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue''>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetD-$m' name='targetD-$m' value='".
 			                        				number_format(
 			                        						($targetValuesDiscovery[$m])
 			                        						)
@@ -477,7 +477,7 @@ class forecastRender extends Render{
 			                        $totalTarget += $targetValuesDiscovery[$m];
 			                    }else{
 			                        echo "<td class='even'>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetD-$m' name='targetD-$m' value='".
 			                        					number_format(
 			                        						( $targetValuesDiscovery[$m] )
 			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>
@@ -485,7 +485,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue style='height:25px;'>
-			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                			<input type='text' readonly='true' id='totalTargetD' name='totalTargetD' value='".
 			                				number_format(
 			                					( $targetValuesDiscovery[$m] )
 			                					)
@@ -512,7 +512,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rfD-$m' readonly='true' id='rfD-$m' value='".
+			                        			<input type='text' name='rfD-$m' readonly='true' id='rfD-$m' value='".
 			                        				number_format(
 			                        					$executiveRFDisc[$m]
 			                        				)
@@ -558,16 +558,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingED-$m' name='bookingED-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingED-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' name='bookingED-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingED' name='totalBookingED' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -636,16 +636,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetD-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTargetD-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetD-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTargetD-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTargetD' name='totalRFvsTargetD' value='".number_format($RFvsTargetDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -660,16 +660,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='achievementD-$m' id='achievementD-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' name='achievementD-$m' id='achievementD-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalAchievementD' name='totalAchievementD' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -687,7 +687,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue''>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetS-$m' name='targetS-$m' value='".
 			                        				number_format(
 			                        						($targetValuesSony[$m])
 			                        						)
@@ -696,7 +696,7 @@ class forecastRender extends Render{
 			                        $totalTarget += $targetValuesSony[$m];
 			                    }else{
 			                        echo "<td class='even'>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetS-$m' name='targetS-$m' value='".
 			                        					number_format(
 			                        						( $targetValuesSony[$m] )
 			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>
@@ -704,7 +704,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>
-			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                			<input type='text' readonly='true' id='totalTargetS' name='totalTargetS' value='".
 			                				number_format(
 			                					( $targetValuesSony[$m] )
 			                					)
@@ -731,7 +731,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rfS-$m' readonly='true' id='rfS-$m' value='".
+			                        			<input type='text' name='rfS-$m' readonly='true' id='rfS-$m' value='".
 			                        				number_format(
 			                        					$executiveRFSony[$m]
 			                        				)
@@ -777,16 +777,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingES-$m' name='bookingES-$m' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingES-$m' value='".number_format($executiveRevenueCYearSony[$m])."' name='bookingES-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingES' name='totalBookingES' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -855,16 +855,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetS-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTargetS-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetS-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTargetS-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTargetS' name='totalRFvsTargetS' value='".number_format($RFvsTargetSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -879,16 +879,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='achievementS-$m' id='achievementS-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' name='achievementS-$m' id='achievementS-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalAchievementS' name='totalAchievementS' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -1743,7 +1743,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd' style='text-align:right; width:3%;'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        			<input type='text' name='rf-$m' readonly='true' id='rf-$m' value='".
 			                        				number_format(
 			                        					$executiveRF[$m]
 			                        				)
@@ -1902,7 +1902,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTarget' name='totalRFvsTarget' value='".number_format($RFvsTarget[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -1945,7 +1945,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue''>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetD-$m' name='targetD-$m' value='".
 			                        				number_format(
 			                        						($targetValuesDiscovery[$m])
 			                        						)
@@ -1954,7 +1954,7 @@ class forecastRender extends Render{
 			                        $totalTarget += $targetValuesDiscovery[$m];
 			                    }else{
 			                        echo "<td class='even'>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetD-$m' name='targetD-$m' value='".
 			                        					number_format(
 			                        						( $targetValuesDiscovery[$m] )
 			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>
@@ -1962,7 +1962,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue style='height:25px;'>
-			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                			<input type='text' readonly='true' id='totalTargetD' name='totalTargetD' value='".
 			                				number_format(
 			                					( $targetValuesDiscovery[$m] )
 			                					)
@@ -1981,7 +1981,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>
-			                        			<input type='text' readonly='true' id='rf-$m' name='rf-$m' value='".
+			                        			<input type='text' readonly='true' id='rfD-$m' name='rfD-$m' value='".
 			                        				number_format(
 			                        					$executiveRFDisc[$m]
 			                        				)
@@ -1989,7 +1989,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        			<input type='text' name='rfD-$m' readonly='true' id='rfD-$m' value='".
 			                        				number_format(
 			                        					$executiveRFDisc[$m]
 			                        				)
@@ -2035,16 +2035,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingED-$m' name='bookingED-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingED-$m' value='".number_format($executiveRevenueCYearDisc[$m])."' name='bookingED-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingED' name='totalBookingED' value='".number_format($executiveRevenueCYearDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2085,16 +2085,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' name='pending-$m' id='pending-$m' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='pendingD-$m' id='pendingD-$m' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='pending-$m' value='".number_format($pendingDisc[$m])."' name='pending-$m' style='width:100%; border:none;  font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='pendingD-$m' value='".number_format($pendingDisc[$m])."' name='pendingD-$m' style='width:100%; border:none;  font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalPending' name='totalPending' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                	echo "<input type='text' readonly='true' id='totalPendingDisc' name='totalPendingDisc' value='".number_format($pendingDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2137,16 +2137,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetD-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTargetD-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetD-$m' value='".number_format($RFvsTargetDisc[$m])."' name='RFvsTargetD-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTargetD' name='totalRFvsTargetD' value='".number_format($RFvsTargetDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2161,16 +2161,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='achievementD-$m' id='achievementD-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' name='achievementD-$m' id='achievementD-$m' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalAchievementD' name='totalAchievementD' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2188,7 +2188,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue''>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetS-$m' name='targetS-$m' value='".
 			                        				number_format(
 			                        						($targetValuesSony[$m])
 			                        						)
@@ -2197,7 +2197,7 @@ class forecastRender extends Render{
 			                        $totalTarget += $targetValuesSony[$m];
 			                    }else{
 			                        echo "<td class='even'>
-			                        			<input type='text' readonly='true' id='target-$m' name='target-$m' value='".
+			                        			<input type='text' readonly='true' id='targetS-$m' name='targetS-$m' value='".
 			                        					number_format(
 			                        						( $targetValuesSony[$m] )
 			                        						)."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>
@@ -2205,7 +2205,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>
-			                			<input type='text' readonly='true' id='totalTarget' name='totalTarget' value='".
+			                			<input type='text' readonly='true' id='totalTargetS' name='totalTargetS' value='".
 			                				number_format(
 			                					( $targetValuesSony[$m] )
 			                					)
@@ -2224,7 +2224,7 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>
-			                        			<input type='text' readonly='true' id='rf-$m' name='rf-$m' value='".
+			                        			<input type='text' readonly='true' id='rfS-$m' name='rfS-$m' value='".
 			                        				number_format(
 			                        					$executiveRFSony[$m]
 			                        				)
@@ -2232,7 +2232,7 @@ class forecastRender extends Render{
 			                        	  </td>";
 			                    }else{
 			                        echo "<td class='odd'>
-			                        			<input type='text' name='fcstSalesRep-$m' name='rf-$m' readonly='true' id='rf-$m' value='".
+			                        			<input type='text' name='rfS-$m' readonly='true' id='rfS-$m' value='".
 			                        				number_format(
 			                        					$executiveRFSony[$m]
 			                        				)
@@ -2278,16 +2278,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='bookingE-$m' name='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='bookingES-$m' name='bookingES-$m' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='bookingE-$m' value='".number_format($executiveRevenueCYearSony[$m])."' name='bookingE-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo"<input type='text' readonly='true' id='bookingES-$m' value='".number_format($executiveRevenueCYearSony[$m])."' name='bookingES-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalBookingE' name='totalBookingE' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalBookingES' name='totalBookingES' value='".number_format($executiveRevenueCYearSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2329,16 +2329,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' name='pending-$m' id='pending-$m' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='pendingS-$m' id='pendingS-$m' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='pending-$m' value='".number_format($pendingSony[$m])."' name='pending-$m' style='width:100%; border:none;  font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='pendingS-$m' value='".number_format($pendingSony[$m])."' name='pendingS-$m' style='width:100%; border:none;  font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalPending' name='totalPending' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                	echo "<input type='text' readonly='true' id='totalPendingSony' name='totalPendingSony' value='".number_format($pendingSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2381,16 +2381,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetS-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTargetS-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='odd'>";
-			                        	echo "<input type='text' readonly='true' id='RFvsTarget-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTarget-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' id='RFvsTargetS-$m' value='".number_format($RFvsTargetSony[$m])."' name='RFvsTargetS-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                		echo "<input type='text' readonly='true' id='TotalRFvsTarget' name='TotalRFvsTarget' value='".number_format($RFvsTargetSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
+			                		echo "<input type='text' readonly='true' id='totalRFvsTargetS' name='totalRFvsTargetS' value='".number_format($RFvsTargetSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>";
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
@@ -2405,16 +2405,16 @@ class forecastRender extends Render{
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        	echo "<input type='text' readonly='true' name='achievementS-$m' id='achievementS-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
 			                        echo "</td>";
 			                    }else{
 			                        echo "<td class='even'>";
-			                        	echo "<input type='text' readonly='true' name='achievement-$m' id='achievement-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        	echo "<input type='text' readonly='true' name='achievementS-$m' id='achievementS-$m' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
 			                        echo "</td>";
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>";
-			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                	echo "<input type='text' readonly='true' id='totalAchievementS' name='totalAchievementS' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
 			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
