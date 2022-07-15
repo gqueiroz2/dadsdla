@@ -7,6 +7,30 @@
         table {
             border-collapse: collapse;
         }
+
+        #loading {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            margin:0px;
+            width: 100%;
+            height: 105%;
+            display:block;
+            z-index: 99999;
+            opacity: 0.9;
+            -moz-opacity: 0;
+            filter: alpha(opacity = 45);
+            background: white;
+            background-image: url("/loading.gif");
+            background-repeat: no-repeat;
+            background-position:50% 50%;
+            text-align: center;
+            overflow: hidden;
+            font-size:30px;
+            font-weight: bold;
+            color: black;
+            padding-top: 20%;
+        }
     </style>
 @endsection
 @section('content')
