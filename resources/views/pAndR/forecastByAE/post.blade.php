@@ -144,6 +144,11 @@
                     </div>
                 </div>
             </div>
+
+            <div id="loading">
+                Processing Request...
+                <br>
+            </div>
             @if ($forRender != null)
                 <div class="row mt-2 justify-content-end">
                     <div class="col" style="width: 100%;">
@@ -171,10 +176,7 @@
         </form>
     </div>
 
-     <div id="loading">
-        Processing Request...
-        <br>
-    </div>
+     
 
     <div id="vlau"></div>
 
