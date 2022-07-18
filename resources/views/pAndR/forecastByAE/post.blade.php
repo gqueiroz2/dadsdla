@@ -29,7 +29,6 @@
             font-size:30px;
             font-weight: bold;
             color: black;
-            padding-top: 20%;
         }
     </style>
 @endsection
@@ -172,9 +171,12 @@
         </form>
     </div>
 
-    <div id="vlau">
-
+     <div id="loading">
+        Processing Request...
+        <br>
     </div>
+
+    <div id="vlau"></div>
 
     <script type="text/javascript">
         $(document).ready(function() {
