@@ -94,6 +94,8 @@ class forecastRender extends Render{
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
         echo "<input type='hidden' id='year' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerClient))."'>";
 
+        echo "<input type='hidden' id='clickBoolHeader' value='1'>";
+
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style='width:100%; text-align:center; font-size:25px;'>";
             echo "<tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>";
@@ -907,8 +909,6 @@ class forecastRender extends Render{
 
         echo "<input type='hidden' id='clickBool' value='1'>";
 
-        echo "<input type='hidden' id='clickBoolHeader' value='1'>";
-
         for ($c=0; $c < sizeof($client); $c++) {
 
             if($splitted){
@@ -1443,7 +1443,7 @@ class forecastRender extends Render{
 
     }
 
-    public function LoadFcstBrazil($forRender){
+    public function loadFcstBrazil($forRender){
 
         $cYear = $forRender['cYear'];
         $pYear = $forRender['pYear'] ;
@@ -1463,12 +1463,6 @@ class forecastRender extends Render{
         $color = $forRender["readable"]["color"];
         $color2 = $forRender["readable"]["color2"];
 
-        $rollingFCSTDisc = $forRender['rollingFCSTDisc'];
-        $rollingFCSTSony = $forRender['rollingFCSTSony'];
-        
-        $lastRollingFCSTDisc = $forRender['lastRollingFCSTDisc'];
-        $lastRollingFCSTSony = $forRender['lastRollingFCSTSony'];
-
         $cmapsDisc = $forRender['cmapsDisc'];
         $cmapsSony = $forRender['cmapsSony'];
 
@@ -1476,6 +1470,12 @@ class forecastRender extends Render{
 
         $cmapsClientDisc = $forRender['cmapsClientDisc'];
         $cmapsClientSony = $forRender['cmapsClientSony'];
+
+        $rollingFCSTDisc = $forRender['rollingFCSTDisc'];
+        $rollingFCSTSony = $forRender['rollingFCSTSony'];
+        
+        $lastRollingFCSTDisc = $forRender['lastRollingFCSTDisc'];
+        $lastRollingFCSTSony = $forRender['lastRollingFCSTSony'];
 
         $clientRevenueCYearDisc = $forRender['clientRevenueCYearDisc'];
         $clientRevenueCYearSony = $forRender['clientRevenueCYearSony'];
@@ -1535,6 +1535,8 @@ class forecastRender extends Render{
         echo "<input type='hidden' id='year' name='year' value='".base64_encode(json_encode($cYear))."'>";
         echo "<input type='hidden' id='year' name='brandsPerClient' value='".base64_encode(json_encode($brandsPerClient))."'>";
 
+        echo "<input type='hidden' id='clickBoolHeader' value='1'>";
+
         echo "<div class='table-responsive' style='zoom:80%;'>
             <table style='width:100%; text-align:center; font-size:25px;'>";
             echo "<tr><th class='lightBlue'>".$salesRep['salesRep']." - ".$currencyName."/".$valueView."</th></tr>";
@@ -1571,22 +1573,22 @@ class forecastRender extends Render{
 								echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
+								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Bookings</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
+								echo "<td class='odd' style='text-align:left; height:25px;'>Pending</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
+								echo "<td class='rcBlue' style='text-align:left; height:25px;'>".$pYear."</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='odd' style='text-align:left; height:25px;'>".$pYear."</td>";
+								echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='rcBlue' style='text-align:left; height:25px;'>Var RF vs Target</td>";
+								echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
 							echo "</tr>";
 							echo "<tr>";
-								echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>% Target Achievement</td>";
+								echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>Cmaps</td>";
 							echo "</tr>";
 						echo "</tr>";
 						
@@ -1605,31 +1607,31 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            echo "<tr class='clickLoopHeader'>";
 			                echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
-			          	echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; height:25px;'>".$pYear."</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Var RF vs Target</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>% Target Achievement</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>Bookings</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='odd' style='text-align:left; height:25px;'>Pending</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>".$pYear."</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader' >";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+							echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>Cmaps</td>";
 						echo "</tr>";
 		                /* FIM  DISC */
 
 
 			                /* INICIO SONY */
 		                echo "<tr class='clickLoopHeader' style='border-bottom: 1pt solid black;'>";
-                			echo "<td class='sony' id='' rowspan='9' style='text-align:center; border-bottom: 1pt solid black; width:5.5%; height:25px;'>
+                			echo "<td class='sony' id='' rowspan='10' style='text-align:center; border-bottom: 1pt solid black; width:5.5%; height:25px;'>
                 					<span style='font-size:12px;'>";
                 						echo " SONY "; 
                 					echo "</span>";
@@ -1642,23 +1644,23 @@ class forecastRender extends Render{
 			            echo "<tr class='clickLoopHeader'>";
 			                echo "<td class='odd' style='text-align:left; height:25px;'><span>Rolling Fcast ".$cYear."</span><br>";
 			            echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; height:25px;'>Bookings</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Cmaps</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Pending</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; height:25px;'>".$pYear."</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='rcBlue' style='text-align:left; height:25px;'>Var RF vs Target</td>";
-						echo "</tr>";
-						echo "<tr class='clickLoopHeader'>";
-							echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>% Target Achievement</td>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>Bookings</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='odd' style='text-align:left; height:25px;'>Pending</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>".$pYear."</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='odd' style='text-align:left; height:25px;'>Var RF vs Target</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+			                echo "<td class='rcBlue' style='text-align:left; height:25px;'>% Target Achievement</td>";
+			            echo "</tr>";
+			            echo "<tr class='clickLoopHeader'>";
+							echo "<td class='odd' style='text-align:left; border-bottom: 1pt solid black; height:25px;'>Cmaps</td>";
 						echo "</tr>";
 		                /* FIM SONY */
 
@@ -1783,7 +1785,6 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            /* END OF ROLLING FCST BY SALES REP INFO */ 
 
-
 			            /* START OF BOOKED BY SALES REP INFO */ 
 			            
 			            echo "<tr>";
@@ -1809,31 +1810,6 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
-
-			            /* START OF CMAPS BY SALES REP INFO */ 
-
-
-			             echo "<tr>";
-			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
-			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-			                        echo "<td class='medBlue' style='width:3%;'>"; 
-			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }else{
-			                        echo "<td class='even' style='width:3%;'>"; 
-			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsTotal[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }
-			                }
-			                echo "<td class='smBlue' style='width:3%; height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
-			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
-			                for ($i=0; $i < 7; $i++) { 
-		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
-			            echo "</tr>";
 
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            
@@ -1913,7 +1889,7 @@ class forecastRender extends Render{
 			            /* END VAR RF VS TARGET BY SALES REP */
 
 			            /* START % TARGET ACHIEVEMENT */
-			            echo "<tr style='border-bottom: 1pt solid black;'>";
+			            echo "<tr>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue' style='width:3%;'>";
@@ -1928,13 +1904,38 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievement' name='totalAchievement' value='".number_format($targetAchievement[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
+		                    echo "<td style=' text-align:right; width:0.42%;' colspan=6;>&nbsp</td>";		                
 			            echo "</tr>";
 			            /* END % TARGET ACHIEVEMENT */
+
+			            /* START CMAPS BY SALES REP */
+		                echo "<tr style='border-bottom: 1pt solid black;'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue' style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsTotal-$m' id='cmapsTotal-$m' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsTotal-$m' id='cmapsTotal-$m' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
+			                	echo "<input type='text' readonly='true' id='cmapsTotalTT' name='cmapsTotalTT' value='".number_format($cmapsTotal[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.40%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
+			            echo "</tr>";
+
+			            /* END CMAPS BY SALES REP*/
 
 			             /*DISC SALES REP*/
 
@@ -1997,7 +1998,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>
-			                			<input type='text' name='total-total' readonly='true' id='total-total' value='".
+			                			<input type='text' name='total-totalDisc' readonly='true' id='total-totalDisc' value='".
 			                				number_format(
 			                					$executiveRFDisc[$m]
 			                					)
@@ -2054,30 +2055,6 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
-
-			            /* START OF CMAPS BY SALES REP INFO */ 
-			            
-			            echo "<tr class='clickLoopHeader'>";
-			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
-			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }else{
-			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsDisc[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }
-			                }
-			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
-			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
-			                for ($i=0; $i < 7; $i++) { 
-		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
-			            echo "</tr>";
 
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            
@@ -2157,7 +2134,7 @@ class forecastRender extends Render{
 			            /* END VAR RF VS TARGET BY SALES REP */
 
 			            /* START % TARGET ACHIEVEMENT */
-			            echo "<tr class='clickLoopHeader' style='border-bottom: 1pt solid black;'>";
+			            echo "<tr class='clickLoopHeader'>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
@@ -2172,12 +2149,37 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievementD' name='totalAchievementD' value='".number_format($targetAchievementDisc[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
+		                    echo "<td style=' text-align:right; width:0.42%;' colspan=6;>&nbsp</td>";		                
 			            echo "</tr>";
+
+			            /* START CMAPS BY SALES REP DISCOVERY */
+		                echo "<tr class='clickLoopHeader' style='border-bottom: 1pt solid black;'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue' style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsDisc-$m' id='cmapsDisc-$m' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsDisc-$m' id='cmapsDisc-$m' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
+			                	echo "<input type='text' readonly='true' id='cmapsDiscTT' name='cmapsDiscTT' value='".number_format($cmapsDisc[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.40%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
+			            echo "</tr>";
+
+			            /* END CMAPS BY SALES REP*/
 
 			             /*Sony SALES REP*/
 
@@ -2240,7 +2242,7 @@ class forecastRender extends Render{
 			                    }
 			                }
 			                echo "<td class='smBlue' style='height:25px;'>
-			                			<input type='text' name='total-total' readonly='true' id='total-total' value='".
+			                			<input type='text' name='total-totalSony' readonly='true' id='total-totalSony' value='".
 			                				number_format(
 			                					$executiveRFSony[$m]
 			                					)
@@ -2297,31 +2299,6 @@ class forecastRender extends Render{
 			            echo "</tr>";
 			            
 			            /* END OF BOOKED BY SALES REP INFO */ 
-
-			            /* START OF BOOKED BY SALES REP INFO */ 
-			            
-			            echo "<tr class='clickLoopHeader'>";
-			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
-			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
-			                        echo "<td class='medBlue'>"; 
-			                        	echo "<input type='text' readonly='true' id='cmaps-$m' name='cmaps-$m' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }else{
-			                        echo "<td class='even'>"; 
-			                        	echo"<input type='text' readonly='true' id='cmaps-$m' value='".number_format($cmapsSony[$m])."' name='cmaps-$m' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
-			                        echo "</td>";
-			                    }
-			                }
-			                echo "<td class='smBlue' style='height:25px;'>"; 
-			                	echo "<input type='text' readonly='true' id='totalCmaps' name='totalCmaps' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
-			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
-			                for ($i=0; $i < 7; $i++) { 
-		                    	echo "<td class='rcBlue'>&nbsp</td>";
-		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
-			            echo "</tr>";
-
 
 			            /* START OF PENDING BY SALES REP INFO */ 
 			            
@@ -2401,7 +2378,7 @@ class forecastRender extends Render{
 			            /* END VAR RF VS TARGET BY SALES REP */
 
 			            /* START % TARGET ACHIEVEMENT */
-			            echo "<tr class='clickLoopHeader' style='border-bottom: 1pt solid black;'>";
+			            echo "<tr class='clickLoopHeader'>";
 			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
 			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
 			                        echo "<td class='medBlue'>";
@@ -2416,11 +2393,34 @@ class forecastRender extends Render{
 			                echo "<td class='smBlue' style='height:25px;'>";
 			                	echo "<input type='text' readonly='true' id='totalAchievementS' name='totalAchievementS' value='".number_format($targetAchievementSony[$m])."%' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
 			                echo "</td>";
-			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                echo "<td style='background-color: #FFFFFF;'>&nbsp</td>";
 			                for ($i=0; $i < 7; $i++) { 
 		                    	echo "<td class='rcBlue'>&nbsp</td>";
 		                    }
-		                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";	                
+		                    echo "<td style=' text-align:right; width:0.42%;' colspan=6;>&nbsp</td>";	                
+			            echo "</tr>";
+
+			            /* START CMAPS BY SALES REP SONY */
+		                echo "<tr class='clickLoopHeader' style='border-bottom: 1pt solid black;'>";
+			                for ($m=0; $m <sizeof($this->month) ; $m++) { 
+			                    if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+			                        echo "<td class='medBlue' style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsSony-$m' id='cmapsSony-$m' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>";
+			                        echo "</td>";
+			                    }else{
+			                        echo "<td class='odd'style='width:3%;'>";
+			                        	echo "<input type='text' readonly='true' name='cmapsSony-$m' id='cmapsSony-$m' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent;'>"; 
+			                        echo "</td>";
+			                    }
+			                }
+			                echo "<td class='smBlue' style='width:3%; height:25px;'>";
+			                	echo "<input type='text' readonly='true' id='cmapsSonyTT' name='cmapsSonyTT' value='".number_format($cmapsSony[$m])."' style='width:100%; border:none; font-weight:bold; text-align:right; background-color:transparent; color:white;'>"; 
+			                echo "</td>";
+			                echo "<td style='background-color: #FFFFFF; border-bottom: 1pt solid white;'>&nbsp</td>";
+			                for ($i=0; $i < 7; $i++) { 
+		                    	echo "<td class='odd'>&nbsp</td>";
+		                    }
+		                    echo "<td style=' text-align:right; width:0.40%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";		                
 			            echo "</tr>";
            
             			echo "</tbody>";
@@ -2431,9 +2431,8 @@ class forecastRender extends Render{
         echo "<br>";        
 
 
-        echo "<input type='hidden' id='clickBool' value='1'>";
+       
 
-        echo "<input type='hidden' id='clickBoolHeader' value='1'>";
 
         for ($c=0; $c < sizeof($client); $c++) {
 
@@ -2472,6 +2471,8 @@ class forecastRender extends Render{
             $color = "";
             $boolfcst = "1";
 
+            echo "<input type='hidden' id='clickBool-$c' value='1'>";
+
             echo "<div class='' style='zoom:75%;'>";
             	echo "<div class='row mt-3'>";
             		echo "<div class='col-2' style='padding-right:1px;'>";
@@ -2488,8 +2489,8 @@ class forecastRender extends Render{
                 			echo "</tr>";
 
                 			 /* INICIO TT */
-			                echo "<tr class='clickBool'>";
-                    			echo "<td class='darkBlue' id='client-$c' rowspan='5' style='text-align:center; background-color: $color; width:5.5%;'>
+			                echo "<tr class='clickBool-$c'>";
+                    			echo "<td class='darkBlue' id='client-$c' rowspan='6' style='text-align:center; background-color: $color; width:5.5%;'>
                     					<span style='font-size:12px;'>";
                     						echo " TT $ow"; 
                     						echo "</span>";
@@ -2504,15 +2505,18 @@ class forecastRender extends Render{
 			                    echo "<tr>";
 			                        echo "<td style='background-color:#c9d8e8;text-align:left; height:30px;'>".$pYear."</td>";
 			                    echo "</tr>";
-			                    echo "<tr style='border-bottom: 1pt solid black;'>";
+			                    echo "<tr>";
 			                        echo "<td style='background-color:#dbe5f0; text-align:left; height:30px;'>Var RF vs ".$pYear."</td>";
+			                    echo "</tr>";
+			                    echo "<tr style='border-bottom: 1pt solid black;'>";
+			                        echo "<td style='background-color:#c9d8e8;text-align:left; height:30px;'>Cmaps</td>";
 			                    echo "</tr>";
                     		echo "</tr>";
 			                /* FIM TT */
 
                 			/*INICIO DISC */
-                			echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
-                    			echo "<td class='dc' id='client-$c' rowspan='6' style=' text-align:center; background-color: $color; width:5.5%;'>
+                			echo "<tr class='clickLoop-$c' style='border-bottom: 1pt solid black;'>";
+                    			echo "<td class='dc' id='client-$c' rowspan='7' style=' text-align:center; background-color: $color; width:5.5%;'>
                     					<span style='font-size:12px;'>";
                     						echo " DISC $ow"; 
                     						echo "</span>";
@@ -2520,27 +2524,30 @@ class forecastRender extends Render{
                     		echo "</tr>";
 
                 			
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:30px;'> Rolling Fcast ".$cYear." </td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#c9d8e8; text-align:left; height:30px;'>Manual Estimation";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:30px;'>Booking</td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#c9d8e8; text-align:left; height:30px;'>".$pYear."</td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:30px;'>Var RF vs ".$pYear."</td>";
+			                echo "</tr>";
+			                echo "<tr class='clickLoop-$c' style='border-bottom: 1pt solid black;'>";
+			                    echo "<td style='background-color:#c9d8e8;text-align:left; height:30px;'>Cmaps</td>";
 			                echo "</tr>";
 			                /* FIM  DISC */
 
 
 			                /* INICIO SONY */
-			                echo "<tr class='clickLoop'>";
-                    			echo "<td class='sony' id='client-$c' rowspan='6' style='text-align:center; background-color: $color; width:5.5%;'>
+			                echo "<tr class='clickLoop-$c'>";
+                    			echo "<td class='sony' id='client-$c' rowspan='7' style='text-align:center; background-color: $color; width:5.5%;'>
                     					<span style='font-size:12px;'>";
                     						echo " SONY $ow"; 
                     						echo "</span>";
@@ -2548,20 +2555,23 @@ class forecastRender extends Render{
                     		echo "</tr>";
 
 			                
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:30px;'> Rolling Fcast ".$cYear." </td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#c9d8e8; text-align:left; height:30px;'>Manual Estimation";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0;text-align:left; height:30px;'>Booking</td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#c9d8e8;text-align:left; height:30px;'>".$pYear."</td>";
 			                echo "</tr>";
-			                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+			                echo "<tr class='clickLoop-$c'>";
 			                    echo "<td style='background-color:#dbe5f0; text-align:left; height:30px;'>Var RF vs ".$pYear."</td>";
+			                echo "</tr>";
+			                echo "<tr class='clickLoop-$c' style='border-bottom: 1pt solid black;'>";
+			                    echo "<td style='background-color:#c9d8e8;text-align:left; height:30px;'>Cmaps</td>";
 			                echo "</tr>";
 			                /* FIM SONY */
 
@@ -2695,7 +2705,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT PAST YEAR TT*/               
 
                 /* START OF CLIENT RF VS PYEAR TT*/         
-                echo "<tr style='border-bottom: 1pt solid black;'>";
+                echo "<tr>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         $tmp = ($rollingFCSTDisc[$c][$m] + $rollingFCSTSony[$c][$m]) - ($clientRevenuePYearDisc[$c][$m] + $clientRevenuePYearSony[$c][$m]) ;
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -2709,9 +2719,26 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
-                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+                    echo "<td style=' text-align:right; width:0.42%;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR TT*/
+
+                /* START OF CMAPS BY CLIENT*/
+                echo "<tr style='border-bottom: 1pt solid black;'>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($cmapsClientDisc[$c][$m]+$cmapsClientSony[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='odd' style='height:30px; width:3%;'>".number_format($cmapsClientDisc[$c][$m]+$cmapsClientSony[$c][$m])."</td>";
+                            echo "<td id='cmapsByclient-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:3%;'>".number_format($cmapsClientDisc[$c][$m]+$cmapsClientSony[$c][$m])."</td>";
+                    for ($i=0; $i < 7; $i++) { 
+                    	echo "<td class='odd'>&nbsp</td>";
+                    }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+                echo "</tr>";
 
                 /**********************************************************************************************************************************************************/
 				/**********************************************************************************************************************************************************/
@@ -2720,7 +2747,7 @@ class forecastRender extends Render{
 
                 
                 /* START OF CLIENT ROLLING FORECAST DISC */
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($lastRollingFCSTDisc[$c][$m])."</td>";
@@ -2756,7 +2783,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT ROLLING FORECAST DISC */ 
 
                 /* START OF CLIENT MANUAL ESTIMATION DISC */            
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                         //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -2780,7 +2807,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT MANUAL ESTIMATION DISC*/
 
                 /* START OF CLIENT BOOKING DISC*/          
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($clientRevenueCYearDisc[$c][$m])."</td>";
@@ -2798,7 +2825,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT BOOKING DISC*/ 
                 
                 /* START OF CLIENT PAST YEAR DISC*/            
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($clientRevenuePYearDisc[$c][$m])."</td>";
@@ -2816,7 +2843,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT PAST YEAR DISC*/               
 
                 /* START OF CLIENT RF VS PYEAR DISC*/         
-                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         $tmp = $rollingFCSTDisc[$c][$m] - $clientRevenuePYearDisc[$c][$m];
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -2830,9 +2857,26 @@ class forecastRender extends Render{
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
-                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+                    echo "<td style=' text-align:right; width:0.42%;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR DISC*/
+
+                /* START OF CMAPS BY CLIENT DISC*/
+                echo "<tr class='clickLoop-$c' style='border-bottom: 1pt solid black;'>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($cmapsClientDisc[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='odd' style='height:30px; width:3%;'>".number_format($cmapsClientDisc[$c][$m])."</td>";
+                            echo "<td id='cmapsByclientDisc-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:3%;'>".number_format($cmapsClientDisc[$c][$m])."</td>";
+                    for ($i=0; $i < 7; $i++) { 
+                    	echo "<td class='odd'>&nbsp</td>";
+                    }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+                echo "</tr>";
 
 
                 /**********************************************************************************************************************************************************/
@@ -2841,7 +2885,7 @@ class forecastRender extends Render{
 
 
                 /* START OF CLIENT ROLLING FORECAST SONY*/
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($lastRollingFCSTSony[$c][$m])."</td>";
@@ -2872,7 +2916,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT ROLLING FORECAST SONY*/ 
 
                 /* START OF CLIENT MANUAL ESTIMATION SONY*/            
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                         //echo "<div style='display:none;' id='totalPP-$c' ><span>Total P.P.(%):</span><input type='number' id='totalPP2-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;'><input type='number' id='totalPP3-$c' step='0.5' value='10' min='0' max='100' style='width:25%; background-color:white; text-align:right; border-style:solid; border-color: grey; border-width:1px;display:none;'></div>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
@@ -2896,7 +2940,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT MANUAL ESTIMATION SONY*/
 
                 /* START OF CLIENT BOOKING SONY*/          
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
@@ -2914,7 +2958,7 @@ class forecastRender extends Render{
                 /* END OF CLIENT BOOKING SONY*/ 
                 
                 /* START OF CLIENT PAST YEAR SONY*/            
-                echo "<tr class='clickLoop'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($clientRevenuePYearSony[$c][$m])."</td>";
@@ -2934,14 +2978,14 @@ class forecastRender extends Render{
                 /* END OF CLIENT PAST YEAR SONY*/               
 
                 /* START OF CLIENT RF VS PYEAR SONY*/         
-                echo "<tr class='clickLoop' style='border-bottom: 1pt solid black;'>";
+                echo "<tr class='clickLoop-$c'>";
                     for ($m=0; $m <sizeof($this->month) ; $m++) { 
                         $tmp = $rollingFCSTSony[$c][$m] - $clientRevenuePYearSony[$c][$m];
                         if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($tmp)."</td>";
                         }else{
                             echo "<td class='even' style='height:30px; width:3%'>".number_format($tmp)."</td>";
-                            echo "<td id='RFxLY-$c-$m' style='display:none; border-bottom: 1pt solid black;'></td>";
+                            echo "<td id='RFxLY-$c-$m' style='display:none;'></td>";
                         }
                     }
                     echo "<td class='smBlue'>".number_format($rollingFCSTSony[$c][$m] - $clientRevenuePYearSony[$c][$m])."</td>";
@@ -2951,6 +2995,24 @@ class forecastRender extends Render{
                     echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
                 echo "</tr>";
                 /* END OF CLIENT RF VS PYEAR SONY*/
+
+                /* START OF CMAPS CLIENT SONY*/
+
+                echo "<tr class='clickLoop-$c' style='border-bottom: 1pt solid black;'>";
+                    for ($m=0; $m <sizeof($this->month) ; $m++) { 
+                        if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) {
+                            echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($cmapsClientSony[$c][$m])."</td>";
+                        }else{
+                            echo "<td class='odd' style='height:30px; width:3%;'>".number_format($cmapsClientSony[$c][$m])."</td>";
+                            echo "<td id='cmapsByclientSony-$c-$m' style='display:none;'></td>";
+                        }
+                    }
+                    echo "<td class='smBlue' style='width:3%;'>".number_format($cmapsClientSony[$c][$m])."</td>";
+                    for ($i=0; $i < 7; $i++) { 
+                    	echo "<td class='odd'>&nbsp</td>";
+                    }
+                    echo "<td style=' text-align:right; width:0.42%; border-bottom:1pt solid white;' colspan=6;>&nbsp</td>";
+                echo "</tr>";
 
                 /**********************************************************************************************************************************************************/
 				/**********************************************************************************************************************************************************/
@@ -2968,6 +3030,6 @@ class forecastRender extends Render{
         }  
 
     }
-
-
 }
+
+    

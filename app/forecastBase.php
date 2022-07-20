@@ -1588,14 +1588,13 @@ class forecastBase extends pAndR{
                   LEFT JOIN client c ON c.ID = cm.client_id
                   LEFT JOIN agency a ON a.ID = cm.agency_id
                   WHERE (cm.sales_rep_id = \"$tmp\" )
-                  AND cm.year IN (\"$cYear\", \"$pYear\")                   
+                  AND cm.year IN (\"$cYear\")                   
                   ORDER BY 1
 
                 ";
         $resCMAPS = $con->query($cmaps);
         $from = array("clientName","clientID","agencyID","agencyName");
         $listCMAPS = $sql->fetch($resCMAPS,$from,$from);
-        //var_dump($cmaps);
 
         $count = 0;
         $list = array();

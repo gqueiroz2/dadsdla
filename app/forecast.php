@@ -44,13 +44,13 @@ class forecast extends forecastBase{
         $save = $sql->fetch($result,$from,$from);        
 
         
-        /*if($regionName == "Brazil"){
-            /* Lista os clientes do CMAPS, SF e do BTS 
+        if($regionName == "Brazil"){
+            /* Lista os clientes do CMAPS, SF e do BTS */
             $listOfClients = $this->listClientsBrazil($con,$sql,$salesRepID,$cYear,$pYear,$regionID);
-        }else{*/
+        }else{
             /* Lista os clientes do SF e do BTS */
             $listOfClients = $this->listClientsByAE($con,$sql,$salesRepID,$cYear,$pYear,$regionID);    
-        //}        
+        }        
 
         if(sizeof($listOfClients) == 0){
             return false;
@@ -161,10 +161,10 @@ class forecast extends forecastBase{
 
              /*Valor do CMAPS por cliente tanto SONY quanto DISCOVERY*/
 
-            $cmapsClientDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$discoveryBrands);
+            $cmapsClientDisc = $this->cmapsByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$discoveryBrands);
             $cmapsClientDisc = $this->addQuartersAndTotalOnArray($cmapsClientDisc);
 
-            $cmapsClientSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$sonyBrands);
+            $cmapsClientSony = $this->cmapsByClientAndAE($con,$sql,$base,$pr,$regionID,$cYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"cYear",$cYear,$sonyBrands);
             $cmapsClientSony = $this->addQuartersAndTotalOnArray($cmapsClientSony);
 
         }else{

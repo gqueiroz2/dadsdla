@@ -153,11 +153,11 @@
                 <div class="row mt-2 justify-content-end">
                     <div class="col" style="width: 100%;">
                         <center>
-                            {{-- @if ($forRender['salesRep']['region'] == 'Brazil')
+                            @if ($forRender['salesRep']['region'] == 'Brazil')
                                 {{$render->loadFcstBrazil($forRender)}}
-                            @else --}}
-                            {{ $render->loadForecast($forRender) }}
-                            {{-- @endif --}}
+                            @else 
+                                {{$render->loadForecast($forRender)}}
+                            @endif
 
 
                         </center>
@@ -201,23 +201,25 @@
 
             });
 
-            $('.clickLoop').hide();
+            @for($c=0;$c<sizeof($forRender['client']);$c++)
 
-            $(".clickBool").click(function(e) {
-                var myBool = $("#clickBool").val();
+                $('.clickLoop-'+ {{ $c }}).hide();
 
-                if (myBool == 1) {
-                    e
-                    $(".clickLoop").show();
-                    myBool = 0;
+                $(".clickBool-"+ {{ $c }}).click(function(e) {
+                    var myBool = $("#clickBool-"+ {{ $c }}).val();
 
-                } else {
-                    $(".clickLoop").hide();
-                    myBool = 1;
-                }
-                $("#clickBool").val(myBool);
+                    if (myBool == 1) {e
+                        $(".clickLoop-"+ {{ $c }}).show();
+                        myBool = 0;
 
-            });
+                    } else {
+                        $(".clickLoop-"+ {{ $c }}).hide();
+                        myBool = 1;
+                    }
+                    $("#clickBool-"+ {{ $c }}).val(myBool);
+
+                });
+            @endfor
         })
     </script>
 
