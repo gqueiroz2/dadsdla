@@ -2948,7 +2948,7 @@ class forecastRender extends Render{
                             echo "<td class='medBlue' style='width:3%; height:30px;'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
                         }else{
                             echo "<td class='even' style='height:30px; width:3%'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
-                            echo "<td id='booking-$c-$m' style='display:none;'> </td>";
+                            echo "<td id='booking-$c-$m' style='display:none;'></td>";
                         }
                     }
                     echo "<td class='smBlue'>".number_format($clientRevenueCYearSony[$c][$m])."</td>";
@@ -2970,6 +2970,7 @@ class forecastRender extends Render{
                         }
                     }
                     echo "<td class='smBlue'>".number_format($clientRevenuePYearSony[$c][$m])."</td>";
+                    echo "<td>&nbsp</td>";
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
@@ -2991,6 +2992,7 @@ class forecastRender extends Render{
                         }
                     }
                     echo "<td class='smBlue' style='width:3%;'>".number_format($rollingFCSTSony[$c][$m] - $clientRevenuePYearSony[$c][$m])."</td>";
+                    echo "<td>&nbsp</td>";
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='rcBlue'>&nbsp</td>";
                     }
@@ -3009,6 +3011,7 @@ class forecastRender extends Render{
                         }
                     }
                     echo "<td class='smBlue' style='width:3%;'>".number_format($cmapsClientSony[$c][$m])."</td>";
+                    echo "<td>&nbsp</td>";
                     for ($i=0; $i < 7; $i++) { 
                     	echo "<td class='odd'>&nbsp</td>";
                     }
