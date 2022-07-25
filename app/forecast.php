@@ -119,6 +119,10 @@ class forecast extends forecastBase{
         //PARTE PARA TRAZER CMAPS INTEGRADO AO FORECAST PARA BRAZIL
 
         if ($regionName == "Brazil") {
+
+            //P-rate
+            $divCmaps = $base->generateDivCMAPS($con,$pr,$regionID,array($cYear),$currencyID);
+
             /*Gerando soma PARA canais Sony CMAPS*/
             for ($s=0; $s < sizeof($sonyBrands); $s++) {
                 for ($m=0; $m < sizeof($month); $m++) {
@@ -138,7 +142,7 @@ class forecast extends forecastBase{
             /*valores de Discovery CMAPS*/
             for ($m=0; $m <sizeof($month) ; $m++) { 
                     //var_dump($discoveryBrands[$d]);
-                $cmapsDisc[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"1");   
+                $cmapsDisc[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"1")/$divCmaps;   
                  
             } 
 
@@ -148,7 +152,7 @@ class forecast extends forecastBase{
 
             for ($m=0; $m <sizeof($month) ; $m++) { 
                     //var_dump($discoveryBrands[$d]);
-                $cmapsSony[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"2");   
+                $cmapsSony[$m] = $this->generateValueCmaps($con,$sql,false,$cYear,$salesRepID,$month[$m][1], $this->generateColumns($value,"cmaps") ,"cmaps",$value,"2")/$divCmaps;   
                  
             } 
 
