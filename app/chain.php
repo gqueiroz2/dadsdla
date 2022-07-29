@@ -1087,6 +1087,13 @@ class chain extends excel{
                     $pivot = 'sales_rep_owner_id';
                 }
                 $rtr = array($currentC[$pivot],$smtg);
+            }elseif($current == "Jamer Ruiz"){                
+                if($column == 'sales_rep_owner'){
+                    $pivot = 'sales_rep_splitter_id';
+                }else{
+                    $pivot = 'sales_rep_owner_id';
+                }
+                $rtr = array($currentC[$pivot],$smtg);
             }else{
                 for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
                     if($current == $salesReps[$sr]['salesRepUnit']){    
@@ -1294,7 +1301,7 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event'                                                                               
+    						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event' || $columns[$c] == 'from_date' ||$columns[$c] == 'to_date'                                                                                 
                               ){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
@@ -1327,9 +1334,7 @@ class chain extends excel{
 
 
                             }elseif($columns[$c] == 'io_start_date' ||
-                                    $columns[$c] == 'io_end_date' ||
-                                    $columns[$c] == 'from_date' ||
-                                $columns[$c] == 'to_date'
+                                    $columns[$c] == 'io_end_date'
                               ){
                                 
                                 //$temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
@@ -1348,6 +1353,16 @@ class chain extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]), $table);
                                 }                            
+                            }elseif ($columns[$c] == 'gross_revenue_loc' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr_brand") {
+                                
+                                $temp = number_format($spreadSheetV2[$s][$columns[$c]],2,'.',',');
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+
+                            }elseif ($columns[$c] == 'fcst_amount_net' || $columns[$c] == 'fcst_amount_gross' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr") {
+                                
+                                $temp = number_format($spreadSheetV2[$s][$columns[$c]],2,'.',',');
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+
                             }elseif($columns[$c] == "brand" && $table == "sf_pr"){
                                 
                                 if(!is_null($spreadSheet[$s][$c])){
