@@ -1279,6 +1279,11 @@
                 $("#month-" + c + "-0").css("height", $("#client-" + c).css("height"));
             }
             $("#loading").css('display', "none");
+
+            window.addEventListener("mousewheel", (e) => {
+            if (e.deltaY === 1) {
+            e.preventDefault();
+ }
         });
     </script>
 
