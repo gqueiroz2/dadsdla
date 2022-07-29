@@ -1087,13 +1087,6 @@ class chain extends excel{
                     $pivot = 'sales_rep_owner_id';
                 }
                 $rtr = array($currentC[$pivot],$smtg);
-            }elseif($current == "Jamer Ruiz"){                
-                if($column == 'sales_rep_owner'){
-                    $pivot = 'sales_rep_splitter_id';
-                }else{
-                    $pivot = 'sales_rep_owner_id';
-                }
-                $rtr = array($currentC[$pivot],$smtg);
             }else{
                 for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
                     if($current == $salesReps[$sr]['salesRepUnit']){    
