@@ -42,6 +42,8 @@ class chain extends excel{
             for ($c=0; $c < sizeof($spreadSheet); $c++) { 
                 if ($spreadSheet[$c]['sales_rep_owner'] == $spreadSheet[$c]['sales_rep_splitter']) {
                     $spreadSheet[$c]['is_split'] = "0";
+                }elseif ($spreadSheet[$c]['sales_rep_owner'] != $spreadSheet[$c]['sales_rep_splitter'] && $spreadSheet[$c]['sales_rep_splitter'] == "Jamer Ruiz") {
+                    $spreadSheet[$c]['sales_rep_splitter'] = $spreadSheet[$c]['sales_rep_owner'];
                 }
             }
         }
@@ -860,6 +862,8 @@ class chain extends excel{
 
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$salesRepRepresentatives,$currencies,$year,$currentC){
         $base = new base();
+
+        var_dump($current);
 
         if($column == 'campaign_sales_office'){
             $rtr =  array(false,'campaign_sales_office_id');
