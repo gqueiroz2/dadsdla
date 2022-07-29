@@ -25,7 +25,7 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
-        //var_dump($columns);
+        var_dump($columns);
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         if($table == 'cmaps'){
@@ -1355,7 +1355,7 @@ class chain extends excel{
                                 }                            
                             }elseif ($columns[$c] == 'gross_revenue_loc' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr_brand") {
                                 
-                                $temp = number_format($spreadSheetV2[$s][$columns[$c]],2,'.',',');
+                                $temp = number_format($spreadSheet[$s][$c],2,'.',',');
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
                             }elseif ($columns[$c] == 'fcst_amount_net' || $columns[$c] == 'fcst_amount_gross' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr") {
