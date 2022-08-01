@@ -43,6 +43,10 @@ class chain extends excel{
                 if ($spreadSheet[$c]['sales_rep_owner'] == $spreadSheet[$c]['sales_rep_splitter']) {
                     $spreadSheet[$c]['is_split'] = "0";
                 }
+
+                if ($spreadSheet[$c]['sales_rep_owner'] != $spreadSheet[$c]['sales_rep_splitter'] && $spreadSheet[$c]['sales_rep_splitter'] == "Jamer Ruiz") {
+                    $spreadSheet[$c]['sales_rep_splitter'] = $spreadSheet[$c]['sales_rep_owner'];
+                }
             }
         }
         $into = $this->into($columns);      
