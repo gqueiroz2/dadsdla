@@ -861,7 +861,7 @@ class chain extends excel{
     public function handle($con,$table,$current,$column,$regions,$brands,$salesReps,$salesRepRepresentatives,$currencies,$year,$currentC){
         $base = new base();
 
-        var_dump($current);
+        //var_dump($current);
 
         if($column == 'campaign_sales_office'){
             $rtr =  array(false,'campaign_sales_office_id');
