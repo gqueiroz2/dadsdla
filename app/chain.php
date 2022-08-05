@@ -239,9 +239,16 @@ class chain extends excel{
                     }
                 }
             }else{
+
+
                 if($truncate){
-                    $truncateStatement = "TRUNCATE TABLE $table";
-                    if($con->query($truncateStatement) === TRUE){
+                    if ($table == 'sf_pr_brand') {
+                        $truncateStatement = "TRUNCATE TABLE sf_pr";
+                    }else{
+                        $truncateStatement = "TRUNCATE TABLE $table";    
+                    }
+                    
+                    if($con->query($truncateStatement) == true){
                         $truncated = true;
                     }else{
                         $truncated = false;
