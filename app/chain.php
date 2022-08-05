@@ -1302,13 +1302,20 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-    						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event' || $columns[$c] == 'from_date' ||$columns[$c] == 'to_date'                                                                                 
-                              ){
-                                $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));
+    						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event'){
+                                $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd", $spreadSheet[$s][$c]);
+                               
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
     			
-                            }elseif($columns[$c] == 'impression_duration' ){
+                            }elseif ( $columns[$c] == 'from_date' ||$columns[$c] == 'to_date') {
+                                 $temp = $base->formatData("mm/dd/aaaa","aaaa-mm-dd", $spreadSheet[$s][$c]);
+                                //var_dump($spreadSheet[$s][$c]);
+                                //var_dump($temp);
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                            }
+
+                            elseif($columns[$c] == 'impression_duration' ){
 
                                     $temp = explode(" ", $spreadSheet[$s][$c]);
                                     var_dump($temp);
