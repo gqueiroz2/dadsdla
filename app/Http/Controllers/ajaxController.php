@@ -1148,6 +1148,7 @@ class ajaxController extends Controller{
         $userLevel = Request::session()->get('userLevel');
         $special = Request::session()->get('special');
         $userRegionID = Request::session()->get('userRegionID');
+        $userSalesRepGroupID = Request::session()->get('userSalesRepGroupID');
 
         $salesRepGroupID = $sr->getSalesRepGroup($con,array($regionID));
         for ($s=0; $s <sizeof($salesRepGroupID); $s++) { 
@@ -1156,6 +1157,8 @@ class ajaxController extends Controller{
 
         $salesRep = $sr->getSalesRep($con,$salesRepGroupID);
         $salesRep = $sr->getSalesRepStatus($con,$salesRep,$year);
+        $salesRepL3 = $sr->getSalesRepByGroup($con,$userSalesRepGroupID,$year);
+
         
         if ($salesRep) {
             echo "<option selected='true' value=''>Select Sales Rep.</option>";
@@ -1208,7 +1211,16 @@ class ajaxController extends Controller{
                     echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
                 }   
             }
-
+        }else if($userLevel == "L3"){
+            if($salesRepL3){
+                for ($s=0; $s < sizeof($salesRepL3); $s++) { 
+                    echo "<option value='".$salesRepL3[$s]["ID"]."'>"
+                        .$salesRepL3[$s]["name"].
+                    "</option>";
+                }
+            }else{
+                echo "<option value=''> There is no Sales Rep. for this Sales Rep. Group. </option>";
+            }   
         }else{
 
             if($salesRep){
