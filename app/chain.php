@@ -664,6 +664,8 @@ class chain extends excel{
             $region = "New York International";
         }else if($region == 'MIAMI INTL.'){
             $region = "Miami";
+        }else if($region == 'PUERTO RICO'){
+            $region = "Puerto Rico";
         }else if($region == 'SINGAPORE INTL.'){
             $region = "Singapore";
         }else{
