@@ -82,6 +82,7 @@ class baseReportPandRController extends Controller{
                 }
                 $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
 */
+                //var_dump(Request::all());
 
                 $forRender = $br->baseLoadReport($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value,$baseReport);
                 

@@ -25,7 +25,7 @@ class forecastBase extends pAndR{
             
             $monthOPP[$c] = $this->periodOfOPP($someFCST[$c],$year); // MONTHS OF THE FCST
 
-           //var_dump($someFCST);
+           //var_dump($lastYearRevCompany);
             if($monthOPP[$c]){
                 $shareSalesRep[$c] = $this->salesRepShareOnPeriod($lastYearRevCompany,$lastYearRevSalesRep,$lastYearRevClient[$c],$monthOPP[$c],$someFCST[$c]);
                 $fcst[$c] = $this->fillFCST($someFCST[$c],$monthOPP[$c],$shareSalesRep[$c],$salesRepID,$splitted[$c]);
@@ -723,6 +723,7 @@ class forecastBase extends pAndR{
                                 AND (brand_id IN ($brandString))
                                 AND ( stage != '6')
                                 AND ( stage != '7')
+                                AND ( stage != 'Cr')
                                 AND (year_from = \"".$year."\")";
                                 /*                                
                                 AND (from_date > \"".$date."\")";*/
@@ -736,7 +737,8 @@ class forecastBase extends pAndR{
                             AND ( (sales_rep_splitter_id = \"".$salesRepID."\") OR (sales_rep_owner_id = \"".$salesRepID."\") )
                             AND (brand_id IN ($brandString))
                             AND ( stage != '6')
-                            AND ( stage != '7')                            
+                            AND ( stage != '7') 
+                            AND ( stage != 'Cr')                           
                             AND (year_from = \"".$year."\")";
                             //echo "<pre>".$select."</pre>";
                             /*AND (from_date > \"".$date."\")*/

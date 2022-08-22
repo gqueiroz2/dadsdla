@@ -25,7 +25,7 @@ class chain extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
-        var_dump($columns);
+        //var_dump($columns);
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
         if($table == 'cmaps'){
@@ -46,6 +46,16 @@ class chain extends excel{
 
                 if ($spreadSheet[$c]['sales_rep_owner'] != $spreadSheet[$c]['sales_rep_splitter'] && $spreadSheet[$c]['sales_rep_splitter'] == "Jamer Ruiz") {
                     $spreadSheet[$c]['sales_rep_splitter'] = $spreadSheet[$c]['sales_rep_owner'];
+                }
+            }
+        }
+
+        if ($table == "data_hub") {
+            for ($y=0; $y <sizeof($spreadSheet); $y++) { 
+                if ($spreadSheet[$y]['month'] == 1 && $spreadSheet[$y]['sales_rep'] == "Walter Premero" && $spreadSheet[$y]['year'] == 2022) {
+                    $spreadSheet[$y]['sales_rep'] = "Walter Premero CW";
+
+                    //var_dump($spreadSheet[$y]['sales_rep']);
                 }
             }
         }
