@@ -65,6 +65,15 @@ class performance extends base{
         $values = $sql->fetchSum($results,"sum")["sum"]; 
         
         return $values;
+    }   
+
+     public function generateValueCompany($con,$sql,$region,$year,$brand,$month,$sum,$table,$value=null){
+        
+        $where = $this->createWhere($sql,"company",$region,$year,$brand['brandID'], null, $month,$value);
+        $results = $sql->selectSum($con,$sum,"sum",$table,false,$where);
+        $values = $sql->fetchSum($results,"sum")["sum"]; 
+        
+        return $values;
     }    
 
     public function generateValue($con,$sql,$region,$year,$brand,$salesRep,$month,$sum,$table,$value=null){
@@ -136,6 +145,14 @@ class performance extends base{
             }else{
                 $columns = array("region_id","year","month","sales_rep_id","brand_id","currency_id","type_of_revenue");
                 $arrayWhere = array($region,$year,$month,$salesRep["id"],$brand,'4',$value);
+                $where = $sql->where($columns,$arrayWhere);
+            }
+        }elseif ($source == "company") {
+            $columns = array("sales_representant_office_id","year","brand_id","month");
+            $arrayWhere = array($region,$year,$brand,$month);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
                 $where = $sql->where($columns,$arrayWhere);
             }
         }else{

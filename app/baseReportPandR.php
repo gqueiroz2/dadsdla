@@ -27,6 +27,7 @@ class baseReportPandR extends pAndR
         $sql = new sql();
         $reg = new region();
         $fb = new forecastBase();
+        $p = new performance();
 
         $actualMonth = date('n');
 
@@ -82,17 +83,39 @@ class baseReportPandR extends pAndR
         $revenueShares = $this->revenueShares($con, $sql, $regionID, $pYear, $month, $this->generateColumns($value, "ytd"), $value);
 
         $brandsValueLastYear = $this->lastYearBrand($con, $sql, $pr, $br->getBrand($con), ($pYear), $value, $currency, $regionID, $currencyID,$month);
-
+        //var_dump($revenueShares);
         for ($l = 0; $l < sizeof($list); $l++) {
             for ($m = 0; $m < sizeof($month); $m++) {
-                //var_dump($list[$l]);
+                //var_dump($list);
                 $lastYearRevenue[$l][$m] = $this->generateValuePandR($con, $sql, 'revenue', $baseReport, $regionID, $pYear, $month[$m][1], $list[$l], $this->generateColumns($value, "ytd"), $value) * $div;
                 
             }
             $lastYearRevenue[$l] = $this->addQuartersAndTotalOnArray(array($lastYearRevenue[$l]))[0];
         }
-        //var_dump($lastYearRevenue);
 
+        $list2 = $this->listByAEMult($con, $sql, $salesRepID, $cYear, $regionID, $salesRepIDString, 'brand');
+
+
+       for ($l = 0; $l < sizeof($list2); $l++) {
+            for ($m = 0; $m < sizeof($month); $m++) {
+                //var_dump($list2);
+
+                $company[$m][$l] = $p->generateValueCompany($con,$sql,$regionID,$pYear,$list2[$l],$month[$m][1],$this->generateColumns($value,"ytd"),'ytd',$value)*$div;
+            }   
+        }
+
+        $company = $this->addQuartersAndTotalOnArray($company);
+
+        $companyTT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for ($c=0; $c <sizeof($company) ; $c++) { 
+            for ($s=0; $s <sizeof($company[$c]) ; $s++) { 
+                $companyTT[$s] += ($company[$c][$s]);    
+            }
+              
+        }         
+        //var_dump($companyTT);
+
+        
         //var_dump($rollingFCST);
         for ($l = 0; $l < sizeof($list); $l++) {
             for ($m = 0; $m < sizeof($month); $m++) {
@@ -106,7 +129,7 @@ class baseReportPandR extends pAndR
 
 
             $cont = $l;
-            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont, $div,$salesRepIDString);
+            $rollingFCST[$l] = $this->generateForecast($con, $sql, $baseReport, $regionID, $cYear, $list[$l], $this->generateColumns($value, "crm"), $value, $revenueShares, $br, $brandsValueLastYear, $fb, $lastYearRevenue, $splitted, $cont, $div,$salesRepIDString,$companyTT);
             //var_dump($rollingFCST);
 
             $lastYear[$l] = $this->addQuartersAndTotalOnArray(array($lastYear[$l]))[0];
@@ -173,8 +196,7 @@ class baseReportPandR extends pAndR
         return $rtr;
     }
 
-    public function listByAEMult($con, $sql, $salesRepID, $cYear, $regionID, $salesRepIDString, $baseReport)
-    {
+    public function listByAEMult($con, $sql, $salesRepID, $cYear, $regionID, $salesRepIDString,$baseReport)  {
         $date = date('n') - 1;
 
         switch ($baseReport) {
@@ -185,7 +207,7 @@ class baseReportPandR extends pAndR
         		            FROM sf_pr s
                             LEFT JOIN brand b ON b.ID = s.brand_id
                             WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
-                            AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+                            AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\")  AND ( s.stage != \"7\")
                             AND (s.year_from = \"$cYear\") AND ( s.stage != \"Cr\")
                             ORDER BY 1
                         ";
@@ -199,7 +221,7 @@ class baseReportPandR extends pAndR
                             FROM ytd y
                             LEFT JOIN brand b ON b.ID = sf.brand_id
                             WHERE (y.sales_rep_id IN ($salesRepIDString) )
-                            AND (y.year = \"$cYear\" )
+                            AND (y.year = \"$cYear\" ) 
                             AND (r.ID = \"" . $regionID . "\")
                             ORDER BY 1
                        ";
@@ -218,7 +240,7 @@ class baseReportPandR extends pAndR
 		    				FROM sf_pr s
 		                    LEFT JOIN client c ON c.ID = s.client_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
-		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\")
+		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\")  AND ( s.stage != \"7\")
                             AND  ( s.stage != \"Cr\")
 		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
@@ -234,7 +256,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN client c ON c.ID = y.client_id
 		                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
 		    				WHERE (y.sales_rep_id IN ($salesRepIDString) )
-		    				AND (y.year = \"$cYear\" )
+		    				AND (y.year = \"$cYear\" ) 
 		                    AND (r.ID = \"" . $regionID . "\")
 		    				ORDER BY 1
 		    	       ";
@@ -254,7 +276,7 @@ class baseReportPandR extends pAndR
 		                    LEFT JOIN client c ON c.ID = s.client_id
 		    				LEFT JOIN agency a ON a.ID = s.agency_id
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
-		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\") AND ( s.stage != \"Cr\")
+		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\")  AND ( s.stage != \"7\") AND ( s.stage != \"Cr\")
 		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
@@ -271,7 +293,7 @@ class baseReportPandR extends pAndR
 		                    LEFT JOIN region r ON r.ID = y.sales_representant_office_id
 		                    LEFT JOIN agency a ON a.ID = y.agency_id
 		    				WHERE (y.sales_rep_id IN ($salesRepIDString) )
-		    				AND (y.year = \"$cYear\" )
+		    				AND (y.year = \"$cYear\" ) 
 		                    AND (r.ID = \"" . $regionID . "\")
 		    				ORDER BY 1
 		    	       ";
@@ -292,7 +314,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN agency a ON a.ID = s.agency_id
 		    				LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID
 		    				WHERE ((s.sales_rep_owner_id IN ($salesRepIDString)) OR (s.sales_rep_splitter_id IN ($salesRepIDString)))
-		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\") AND ( s.stage != \"5\") AND ( s.stage != \"7\") AND ( s.stage != \"Cr\")
+		                    AND ( s.region_id = \"" . $regionID . "\") AND ( s.stage != \"6\")  AND ( s.stage != \"7\") AND ( s.stage != \"Cr\")
 		                    AND (s.year_from = \"$cYear\") 
 		    				ORDER BY 1
 		    	       ";
@@ -310,7 +332,7 @@ class baseReportPandR extends pAndR
 		                    LEFT JOIN agency a ON a.ID = y.agency_id
 		                    LEFT JOIN agency_group ag ON a.agency_group_id = ag.ID 
 		    				WHERE (y.sales_rep_id IN ($salesRepIDString) )
-		    				AND (y.year = \"$cYear\" )
+		    				AND (y.year = \"$cYear\" ) 
 		                    AND (r.ID = \"" . $regionID . "\")
 		    				ORDER BY 1
 		    	       ";
@@ -346,7 +368,7 @@ class baseReportPandR extends pAndR
 		    				LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
 		    				LEFT JOIN region r ON r.ID = y.sales_representant_office_id
 		    				WHERE (y.sales_rep_id IN ($salesRepIDString) )
-		    				AND (y.year = \"$cYear\" )
+		    				AND (y.year = \"$cYear\" ) 
 		                    AND (r.ID = \"" . $regionID . "\")
 		    				ORDER BY 1
 		    	       ";
@@ -534,7 +556,7 @@ class baseReportPandR extends pAndR
         return $share;
     }
 
-    public function generateForecast($con, $sql, $baseReport, $region, $year, $list, $sum, $value, $share, $br, $lastYearBrand, $fb, $lastYearRevenue, $splitted, $cont, $div,$salesRepIDString)
+    public function generateForecast($con, $sql, $baseReport, $region, $year, $list, $sum, $value, $share, $br, $lastYearBrand, $fb, $lastYearRevenue, $splitted, $cont, $div,$salesRepIDString,$company)
     {
         //var_dump($salesRepID);
         switch ($baseReport) {
@@ -554,7 +576,6 @@ class baseReportPandR extends pAndR
                                 AND (brand_id = '" . $list['brandID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "')
                                 AND (stage != 'Cr')
-                                AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != '7')
                                 ";
@@ -562,7 +583,7 @@ class baseReportPandR extends pAndR
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'brandID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-                echo "<pre>$select</pre>";
+                //echo "<pre>$select</pre>";
                 //var_dump($fetched);
                 if ($fetched) {
 
@@ -585,10 +606,6 @@ class baseReportPandR extends pAndR
                             $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $div;
                         }
                     }
-                    /*for ($f = 0; $f < sizeof($fetched); $f++) {
-                    
-                      $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $div;
-                    }*/
 
                     if ($fetched) {
                         for ($o = 0; $o < sizeof($fetched); $o++) {
@@ -648,7 +665,6 @@ class baseReportPandR extends pAndR
                                 AND (sales_rep_owner_id = '" . $list['salesRepID'] . "' OR sales_rep_splitter_id = '" . $list['salesRepID'] . "') 
                                 AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
                                 AND (stage != 'Cr')
-                                AND (stage != '5')
                                 AND (stage != '6')
                                 AND (stage != '7')
                                 ";
@@ -656,7 +672,7 @@ class baseReportPandR extends pAndR
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'owner', 'splitter', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
-
+                //echo "<pre>$select</pre>";
                 //$month = $month-1;
                 if ($fetched) {
 
@@ -728,16 +744,19 @@ class baseReportPandR extends pAndR
                                 FROM sf_pr 
                                 WHERE (region_id = '" . $region . "') 
                                 AND (client_id = '" . $list['clientID'] . "') 
-                                AND (year_from = '" . $year . "' OR year_to = '" . $year . "') 
-
+                                AND (year_from = '" . $year . "' OR year_to = '" . $year . "')
+                                AND (stage != 'Cr')
+                                AND (stage != '6')
+                                AND (stage != '7')
                                 ";
                 //echo "<pre>".$select."</pre>";
-
+                //var_dump($list['clientID']);
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'clientID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
 
-                if ($fetched) {
+                if ($fetched ) {
+                //var_dump($fetched);
 
                     /*
                         AJUSTE DAS PREVISÕES QUE POSSUEM MAIS DE 1 ANO DE PREVISÃO
@@ -753,9 +772,11 @@ class baseReportPandR extends pAndR
 
                             $fetched[$f]['sumValue'] = ($fetched[$f]['sumValue'] * $shareFromCYear) * $div;
                         
+                        }else{
+                            $fetched[$f]['sumValue'] = $fetched[$f]['sumValue'] * $div;
                         }
                     }
-
+                    //var_dump($fetched);
                     if ($fetched) {
                         for ($o = 0; $o < sizeof($fetched); $o++) {
                             //var_dump($fetched);              
@@ -767,14 +788,15 @@ class baseReportPandR extends pAndR
                     //var_dump($period);
 
                     if ($period) {
-
-                        //var_dump($lastYearRevenue);
-                        $shareSalesRep = $this->salesRepShareOnPeriod(null, null, $period, $lastYearRevenue[$cont]);
+                        //var_dump($share);
+                        $newShare = $this->addQuartersAndTotalOnArray(array($share));
+                        $shareSalesRep = $this->salesRepShareOnPeriod($company, null, $period, $lastYearRevenue[$cont]);
+                        
                         //var_dump($shareSalesRep);
-
+                        //var_dump($fetched);
                         //var_dump($splitted);
                         $fcst = $this->fillFCST($fetched,$period,$shareSalesRep,$list['clientID'],$splitted);
-                        ///var_dump($fcst);
+                        //var_dump($fcst);
 
                     }else{
                         $shareSalesRep = false;
@@ -784,17 +806,19 @@ class baseReportPandR extends pAndR
 
                     if ($fcst) {
                         $fcst = $fb->adjustValues($fcst);
+                        //var_dump($fcst);
                         $fcstAmount = $fb->fcstAmount($fcst,$period,$splitted,$list['clientID']);
+                        //var_dump($fcstAmount);
                         $fcstAmount = $fb->adjustValuesForecastAmount($fcstAmount);
 
                         //var_dump($fcstAmount);
                     }else{
                         $fcstAmount = false;
                     }
-
+                    //var_dump($fcstAmount);
                     return $fcstAmount;
                 }
-                //var_dump($fcstAmount);
+                
                 
                 break;
 
@@ -817,6 +841,7 @@ class baseReportPandR extends pAndR
                 $res = $con->query($select);
                 $from = array('sumValue', 'fromDate', 'toDate', 'yearFrom', 'yearTo', 'agencyID', 'stage');
                 $fetched = $sql->fetch($res, $from, $from);
+                //var_dump($fetched);
                 if ($fetched) {
 
                     /*
@@ -1023,16 +1048,17 @@ class baseReportPandR extends pAndR
             for ($m = 0; $m < sizeof($monthWQ); $m++) {
                 $fcst[$i][$m]['stage'] = false;
                 $fcst[$i][$m]['value'] = 0.0;
+
             }
         }
-
+        //var_dump($fcst);
         for ($i = 0; $i < sizeof($sFCST); $i++) {
             if ($splitted == null || !$splitted['splitted']) {
                 $factor = 1;
             } else {
                 $factor = 2;
             }
-
+            //var_dump($sFCST);
             $adjustedValue = $sFCST[$i]['sumValue'] * $factor;
             for ($j = 0; $j < sizeof($mOPP[$i]); $j++) {
                 //var_dump( $sRP[$i]);
@@ -1041,7 +1067,7 @@ class baseReportPandR extends pAndR
                 $fcst[$i][$mOPP[$i][$j]]['value'] = ($adjustedValue * $sRP[$i][$j]);
             }
         }
-
+        //var_dump($fcst);
         return $fcst;
     }
 
