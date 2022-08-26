@@ -10,7 +10,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Insert BV Band </b> </h4></center>
+						<center><h4> Data Management - <b> Insert ABV </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">

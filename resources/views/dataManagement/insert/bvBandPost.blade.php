@@ -10,7 +10,7 @@
 			<div class="col-sm-6">
 				<div class="card">
 					<div class="card-header">
-						<center><h4> Data Management - <b> Insert BV Band </b> </h4></center>
+						<center><h4> Data Management - <b> Insert AVB </b> </h4></center>
 					</div>
 					<div class="card-body">
 						<div class="container-fluid">
@@ -54,7 +54,7 @@
 							<form method="POST" action="{{ route('insertBvBandAfterCheck') }}" runat="server" onsubmit="ShowLoading()">
 								<div class="row justify-content-center mt-2" id="insertBvBandAfterCheckLabel" style="display:none;">
 									<div class="col">
-										<center><h6> Data Management - <b> Continue Insert BV Band </b> </h6></center>
+										<center><h6> Data Management - <b> Continue Insert AVB </b> </h6></center>
 									</div>
 								</div>
 								<div class="row justify-content-center mt-2" id="insertBvBandAfterCheck" style="display:none;">
