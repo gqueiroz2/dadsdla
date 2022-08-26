@@ -27,7 +27,11 @@ class chainCmaps extends excel{
         $columns = $this->defineColumns($table,'DLA');
         $parametter = 'daily_results';
 
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+        
+        if ($spreadSheet != "") {
+            $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+        }
+        
         //var_dump($spreadSheet);
 
         for ($i=0; $i <sizeof($spreadSheet); $i++) { 
@@ -35,7 +39,6 @@ class chainCmaps extends excel{
             $spreadSheet[$i]['extract_date'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i]['extract_date']);
             $spreadSheet[$i]['log'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i]['log']);
         }
-
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
