@@ -231,11 +231,11 @@ class forecast extends forecastBase{
         $clientRevenueCYearSony = $this->addQuartersAndTotalOnArray($clientRevenueCYearSony);
 
         /* Valores dos Clientes no Ano Anterior - Discovery */
-        $clientRevenuePYearDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$discoveryBrands);
+        $clientRevenuePYearDisc = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],false,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$discoveryBrands);
         $clientRevenuePYearDisc = $this->addQuartersAndTotalOnArray($clientRevenuePYearDisc);
 
         /* Valores dos Clientes no Ano Anterior - Sony */
-        $clientRevenuePYearSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],$splitted,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$sonyBrands);
+        $clientRevenuePYearSony = $this->revenueByClientAndAE($con,$sql,$base,$pr,$regionID,$pYear,$month,$salesRepID[0],false,$currency,$currencyID,$value,$listOfClients,"pYear",$cYear,$sonyBrands);
         $clientRevenuePYearSony = $this->addQuartersAndTotalOnArray($clientRevenuePYearSony);
 
 
@@ -248,7 +248,7 @@ class forecast extends forecastBase{
             
         }
         //var_dump($clientRevenueCYearDisc);
-        $executiveRevenuePYearDisc = $this->consolidateAEFcst($clientRevenuePYearDisc,$splitted);
+        $executiveRevenuePYearDisc = $this->consolidateAEFcst($clientRevenuePYearDisc,false);
         /*$tmpDisc = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$discoveryBrands);
         $executiveRevenueCYearDisc = $this->addQuartersAndTotal($tmpDisc);
         */        
@@ -262,7 +262,7 @@ class forecast extends forecastBase{
             
         }
 
-        $executiveRevenuePYearSony = $this->consolidateAEFcst($clientRevenuePYearSony,$splitted);
+        $executiveRevenuePYearSony = $this->consolidateAEFcst($clientRevenuePYearSony,false);
 
         /*$tmpSony = $this->getBookingExecutive($con,$sql,$salesRepID[0],$month,$regionID,$cYear,$value,$currency,$pr,$sonyBrands);
         $executiveRevenueCYearSony = $this->addQuartersAndTotal($tmpSony);        
