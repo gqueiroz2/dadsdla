@@ -183,10 +183,9 @@ class dataManagementController extends Controller{
                 $check[$t] = false;
             }
         }   
-
         $countCheck = 0;
         for ($c=0; $c < sizeof($check) ; $c++) { 
-            if($check){
+            if($check[$c]){
                 $countCheck ++;
             }
         }
@@ -196,6 +195,7 @@ class dataManagementController extends Controller{
         }else{
             $checkCheck = true;
         }
+
 
         if($checkCheck){
             for ($t=0; $t < sizeof($tmp); $t++){ 
@@ -258,6 +258,8 @@ class dataManagementController extends Controller{
         $into = $chain->into($column); 
 
         $mtx = $bb->workOnSheet($spreadSheet);
+        //var_dump($mtx);
+        
         $mtx = $bb->fixColumnWorkSheet($column,$mtx);
 
         $count = 0;

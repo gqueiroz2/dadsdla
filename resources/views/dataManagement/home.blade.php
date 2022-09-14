@@ -87,7 +87,7 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('insertBvBandG') }}" style="color: white">
-											Insert BV Bands
+											Insert AVB
 										</a>
 									</button>	
 								</div>

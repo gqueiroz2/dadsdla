@@ -29,11 +29,11 @@ class bvBand extends Model{
 		$column = $this->column;
 
 		for ($s=0; $s < sizeof($sheet); $s++) { 
-			for ($t=0; $t < sizeof($sheet[$s]); $t++) { 
+			for ($t=0; $t < 5; $t++) { 
+				//var_dump($sheet[$s][$t]);
 				$sh[$s][$column[$t]] = $sheet[$s][$t];
 			}
 		}
-
 		return $sh;
 
 	}

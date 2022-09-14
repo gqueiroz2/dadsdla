@@ -1233,7 +1233,7 @@ class baseReportPandR extends pAndR
 
     public function isiTSplitted($con, $sql, $sR, $list, $cY, $pY)
     {
-        /*
+        
         $soma = 0;
 
         $splitted = array();
@@ -1241,24 +1241,22 @@ class baseReportPandR extends pAndR
             $splitted[$l] = $this->checkSplitted($con,$sql,$sR[0],$list[$l],$cY);
         }        
         return $splitted;  
-       	*/
+       	
     }
 
     public function checkSplitted($con, $sql, $sR, $list, $year)
     {
-        //$rtr = array( "splitted" => false , "owner" => null );
+        $rtr = array( "splitted" => false , "owner" => null );
 
         /*        
         CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
         */
-        /*
+        
         $date = date('n')-1;
 
         $select = "SELECT DISTINCT order_reference , sales_rep_id , client_id ,agency_id
                         FROM ytd
-                        WHERE (client_id = \"".$list['clientID']."\")
-                        AND (agency_id = \"".$list['agencyID']."\")
-                        AND (year = \"".$year."\") 
+                        WHERE (year = \"".$year."\") 
                         AND (from_date > \"".$date."\")                 
                   ";
 
@@ -1271,13 +1269,8 @@ class baseReportPandR extends pAndR
             for ($o=0; $o < sizeof($orderRef); $o++) { 
                 if($o == 0){
                     $comp[$cc]['sales_rep_id'] = $orderRef[$o]['sales_rep_id'];
-                    $comp[$cc]['agency_id'] = $orderRef[$o]['agency_id'];
+                    //$comp[$cc]['agency_id'] = $orderRef[$o]['agency_id'];
                 }
-
-                if($comp[0]['agency_id'] == $orderRef[$o]['agency_id']){
-                    $splitted[$cc] = $orderRef[$o]['sales_rep_id'];
-                    $cc++;    
-                }                
                 
             }
         }
@@ -1294,13 +1287,10 @@ class baseReportPandR extends pAndR
         CHECKING FOR SPLITTED ACCOUNTS ON BI / BTS
 
         */
-        /*
+        
         $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
-                        WHERE (client_id = \"".$list['clientID']."\") 
-                        AND (agency_id = \"".$list['agencyID']."\")
-                        AND (sales_rep_splitter_id != sales_rep_owner_id)
-                        AND (stage != \"5\")                      
+                        WHERE (sales_rep_splitter_id != sales_rep_owner_id)
                         AND (stage != \"6\")                      
                         AND (stage != \"7\")                      
                   ";
@@ -1320,10 +1310,7 @@ class baseReportPandR extends pAndR
         }else{
             $selectSF = "SELECT DISTINCT oppid , sales_rep_owner_id , sales_rep_splitter_id , client_id, brand
                         FROM sf_pr
-                        WHERE (client_id = \"".$list['clientID']."\") 
-                        AND (agency_id = \"".$list['agencyID']."\")
-                        AND (sales_rep_splitter_id = sales_rep_owner_id)
-                        AND (stage != \"5\")                      
+                        WHERE (sales_rep_splitter_id = sales_rep_owner_id)
                         AND (stage != \"6\")                      
                         AND (stage != \"7\")                      
                   ";
@@ -1343,8 +1330,9 @@ class baseReportPandR extends pAndR
         FIND A WAY TO USE YEAR TO CHECK FOR SPLIITING
 
         */
-
-        //return $rtr;
+        //var_dump($rtr);
+        //$rtr = null;
+        return $rtr;
 
     }
 
