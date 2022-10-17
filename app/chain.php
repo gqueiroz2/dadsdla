@@ -28,6 +28,7 @@ class chain extends excel{
         //var_dump($columns);
         
         $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+
         if($table == 'cmaps'){
             array_push($columns, 'sales_rep_representatives');
             $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
@@ -59,6 +60,15 @@ class chain extends excel{
                 }
             }
         }
+
+        if ($table == 'aleph') {
+            for ($a=0; $a < sizeof($spreadSheet); $a++) { 
+                if ($spreadSheet[$a]['agency'] != '' || $spreadSheet[$a]['agency'] != 'DIRECT' && $spreadSheet[$a]['agency_group'] = '') {
+                    $spreadSheet[$a]['agency_group'] = 'Others';
+                }
+                
+            }
+        }
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
@@ -70,7 +80,7 @@ class chain extends excel{
             }            
         }
         //var_dump($spreadSheet);
-        if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
+       if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
         else{ $complete = false; }
 
         return $complete;
@@ -1380,6 +1390,11 @@ class chain extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->removePercentageSymbol(trim($spreadSheet[$s][$c]), $table);
                                 }                            
+                            }elseif ($columns[$c] == 'gross_revenue' && $table == 'aleph') {
+                                
+                                $temp = number_format(trim($spreadSheet[$s][$c]),2,'.',',');
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+
                             }elseif ($columns[$c] == 'gross_revenue_loc' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr_brand") {
                                 
                                 $temp = number_format($spreadSheet[$s][$c],2,'.',',');
@@ -1436,6 +1451,10 @@ class chain extends excel{
                                     $temp = $base->monthToIntInsights(trim($spreadSheet[$s][$c]));
                                     $spreadSheetV2[$s][$columns[$c]] = $temp[1];
                                     $spreadSheetV2[$s]['year'] = $temp[0];
+                                }elseif( $table && ($table == "aleph") ){
+                                    $temp = strtoupper($spreadSheet[$s][$c]);
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($temp);
+                                    //var_dump($spreadSheetV2[$s][$columns[$c]]);
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));                                    
                                 }
@@ -1696,13 +1715,88 @@ class chain extends excel{
                         return $this->insightsColumns;
                         break;
                 }
+            case 'aleph':
+                switch ($recurrency){
+                    case 'first':
+                        return $this->alephColumnsF;
+                        break;
+                    case 'second':
+                        return $this->alephColumnsS;
+                        break;
+                    case 'third':
+                        return $this->alephColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->alephColumns;
+                        break;
                     
                 break;
+                }
     		
     		
     	}
 
     }
+
+    public $alephColumnsF = array(
+                            'sales_office',
+                            'year',
+                            'month', 
+                            'brand',
+                            'feed_code',
+                            'feed_type',
+                            'client',
+                            'agency',
+                            'old_sales_rep',
+                            'current_sales_rep',
+                            'agency_group',
+                            'gross_revenue'
+    );
+
+    public $alephColumnsS = array(
+                            'sales_office_id',
+                            'year',
+                            'month', 
+                            'brand_id',
+                            'feed_code',
+                            'feed_type',
+                            'client',
+                            'agency',
+                            'old_sales_rep',
+                            'current_sales_rep_id',
+                            'agency_group',
+                            'gross_revenue'
+    );
+
+    public $alephColumnsT = array(
+                            'sales_office_id',
+                            'year',
+                            'month', 
+                            'brand_id',
+                            'feed_code',
+                            'feed_type',
+                            'client_id',
+                            'agency_id',
+                            'old_sales_rep',
+                            'current_sales_rep_id',
+                            'agency_group_id',
+                            'gross_revenue'
+    );
+
+    public $alephColumns = array(
+                            'sales_office_id',
+                            'year',
+                            'month', 
+                            'brand_id',
+                            'feed_code',
+                            'feed_type',
+                            'client_id',
+                            'agency_id',
+                            'old_sales_rep',
+                            'current_sales_rep_id',
+                            'agency_group_id',
+                            'gross_revenue'
+    );
 
     public $sfPandRBrandColumnsF = array(
                                   'oppid',
@@ -1724,7 +1818,7 @@ class chain extends excel{
                                   'from_date',
                                   'to_date',
                                   'opportunity_record_type',
-                                  'is_split',
+                                  'is_split'
                               );
 
     public $sfPandRBrandColumnsS = array(

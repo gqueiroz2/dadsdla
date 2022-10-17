@@ -37,7 +37,7 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('chain') }}" style="color: white">
-											Insert (BTS / FW / SF)
+											Insert (BTS / FW / SF / ALEPH / WBD)
 										</a>
 									</button>
 								</div>

@@ -491,6 +491,21 @@ class base extends Model{
         return $intMonth;
     }
 
+    public function monthToIntAleph($month){        
+
+        $tmp = explode(" ",$month);
+        $newMonth = trim($tmp[0]);
+        
+        $intMonth = false;
+        for ($m=0; $m < sizeof($this->month); $m++) { 
+            if($newMonth == $this->month[$m][0]){
+                $intMonth = $this->month[$m][1];
+            }
+        }
+
+        return $intMonth;
+    }
+
     public function monthToIntInsights($month){
         $tmp = explode(" ",$month);
         $newMonth = trim($tmp[0]);

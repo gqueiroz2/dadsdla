@@ -171,6 +171,11 @@ class ChainController extends Controller{
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
+            case 'aleph':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                $spreadSheet = array_values($spreadSheet);
+                break;
 		}
         //var_dump($spreadSheet);
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
