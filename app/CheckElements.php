@@ -17,23 +17,27 @@ class CheckElements extends Model{
 		if($table == "cmaps"){
 			$regions = false;
 		}else{
-			$regions = false;//$this->checkNewRegions($conDLA,$con,$table,$sql);
+			$regions = $this->checkNewRegions($conDLA,$con,$table,$sql);
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);
 		}
-
+		//var_dump($regions);
+		
 		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
-		$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
+			
 		if($table == "cmaps"){
 			$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
 			$agencies = $this->checkNewAgenciesNoRegion($conDLA,$con,$table,$sql);
+			$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql,false);
 		}else{
 			$clients = $this->checkNewClients($conDLA,$con,$table,$sql,$region);
+			//var_dump($clients);
 			$agencies = $this->checkNewAgencies($conDLA,$con,$table,$sql,$region);
+			///$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql,$region);
 		}
 
 
-		$rtr = array(
+		/*$rtr = array(
 				'regions' => $regions,
 				'brands' => $brands,
 				'salesReps' => $salesReps,
@@ -42,7 +46,7 @@ class CheckElements extends Model{
 				'currencies' => $currencies
 			);
 
-		return($rtr);
+		return($rtr);*/
 	}
 
 	public function newValuesNoRegion($conDLA,$con,$table){
@@ -173,24 +177,29 @@ class CheckElements extends Model{
 
 		$tableDLA = "region";
 		$somethingDLA = "name";
-		$something1 = "campaign_sales_office";
-		$something2 = "sales_representant_office";
+		if ($table == 'aleph') {
+			$something1 = "sales_office";
+			$something2 = "sales_office";	
+		}else{
+			$something1 = "campaign_sales_office";
+			$something2 = "sales_representant_office";	
+		}
+		
 
 		$fromDLA = array("name");
 		$from1 = array($something1);
 		$from2 = array($something2);
 
+		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
+		$distinctFM1 = $this->getDistinct($con,$something1,$table,$sql,$from1,false,false);
+		$distinctFM2 = $this->getDistinct($con,$something2,$table,$sql,$from2,false,false);
 
-		$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA);
-		$distinctFM1 = $this->getDistinct($con,$something1,$table,$sql,$from1);
-		$distinctFM2 = $this->getDistinct($con,$something2,$table,$sql,$from2);
-
-		$tmp = array_merge($distinctFM1,$distinctFM2);
+		/*$tmp = array_merge($distinctFM1,$distinctFM2);
 		$distinctFM = array_values(array_unique($tmp));
 
 		$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
 
-		return $new;
+		return $new;*/
 
 	}
 
@@ -224,8 +233,11 @@ class CheckElements extends Model{
 
 	}
 
-	public function checkNewSalesReps($conDLA,$con,$table,$sql){
+	public function checkNewSalesReps($conDLA,$con,$table,$sql,$region){
 		$sr = new salesRep();
+		$r = new region();
+
+		$seekRegion = $r->getRegion($conDLA,array($region))[0];
 
 		if($table == "cmaps" || $table == "data_hub" ){
 			$tableDLA = "sales_rep_unit";
@@ -246,29 +258,37 @@ class CheckElements extends Model{
 		}else{
 
 			$tableDLA = "sales_rep_unit";
+			
+			if ($table == 'aleph' || $table == 'wbd') {
+				$something = "current_sales_rep";
+
+			}else{
+				$something = "sales_rep_owner";	
+			}
 
 			$somethingDLA = "name";
-			$something = "sales_rep_owner";
+			
 
 			$fromDLA = array("name");
 			$from = array($something);
 
-			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,false,false);
-			$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from,false,false);
+			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,$seekRegion['name'],"sales_rep");
+			$distinctFM = $this->getDistinct($con,$something,$table,$sql,$from,$seekRegion['name'],"sales_rep");
 
-			$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
-			if($new){
+			var_dump($distinctFM);
+			//$new = $this->checkDifferences($distinctDLA, $distinctFM, $table);
+			/*if($new){
 				$new = array_values(array_unique($new));
-			}
+			}*/
 		}
 
-		if(empty($new)){
+		/*if(empty($new)){
 			$rtr = false;
 		}else{
 			$rtr = $new;
 		}
 		
-		return $rtr;
+		return $rtr;*/
 	}
 
 	public function checkNewClients($conDLA,$con,$table,$sql,$region){
@@ -302,11 +322,18 @@ class CheckElements extends Model{
 												WHERE (region = '".$seekRegion['name']."')
 												AND(client != '')
 												ORDER BY region,client ";
+		}elseif ($table == "aleph") {
+			$selectDistinctFM = "SELECT DISTINCT client,sales_office FROM $table
+												WHERE (sales_office = '".$seekRegion['name']."')
+												AND(client != '')
+												ORDER BY sales_office,client ";
+			//var_dump($selectDistinctFM);
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table
 												WHERE (sales_representant_office = '".$seekRegion['name']."')
 												AND(client != '')
 												ORDER BY sales_representant_office,client ";
+			//var_dump($selectDistinctFM);
 		}
 
 		$res = $con->query($selectDistinctFM);
@@ -317,21 +344,22 @@ class CheckElements extends Model{
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
 		}elseif($table == "data_hub"){
 			$resultsFM = $sql->fetch($res,array("client","holding_company"),array("client","region"));
+		}elseif ($table == "aleph") {
+			$resultsFM = $sql->fetch($res,array("client","sales_office"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
-
+		//var_dump($resultsFM);
 		if($resultsFM){
 
 			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,$seekRegion['name'],"client");
-
+			var_dump($distinctDLA);
 			$distinctFM = $this->makeDistinct($resultsFM);//$this->getDistinct($con,$something,$table,$sql,$from);
-
-			$new = $this->checkDifferencesAC('client', $distinctDLA, $distinctFM, $table);
+			//$new = $this->checkDifferencesAC('client', $distinctDLA, $distinctFM, $table);
 		}else{
 			$new = false;
 		}
-		return $new;
+		//return $new;
 	}
 
 	public function checkNewAgencies($conDLA,$con,$table,$sql,$region){
@@ -407,6 +435,17 @@ class CheckElements extends Model{
 				$join = "LEFT JOIN client c ON t.client_id = c.ID
 				         LEFT JOIN client_group cg ON c.client_group_id = cg.ID
 				         LEFT JOIN region r ON cg.region_id = r.ID";
+			}elseif ($type == "sales_rep") {
+				if ($table == "aleph" || $table == "wbd") {
+					$join = "LEFT JOIN sales_rep s ON t.current_sales_rep_id = s.ID
+							LEFT JOIN sales_rep_group sr ON s.sales_group_id = sr.ID
+				         	LEFT JOIN region r ON sr.region_id = r.ID";
+				}else{
+					$join = "LEFT JOIN sales_rep s ON t._id = c.ID
+				         LEFT JOIN client_group cg ON c.client_group_id = cg.ID
+				         LEFT JOIN region r ON cg.region_id = r.ID";	
+				}
+				
 			}
 
 			$select = "SELECT DISTINCT t.$something FROM $table t $join WHERE(r.name = '".$region."') AND(t.$something != '') ORDER BY $something ";
@@ -414,16 +453,16 @@ class CheckElements extends Model{
 		}else{
 			$select = "SELECT DISTINCT $something FROM $table ORDER BY $something";
 		}
-
+		//var_dump($select);
 		$res = $con->query($select);
 		$tmp = $sql->fetch($res,$from,$from);
-
-		for ($t=0; $t < sizeof($tmp); $t++) {
+		var_dump($select);
+		/*for ($t=0; $t < sizeof($tmp); $t++) {
 			for ($f=0; $f < sizeof($from); $f++) {
 				$distinct[$t] = $tmp[$t][$from[$f]];
 			}
 		}
-		return $distinct;
+		return $distinct;*/
 	}
 
 	public function getDistinctNR($con,$something,$table,$sql,$from){
@@ -648,6 +687,7 @@ class CheckElements extends Model{
 		$new = array();
 		$test = array();
 		$formattedName = array();
+		$r = new region();
 		//var_dump($fm);
 		//var_dump($dla);
 
@@ -678,13 +718,15 @@ class CheckElements extends Model{
 
 		if ($table != 'cmaps') {
 			for ($r = 0; $r < sizeof($typeName); $r++) {
-				$region[] = $fm[$regionID[$r]]['region'];
+				var_dump([$regionID[$r]]);
+				$region[] = $fm[$regionID[$r]];
 			}
 
 			for ($x = 0; $x < sizeof($formattedName); $x++){
+				//var_dump($region);
 				$test[] = $formattedName[$x];
-				$test['region'] = $region[$x];
-				$new[$x] = $test;
+				$test[$x] = $region[$x];
+				$new[$x] = $test[$x];
 			} 
 		} else {
 
@@ -694,7 +736,7 @@ class CheckElements extends Model{
 				$new[$x] = $test;
 			} 
 		}
-
+		//var_dump($new);
 		if(empty($new)){
 			$rtr = false;
 		}else{
@@ -702,7 +744,7 @@ class CheckElements extends Model{
 		}
 
 		//var_dump($rtr);
-		return $rtr;
+		//return $rtr;
 
 
 

@@ -66,6 +66,10 @@ class chain extends excel{
                 if ($spreadSheet[$a]['agency'] != '' || $spreadSheet[$a]['agency'] != 'DIRECT' && $spreadSheet[$a]['agency_group'] = '') {
                     $spreadSheet[$a]['agency_group'] = 'Others';
                 }
+
+                if ($spreadSheet[$a]['current_sales_rep'] == '' || $spreadSheet[$a]['old_sales_rep'] == '') {
+                    $spreadSheet[$a]['current_sales_rep'] = 'DLA N/A';
+                }
                 
             }
         }
@@ -109,7 +113,14 @@ class chain extends excel{
             $tempBase = false;
         }
 
-        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);   
+        if ($table == 'aleph') {
+            //$test = $this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS);
+            $current = $this->fixToInput($this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS),$columnsS);       
+        }else{
+            $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);   
+        }        
+
+        //var_dump($current);
 
         if($tempBase){
             $table = 'bts';
@@ -124,7 +135,8 @@ class chain extends excel{
         }       
 
         $into = $this->into($columnsS);		
-
+        //var_dump($into);
+        
         if($table == 'data_hub'){
             $columns = $this->ytdColumnsF;
         }
@@ -134,11 +146,19 @@ class chain extends excel{
             array_push($columns, "sales_rep_splitter");
             
         }
-        $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
 
+        if ($table == "aleph") {
+            //var_dump($current);
+            $next = $this->handleForNextTable($con,$table,$current,$columnsS,$year);
+        }else{
+            $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
+        }   
+        
         if($table == "sf_pr_brand"){
             $next = $this->addSFValues($fCon,$sql,$next,$columns);
-        }   
+        }  
+
+        //var_dump($next); 
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
@@ -176,15 +196,15 @@ class chain extends excel{
     	}else{
     		$cleanedValues = $current;
     	}
-    	
+    	//var_dump($cleanedValues);
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
-
-        if($table== 'cmaps'){
+        var_dump($next);
+        /*if($table== 'cmaps'){
            $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into,$columnsS);
         }else{
             $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
         }
-        return $bool;
+        return $bool;*/
 
     }
 
@@ -793,6 +813,14 @@ class chain extends excel{
     	return($or);
     }    
 
+    public function selectFromCurrentTableAleph($sql,$con,$table,$columns,$columnsS){
+        $res = $sql->select($con,"*",$table);
+        //var_dump($columnsS);
+        $current = $sql->fetch($res,$columns,$columnsS);
+        //var_dump($current);
+        return $current;
+    }
+
     public function selectFromCurrentTable($sql,$con,$table,$columns){
     	$res = $sql->select($con,"*",$table);
         $current = $sql->fetch($res,$columns,$columns);
@@ -823,17 +851,37 @@ class chain extends excel{
 
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,1,$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,1,$regionName,$current[$c]['client']);
+            }elseif ($table == 'aleph') {
+                $regionName = $rr->getRegion($con,array($current[$c]['sales_office_id']))[0]['name'];
+
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['sales_office_id'],$regionName,$current[$c]['agency']);
+                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['sales_office_id'],$regionName,$current[$c]['client']);   
+                $current[$c]['agency_group_id'] = $this->seekAgencyGroupID($con,$current[$c]['sales_office_id'],$regionName,$current[$c]['agency_group']);                                
+
             }else{                
 
                 $regionName = $rr->getRegion($con,array($current[$c]['sales_representant_office_id']))[0]['name'];
 
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['sales_representant_office_id'],$regionName,$current[$c]['agency']);
-                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['sales_representant_office_id'],$regionName,$current[$c]['client']);                
+                $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['sales_representant_office_id'],$regionName,$current[$c]['client']);
+                
             }
         }
 
 		return $current;
     }
+
+    public function seekAgencyGroupID($con,$region,$regionName,$agencyGroup){
+        
+        $ag = new agency();
+        $sql = new sql();
+
+        $agencyGroupID = $ag->getAgencyGroupID($con,$sql,$agencyGroup,$region);
+
+        return($agencyGroupID);
+
+    }
+
 
     public function seekAgencyID($con,$region,$regionName,$agency){
         
@@ -903,7 +951,14 @@ class chain extends excel{
 					$rtr =  array( $regions[$r]['id'],'campaign_sales_office_id');
 				}
 			}
-		}elseif($column == 'package'){
+		}elseif($column == 'sales_office_id'){
+            $rtr =  array(false,'sales_office_id');
+            for ($r=0; $r < sizeof($regions); $r++) { 
+                if($current == $regions[$r]['name']){   
+                    $rtr =  array( $regions[$r]['id'],'sales_office_id');
+                }
+            }
+        }elseif($column == 'package'){
             if($current == 'sim ' || $current == 'SIM' || $current == 'Sim'){
                 $bool = 1;
             }else{
@@ -976,6 +1031,21 @@ class chain extends excel{
                 }elseif($current == 'VES'){
                     $rtr =  array( 9,'currency_id');
                     break;
+                }
+            }
+        }elseif ($table == "aleph" && $column == 'brand_id') {
+            $rtr =  array(false,'brand_id');
+            
+            if($table == "cmaps"){
+                $temp = strtoupper($current);
+            }else{
+                $temp = $current;
+            }
+
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                if( $temp  == $brands[$b]['brandUnit']){    
+
+                    $rtr =  array( $brands[$b]['brandID'],'brand_id');
                 }
             }
         }elseif($column == 'brand' && $table != "sf_pr"){
@@ -1079,6 +1149,24 @@ class chain extends excel{
                 //var_dump($current);
             }
 
+        }elseif ($column == 'current_sales_rep_id') {
+            $rtr =  array(false,'current_sales_rep_id');
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['salesRepID'],'current_sales_rep_id');
+
+                    $check++;
+                }
+                
+            }
         }elseif($column == 'sales_rep_representatives'){
             $rtr =  array(false,'sales_rep_representatives_id');
             $check = -1;
