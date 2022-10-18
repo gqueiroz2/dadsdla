@@ -136,6 +136,91 @@
 				<td>{{$data['mtx'][$m]['fcstAmountNet']}}</td>
 			</tr>
 		@endfor
+	@elseif ($data['source'] == 'AlEPH')
+		<tr>	
+			<th style="background-color: #0047b3;" colspan='12'> {{$data['regions']}} - Viewer Aleph {{$data['year']}} - ({{strtoupper($data['currencies'])}}) </th>
+		</tr>
+
+		<tr class='center'>
+			<td style="background-color: #e6e6e6;">Year</td>
+			<td style="background-color: #e6e6e6;">Month</td>
+			<td style="background-color: #e6e6e6;">Brand</td>
+			<td style="background-color: #e6e6e6;">P. Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Current Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Client</td>
+			<td style="background-color: #e6e6e6;">Agency</td>
+			<td style="background-color: #e6e6e6;"> Agency Group</td>
+			<td style="background-color: #e6e6e6;">Feed Type</td>
+			<td style="background-color: #e6e6e6;">Feed Code</td>
+			<td style="background-color: #e6e6e6;">Gross Revenue</td>
+			<td style="background-color: #e6e6e6;">Net Revenue</td>					
+		</tr>
+
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan='9'></td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
+		@for ($m=0; $m <sizeof($data['mtx']); $m++)
+			<tr>
+				<td>{{$data['mtx'][$m]['year'}}</td>
+				<td>{{$data['mtx'][$m]['month'}}</td>
+				<td>{{$data['mtx'][$m]['brand'}}</td>
+				<td>{{$data['mtx'][$m]['oldRep'}}</td>
+				<td>{{$data['mtx'][$m]['salesRep'}}</td>
+				<td>{{$data['mtx'][$m]['client'}}</td>
+				<td>{{$data['mtx'][$m]['agency'}}</td>
+				<td>{{$data['mtx'][$m]['agencyGroup'}}</td>
+				<td>{{$data['mtx'][$m]['feedType'}}</td>
+				<td>{{$data['mtx'][$m]['feedCode'}}</td>
+				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
+				<td>"{{$data['mtx'][$m]['netRevenue']}}</td>
+			</tr>
+		@endfor
+
+	@elseif ($data['source'] == 'WBD')
+		<tr>	
+			<th style="background-color: #0047b3;" colspan='11'> {{$data['regions']}} - Viewer WBD {{$data['year']}} - ({{$data['currencies']}}) </th>
+		</tr>
+
+		<tr>
+			<td style="background-color: #e6e6e6;">Company</td>
+			<td style="background-color: #e6e6e6;">Year</td>
+			<td style="background-color: #e6e6e6;">Month</td>
+			<td style="background-color: #e6e6e6;">Brand</td>
+			<td style="background-color: #e6e6e6;">P. Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Current Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Client</td>
+			<td style="background-color: #e6e6e6;">Agency</td>
+			<td style="background-color: #e6e6e6;">Manager</td>
+			<td style="background-color: #e6e6e6;">Gross Revenue</td>
+			<td style="background-color: #e6e6e6;">Net Revenue</td>					
+		</tr>
+
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan='8'></td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
+		@for ($m=0; $m <sizeof($data['mtx']) ; $m++) 
+			<tr>
+				<td>{{$data['mtx'][$m]['company']}}</td>
+				<td>{{$data['mtx'][$m]['year']}}</td>
+				<td>{{$data['mtx'][$m]['month']}}</td>
+				<td>{{$data['mtx'][$m]['brand']}}</td>
+				<td>{{$data['mtx'][$m]['oldRep']}}</td>
+				<td>{{$data['mtx'][$m]['salesRep']}}</td>
+				<td>{{$data['mtx'][$m]['client']}}</td>
+				<td>{{$data['mtx'][$m]['agency']}}</td>
+				<td>{{$data['mtx'][$m]['manager']}}</td>
+				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
+				<td>{{$data['mtx'][$m]['netRevenue']}}</td>		
+			</tr>
+		@endfor			
 	@endif
 
 </table>

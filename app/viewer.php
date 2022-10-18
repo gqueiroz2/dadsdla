@@ -28,14 +28,7 @@ class viewer extends Model{
 
 			$especificNumber = strtoupper($especificNumber);
 
-			$from = array(
-						'year',
-						'month',
-						'brand',
-						'agency',
-		                'client',
-		                'salesRep', 
-		                'piNumber',		                
+			$from = array('year','month','brand','agency','client','salesRep','piNumber',		                
 		                'mapNumber',
 		                'product',
 		                'segment',
@@ -370,6 +363,63 @@ class viewer extends Model{
 							";
 						//AND (sf.year_to = '$year')";
 			}
+		}elseif ($source == 'ALEPH') {
+
+			$from = array('year','month','brand','feedCode','feedType','client','agency','oldRep','salesRep','agencyGroup','grossRevenue', 'netRevenue');
+
+			$select = "SELECT a.year AS 'year',
+							  a.month AS 'month',
+							  b.name AS 'brand',
+							  a.feed_code AS 'feedCode',
+							  a.feed_type AS 'feedType',
+							  c.name AS 'client',
+							  ag.name AS 'agency',
+							  a.old_sales_rep AS 'oldRep',
+							  sr.name AS 'salesRep',
+							  agg.name AS 'agencyGroup',
+							  a.gross_revenue AS 'grossRevenue',
+							  a.gross_revenue AS 'netRevenue'
+						FROM aleph a
+						LEFT JOIN client c ON a.client_id = c.ID
+						LEFT JOIN agency ag ON a.agency_id = ag.ID
+						LEFT JOIN brand b ON a.brand_id = b.ID
+						LEFT JOIN sales_rep sr ON a.current_sales_rep_id = sr.ID
+						LEFT JOIN agency_group agg ON a.agency_group_id = agg.ID
+						LEFT JOIN region r ON a.sales_office_id = r.ID
+						WHERE (a.year = '$year')
+							AND (r.ID = '$salesRegion')
+							AND (sr.ID IN ($salesRepString))
+							AND (a.brand_id IN ($brandString)) 
+							AND (a.month IN ($monthString))
+							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
+						GROUP BY a.feed_code";
+		}elseif ($source == 'WBD') {
+			
+			$from = array('company','year','month','oldRep', 'client','agency','brand','manager','salesRep','grossRevenue','netRevenue');
+
+			$select = "SELECT bg.name AS 'company',
+							  w.year AS 'year',
+							  w.month AS 'month',
+							  w.old_sales_rep AS 'oldRep',
+							  c.name AS 'client',
+							  ag.name AS 'agency',
+							  b.name AS 'brand',
+							  w.manager AS 'manager',
+							  sr.name AS 'salesRep',
+							  w.gross_value AS 'grossRevenue',
+							  w.net_value AS 'netRevenue'
+					   FROM wbd w
+					   LEFT JOIN client c ON w.client_id = c.ID
+					   LEFT JOIN agency ag ON w.agency_id = ag.ID
+					   LEFT JOIN brand b ON w.brand_id = b.ID
+					   LEFT JOIN sales_rep sr ON w.current_sales_rep_id = sr.ID
+					   LEFT JOIN brand_group bg ON w.company_id = bg.ID
+					   WHERE (w.year = '$year')
+							AND (sr.ID IN ($salesRepString))
+							AND (w.brand_id IN ($brandString)) 
+							AND (w.month IN ($monthString))
+							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
+					   GROUP BY w.manager";
 		}
 		//echo "<pre>".$select."</pre>";
 		
@@ -760,13 +810,13 @@ class viewer extends Model{
 		$p = new pRate();
 		$year = date('Y');
 		if ($currencies == 'USD') {
-			if ($source == 'CMAPS') {
+			if ($source == 'CMAPS' || $source ==  'ALEPH' || $source == 'WBD') {
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
 			}else{
 				$pRate = 1.0;
 			}
 		}else{
-			if ($source == 'CMAPS') {
+			if ($source == 'CMAPS' || $source ==  'ALEPH' || $source == 'WBD') {
 				$pRate = 1.0;
 			}else{
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
@@ -790,7 +840,14 @@ class viewer extends Model{
 				}elseif ($source == "SF") {
 					$gross += $table[$t]['fcstAmountGross']/$pRate;
 					$net += $table[$t]['fcstAmountNet']/$pRate;
+				}elseif ($source == 'ALEPH') {
+					$gross += $table[$t]['grossRevenue']/$pRate;
+					$net += ($table[$t]['grossRevenue']*0.80)/$pRate;
+				}elseif($source == "WBD"){
+					$gross += $table[$t]['grossRevenue']/$pRate;
+					$net += $table[$t]['netRevenue']/$pRate;
 				}
+
 				$c++;
 			}
 
@@ -949,7 +1006,35 @@ class viewer extends Model{
 						}*/
 						
 						break;
-				
+
+					case 'ALEPH':
+
+						if ($mtx[$m]['month']){
+							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+						}
+
+						if ($mtx[$m]['netRevenue']) {
+								$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']*0.8)/$pRate;
+							}
+						if ($mtx[$m]['grossRevenue']) {
+							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
+						}
+
+						break;
+
+					case 'WBD':
+
+						if ($mtx[$m]['month']){
+							$mtx[$m]['month'] = $base->intToMonth(array($mtx[$m]['month']))[0];
+						}
+
+						if ($mtx[$m]['netRevenue']) {
+							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
+						}
+						if ($mtx[$m]['grossRevenue']) {
+							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
+						}
+
 				}			
 			}
 
