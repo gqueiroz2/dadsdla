@@ -21,8 +21,8 @@ class CheckElements extends Model{
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);
 		}
 
-		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
-		$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
+		//$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
+		//$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
 		if($table == "cmaps"){
 			$clients = $this->checkNewClientsNoRegion($conDLA,$con,$table,$sql);
@@ -35,8 +35,8 @@ class CheckElements extends Model{
 
 		$rtr = array(
 				'regions' => $regions,
-				'brands' => $brands,
-				'salesReps' => $salesReps,
+				'brands' => null,
+				'salesReps' => null,
 				'clients' => $clients,
 				'agencies' => $agencies,
 				'currencies' => $currencies
@@ -302,6 +302,12 @@ class CheckElements extends Model{
 												WHERE (region = '".$seekRegion['name']."')
 												AND(client != '')
 												ORDER BY region,client ";
+		}elseif ($table == "aleph") {
+			$selectDistinctFM = "SELECT DISTINCT client,sales_office FROM $table
+												WHERE (sales_office = '".$seekRegion['name']."')
+												AND(client != '')
+												ORDER BY sales_office,client ";
+			//var_dump($selectDistinctFM);
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table
 												WHERE (sales_representant_office = '".$seekRegion['name']."')
@@ -317,10 +323,12 @@ class CheckElements extends Model{
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
 		}elseif($table == "data_hub"){
 			$resultsFM = $sql->fetch($res,array("client","holding_company"),array("client","region"));
+		}elseif($table == "aleph") {
+			$resultsFM = $sql->fetch($res,array("client","sales_office"),array("client","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("client","sales_representant_office"),array("client","region"));
 		}
-
+		
 		if($resultsFM){
 
 			$distinctDLA = $this->getDistinct($conDLA,$somethingDLA,$tableDLA,$sql,$fromDLA,$seekRegion['name'],"client");
@@ -648,7 +656,7 @@ class CheckElements extends Model{
 		$new = array();
 		$test = array();
 		$formattedName = array();
-		//var_dump($fm);
+		var_dump($fm);
 		//var_dump($dla);
 
 		for ($f = 0; $f < sizeof($fm); $f++) {
@@ -672,11 +680,11 @@ class CheckElements extends Model{
 			$formattedName[] = $fm[$regionID[$j]];
 		}
 		
-		//var_dump($formattedName);
+		var_dump($formattedName);
 
 		//var_dump($table);
 
-		if ($table != 'cmaps') {
+		if ($table != 'cmaps' && $table != 'aleph') {
 			for ($r = 0; $r < sizeof($typeName); $r++) {
 				$region[] = $fm[$regionID[$r]]['region'];
 			}
