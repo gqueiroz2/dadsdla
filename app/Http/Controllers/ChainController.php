@@ -176,9 +176,16 @@ class ChainController extends Controller{
                 unset($spreadSheet[1]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
+            case 'wbd':
+                unset($spreadSheet[0]);
+                unset($spreadSheet[1]);
+                unset($spreadSheet[2]);
+                $spreadSheet = array_values($spreadSheet);
+                break;
 		}
-        //var_dump($spreadSheet);
+        
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);
+        //var_dump($spreadSheet);
 
 		if($complete){
             return back()->with('firstChainComplete',"The Excel Data Was Succesfully Inserted :)");
@@ -207,7 +214,7 @@ class ChainController extends Controller{
     	$year = Request::get('year');
 
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
-        
+        var_dump($complete);
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }

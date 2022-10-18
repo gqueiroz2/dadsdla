@@ -14,6 +14,8 @@ use App\client;
 use App\sql;
 use App\dataBase;
 
+use function PHPSTORM_META\map;
+
 class chain extends excel{
    
     public function handler($con,$table,$spreadSheet,$year){
@@ -83,7 +85,6 @@ class chain extends excel{
                 $check++;
             }            
         }
-        //var_dump($spreadSheet);
        if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
         else{ $complete = false; }
 
@@ -199,12 +200,12 @@ class chain extends excel{
     	//var_dump($cleanedValues);
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
         var_dump($next);
-        /*if($table== 'cmaps'){
+        if($table== 'cmaps'){
            $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into,$columnsS);
         }else{
             $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into);
         }
-        return $bool;*/
+        return $bool;
 
     }
 
@@ -845,7 +846,7 @@ class chain extends excel{
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['region_id'],$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['region_id'],$regionName,$current[$c]['client']);      
 
-            }elseif($table == "insights"){
+            }elseif($table == "insights" || $table == "wbd"){
 
                 $regionName = "Brazil";
 
@@ -916,6 +917,7 @@ class chain extends excel{
     	$salesReps = $sr->getSalesRepUnit($con);
         $salesRepRepresentatives = $sr->getSalesRepUnitWithRepresentatives($con);
     	$currencies = $pr->getCurrency($con);
+        var_dump($columns);
 
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
@@ -1146,7 +1148,7 @@ class chain extends excel{
             }
             
             if(!$rtr[0]){
-                //var_dump($current);
+                var_dump($rtr);
             }
 
         }elseif ($column == 'current_sales_rep_id') {
@@ -1406,6 +1408,8 @@ class chain extends excel{
                            $columns[$c] == 'amount' ||
                            $columns[$c] == 'amount_converted' ||
                            $columns[$c] == 'num_spot' ||
+                           $columns[$c] == 'gross_value' ||
+                           $columns[$c] == 'net_value' ||
                            $columns[$c] == 'gross_revenue_curr_prate'
     				      ){
                             if ($columns[$c] == 'gross_revenue_prate' || $columns[$c] == 'gross_revenue_curr_prate'){
@@ -1419,6 +1423,21 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
+                            if($table == 'wbd'){
+                                if ($columns[$c] == 'company'){
+                                    switch ($spreadSheet[$s][$c]){
+                                        case 'DSC':
+                                            $spreadSheet[$s][$c] = 1;
+                                            break;
+                                        case 'SPT':
+                                            $spreadSheet[$s][$c] = 2;
+                                            break;
+                                        case 'WM':
+                                            $spreadSheet[$s][$c] = 3;
+                                            break;
+                                    }
+                                }
+                            }
     						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event'){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd", $spreadSheet[$s][$c]);
                                
@@ -1483,6 +1502,12 @@ class chain extends excel{
                                 $temp = number_format(trim($spreadSheet[$s][$c]),2,'.',',');
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
+                            }elseif ($columns[$c] == 'gross_value' || $columns[$c] == 'net_value' && $table == 'wbd') {
+                                
+                                $temp = number_format(trim($spreadSheet[$s][$c]),2,'.',',');
+                                $spreadSheetV2[$s][$columns[$c]] = $temp;
+                                //var_dump($spreadSheet[$s][$c]);
+
                             }elseif ($columns[$c] == 'gross_revenue_loc' || $columns[$c] == 'gross_revenue' || $columns[$c] == 'net_revenue' && $table == "sf_pr_brand") {
                                 
                                 $temp = number_format($spreadSheet[$s][$c],2,'.',',');
@@ -1542,6 +1567,9 @@ class chain extends excel{
                                 }elseif( $table && ($table == "aleph") ){
                                     $temp = strtoupper($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($temp);
+                                    //var_dump($spreadSheetV2[$s][$columns[$c]]);
+                                }elseif( $table && ($table == "wbd") ){
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($spreadSheet[$s][$c]);
                                     //var_dump($spreadSheetV2[$s][$columns[$c]]);
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));                                    
@@ -1820,11 +1848,86 @@ class chain extends excel{
                     
                 break;
                 }
-    		
+            case 'wbd':
+                switch ($recurrency){
+                    case 'first':
+                        return $this->wbdColumnsF;
+                        break;
+                    case 'second':
+                        return $this->wbdColumnsS;
+                        break;
+                    case 'third':
+                        return $this->wbdColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->wbdColumns;
+                        break;
+                    
+                break;
+                }
+
     		
     	}
 
     }
+
+    public $wbdColumnsF = array(
+                            'company',
+                            'year',
+                            'month',
+                            'old_sales_rep',
+                            'client',
+                            'agency',
+                            'brand',
+                            'manager',
+                            'current_sales_rep',
+                            'gross_value',
+                            'net_value'
+    );
+
+    public $wbdColumnsS = array(
+                            'company',
+                            'year',
+                            'month',
+                            'old_sales_rep',
+                            'client',
+                            'agency',
+                            'brand_id',
+                            'manager',
+                            'current_sales_rep',
+                            'gross_value',
+                            'net_value'
+    );
+
+    public $wbdColumnsT = array(
+                            'company',
+                            'year',
+                            'month',
+                            'old_sales_rep',
+                            'client_id',
+                            'agency_id',
+                            'brand_id',
+                            'manager',
+                            'current_sales_rep',
+                            'gross_value',
+                            'net_value'
+    );
+
+    public $wbdColumns = array(
+                            'company',
+                            'year',
+                            'month',
+                            'old_sales_rep',
+                            'client_id',
+                            'agency_id',
+                            'brand_id',
+                            'manager',
+                            'current_sales_rep',
+                            'gross_value',
+                            'net_value'
+    );
+
+
 
     public $alephColumnsF = array(
                             'sales_office',

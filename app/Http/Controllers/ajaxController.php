@@ -195,14 +195,7 @@ class ajaxController extends Controller{
         
         echo "<option value=''> Select </option>";
         for ($a=0; $a < sizeof($agencies); $a++){ 
-            echo "<option value='".base64_encode(
-                                   json_encode(
-                                   array(
-                                            'id' => $agencies[$a]['id'],
-                                            'name' => $agencies[$a]['agencyGroup'] 
-                                        )
-                                    ))
-                                  ."'>".$agencies[$a]['agencyGroup']."</option>";
+            echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";
         }
     }
 

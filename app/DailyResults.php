@@ -287,6 +287,7 @@ class DailyResults extends Model{
                                     "pSapPercent" => $monthPerSAP, 
                                     "ppSapPercent" => $monthPerPSAP);
                 array_push($monthValues, $monthCalcs);
+                var_dump($month + $i);
             }
 
             array_push($table, $monthValues);
@@ -363,6 +364,13 @@ class DailyResults extends Model{
         }
        
         array_push($table, $anualValues);
+        //var_dump(sizeof($table));
+
+        for($j=0; $j < sizeof($table); $j++){
+            for($i=0; $i < sizeof($table[$j]); $i++){
+                var_dump($table[$j][$i]);
+            }
+        }
 
         //var_dump($table);
         return $table;

@@ -21,19 +21,18 @@ Route::group(['middleware' => 'auth'],function(){
 								->name('overviewPost');
 		});
 
-
-		Route::group(['prefix'=>'BV'],function(){
-			Route::get('/','dashboardsBvController@bvGet')
-							->name('bvGet');
-			Route::post('/','dashboardsBvController@bvPost')
-								->name('bvPost');
-		});
-
-
-		Route::group(['prefix'=>'bv'],function(){
+		// == Antique BV == //
+		/*Route::group(['prefix'=>'bv'],function(){
 			Route::get('/','dashboardsController@dashboardBVGet')
 							->name('dashboardBVGet');
 			Route::post('/','dashboardsController@dashboardBVPost')
+								->name('dashboardBVPost');
+		});*/
+
+		Route::group(['prefix'=>'bv'],function(){
+			Route::get('/','bvController@bvGet')
+							->name('dashboardBVGet');
+			Route::post('/','bvController@bvPost')
 								->name('dashboardBVPost');
 		});
 

@@ -9,7 +9,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<form method="POST" action="{{ route('dashboardBVPost') }}" runat="server" onsubmit="ShowLoading()">
+				<form method="POST" action="{{ route('dashboardBVGet') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
 						<div class="col">
