@@ -21,6 +21,8 @@ class baseRender extends Render{
 			$source = "Cmaps";
 		}elseif ($source == 'IBMS/BTS') {
 			$source = "BTS";
+		}elseif($source == 'ALEPH'){
+			$source = 'Aleph';
 		}
 		
 		echo "<table style='width: 100%;'>";
@@ -212,28 +214,32 @@ class baseRender extends Render{
 
 					}
 
-				}/*elseif ($source = 'FreeWheel') {
-					echo "<tr class='center'>";
-						echo "<td class='grey' style='width:6%; '>Insertion Order</td>";
-						echo "<td class='grey' style='width:5%;'>Insertion Order ID</td>";
-						echo "<td class='grey' style='width:3%;'>Year</td>";
-						echo "<td class='grey' style='width:3%;'>Month</td>";
-						echo "<td class='grey' style='width:5%;'>Io Start Date</td>";
-						echo "<td class='grey' style='width:5%;'>Io End Date</td>";
-						echo "<td class='grey' style='width:3%;'>Brand</td>";
-						echo "<td class='grey' style='width:5%;'>Placement</td>";
-						echo "<td class='grey' style='width:5%;'>Sales Rep</td>";
-						echo "<td class='grey' style='width:3%;'>Agency</td>";
-						echo "<td class='grey' style='width:5%;'>Client</td>";
-						echo "<td class='grey' style='width:5%;'> Ad Unit</td>";
-						echo "<td class='grey' style='width:5%;'>Buy Type</td>";
-						echo "<td class='grey' style='width:5%;'>Agency Commission</td>";
-						echo "<td class='grey' style='width:5%;'> Sales Rep Commission</td>";
-						echo "<td class='grey' style='width:5%;'>Commission</td>";
-						echo "<td class='grey' style='width:5%;'> Revenue
-						</td>";
-					
+				}elseif ($source == 'Aleph') {
+					echo "<tr>";	
+						echo "<th class='newBlue center' colspan='12' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
 					echo "</tr>";
+
+					echo "<tr class='center'>";
+						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
+						echo "<td class='rcBlue' style='width:5%;'>P. Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Current Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:5%;'> Agency Group</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Feed Type</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Feed Code</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";					
+					echo "</tr>";
+
+					echo "<tr style='font-size:14px;'>";
+							echo "<td class='darkBlue center'>Total</td>";
+							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
+					echo"</tr>";
 
 					for ($m=0; $m <sizeof($mtx) ; $m++) {
 						if ($m%2 == 0) {
@@ -242,34 +248,73 @@ class baseRender extends Render{
 							$color = 'medBlue';
 						}
 
-					echo "<tr class='center' style='font-size:10px;'>";
-						echo "<td class='$color' > ".$mtx[$m]['insertionOrder']."</td>";
-						echo "<td class='$color'> ".$mtx[$m]['insertionOrderId']."</td>";	
+					echo "<tr class='center' style='font-size:12px;'>";
 						echo "<td class='$color'>".$mtx[$m]['year']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['month']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['ioStartDate']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['ioEndDate']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['brand']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['placement']."</>";
+						echo "<td class='$color'>".$mtx[$m]['oldRep']."</>";
 						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['agency']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['client']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['adUnit']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['buyType']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['agencyCommissionPercentage']."%</td>";
-						echo "<td class='$color'>".$mtx[$m]['repCommissionPercentage']."%</td>";
-						echo "<td class='$color'>".number_format($mtx[$m]['commission'],0,",",".")."</td>";
-						if ($value == 'GROSS') {
-							echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
-						}else{
-							echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
-						}
-
+						echo "<td class='$color'>".$mtx[$m]['agency']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['agencyGroup']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['feedType']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['feedCode']."</td>";
+						echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
+						echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
+					}
 					echo "</tr>";
 
-					}
 
-				}*/
+				}elseif ($source == 'WBD') {
+					echo "<tr>";	
+						echo "<th class='newBlue center' colspan='11' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+					echo "</tr>";
+
+					echo "<tr class='center'>";
+						echo "<td class='rcBlue' style='width:5%;'>Company</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
+						echo "<td class='rcBlue' style='width:5%;'>P. Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Current Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Manager</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";					
+					echo "</tr>";
+
+					echo "<tr style='font-size:14px;'>";
+							echo "<td class='darkBlue center'>Total</td>";
+							echo "<td class='darkBlue' colspan='8'></td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
+							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
+					echo"</tr>";
+
+					for ($m=0; $m <sizeof($mtx) ; $m++) {
+						if ($m%2 == 0) {
+							$color = 'even';
+						}else{
+							$color = 'medBlue';
+						}
+
+					echo "<tr class='center' style='font-size:12px;'>";
+						echo "<td class='$color'>".$mtx[$m]['company']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['year']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['month']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['brand']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['oldRep']."</>";
+						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['client']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['agency']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['manager']."</td>";
+						echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
+						echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
+					}
+					echo "</tr>";
+
+
+				}
 			
 		echo "</table>";
 
