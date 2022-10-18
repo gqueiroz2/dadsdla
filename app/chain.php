@@ -114,7 +114,7 @@ class chain extends excel{
             $tempBase = false;
         }
 
-        if ($table == 'aleph') {
+        if ($table == 'aleph' || $table == 'wbd') {
             //$test = $this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS);
             $current = $this->fixToInput($this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS),$columnsS);       
         }else{
@@ -148,7 +148,7 @@ class chain extends excel{
             
         }
 
-        if ($table == "aleph") {
+        if ($table == "aleph" || $table == 'wbd') {
             //var_dump($current);
             $next = $this->handleForNextTable($con,$table,$current,$columnsS,$year);
         }else{
@@ -162,7 +162,7 @@ class chain extends excel{
         //var_dump($next); 
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
-  		
+  		//var_dump($complete);
         return $complete;                     
 
     }  
@@ -199,7 +199,7 @@ class chain extends excel{
     	}
     	//var_dump($cleanedValues);
     	$next = $this->handleForLastTable($con,$table,$cleanedValues,$columnsS);
-        var_dump($next);
+        //var_dump($next);
         if($table== 'cmaps'){
            $bool = $this->insertToLastTable($tCon,$table,$columnsT,$next,$into,$columnsS);
         }else{
@@ -917,7 +917,8 @@ class chain extends excel{
     	$salesReps = $sr->getSalesRepUnit($con);
         $salesRepRepresentatives = $sr->getSalesRepUnitWithRepresentatives($con);
     	$currencies = $pr->getCurrency($con);
-        var_dump($columns);
+        //var_dump($columns);
+        //var_dump($current);
 
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
@@ -1038,11 +1039,18 @@ class chain extends excel{
         }elseif ($table == "aleph" && $column == 'brand_id') {
             $rtr =  array(false,'brand_id');
             
-            if($table == "cmaps"){
-                $temp = strtoupper($current);
-            }else{
-                $temp = $current;
+            $temp = $current;            
+
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                if( $temp  == $brands[$b]['brandUnit']){    
+
+                    $rtr =  array( $brands[$b]['brandID'],'brand_id');
+                }
             }
+        }elseif ($table == "wbd" && $column == 'brand_id') {
+            $rtr =  array(false,'brand_id');
+            
+            $temp = $current;            
 
             for ($b=0; $b < sizeof($brands); $b++) { 
                 if( $temp  == $brands[$b]['brandUnit']){    
@@ -1569,7 +1577,7 @@ class chain extends excel{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($temp);
                                     //var_dump($spreadSheetV2[$s][$columns[$c]]);
                                 }elseif( $table && ($table == "wbd") ){
-                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($spreadSheet[$s][$c]);
+                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntWBD($spreadSheet[$s][$c]);
                                     //var_dump($spreadSheetV2[$s][$columns[$c]]);
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToInt(trim($spreadSheet[$s][$c]));                                    
@@ -1886,7 +1894,7 @@ class chain extends excel{
     );
 
     public $wbdColumnsS = array(
-                            'company',
+                            'company_id',
                             'year',
                             'month',
                             'old_sales_rep',
@@ -1894,13 +1902,13 @@ class chain extends excel{
                             'agency',
                             'brand_id',
                             'manager',
-                            'current_sales_rep',
+                            'current_sales_rep_id',
                             'gross_value',
                             'net_value'
     );
 
     public $wbdColumnsT = array(
-                            'company',
+                            'company_id',
                             'year',
                             'month',
                             'old_sales_rep',
@@ -1908,13 +1916,13 @@ class chain extends excel{
                             'agency_id',
                             'brand_id',
                             'manager',
-                            'current_sales_rep',
+                            'current_sales_rep_id',
                             'gross_value',
                             'net_value'
     );
 
     public $wbdColumns = array(
-                            'company',
+                            'company_id',
                             'year',
                             'month',
                             'old_sales_rep',
@@ -1922,7 +1930,7 @@ class chain extends excel{
                             'agency_id',
                             'brand_id',
                             'manager',
-                            'current_sales_rep',
+                            'current_sales_rep_id',
                             'gross_value',
                             'net_value'
     );

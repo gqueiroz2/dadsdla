@@ -214,7 +214,7 @@ class ChainController extends Controller{
     	$year = Request::get('year');
 
         $complete = $chain->secondChain($sql,$con,$fCon,$sCon,$table,$year);
-        var_dump($complete);
+        //var_dump($complete);
     	if($complete){
             return back()->with('secondChainComplete',"The Excel Data Was Succesfully Inserted :)");
         }
