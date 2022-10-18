@@ -308,6 +308,9 @@ class CheckElements extends Model{
 												AND(client != '')
 												ORDER BY sales_office,client ";
 			//var_dump($selectDistinctFM);
+		}elseif ($table == "wbd") {
+			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";
+			//var_dump($selectDistinctFM);
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table
 												WHERE (sales_representant_office = '".$seekRegion['name']."')
@@ -317,7 +320,7 @@ class CheckElements extends Model{
 
 		$res = $con->query($selectDistinctFM);
 
-		if($table == "cmaps"){
+		if($table == "cmaps" || $table == "wbd"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
 		}elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
 			$resultsFM = $sql->fetch($res,array("client","region"),array("client","region"));
@@ -355,7 +358,8 @@ class CheckElements extends Model{
 
 		$seekRegion = $r->getRegion($conDLA,array($region))[0];
 
-		if($table == "cmaps"){
+		if($table == "cmaps"
+		){
 			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";
 		}elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
 			$selectDistinctFM = "SELECT DISTINCT agency,region FROM $table
@@ -621,7 +625,7 @@ class CheckElements extends Model{
 
 		//var_dump($table);
 
-		if ($table != 'cmaps') {
+		if ($table != 'cmaps' && $table != 'wbd') {
 			for ($r = 0; $r < sizeof($typeName); $r++) {
 				$region[] = $fm[$regionID[$r]]['region'];
 			}
@@ -684,7 +688,7 @@ class CheckElements extends Model{
 
 		//var_dump($table);
 
-		if ($table != 'cmaps' && $table != 'aleph') {
+		if ($table != 'cmaps' && $table != 'aleph' && $table != "wbd") {
 			for ($r = 0; $r < sizeof($typeName); $r++) {
 				$region[] = $fm[$regionID[$r]]['region'];
 			}
