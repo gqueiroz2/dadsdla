@@ -851,7 +851,7 @@ class ajaxController extends Controller{
         $sr = new salesRep();
 
         $regionID = Request::get('regionID');
-        var_dump($regionID);
+        //var_dump($regionID);
         $year = Request::get('year');
         $source = Request::get('source');
         $permission = Request::session()->get('userLevel');
@@ -859,10 +859,10 @@ class ajaxController extends Controller{
         $user = Request::session()->get('userName');
 
 
-        var_dump($source);
+        //var_dump($source);
 
         $regionName = $rr->getRegion($con,array($regionID))[0]['name'];
-        var_dump($regionName);
+        //var_dump($regionName);
         
         if($regionName == 'Brazil'){
             if (is_null($regionID)) {

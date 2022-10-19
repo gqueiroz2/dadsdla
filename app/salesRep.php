@@ -289,8 +289,10 @@ class salesRep extends Management
 				";
 		$order = "5,1";
 		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
+		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
 		$salesRep = $sql->fetch($res, $from, $from);
+		//var_dump($salesRep);
 		return $salesRep;
 	}
 

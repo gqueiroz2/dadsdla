@@ -10,6 +10,7 @@ class viewer extends Model{
 
 	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
 		$base = new base();
+		//var_dump($salesRep);
 
 		$brandString = $base->arrayToString($brand,false,0);
 		
@@ -383,12 +384,15 @@ class viewer extends Model{
 						LEFT JOIN client c ON a.client_id = c.ID
 						LEFT JOIN agency ag ON a.agency_id = ag.ID
 						LEFT JOIN brand b ON a.brand_id = b.ID
+						LEFT JOIN sales_rep_status srs  ON a.current_sales_rep_id  = srs.sales_rep_id 
+						LEFT JOIN sales_rep_representatives srr ON srs.sales_rep_representatives_id = srr.ID 
 						LEFT JOIN sales_rep sr ON a.current_sales_rep_id = sr.ID
 						LEFT JOIN agency_group agg ON a.agency_group_id = agg.ID
 						LEFT JOIN region r ON a.sales_office_id = r.ID
 						WHERE (a.year = '$year')
 							AND (r.ID = '$salesRegion')
-							AND (sr.ID IN ($salesRepString))
+							AND ((srs.status = '1' ) AND (srs.year = '$year'))
+							AND (srr.ID IN ($salesRepString))
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
 							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
@@ -412,22 +416,25 @@ class viewer extends Model{
 					   LEFT JOIN client c ON w.client_id = c.ID
 					   LEFT JOIN agency ag ON w.agency_id = ag.ID
 					   LEFT JOIN brand b ON w.brand_id = b.ID
-					   LEFT JOIN sales_rep sr ON w.current_sales_rep_id = sr.ID
 					   LEFT JOIN brand_group bg ON w.company_id = bg.ID
+					   LEFT JOIN sales_rep_status srs  ON w.current_sales_rep_id  = srs.sales_rep_id 
+					   LEFT JOIN sales_rep_representatives srr ON srs.sales_rep_representatives_id = srr.ID 
+					   LEFT JOIN sales_rep sr ON w.current_sales_rep_id = sr.ID
 					   WHERE (w.year = '$year')
-							AND (sr.ID IN ($salesRepString))
-							AND (w.brand_id IN ($brandString)) 
+							AND ((srs.status = '1' ) AND (srs.year = '$year'))
+							AND (w.brand_id IN ($brandString))
+							AND (srr.ID IN ($salesRepString)) 
 							AND (w.month IN ($monthString))
 							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
 			";
 		}
-		//echo "<pre>".$select."</pre>";
+		echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
 		//echo "$result";
 
 		$mtx = $sql->fetch($result,$from,$from);
-		//var_dump($mtx);
+		//var_dump(sizeof($mtx));
 		return $mtx;
 	}
 
@@ -802,7 +809,7 @@ class viewer extends Model{
 		//echo "$result";
 
 		$mtx = $sql->fetch($result,$from,$from);
-		//var_dump($mtx);
+		
 		return $mtx;
 	}
 
@@ -829,7 +836,9 @@ class viewer extends Model{
 
 		$c = 1;
 		if ($table) {
+			//var_dump(sizeof($table));
 			for ($t=0; $t < sizeof($table); $t++){ 
+				//var_dump();
 				if($source == "CMAPS"){
 					$discount += $table[$t]['discount'];
 					$gross += $table[$t]['grossRevenue']/$pRate;
@@ -841,8 +850,8 @@ class viewer extends Model{
 					$gross += $table[$t]['fcstAmountGross']/$pRate;
 					$net += $table[$t]['fcstAmountNet']/$pRate;
 				}elseif ($source == 'ALEPH') {
-					$gross += $table[$t]['grossRevenue']/$pRate;
-					$net += ($table[$t]['grossRevenue']*0.80)/$pRate;
+					$gross += (doubleval($table[$t]['grossRevenue']))/$pRate;
+					$net += (doubleval($table[$t]['grossRevenue']*0.80))/$pRate;
 				}elseif($source == "WBD"){
 					$gross += $table[$t]['grossRevenue']/$pRate;
 					$net += $table[$t]['netRevenue']/$pRate;
@@ -850,6 +859,7 @@ class viewer extends Model{
 
 				$c++;
 			}
+			//var_dump($table);
 
 			$sumGrossRevenue = $gross;
 			$sumNetRevenue = $net;			
