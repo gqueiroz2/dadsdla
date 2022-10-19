@@ -136,7 +136,6 @@ class chain extends excel{
         }       
 
         $into = $this->into($columnsS);		
-        //var_dump($into);
         
         if($table == 'data_hub'){
             $columns = $this->ytdColumnsF;

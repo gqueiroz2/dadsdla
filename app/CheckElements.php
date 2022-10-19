@@ -21,7 +21,7 @@ class CheckElements extends Model{
 			//$currencies = $this->checkNewCurrencies($conDLA,$con,$table,$sql);
 		}
 
-		//$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
+		$brands = $this->checkNewBrands($conDLA,$con,$table,$sql);
 		//$salesReps = $this->checkNewSalesReps($conDLA,$con,$table,$sql);
 
 		if($table == "cmaps"){
@@ -35,7 +35,7 @@ class CheckElements extends Model{
 
 		$rtr = array(
 				'regions' => $regions,
-				'brands' => null,
+				'brands' => $brands,
 				'salesReps' => null,
 				'clients' => $clients,
 				'agencies' => $agencies,
@@ -358,7 +358,7 @@ class CheckElements extends Model{
 
 		$seekRegion = $r->getRegion($conDLA,array($region))[0];
 
-		if($table == "cmaps"
+		if($table == "cmaps"  || $table == 'wbd'
 		){
 			$selectDistinctFM = "SELECT DISTINCT agency FROM $table ORDER BY agency";
 		}elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
@@ -371,6 +371,11 @@ class CheckElements extends Model{
 														WHERE (holding_company = '".$seekRegion['name']."')
 														AND(agency != '')
 														ORDER BY agency";
+		}elseif ($table == "aleph") {
+			$selectDistinctFM = "SELECT DISTINCT agency,sales_office FROM $table
+												WHERE (sales_office = '".$seekRegion['name']."')
+												AND(agency != '')
+												ORDER BY sales_office,agency ";
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT agency,sales_representant_office FROM $table
 														WHERE (sales_representant_office = '".$seekRegion['name']."')
@@ -383,12 +388,14 @@ class CheckElements extends Model{
 		$res = $con->query($selectDistinctFM);
 		$sql = new sql();
 
-		if($table == "cmaps"){
+		if($table == "cmaps" || $table == 'wbd'){
 			$resultsFM = $sql->fetch($res,array("agency"),array("agency"));
 		}elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
 			$resultsFM = $sql->fetch($res,array("agency","region"),array("agency","region"));
 		}elseif($table == "data_hub"){
 			$resultsFM = $sql->fetch($res,array("agency","holding_company"),array("agency","region"));
+		}elseif($table == "aleph") {
+			$resultsFM = $sql->fetch($res,array("agency","sales_office"),array("agency","region"));
 		}else{
 			$resultsFM = $sql->fetch($res,array("agency","sales_representant_office"),array("agency","region"));
 		}

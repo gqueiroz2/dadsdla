@@ -392,7 +392,7 @@ class viewer extends Model{
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
 							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
-						GROUP BY a.feed_code";
+						";
 		}elseif ($source == 'WBD') {
 			
 			$from = array('company','year','month','oldRep', 'client','agency','brand','manager','salesRep','grossRevenue','netRevenue');
@@ -419,7 +419,7 @@ class viewer extends Model{
 							AND (w.brand_id IN ($brandString)) 
 							AND (w.month IN ($monthString))
 							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
-					   GROUP BY w.manager";
+			";
 		}
 		//echo "<pre>".$select."</pre>";
 		
@@ -1014,10 +1014,10 @@ class viewer extends Model{
 						}
 
 						if ($mtx[$m]['netRevenue']) {
-								$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']*0.8)/$pRate;
+								$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']*0.8);
 							}
 						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
+							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue']);
 						}
 
 						break;
@@ -1029,10 +1029,10 @@ class viewer extends Model{
 						}
 
 						if ($mtx[$m]['netRevenue']) {
-							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue'])/$pRate;
+							$mtx[$m]['netRevenue'] = doubleval($mtx[$m]['netRevenue']);
 						}
 						if ($mtx[$m]['grossRevenue']) {
-							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue'])/$pRate;
+							$mtx[$m]['grossRevenue'] = doubleval($mtx[$m]['grossRevenue']);
 						}
 
 				}			
