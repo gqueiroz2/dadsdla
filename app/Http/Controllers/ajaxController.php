@@ -784,6 +784,31 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getSalesRepByRegionByYear(){
+        $regionID = Request::get('regionID');
+        $cYear = Request::get('year');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+
+            $default = $db->defaultConnection();
+            $con = $db->openConnection($default);
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$cYear);
+
+            echo "<option selected='true' value=''>Select Sales Rep.</option>";
+
+            for ($s=0; $s < sizeof($resp); $s++) { 
+                echo "<option value='".$resp[$s]["id"]."'> ".$resp[$s]["salesRep"]." </option>";
+            }
+        }
+    }
+
     public function getNewSalesRepByRegion(){
         $regionID = Request::get('regionID');
 
@@ -817,7 +842,7 @@ class ajaxController extends Controller{
         }
     }
 
-    public function getNewSalesRepByRegionAndYear(){
+    public function getRepByRegionAndYear(){
         $regionID = Request::get('regionID');
 
         $year = Request::get('year');
@@ -836,7 +861,7 @@ class ajaxController extends Controller{
 
             $resp = $sr->getSalesRepByRegion($con,$regionID,true,$year);
 
-            for ($s=0; $s < sizeof($resp); $s++) { 
+            for ($s=0; $s < sizeof($resp); $s++) {
                 echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
             }
         }
@@ -1394,7 +1419,7 @@ class ajaxController extends Controller{
         }
 
 
-        //echo "<option value=''> Select </option>";
+        echo "<option value=''> Select </option>";
         for ($s=0; $s < sizeof($source); $s++) { 
             echo "<option value='".$source[$s]."'>".$source[$s]."</option>";
         }

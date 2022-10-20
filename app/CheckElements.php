@@ -667,7 +667,7 @@ class CheckElements extends Model{
 		$new = array();
 		$test = array();
 		$formattedName = array();
-		var_dump($fm);
+		//var_dump($fm);
 		//var_dump($dla);
 
 		for ($f = 0; $f < sizeof($fm); $f++) {
@@ -691,7 +691,7 @@ class CheckElements extends Model{
 			$formattedName[] = $fm[$regionID[$j]];
 		}
 		
-		var_dump($formattedName);
+		//var_dump($formattedName);
 
 		//var_dump($table);
 

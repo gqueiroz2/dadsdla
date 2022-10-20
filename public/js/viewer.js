@@ -1,6 +1,9 @@
+// Considerations: use the front-end filters for generating data for the table and not the actual :D
+
 $(document).ready(function(){
   $('#region').change(function(){
     var regionID = $(this).val();
+    var year = $('#year').val();
     ajaxSetup();
     if (regionID != "") {
       $.ajax({ 
@@ -14,12 +17,11 @@ $(document).ready(function(){
             var option = "<option> Select Year </option>";           
           }else{
             $.ajax({
-              url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
+              url:"/ajax/adsales/repByRegionAndYear",
               method:"POST",
-              data:{regionID,year},
+              data:{regionID, year},
               success: function(output){
                 $('#salesRep').html(output).selectpicker("refresh");
-                //$('#vlau').html(output).selectpicker("refresh");
               },
               error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);
@@ -121,7 +123,7 @@ $(document).ready(function(){
       
       $('#sourceDataBase').change(function(){
         var source = $(this).val();
-        
+        var year = $('#year').val();
         var sourceDataBase = $('#sourceDataBase').val();
         
         if (sourceDataBase == "SF") {
@@ -158,9 +160,10 @@ $(document).ready(function(){
           $.ajax({
             url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
             method:"POST",
-            data:{regionID,year,source},
+            data:{regionID,year},
             success: function(output){
-              $('#saleRep').html(output).selectpicker("refresh");              
+              $('#salesRep').html(output).selectpicker("refresh");
+              //$('#vlau').html(output).selectpicker("refresh");
             },
             error: function(xhr, ajaxOptions,thrownError){
               alert(xhr.status+" "+thrownError);
@@ -227,6 +230,37 @@ $(document).ready(function(){
             }
           }); 
         }
+      });
+
+      $('#year').change(function(){
+        var year = $('#year').val();
+        if(sourceDataBase == "CMAPS"){
+          $.ajax({
+            url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
+            method:"POST",
+            data:{regionID,year},
+            success: function(output){
+              $('#salesRep').html(output).selectpicker("refresh");
+              //$('#vlau').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });
+        }else{
+          $.ajax({
+            url:"/ajax/adsales/repByRegionAndYear",
+            method:"POST",
+            data:{regionID, year},
+            success: function(output){
+              $('#salesRep').html(output).selectpicker("refresh");
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          });
+        }
+        
       });
 
       var currentTime = new Date();
@@ -350,96 +384,4 @@ $(document).ready(function(){
     }); 
   });
 
-  $('#year').click(function(){
-    var year = $(this).val();
-    if (year != "") {
-      var regionID = $('#region').val();
-      ajaxSetup();      
-      if (regionID != "") {
-
-        $.ajax({
-          url:"/ajax/adsales/thirdPosByRegion",
-          method:"POST",
-          data:{regionID, year},
-            success: function(output){
-              $('#thirdPos').html(output);
-              var form = $('#thirdPos').val();
-              $.ajax({
-                url:"/ajax/adsales/firstPosByRegion",
-                method:"POST",
-                data:{year,form},
-                  success: function(output){
-                    $('#firstPos').html(output);
-                  },
-                  error: function(xhr, ajaxOptions,thrownError){
-                    alert(xhr.status+" "+thrownError);
-                }
-              });
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-              alert(xhr.status+" "+thrownError);
-          }
-        });
-
-
-
-        $.ajax({
-          url:"/ajax/adsales/secondPosByRegion",
-          method:"POST",
-          data:{year},
-            success: function(output){
-              $('#secondPos').html(output);
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-              alert(xhr.status+" "+thrownError);
-          }
-        });
-
-        $.ajax({
-          url:"/ajax/adsales/agencyByRegion",
-          method:"POST",
-          data:{regionID},
-          success: function(output){
-            $('#agency').html(output).selectpicker("refresh");
-          },
-          error: function(xhr, ajaxOptions,thrownError){
-            alert(xhr.status+" "+thrownError);
-          }
-        });
-
-        $.ajax({
-          url:"/ajax/adsales/clientByRegion",
-          method:"POST",
-          data:{regionID},
-          success: function(output){
-            $('#client').html(output).selectpicker("refresh");
-          },
-          error: function(xhr, ajaxOptions,thrownError){
-            alert(xhr.status+" "+thrownError);
-          }
-        });   
-        
-        $.ajax({
-          url:"/ajax/adsales/newSalesRepRepresentativesByRegionAndYear",
-          method:"POST",
-          data:{regionID,year},
-          success: function(output){
-            $('#salesRep').html(output).selectpicker("refresh");
-          },
-          error: function(xhr, ajaxOptions,thrownError){
-            alert(xhr.status+" "+thrownError);
-          }
-        });
-
-
-      }else{
-        var option = "<option> Select Region </option>";
-      }
-    }else{
-      var option = "<option> Select Year </option>";
-      $('#firstPos').empty().append(option);
-      $('#secondPos').empty().append(option);
-      $('#thirdPos').empty().append(option);
-    }
-  });
 });
