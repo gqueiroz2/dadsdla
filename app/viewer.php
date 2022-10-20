@@ -384,15 +384,12 @@ class viewer extends Model{
 						LEFT JOIN client c ON a.client_id = c.ID
 						LEFT JOIN agency ag ON a.agency_id = ag.ID
 						LEFT JOIN brand b ON a.brand_id = b.ID
-						LEFT JOIN sales_rep_status srs  ON a.current_sales_rep_id  = srs.sales_rep_id 
-						LEFT JOIN sales_rep_representatives srr ON srs.sales_rep_representatives_id = srr.ID 
 						LEFT JOIN sales_rep sr ON a.current_sales_rep_id = sr.ID
 						LEFT JOIN agency_group agg ON a.agency_group_id = agg.ID
 						LEFT JOIN region r ON a.sales_office_id = r.ID
 						WHERE (a.year = '$year')
 							AND (r.ID = '$salesRegion')
-							AND ((srs.status = '1' ) AND (srs.year = '$year'))
-							AND (srr.ID IN ($salesRepString))
+							AND (sr.ID IN ($salesRepString))
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
 							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
@@ -417,15 +414,12 @@ class viewer extends Model{
 					   LEFT JOIN agency ag ON w.agency_id = ag.ID
 					   LEFT JOIN brand b ON w.brand_id = b.ID
 					   LEFT JOIN brand_group bg ON w.company_id = bg.ID
-					   LEFT JOIN sales_rep_status srs  ON w.current_sales_rep_id  = srs.sales_rep_id 
-					   LEFT JOIN sales_rep_representatives srr ON srs.sales_rep_representatives_id = srr.ID 
 					   LEFT JOIN sales_rep sr ON w.current_sales_rep_id = sr.ID
 					   WHERE (w.year = '$year')
-							AND ((srs.status = '1' ) AND (srs.year = '$year'))
 							AND (w.brand_id IN ($brandString))
-							AND (srr.ID IN ($salesRepString)) 
+							AND (sr.ID IN ($salesRepString)) 
 							AND (w.month IN ($monthString))
-							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
+							AND (  ( c.ID IN ($clientString) )  )
 			";
 		}
 		echo "<pre>".$select."</pre>";

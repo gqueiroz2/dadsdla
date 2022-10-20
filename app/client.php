@@ -413,7 +413,7 @@ class client extends Management{
      
         $sql = new sql();
 
-        $table = "ytd y";
+        $table = "client c";
 
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
@@ -426,7 +426,7 @@ class client extends Management{
 
         if($clientRegion){
             $clientRegions = implode(",",$clientRegion);
-            $where .= "WHERE sales_representant_office_id IN ('$clientRegions')";
+            $where .= "WHERE client_group_id IN ('$clientRegions')";
 
             if ($year) {
                 //$years = implode(",", $year);
@@ -443,8 +443,7 @@ class client extends Management{
 
 
 
-        $join = "LEFT JOIN client c ON c.ID = y.client_id
-                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
                  LEFT JOIN region r ON cg.region_id = r.ID
                 ";
 
