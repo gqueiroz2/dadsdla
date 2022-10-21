@@ -197,7 +197,7 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 						}
 					}
-				}elseif () {
+				}elseif ($this->data['source'] == 'wbd') {
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 

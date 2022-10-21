@@ -136,7 +136,7 @@
 				<td>{{$data['mtx'][$m]['fcstAmountNet']}}</td>
 			</tr>
 		@endfor
-	@elseif ($data['source'] == 'AlEPH')
+	@elseif ($data['source'] == 'aleph')
 		<tr>	
 			<th style="background-color: #0047b3;" colspan='12'> {{$data['regions']}} - Viewer Aleph {{$data['year']}} - ({{strtoupper($data['currencies'])}}) </th>
 		</tr>
@@ -165,22 +165,22 @@
 
 		@for ($m=0; $m <sizeof($data['mtx']); $m++)
 			<tr>
-				<td>{{$data['mtx'][$m]['year'}}</td>
-				<td>{{$data['mtx'][$m]['month'}}</td>
-				<td>{{$data['mtx'][$m]['brand'}}</td>
-				<td>{{$data['mtx'][$m]['oldRep'}}</td>
-				<td>{{$data['mtx'][$m]['salesRep'}}</td>
-				<td>{{$data['mtx'][$m]['client'}}</td>
-				<td>{{$data['mtx'][$m]['agency'}}</td>
-				<td>{{$data['mtx'][$m]['agencyGroup'}}</td>
-				<td>{{$data['mtx'][$m]['feedType'}}</td>
-				<td>{{$data['mtx'][$m]['feedCode'}}</td>
+				<td>{{$data['mtx'][$m]['year']}}</td>
+				<td>{{$data['mtx'][$m]['month']}}</td>
+				<td>{{$data['mtx'][$m]['brand']}}</td>
+				<td>{{$data['mtx'][$m]['oldRep']}}</td>
+				<td>{{$data['mtx'][$m]['salesRep']}}</td>
+				<td>{{$data['mtx'][$m]['client']}}</td>
+				<td>{{$data['mtx'][$m]['agency']}}</td>
+				<td>{{$data['mtx'][$m]['agencyGroup']}}</td>
+				<td>{{$data['mtx'][$m]['feedType']}}</td>
+				<td>{{$data['mtx'][$m]['feedCode']}}</td>
 				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
 				<td>"{{$data['mtx'][$m]['netRevenue']}}</td>
 			</tr>
 		@endfor
 
-	@elseif ($data['source'] == 'WBD')
+	@elseif ($data['source'] == 'wbd')
 		<tr>	
 			<th style="background-color: #0047b3;" colspan='11'> {{$data['regions']}} - Viewer WBD {{$data['year']}} - ({{$data['currencies']}}) </th>
 		</tr>
