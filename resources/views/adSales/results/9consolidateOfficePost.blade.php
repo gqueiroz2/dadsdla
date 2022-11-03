@@ -15,7 +15,7 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif						
-						{{$render->regionOffice($region)}}													
+						{{$render->regionOffice($region, $userRegionExcel)}}													
 					</div>	
 
 					<div class="col-sm">
@@ -70,6 +70,7 @@
 	<?php
 		$month = array("January","February","March","April","May","June","July","August","September","October","November","December");
 		$quarter = array("Q1","Q2","Q3","Q4");
+		var_dump($userRegionExcel);
 	?>
 
 

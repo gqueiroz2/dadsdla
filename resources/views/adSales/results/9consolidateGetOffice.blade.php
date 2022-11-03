@@ -15,7 +15,7 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif						
-						{{$render->regionOffice($region)}}													
+						{{$render->regionOffice($region, $regionName)}}													
 					</div>	
 
 					<div class="col-sm">
