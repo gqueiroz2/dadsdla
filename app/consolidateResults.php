@@ -932,9 +932,9 @@ class consolidateResults extends Model{
             if($table == "cmaps"){  
 
                 $rtr = $tmp/$pRate;
-            }elseif ($table == "ytd") {
+            }elseif ($table == "ytd y") {
                 $rtr = $tmp*$pRate;
-            }else if($table == "plan_by_brand"){                          
+            }else if($table == "plan_by_brand pbb"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
                 if ($valueView == 'net') {
