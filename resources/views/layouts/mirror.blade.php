@@ -105,14 +105,17 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
-										@if( ( $userLevel == "SU") ||  ( $userLevel == "L1" ) ||  ( $userLevel == "L3" ) ||  ( $userLevel == "SU" ) ||  ( $userName == "Rodrigo Tamer" ) )
+										@if( ( $userLevel == "SU") ||  ( $userLevel == "L1" ) )
 											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>		
 										@endif
 
 										@if( ( $userLevel == "SU" ) )								
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
-											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
-										@endif									
+										@endif
+
+										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L3')											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										@endif		
+
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 										<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>

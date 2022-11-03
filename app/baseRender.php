@@ -216,18 +216,17 @@ class baseRender extends Render{
 
 				}elseif ($source == 'Aleph') {
 					echo "<tr>";	
-						echo "<th class='newBlue center' colspan='12' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+						echo "<th class='newBlue center' colspan='11' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
 					echo "</tr>";
 
 					echo "<tr class='center'>";
 						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
-						echo "<td class='rcBlue' style='width:5%;'>P. Sales Rep</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Current Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Previous AE</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
-						echo "<td class='rcBlue' style='width:5%;'> Agency Group</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Feed Type</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Feed Code</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
@@ -236,7 +235,7 @@ class baseRender extends Render{
 
 					echo "<tr style='font-size:14px;'>";
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='9'></td>";
+							echo "<td class='darkBlue' colspan='8'></td>";
 							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
 							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
 					echo"</tr>";
@@ -256,7 +255,6 @@ class baseRender extends Render{
 						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['client']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['agency']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['agencyGroup']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['feedType']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['feedCode']."</td>";
 						echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
@@ -275,11 +273,11 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
-						echo "<td class='rcBlue' style='width:5%;'>P. Sales Rep</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Current Sales Rep</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Previous AE</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Manager</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Director</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";					
 					echo "</tr>";

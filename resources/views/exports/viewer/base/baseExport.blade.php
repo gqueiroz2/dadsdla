@@ -145,8 +145,8 @@
 			<td style="background-color: #e6e6e6;">Year</td>
 			<td style="background-color: #e6e6e6;">Month</td>
 			<td style="background-color: #e6e6e6;">Brand</td>
-			<td style="background-color: #e6e6e6;">P. Sales Rep</td>
-			<td style="background-color: #e6e6e6;">Current Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Previous AE</td>
+			<td style="background-color: #e6e6e6;">Current AE</td>
 			<td style="background-color: #e6e6e6;">Client</td>
 			<td style="background-color: #e6e6e6;">Agency</td>
 			<td style="background-color: #e6e6e6;"> Agency Group</td>
@@ -190,11 +190,11 @@
 			<td style="background-color: #e6e6e6;">Year</td>
 			<td style="background-color: #e6e6e6;">Month</td>
 			<td style="background-color: #e6e6e6;">Brand</td>
-			<td style="background-color: #e6e6e6;">P. Sales Rep</td>
-			<td style="background-color: #e6e6e6;">Current Sales Rep</td>
+			<td style="background-color: #e6e6e6;">Previous AE</td>
+			<td style="background-color: #e6e6e6;">Current AE</td>
 			<td style="background-color: #e6e6e6;">Client</td>
 			<td style="background-color: #e6e6e6;">Agency</td>
-			<td style="background-color: #e6e6e6;">Manager</td>
+			<td style="background-color: #e6e6e6;">Director</td>
 			<td style="background-color: #e6e6e6;">Gross Revenue</td>
 			<td style="background-color: #e6e6e6;">Net Revenue</td>					
 		</tr>

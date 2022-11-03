@@ -25,9 +25,14 @@ class consolidateResults extends Model{
         
         
         for ($r=0; $r < sizeof($region); $r++) { 
-            for ($m=0; $m < sizeof($month); $m++) {                 
-                $currentAdSales[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value, $cYear,null,$company);
-                $previousAdSales[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value,$pYear,null,$company);                                   
+            for ($m=0; $m < sizeof($month); $m++) {     
+                $currentAleph[$r][$m] = $this->defineValuesOffice($con, "aleph", $currency, $month[$m][1], $region[$r], $value, $cYear,null,$company); 
+                //var_dump($currentAleph);          
+                $previousAleph[$r][$m] = $this->defineValuesOffice($con, "aleph", $currency, $month[$m][1], $region[$r], $value, $pYear,null,$company); 
+                $currentYtd[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value, $cYear,null,$company);
+                $currentAdSales[$r][$m] = $currentAleph[$r][$m] + $currentYtd[$r][$m];
+                $previousYtd[$r][$m] = $this->defineValuesOffice($con, "ytd", $currency, $month[$m][1], $region[$r], $value,$pYear,null,$company);
+                $previousAdSales[$r][$m] = $previousAleph[$r][$m] + $previousYtd[$r][$m];
                 $currentTarget[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "TARGET",$company);
                 $currentCorporate[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "CORPORATE",$company);
                 $currentSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "ACTUAL",$company);
@@ -54,7 +59,7 @@ class consolidateResults extends Model{
 		$form = "bts";
 		$year = date('Y');
 		$pYear = $year - 1;
-        //var_dump($currency);
+        //var_dump($typeSelect);
 
 		switch ($type) {
 			case 'brand':				
@@ -62,10 +67,16 @@ class consolidateResults extends Model{
 		            for ($m=0; $m < sizeof($month); $m++) { 
                         //var_dump($typeSelect);
 		                if ($typeSelect[$b][1] != 'ONL' && $typeSelect[$b][1] != 'VIX') {
-		                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
-		                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+                            $currentAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
+                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+		                    $currentYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
+                            $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
+                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+		                    $previousYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+                            $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m];
 		                }else{
 		                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
+                            $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
 		                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);                    
 		                }        
 		                $currentTarget[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET");
@@ -74,7 +85,8 @@ class consolidateResults extends Model{
 		                $previousSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL");
 		            }
 		        }
-
+                //var_dump($test);
+                //var_dump($currentAdSales);
 		        $rtr = array( "typeSelect" => $typeSelect,
                               "currentAdSales" => $currentAdSales,
 		        			  "previousAdSales" => $previousAdSales,
@@ -89,9 +101,12 @@ class consolidateResults extends Model{
 			case 'advertiser':				
 				for ($b=0; $b < sizeof($typeSelect); $b++) { 
 		            for ($m=0; $m < sizeof($month); $m++) {
-            	
-	                    $currentAdSales[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-	                    $previousAdSales[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);                    		                     
+                        $currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
+                        $previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
+	                    $currentYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
+	                    $previousYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+                        $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
+                        $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m]; 
 		                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "CORPORATE");
 		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "ACTUAL");
@@ -114,9 +129,13 @@ class consolidateResults extends Model{
 			case 'agency':				
 				for ($b=0; $b < sizeof($typeSelect); $b++) { 
 		            for ($m=0; $m < sizeof($month); $m++) {
-            	
-	                    $currentAdSales[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-	                    $previousAdSales[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);                    		                     
+            	        $currentAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);  
+                        //var_dump($currentAleph); 
+	                    $currentYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
+                        $currentAdSales[$b][$m]  = $currentYtd[$b][$m] + $currentAleph[$b][$m];
+                        $previousAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $pYear);  
+	                    $previousYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);
+                        $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m];
 		                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "CORPORATE");
 		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "ACTUAL");
@@ -139,9 +158,12 @@ class consolidateResults extends Model{
             case 'agencyGroup':              
                 for ($b=0; $b < sizeof($typeSelect); $b++) { 
                     for ($m=0; $m < sizeof($month); $m++) {
-                
-                        $currentAdSales[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-                        $previousAdSales[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);                                              
+                        $currentAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
+                        $currentYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
+                        $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
+                        $previousAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);
+                        $previousYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);
+                        $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m];
                         $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
                         $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "CORPORATE");
                         $currentSAP[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "ACTUAL");
@@ -166,9 +188,13 @@ class consolidateResults extends Model{
 
 				for ($b=0; $b < sizeof($typeSelect); $b++) { 
 		            for ($m=0; $m < sizeof($month); $m++) { 
-		                
-	                    $currentAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
-                        $previousAdSales[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
+		                $currentAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
+                        $previousAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
+                        $currentYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
+                        //var_dump($currentYtd);
+                        $previousYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);
+                        $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
+                        $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m];
 		                $currentTarget[$b][$m] = $this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "TARGET");
 		                $currentCorporate[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "CORPORATE");
 		                $currentSAP[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_sales", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year, "ACTUAL");
@@ -201,10 +227,12 @@ class consolidateResults extends Model{
         $p = new pRate();
 
         $year = $keyYear;
+        $valueView = $value;
+        //var_dump($table);
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == "aleph"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
@@ -212,7 +240,7 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == "aleph"){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
@@ -249,6 +277,14 @@ class consolidateResults extends Model{
                 $value = "value";
                 break;
 
+            case 'aleph':
+                
+                $columns = array("sales_office_id","year", "month","current_sales_rep_id");                
+                $columnsValue = array($region,$year,$month,$typeSelect);
+                    
+                $value .= '_revenue';
+                
+                break;
             default:
                 $columns = false;
                 break;
@@ -273,14 +309,21 @@ class consolidateResults extends Model{
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
-            if($table == "cmaps"){                          
+            if($table == "cmaps"){  
                 $rtr = $tmp/$pRate;
-            }else if($table == "plan_by_sales"){                          
+            }elseif ($table == "ytd") {
+                $rtr = $tmp*$pRate;
+            }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
-                $rtr = $tmp*$pRate;
+                if ($valueView == 'net') {
+                    $rtr = ($tmp*0.80)/$pRate;
+                }else{
+                    $rtr = $tmp/$pRate;
+                }
             }
         }
+        
         return $rtr;		
     }  
 
@@ -288,10 +331,11 @@ class consolidateResults extends Model{
         $p = new pRate();
 
         $year = $keyYear;
+        $valueView = $value;
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'aleph'){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
@@ -299,7 +343,7 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'aleph'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
@@ -335,6 +379,14 @@ class consolidateResults extends Model{
                 $columnsValue = array($region, strtoupper($source), $value, $typeSelect, $year, $month, 4);
                 $value = "revenue";
                 break;
+             case 'aleph':
+                
+                $columns = array("sales_office_id","year", "month","client_id");                
+                $columnsValue = array($region,$year,$month,$typeSelect);                
+                    
+                $value .= '_revenue';
+                
+                break;
 
             /*
             case 'cmaps':
@@ -396,25 +448,33 @@ class consolidateResults extends Model{
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
-            if($table == "cmaps"){                          
+            if($table == "cmaps"){  
+
                 $rtr = $tmp/$pRate;
+            }elseif ($table == "ytd") {
+                $rtr = $tmp*$pRate;
             }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
-                $rtr = $tmp*$pRate;
-            }
+                if ($valueView == 'net') {
+                    $rtr = ($tmp*0.80)/$pRate;
+                }else{
+                    $rtr = $tmp/$pRate;
+                }                
+            }           
         }
         return $rtr;		
     }      
 
     public function defineValuesAgency($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
         $p = new pRate();
-
+        //r_dump($typeSelect);
         $year = $keyYear;
+        $valueView = $value;
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == "aleph"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
@@ -422,7 +482,7 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == "aleph"){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
@@ -458,6 +518,15 @@ class consolidateResults extends Model{
                 $columnsValue = array($region, strtoupper($source), $value, $typeSelect, $year, $month, 4);
                 $value = "revenue";
                 break;
+            case 'aleph':
+                
+                $columns = array("sales_office_id","year", "month","agency_id");                
+                $columnsValue = array($region,$year,$month,$typeSelect);                
+                    
+                $value .= '_revenue';
+                
+                break;
+
 
             /*
             case 'cmaps':
@@ -519,13 +588,20 @@ class consolidateResults extends Model{
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
 
-            if($table == "cmaps"){                          
+            if($table == "cmaps"){  
+
                 $rtr = $tmp/$pRate;
+            }elseif ($table == "ytd") {
+                $rtr = $tmp*$pRate;
             }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
-                $rtr = $tmp*$pRate;
-            }
+                if ($valueView == 'net') {
+                    $rtr = ($tmp*0.80)/$pRate;
+                }else{
+                    $rtr = $tmp/$pRate;
+                }                
+            } 
         }
         return $rtr;		
     }      
@@ -534,10 +610,11 @@ class consolidateResults extends Model{
         $p = new pRate();
 
         $year = $keyYear;
+        $valueView = $value;
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'aleph'){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
@@ -545,7 +622,7 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'aleph'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
@@ -580,6 +657,15 @@ class consolidateResults extends Model{
                 $columns = array("sales_office_id", "source", "type_of_revenue", "sales_rep_id", "year", "month", "currency_id");
                 $columnsValue = array($region, strtoupper($source), $value, $typeSelect, $year, $month, 4);
                 $value = "revenue";
+                break;
+
+            case 'aleph':
+                
+                $columns = array("sales_office_id","year", "month","agency_group_id");                
+                $columnsValue = array($region,$year,$month,$typeSelect);                
+                    
+                $value .= '_revenue';
+                
                 break;
 
             /*
@@ -649,14 +735,21 @@ class consolidateResults extends Model{
             $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
             
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
-
-            if($table == "cmaps"){                          
+            //var_dump($table);
+            if($table == "cmaps"){  
                 $rtr = $tmp/$pRate;
+            }elseif ($table == "ytd y") {
+                $rtr = $tmp*$pRate;
             }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
-                $rtr = $tmp*$pRate;
-            }
+                if ($valueView == 'net') {
+
+                    $rtr = ($tmp*0.80)/$pRate;
+                }else{
+                    $rtr = $tmp/$pRate;
+                }                
+            } 
         }
         return $rtr;        
     }
@@ -666,10 +759,17 @@ class consolidateResults extends Model{
         $p = new pRate();
         //var_dump($company);
         $year = $keyYear;
-        
-       // var_dump($company);
-        $pRate = 1.0;
-        $pRateSel = $pRate;
+        $valueView = $value;
+        //var_dump($value);
+        if ($currency == "4") {
+            if($table == "aleph"){
+                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                $pRateSel = $pRate;
+            }else{
+                $pRate = 1.0;
+                $pRateSel = $pRate;
+            }
+        }
         /*
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
@@ -712,9 +812,12 @@ class consolidateResults extends Model{
                     if ($company[0] == 'dc' ) {
                         $columns = array("brand_id", "year", "month", "b.brand_group_id");
                         $columnsValue = array($brand, $year, $month,"1");
-                    }elseif ($company[0] = 0) {
+                    }elseif ($company[0] = 'spt') {
                         $columns = array("brand_id", "year", "month", "b.brand_group_id");
                         $columnsValue = array($brand, $year, $month,"2");
+                    }elseif ($company[0] = 'wm') {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"3");
                     }
                 }else{
                     $columns = array("brand_id", "year", "month");
@@ -735,6 +838,10 @@ class consolidateResults extends Model{
                         
                         $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
                         $columnsValue = array($region,$year,$month,"2");                
+                    }elseif ($company[0] == 'wm') {
+                        
+                        $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
+                        $columnsValue = array($region,$year,$month,"3");                
                     }
                 }else{
                     $columns = array("y.sales_representant_office_id","y.year", "y.month");                
@@ -749,6 +856,39 @@ class consolidateResults extends Model{
                 $where = $where = $sql->where($columns, $columnsValue);
                 break;
 
+            case 'aleph':
+               //for ($c=0; $c < sizeof($company); $c++) { 
+
+                 if (sizeof($company) == 1) {
+                    if ($company[0] == 'dc' ) {
+                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
+                        $columnsValue = array($region,$year,$month, "1");                    
+                    }elseif ($company[0] == 'spt') {
+                        
+                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
+                        $columnsValue = array($region,$year,$month,"2");                
+                    }elseif ($company[0] == 'wm') {
+                        
+                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
+                        $columnsValue = array($region,$year,$month,"3");                
+                    }
+                }else{
+                    $columns = array("a.sales_office_id","a.year", "a.month");                
+                    $columnsValue = array($region,$year,$month);                
+                }    
+                //}
+                
+                if ($value == 'net') {
+                    $value = "gross_revenue";
+                }else{
+                    $value .= '_revenue';
+                }
+                
+                $join = "LEFT JOIN brand b ON (a.brand_id = b.ID)";
+                $table .= " a";
+                $where = $where = $sql->where($columns, $columnsValue);
+                break;
+
             case 'plan_by_brand':
                 if (sizeof($company) == 1) {
                     if ($company[0] == 'dc') {
@@ -757,7 +897,10 @@ class consolidateResults extends Model{
                     }elseif ($company[0] == 'spt') {
                         $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
                         $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '2');
-                    }    
+                    }elseif ($company[0] == 'wm') {
+                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
+                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '3');
+                    }  
                 }else{
                     $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id");
                     $columnsValue = array($region,strtoupper($source),$value,$year,$month,4);    
@@ -785,18 +928,25 @@ class consolidateResults extends Model{
             $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
 
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+            //var_dump($value);
+            if($table == "cmaps"){  
 
-            if($table == "cmaps"){                          
                 $rtr = $tmp/$pRate;
+            }elseif ($table == "ytd") {
+                $rtr = $tmp*$pRate;
             }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;
             }else{
-                $rtr = $tmp*$pRate;
+                if ($valueView == 'net') {
+                    $rtr = ($tmp*0.80)/$pRate;
+                }else{
+                    $rtr = $tmp/$pRate;
+                }                
             }           
 
 
         }
-
+        //var_dump($rtr);
         return $rtr;
         
     }
@@ -809,7 +959,7 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }else{
@@ -817,7 +967,7 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
@@ -847,6 +997,24 @@ class consolidateResults extends Model{
                 $columns = array("brand_id", "year", "month");
                 
                 $columnsValue = array($brand, $year, $month);
+                break;
+
+            case 'wbd':
+                $columns = array('brand_id', 'year','month');
+
+                $columnsValue = array($brand, $year, $month);
+
+                $value .= "_value";
+
+                break;
+
+            case 'aleph':
+                $columns = array('sales_office_id','brand_id', 'year','month');
+
+                $columnsValue = array($region,$brand, $year, $month);
+
+                $value = "gross_revenue";
+                
                 break;
 
             case 'ytd':
@@ -921,7 +1089,7 @@ class consolidateResults extends Model{
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
             //var_dump($value);
 
-            if($table == "cmaps"){                          
+            if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){                          
                 $rtr = $tmp/$pRate;
             }else if($table == "plan_by_brand"){                          
                 $rtr = $tmp*$pRateSel;

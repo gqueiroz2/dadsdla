@@ -398,7 +398,7 @@ class viewer extends Model{
 			
 			$from = array('company','year','month','oldRep', 'client','agency','brand','manager','salesRep','grossRevenue','netRevenue');
 
-			$select = "SELECT bg.name AS 'company',
+			$select = "SELECT bg.abv AS 'company',
 							  w.year AS 'year',
 							  w.month AS 'month',
 							  w.old_sales_rep AS 'oldRep',

@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'lucio_cruz@discoverybrasil.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'gabriela_queiroz@discoverybrasil.com'),
         'name' => env('MAIL_FROM_NAME', 'DADS Ad Sales Portal'),
     ],
 
@@ -84,7 +84,7 @@ return [
     |
     */
 
-    'username' => 'lucio_cruz@discoverybrasil.com',
+    'username' => 'gabriela_queiroz@discoverybrasil.com',
 
     'password' => 'tnuozkwcpnbidloc',
 

@@ -28,6 +28,24 @@ class brand extends Management{
 		return $brand;
 	}
 
+	public function getBrandGroup($con , $ID = false){
+		
+		$sql = new sql();
+		$table = "brand";
+		$columns = "id,name,type,brand_group_id";
+		$from = array('id','name','type','brandGroup');	
+		$where = "WHERE sub_brand = '0'";//false;//"WHERE name != 'OTH'";
+
+		if($ID){
+			$IDS = implode(",", $ID);
+			$where.= " WHERE brand.id IN ($IDS)";
+		}
+
+		$result = $sql->select($con,$columns,$table,null,$where);
+		$brand = $sql->fetch($result,$from,$from);
+		return $brand;
+	}
+
 	public function getBrandBinary($con , $ID = false){
 		
 		$sql = new sql();

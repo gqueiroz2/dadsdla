@@ -97,7 +97,7 @@ class consolidateResultsController extends Controller{
             }
             
         }else{
-            $companyView = "SPT/DN";
+            $companyView = "SPT/DN/WM";
         }
 
         
@@ -302,6 +302,7 @@ class consolidateResultsController extends Controller{
 
         $cYear = date('Y');
         $pYear = $cYear - 1;
+        $typeSelectS = array();
 
         switch ($type) {
             case 'brand':
@@ -317,16 +318,25 @@ class consolidateResultsController extends Controller{
                 }
                 break;
             case 'advertiser':                
-                $typeSelectS = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
+                $tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
+                $tmp2 = $cl->getClientByRegionWithValueAleph($con,array($regionID),$cYear);
+                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
+                $typeSelect = array_values($typeSelectS);
                 break;
             case 'agency':                               
-                $typeSelectS = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
+                $tmp1 = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
+                $tmp2 = $ag->getAgencyByRegionWithValueAleph($con,array($regionID),$cYear);
+                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
+                $typeSelect = array_values($typeSelectS);
                 break; 
             case 'agencyGroup':  
-                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
+                $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                $tmp2 = $ag->getAgencyGroupByRegionWithValueAleph($con,array($regionID),$cYear);
+                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
+                $typeSelect = array_values($typeSelectS);
             default:
                 
                 break;
@@ -369,7 +379,7 @@ class consolidateResultsController extends Controller{
         $valueExcel = $value;
         $userRegionExcel = $regionName;
 
-        var_dump($typeSelect);
+        //var_dump($typeSelect);
         return view('adSales.results.8consolidatePost',compact('render','region','brand','currency','regionCurrencies','mtx','years','typeSelect','mtxDN','salesRegion','currencyS','value','type','typeSelectS', 'title','titleExcel', 'typeExcel', 'regionExcel','typeSelectExcel', 'currencyExcel', 'valueExcel','newMtx', 'userRegionExcel','currencyName'));   
         
         

@@ -111,7 +111,7 @@
 
 							<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 								<tr class="center">
-					        		<td class='darkBlue center' style="width: 7% !important;"> DN </td>
+					        		<td class='darkBlue center' style="width: 7% !important;"> WBD </td>
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor

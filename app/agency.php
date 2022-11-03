@@ -531,6 +531,55 @@ class agency extends Management{
 
     }
 
+    public function getAgencyGroupByRegionWithValueAleph($con,$agencyRegion=false, $year=false){
+
+        $sql = new sql();
+        $cYear = $year;
+        $pYear = $cYear - 1;
+        $table = "aleph y";
+
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+            $where .= "WHERE sales_office_id IN ('$agencyRegions')
+                        AND (
+                            (gross_revenue > 0) 
+                            AND ( (year = $cYear) OR (year = $pYear) )
+                        )";
+            /*
+            if ($year) {
+               //$years = implode(",", $year);
+                $where .= " AND year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";                
+            }*/
+        }
+
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 LEFT JOIN region r ON r.ID = y.sales_office_id";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+
+        $from = array('id','agencyGroup', 'region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
     public function getAgency($con,$agencyID=false){
 
         $sql = new sql();
@@ -727,6 +776,61 @@ class agency extends Management{
             $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')
                         AND (
                             (gross_revenue_prate > 0) 
+                            AND ( (year = $cYear) OR (year = $pYear) )
+                        )";
+            /*
+            if ($year) {
+                //$years = implode(",", $year);
+                $where .= " AND year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+                $where .= ")";
+            }
+            */
+        }
+
+        $join = "LEFT JOIN agency a ON a.id = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 LEFT JOIN region r ON ag.region_id = r.ID
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
+
+        $from = array('id','agency','agencyGroup','agencyGroupID','region');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
+    public function getAgencyByRegionWithValueAleph($con,$agencyRegion=false,$year=false){
+
+        $sql = new sql();
+
+        $cYear = $year;
+        $pYear = $cYear - 1;
+
+        $table = "aleph y";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID',
+                    r.name AS 'region'
+                   ";
+
+        $where = "";
+
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+            $where .= "WHERE sales_office_id IN ('$agencyRegions')
+                        AND (
+                            (gross_revenue > 0) 
                             AND ( (year = $cYear) OR (year = $pYear) )
                         )";
             /*
