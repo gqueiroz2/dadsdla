@@ -58,13 +58,14 @@ class base extends Model{
             case 'SF':
                 return "Discovery CRM";
                 break;
-
-            case 'INSIGHTS':
-                return "INSIGHTS";
-                break;
-
-            default:
+            case 'BTS':
                 return "BTS";
+                break;
+            case 'ALEPH / WBD':
+                return 'ALEPH / WBD';
+                break;
+            default:
+                return "";
                 break;
         }
 
@@ -79,13 +80,14 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date WHERE (source != 'FW')";
+        $select = "SELECT * FROM sources_date WHERE (source != 'FW' ) AND (source != 'INSIGHTS')";
 
         $res = $con->query($select);
 
         $from = array("source","current_throught");
 
         $list = $sql->fetch($res,$from,$from);
+        //var_dump($list);
 
         for ($l=0; $l < sizeof($list); $l++) { 
             echo "<div class='row mt-1'>";

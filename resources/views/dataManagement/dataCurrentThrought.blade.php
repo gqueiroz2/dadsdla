@@ -72,9 +72,21 @@
                                             <input type="date" class="form-control" name="btsInfo" value="{{$newList['bts']}}">
                                         </div>
                                     </div>
-                                </div>  
+                                </div> 
 
-                                <div class="row justify-content-center">          
+                                 <div class="row justify-content-center">          
+                                    <div class="col">       
+                                        <div class="form-group">
+                                            <label><b> ALEPH / WBD: </b></label> 
+                                            @if($errors->has('alephInfo'))
+                                                <label style="color: red;">* Required</label>
+                                            @endif
+                                            <input type="date" class="form-control" name="alephInfo" value="{{$newList['aleph']}}">
+                                        </div>
+                                    </div>
+                                </div> 
+
+                               {{-- <div class="row justify-content-center">          
                                     <div class="col">       
                                         <div class="form-group">
                                             <label><b> Insights: </b></label> 
@@ -85,7 +97,7 @@
                                         </div>
                                     </div>
                                 </div>  
-
+                                --}}
                                 @if(session('currentThrought'))
                                     <div class="alert alert-info">
                                         {{ session('currentThrought') }}

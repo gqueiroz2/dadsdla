@@ -311,12 +311,14 @@ class dataManagementController extends Controller{
                 $fw = $list[$l]['current_throught'];
             }elseif ($list[$l]['source'] == 'INSIGHTS') {
                 $insights = $list[$l]['current_throught'];
+            }elseif ($list[$l]['source'] == 'ALEPH / WBD') {
+                $aleph = $list[$l]['current_throught'];
             }else{
                 $bts = $list[$l]['current_throught'];
             }
         }
 
-        $newList = array("cmaps" => $cmaps, "bts" => $bts, "fw" => $fw, "sf" => $sf, "insights" => $insights);
+        $newList = array("cmaps" => $cmaps, "bts" => $bts, "fw" => $fw, "sf" => $sf, "insights" => $insights, "aleph" => $aleph);
 
         return view('dataManagement.dataCurrentThrought',compact('newList'));
     }
@@ -332,13 +334,16 @@ class dataManagementController extends Controller{
         $freeWheelInfo = Request::get('freeWheelInfo');
         $btsInfo = Request::get('btsInfo');
         $insightsInfo = Request::get('insightsInfo');
+        $alephInfo = Request::get('alephInfo');
 
         $list = array( 
                         array("name" => "BTS","value" => $btsInfo),
                         array("name" => "CMAPS","value" => $cmapsInfo),
                         array("name" => "FW","value" => $freeWheelInfo),
                         array("name" => "SF","value" => $crmInfo),
-                        array('name' => "INSIGHTS","value" => $insightsInfo)
+                        array('name' => "INSIGHTS","value" => $insightsInfo),
+                        array('name' => "ALEPH / WBD","value" => $alephInfo)
+
         );
 
         $count = 0;
