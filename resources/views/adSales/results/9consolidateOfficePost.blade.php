@@ -70,7 +70,7 @@
 	<?php
 		$month = array("January","February","March","April","May","June","July","August","September","October","November","December");
 		$quarter = array("Q1","Q2","Q3","Q4");
-		var_dump($userRegionExcel);
+		//var_dump($userRegionExcel);
 	?>
 
 
