@@ -232,9 +232,12 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps" || $table == "aleph"){
+                if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif($table == "aleph"){
+               		$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -335,9 +338,12 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps" || $table == 'aleph'){
+                if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif($table == "aleph"){
+               		$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -474,9 +480,12 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps" || $table == "aleph"){
+                if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif($table == "aleph"){
+               		$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -614,9 +623,12 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps" || $table == 'aleph'){
+                if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif($table == "aleph"){
+               		$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -763,8 +775,8 @@ class consolidateResults extends Model{
         //var_dump($value);
         if ($currency == "4") {
             if($table == "aleph"){
-                $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                $pRateSel = $pRate;
+               	$pRate = 4.99;
+                $pRateSel = 4.99;
             }else{
                 $pRate = 1.0;
                 $pRateSel = $pRate;
@@ -928,7 +940,7 @@ class consolidateResults extends Model{
             $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
 
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
-            //var_dump($value);
+            //var_dump($tmp);
             if($table == "cmaps"){  
 
                 $rtr = $tmp/$pRate;
@@ -959,17 +971,23 @@ class consolidateResults extends Model{
 
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+                if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif ($table == 'wbd' || $table == 'aleph') {
+                	$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+                if($table == "cmaps"){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
+                }elseif ($table == 'wbd' || $table == 'aleph'){
+                	$pRate = 4.99;
+                	$pRateSel = 4.99;
                 }else{
                     
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));

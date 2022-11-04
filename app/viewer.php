@@ -811,8 +811,10 @@ class viewer extends Model{
 		$p = new pRate();
 		$year = date('Y');
 		if ($currencies == 'USD') {
-			if ($source == 'CMAPS' || $source ==  'ALEPH' || $source == 'WBD') {
+			if ($source == 'CMAPS'){
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}elseif ($source ==  'ALEPH' || $source == 'WBD'){
+				$pRate = 4.99;
 			}else{
 				$pRate = 1.0;
 			}
@@ -888,6 +890,8 @@ class viewer extends Model{
 		if ($currencies == 'USD') {
 			if ($source == 'CMAPS') {
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
+			}elseif($source ==  'ALEPH' || $source == 'WBD'){
+				$pRate = 4.99;
 			}else{
 				$pRate = 1.0;
 			}
