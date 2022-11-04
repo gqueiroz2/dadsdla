@@ -841,26 +841,18 @@ class consolidateResults extends Model{
                 break;
 
             case 'ytd':
-               //for ($c=0; $c < sizeof($company); $c++) { 
-                 if (sizeof($company) == 1) {
-                    if ($company[0] == 'dc' ) {
-                        $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month, "1");                    
-                    }elseif ($company[0] == 'spt') {
-                        
-                        $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month,"2");                
-                    }elseif ($company[0] == 'wm') {
-                        
-                        $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month,"3");                
-                    }
-                }else{
-                    $columns = array("y.sales_representant_office_id","y.year", "y.month");                
-                    $columnsValue = array($region,$year,$month);                
-                }    
-                //}
-                
+               for ($c=0; $c < sizeof($company); $c++) { 
+               		if ($company[$c] == 'dc') {
+               			$company[$c] = '1';
+               		}elseif ($company[$c] == 'spt') {
+               			$company[$c] = '2';
+               		}else{
+               			$company[$c] = '3';
+               		}
+
+                    $columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
+                    $columnsValue = array($region,$year,$month, $company);                    
+                }                
 
                 $value .= "_revenue_prate";
                 $join = "LEFT JOIN brand b ON (y.brand_id = b.ID)";
@@ -869,26 +861,19 @@ class consolidateResults extends Model{
                 break;
 
             case 'aleph':
-               //for ($c=0; $c < sizeof($company); $c++) { 
-
-                 if (sizeof($company) == 1) {
-                    if ($company[0] == 'dc' ) {
-                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month, "1");                    
-                    }elseif ($company[0] == 'spt') {
-                        
-                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month,"2");                
-                    }elseif ($company[0] == 'wm') {
-                        
-                        $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
-                        $columnsValue = array($region,$year,$month,"3");                
-                    }
-                }else{
-                    $columns = array("a.sales_office_id","a.year", "a.month");                
-                    $columnsValue = array($region,$year,$month);                
-                }    
-                //}
+               for ($c=0; $c < sizeof($company); $c++) { 
+               		if ($company[$c] == 'dc') {
+               			$company[$c] = '1';
+               		}elseif ($company[$c] == 'spt') {
+               			$company[$c] = '2';
+               		}else{
+               			$company[$c] = '3';
+               		}
+       
+                    $columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
+                    $columnsValue = array($region,$year,$month, $company);                    
+              
+                }
                 
                 if ($value == 'net') {
                     $value = "gross_revenue";
@@ -902,20 +887,18 @@ class consolidateResults extends Model{
                 break;
 
             case 'plan_by_brand':
-                if (sizeof($company) == 1) {
-                    if ($company[0] == 'dc') {
-                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '1');
-                    }elseif ($company[0] == 'spt') {
-                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '2');
-                    }elseif ($company[0] == 'wm') {
-                        $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                        $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, '3');
-                    }  
-                }else{
-                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id");
-                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4);    
+               for ($c=0; $c < sizeof($company); $c++) { 
+               		if ($company[$c] == 'dc') {
+               			$company[$c] = '1';
+               		}elseif ($company[$c] == 'spt') {
+               			$company[$c] = '2';
+               		}else{
+               			$company[$c] = '3';
+               		}
+                   
+                    $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
+                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, $company);
+                    
                 }
                 
                 $value = "revenue";
@@ -940,7 +923,6 @@ class consolidateResults extends Model{
             $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
 
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
-            //var_dump($tmp);
             if($table == "cmaps"){  
 
                 $rtr = $tmp/$pRate;
@@ -954,7 +936,7 @@ class consolidateResults extends Model{
                 }else{
                     $rtr = $tmp/$pRate;
                 }                
-            }           
+            }   
 
 
         }

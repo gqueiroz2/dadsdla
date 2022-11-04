@@ -96,8 +96,12 @@ class consolidateResultsController extends Controller{
                 $companyView = strtoupper($company[0]);    
             }
             
-        }else{
-            $companyView = "SPT/DN/WM";
+        }elseif(sizeof($company) == 2){
+            $companyView = "$company[0] / $company[1]";
+            $companyView = strtoupper($companyView);
+        }
+        else{
+            $companyView = "WBD";
         }
 
         
