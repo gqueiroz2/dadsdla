@@ -216,7 +216,7 @@ class sql extends Model{
     }
 
     public function where($columns,$variables){
-
+        //var_dump($variable);
         $where = "WHERE ";
         
         for ($i=0; $i < sizeof($columns); $i++) { 
@@ -233,6 +233,7 @@ class sql extends Model{
                             $where .= "\"".$variables[$i][$v]."\",";
                         }
                     }
+                //var_dump($where);
                     
                 }else{
                     $where .= "($columns[$i] = \"$variables[$i]\")";

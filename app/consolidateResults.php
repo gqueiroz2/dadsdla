@@ -478,6 +478,7 @@ class consolidateResults extends Model{
         $year = $keyYear;
         $valueView = $value;
 
+
         if ($table != "plan_by_brand" && $table != "digital") {
             if ($currency[0]['name'] == "USD") {
                 if($table == "cmaps"){
@@ -897,7 +898,7 @@ class consolidateResults extends Model{
                		}
                    
                     $columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","pbb.currency_id","b.brand_group_id");
-                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, $company);
+                    $columnsValue = array($region,strtoupper($source),$value,$year,$month,4, $company[$c]);
                     
                 }
                 
@@ -905,6 +906,7 @@ class consolidateResults extends Model{
                 $join = "LEFT JOIN brand b ON (pbb.brand_id = b.ID)";
                 $table .= " pbb";
                 $where = $where = $sql->where($columns, $columnsValue);
+                //var_dump($where);
                 break;
 
             default:
@@ -948,6 +950,7 @@ class consolidateResults extends Model{
 	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false){
 
         $p = new pRate();
+        //var_dump($keyYear);
 
         $year = $keyYear;
 
@@ -964,12 +967,9 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
                 }
             }else{
-                if($table == "cmaps"){
+                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
-                }elseif ($table == 'wbd' || $table == 'aleph'){
-                	$pRate = 4.99;
-                	$pRateSel = 4.99;
                 }else{
                     
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
@@ -985,8 +985,10 @@ class consolidateResults extends Model{
                 $pRate = 1.0;
                 $pRateSel = $pRate;
             }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+            	$ccYear = date('Y');
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
+                //var_dump($pRateSel);
             }            
         }
 
