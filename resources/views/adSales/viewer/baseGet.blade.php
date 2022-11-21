@@ -129,13 +129,6 @@
             </div>
         </div>
 
-        <div class="row justify-content-end mt-2">
-            <div class="col" style="color: #0070c0;font-size: 22px">
-                <span style="float: right; margin-right: 2.5%;"> Data Current Through: ({{$bs->sourceCMAPS()}}) </span>
-            </div>
-            
-        </div>
-
         <div id="vlau"></div>
     </div>
 

@@ -131,7 +131,7 @@ class base extends Model{
         
     }
 
-    public function sourceCMAPS(){
+    public function sourceCMAPS($source){
         $db = new dataBase();
         $base = new base();
         $default = $db->defaultConnection();
@@ -139,8 +139,12 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date WHERE (source = 'CMAPS')";
-
+        if ($source == 'ALEPH' || $source == 'WBD') {
+            $select = "SELECT * FROM sources_date WHERE (source = 'ALEPH / WBD')";
+        }else{
+            $select = "SELECT * FROM sources_date WHERE (source = '$source')";    
+        }
+        
         $res = $con->query($select);
 
         $from = array("current_throught");

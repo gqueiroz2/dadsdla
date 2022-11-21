@@ -291,7 +291,7 @@ class viewerController extends Controller{
             array_push($brand, "15");
             array_push($brand, "16");
         }
-        //var_dump($brand);
+        //var_dump($source);
 
         if ($permission == "L8" ) {
             $table = $viewer->getTablesReps($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$user);
