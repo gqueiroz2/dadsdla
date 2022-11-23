@@ -37,7 +37,7 @@ class ajaxController extends Controller{
                 $brand = $b->getBrand($con);
                 for ($i = 0; $i < sizeof($brand); $i++) { 
                     if ($brand[$i]["name"] != "DN") {
-                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'],$brand[$i]['brand_group_id'])));
                         echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
                     }
                 }
@@ -83,7 +83,7 @@ class ajaxController extends Controller{
                 $brand = $b->getBrand($con);
                 for ($i = 0; $i < sizeof($brand); $i++) { 
                     if ($brand[$i]["name"] != "DN") {
-                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'])));
+                        $value[$i] = base64_encode(json_encode(array($brand[$i]['id'],$brand[$i]['name'],$brand[$i]['brand_group_id'])));
                         echo "<option selected='true' value='".$value[$i]."'>".$brand[$i]["name"]."</option>";   
                     }
                 }

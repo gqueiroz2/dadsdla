@@ -312,6 +312,7 @@ class consolidateResultsController extends Controller{
             case 'brand':
                 $brandTmp = Request::get('typeSelect');
                 $brandID = $base->handleBrand($brandTmp);
+                
                 $typeSelect = $brandID;
                 $typeSelectS = false;
                 break;
@@ -350,7 +351,7 @@ class consolidateResultsController extends Controller{
 
         $month = $base->getMonth();
         //var_dump($typeSelect);
-        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value);
+        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value,$brand);
 
         $mtx = $cR->assemble($mtx);
 
