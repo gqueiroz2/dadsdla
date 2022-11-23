@@ -113,7 +113,8 @@
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
 										@endif
 
-										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L3')											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L3')											
+											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 										@endif		
 
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
@@ -141,7 +142,7 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-										@if( $userLevel == 'SU') )
+										@if( $userLevel == 'SU') 
 											<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
 										@endif
 									</div>
