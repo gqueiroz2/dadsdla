@@ -180,19 +180,34 @@ class ajaxController extends Controller{
     public function BVAgencyGroup(){
 
         $db = new dataBase();
+        $sr = new salesRep();
+        $agency = new agency(); 
 
         $regionID = Request::get('regionID');
 
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-
-        $agency = new agency(); 
-
-
+        $user = Request::session()->get('userName');
+        $userLevel = Request::session()->get('userLevel');
         $year = array(date('Y'));
+        $rID = array();
 
-        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValues($con,$year,array($regionID));
-        
+        $resp = $sr->getSalesRepByRegionBV($con,array($regionID),true,$year);
+        //var_dump($resp);
+
+        for ($s=0; $s <sizeof($resp) ; $s++) {  
+            $salesRepWithNoSpecialCharacters = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$resp[$s]['salesRep']);
+            $salesRepWithNoSpecialCharacters1 = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$user);
+            if($salesRepWithNoSpecialCharacters == $salesRepWithNoSpecialCharacters1){                        
+                $salesRep = array($resp);
+            }else{
+                $salesRep = $resp;
+            }
+
+        }
+        //var_dump($salesRep);
+        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$year,array($regionID),$salesRep);
+        //var_dump($agencies);
         echo "<option value=''> Select </option>";
         for ($a=0; $a < sizeof($agencies); $a++){ 
             echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";

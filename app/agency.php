@@ -395,6 +395,59 @@ class agency extends Management{
 
     }
 
+    public function getAgencyGroupByRegionCMAPSWithValuesBV($con,$year=false,$agencyRegion=false,$salesRep=false){
+        $sql = new sql();
+
+        $table = "cmaps y";
+
+        $columns = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup'
+                   ";
+
+        $where = "";
+        //var_dump($salesRep);
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+
+            if ($year) {
+                $where .= "WHERE year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $where .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+
+                $where .= ")";  
+                $where .= " AND sr.ID IN (";
+                for ($s=0; $s < sizeof($salesRep); $s++) { 
+                    $where .= " '".$salesRep[$s]['id']."' ";
+                    if($s < ( sizeof($salesRep) - 1) ){
+                        $where .= ",";
+                    }
+                }
+
+                $where .= ")";                
+            }else{
+                $where = "WHERE (sr.ID IN ($salesRep))";
+            }
+        }
+        //var_dump($where);
+        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+
+        $from = array('id','agencyGroup');
+
+        $agency = $sql->fetch($res,$from,$from);
+
+        return $agency;
+
+    }
+
     public function getAgencyGroupByRegionCMAPSWithValues($con,$year=false,$agencyRegion=false){
         $sql = new sql();
 
@@ -420,12 +473,13 @@ class agency extends Management{
                 }
                 $where .= ")";                
             }else{
-                //$where = "WHERE (SUM(gross) > 0)";
+                //$where = "WHERE (sr.ID IN ($salesRep))";
             }
         }
 
         $join = "LEFT JOIN agency a ON a.ID = y.agency_id
                  LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 LEFT JOIN sales_rep sr ON sr.ID = c.sales_rep_id
                  ";
         
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
