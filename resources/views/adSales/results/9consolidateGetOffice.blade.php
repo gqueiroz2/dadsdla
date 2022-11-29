@@ -14,8 +14,12 @@
 						<label class="labelLeft"><span class="bold"> Region: </span></label>
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
-						@endif						
-						{{$render->regionOffice($region, $regionName)}}													
+						@endif	
+						@if($regionName == 'Brazil')
+							{{$render->regionFiltered($region, $regionID, $special)}}																			
+						@else
+							{{$render->regionOffice($region, $regionName)}}														
+						@endif
 					</div>	
 
 					<div class="col-sm">

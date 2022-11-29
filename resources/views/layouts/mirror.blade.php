@@ -105,24 +105,24 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
-										@if( ( $userLevel == "SU") ||  ( $userLevel == "L1" ) )
+										@if( ( $userLevel == "SU")  )
 											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>		
 										@endif
 
 										@if( ( $userLevel == "SU" ) )								
-											<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
-										@endif
-
-										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L3')											
-											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
-										@endif		
-
-										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+										<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
 										<a class="dropdown-item" href="{{ route('resultsMonthlyGet') }}"> Month </a>
 										<a class="dropdown-item" href="{{ route('resultsQuarterGet') }}"> Quarter </a>
 										<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
 										<a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY - Brand </a>
 										<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
+										@endif
+
+										@if($userLevel == 'L1' || $userLevel == 'SU' || $userLevel == 'L3')											
+											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										@endif		
+										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+										
 									</div>
 								</li>
 							@endif
@@ -138,16 +138,18 @@
 									</li>
 								@endif
 
+								@if($userLevel == 'SU')
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-										@if( $userLevel == 'SU') 
 											<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
-										@endif
+										
 									</div>
 								</li>
+								@endif
 
+								@if($userLevel == 'SU')
 		                       <li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
@@ -158,19 +160,20 @@
 			                         	<a class="nav-link" href="{{route('newGet')}}"> New </a>
 			                        </div>
 		                        </li>
+		                        @endif
 		                    @endif
 		                        <li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 										<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-										@if( $userRegionName == "Brazil" )
+										@if($userLevel == 'SU')
 											<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
 										@endif
 									</div>
 								</li>
 							
 
-							@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1')
+							@if($userLevel == 'SU')
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -180,7 +183,6 @@
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>
-							@elseif($userLevel == 'L6' || $userLevel == 'L3' || $userLevel == 'L4')
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">

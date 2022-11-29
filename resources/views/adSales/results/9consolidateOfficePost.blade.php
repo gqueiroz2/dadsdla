@@ -15,7 +15,11 @@
 						@if($errors->has('region'))
 							<label style="color: red;">* Required</label>
 						@endif						
-						{{$render->regionOffice($region, $userRegionExcel)}}													
+						@if($regionName == 'Brazil')
+							{{$render->regionFiltered($region, $regionID, $special)}}																			
+						@else
+							{{$render->regionOffice($region, $regionName)}}														
+						@endif													
 					</div>	
 
 					<div class="col-sm">
