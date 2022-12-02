@@ -48,7 +48,6 @@ class bvController extends Controller {
               'role' => 'Regional Office'
            )
         );
-  
         $currency = new pRate();
         $currencies = $currency->getCurrency($con);
   
@@ -56,7 +55,7 @@ class bvController extends Controller {
         $brands = $b->getBrand($con);
         $render = new Render();
         $bvModel = new bvModel();
-        $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con);
+        $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'));
           
         return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'currencies', 'brands', 'render'));
     }
