@@ -113,6 +113,14 @@ class performance extends base{
             }else{
                 $where = $sql->where($columns,$arrayWhere);
             }
+        }elseif ($source == "aleph") {
+            $columns = array("sales_office_id","year","brand_id","current_sales_rep_id","month");
+            $arrayWhere = array($region,$year,$brand,$salesRep["id"],$month);
+            if($brand == 9){
+                $where = $sql->whereONLAdjust($columns,$arrayWhere);
+            }else{
+                $where = $sql->where($columns,$arrayWhere);
+            }
         }elseif ($source == "ytdWB") {
             $columns = array("sales_representant_office_id","year","month");
             $arrayWhere = array($region,$year,$month);

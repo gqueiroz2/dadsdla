@@ -105,8 +105,18 @@ class consolidateResultsController extends Controller{
             $companyView = "WBD";
         }
 
+        $userRegionExcel = $regionName;
+
+        $companyExcel = $company;
+        $companyViewExcel = $companyView;
+        $regionExcel = array($regionID);
+        $currencyExcel = $currencyID;
+        $valueExcel = $value;
+        $title = 'Results - Consolidate Office';
+        $titleExcel = 'Results - Consolidate Office.xlsx';
+
         
-        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','companyView','regionName','regionID')); 
+        return view('adSales.results.9consolidateOfficePost',compact('render','region','mtx','years','mtxDN','currencyS','value','typeSelectN', 'regionExcel', 'currencyExcel','valueExcel', 'title', 'titleExcel', 'userRegionExcel','companyView','regionName','regionID', 'companyExcel', 'companyViewExcel')); 
 
 
     }
@@ -220,10 +230,7 @@ class consolidateResultsController extends Controller{
 
         $mtxDN = $cR->addDN($mtx);
         $regionName = Request::session()->get('userRegion'); 
-        $userRegionExcel = $regionName;
-
-
-    
+        $userRegionExcel = $regionName;    
         
         $title = 'Results - Consolidate DLA';
         $titleExcel = 'Results - Consolidate DLA.xlsx';

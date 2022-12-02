@@ -127,7 +127,7 @@
 								</li>
 							@endif
 							@if( $userRegionName == "Brazil" )
-								@if($userLevel == 'SU' || $userLevel == 'L0' || $userLevel == 'L1' || $userLevel == 'L3' || $userLevel == 'L4' )						
+								@if($userLevel == 'SU')						
 									<li class="nav-item dropdown">
 										<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Performance </a>
 										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -183,12 +183,12 @@
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>
-								<li class="nav-item dropdown">
+								<!--<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE View </a>
-										<!--<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>-->
-								</li>
+										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
+								</li>-->
 							@endif
 
 							@if( ( $userLevel == "SU" ) )
@@ -215,8 +215,9 @@
 								@if($userLevel == "SU")
 									<a class="dropdown-item" href="{{ route('dataManagementHomeGet') }}"> Data Management </a>
 									<a class="dropdown-item" href="{{ route('planningHome') }}"> Planning </a>
+									<a class="dropdown-item" href="{{ route('salesManagementHome') }}"> CRM Connection </a>
 								@endif
-								<a class="dropdown-item" href="{{ route('salesManagementHome') }}"> CRM Connection </a>
+								
 								
 							</div>
 						</li>

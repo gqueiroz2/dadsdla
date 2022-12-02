@@ -112,6 +112,7 @@
 			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
 		</tr>
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
+
 			<tr>
 				<td >{{$data['mtx'][$m]['oppid']}}</td>
 				<td>{{$data['mtx'][$m]['opportunityName']}}</td>
@@ -130,6 +131,8 @@
 					<td> 3 - Negotiation </td>
 				@elseif ($data['mtx'][$m]['stage'] == 4)
 					<td> 4 - Verbal </td>
+				@elseif ($data['mtx'][$m]['stage'] == 5)
+					<td> 5 - Closed Won </td>
 				@endif
 				<td>{{$data['mtx'][$m]['agencyCommission']}}</td>
 				<td>{{$data['mtx'][$m]['fcstAmountGross']}}</td>

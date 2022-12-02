@@ -155,6 +155,8 @@ class consolidateExcelController extends Controller{
         $regionID = json_decode(base64_decode(Request::get('regionExcel')));
         $currencyID = Request::get("currencyExcel");
         $value = Request::get('valueExcel');  
+        $company = json_decode(base64_decode(Request::get('companyExcel')));
+        $companyView = request::get('companyViewExcel');
 
         $title = Request::get("title");
         
@@ -172,7 +174,7 @@ class consolidateExcelController extends Controller{
 
         $typeSelectN = $cR->typeSelectN($con,$r,$regionID);
 
-        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years);
+        $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years,$company);
         $mtx = $cR->assemble($mtx);
         $mtxDN = $cR->addDN($mtx);        
 
@@ -206,6 +208,8 @@ class consolidateExcelController extends Controller{
         $brand = $b->getBrand($con);
         $currency = $pr->getCurrency($con,false);
         $sr = new salesRep();
+        $b = new brand();
+        $brand = $b->getBrand($con);
 
         $regionCurrencies = $base->currenciesByRegion();
 
@@ -266,7 +270,7 @@ class consolidateExcelController extends Controller{
 
         $months = $base->getMonth();
 
-        $mtx = $cR->construct($con,$currency,$months,$type,$typeSelect,$regionID,$value);
+        $mtx = $cR->construct($con,$currency,$months,$type,$typeSelect,$regionID,$value,$brand);
 
         $mtx = $cR->assemble($mtx);
 

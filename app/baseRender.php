@@ -201,7 +201,7 @@ class baseRender extends Render{
 							}elseif ($mtx[$m]['stage'] == 4){
 								echo "<td class='$color'> 4 - Verbal </td>";
 							}elseif ($mtx[$m]['stage'] == 5){
-								echo "<td class='$color'> 4 - Closed Won </td>";
+								echo "<td class='$color'> 5 - Closed Won </td>";
 							}
 							echo "<td class='$color'> ".$mtx[$m]['agencyCommission']."%</td>";
 							echo "<td class='$color'>".number_format($mtx[$m]['fcstAmountGross'],0,",",".")."</td>";
