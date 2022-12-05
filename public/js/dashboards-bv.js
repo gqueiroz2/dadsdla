@@ -46,6 +46,42 @@ $(document).ready(function(){
 	});
 });
 
+function handleNumber(number){
+  number = number.replaceAll(",","");
+  number = parseFloat(number);
+  return number;
+}
 
+  function Comma(x) { //function to add commas to textboxes
+      /*Num += '';
+      console.log(Num);
+      x = Num.split('.');
+      x1 = x[0];
+      x2 = x.length > 1 ? ',' + x[1] : '';
+      console.log(x1);
+      console.log(x2);
+      if(x2){
+        console.log('if');
+        if(x2[2]){
+          x2 = x2[0]+x2[1]+x2[2];
+        }else{
+          x2 = x2[0]+x2[1]+0;
+        }
+      }else{
+        x2 = ',00';
+      }
+
+      var rgx = /(\d+)(\d{3})/;
+      while (rgx.test(x1))
+          x1 = x1.replace(rgx, '$1' + '.' + '$2');
+      return x1 + x2;
+      */
+      if(x == Infinity){
+        return 0
+      } else {
+        return x
+      }
+
+  }
 
 //$('#typeName').removeAttr("style").html(output+":");

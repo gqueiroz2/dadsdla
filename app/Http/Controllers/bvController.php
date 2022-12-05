@@ -56,7 +56,7 @@ class bvController extends Controller {
         $render = new Render();
         $bvModel = new bvModel();
         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'));
-          
-        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'currencies', 'brands', 'render'));
+         
+        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'currencies', 'brands', 'render','year','bvTest'));
     }
 }

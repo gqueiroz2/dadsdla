@@ -60,7 +60,7 @@ class bvModel extends Model{
             $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql);
             $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql);
             $prevValue = 0; // Prevision are from database
-            $statusString = null; // Status are from database
+            $statusString = ''; // Status are from database
 
             // == Percentage and division by 0 check, if values are big than 0 == //
             if ($actualValue > 0 && $previousValue > 0){
@@ -73,6 +73,8 @@ class bvModel extends Model{
             $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "variation" => $variation, "status" => $statusString);
             array_push($bvTable, $pivotArray);
         };
-        var_dump($bvTable);
+        //var_dump($bvTable);
+
+        return $bvTable;
     }
 }
