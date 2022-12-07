@@ -58,7 +58,7 @@
 			        </table>
 					<table style='width: 100%; zoom: 85%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>
 						<tr>
-							<th class='newBlue center' colspan='9' style='font-size:22px; width:100%;'> Control Panel </th>
+							<th class='newBlue center' colspan='9' style='font-size:22px; width:100%;'> Control Panel - {{$agencyGroupName}}</th>
 						</tr>
 						<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
 							<td class="col" style="width:8%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Client</td>
@@ -77,14 +77,25 @@
 								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['client']}}</td>
 								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-2],2,',','.')}}</td>
 								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-1],2,',','.')}}</td>
-								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],2,',','.')}}"></td>
-								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-{{$b}}" id="forecast-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prev'],2,',','.')}}"></td>
-								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],2,',','.')}}"></td>
-								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0"></td>
+								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="number" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],2,',','.')}}"></td>
+								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="number" name="forecast-{{$b}}" id="forecast-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prev'],2,',','.')}}"></td>
+								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="number" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],2,',','.')}}"></td>
+								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="number" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0"></td>
 								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['variation']}}%</td>
 								<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="status-{{$b}}" id="status-{{$b}}" style="background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 							</tr>
-						@endfor					
+						@endfor
+						<tr>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+							<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+						</tr>				
 						
 					</table>
 
@@ -111,18 +122,10 @@
 
 		@for ($i = 0; $i < sizeof($bvTest) ; $i++) 
 			$("#forecast-{{$i}}").change(function() { 
-				if ($(this).val() == '') {
-	                $(this).val(0);
-	            }
-
-	            $(this).val(Comma(handleNumber($(this).val())));
+				$(this).val(Comma(handleNumber($(this).val())));
 			
+				var totalClient = Comma(handleNumber($("#forecast-{{$i}}").val()) + handleNumber($("#real-{{$i}}" ).val()));
 
-				var totalClient = Comma(
-			        handleNumber($("#forecast-{{$i}}").val()) +
-			        handleNumber($("#real-{{$i}}" ).val())
-			    );
-				console.log(totalClient);
 			    $("#forecast-total-{{$i}}").val(totalClient);
 			}
 		@endfor

@@ -25,6 +25,22 @@ class agency extends Management{
         return $agencyGroupID[0]['id'];
     }
 
+    public function getAgencyGroupByID($con,$group,$region){
+        $sql = new sql();
+        
+        $table = "agency_group";
+        $columns = "name";
+        $join = false;
+        $where = "WHERE id = '$group' AND region_id = '$region'";
+        $limit = "LIMIT 1";
+        $res = $sql->select($con,$columns,$table,$join,$where,1,$limit);
+        $from = array("name");
+        $to = array('name');
+        $agencyGroupID = $sql->fetch($res,$from,$to);
+
+        return $agencyGroupID[0]['name'];
+    }
+
     public function getAgencyIDbyAgencyUnit($con,$sql,$parent,$region,$regionName){
         
         $table = "agency a";
