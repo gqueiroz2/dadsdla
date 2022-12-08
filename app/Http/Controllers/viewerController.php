@@ -306,7 +306,7 @@ class viewerController extends Controller{
         $total = $viewer->totalFromTable($con,$table,$source,$salesRegion,$currencies);
         //var_dump($table[0]);
         $mtx = $viewer->assemble($table,$salesCurrency,$source,$con,$salesRegion,$currencies);
-        var_dump($mtx);
+        //var_dump($mtx);
 
         $regionExcel = $salesRegion;
         $sourceExcel = $source;
