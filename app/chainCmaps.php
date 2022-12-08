@@ -866,7 +866,12 @@ class chainCmaps extends excel{
                            $columns[$c] == 'read_dsc_tv'||
                            $columns[$c] == 'read_dsc_onl'||
                            $columns[$c] == 'read_spt_tv'||
-                           $columns[$c] == 'read_spt_onl'/*||
+                           $columns[$c] == 'read_spt_onl'||
+                           $columns[$c] == 'real_wm_tv'||
+                           $columns[$c] == 'real_wm_onl'||
+                           $columns[$c] == 'read_wm_tv'||
+                           $columns[$c] == 'read_wm_onl'/*||
+                           
                            $columns[$c] == 'real_date'  ||
                            $columns[$c] == 'extract_date' || 
                            $columns[$c] == 'log'*/
@@ -1198,7 +1203,11 @@ class chainCmaps extends excel{
                                  'read_dsc_tv',
                                  'read_dsc_onl',
                                  'read_spt_tv',
-                                 'read_spt_onl'
+                                 'read_spt_onl',
+                                 'real_wm_tv',
+                                 'real_wm_onl',
+                                 'read_wm_tv',
+                                 'read_wm_onl'
                               );
 
     
