@@ -1199,13 +1199,13 @@ class chainCmaps extends excel{
                                  'real_dsc_tv',
                                  'real_dsc_onl',
                                  'real_spt_tv',
-                                 'real_spt_onl',
+                                 'real_spt_onl',                                 
+                                 'real_wm_tv',
+                                 'real_wm_onl',
                                  'read_dsc_tv',
                                  'read_dsc_onl',
                                  'read_spt_tv',
                                  'read_spt_onl',
-                                 'real_wm_tv',
-                                 'real_wm_onl',
                                  'read_wm_tv',
                                  'read_wm_onl'
                               );
