@@ -23,6 +23,31 @@ $(document).ready(function(){
         }   
       });
 
+      $.ajax({ 
+        url:"/ajax/yearOnFcst",
+        method:"POST",
+        data:{regionID},
+        success: function(output){
+          $('#year').html(output);
+          var year = $("#year").val();
+          $.ajax({
+            url:"/ajax/adsales/salesRepByRegion",
+            method:"POST",
+            data:{regionID,year},
+            success: function(output){
+              $('#salesRep').html(output);
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+              alert(xhr.status+" "+thrownError);
+            }
+          })         
+        
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
+
       $.ajax({
         url:"/ajax/dashboards/BV-agencyGroup",
         method:"POST",

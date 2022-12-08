@@ -11,6 +11,7 @@ use App\brand;
 use App\agency;
 use App\bvModel;
 
+
 class bvController extends Controller {
 
     public function bvGet(){
@@ -25,9 +26,10 @@ class bvController extends Controller {
               'role' => 'Regional Office'
            )
         );
-  
+        
         $currency = new pRate();
         $currencies = $currency->getCurrency($con);
+        
   
         $b = new brand();
         $brands = $b->getBrand($con);
@@ -53,6 +55,7 @@ class bvController extends Controller {
                'role' => 'Regional Office'
             )
          );
+
          $currency = new pRate();
          $currencies = $currency->getCurrency($con);
 

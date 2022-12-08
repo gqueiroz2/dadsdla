@@ -35,6 +35,12 @@ class DailyResults extends Model{
                     $querryONL = "SELECT SUM(real_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                     //var_dump($querryONL);
                     break;
+                case "wm":
+                    $querryTV = "SELECT SUM(real_wm_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM(real_wm_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                    //var_dump($querryONL);
+                    break;
             }
         } else {
             // == Caso a região não seja "Brazil (1)", ele leva em consideração a base do YTD e ignora o valor do log diario (levando só em consideração o mês e o ano) == //
@@ -60,6 +66,12 @@ class DailyResults extends Model{
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND year = $year AND month = $month";
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9,10,13,14,15,16) AND year = $year AND month = $month";
+                    //var_dump($querryONL);
+                    break;
+                case "sony":
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN IN (22, 23) AND year = $year AND month = $month";
+                    //var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "sony":
@@ -207,8 +219,7 @@ class DailyResults extends Model{
     public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate, Float $brlPRate, String $brands, Int $currencyID){
         $sql = new sql();
 
-        $actualDate = date("m");
-        //var_dump($actualDate);
+        //$actualDate = date("m");
 
         $day = date('d', strtotime($log));
         $month = $this->getActiveMonth();
@@ -225,6 +236,10 @@ class DailyResults extends Model{
         $anualSs = array(0, 0, 0);
 
         $table = array();
+
+        if($month == 12 || $month == 11){
+            $month = 10;
+        }
 
         for ($i = 0; $i < 3; $i++){
             $monthValues = array();
@@ -287,13 +302,14 @@ class DailyResults extends Model{
                                     "pSapPercent" => $monthPerSAP, 
                                     "ppSapPercent" => $monthPerPSAP);
                 array_push($monthValues, $monthCalcs);
-                var_dump($month + $i);
+                //var_dump($month + $i);
             }
 
             array_push($table, $monthValues);
         }
 
         // == Calculo do primeiro mês até o atual (com base no filtro) == //
+        $month = $this->getActiveMonth();
         for ($i = 1; $i <= $month; $i++){
 
             $anualValues = array();
@@ -368,7 +384,7 @@ class DailyResults extends Model{
 
         for($j=0; $j < sizeof($table); $j++){
             for($i=0; $i < sizeof($table[$j]); $i++){
-                var_dump($table[$j][$i]);
+                //var_dump($table[$j][$i]);
             }
         }
 

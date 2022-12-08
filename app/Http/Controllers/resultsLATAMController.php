@@ -58,18 +58,22 @@ class resultsLATAMController extends Controller{
         $realDate = $dr->getLog($con, $log, $regionID);
         //var_dump($realDate);
         $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate,"total", $currencyID);
-        var_dump("==============================");
+        //var_dump("==============================");
         $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "discovery", $currencyID);
-        var_dump("==============================");
+        //var_dump("==============================");
         $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "sony", $currencyID);
-        var_dump("==============================");
+        //var_dump("==============================");
         //var_dump($sony);
 
         $month = $dr->getActiveMonth();
         $day = date('d', strtotime($log));
         $cYear = date('Y', strtotime($log));
         $pYear = $cYear - 1;
-        $ppYear = $pYear - 1;        
+        $ppYear = $pYear - 1;  
+        
+        if($month == 12 || $month == 11){
+            $month = 10;
+        }
 
         $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
 
