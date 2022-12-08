@@ -28,6 +28,24 @@ class brand extends Management{
 		return $brand;
 	}
 
+	public function getBrandByGroup($con , $ID = false){
+		
+		$sql = new sql();
+		$table = "brand";
+		$columns = "id,name,brand_group_id";
+		$from = array('id','name','brand_group_id');	
+		$where = "WHERE sub_brand = '0'";//false;//"WHERE name != 'OTH'";
+
+		if($ID){
+			$IDS = implode(",", $ID);
+			$where.= " AND brand.brand_group_id IN ($IDS)";
+		}
+
+		$result = $sql->select($con,$columns,$table,null,$where);
+		$brand = $sql->fetch($result,$from,$from);
+		return $brand;
+	}
+
 	public function getBrandGroup($con , $ID = false){
 		
 		$sql = new sql();

@@ -28,14 +28,19 @@
 							<label style="color: red;">* Required</label>
 						@endif
 						{{$render->company()}}
-					</div>										
+					</div>									
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> Currency: </span></label>
 						@if($errors->has('currency'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->currencyUSD()}}
+						@if($regionName == 'Brazil')
+							{{$render->currencyOffice()}}																			
+						@else
+							{{$render->currencyUSD($region, $regionName)}}														
+						@endif	
+						
 					</div>
 
 					<div class="col-sm">

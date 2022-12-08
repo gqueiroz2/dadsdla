@@ -78,7 +78,7 @@ class consolidateResultsController extends Controller{
         $mtx = $cR->assemble($mtx);
         $mtxDN = $cR->addDN($mtx);        
 
-        $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
+        $currencyS = $pr->getCurrencyByRegion($con,array($currencyID))[0]['name'];
 
         $regionName = Request::session()->get('userRegion'); 
         $userRegionExcel = $regionName;

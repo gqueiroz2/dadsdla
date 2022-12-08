@@ -509,6 +509,13 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function currencyOffice(){
+        echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
+            echo "<option value='1'> BRL </option>";
+            echo "<option value='4'> USD </option>";              
+        echo "</select>";
+    }
+
     public function currencyUSD(){
         echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
             echo "<option value='4'> USD </option>";            
@@ -564,8 +571,8 @@ class Render extends Model{
 
     public function value3(){
         echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
-            echo "<option value='net'> Net </option>";            
-            echo "<option value='gross'> Gross </option>";        
+            echo "<option value='gross'> Gross </option>"; 
+            echo "<option value='net'> Net </option>";                   
         echo "</select>";
     }
 
