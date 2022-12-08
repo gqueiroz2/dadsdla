@@ -58,12 +58,9 @@ class resultsLATAMController extends Controller{
         $realDate = $dr->getLog($con, $log, $regionID);
         //var_dump($realDate);
         $total = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate,"total", $currencyID);
-        //var_dump("==============================");
         $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "discovery", $currencyID);
-        //var_dump("==============================");
         $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "sony", $currencyID);
-        //var_dump("==============================");
-        //var_dump($sony);
+        $wm = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "wm", $currencyID);
 
         $month = $dr->getActiveMonth();
         $day = date('d', strtotime($log));
@@ -86,7 +83,7 @@ class resultsLATAMController extends Controller{
         $logExcel = $log; 
             
         //var_dump($regionID);
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID'));
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID', 'wm'));
 
     }
 }

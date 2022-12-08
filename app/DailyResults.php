@@ -74,7 +74,7 @@ class DailyResults extends Model{
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
-                case "sony":
+                case "wm":
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN IN (22, 23) AND year = $year AND month = $month";
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
@@ -132,6 +132,12 @@ class DailyResults extends Model{
                 $querryONL = "SELECT SUM(read_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryONL);
                 break;
+            case "wm":
+                $querryTV = "SELECT SUM(read_wm_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(read_wm_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                //var_dump($querryONL);
+                break;
         }
         
         $resultTV = $con->query($querryTV);
@@ -161,21 +167,27 @@ class DailyResults extends Model{
     public function plan($con, $sql, Int $region, Float $pRate, String $value, String $source, String $month, String $year, String $brands){
         switch ($brands){
             case "total":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (1,2,3) AND source = '$source' AND b.type = 'Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9,10,13,14,15,16,25,26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (1,2,3) AND source = '$source' AND b.type = 'Non-Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
                 break;
             case "discovery":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (1) AND source = '$source' AND b.type = 'Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (9,10,13,14,15,16) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (1) AND source = '$source' AND b.type = 'Non-Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
                 break;
             case "sony":
-                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (22, 23) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (2) AND source = '$source' AND b.type = 'Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand WHERE sales_office_id = $region AND brand_id IN (25, 26) AND source = '$source' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (2) AND source = '$source' AND b.type = 'Non-Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryONL);
+                break;
+            case "wm":
+                $querryTV = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (3) AND source = '$source' AND b.type = 'Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
+                //var_dump($querryTV);
+                $querryONL = "SELECT SUM(revenue) AS $value FROM plan_by_brand INNER JOIN brand b on brand_id = b.ID WHERE sales_office_id = $region AND b.brand_group_id IN (3) AND source = '$source' AND b.type = 'Non-Linear' AND year = $year AND month = $month AND type_of_revenue = '$value'";
                 //var_dump($querryONL);
                 break;
         }
