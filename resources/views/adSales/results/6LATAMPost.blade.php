@@ -161,7 +161,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$month}})  </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}})  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentYTD'],2,',','.')}} </td>
@@ -294,7 +294,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$month}}) </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}}) </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentYTD'],2,',','.')}} </td>
@@ -427,7 +427,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    		<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$month}})  </td>
+					    		<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}})  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentYTD'],2,',','.')}} </td>
@@ -559,7 +559,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$month}}) </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}}) </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentYTD'],2,',','.')}} </td>

@@ -68,6 +68,8 @@ class resultsLATAMController extends Controller{
         $pYear = $cYear - 1;
         $ppYear = $pYear - 1;  
         
+        $actualMonth = $monthForm = $base->intToMonth(array($month))[0];
+        
         if($month == 12 || $month == 11){
             $month = 10;
         }
@@ -83,7 +85,7 @@ class resultsLATAMController extends Controller{
         $logExcel = $log; 
             
         //var_dump($regionID);
-    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID', 'wm'));
+    	return view('adSales.results.6LATAMPost',compact('render','region', 'currency','month','log', 'day','currencyName', 'value', 'cYear', 'pYear', 'ppYear', 'total', 'disc', 'sony', 'realDate','base','title', 'titleExcel', 'regionExcel', 'currencyExcel', 'valueExcel', 'logExcel', 'regionID', 'wm', 'actualMonth'));
 
     }
 }
