@@ -18,9 +18,9 @@ class DailyResults extends Model{
 
             switch ($brands){
                 case "total":
-                    $querryTV = "SELECT SUM(real_dsc_tv + real_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                    $querryTV = "SELECT SUM(real_dsc_tv + real_spt_tv + real_wm_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM(real_dsc_onl + real_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                    $querryONL = "SELECT SUM(real_dsc_onl + real_spt_onl + real_wm_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                     //var_dump($querryONL);
                     break;
                 case "discovery":
@@ -115,9 +115,9 @@ class DailyResults extends Model{
 
         switch ($brands){
             case "total":
-                $querryTV = "SELECT SUM(read_dsc_tv + read_spt_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                $querryTV = "SELECT SUM(read_dsc_tv + read_spt_tv + read_wm_tv) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryTV);
-                $querryONL = "SELECT SUM(read_dsc_onl + read_spt_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
+                $querryONL = "SELECT SUM(read_dsc_onl + read_spt_onl + read_wm_onl) AS $value FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryONL);
                 break;
             case "discovery":
