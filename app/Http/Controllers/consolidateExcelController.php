@@ -178,7 +178,7 @@ class consolidateExcelController extends Controller{
         $mtx = $cR->assemble($mtx);
         $mtxDN = $cR->addDN($mtx);        
 
-        $currencyS = $pr->getCurrencyByRegion($con,array(4))[0]['name'];
+        $currencyS = $pr->getCurrencyByRegion($con,array($currencyID))[0]['name'];
 
         $monthView = array("January","February","March","April","May","June","July","August","September","October","November","December");
         $quarter = array("Q1","Q2","Q3","Q4");
