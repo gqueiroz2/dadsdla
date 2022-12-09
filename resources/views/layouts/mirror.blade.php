@@ -105,9 +105,7 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
-										@if( ( $userLevel == "SU")  )
-											<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>		
-										@endif
+												
 
 										@if( ( $userLevel == "SU" ) )								
 										<a class="dropdown-item" href="{{ route('consolidateResultsGetDLA') }}"> Pacing DLA - All Markets </a>
@@ -122,6 +120,7 @@
 											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 										@endif		
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
+										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>	
 										
 									</div>
 								</li>

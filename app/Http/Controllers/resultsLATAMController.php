@@ -78,6 +78,7 @@ class resultsLATAMController extends Controller{
 
         $title = "Daily Results";
         $titleExcel = "Daily Results.xlsx";
+        
 
         $regionExcel = $regionID;
         $currencyExcel = $currencyID;
