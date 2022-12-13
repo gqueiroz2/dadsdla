@@ -23,44 +23,38 @@ $(document).ready(function(){
         }   
       });
 
-      $.ajax({ 
-        url:"/ajax/yearOnFcst",
+      var currentTime = new Date();
+
+      var year = currentTime.getFullYear();
+
+      $.ajax({
+        url:"/ajax/dashboards/salesRepByRegionFiltered",
         method:"POST",
-        data:{regionID},
+        data:{regionID,year},
         success: function(output){
-          $('#year').html(output);
-          var year = $("#year").val();
+          $('#salesRep').html(output);
+
+          var salesRep = $('#salesRep').val();
+
           $.ajax({
-            url:"/ajax/adsales/salesRepByRegion",
+            url:"/ajax/dashboards/BV-agencyGroup",
             method:"POST",
-            data:{regionID,year},
+            data:{regionID,salesRep},
             success: function(output){
-              $('#salesRep').html(output);
+              $('#agencyGroup').html(output).selectpicker('refresh');
+              //$('#vlau ').html(output).selectpicker('refresh');
             },
             error: function(xhr, ajaxOptions,thrownError){
-              alert(xhr.status+" "+thrownError);
+                alert(xhr.status+" "+thrownError);
             }
-          })         
-        
+          }); 
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
-      });
+      }) 
 
-      $.ajax({
-        url:"/ajax/dashboards/BV-agencyGroup",
-        method:"POST",
-        data:{regionID},
-        success: function(output){
-          $('#agencyGroup').html(output).selectpicker('refresh');
-          //$('#vlau ').html(output).selectpicker('refresh');
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-            alert(xhr.status+" "+thrownError);
-        }
-      });
-      
+           
 		}else{
       var option = "<option> Select Region </option>";
       $('#type').empty().append(option);

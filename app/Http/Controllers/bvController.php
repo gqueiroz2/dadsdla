@@ -46,7 +46,7 @@ class bvController extends Controller {
          $region = new region();
          $agencyGroup = Request::get('agencyGroup');
          $agencyGroupName = $a->getAgencyGroupByID($con,$agencyGroup,'1');
-         
+         var_dump(Request::all());
          $year = (int)date("Y");
          $salesRegion = array(
             array(

@@ -185,27 +185,14 @@ class ajaxController extends Controller{
 
         $regionID = Request::get('regionID');
 
+        $salesRep = Request::get('salesRep');
+
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-        $user = Request::session()->get('userName');
-        $userLevel = Request::session()->get('userLevel');
+
         $year = array(date('Y'));
         $rID = array();
 
-        $resp = $sr->getSalesRepByRegionBV($con,array($regionID),true,$year);
-        //var_dump($resp);
-
-        for ($s=0; $s <sizeof($resp) ; $s++) {  
-            $salesRepWithNoSpecialCharacters = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$resp[$s]['salesRep']);
-            $salesRepWithNoSpecialCharacters1 = preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$user);
-            if($salesRepWithNoSpecialCharacters == $salesRepWithNoSpecialCharacters1){                        
-                $salesRep = array($resp);
-            }else{
-                $salesRep = $resp;
-            }
-
-        }
-        //var_dump($salesRep);
         $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$year,array($regionID),$salesRep);
         //var_dump($agencies);
         echo "<option value=''> Select </option>";
