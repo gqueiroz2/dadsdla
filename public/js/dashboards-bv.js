@@ -33,26 +33,29 @@ $(document).ready(function(){
         data:{regionID,year},
         success: function(output){
           $('#salesRep').html(output);
-
           var salesRep = $('#salesRep').val();
-
-          $.ajax({
-            url:"/ajax/dashboards/BV-agencyGroup",
-            method:"POST",
-            data:{regionID,salesRep},
-            success: function(output){
-              $('#agencyGroup').html(output).selectpicker('refresh');
-              //$('#vlau ').html(output).selectpicker('refresh');
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-                alert(xhr.status+" "+thrownError);
-            }
-          }); 
+          
+          $('#salesRep').change(function(){
+            console.log(salesRep)
+            $.ajax({
+              url:"/ajax/dashboards/BV-agencyGroup",
+              method:"POST",
+              data:{regionID,salesRep},
+              success: function(output){
+                $('#agencyGroup').html(output).selectpicker('refresh');
+                //$('#vlau ').html(output).selectpicker('refresh');
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                  alert(xhr.status+" "+thrownError);
+              }
+            });
+          })
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
-      }) 
+      })
+      
 
            
 		}else{
