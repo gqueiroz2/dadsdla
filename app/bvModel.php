@@ -10,7 +10,7 @@ class bvModel extends Model{
     
     // == This function get all clients relationated with the AgencyGroup selected by user in the filter == //
     public function getSalesRepByAgencyGroup(String $agencyGroupId, int $year, Object $con, Object $sql){
-        $query = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from cmaps cm 
+        $queryCmaps = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from cmaps cm 
                    left join agency a on a.ID = cm.agency_id 
                    left join client c on c.ID = cm.client_id 
                    left join sales_rep sr on sr.ID = cm.sales_rep_id  
@@ -19,11 +19,30 @@ class bvModel extends Model{
                    and cm.`year` in ($year)
                    order by 1 asc";
 
-        $result = $con->query($query);
+        $resultCmaps = $con->query($queryCmaps);
         $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
-        $value = $sql->fetch($result, $from, $from);
-        //var_dump($value);
+        $valueCmaps = $sql->fetch($resultCmaps, $from, $from);
+
+
+        // == This part make the integration with WarnerMedia ALEPH base == //
+        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from aleph al 
+                   left join agency a on a.ID = al.agency_id 
+                   left join client c on c.ID = al.client_id 
+                   left join sales_rep sr on sr.ID = al.current_sales_rep_id  
+                   left join agency_group ag on ag.ID = a.agency_group_id 
+                   where ag.ID = $agencyGroupId
+                   and al.`year` in ($year)
+                   order by 1 asc";
+
+        $resultAleph = $con->query($queryAleph);
+        $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
+        $valueAleph = $sql->fetch($resultAleph, $from, $from);
+    
+
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
+        $value = array_merge($valueCmaps, $valueAleph); // Only for test porpouses 
+        var_dump($valueAleph);
+
         return $value;
     }
 
