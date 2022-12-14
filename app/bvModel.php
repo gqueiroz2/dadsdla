@@ -9,7 +9,7 @@ use App\sql;
 class bvModel extends Model{
     
     // == This function get all clients relationated with the AgencyGroup selected by user in the filter == //
-    public function getSalesRepByAgencyGroup(String $agencyGroupId, int $year, Object $con, Object $sql){
+    public function getSalesRepByAgencyGroup(String $agencyGroupId, string $salesRep, int $year, Object $con, Object $sql){
         $queryCmaps = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from cmaps cm 
                    left join agency a on a.ID = cm.agency_id 
                    left join client c on c.ID = cm.client_id 
@@ -38,10 +38,10 @@ class bvModel extends Model{
         $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
         $valueAleph = $sql->fetch($resultAleph, $from, $from);
     
-
+        
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
         $value = array_merge($valueCmaps, $valueAleph); // Only for test porpouses 
-        var_dump($valueAleph);
+        var_dump($value);
 
         return $value;
     }
@@ -63,13 +63,13 @@ class bvModel extends Model{
     }
 
     // == This function generate the matrix used in front-end == //
-    public function tableBV(String $agencyGroupId, int $year, Object $con, String $valueType){
+    public function tableBV(String $agencyGroupId, int $year, Object $con, String $valueType, string $salesRep){
         $sql = new sql();
         $year = (int)date("Y");
         $pYear = $year-1;
         $ppYear = $year-2;
         $bvTable = array();
-        $result = $this->getSalesRepByAgencyGroup($agencyGroupId, $year, $con, $sql);
+        $result = $this->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
 
         /* == Generate arrays for fill the matrix, 
         the matrix structure is:

@@ -183,22 +183,26 @@ class ajaxController extends Controller{
         $sr = new salesRep();
         $agency = new agency(); 
 
-        $regionID = Request::get('regionID');
+        $regionID = '1';
 
         $salesRep = Request::get('salesRep');
-
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
         $year = array(date('Y'));
         $rID = array();
 
-        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$year,array($regionID),$salesRep);
+        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$year,array($regionID),array($salesRep));
         //var_dump($agencies);
-        echo "<option value=''> Select </option>";
-        for ($a=0; $a < sizeof($agencies); $a++){ 
-            echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";
+        if ($agencies != '') {
+            echo "<option value=''> Select </option>";
+            for ($a=0; $a < sizeof($agencies); $a++){ 
+                echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";
+            }
+        }else{
+           echo "<option value=''> There is no Data for this Sales Rep. </option>";
         }
+        
     }
 
     public function brandBySource(){

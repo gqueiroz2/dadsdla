@@ -33,39 +33,46 @@ $(document).ready(function(){
         data:{regionID,year},
         success: function(output){
           $('#salesRep').html(output);
-          var salesRep = $('#salesRep').val();
-          
-          $('#salesRep').change(function(){
-            console.log(salesRep)
-            $.ajax({
-              url:"/ajax/dashboards/BV-agencyGroup",
-              method:"POST",
-              data:{regionID,salesRep},
-              success: function(output){
-                $('#agencyGroup').html(output).selectpicker('refresh');
-                //$('#vlau ').html(output).selectpicker('refresh');
-              },
-              error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
-              }
-            });
-          })
         },
         error: function(xhr, ajaxOptions,thrownError){
           alert(xhr.status+" "+thrownError);
         }
-      })
-      
-
+      });    
            
 		}else{
       var option = "<option> Select Region </option>";
       $('#type').empty().append(option);
       $('#currency').empty().append(option);
-      $('#agencyGroup').empty().append(option).selectpicker('refresh');
+      $('#salesRep').empty().append(option).selectpicker('refresh');
     }
 
 	});
+
+  var regionID = $(this).val();
+
+  $('#salesRep').change(function(){
+    
+    var salesRep = $(this).val();
+    if (salesRep != "") {
+
+      $.ajax({
+        url:"/ajax/dashboards/BV-agencyGroup",
+        method:"POST",
+        data:{regionID,salesRep},
+        success: function(output){
+          $('#agencyGroup').html(output).selectpicker('refresh');
+          //$('#vlau ').html(output).selectpicker('refresh');
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+            alert(xhr.status+" "+thrownError);
+        }
+      });  
+    }else{
+      var option = "<option> Select Sales Rep </option>";
+      $('#agencyGroup').empty().append(option).selectpicker('refresh');
+    }
+  });   
+
 });
 
 function handleNumber(number){

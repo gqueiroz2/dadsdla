@@ -414,7 +414,7 @@ class agency extends Management{
     public function getAgencyGroupByRegionCMAPSWithValuesBV($con,$year=false,$agencyRegion=false,$salesRep=false){
         $sql = new sql();
 
-        $table = "cmaps y";
+        $tableCmaps = "cmaps y";
 
         $columns = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -437,7 +437,7 @@ class agency extends Management{
                 $where .= ")";  
                 $where .= " AND sr.ID IN (";
                 for ($s=0; $s < sizeof($salesRep); $s++) { 
-                    $where .= " '".$salesRep[$s]['id']."' ";
+                    $where .= " '".$salesRep[$s]."' ";
                     if($s < ( sizeof($salesRep) - 1) ){
                         $where .= ",";
                     }
@@ -454,11 +454,61 @@ class agency extends Management{
                  LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
                  ";
         
-        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
+        $res = $sql->selectGroupBy($con,$columns,$tableCmaps,$join,$where, "ag.name", "ag.id");
 
         $from = array('id','agencyGroup');
 
-        $agency = $sql->fetch($res,$from,$from);
+        $agencyCmaps = $sql->fetch($res,$from,$from);
+        
+        // ========================================= // 
+
+        /*$tableAleph = "aleph y";
+
+        $columnsAleph = "ag.ID AS 'id',
+                    ag.name AS 'agencyGroup'
+                   ";
+
+        $whereAleph = "";
+        //var_dump($salesRep);
+        if($agencyRegion){
+            $agencyRegions = implode(",", $agencyRegion);
+
+            if ($year) {
+                $whereAleph .= "WHERE year IN (";
+                for ($y=0; $y < sizeof($year); $y++) { 
+                    $whereAleph .= "'".$year[$y]."'";
+                    if($y < ( sizeof($year) - 1) ){
+                        $where .= ",";
+                    }
+                }
+
+                $whereAleph .= ")";  
+                $whereAleph .= " AND sr.ID IN (";
+                for ($s=0; $s < sizeof($salesRep); $s++) { 
+                    $whereAleph .= " '".$salesRep[$s]."' ";
+                    if($s < ( sizeof($salesRep) - 1) ){
+                        $whereAleph .= ",";
+                    }
+                }
+
+                $whereAleph .= ")";                
+            }else{
+                $whereAleph = "WHERE (sr.ID IN ($salesRep))";
+            }
+        }
+        //var_dump($where);
+        $joinAleph = "LEFT JOIN agency a ON a.ID = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
+                 LEFT JOIN sales_rep sr ON sr.ID = y.current_sales_rep_id
+                 ";
+        
+        $resAleph = $sql->selectGroupBy($con,$columnsAleph,$tableAleph,$joinAleph,$whereAleph, "ag.name", "ag.id");
+
+        $fromAleph = array('id','agencyGroup');
+
+        $agencyAleph = $sql->fetch($resAleph,$fromAleph,$fromAleph);*/
+
+        $agency = $agencyCmaps;
 
         return $agency;
 

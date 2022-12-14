@@ -20,6 +20,13 @@
 							{{$render->region($salesRegion)}}							
 						</div>
 						<div class="col">
+							<label class='labelLeft'><span class="bold">Sales Rep:</span></label>
+							@if ($errors->has('salesRep'))
+								<label style="color: red;">* Required</label>
+							@endif
+							{{ $render->salesRep2()}}
+						</div>
+						<div class="col">
 							<label class="labelLeft bold" > Agency Group </label>
 							@if($errors->has('agencyGroup'))
 								<label style="color: red;">* Required</label>

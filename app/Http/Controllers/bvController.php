@@ -45,8 +45,9 @@ class bvController extends Controller {
          $a = new agency();
          $region = new region();
          $agencyGroup = Request::get('agencyGroup');
+         $salesRep = Request::get('salesRep');
          $agencyGroupName = $a->getAgencyGroupByID($con,$agencyGroup,'1');
-         var_dump(Request::all());
+         //var_dump(Request::all());
          $year = (int)date("Y");
          $salesRegion = array(
             array(
@@ -63,7 +64,7 @@ class bvController extends Controller {
          $brands = $b->getBrand($con);
          $render = new Render();
          $bvModel = new bvModel();
-         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'));
+         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'),$salesRep);
 
         return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'currencies', 'brands', 'render','year','bvTest','agencyGroupName'));
     }

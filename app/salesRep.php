@@ -554,7 +554,7 @@ class salesRep extends Management
 		WHERE srs.status = 1 
 		and (srs.year = $year)
 		and (sr.sales_group_id = $salesRepGroupID)";
-		var_dump($query);
+		//var_dump($query);
 		$from = array('ID', 'sales_group_id', 'name');
 		$res = $con->query($query);
 		$salesRepByGroup =  $sql->fetch($res, $from, $from);
