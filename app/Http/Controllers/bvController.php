@@ -26,16 +26,10 @@ class bvController extends Controller {
               'role' => 'Regional Office'
            )
         );
-        
-        $currency = new pRate();
-        $currencies = $currency->getCurrency($con);
-        
-  
-        $b = new brand();
-        $brands = $b->getBrand($con);
+      
         $render = new Render();
           
-        return view("adSales.dashboards.dashboardBVGet", compact('region','salesRegion', 'currencies', 'brands', 'render'));
+        return view("adSales.dashboards.dashboardBVGet", compact('region', 'salesRegion', 'render'));
      }
     
     public function bvPost(){
@@ -57,15 +51,10 @@ class bvController extends Controller {
             )
          );
 
-         $currency = new pRate();
-         $currencies = $currency->getCurrency($con);
-
-         $b = new brand();
-         $brands = $b->getBrand($con);
          $render = new Render();
          $bvModel = new bvModel();
-         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'),$salesRep);
+         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'),$salesRep, Request::get('currency'));
 
-        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'currencies', 'brands', 'render','year','bvTest','agencyGroupName'));
+        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName'));
     }
 }
