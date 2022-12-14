@@ -16,6 +16,7 @@ class bvModel extends Model{
                    left join sales_rep sr on sr.ID = cm.sales_rep_id  
                    left join agency_group ag on ag.ID = a.agency_group_id 
                    where ag.ID = $agencyGroupId
+                   and sr.id = $salesRep
                    and cm.`year` in ($year)
                    order by 1 asc";
 
@@ -31,6 +32,7 @@ class bvModel extends Model{
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
                    left join agency_group ag on ag.ID = a.agency_group_id 
                    where ag.ID = $agencyGroupId
+                   and sr.id = $salesRep
                    and al.`year` in ($year)
                    order by 1 asc";
 
@@ -40,8 +42,13 @@ class bvModel extends Model{
     
         
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
-        $value = array_merge($valueCmaps, $valueAleph); // Only for test porpouses 
-        var_dump($value);
+        if ($valueAleph == "") {
+            $value = $valueCmaps;
+        }elseif ($valueCmaps == "") {
+            $value = $valueAleph;
+        }else{
+            $value = array_merge($valueCmaps,$valueAleph);
+        }  // Only for test porpouses 
 
         return $value;
     }

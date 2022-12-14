@@ -462,7 +462,7 @@ class agency extends Management{
         
         // ========================================= // 
 
-        /*$tableAleph = "aleph y";
+        $tableAleph = "aleph y";
 
         $columnsAleph = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -506,9 +506,15 @@ class agency extends Management{
 
         $fromAleph = array('id','agencyGroup');
 
-        $agencyAleph = $sql->fetch($resAleph,$fromAleph,$fromAleph);*/
+        $agencyAleph = $sql->fetch($resAleph,$fromAleph,$fromAleph);
 
-        $agency = $agencyCmaps;
+        if ($agencyAleph == "") {
+            $agency = $agencyCmaps;
+        }elseif ($agencyCmaps == "") {
+            $agency = $agencyAleph;
+        }else{
+            $agency = array_merge($agencyCmaps,$agencyAleph);
+        }        
 
         return $agency;
 
