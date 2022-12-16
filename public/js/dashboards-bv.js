@@ -76,7 +76,7 @@ $(document).ready(function(){
 });
 
 function handleNumber(number){
- // number = number.replaceAll(".","");
+  number = number.replaceAll(".","");
   number = parseFloat(number);
   return number;
 }
