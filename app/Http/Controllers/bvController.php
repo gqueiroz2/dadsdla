@@ -41,6 +41,8 @@ class bvController extends Controller {
          $agencyGroup = Request::get('agencyGroup');
          $salesRep = Request::get('salesRep');
          $agencyGroupName = $a->getAgencyGroupByID($con,$agencyGroup,'1');
+         $currency = Request::get('currency');
+         $value = Request::get('value');
          //var_dump(Request::all());
          $year = (int)date("Y");
          $salesRegion = array(
@@ -53,13 +55,13 @@ class bvController extends Controller {
 
          $render = new Render();
          $bvModel = new bvModel();
-         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'),$salesRep, Request::get('currency'));
+         $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value,$salesRep, $currency);
          $total = $bvModel->getBVTotal($bvTest, $year);
 
-        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total'));
+        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total','salesRep','currency','value'));
     }
 
     public function bvSaveForecast(){
-      
+      var_dump(Request::all());
     }
 }
