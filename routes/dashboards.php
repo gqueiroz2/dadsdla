@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'],function(){
 							->name('dashboardBVGet');
 			Route::post('/','bvController@bvPost')
 								->name('dashboardBVPost');
+			Route::post('/save','bvController@bvSaveForecast')
+										->name('bvSaveForecast');
 		});
 
 
