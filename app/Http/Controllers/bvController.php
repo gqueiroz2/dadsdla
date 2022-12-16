@@ -58,4 +58,8 @@ class bvController extends Controller {
 
         return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total'));
     }
+
+    public function bvSaveForecast(){
+      
+    }
 }

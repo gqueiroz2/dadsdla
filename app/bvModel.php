@@ -143,11 +143,10 @@ class bvModel extends Model{
             }
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
-            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev,"variation" => $variation, "status" => $statusString);
-            array_push($bvTable, $pivotArray);           
-            
-        };
+            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev,"variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
+            array_push($bvTable, $pivotArray);
 
+        };
         return $bvTable;
     }
 
