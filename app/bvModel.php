@@ -122,7 +122,7 @@ class bvModel extends Model{
             $pRateValue = $pRate->getPRateByRegionAndYear($con, array('1'), array($year));
         }
 
-        var_dump($pRateValue);
+        //var_dump($pRateValue);
 
         /* == Generate arrays for fill the matrix, 
         the matrix structure is:

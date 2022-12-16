@@ -230,6 +230,10 @@ th{
     font-weight: bold;
 }
 
+.labelRight{
+    float: right;    
+}
+
 .labelLeft{
 	float: left;	
 }
