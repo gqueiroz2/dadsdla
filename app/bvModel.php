@@ -132,6 +132,7 @@ class bvModel extends Model{
             $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $prevValue = 0; // Prevision are from database
+            $sptPrev = 0; // Prevision are from database
             $statusString = ''; // Status are from database
 
             // == Percentage and division by 0 check, if values are big than 0 == //
@@ -142,11 +143,42 @@ class bvModel extends Model{
             }
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
-            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "variation" => $variation, "status" => $statusString);
+            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev,"variation" => $variation, "status" => $statusString);
             array_push($bvTable, $pivotArray);           
             
         };
 
         return $bvTable;
+    }
+
+    public function getBVTotal(array $bvTable, int $year){
+        $ppYear = (String) $year - 2;
+        $pYear = (String) $year - 1 ;
+
+        $totalPpYear = 0;
+        $totalPYear = 0;
+        $totalCYear = 0;
+        $totalPrev = 0;
+        $totalSPTPrev = 0;
+
+        for ($i = 0; $i < sizeof($bvTable); $i++){
+            $totalPpYear += $bvTable[$i][$ppYear];
+            $totalPYear += $bvTable[$i][$pYear];
+            $totalCYear += $bvTable[$i][$year];
+            $totalPrev += $bvTable[$i]['prev'];
+            $totalSPTPrev += $bvTable[$i]['sptPrev'];
+        }
+
+        if ($totalCYear > 0 && $totalPYear > 0){
+            $totalVariation = number_format((($totalCYear + $totalPrev) / $totalPYear) * 100);
+        } else {
+            $totalVariation = 0;
+        }
+
+        $totalPrevActualSum = $totalCYear + $totalPrev;
+
+        $pivotArray = array($ppYear => $totalPpYear, $pYear => $totalPYear, $year => $totalCYear, "prev" => $totalPrev, "prevActualSum" => $totalPrevActualSum, "sptPrev" => $totalPrev, "variation" => $totalVariation);
+
+        return $pivotArray;
     }
 }

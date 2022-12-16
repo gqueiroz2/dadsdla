@@ -54,7 +54,8 @@ class bvController extends Controller {
          $render = new Render();
          $bvModel = new bvModel();
          $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, Request::get('value'),$salesRep, Request::get('currency'));
+         $total = $bvModel->getBVTotal($bvTest, $year);
 
-        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName'));
+        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total'));
     }
 }

@@ -50,28 +50,25 @@
 						<div class="col">
 							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
 							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">
+							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+							<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 		<form method="POST" runat="server" name="tableForm" onkeyup="calculate()"> 
-			 <div class="col-2">
-                <input type="submit" id="button" value="Save" class="btn btn-primary"
-                    style="width: 100%">
-            </div>
-			
 			<div class="container-fluid" id="body">
 				<div class="row">
 					<div class="col"> 
-						<table class="table-responsive" style='width: 100%; zoom: 85%;font-size: 16px;'>
+						<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 							<tr class="center">
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
 				        </table>
 				            
 				       		@csrf 	
-							<table class="table-responsive" style='width: 100%; zoom: 85%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>
+							<table style='width: 100%; zoom: 85%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>
 								<tr>
 									<th class='newBlue center' colspan='9' style='font-size:22px; width:100%;'> Control Panel - {{$agencyGroupName}}</th>
 								</tr>
@@ -99,15 +96,15 @@
 										<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 									</tr>
 								@endfor
-								<tr>
+								<tr style='font-size:16px;'>
 									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
-									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-2],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-1],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['prev'],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['prevActualSum'],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['sptPrev'],0,',','.')}}</td>
+									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['variation'],0,',','.')}}%</td>
 									<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
 								</tr>		
 							</table>
