@@ -7,7 +7,7 @@
 
 @section('content')
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row justify-content-end">
 			<div class="col">
 				<form method="POST" action="{{ route('dashboardBVPost') }}" runat="server" onsubmit="ShowLoading()">
 					@csrf
@@ -47,25 +47,45 @@
 							@endif
 							{{$render->valueNet()}}
 						</div>
-						<div class="col">
+						<div class="col" style='margin-right: 13px;'>
 							<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">
-							
+							<input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">							
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 
+		<div class="container-fluid">
+        	<div class="row justify-content-end mt-3">
+	            <div class="col-2" style="color: #0070c0;font-size: 25px;">
+	                AVB - Contole Panel
+	            </div>
+	            <div class="col-2">
+	                <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+	                    Generate Excel
+	                </button>
+	            </div>
+        	</div>
+    	</div>
+
 		<form method="POST" runat="server" name="tableForm" onkeyup="calculate()" action="{{ route('bvSaveForecast') }}"> 
 			@csrf 
 			<input type='hidden' readonly='true' type="text" name="currency" id="currency" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$currency}}">
 			<input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">
 			<input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRep}}">
-			<div class="col">
-				<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-				<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">
-			</div>
+			  	<div class="row justify-content-end">
+	                <div class="col">
+	                    <div class="container-fluid">
+	                        <div class="row justify-content-end">
+	                            <div class="col-2">
+									<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+									<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
 			<div class="container-fluid" id="body">
 				<div class="row">
 					<div class="col"> 
