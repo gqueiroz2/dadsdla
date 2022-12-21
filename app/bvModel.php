@@ -150,6 +150,7 @@ class bvModel extends Model{
         return $bvTable;
     }
 
+    // == Generate total value based on result of tableBV function == //
     public function getBVTotal(array $bvTable, int $year){
         $ppYear = (String) $year - 2;
         $pYear = (String) $year - 1 ;
@@ -179,5 +180,10 @@ class bvModel extends Model{
         $pivotArray = array($ppYear => $totalPpYear, $pYear => $totalPYear, $year => $totalCYear, "prev" => $totalPrev, "prevActualSum" => $totalPrevActualSum, "sptPrev" => $totalPrev, "variation" => $totalVariation);
 
         return $pivotArray;
+    }
+
+    // == This function are called by Save button in front-end and verify if the registers are already created in database, if already exist it will make a update, if not, will create a new registry == //
+    public function verifyUpdateAndSaveBV(int $salesRep, int $clientID, int $agencyID, int $currency, String $value, float $forecast, float $forecastSPT, $status, Object $con, Object $sql){
+
     }
 }

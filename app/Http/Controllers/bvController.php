@@ -10,6 +10,7 @@ use App\pRate;
 use App\brand;
 use App\agency;
 use App\bvModel;
+use App\sql;
 
 
 class bvController extends Controller {
@@ -58,10 +59,40 @@ class bvController extends Controller {
          $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value,$salesRep, $currency);
          $total = $bvModel->getBVTotal($bvTest, $year);
 
-        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total','salesRep','currency','value'));
+        return view("adSales.dashboards.dashboardBVPost", compact('region','salesRegion', 'render','year','bvTest','agencyGroupName', 'total','salesRep','currency','value', 'agencyGroup'));
     }
 
     public function bvSaveForecast(){
-      var_dump(Request::all());
+      $db = new dataBase();
+      $bvModel = new bvModel();
+      $sql = new sql();
+
+      $default = $db->defaultConnection();
+      $con = $db->openConnection($default);
+
+      $year = (int)date("Y");
+      $value = Request::get('value');
+      $currency = (int) Request::get('currency');
+      $salesRep = (int) Request::get('salesRep');
+      $saveButtonGet = Request::all();
+      $agencyGroupId = Request::get('agencyGroup');
+
+      // == Function to get the clients in the same way done in post == //
+      $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
+
+      // == Using the size of $clientByAE we can do a for to get the correcty match for every registry get by front == //
+      for ($i = 0; $i < sizeof($clientsByAE); $i++){
+         $clientID = (int) $saveButtonGet['clientID-'.$i];
+         $agencyID = (int) $saveButtonGet['agencyID-'.$i]; 
+         $forecast = (float) $saveButtonGet['forecast-'.$i];
+         $forecastSPT = (float) $saveButtonGet['forecast-spt-'.$i];
+         $status = $saveButtonGet['status-'.$i];
+
+         var_dump($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status);
+
+         $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
+      }
+
+      //var_dump($saveButtonGet);
     }
 }
