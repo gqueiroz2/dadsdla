@@ -104,21 +104,21 @@ class bvModel extends Model{
          return $value;
      }
 
-     public function getPrevision($salesRep, $clientID, $agencyID, $currency, $value, $previsionType, $con, $sql){
+     public function getPrevision($salesRep, $clientID, $agencyID, $currency, $previsionType, $con, $sql, $pRateWM){
         switch ($previsionType){
             case 'wbd':
-                $previsionQuery = "SELECT forecast_revenue AS forecast, currency_id AS currency, value from bv_forecast
+                $previsionQuery = "SELECT forecast_revenue AS forecast, currency_id AS currency from bv_forecast
                                    WHERE sales_rep_id = $salesRep
                                    AND client_id = $clientID
                                    AND agency_id = $agencyID";
-                $from = array('forecast', 'currency', 'value');
+                $from = array('forecast', 'currency');
                 break;
             case 'spt':
                 $previsionQuery = "SELECT forecast_spt_revenue AS forecast, currency_id AS currency, value from bv_forecast
                                    WHERE sales_rep_id = $salesRep
                                    AND client_id = $clientID
                                    AND agency_id = $agencyID";
-                $from = array('forecast', 'currency', 'value');
+                $from = array('forecast', 'currency');
                 break;
             case 'status':
                 $previsionQuery = "SELECT status from bv_forecast
@@ -133,11 +133,14 @@ class bvModel extends Model{
         $previsionValue = $sql->fetch($previsionResult, $from, $from);
 
         if ($previsionType == 'wbd' || $previsionType == 'spt'){
-            $return =  $previsionValue[0]['forecast'];
+            if ($currency != $previsionValue[0]['currency']){
+                $return =  $previsionValue[0]['forecast'] / $pRateWM;
+            } else {
+                $return =  $previsionValue[0]['forecast'];
+            }
         }else{
-            $return = null;
+            $return = $previsionValue[0]['status'];
         }
-        
 
         //var_dump($return);
         return $return;
@@ -170,9 +173,9 @@ class bvModel extends Model{
             $pPreviousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql, $pRateValue, $pRateWM);
-            $prevValue = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'wbd', $con, $sql);
-            $sptPrev = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'spt', $con, $sql);
-            $statusString = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'status', $con, $sql);
+            $prevValue = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'wbd', $con, $sql, $pRateWM);
+            $sptPrev = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'spt', $con, $sql, $pRateWM);
+            $statusString = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'status', $con, $sql, $pRateWM);
 
             // == Percentage and division by 0 check, if values are big than 0 == //
             if ($actualValue > 0 && $previousValue > 0){
@@ -224,18 +227,45 @@ class bvModel extends Model{
 
     // == This function are called by Save button in front-end and verify if the registers are already created in database, if already exist it will make a update, if not, will create a new registry == //
     public function verifyUpdateAndSaveBV(int $salesRep, int $clientID, int $agencyID, int $currency, String $value, $forecast, $forecastSPT, $status, Object $con, Object $sql){
-        $updateTime = date("Y/m/d");
-        $updateQuery = "UPDATE bv_forecast
-                        forecast_revenue = $forecast,
+        $updateTime = date("Y-m-d");
+
+        $selectQuery = "SELECT agency_id AS agency, client_id AS client
+                        FROM bv_forecast
+                        WHERE sales_rep_id = $salesRep
+                        AND client_id = $clientID
+                        AND agency_id = $agencyID
+                        AND currency_id = $currency
+                        AND value = '$value'";
+        $from = array('agency', 'client');
+        $selectResultQuery = $con->query($selectQuery);
+        $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
+        
+        if ($resultSelect != false){
+            $updateQuery = "UPDATE bv_forecast 
+                        SET forecast_revenue = $forecast,
                         forecast_spt_revenue = $forecastSPT,
+                        updated_date = '$updateTime',
                         status = '$status'
                         WHERE sales_rep_id = $salesRep
                         AND client_id = $clientID
                         AND agency_id = $agencyID
                         AND currency_id = $currency
                         AND value = '$value'";
-        $resultQuery = $con->query($updateQuery);
-        //var_dump($resultQuery);
-        echo("<pre>$updateQuery</pre>");;
+
+            $resultQuery = $con->query($updateQuery);
+        }else{
+            $insertQuery = "INSERT INTO  bv_forecast
+                        SET updated_date = '$updateTime',
+                        sales_rep_id = $salesRep,
+                        client_id = $clientID,
+                        agency_id = $agencyID,
+                        currency_id = $currency,
+                        value = '$value',
+                        forecast_revenue = $forecast,
+                        forecast_spt_revenue = $forecastSPT,
+                        status = '$status'";
+            $resultInsertQuery = $con->query($insertQuery);
+
+        }
     }
 }
