@@ -103,6 +103,45 @@ class bvModel extends Model{
          $value = $valueCMAPS + $valueALEPH;
          return $value;
      }
+
+     public function getPrevision($salesRep, $clientID, $agencyID, $currency, $value, $previsionType, $con, $sql){
+        switch ($previsionType){
+            case 'wbd':
+                $previsionQuery = "SELECT forecast_revenue AS forecast, currency_id AS currency, value from bv_forecast
+                                   WHERE sales_rep_id = $salesRep
+                                   AND client_id = $clientID
+                                   AND agency_id = $agencyID";
+                $from = array('forecast', 'currency', 'value');
+                break;
+            case 'spt':
+                $previsionQuery = "SELECT forecast_spt_revenue AS forecast, currency_id AS currency, value from bv_forecast
+                                   WHERE sales_rep_id = $salesRep
+                                   AND client_id = $clientID
+                                   AND agency_id = $agencyID";
+                $from = array('forecast', 'currency', 'value');
+                break;
+            case 'status':
+                $previsionQuery = "SELECT status from bv_forecast
+                                   WHERE sales_rep_id = $salesRep
+                                   AND client_id = $clientID
+                                   AND agency_id = $agencyID";
+                $from = array('status');
+                break;
+        }
+
+        $previsionResult = $con->query($previsionQuery);
+        $previsionValue = $sql->fetch($previsionResult, $from, $from);
+
+        if ($previsionType == 'wbd' || $previsionType == 'spt'){
+            $return =  $previsionValue[0]['forecast'];
+        }else{
+            $return = null;
+        }
+        
+
+        //var_dump($return);
+        return $return;
+     }
  
     // == This function generate the matrix used in front-end == //
     public function tableBV(String $agencyGroupId, int $year, Object $con, String $valueType, String $salesRep, String $currency){
@@ -131,9 +170,9 @@ class bvModel extends Model{
             $pPreviousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
             $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql, $pRateValue, $pRateWM);
-            $prevValue = 0; // Prevision are from database
-            $sptPrev = 0; // Prevision are from database
-            $statusString = ''; // Status are from database
+            $prevValue = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'wbd', $con, $sql);
+            $sptPrev = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'spt', $con, $sql);
+            $statusString = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $currency, $valueType, 'status', $con, $sql);
 
             // == Percentage and division by 0 check, if values are big than 0 == //
             if ($actualValue > 0 && $previousValue > 0){
@@ -143,10 +182,11 @@ class bvModel extends Model{
             }
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
-            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev,"variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
+            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
             array_push($bvTable, $pivotArray);
 
         };
+        //var_dump($bvTable);
         return $bvTable;
     }
 
@@ -177,13 +217,25 @@ class bvModel extends Model{
 
         $totalPrevActualSum = $totalCYear + $totalPrev;
 
-        $pivotArray = array($ppYear => $totalPpYear, $pYear => $totalPYear, $year => $totalCYear, "prev" => $totalPrev, "prevActualSum" => $totalPrevActualSum, "sptPrev" => $totalPrev, "variation" => $totalVariation);
+        $pivotArray = array($ppYear => $totalPpYear, $pYear => $totalPYear, $year => $totalCYear, "prev" => $totalPrev, "prevActualSum" => $totalPrevActualSum, "sptPrev" => $totalSPTPrev, "variation" => $totalVariation);
 
         return $pivotArray;
     }
 
     // == This function are called by Save button in front-end and verify if the registers are already created in database, if already exist it will make a update, if not, will create a new registry == //
-    public function verifyUpdateAndSaveBV(int $salesRep, int $clientID, int $agencyID, int $currency, String $value, float $forecast, float $forecastSPT, $status, Object $con, Object $sql){
-
+    public function verifyUpdateAndSaveBV(int $salesRep, int $clientID, int $agencyID, int $currency, String $value, $forecast, $forecastSPT, $status, Object $con, Object $sql){
+        $updateTime = date("Y/m/d");
+        $updateQuery = "UPDATE bv_forecast
+                        forecast_revenue = $forecast,
+                        forecast_spt_revenue = $forecastSPT,
+                        status = '$status'
+                        WHERE sales_rep_id = $salesRep
+                        AND client_id = $clientID
+                        AND agency_id = $agencyID
+                        AND currency_id = $currency
+                        AND value = '$value'";
+        $resultQuery = $con->query($updateQuery);
+        //var_dump($resultQuery);
+        echo("<pre>$updateQuery</pre>");;
     }
 }

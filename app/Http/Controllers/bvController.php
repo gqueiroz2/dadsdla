@@ -90,7 +90,9 @@ class bvController extends Controller {
 
          var_dump($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status);
 
-         $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
+         if ($forecast > 0 || $forecastSPT > 0 || $status != null){
+            $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
+         }
       }
 
       //var_dump($saveButtonGet);
