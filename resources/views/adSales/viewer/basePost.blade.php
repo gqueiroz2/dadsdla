@@ -31,6 +31,13 @@
                             @endif
                         </div>
 
+                        <div class="col">
+                            <label class="labelLeft"><span class="bold"> Year: </span></label>
+                            @if($errors->has('year'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->year($regionID)}}                    
+                        </div> 
 
                         <div class="col">
                             <label class="labelLeft"><span class="bold"> Source: </span></label>
@@ -44,14 +51,7 @@
                             <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
                             {{$render->especificNumber($brand)}}
                         </div>
-                        
-                        <div class="col">
-                            <label class="labelLeft"><span class="bold"> Year: </span></label>
-                            @if($errors->has('year'))
-                                <label style="color: red;">* Required</label>
-                            @endif
-                            {{$render->year($regionID)}}                    
-                        </div>  
+                         
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))
