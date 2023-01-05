@@ -89,16 +89,18 @@
 				</div>
 			<div class="container-fluid" id="body">
 				<div class="row">
-					<div class="col"> 
-						<table style='width: 100%; zoom: 85%;font-size: 16px;'>
-							<tr class="center">
-				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-				        	</tr>
-				        </table>       
-				       			
-						<table style='width: 100%; zoom: 85%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>
+					<div class="col"> 				       			
+						<table id='table' style='width: 100%; zoom: 85%;'>
 							<tr>
-								<th class='newBlue center' colspan='9' style='font-size:22px; width:100%;'> Control Panel - {{$agencyGroupName}}</th>
+								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">Updated date</td>
+								<td class="col oddGrey center" style="font-size:14px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">{{$updateInfo[0]['updateDate']}}</td>
+							</tr>
+							<tr>
+								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">Sales Rep</td>
+								<td class="col oddGrey center" style="font-size:14px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">{{$updateInfo[0]['salesRep']}}</td>
+							</tr>
+							<tr>
+								<th class='newBlue center' colspan='9' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> Control Panel - {{$agencyGroupName}}</th>
 							</tr>
 							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
 								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Client</td>
@@ -115,7 +117,7 @@
 								<input type='hidden' readonly='true' type="text" name="clientID-{{$b}}" id="clientID-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['clientId']}}">
 								<input type='hidden' readonly='true' type="text" name="agencyID-{{$b}}" id="agencyID-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agencyId']}}">
 								<tr class='center' style='font-size:16px;'>
-									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['client']}}"></td>
+									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['client']}}"></td>
 									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-2],0,',','.')}}</td>
 									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-1],0,',','.')}}</td>
 									<td class="even numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],0,',','.')}}"></td>
@@ -123,11 +125,26 @@
 									<td class="even numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],0,',','.')}}"></td>
 									<td class="even numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value={{number_format($bvTest[$b]['sptPrev'],0,',','.')}}></td>
 									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['variation']}}%</td>
-									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="255" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
+									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="100" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 								</tr>
 							@endfor
+
+							<tr>
+								<td><select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'> 
+									@for ($s=0; $s < sizeof($list); $s++)
+                        				<option value='{{$list[$s]['id']}}' selected='true'> {{$list[$s]["client"]}} </option> 
+                        			@endfor</select></td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
+							</tr>
 							<tr style='font-size:16px;'>
-								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">TOTAL</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-2],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-1],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year],0,',','.')}}</td>
@@ -144,6 +161,7 @@
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
 				        </table>
+				        <button type="button" onclick="addClientaddClient()">Try it</button>
 					</div>
 				</div>
 			</div>
@@ -181,7 +199,12 @@
 
 	};	
 
+	function addClient(){
+		
+	}
+
 </script>
+
 @endsection
 
 

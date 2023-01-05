@@ -569,7 +569,7 @@ class client extends Management{
      
         $sql = new sql();
 
-        $table = "cmaps y";
+        $table = "ytd y";
 
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
@@ -578,6 +578,48 @@ class client extends Management{
                    ";
 
         $where = "WHERE year = '$year'";
+
+        $join = "LEFT JOIN client c ON c.ID = y.client_id
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+                ";
+
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
+
+        $from = array('id','client','clientGroupID','clientGroup');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
+    public function getClientByRegionBySource($con,$source=false,$year=false){
+     
+        $sql = new sql();
+        $source = strtolower($source);
+
+        if ($source == 'sf') {
+            $source = 'sf_pr';
+        }elseif($source == 'bts'){
+            $source = 'ytd';
+        }
+
+        $table = "$source y";
+
+        $columns = "c.name AS 'client',
+                    c.ID AS 'id',
+                    cg.ID AS 'clientGroupID',
+                    cg.name AS 'clientGroup'
+                   ";
+
+        if($year){
+            if ($source == 'sf_pr') {
+                $where = "WHERE year_from = '$year' OR year_to = '$year'";    
+            }else{
+                $where = "WHERE year = '$year'";    
+            }            
+        }else{
+            $where = false;
+        }
 
         $join = "LEFT JOIN client c ON c.ID = y.client_id
                  LEFT JOIN client_group cg ON cg.ID = c.client_group_id

@@ -58,8 +58,10 @@ class bvController extends Controller{
       $bvModel = new bvModel();
       $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
+      $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
+      $list = $bvModel->listOFClients($con, $year);
 
-      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup'));
+      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list'));
    }
 
    public function bvSaveForecast(){
@@ -102,13 +104,15 @@ class bvController extends Controller{
 
          //var_dump($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status);
 
-         $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
+         $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $agencyGroup, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
       }
 
       $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
       $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
+      $updateInfo = $bvModel->getRepAndDateOfPrev($salesRep, $agencyGroup, $con);
+      $list = $bvModel->listOFClients($con, $year);
 
-      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup'));
+      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list'));
    }
 }

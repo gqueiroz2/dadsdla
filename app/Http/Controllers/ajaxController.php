@@ -304,6 +304,7 @@ class ajaxController extends Controller{
 
         $agency = $a->getAgencyByRegionCMAPS($con,$year);
 
+   
         for ($a=0; $a < sizeof($agency); $a++){ 
             echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
         }
@@ -323,7 +324,10 @@ class ajaxController extends Controller{
 
         for ($c=0; $c < sizeof($client); $c++) { 
             echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
-        }
+        }    
+        
+
+        
     }
 
     public function getClientByRegionAndAgency(){

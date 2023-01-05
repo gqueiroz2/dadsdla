@@ -462,7 +462,7 @@ class agency extends Management{
         
         // ========================================= // 
 
-        $tableAleph = "aleph y";
+        $tableAleph = "wbd y";
 
         $columnsAleph = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -1003,6 +1003,79 @@ class agency extends Management{
         
         if($year){
             $where = "WHERE year = '$year'";
+        }else{
+            $where = false;
+        }
+        
+        $join = "LEFT JOIN agency a ON a.id = y.agency_id
+                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                 ";
+        
+        $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
+
+        $from = array('id','agency','agencyGroup','agencyGroupID');
+
+        $agencyCmaps = $sql->fetch($res,$from,$from);
+
+        if ($agencyCmaps != null) {
+            return $agencyCmaps;
+        }else{
+            $table = "ytd y";
+
+            $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID'
+                   ";
+        
+            if($year){
+                $where = "WHERE year = '$year'";
+            }else{
+                $where = false;
+            }
+            
+            $join = "LEFT JOIN agency a ON a.id = y.agency_id
+                     LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
+                     ";
+            
+            $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
+
+            $from = array('id','agency','agencyGroup','agencyGroupID');
+
+            $agency = $sql->fetch($res,$from,$from);
+
+            return $agency;
+        }
+
+        
+        
+    }
+
+    public function getAgencyByRegionBySource($con,$source=false,$year=false){
+
+        $sql = new sql();
+        $source = strtolower($source);
+
+        if ($source == 'sf') {
+            $source = 'sf_pr';
+        }elseif($source == 'bts'){
+            $source = 'ytd';
+        }
+
+        $table = "$source y";
+
+        $columns = "a.name AS 'agency',
+                    a.ID AS 'id',
+                    ag.name AS 'agencyGroup',
+                    ag.ID AS 'agencyGroupID'
+                   ";
+        
+        if($year){
+            if ($source == 'sf_pr') {
+                $where = "WHERE year_from = '$year' OR year_to = '$year'";    
+            }else{
+                $where = "WHERE year = '$year'";    
+            }            
         }else{
             $where = false;
         }
