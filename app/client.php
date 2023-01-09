@@ -517,22 +517,19 @@ class client extends Management{
         $cYear = $year;
         $pYear = $cYear - 1;
 
-        $table = "aleph y";
+        $table = "wbd y";
 
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
                     cg.ID AS 'clientGroupID',
-                    cg.name AS 'clientGroup',
-                    r.name AS 'region'
-                   ";
+                    cg.name AS 'clientGroup'
+                    ";
 
         $where = "";
 
         if($clientRegion){
             $clientRegions = implode(",",$clientRegion);
-            $where .= "WHERE sales_office_id IN ('$clientRegions') 
-                       AND (
-                            (gross_revenue > 0) 
+            $where .= "WHERE ((gross_value > 0) 
                             AND ( (year = $cYear) OR (year = $pYear) )
                         )";
             /*          
@@ -554,12 +551,11 @@ class client extends Management{
 
         $join = "LEFT JOIN client c ON c.ID = y.client_id
                  LEFT JOIN client_group cg ON cg.ID = c.client_group_id
-                 LEFT JOIN region r ON cg.region_id = r.ID
                 ";
 
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "c.name", "c.id");
 
-        $from = array('id','client','clientGroupID','clientGroup','region');
+        $from = array('id','client','clientGroupID','clientGroup');
 
         $client = $sql->fetch($res,$from,$from);
 

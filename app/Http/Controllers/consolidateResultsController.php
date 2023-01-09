@@ -330,26 +330,39 @@ class consolidateResultsController extends Controller{
                     $typeSelectS[$t] = $sr->getSalesRepById($con,array($typeSelect[$t]))[0];
                 }
                 break;
-            case 'advertiser':                
-                $tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
+            case 'advertiser':      
+                if ($regionID == '1') {
+                    $tmp1 = $cl->getClientByRegionWithValueAleph($con,array($regionID),$cYear);         
+                }else{
+                    $tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);    
+                }          
+                /*$tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
                 $tmp2 = $cl->getClientByRegionWithValueAleph($con,array($regionID),$cYear);
                 $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
-                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
-                $typeSelect = array_values($typeSelectS);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
                 break;
-            case 'agency':                               
-                $tmp1 = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
-                $tmp2 = $ag->getAgencyByRegionWithValueAleph($con,array($regionID),$cYear);
-                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
-                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
-                $typeSelect = array_values($typeSelectS);
+            case 'agency':
+                if ($regionID == '1') {
+                    $tmp1 = $ag->getAgencyByRegionWithValueAleph($con,array($regionID),$cYear);
+                }else{
+                    $tmp1 = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);    
+                }             
+               /* $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
                 break; 
-            case 'agencyGroup':  
-                $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+            case 'agencyGroup': 
+                if ($regionID == '1') {
+                    $tmp1 = $ag->getAgencyGroupByRegionWithValueAleph($con,array($regionID),$cYear);
+                }else{
+                    $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                }
+               /* $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
                 $tmp2 = $ag->getAgencyGroupByRegionWithValueAleph($con,array($regionID),$cYear);
                 $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
-                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);
-                $typeSelect = array_values($typeSelectS);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
             default:
                 
                 break;
