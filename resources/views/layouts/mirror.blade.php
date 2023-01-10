@@ -135,7 +135,7 @@
 											<a class="dropdown-item" href="{{route('quarterPerformanceGet')}}"> Office </a>
 										</div>
 									</li>
-								@endif
+								
 
 								<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
@@ -145,7 +145,7 @@
 										
 									</div>
 								</li>
-
+								@endif
 								@if($userLevel == 'SU')
 		                       <li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>

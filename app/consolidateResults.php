@@ -361,9 +361,7 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                     
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+ 
                 }                
             }    
         }else{            
@@ -1100,8 +1098,14 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif ($table == 'wbd' || $table == 'aleph') {
-                	$pRate = 4.99;
-                	$pRateSel = 4.99;
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}
+                	
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -1125,7 +1129,7 @@ class consolidateResults extends Model{
                 $pRate = 1.0;
                 $pRateSel = $pRate;
             }else{
-            	$ccYear = date('Y');
+            	$ccYear = $year;
                 $pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
                 $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
                 //var_dump($pRateSel);
@@ -1245,7 +1249,7 @@ class consolidateResults extends Model{
             			$pRateSel = 4.99;
             			$rtr = $tmp*$pRateSel;                    
             		}else{
-            			$ccYear = date('Y');
+            			$ccYear = $year;
 	                	$pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
 	                	$pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
             			
