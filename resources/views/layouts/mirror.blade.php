@@ -117,9 +117,8 @@
 										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>	
 										@endif
 
-										@if($userLevel == 'L1' || $userLevel == 'SU' || $userLevel == 'L3')											
-											<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
-										@endif		
+																				
+										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										
 										
