@@ -12,7 +12,7 @@ class client extends Management{
 
     public function clientByAgencyAndRegion($con,$sql,$region,$year,$agency){
 
-        $table = 'cmaps c';
+        $table = 'wbd c';
 
         $columns = "cl.name AS 'client',
                     cl.ID AS 'clientID',
