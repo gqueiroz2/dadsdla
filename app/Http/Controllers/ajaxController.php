@@ -1423,7 +1423,7 @@ class ajaxController extends Controller{
 
 
         if ($region == 1) {
-            $source = array("CMAPS","BTS","SF","ALEPH","WBD");            
+            $source = array("WBD","CMAPS","BTS","ALEPH");            
         }else{
             $source = array("BTS"/*,"FW"*/,"SF");
         }
