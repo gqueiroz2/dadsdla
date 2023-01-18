@@ -82,8 +82,7 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND ( ( a.ID IN ($agencyString) ) 
-									AND ( cL.ID IN ($clientString) )  )
+									AND ( cL.ID IN ($clientString) ) 
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
 			}else{
@@ -118,8 +117,7 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( ( a.ID IN ($agencyString) ) 
-										AND ( cL.ID IN ($clientString) )  )
+										AND ( cL.ID IN ($clientString) )  
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}else{
@@ -153,8 +151,7 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( ( a.ID IN ($agencyString) ) 
-										AND ( cL.ID IN ($clientString) )  )
+										AND ( cL.ID IN ($clientString) ) 
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}
@@ -206,8 +203,7 @@ class viewer extends Model{
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
 								AND (r.ID = '$salesRegion')
-								AND ( ( a.ID IN ($agencyString) ) 
-								AND ( c.ID IN ($clientString) )  )
+								AND ( cl.ID IN ($clientString) )  
 								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
 			
@@ -398,8 +394,7 @@ class viewer extends Model{
 							AND (sr.ID IN ($salesRepString))
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
-							AND ( ( a.ID IN ($agencyString) ) 
-							AND ( c.ID IN ($clientString) )  )
+							AND ( c.ID IN ($clientString) ) 
 						";
 		}elseif ($source == 'WBD') {
 			
@@ -426,9 +421,8 @@ class viewer extends Model{
 							AND (w.brand_id IN ($brandString))
 							AND (sr.ID IN ($salesRepString)) 
 							AND (w.month IN ($monthString))
-							AND ( ( a.ID IN ($agencyString) ) 
-							AND ( c.ID IN ($clientString) )  )
-			";
+							AND ( c.ID IN ($clientString) ) 
+						";
 		}
 		//echo "<pre>".$select."</pre>";
 		
@@ -913,7 +907,7 @@ class viewer extends Model{
 				$pRate = 1.0;
 			}
 		}else{
-			if ($source == 'CMAPS') {
+			if ($source == 'CMAPS' || $source ==  'ALEPH' || $source == 'WBD') {
 				$pRate = 1.0;
 			}else{
 				$pRate = $p->getPRateByRegionAndYear($con,array($salesRegion),array($year));
