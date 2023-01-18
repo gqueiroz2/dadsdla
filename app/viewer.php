@@ -424,7 +424,7 @@ class viewer extends Model{
 							AND ( c.ID IN ($clientString) ) 
 						";
 		}
-		echo "<pre>".$select."</pre>";
+		//echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
 		//echo "$result";
