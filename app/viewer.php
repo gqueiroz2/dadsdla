@@ -82,7 +82,7 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
-									AND ( cL.ID IN ($clientString) ) 
+									AND ( cl.ID IN ($clientString) ) 
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
 			}else{
@@ -117,7 +117,7 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( cL.ID IN ($clientString) )  
+										AND ( cl.ID IN ($clientString) )  
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}else{
@@ -151,7 +151,7 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( cL.ID IN ($clientString) ) 
+										AND ( cl.ID IN ($clientString) ) 
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}
@@ -424,7 +424,7 @@ class viewer extends Model{
 							AND ( c.ID IN ($clientString) ) 
 						";
 		}
-		//echo "<pre>".$select."</pre>";
+		echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
 		//echo "$result";
