@@ -298,6 +298,18 @@ $(document).ready(function(){
         }
       });
 
+       $.ajax({
+        url:"/ajax/adsales/agencyByRegionSize",
+        method:"POST",
+        data:{year,regionID},
+        success: function(output){
+          $('#sizeOfAgency').html(output).selectpicker("refresh");
+        },
+        error: function(xhr, ajaxOptions,thrownError){
+          alert(xhr.status+" "+thrownError);
+        }
+      });
+
       /*
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -368,6 +380,37 @@ $(document).ready(function(){
     });    
 
   });
+
+  $('.clientChange').change(function(){
+    var client = $(this).val();
+    var region = $('#region').val();
+    var year = $('#year').val();
+    $.ajax({
+      url:"/ajax/adsales/agencyByRegionAndClient",
+      method:"POST",
+      data:{client,region,year},
+      success: function(output){
+        $('#agency').html(output).selectpicker("refresh");
+      },
+      error: function(xhr, ajaxOptions,thrownError){
+        alert(xhr.status+" "+thrownError);
+      }
+    });
+
+    $.ajax({
+      url:"/ajax/adsales/agencyByRegionAndClientSize",
+      method:"POST",
+      data:{client,region,year},
+      success: function(output){
+        $('#sizeOfAgency').val(output);
+      },
+      error: function(xhr, ajaxOptions,thrownError){
+        alert(xhr.status+" "+thrownError);
+      }
+    });    
+
+  });
+
 
   $('#thirdPos').change(function(){
     var source = $('#thirdPos').val();

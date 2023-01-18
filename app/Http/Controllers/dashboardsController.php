@@ -14,121 +14,6 @@ use App\dashboards;
 use App\makeChart;
 
 class dashboardsController extends Controller{
-   
-   public function dashboardBVGet(){
-      $db = new dataBase();
-      $default = $db->defaultConnection();
-      $con = $db->openConnection($default);
-      $region = new region();
-      $salesRegion = array(
-         array(
-            'id' => '1',
-            'name' => 'Brazil',
-            'role' => 'Regional Office'
-         )
-      );
-
-      $currency = new pRate();
-      $currencies = $currency->getCurrency($con);
-
-      $b = new brand();
-      $brands = $b->getBrand($con);
-      $render = new renderDashboards();
-        
-      return view("adSales.dashboards.dashboardBVGet", compact('region','salesRegion', 'currencies', 'brands', 'render'));
-   }
-
-   public function dashboardBVPost(){
-      
-      $db = new dataBase();
-      $region = new region();
-      $dash = new dashboards();
-      $currency = new pRate();
-      $b = new brand();      
-      $render = new renderDashboards();
-      $p = new pRate();
-      $mc = new makeChart();
-      $base = new base();
-
-      $validator = Validator::make(Request::all(),[
-         'region' => 'required',         
-         'agencyGroup' => 'required',         
-     ]);
-
-     if ($validator->fails()) {
-         return back()->withErrors($validator)->withInput();
-     }
-
-
-      $default = $db->defaultConnection();
-      $con = $db->openConnection($default);
-      $salesRegion = array(
-         array(
-            'id' => '1',
-            'name' => 'Brazil',
-            'role' => 'Regional Office'
-         )
-      );
-
-      $currencies = $currency->getCurrency($con);      
-      $brands = $b->getBrand($con);      
-      $regionID = Request::get("region");
-
-      $temp = json_decode(base64_decode(Request::get("agencyGroup")));
-
-      $agencyGroup = $temp->id;
-      $agencyGroupName = $temp->name;
-
-      $currency = Request::get("currency");
-      $value = Request::get("value");
-
-      $regionExcel = $regionID;
-      $agencyExcel = $temp;
-      $currencyExcel = $currency;
-      $valueExcel = $value;
-
-      $currencyShow = $p->getCurrency($con, array($currency))[0]['name'];
-      $valueShow = strtoupper($value);
-
-      $cYear = intval(date("Y"));
-      $pYear = $cYear - 1;
-      
-      $years = array($cYear);
-      $yearsP = array($pYear);
-      $yearsBand = array($cYear,$pYear);
-      $type = "agencyGroup";
-      
-      $startMonthFcst = intval(date('m')) - 1;
-
-      $mountBV = $dash->mountBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,"cmaps");
-      $graph = $dash->excelBV($base,$mc,$mountBV,$cYear);
-      $mountBV = $dash->someTotals($mountBV);
-      $forecast = $dash->forecastBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$years,$startMonthFcst);
-      $bands = $dash->bandsBV($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsBand);
-      $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
-      $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$regionID,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
-
-      $monthsMidName = array("Jan",
-                              "Feb",
-                              "Mar",
-                              "Apr",
-                              "May",
-                              "Jun",
-                              "Jul",
-                              "Aug",
-                              "Sep",
-                              "Oct",
-                              "Nov",
-                              "Dec"
-                             );
-
-      
-
-
-      $title = "Dashboard - BV.xlsx";
-
-      return view("adSales.dashboards.dashboardBVNoExcelPost", compact('base','region','salesRegion', 'currencies', 'brands', 'render','graph','yearsBand','cYear','agencyGroupName','bands','bvAnalisis','forecast','monthsMidName','startMonthFcst','currencyShow','valueShow','mountBV', 'regionExcel', 'agencyExcel', 'currencyExcel', 'valueExcel', 'title','infoPreviousYear'));
-   }
 
 	public function overviewGet(){
 
@@ -192,8 +77,8 @@ class dashboardsController extends Controller{
       $pYear = $cYear - 1;
       $ppYear = $pYear - 1;
       $years = array($cYear,$pYear,$ppYear);
-
-      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,"ytd");
+      
+      $handle = $dash->mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years);
 
       $last3YearsChild = $handle['last3YearsChild'];
       $last3YearsByMonth = $handle['last3YearsByMonth'];

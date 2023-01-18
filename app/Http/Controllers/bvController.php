@@ -78,7 +78,7 @@ class bvController extends Controller{
       $currency = (int) Request::get('currency');
       $salesRep = (int) Request::get('salesRep');
       $saveButtonGet = Request::all();
-
+      var_dump(Request::all());
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $year = (int)date("Y");
@@ -90,7 +90,10 @@ class bvController extends Controller{
          )
       );
 
-
+      if ($saveButtonGet['client'][0] != null) {
+         $saveNewClient =  $bvModel->newClientInclusion($con,$agencyGroup,$salesRep,$saveButtonGet['client'][0]);
+      }
+      
       // == Function to get the clients in the same way done in post == //
       $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroup, $salesRep, $year, $con, $sql);
 

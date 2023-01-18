@@ -512,51 +512,110 @@ class dashboards extends rank{
 
     }
 
-	public function mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years,$kind){
+	public function mount($con,$p,$type,$regionID,$currency,$value,$baseFilter,$secondaryFilter,$years){
 		$sr = new subRankings();
-	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
-	   	$table = $kind;
+	   	
 	   	/*DEFINIR SE PARA BRASIL PEGA CMAPS OU NAO*/
         $currencyName = $p->getCurrency($con, array($currency))[0]['name'];
-        if ($currencyName == "USD") {
-            $pRate = 1.0;
+              
+
+        if ($regionID == "1") {
+            if ($currencyName == "USD") {
+                 $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+            }else{
+               $pRate = 1.0;
+            }
+            if($value == "gross"){
+                $column = "gross_value";
+                $columnD = "gross_value";
+            }else{
+                $column = "net_value";  
+                $columnD = "net_value";   
+            }  
+
+            //if ($years[0] >= 2022 || $years[1] >= 2022 || $years[2] >= 2022 ) {
+                switch ($type) {
+                    case 'client':
+                        $last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        break;
+
+                    case 'agency':          
+                            $last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                            $last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                            $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                            $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                            $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                            break;
+                    case 'agencyGroup':
+                            $last3YearsRoot = $this->last3Years($con,"agencyGroup","root",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                            $last3YearsChild = $this->last3Years($con,"agency","child",$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                            $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                            $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'wbd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                            $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);                       
+
+                        break;
+                    default:
+                        $last3YearsRoot = false;
+                        $last3YearsChild = false;
+                        $last3YearsByMonth = false;
+                        $last3YearsByBrand = false;
+                        $last3YearsByProduct = false;
+                        break;
+                }
+           // }
         }else{
-            $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+            if ($currencyName == "USD") {
+                $pRate = 1.0;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con, array($regionID), array($years[0]));
+            }
+            if($value == "gross"){
+                $column = "gross_revenue_prate";
+                $columnD = "gross_revenue";
+            }else{
+                $column = "net_revenue_prate";  
+                $columnD = "net_revenue";   
+            }  
+            switch ($type) {
+                case 'client':
+                    $last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                    $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                    $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    break;
+
+                case 'agency':          
+                        $last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        break;
+                case 'agencyGroup':
+                        $last3YearsRoot = $this->last3Years($con,"agencyGroup","root",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsChild = $this->last3Years($con,"agency","child",$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                        $last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
+                        $last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,'ytd',$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
+                    
+
+                    break;
+                default:
+                    $last3YearsRoot = false;
+                    $last3YearsChild = false;
+                    $last3YearsByMonth = false;
+                    $last3YearsByBrand = false;
+                    $last3YearsByProduct = false;
+                    break;
+            }
+
         }
-        if($value == "gross"){
-            $column = "gross_revenue_prate";
-        	$columnD = "gross_revenue";
-        }else{
-            $column = "net_revenue_prate";  
-        	$columnD = "net_revenue";	
-        }        
-	    switch ($type) {
-	    	case 'client':
-    			$last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-    			$last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-    			$last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-    			$last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    		break;
-	    	
-	    	default:
-	    		if($type == "agency"){	    	
-	    			$last3YearsRoot = $this->last3Years($con,"agency","root",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    			$last3YearsChild = $this->last3Years($con,"client","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    			$last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    		}else{
-	    			$last3YearsRoot = $this->last3Years($con,"agencyGroup","root",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    			$last3YearsChild = $this->last3Years($con,"agency","child",$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    			$last3YearsByMonth = $this->last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByBrand = $this->last3YearsByBrand($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD);
-	    			$last3YearsByProduct = $this->last3YearsByProduct($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency);
-	    		}
-
-	    		break;
-	    }
-
+	    
 	    $rtr = array( "last3YearsRoot" => $last3YearsRoot,
 	    			  "last3YearsChild" => $last3YearsChild,
 	    			  "last3YearsByMonth" => $last3YearsByMonth,

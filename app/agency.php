@@ -25,6 +25,33 @@ class agency extends Management{
         return $agencyGroupID[0]['id'];
     }
 
+
+    public function agencyByClientAndRegion($con,$sql,$region,$year,$client){
+
+        $table = 'wbd c';
+
+        $columns = "cl.name AS 'client',
+                    cl.ID AS 'clientID',
+                    a.ID AS 'agencyID',
+                    a.name AS 'agency'
+                   ";
+
+        $where = "WHERE (c.client_id IN ($client)) AND (year = '$year')";
+
+
+        $join = "LEFT JOIN client cl ON cl.ID = c.client_id
+                 LEFT JOIN agency a ON a.ID = c.agency_id                 
+                ";
+
+        $res = $sql->selectGroupByDistinct($con,$columns,$table,$join,$where, "cl.name");
+
+        $from = array('clientID','client','agencyID','agency');
+
+        $client = $sql->fetch($res,$from,$from);
+
+        return $client;
+    }
+
     public function getAgencyGroupByID($con,$group,$region){
         $sql = new sql();
         
@@ -787,20 +814,19 @@ class agency extends Management{
 
         $sql = new sql();
 
-        $table = "ytd y";
+        $table = "wbd y";
 
         $columns = "a.name AS 'agency',
                     a.ID AS 'id',
                     ag.name AS 'agencyGroup',
-                    ag.ID AS 'agencyGroupID',
-                    r.name AS 'region'
+                    ag.ID AS 'agencyGroupID'
                    ";
 
         $where = "";
 
         if($agencyRegion){
             $agencyRegions = implode(",", $agencyRegion);
-            $where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
+            //$where .= "WHERE sales_representant_office_id IN ('$agencyRegions')";
 
             if ($year) {
                 //$years = implode(",", $year);
@@ -822,7 +848,7 @@ class agency extends Management{
         
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "a.name", "a.id");
 
-        $from = array('id','agency','agencyGroup','agencyGroupID','region');
+        $from = array('id','agency','agencyGroup','agencyGroupID');
 
         $agency = $sql->fetch($res,$from,$from);
 
@@ -1012,7 +1038,7 @@ class agency extends Management{
 
         $agencyCmaps = $sql->fetch($res,$from,$from);
 
-        if ($agencyCmaps != null) {
+       /* if ($agencyCmaps != null) {
             return $agencyCmaps;
         }else{
             $table = "ytd y";
@@ -1037,10 +1063,10 @@ class agency extends Management{
 
             $from = array('id','agency','agencyGroup','agencyGroupID');
 
-            $agency = $sql->fetch($res,$from,$from);
+            $agency = $sql->fetch($res,$from,$from);*/
 
-            return $agency;
-        }
+            return $agencyCmaps;
+       // }
 
         
         

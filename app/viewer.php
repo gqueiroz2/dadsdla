@@ -82,6 +82,8 @@ class viewer extends Model{
 									AND (c.year = '$year') 
 									AND (c.month IN ($monthString))
 									AND (sr.ID IN ($salesRepString))
+									AND ( ( a.ID IN ($agencyString) ) 
+									AND ( cL.ID IN ($clientString) )  )
 									AND (c.map_number LIKE '%".$especificNumber."%')
 							ORDER BY c.month";
 			}else{
@@ -116,7 +118,8 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
+										AND ( ( a.ID IN ($agencyString) ) 
+										AND ( cL.ID IN ($clientString) )  )
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}else{
@@ -150,7 +153,8 @@ class viewer extends Model{
 								WHERE (c.brand_id IN ($brandString)) 
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
-										AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
+										AND ( ( a.ID IN ($agencyString) ) 
+										AND ( cL.ID IN ($clientString) )  )
 										AND (sr.ID IN ($salesRepString))
 								ORDER BY month,mapNumber";
 				}
@@ -202,6 +206,8 @@ class viewer extends Model{
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
 								AND (r.ID = '$salesRegion')
+								AND ( ( a.ID IN ($agencyString) ) 
+								AND ( c.ID IN ($clientString) )  )
 								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
 			
@@ -392,7 +398,8 @@ class viewer extends Model{
 							AND (sr.ID IN ($salesRepString))
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
-							AND ( ( ag.ID IN ($agencyString) ) OR ( c.ID IN ($clientString) )  )
+							AND ( ( a.ID IN ($agencyString) ) 
+							AND ( c.ID IN ($clientString) )  )
 						";
 		}elseif ($source == 'WBD') {
 			
@@ -403,7 +410,7 @@ class viewer extends Model{
 							  w.month AS 'month',
 							  w.old_sales_rep AS 'oldRep',
 							  c.name AS 'client',
-							  ag.name AS 'agency',
+							  a.name AS 'agency',
 							  b.name AS 'brand',
 							  w.manager AS 'manager',
 							  sr.name AS 'salesRep',
@@ -411,7 +418,7 @@ class viewer extends Model{
 							  w.net_value AS 'netRevenue'
 					   FROM wbd w
 					   LEFT JOIN client c ON w.client_id = c.ID
-					   LEFT JOIN agency ag ON w.agency_id = ag.ID
+					   LEFT JOIN agency a ON w.agency_id = a.ID
 					   LEFT JOIN brand b ON w.brand_id = b.ID
 					   LEFT JOIN brand_group bg ON w.company_id = bg.ID
 					   LEFT JOIN sales_rep sr ON w.current_sales_rep_id = sr.ID
@@ -419,7 +426,8 @@ class viewer extends Model{
 							AND (w.brand_id IN ($brandString))
 							AND (sr.ID IN ($salesRepString)) 
 							AND (w.month IN ($monthString))
-							AND (  ( c.ID IN ($clientString) )  )
+							AND ( ( a.ID IN ($agencyString) ) 
+							AND ( c.ID IN ($clientString) )  )
 			";
 		}
 		//echo "<pre>".$select."</pre>";
@@ -512,6 +520,8 @@ class viewer extends Model{
 										AND (c.year = '$year') 
 										AND (c.month IN ($monthString))
 										AND (sr.name = '$user')
+										AND ( ( a.ID IN ($agencyString) ) 
+										AND ( c.ID IN ($clientString) )  )
 										AND (c.map_number LIKE '%".$especificNumber."%')
 								ORDER BY c.month";
 				}else{
@@ -546,7 +556,8 @@ class viewer extends Model{
 									WHERE (c.brand_id IN ($brandString)) 
 											AND (c.year = '$year') 
 											AND (c.month IN ($monthString))
-											AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
+											AND ( ( a.ID IN ($agencyString) ) 
+											AND ( c.ID IN ($clientString) )  )
 											AND (sr.name = '$user')
 									ORDER BY month,mapNumber";
 					}else{
@@ -580,7 +591,8 @@ class viewer extends Model{
 									WHERE (c.brand_id IN ($brandString)) 
 											AND (c.year = '$year') 
 											AND (c.month IN ($monthString))
-											AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
+											AND ( ( a.ID IN ($agencyString) ) 
+											AND ( c.ID IN ($clientString) )  )
 											AND (sr.name = '$user')
 									ORDER BY month,mapNumber";
 					}
@@ -632,6 +644,8 @@ class viewer extends Model{
 									AND (y.year = '$year')
 									AND (y.month IN ($monthString))
 									AND (r.ID = '$salesRegion')
+									AND ( ( a.ID IN ($agencyString) ) 
+									AND ( c.ID IN ($clientString) )  )
 									AND (sr.name = '$user')
 							ORDER BY y.month";			
 				
@@ -691,6 +705,7 @@ class viewer extends Model{
 									AND (f.year = '$year')
 									AND (f.month IN ($monthString))
 									AND (r.ID = '$salesRegion')
+									AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
 									AND (sr.name = '$user')
 							ORDER BY f.month";
 
@@ -753,6 +768,7 @@ class viewer extends Model{
 	                            AND (stage != '6')
 	                            AND (stage != 'Cr')
 	                            AND (sf.brand_id IN ($brandString))
+	                            AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
 	                            AND (sr.name = '$user')
 								AND (sf.oppid LIKE '%".$especificNumber."%')
 						GROUP BY sf.oppid";
@@ -788,6 +804,7 @@ class viewer extends Model{
 									AND (r.ID = '$salesRegion')
 									AND (sr.name = '$user')
 									AND (sf.brand_id IN ($brandString))
+									AND ( ( a.ID IN ($agencyString) ) OR ( cl.ID IN ($clientString) )  )
 	                                AND (stage != '6')
 	                                AND (stage != 'Cr')
 	                                AND (sr.name = '$user')

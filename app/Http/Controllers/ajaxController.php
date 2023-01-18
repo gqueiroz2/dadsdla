@@ -256,9 +256,16 @@ class ajaxController extends Controller{
         $region = Request::get("regionID");
         $client = $c->getClientByRegion($con,array($region));
 
-        for ($c=0; $c < sizeof($client); $c++) { 
-            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+        if ($client) {
+            for ($c=0; $c < sizeof($client); $c++) { 
+                echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+            }
+        }else{
+            echo "<option value='' selected='true'> There is no Clients for those agencies </option>";
         }
+
+
+        
     }
 
     public function getAgencyByRegionSF(){
@@ -304,10 +311,15 @@ class ajaxController extends Controller{
 
         $agency = $a->getAgencyByRegionCMAPS($con,$year);
 
-   
-        for ($a=0; $a < sizeof($agency); $a++){ 
-            echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+        if ($agency) {
+            for ($a=0; $a < sizeof($agency); $a++){ 
+                echo "<option value='".$agency[$a]["id"]."' selected='true'>".$agency[$a]["agency"]."</option>";
+            }
+        }else{
+            echo "<option value='' selected='true'> There is no Clients for those agencies on $year </option>";
         }
+        
+        
     }
 
     public function getClientByRegionAndYear(){
@@ -321,11 +333,13 @@ class ajaxController extends Controller{
         $year  = Request::get("year");
 
         $client = $c->getClientByRegionCMAPS($con,$year);
-
-        for ($c=0; $c < sizeof($client); $c++) { 
-            echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+        if ($client) {
+            for ($c=0; $c < sizeof($client); $c++) { 
+                echo "<option value='".$client[$c]["id"]."' selected='true'>".$client[$c]["client"]."</option>";
+            }    
+        }else{
+            echo "<option value='' selected='true'> There is no Clients for those agencies on $year </option>";
         }    
-        
 
         
     }
@@ -356,6 +370,64 @@ class ajaxController extends Controller{
             }    
         }else{
             echo "<option value='' selected='true'> There is no Clients for those agencies on $year </option>";
+        }
+    }
+
+     public function getAgencyByRegionAndClient(){
+        $base = new base();
+        $a = new agency;
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $sql = new sql();
+
+        $client = Request::get('client');
+        $region = Request::get("region");
+        $year = Request::get("year");
+        if( !is_null($agency) ){
+            $clientString = $base->arrayToString($client,false,0);
+        }else{
+            $clientString = false;
+        }
+
+        $agency = $a->agencyByClientAndRegion($con,$sql,$region,$year,$clientString);
+
+        if($agency){
+            for ($c=0; $c < sizeof($agency); $c++) { 
+                echo "<option value='".$agency[$c]["agencyID"]."' selected='true'>".$agency[$c]["agency"]."</option>";
+            }    
+        }else{
+            echo "<option value='' selected='true'> There is no agencies for those agencies on $year </option>";
+        }
+    }
+
+    public function getAgencyByRegionAndClientSize(){
+        $base = new base();
+        $a = new agency;
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $sql = new sql();
+
+        $client = Request::get('client');
+        $region = Request::get("region");
+        $year = Request::get("year");
+        if( !is_null($client) ){
+            $clientString = $base->arrayToString($client,false,0);
+        }else{
+            $clientString = false;
+        }
+
+       $agency = $a->agencyByClientAndRegion($con,$sql,$region,$year,$clientString);
+
+
+
+        if($agency){
+            echo sizeof($agency);
+        }else{
+            echo 0;
         }
     }
 
@@ -406,10 +478,37 @@ class ajaxController extends Controller{
             $agencyString = false;
         }*/
 
-        $client = $c->getClientByRegionCMAPS($con,$year);
+        $client = $c->getClientByRegion($con,$region,$year);
 
         if($client){
             echo sizeof($client);
+        }else{
+            echo 0;
+        }
+    }
+
+     public function getAgencyByRegionSize(){
+        $base = new base();
+        $a = new agency;
+        $db = new dataBase();
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $sql = new sql();
+
+        $region = Request::get("region");
+        $year = Request::get("year");
+        /*
+        if( !is_null($agency) ){
+            $agencyString = $base->arrayToString($agency,false,0);
+        }else{
+            $agencyString = false;
+        }*/
+
+        $agency = $a->getAgencyByRegion($con,$region,$year);
+
+        if($agency){
+            echo sizeof($agency);
         }else{
             echo 0;
         }
@@ -481,9 +580,8 @@ class ajaxController extends Controller{
 
                 $sql = "SELECT DISTINCT a.ID AS 'agencyID',
                                         a.name AS 'agency'
-                            FROM ytd y
+                            FROM wbd y
                             LEFT JOIN agency a ON a.ID = y.agency_id
-                            WHERE (sales_representant_office_id = \"".$regionID."\" )
                             AND (client_id = \"".$baseFilter->id."\")
                 ";
                 $res = $con->query($sql);
@@ -506,9 +604,8 @@ class ajaxController extends Controller{
                     
                     $sql = "SELECT DISTINCT c.ID AS 'clientID',
                                    c.name AS 'client'
-                                FROM ytd y
+                                FROM wbd y
                                 LEFT JOIN client c ON c.ID = y.client_id
-                                WHERE (sales_representant_office_id = \"".$regionID."\" )
                                 AND (agency_id = \"".$baseFilter->id."\")
                     ";
                     $res = $con->query($sql);
@@ -530,7 +627,7 @@ class ajaxController extends Controller{
 
                     $sql = "SELECT DISTINCT a.ID AS 'agencyID',
                                a.name AS 'agency'
-                            FROM ytd y
+                            FROM wbd y
                             LEFT JOIN agency a ON a.ID = y.agency_id
                             LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
                             WHERE (ag.ID = \"".$baseFilter->id."\" )

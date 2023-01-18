@@ -422,9 +422,9 @@ class client extends Management{
                     r.name AS 'region'
                    ";
 
-        $where = "";
-
-        if($clientRegion){
+        $where = "";    
+        //var_dump($clientRegion);
+       if($clientRegion){
             $clientRegions = implode(",",$clientRegion);
             $where .= "WHERE client_group_id IN ('$clientRegions')";
 
@@ -565,7 +565,7 @@ class client extends Management{
      
         $sql = new sql();
 
-        $table = "ytd y";
+        $table = "cmaps y";
 
         $columns = "c.name AS 'client',
                     c.ID AS 'id',

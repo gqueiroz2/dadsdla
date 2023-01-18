@@ -4,29 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\sql;
+use App\base;
 
 
 class bvModel extends Model{
     
     // == This function get all clients relationated with the AgencyGroup selected by user in the filter == //
     public function getSalesRepByAgencyGroup(String $agencyGroupId, string $salesRep, int $year, Object $con, Object $sql){
-        $queryCmaps = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from cmaps cm 
-                   left join agency a on a.ID = cm.agency_id 
-                   left join client c on c.ID = cm.client_id 
-                   left join sales_rep sr on sr.ID = cm.sales_rep_id  
-                   left join agency_group ag on ag.ID = a.agency_group_id 
-                   where ag.ID = $agencyGroupId
-                   and sr.id = $salesRep
-                   and cm.`year` in ($year)
-                   order by 1 asc";
-
-        $resultCmaps = $con->query($queryCmaps);
-        $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
-        $valueCmaps = $sql->fetch($resultCmaps, $from, $from);
+        $base = new base();   
 
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
+        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
                    left join agency a on a.ID = al.agency_id 
                    left join client c on c.ID = al.client_id 
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
@@ -35,22 +24,15 @@ class bvModel extends Model{
                    and sr.id = $salesRep
                    and al.`year` in ($year)
                    order by 1 asc";
-
+        //var_dump($queryAleph);
         $resultAleph = $con->query($queryAleph);
-        $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
+        $from = array('agency', 'agencyName', 'client', 'clientName');
         $valueAleph = $sql->fetch($resultAleph, $from, $from);
     
         
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
-        if ($valueAleph == "") {
-            $value = $valueCmaps;
-        }elseif ($valueCmaps == "") {
-            $value = $valueAleph;
-        }else{
-            $value = array_merge($valueCmaps,$valueAleph);
-        } 
+        $value = $valueAleph;
 
-        $value = array_values($this->unique_multidim_array($value, 'client'));
         return $value;
     }
 
@@ -151,8 +133,14 @@ class bvModel extends Model{
         $pYear = $year-1;
         $ppYear = $year-2;
         $bvTable = array();
-        $result = $this->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
+        $test = $this->getSalesRepByClient($agencyGroupId, $salesRep, $year, $con, $sql);
+        $test2 = $this->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
+        $tmp = array_merge($test,$test2);
+        $tmp = array_values($tmp);
+        var_dump($tmp);
 
+        $result = $this->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
+        //var_dump($result);
         if($currency == '1'){
             $pRateWM = 1; // Temporary value for WM pRate, will need change after 2023
             $pRateValue = 1;
@@ -167,12 +155,12 @@ class bvModel extends Model{
         the matrix structure is:
         [Sales Rep Name, Agency Name, Client Name, Antepenultimate Year Value, Penultimate Year Value, Actual Year Value, Actual Year Prevision, (Actual Year Value + Actual Year Prevision) and Variation] == */
         for ($i = 0; $i < sizeof($result); $i++){
-            $pPreviousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
-            $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
-            $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql, $pRateValue, $pRateWM);
-            $prevValue = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'wbd', $con, $sql, $pRateWM);
-            $sptPrev = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'spt', $con, $sql, $pRateWM);
-            $statusString = $this->getPrevision($result[$i]['srID'], $result[$i]['client'], $result[$i]['agency'], $valueType, 'status', $con, $sql, $pRateWM);
+            $pPreviousValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
+            $previousValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql, $pRateValue, $pRateWM);
+            $actualValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql, $pRateValue, $pRateWM);
+            $prevValue = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'], $valueType, 'wbd', $con, $sql, $pRateWM);
+            $sptPrev = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'], $valueType, 'spt', $con, $sql, $pRateWM);
+            $statusString = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'], $valueType, 'status', $con, $sql, $pRateWM);
 
             // == Percentage and division by 0 check, if values are big than 0 == //
             if ($actualValue > 0 && $previousValue > 0){
@@ -307,5 +295,65 @@ class bvModel extends Model{
         return $client;
     }
 
+    public function newClientInclusion(Object $con, String $agencyGroup, String $salesRep, String $client){
+        $updateTime = date("Y-m-d");
+
+        $insertQuery = "INSERT INTO  bv_new_clients
+                        SET created_date = '$updateTime',
+                        sales_rep_id = $salesRep,
+                        client_id = $client,
+                        agency_group_id = $agencyGroup
+                        ";
+
+        $resultInsertQuery = $con->query($insertQuery);
+    }
+
+    public function getSalesRepByClient(String $agencyGroupId, string $salesRep, int $year, Object $con, Object $sql){
+
+         $selectClient = "SELECT distinct  c.id as id     
+                            from bv_new_clients b
+                            left join sales_rep sr on sr.ID = b.sales_rep_id 
+                            left join client c on c.ID = b.client_id 
+                            left join agency_group ag on ag.ID = b.agency_group_id 
+                            where ag.ID = $agencyGroupId
+                            and sr.ID = $salesRep";
+
+            $resultClient = $con->query($selectClient);
+            $from = array('id');
+            $client = $sql->fetch($resultClient, $from, $from);
+
+            if ($client != null) {
+                for ($c=0; $c < sizeof($client); $c++) {                     
+                     $queryClient[$c] = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd cm 
+                           left join agency a on a.ID = cm.agency_id 
+                           left join client c on c.ID = cm.client_id 
+                           left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
+                           left join agency_group ag on ag.ID = a.agency_group_id 
+                           where c.id in (\"".$client[$c]['id']."\")
+                           and cm.`year` in ($year)
+                           order by 1 asc";
+                    //var_dump($queryClient);
+                    $result[$c] = $con->query($queryClient[$c]);
+                    $from = array('agency', 'agencyName', 'client', 'clientName');
+                    $tmp[$c] = $sql->fetch($result[$c], $from, $from);
+
+                    $test = $tmp;    
+                    var_dump($test);
+                
+
+                }                   
+                 if ($tmp != false) {
+                    $valueClient = $test;
+                }else{
+                    $valueClient = "";
+                }
+
+                return $valueClient;
+            }else{
+                $valueClient = "";
+
+                return $valueClient;
+            }
+    }
 
 }

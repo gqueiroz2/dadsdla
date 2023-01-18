@@ -128,21 +128,6 @@
 									<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="100" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 								</tr>
 							@endfor
-
-							<tr>
-								<td><select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'> 
-									@for ($s=0; $s < sizeof($list); $s++)
-                        				<option value='{{$list[$s]['id']}}' selected='true'> {{$list[$s]["client"]}} </option> 
-                        			@endfor</select></td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-                        		<td class="even" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">%</td>
-							</tr>
 							<tr style='font-size:16px;'>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">TOTAL</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-2],0,',','.')}}</td>
@@ -151,7 +136,7 @@
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['prev'],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['prevActualSum'],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['sptPrev'],0,',','.')}}</td>
-								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total['variation'],0,',','.')}}%</td>
+								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$total['variation']}}%</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
 							</tr>		
 						</table>						
@@ -161,7 +146,42 @@
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
 				        </table>
-				        <button type="button" onclick="addClientaddClient()">Try it</button>
+				         <div class='col'>
+			                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
+			                  Add Client to Agency Group
+			                </button>
+			            </div>
+		            <!-- Modal -->
+			            <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			              <div class="modal-dialog" role="document">
+			                <div class="modal-content">
+			                  <div class="modal-header">
+			                    <h5 class="modal-title" id="exampleModalLabel">ID Numbers</h5>
+				                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+				                      <span aria-hidden="true">&times;</span>
+				                    </button>
+			                  	</div>
+			                  <div class="modal-body">
+			                  	<div class="row justify-content-center">          
+							 		<div class="col">		
+										<div class="form-group">
+											<label><b> client: </b></label> 
+											 <select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+									            <option selected='true' value="">Select a Client</option>
+									            @for ($s=0; $s < sizeof($list); $s++)
+									                <option value='{{$list[$s]['id']}}'> {{$list[$s]["client"]}} </option> 
+                        						@endfor
+									        </select>												
+										</div>
+									</div>
+								</div>
+			                  </div>
+			                  <div class="modal-footer">
+			                  	 <button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+			                  </div>
+			                </div>
+			              </div>
+			            </div>
 					</div>
 				</div>
 			</div>
@@ -198,10 +218,6 @@
 		@endfor
 
 	};	
-
-	function addClient(){
-		
-	}
 
 </script>
 

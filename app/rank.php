@@ -112,7 +112,7 @@ class rank extends Model{
         $p = new pRate();
 
         for ($y=0; $y < sizeof($years); $y++) { 
-            if($tableName == "cmaps"){
+            if($tableName == "cmaps" || $tableName == "wbd"){
                 if ($currency[0]['name'] == "USD"){
                     $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
                 }else{
@@ -151,6 +151,10 @@ class rank extends Model{
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month");
             $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "wbd") {
+            $value .= "_value";
+            $columns = array("brand_id", "month");
+            $colsValue = array($brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue","brand_id", "month");
             $colsValue = array($region, $value, $brands_id, $months);
@@ -208,7 +212,7 @@ class rank extends Model{
                 $res[$y] = $sql->fetch($values[$y], $from, $from);
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                        if ($tableName == "cmaps") {
+                        if ($tableName == "cmaps" || $tableName == "wbd") {
                             $res[$y][$r]['total'] /= $pRate[$y];
                         }else{
                             $res[$y][$r]['total'] *= $pRate[$y];
@@ -293,7 +297,7 @@ class rank extends Model{
         $p = new pRate();
 
         for ($y=0; $y < sizeof($years); $y++) { 
-            if($tableName == "cmaps"){
+            if($tableName == "cmaps" || $tableName == "wbd"){
                 if ($currency[0]['name'] == "USD"){
                     $pRate[$y] = $p->getPRateByRegionAndYear($con, array($region), array($years[$y]));
                 }else{
@@ -336,6 +340,10 @@ class rank extends Model{
             $value .= "_revenue_prate";
             $columns = array("sales_representant_office_id", "brand_id", "month");
             $colsValue = array($region, $brands_id, $months);
+        }elseif ($tableName == "wbd") {
+            $value .= "_value";
+            $columns = array("brand_id", "month");
+            $colsValue = array($brands_id, $months);
         }elseif ($tableName == "plan_by_brand") {
             $columns = array("sales_office_id","type_of_revenue","brand_id", "month");
             $colsValue = array($region, $value, $brands_id, $months);
@@ -415,7 +423,7 @@ class rank extends Model{
 
                 if(is_array($res[$y])){
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                        if ($tableName == "cmaps") {
+                        if ($tableName == "cmaps" || $tableName == "wbd") {
                             $res[$y][$r]['total'] /= $pRate[$y];
                         }else{
                             $res[$y][$r]['total'] *= $pRate[$y];
@@ -558,7 +566,7 @@ class rank extends Model{
                 if(is_array($res[$y])){
 
                     for ($r=0; $r < sizeof($res[$y]); $r++) { 
-                        if ($tableName == "cmaps") {
+                        if ($tableName == "cmaps" || $tableName == "wbd") {
                             $res[$y][$r]['total'] /= $pRate[$y];
                         }else{
                             $temp = $res[$y][$r]['total'];
@@ -701,6 +709,10 @@ class rank extends Model{
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "client_id", "year");
                 $colsValue = array($region, $brands_id, $months, $client);
+            }elseif ($tableName == "wbd") {
+                $value .= "_value";
+                $columns = array("brand_id", "month");
+                $colsValue = array($brands_id, $months);
             }elseif ($tableName == "fw_digital") {
                 $value .= "_revenue";
                 $columns = array("region_id","brand_id", "month", "client_id", "year");
@@ -714,6 +726,10 @@ class rank extends Model{
                 $value .= "_revenue_prate";
                 $columns = array("sales_representant_office_id", "brand_id", "month", "year");
                 $colsValue = array($region, $brands_id, $months);
+            }elseif ($tableName == "wbd") {
+                $value .= "_value";
+                $columns = array("brand_id", "month");
+                $colsValue = array($brands_id, $months);
             }elseif ($tableName == "fw_digital") {
                 $value .= "_revenue";
                 $columns = array("region_id","brand_id", "month", "year");
