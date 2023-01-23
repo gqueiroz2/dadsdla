@@ -8,17 +8,15 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
-use App\base;
+use App\Render;
 use App\dataBase;
 use App\region;
 use App\pRate;
 use App\brand;
+use App\agency;
+use App\bvModel;
+use App\sql;
 
-use App\renderDashboards;
-use Validator;
-
-use App\dashboards;
-use App\makeChart;
 use App\Exports\bvExport;
 
 class dashboardExcelController extends Controller{
@@ -26,79 +24,62 @@ class dashboardExcelController extends Controller{
       public function dashBV(){
 
         	$db = new dataBase();
-            $region = new region();
-            $dash = new dashboards();
-            $currency = new pRate();
-            $b = new brand();      
-            $render = new renderDashboards();
-            $p = new pRate();
-            $mc = new makeChart();
-            $base = new base();
+            $sql = new sql();
             $default = $db->defaultConnection();
             $con = $db->openConnection($default);
+            $a = new agency();
+            $region = new region();
+            $agencyGroup = Request::get('agencyGroup');
+            $salesRep = Request::get('salesRep');
+            $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
+            $currency = Request::get('currency');
+            $value = Request::get('value');
+            $title = Request::get('title');
+            $typeExport = Request::get('typeExport');
+            //var_dump(Request::all());
+            $year = (int)date("Y");
+            $salesRegion = array(
+               array(
+                  'id' => '1',
+                  'name' => 'Brazil',
+                  'role' => 'Regional Office'
+               )
+            );
 
-            $region = Request::get("regionExcel");
+            $render = new Render();
+            $bvModel = new bvModel();
+            $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
+            $total = $bvModel->getBVTotal($bvTest, $year);
+            $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
+            $list = $bvModel->listOFClients($con, $year);
+            $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
+            $tmpColor = false;
 
-            $temp = json_decode(base64_decode(Request::get("agencyExcel")));
-
-            $currency = Request::get("currencyExcel");
-
-            $value = Request::get("valueExcel");
-
-            $title = Request::get("title");
-
-            $typeExport = Request::get("typeExport");
             
-            $currencyShow = $p->getCurrency($con, array($currency))[0]['name'];
-            $valueShow = strtoupper($value);
+            for ($b=0; $b <sizeof($bvTest) ; $b++) { 
+               $color[$b] = '#f9fbfd;';
 
-            $cYear = intval(date("Y"));
-            $pYear = $cYear - 1;
-            
-            $years = array($cYear);
-            $yearsP = array($pYear);
-            $yearsBand = array($cYear,$pYear);
-            $type = "agencyGroup";
+               if ($newClient) {
+                  for ($c=0; $c <sizeof($newClient) ; $c++) { 
+                     if ($bvTest[$b]['clientId'] == $newClient[$c]['client']) {
+                        $tmpColor[$b] = true;
+                     }
+                     if ($tmpColor) {
+                        $color[$b] = '#e6e6e6;';
+                     }else{
+                        $color[$b] = '#f9fbfd;';
+                     }
+                  }
+               }      
+            }
 
-            $agencyGroup = $temp->id;
-            $agencyGroupName = $temp->name;
-                  
-            $startMonthFcst = intval(date('m')) - 1;
-
-            $mountBV = $dash->mountBV($con,$p,$type,$region,$currency,$value,$agencyGroup,$years,"cmaps");
-            $graph = $dash->excelBV($base,$mc,$mountBV,$cYear);
-            $mountBV = $dash->someTotals($mountBV);
-            $forecast = $dash->forecastBV($con,$p,$type,$region,$currency,$value,$agencyGroup,$years,$startMonthFcst);
-            $bands = $dash->bandsBV($con,$p,$type,$region,$currency,$value,$agencyGroup,$yearsBand);
-            $bvAnalisis = $dash->bvAnalisis($mountBV['current'],$bands[0]);
-            $infoPreviousYear = $dash->analisisPreviousYear($con,$p,$type,$region,$currency,$value,$agencyGroup,$yearsP,"cmaps",$bands);
-
-            $monthsMidName = array("Jan",
-                                    "Feb",
-                                    "Mar",
-                                    "Apr",
-                                    "May",
-                                    "Jun",
-                                    "Jul",
-                                    "Aug",
-                                    "Sep",
-                                    "Oct",
-                                    "Nov",
-                                    "Dec"
-                                   );
-            $data = array('mountBV' => $mountBV, 'graph' => $graph, 'forecast'  => $forecast, 'bands' => $bands, 'bvAnalisis' => $bvAnalisis, 'infoPreviousYear' => $infoPreviousYear, 'monthsMidName' => $monthsMidName, 'ragion' => $region, 'temp' => $temp, 'currency' => $currency, 'value' => $value, 'currencyShow' => $currencyShow, 'valueShow' => $valueShow, 'cYear' => $cYear, 'pYear' => $pYear, 'years' => $years, 'yearsP' => $yearsP, 'yearsBand' => $yearsBand, 'type' => $type, 'agencyGroup' => $agencyGroup, 'agencyGroupName' => $agencyGroupName, 'startMonthFcst' => $startMonthFcst);
+            $data = array('bvTest' => $bvTest, 'total' => $total, 'updateInfo' => $updateInfo, 'year' => $year, 'agencyGroupName' => $agencyGroupName, 'color' => $color);
 
             $label = 'exports.dashboards.bvExport';
 
             $auxTitle = $title;
 
-           return Excel::download(new bvExport($data, $label, $typeExport, $auxTitle), $title);
-
-
-
-
-
-
-
+            return Excel::download(new bvExport($data, $label, $typeExport, $auxTitle), $title);
+      
       }
 }

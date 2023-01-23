@@ -35,6 +35,7 @@ class bvController extends Controller{
 
    public function bvPost(){
       $db = new dataBase();
+      $sql = new sql();
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $a = new agency();
@@ -56,12 +57,37 @@ class bvController extends Controller{
 
       $render = new Render();
       $bvModel = new bvModel();
-      $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value, $salesRep, $currency);
+      $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
       $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
       $list = $bvModel->listOFClients($con, $year);
+      $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
+      
+      $title = "Control Panel - BV";
+      $titleExcel = "Control Panel - BV.xlsx";
 
-      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list'));
+      
+      for ($b=0; $b <sizeof($bvTest) ; $b++) { 
+         $color[$b] = 'even';
+
+         if ($newClient) {
+            for ($c=0; $c <sizeof($newClient) ; $c++) { 
+               if ($bvTest[$b]['clientId'] == $newClient[$c]['client']) {
+                  $tmpColor = true;
+               }else{
+                  $tmpColor = false;
+               }
+
+               if ($tmpColor) {
+                  $color[$b] = 'oddGrey';
+               }else{
+                  $color[$b] = 'even';
+               }
+            }
+         }      
+      }
+
+      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel'));
    }
 
    public function bvSaveForecast(){
@@ -78,7 +104,7 @@ class bvController extends Controller{
       $currency = (int) Request::get('currency');
       $salesRep = (int) Request::get('salesRep');
       $saveButtonGet = Request::all();
-      var_dump(Request::all());
+
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $year = (int)date("Y");
@@ -89,13 +115,26 @@ class bvController extends Controller{
             'role' => 'Regional Office'
          )
       );
+    
+       // == Function to get the clients in the same way done in post == //
+      $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
 
-      if ($saveButtonGet['client'][0] != null) {
-         $saveNewClient =  $bvModel->newClientInclusion($con,$agencyGroup,$salesRep,$saveButtonGet['client'][0]);
-      }
-      
-      // == Function to get the clients in the same way done in post == //
       $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroup, $salesRep, $year, $con, $sql);
+
+      // == Getting and saving any new client inclusion by salesRep == //
+      if ($saveButtonGet['client'][0] != null) {
+         $saveNewClient = $bvModel->newClientInclusion($con,$agencyGroup,$salesRep,$saveButtonGet['client'][0]);
+      
+
+      }else{
+          if ($newClient != null)  {
+            $clientsByAE = array_merge($clientsByAE,$newClient);
+            $clientsByAE = array_values($clientsByAE);
+         }
+         
+      }
+
+      
 
       // == Using the size of $clientByAE we can do a for to get the correcty match for every registry get by front == //
       for ($i = 0; $i < sizeof($clientsByAE); $i++) {
@@ -105,17 +144,44 @@ class bvController extends Controller{
          $forecastSPT = str_replace('.', '', $saveButtonGet['forecast-spt-' . $i]);
          $status = $saveButtonGet['status-' . $i];
 
-         //var_dump($salesRep, $clientID, $agencyID, $currency, $value, $forecast, $forecastSPT, $status);
-
          $bvModel->verifyUpdateAndSaveBV($salesRep, $clientID, $agencyID, $agencyGroup, $currency, $value, $forecast, $forecastSPT, $status, $con, $sql);
+      }
+      // == Function to get the clients in the same way done in post == //
+      if ($newClient != null) {
+
+         $clientsByAE = array_merge($clientsByAE,$newClient);
+         $clientsByAE = array_values($clientsByAE);
+
       }
 
       $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
-      $bvTest = $bvModel->tableBV(Request::get('agencyGroup'), $year, $con, $value, $salesRep, $currency);
+      $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
       $updateInfo = $bvModel->getRepAndDateOfPrev($salesRep, $agencyGroup, $con);
       $list = $bvModel->listOFClients($con, $year);
+      $tmpColor = false;
 
-      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list'));
+      $title = "Control Panel - BV";
+      $titleExcel = "Control Panel - BV.xlsx";
+     
+      for ($b=0; $b <sizeof($bvTest) ; $b++) { 
+         $color[$b] = 'even';
+         
+         if ($newClient) {
+            for ($c=0; $c <sizeof($newClient) ; $c++) { 
+               if ($bvTest[$b]['clientId'] == $newClient[$c]['client']) {
+                  $tmpColor[$b] = true;
+               }
+
+               if ($tmpColor) {
+                  $color[$b] = 'oddGrey';
+               }else{
+                  $color[$b] = 'even';
+               }
+            }
+         }      
+      }
+
+      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color', 'title', 'titleExcel'));
    }
 }

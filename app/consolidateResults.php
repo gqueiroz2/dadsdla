@@ -37,7 +37,7 @@ class consolidateResults extends Model{
         $cYear = $years[0];
         $pYear = $years[1];    
         
-        if ($cYear >= '2022' || $pYear >= '2022' && $region[0] == '1') {
+        if ($pYear >= '2022' && $region[0] == '1') {
         	for ($r=0; $r < sizeof($region); $r++) { 
             	for ($m=0; $m < sizeof($month); $m++) {  
 	                //$currentAleph[$r][$m] = $this->defineValuesOffice($con, "aleph", $currency, $month[$m][1], $region[$r], $value, $cYear,null,null,$company); 
@@ -346,12 +346,14 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif($table == "aleph" || $table == 'wbd'){
-               		$pRate = 4.99;
-                	$pRateSel = 4.99;
-                }else{
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}   
+                } 
             }else{
                 if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
                     $pRate = 1.0;
@@ -460,21 +462,20 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif($table == "aleph" || $table == 'wbd'){
-               		$pRate = 4.99;
-                	$pRateSel = 4.99;
-                }else{
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}
+                }    
             }else{
                 if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
-                    
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                    
+                  
                     $ccYear = date('Y');
                     $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
                     $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
@@ -612,21 +613,20 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif($table == "aleph" || $table == 'wbd'){
-               		$pRate = 4.99;
-                	$pRateSel = 4.99;
-                }else{
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}  
+                }  
             }else{
                 if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
-                    
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                    
+                  
                     $ccYear = date('Y');
                     $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
                     $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
@@ -763,20 +763,19 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif($table == "aleph" || $table == 'wbd'){
-               		$pRate = 4.99;
-                	$pRateSel = 4.99;
-                }else{
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}   
+                } 
             }else{
                 if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
                 }else{
-                    
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                     
                     $ccYear = date('Y');
                     $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
@@ -927,8 +926,13 @@ class consolidateResults extends Model{
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
                 }elseif($table == "aleph" || $table == 'wbd'){
-               		$pRate = 4.99;
-                	$pRateSel = 4.99;
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}               		
               	}else{
               		$pRate = 1.0;
               		$pRateSel = $pRate;
@@ -941,9 +945,8 @@ class consolidateResults extends Model{
                     $pRateSel = $pRate;
 
                 }else{                       
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($keyYear));
                 }                
             }    
         }else{   
@@ -952,9 +955,8 @@ class consolidateResults extends Model{
                 $pRate = 1.0;
                 $pRateSel = $pRate;
             }else{
-            	$ccYear = date('Y');
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear)); 
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($keyYear)); 
             }           
         } 
         //var_dump($company);       
@@ -1050,7 +1052,7 @@ class consolidateResults extends Model{
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
             //var_dump($tmp);
 
-            if($table == "cmaps c" || $table == 'wbd' || $table == 'aleph a'){     
+            if($table == "cmaps c" || $table == 'wbd w' || $table == 'aleph a'){     
             	if ($table == 'aleph a'){
             		if ($valueView == 'net') {
                     	$rtr = ($tmp*0.80)/$pRate;
@@ -1067,14 +1069,17 @@ class consolidateResults extends Model{
 	                $rtr = $tmp*$pRate;   
             	}else{
             		for ($c=0; $c <sizeof($company); $c++) { 
-            			if ($company[$c] == '3') {
-		        			$pRateSel = 4.99;
-		        			$rtr = $tmp*$pRateSel;                    
-		        		}else{
-		           			$rtr = $tmp*$pRateSel;	
-		        		}            		      
+            			if ($year  <= 2022) {
+            				if ($company[$c] == '3') {
+		        				$pRateSel = 4.99;
+		        				$rtr = $tmp*$pRateSel;                    
+		        			}else{
+		           				$rtr = $tmp*$pRateSel;	
+		        			}
+            			}else{
+            				$rtr = $tmp*$pRateSel;
+            			}            			            		      
             		} 
-            		//var_dump($pRateSel);          			
             	}  
             }else{
                 $rtr = $tmp*$pRate;
@@ -1097,15 +1102,14 @@ class consolidateResults extends Model{
                 if($table == "cmaps"){
                     $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif ($table == 'wbd' || $table == 'aleph') {
+                }elseif($table == "aleph" || $table == 'wbd'){
                 	if ($year <= 2022) {
                 		$pRate = 4.99;
-                		$pRateSel = 4.99;
+                		$pRateSel = 4.99;	
                 	}else{
                 		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
                     	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}
-                	
+                	}                    	
                 }else{
                     $pRate = 1.0;
                     $pRateSel = $pRate;
@@ -1114,11 +1118,7 @@ class consolidateResults extends Model{
                 if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
                     $pRate = 1.0;
                     $pRateSel = $pRate;
-                }else{
-                    
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                    
+                }else{                    
                     $ccYear = date('Y');
                     $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
                     $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
@@ -1245,16 +1245,17 @@ class consolidateResults extends Model{
 	                $pRateSel = $pRate;
 	                $rtr = $tmp*$pRate;   
             	}else{
-            		if ($brandGroup == '3') {
-            			$pRateSel = 4.99;
-            			$rtr = $tmp*$pRateSel;                    
+            		if ($year <= 2022) {
+            			if ($brandGroup == '3') {
+	            			$pRateSel = 4.99;
+	            			$rtr = $tmp*$pRateSel;                    
+	            		}else{	            			
+	            			$rtr = $tmp*$pRateSel;	
+	            		}
             		}else{
-            			$ccYear = $year;
-	                	$pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
-	                	$pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
-            			
             			$rtr = $tmp*$pRateSel;	
             		}
+            		
             	}      
             //var_dump($rtr);           
             //var_dump($pRateSel);

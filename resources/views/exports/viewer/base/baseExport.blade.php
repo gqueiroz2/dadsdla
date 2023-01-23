@@ -179,7 +179,7 @@
 				<td>{{$data['mtx'][$m]['feedType']}}</td>
 				<td>{{$data['mtx'][$m]['feedCode']}}</td>
 				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
-				<td>"{{$data['mtx'][$m]['netRevenue']}}</td>
+				<td>{{$data['mtx'][$m]['netRevenue']}}</td>
 			</tr>
 		@endfor
 

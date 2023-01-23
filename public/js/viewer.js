@@ -51,68 +51,18 @@ $(document).ready(function(){
                 alert(xhr.status+" "+thrownError);
               }
             }); 
-            
+
             $.ajax({
-              url:"/ajax/adsales/thirdPosByRegion",
+              url:"/ajax/adsales/clientByRegion",
               method:"POST",
-              data:{regionID, year},
-                success: function(output){
-                  $('#thirdPos').html(output);
-                  var form = $('#thirdPos').val();
-                  $.ajax({
-                    url:"/ajax/adsales/firstPosByRegion",
-                    method:"POST",
-                    data:{year,form},
-                      success: function(output){
-                        $('#firstPos').html(output);
-                      },
-                      error: function(xhr, ajaxOptions,thrownError){
-                        alert(xhr.status+" "+thrownError);
-                    }
-                  });
-
-                  var source = $('#thirdPos').val();
-                  $.ajax({
-                    url:"/ajaxResults/valueBySource",
-                    method:"POST",
-                    data:{source},
-                      success: function(output){
-                        $('#value').html(output);
-                      },
-                      error: function(xhr, ajaxOptions,thrownError){
-                        alert(xhr.status+" "+thrownError);
-                    }
-                  });                  
-
-                },
-                error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
-                }
-              });
-              
-              $.ajax({
-              url:"/ajax/adsales/secondPosByRegion",
-              method:"POST",
-              data:{year},
-                success: function(output){
-                  $('#secondPos').html(output);
-                },
-                error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
-                }
-              });
-
-              $.ajax({
-                url:"/ajax/adsales/clientByRegion",
-                method:"POST",
-                data:{regionID},
-                success: function(output){
-                  $('#sizeOfClient').val(output);
-                },
-                error: function(xhr, ajaxOptions,thrownError){
-                  alert(xhr.status+" "+thrownError);
-                }
-              });
+              data:{regionID},
+              success: function(output){
+                $('#sizeOfClient').val(output);
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
             
           }
         },
@@ -337,9 +287,6 @@ $(document).ready(function(){
       $('#salesRep').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#sourceDataBase').empty().html("<option value='' selected='true'> Select Region </option>").selectpicker('refresh');
       $('#currency').empty().append(option);
-      $('#firstPos').empty().append(option);
-      $('#secondPos').empty().append(option);
-      $('#thirdPos').empty().append(option);
       $('#value').empty().append("<option>Select Source</option>");
       $('#especificNumber').val("0");
       $('#especificNumberCol').css("display", "none");
@@ -379,52 +326,6 @@ $(document).ready(function(){
       }
     });    
 
-  });
-
-  $('.clientChange').change(function(){
-    var client = $(this).val();
-    var region = $('#region').val();
-    var year = $('#year').val();
-    $.ajax({
-      url:"/ajax/adsales/agencyByRegionAndClient",
-      method:"POST",
-      data:{client,region,year},
-      success: function(output){
-        $('#agency').html(output).selectpicker("refresh");
-      },
-      error: function(xhr, ajaxOptions,thrownError){
-        alert(xhr.status+" "+thrownError);
-      }
-    });
-
-    $.ajax({
-      url:"/ajax/adsales/agencyByRegionAndClientSize",
-      method:"POST",
-      data:{client,region,year},
-      success: function(output){
-        $('#sizeOfAgency').val(output);
-      },
-      error: function(xhr, ajaxOptions,thrownError){
-        alert(xhr.status+" "+thrownError);
-      }
-    });    
-
-  });
-
-
-  $('#thirdPos').change(function(){
-    var source = $('#thirdPos').val();
-    $.ajax({
-      url:"/ajaxResults/valueBySource",
-      method:"POST",
-      data:{source},
-        success: function(output){
-          $('#value').html(output);
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-      }
-    }); 
   });
 
 });

@@ -649,9 +649,13 @@ class ajaxController extends Controller{
                 }
                 break;
         }
-
-        if($second){               
+        if($second){
             for ($s=0; $s < sizeof($second); $s++) { 
+                if (is_null($second[$s][$showID])) {
+                    unset($second[$s]);
+                    $second = array_values($second);
+                }
+                
                 echo "<option value=\"".$second[$s][$showID]."\" selected='true'>".$second[$s][$showName]."</option>";
             }
         }else{

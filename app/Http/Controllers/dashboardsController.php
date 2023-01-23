@@ -46,7 +46,7 @@ class dashboardsController extends Controller{
       $p = new pRate();
       $mc = new makeChart();
    
-      $default = $db->defaultConnection();
+      $default = $db->defaultConnection(); 
       $con = $db->openConnection($default);
 
       $salesRegion = $region->getRegion($con);      

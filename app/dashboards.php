@@ -30,7 +30,7 @@ class dashboards extends rank{
         return $something;
     }
 
-    public function clearBrands($brand){
+    public function clearBrands($brand){ 
         $size = sizeof($brand);
 
         for ($b=0; $b < $size; $b++) { 
@@ -850,12 +850,20 @@ class dashboards extends rank{
         
                 $res[$y][$b] = $con->query($some[$y][$b]);
                 $from = array("mySum");
-                
-                if ($brands[$b][0] == 13 || $brands[$b][0] == 14 || $brands[$b][0] == 15 || $brands[$b][0] == 16){
-                    $values[$y][8] += $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                if ($table == "wbd") {
+                    if ($brands[$b][0] == 13 || $brands[$b][0] == 14 || $brands[$b][0] == 15 || $brands[$b][0] == 16){
+                        $values[$y][8] += $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']/$pRate;
+                    }else{
+                        $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']/$pRate;
+                    }
                 }else{
-                    $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                    if ($brands[$b][0] == 13 || $brands[$b][0] == 14 || $brands[$b][0] == 15 || $brands[$b][0] == 16){
+                        $values[$y][8] += $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                    }else{
+                        $values[$y][$b] = $sql->fetch($res[$y][$b],$from,$from)[0]['mySum']*$pRate;
+                    }
                 }
+                
             }
         }
 
@@ -866,7 +874,7 @@ class dashboards extends rank{
 	public function last3YearsByMonth($con,$type,$p,$sr,$table,$regionID,$pRate,$column,$baseFilter,$secondaryFilter,$years,$value,$currency,$columnD){
 		$sql = new sql(); 
 		$months = $this->months; 
-
+        
         if (is_array($secondaryFilter)) {
             $secondaryFilter = implode(",", $secondaryFilter);
         }
@@ -900,17 +908,26 @@ class dashboards extends rank{
 		    					FROM $table y
 		    					$join
 		    					$where";
-
+               // var_dump($some);
 		    	$res[$y][$m] = $con->query($some[$y][$m]);
 
 		    	$from = array("mySum");
-		    	$values[$y][$m] = $sql->fetch($res[$y][$m],$from,$from)[0]['mySum']*$pRate;
+                if ($table == 'wbd') {
+                    $values[$y][$m] = $sql->fetch($res[$y][$m],$from,$from)[0]['mySum']/$pRate;
 
+                    $resD[$y][$m] = $con->query($someD[$y][$m]);
 
-                $resD[$y][$m] = $con->query($someD[$y][$m]);
+                    $valuesD[$y][$m] = $sql->fetch($resD[$y][$m],$from,$from)[0]['mySum']/$pRate;
 
-                $valuesD[$y][$m] = $sql->fetch($resD[$y][$m],$from,$from)[0]['mySum']*$pRate;
+                }else{
+                    $values[$y][$m] = $sql->fetch($res[$y][$m],$from,$from)[0]['mySum']*$pRate;
 
+                    $resD[$y][$m] = $con->query($someD[$y][$m]);
+
+                    $valuesD[$y][$m] = $sql->fetch($resD[$y][$m],$from,$from)[0]['mySum']*$pRate;
+
+                }
+		    	
                 $values[$y][$m] += $valuesD[$y][$m];
 
 		    }
