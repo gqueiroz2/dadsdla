@@ -441,7 +441,7 @@ class agency extends Management{
     public function getAgencyGroupByRegionCMAPSWithValuesBV($con,$year=false,$agencyRegion=false,$salesRep=false){
         $sql = new sql();
 
-        $tableCmaps = "cmaps y";
+        $tableCmaps = "wbd y";
 
         $columns = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -453,7 +453,7 @@ class agency extends Management{
             $agencyRegions = implode(",", $agencyRegion);
 
             if ($year) {
-                $where .= "WHERE year IN (";
+                $where .= "WHERE  (gross_value > 0) AND year IN (";
                 for ($y=0; $y < sizeof($year); $y++) { 
                     $where .= "'".$year[$y]."'";
                     if($y < ( sizeof($year) - 1) ){
@@ -472,13 +472,13 @@ class agency extends Management{
 
                 $where .= ")";                
             }else{
-                $where = "WHERE (sr.ID IN ($salesRep))";
+                $where = "WHERE (sr.ID IN ($salesRep)) AND (gross_value > 0)";
             }
         }
         //var_dump($where);
         $join = "LEFT JOIN agency a ON a.ID = y.agency_id
                  LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
-                 LEFT JOIN sales_rep sr ON sr.ID = y.sales_rep_id
+                 LEFT JOIN sales_rep sr ON sr.ID = y.current_sales_rep_id
                  ";
         
         $res = $sql->selectGroupBy($con,$columns,$tableCmaps,$join,$where, "ag.name", "ag.id");
