@@ -272,12 +272,12 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:5%;'>Company</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Year</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Month</td>";
-						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Previous AE</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Client</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Agency</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Director</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";					
 					echo "</tr>";
@@ -300,12 +300,12 @@ class baseRender extends Render{
 						echo "<td class='$color'>".$mtx[$m]['company']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['year']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['month']."</td>";
-						echo "<td class='$color'>".$mtx[$m]['brand']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['oldRep']."</>";
-						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['client']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['agency']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['brand']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['manager']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";						
 						echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
 						echo "<td class='$color'>".number_format($mtx[$m]['netRevenue'],0,",",".")."</td>";
 					}

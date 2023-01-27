@@ -4,6 +4,16 @@
 	<tr>
 		<th style="background-color: #0047b3;" colspan="14"> {{$data['regions']}} - Viewer CMAPS {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
+
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan="8"></td>
+			<td style="background-color: #0f243e;">{{$data['total']['averageDiscount']/100}}</td>
+			<td style="background-color: #0f243e;" colspan="2"></td>				
+			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+		
 		<tr>
 			<td style="background-color: #e6e6e6;">Map Number</td>
 			<td style="background-color: #e6e6e6;">Pi Number</td>
@@ -20,14 +30,7 @@
 			<td style="background-color: #e6e6e6;">Revenue</td>
 			<td style="background-color: #e6e6e6;">Net Revenue</td>
 		</tr>
-		<tr>
-			<td style="background-color: #0f243e;">Total</td>
-			<td style="background-color: #0f243e;" colspan="8"></td>
-			<td style="background-color: #0f243e;">{{$data['total']['averageDiscount']/100}}</td>
-			<td style="background-color: #0f243e;" colspan="2"></td>				
-			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
-			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
-		</tr>
+		
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
 			<tr>				
 				<td>{{$data['mtx'][$m]['mapNumber']}}</td>
@@ -50,6 +53,14 @@
 	<tr>
 		<th style="background-color: #0047b3;" colspan="12"> {{$data['regions']}} - Viewer BTS {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
+
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan="9"></td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
 		<tr>
 			<td style="background-color: #e6e6e6;">Order Reference</td>
 			<td style="background-color: #e6e6e6;">Campaign Reference</td>
@@ -64,12 +75,7 @@
 			<td style="background-color: #e6e6e6;">Revenue</td>
 			<td style="background-color: #e6e6e6;">Net Revenue</td>
 		</tr>
-		<tr>
-			<td style="background-color: #0f243e;">Total</td>
-			<td style="background-color: #0f243e;" colspan="9"></td>
-			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
-			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
-		</tr>
+		
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
 			<tr>
 				<td >{{$data['mtx'][$m]['orderReference']}}</td>
@@ -90,6 +96,14 @@
 	<tr>
 		<th style="background-color: #0047b3;" colspan="13"> {{$data['regions']}} - Viewer SalesForce {{$data['year']}} - ({{strtoupper($data['currencies'])}})</th>		
 	</tr>
+
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan="10"></td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
 		<tr>
 			<td style="background-color: #e6e6e6;">Oppid</td>
 			<td style="background-color: #e6e6e6;">Oportunity Name</td>
@@ -105,12 +119,7 @@
 			<td style="background-color: #e6e6e6;">Amount Gross</td>
 			<td style="background-color: #e6e6e6;">Amount Net</td>
 		</tr>
-		<tr>
-			<td style="background-color: #0f243e;">Total</td>
-			<td style="background-color: #0f243e;" colspan="10"></td>
-			<td style="background-color: #0f243e;">{{$data['total']['sumGrossRevenue']}}</td>
-			<td style="background-color: #0f243e;">{{$data['total']['sumNetRevenue']}}</td>
-		</tr>
+		
 		@for($m=0;$m < sizeof($data['mtx']); $m++)
 
 			<tr>
@@ -144,6 +153,13 @@
 			<th style="background-color: #0047b3;" colspan='12'> {{$data['regions']}} - Viewer Aleph {{$data['year']}} - ({{strtoupper($data['currencies'])}}) </th>
 		</tr>
 
+		<tr>
+			<td style="background-color: #0f243e;">Total</td>
+			<td style="background-color: #0f243e;" colspan='9'></td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
+			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
 		<tr class='center'>
 			<td style="background-color: #e6e6e6;">Year</td>
 			<td style="background-color: #e6e6e6;">Month</td>
@@ -157,14 +173,7 @@
 			<td style="background-color: #e6e6e6;">Feed Code</td>
 			<td style="background-color: #e6e6e6;">Gross Revenue</td>
 			<td style="background-color: #e6e6e6;">Net Revenue</td>					
-		</tr>
-
-		<tr>
-			<td style="background-color: #0f243e;">Total</td>
-			<td style="background-color: #0f243e;" colspan='9'></td>
-			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
-			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
-		</tr>
+		</tr>		
 
 		@for ($m=0; $m <sizeof($data['mtx']); $m++)
 			<tr>
@@ -189,24 +198,24 @@
 		</tr>
 
 		<tr>
-			<td style="background-color: #e6e6e6;">Company</td>
-			<td style="background-color: #e6e6e6;">Year</td>
-			<td style="background-color: #e6e6e6;">Month</td>
-			<td style="background-color: #e6e6e6;">Brand</td>
-			<td style="background-color: #e6e6e6;">Previous AE</td>
-			<td style="background-color: #e6e6e6;">Current AE</td>
-			<td style="background-color: #e6e6e6;">Client</td>
-			<td style="background-color: #e6e6e6;">Agency</td>
-			<td style="background-color: #e6e6e6;">Director</td>
-			<td style="background-color: #e6e6e6;">Gross Revenue</td>
-			<td style="background-color: #e6e6e6;">Net Revenue</td>					
-		</tr>
-
-		<tr>
 			<td style="background-color: #0f243e;">Total</td>
 			<td style="background-color: #0f243e;" colspan='8'></td>
 			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
 			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
+		</tr>
+
+		<tr>
+			<td style="background-color: #e6e6e6;">Company</td>
+			<td style="background-color: #e6e6e6;">Year</td>
+			<td style="background-color: #e6e6e6;">Month</td>
+			<td style="background-color: #e6e6e6;">Previous AE</td>
+			<td style="background-color: #e6e6e6;">Client</td>
+			<td style="background-color: #e6e6e6;">Agency</td>
+			<td style="background-color: #e6e6e6;">Brand</td>
+			<td style="background-color: #e6e6e6;">Director</td>
+			<td style="background-color: #e6e6e6;">Current AE</td>
+			<td style="background-color: #e6e6e6;">Gross Revenue</td>
+			<td style="background-color: #e6e6e6;">Net Revenue</td>					
 		</tr>
 
 		@for ($m=0; $m <sizeof($data['mtx']) ; $m++) 
@@ -214,12 +223,12 @@
 				<td>{{$data['mtx'][$m]['company']}}</td>
 				<td>{{$data['mtx'][$m]['year']}}</td>
 				<td>{{$data['mtx'][$m]['month']}}</td>
-				<td>{{$data['mtx'][$m]['brand']}}</td>
 				<td>{{$data['mtx'][$m]['oldRep']}}</td>
-				<td>{{$data['mtx'][$m]['salesRep']}}</td>
 				<td>{{$data['mtx'][$m]['client']}}</td>
 				<td>{{$data['mtx'][$m]['agency']}}</td>
+				<td>{{$data['mtx'][$m]['brand']}}</td>
 				<td>{{$data['mtx'][$m]['manager']}}</td>
+				<td>{{$data['mtx'][$m]['salesRep']}}</td>
 				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
 				<td>{{$data['mtx'][$m]['netRevenue']}}</td>		
 			</tr>

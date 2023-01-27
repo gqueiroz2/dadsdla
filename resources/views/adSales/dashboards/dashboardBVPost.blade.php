@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'Dashboards Overview')
+@section('title', 'Dashboards BV')
 @section('head')	
 	<script src="/js/dashboards-bv.js"></script>
     <?php include(resource_path('views/auth.php')); ?>

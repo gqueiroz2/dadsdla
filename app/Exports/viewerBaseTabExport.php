@@ -121,10 +121,10 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-					$cellRange = 'A2:N2';
+					$cellRange = 'A3:N3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A3:N3';
+					$cellRange = 'A2:N2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 					$letter = 'N';
@@ -141,10 +141,10 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-					$cellRange = 'A2:L2';
+					$cellRange = 'A3:L3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A3:L3';
+					$cellRange = 'A2:L2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 					$letter = 'L';
@@ -161,10 +161,10 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-					$cellRange = 'A2:M2';
+					$cellRange = 'A3:M3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A3:M3';
+					$cellRange = 'A2:M2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 					$letter = 'M';
@@ -181,10 +181,10 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-					$cellRange = 'A2:L2';
+					$cellRange = 'A3:L3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A3:L3';
+					$cellRange = 'A2:L2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 					$letter = 'L';
@@ -201,10 +201,11 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$cellRange = 'A1';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
-					$cellRange = 'A2:K2';
+					
+					$cellRange = 'A3:K3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A3:K3';
+					$cellRange = 'A2:K2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
 					$letter = 'K';
