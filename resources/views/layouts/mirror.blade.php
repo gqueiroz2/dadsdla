@@ -116,9 +116,9 @@
 										<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
 										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>	
 										@endif
-
-																				
+										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L1' )
 										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										@endif
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										
 										
@@ -141,7 +141,8 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
-											<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
+										<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
+										<a class="dropdown-item" href="{{ route('resumeBVGet') }}"> Resume BV </a>
 										
 									</div>
 								</li>

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\sql;
 use App\base;
+use App\brand;
 
 
 class bvModel extends Model{
@@ -23,10 +24,10 @@ class bvModel extends Model{
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
                    left join agency_group ag on ag.ID = a.agency_group_id 
                    where ag.ID = $agencyGroupId
-                   and sr.id = $salesRep
+                   and (sr.id in ($salesRep))
                    and al.`year` in ($year,$pYear,$ppYear)
                    order by 1 asc";
-        //var_dump($queryAleph);
+        //echo"<pre>$queryAleph</pre>";
         $resultAleph = $con->query($queryAleph);
         $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
         $valueAleph = $sql->fetch($resultAleph, $from, $from);
@@ -72,11 +73,11 @@ class bvModel extends Model{
 
         $valueWbd = $valueType."_value";
         $queryALEPH = "SELECT SUM($valueWbd) from wbd
-                 WHERE current_sales_rep_id = $salesRep
+                 WHERE (current_sales_rep_id IN ($salesRep))
                  AND agency_id = $agency
                  AND client_id = $client
                  AND year = $year";
- 
+        //var_dump($queryALEPH);
         $resultALEPH = $con->query($queryALEPH);
         $from = "SUM($valueWbd)";
         $valuePivot = $sql->fetchSUM($resultALEPH, $from);
@@ -101,21 +102,21 @@ class bvModel extends Model{
         switch ($previsionType){
             case 'wbd':
                 $previsionQuery = "SELECT forecast_revenue AS forecast, currency_id AS currency from bv_forecast
-                                   WHERE sales_rep_id = $salesRep
+                                   WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
                                    AND agency_id = $agencyID";
                 $from = array('forecast', 'currency');
                 break;
             case 'spt':
                 $previsionQuery = "SELECT forecast_spt_revenue AS forecast, currency_id AS currency, value from bv_forecast
-                                   WHERE sales_rep_id = $salesRep
+                                   WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
                                    AND agency_id = $agencyID";
                 $from = array('forecast', 'currency');
                 break;
             case 'status':
                 $previsionQuery = "SELECT status from bv_forecast
-                                   WHERE sales_rep_id = $salesRep
+                                   WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
                                    AND agency_id = $agencyID";
                 $from = array('status');
@@ -146,6 +147,7 @@ class bvModel extends Model{
         $year = (int)date("Y");
         $pYear = $year-1;
         $ppYear = $year-2;
+
         $bvTable = array();
         $includeClient = $this->getSalesRepByClient($agencyGroupId, $salesRep,$con, $sql);
         $repInfo = $this->getSalesRepByAgencyGroup($agencyGroupId, $salesRep, $year, $con, $sql);
@@ -156,8 +158,6 @@ class bvModel extends Model{
         }else{
             $result = $repInfo;
         }
-
-
         /* == Generate arrays for fill the matrix, 
         the matrix structure is:
         [Sales Rep Name, Agency Name, Client Name, Antepenultimate Year Value, Penultimate Year Value, Actual Year Value, Actual Year Prevision, (Actual Year Value + Actual Year Prevision) and Variation] == */
@@ -178,6 +178,8 @@ class bvModel extends Model{
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
             $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
+            
+            //var_dump($pivotArray);
             array_push($bvTable, $pivotArray);
 
         };    
@@ -267,13 +269,13 @@ class bvModel extends Model{
 
     }
 
-    public function getRepAndDateOfPrev(int $salesRep, int $agencyGroupId, Object $con){
+    public function getRepAndDateOfPrev(String $salesRep, int $agencyGroupId, Object $con){
         $sql = new sql();
         
         $select = "SELECT distinct sales_rep.name as salesRep, updated_date as updateDate
                     FROM bv_forecast
                     LEFT JOIN sales_rep ON bv_forecast.sales_rep_id = sales_rep.ID
-                    WHERE sales_rep_id = $salesRep
+                    WHERE (sales_rep_id IN ($salesRep))
                     AND agency_group_id = $agencyGroupId
                 ";
         
@@ -310,7 +312,7 @@ class bvModel extends Model{
 
         $insertQuery = "INSERT INTO  bv_new_clients
                         SET created_date = '$updateTime',
-                        sales_rep_id = $salesRep,
+                        sales_rep_id IN $salesRep,
                         client_id = $client,
                         agency_group_id = $agencyGroup
                         ";
@@ -330,7 +332,7 @@ class bvModel extends Model{
                             left join client c on c.ID = b.client_id 
                             left join agency_group ag on ag.ID = b.agency_group_id 
                             where ag.ID = $agencyGroupId
-                            and sr.ID = $salesRep";
+                            and (sr.ID IN ($salesRep))";
 
             $resultClient = $con->query($selectClient);
             $from = array('id');
@@ -368,6 +370,152 @@ class bvModel extends Model{
 
                 return $valueClient;
             }
+    }
+
+    public function getClientByAgencyGroup(String $agencyGroupId, string $salesRep, Object $con, Object $sql){
+        $base = new base();   
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+        $pppYear = $year-3;
+
+        // == This part make the integration with WarnerMedia ALEPH base == //
+        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd w 
+                   left join agency a on a.ID = w.agency_id 
+                   left join client c on c.ID = w.client_id 
+                   left join brand b on b.ID = w.brand_id  
+                   left join agency_group ag on ag.ID = a.agency_group_id 
+                   where ag.ID = $agencyGroupId
+                   and w.`year` in ($pYear,$ppYear,$pppYear)
+                   order by 1 asc";
+        //var_dump($queryAleph);
+        $resultAleph = $con->query($queryAleph);
+        $from = array('agency', 'agencyName', 'client', 'clientName');
+        $valueAleph = $sql->fetch($resultAleph, $from, $from);
+    
+        
+        // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
+        $value = $valueAleph;
+
+        return $value;
+    }
+
+
+    public function getBrandByClient(Object $sql, Object $con, $client, $brand, int $year){
+            
+       $queryALEPH = "SELECT SUM(net_value) from wbd
+             WHERE brand_id = $brand
+             AND client_id = $client
+             AND year = $year
+             ";
+ 
+        $resultALEPH = $con->query($queryALEPH);
+        $from = "SUM(gross_value)";
+        $valuePivot = $sql->fetchSUM($resultALEPH, $from);
+
+           /* $selectQuery = "SELECT distinct b.id as brandId, b.name as brand, c.id as cId, c.name as clientName
+                        from wbd w
+                        left join client c on c.ID = w.client_id
+                        left join brand b on b.ID = w.brand_id
+                        left join agency a on a.ID = w.agency_id 
+                        where (c.id in ($client))
+                        and (b.id in ($brand))
+                        and (w.year in ($year))
+                        ";    
+
+            $result = $con->query($selectQuery);
+            $from = array('brandId', 'brand','cId','clientName');
+            $resultBrand = $sql->fetch($result,$from,$from);
+
+        //var_dump($selectQuery);*/
+
+        return $valuePivot;
+        
+    }
+
+    public function getLiquidValues(string $brand, int $year, String $agencyGroupId, Object $con, Object $sql, String $salesRep){
+
+        $queryALEPH = "SELECT SUM(net_value) from wbd w
+                    LEFT JOIN agency a on a.ID = w.agency_id 
+                    LEFT JOIN sales_rep sr on sr.ID = w.current_sales_rep_id
+                    WHERE w.brand_id = $brand
+                    AND (sr.id in ($salesRep))
+                    AND a.agency_group_id = $agencyGroupId
+                    AND w.year = $year
+             ";
+        //var_dump($queryALEPH);
+        $resultALEPH = $con->query($queryALEPH);
+        $from = "SUM(net_value)";
+        $valuePivot = $sql->fetchSUM($resultALEPH, $from);
+        $value = $valuePivot[$from];
+
+        return $value;
+    }
+
+    // == This function generate the matrix used in front-end == //
+    public function liquidTable(String $agencyGroupId, int $year, Object $con, String $valueType, String $salesRep, String $currency, array $brand){
+        $sql = new sql();
+        $pRate = new pRate();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+        $pppYear = $year-3;
+        $table = array();
+        $b = new brand();
+        $matrix = array();
+
+        $result = $this->getClientByAgencyGroup($agencyGroupId, $salesRep, $con, $sql);
+        /* == Generate arrays for fill the matrix, 
+        the matrix structure is:
+        [Sales Rep Name, Agency Name, Client Name, Antepenultimate Year Value, Penultimate Year Value, Actual Year Value, Actual Year Prevision, (Actual Year Value + Actual Year Prevision) and Variation] == */
+        for ($b=0; $b <sizeof($brand) ; $b++) { 
+
+            $liquidValuePyear = $this->getLiquidValues($brand[$b]['id'],$pYear,$agencyGroupId,$con,$sql,$salesRep);
+            $liquidValuePpyear = $this->getLiquidValues($brand[$b]['id'],$ppYear,$agencyGroupId,$con,$sql,$salesRep);
+            $liquidValuePppyear = $this->getLiquidValues($brand[$b]['id'],$pppYear,$agencyGroupId,$con,$sql,$salesRep);
+
+            $pivotArray = array('brand' => $brand[$b]['name'],'liquidPyear' => $liquidValuePyear, 'liquidPpyear' => $liquidValuePpyear, 'liquidPppyear' => $liquidValuePppyear);
+        
+            //var_dump($pivotArray);
+            array_push($matrix, $pivotArray);
+            //var_dump($matrix);
+
+        }
+
+        
+        //var_dump($matrix);
+        
+        return $matrix;
+    }
+
+    public function totalperBrandInvest(array $table){
+
+        for ($i = 0; $i < sizeof($table); $i++){
+            $total[] = ($table[$i]['liquidPpyear'] + $table[$i]['liquidPppyear'] + $table[$i]['liquidPyear']);
+
+        }
+
+        return $total;
+    }
+
+     public function totalInvestYear(array $table, array $totalChannels){
+
+        $totalPYear = 0;
+        $totalPpYear = 0;
+        $totalPppYear = 0;
+        $allYears = 0;
+
+        for ($i = 0; $i < sizeof($table); $i++){
+            $totalPYear += $table[$i]['liquidPyear'];
+            $totalPpYear += $table[$i]['liquidPpyear'];
+            $totalPppYear += $table[$i]['liquidPppyear'];
+            $allYears += $totalChannels[$i];
+
+            $total = array('totalPYear' => $totalPYear, 'totalPpYear' => $totalPpYear, 'totalPppYear' => $totalPppYear, 'all' => $allYears);
+
+        }
+
+        return $total;
     }
 
 }

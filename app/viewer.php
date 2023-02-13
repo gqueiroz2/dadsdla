@@ -398,7 +398,7 @@ class viewer extends Model{
 						";
 		}elseif ($source == 'WBD') {
 			
-			$from = array('company','year','month','oldRep', 'client','agency','brand','manager','salesRep','grossRevenue','netRevenue');
+			$from = array('company','year','month','oldRep', 'client','agency','brand','manager','salesRep','feedType','feedCode','grossRevenue','netRevenue');
 
 			$select = "SELECT bg.abv AS 'company',
 							  w.year AS 'year',
@@ -409,6 +409,8 @@ class viewer extends Model{
 							  b.name AS 'brand',
 							  w.manager AS 'manager',
 							  sr.name AS 'salesRep',
+							  w.feed_type as 'feedType',
+							  w.feed_code as 'feedCode',
 							  w.gross_value AS 'grossRevenue',
 							  w.net_value AS 'netRevenue'
 					   FROM wbd w
