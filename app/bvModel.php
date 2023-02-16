@@ -312,11 +312,11 @@ class bvModel extends Model{
 
         $insertQuery = "INSERT INTO  bv_new_clients
                         SET created_date = '$updateTime',
-                        sales_rep_id IN $salesRep,
+                        sales_rep_id = $salesRep,
                         client_id = $client,
                         agency_group_id = $agencyGroup
                         ";
-
+        //var_dump($insertQuery);
         $resultInsertQuery = $con->query($insertQuery);
     }
 
@@ -337,6 +337,7 @@ class bvModel extends Model{
             $resultClient = $con->query($selectClient);
             $from = array('id');
             $client = $sql->fetch($resultClient, $from, $from);
+            //var_dump($selectClient);
 
             if ($client != null) {
                 for ($c=0; $c < sizeof($client); $c++) {
@@ -401,33 +402,45 @@ class bvModel extends Model{
     }
 
 
-    public function getBrandByClient(Object $sql, Object $con, $client, $brand, int $year){
-            
-       $queryALEPH = "SELECT SUM(net_value) from wbd
-             WHERE brand_id = $brand
-             AND client_id = $client
-             AND year = $year
-             ";
+    public function getBrandByClient(Object $sql, Object $con, $agencyGroupId, $brand, int $year,$client){
+       
+        //var_dump($client);
+        $queryALEPH = "SELECT SUM(net_value) from wbd
+                left join agency a on a.ID = wbd.agency_id 
+                left join agency_group ag on ag.ID = a.agency_group_id 
+                left join client c on c.ID = wbd.client_id
+              WHERE (brand_id = $brand)
+              AND ag.ID = $agencyGroupId
+              and c.ID = $client
+              AND year = $year
+         ";
+       
  
         $resultALEPH = $con->query($queryALEPH);
-        $from = "SUM(gross_value)";
+        $from = "SUM(net_value)";
         $valuePivot = $sql->fetchSUM($resultALEPH, $from);
 
-           /* $selectQuery = "SELECT distinct b.id as brandId, b.name as brand, c.id as cId, c.name as clientName
+        /*for ($b=0; $b < sizeof($brand); $b++) { 
+            $tmp = $brand[$b]['id'];
+
+            $selectQuery = "SELECT distinct b.id as brandId, b.name as brand, c.id as cId, c.name as clientName
                         from wbd w
                         left join client c on c.ID = w.client_id
                         left join brand b on b.ID = w.brand_id
                         left join agency a on a.ID = w.agency_id 
-                        where (c.id in ($client))
-                        and (b.id in ($brand))
+                        left join agency_group ag on ag.ID = a.agency_group_id 
+                        where ag.ID = $agencyGroupId
+                        and (b.id in ($tmp))
                         and (w.year in ($year))
-                        ";    
+                        ";
+        }
+                
 
-            $result = $con->query($selectQuery);
-            $from = array('brandId', 'brand','cId','clientName');
-            $resultBrand = $sql->fetch($result,$from,$from);
+        $result = $con->query($selectQuery);
+        $from = array('brandId', 'brand','cId','clientName');
+        $resultBrand = $sql->fetch($result,$from,$from);*/
 
-        //var_dump($selectQuery);*/
+       //var_dump($valuePivot);
 
         return $valuePivot;
         
