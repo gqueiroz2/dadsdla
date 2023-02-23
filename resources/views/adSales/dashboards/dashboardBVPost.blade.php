@@ -120,7 +120,7 @@
 								<input type='hidden' readonly='true' type="text" name="agencyID-{{$b}}" id="agencyID-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agencyId']}}">
 								<tr class='center' style='font-size:16px;'>
 									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['client']}}"></td>
-									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agency']}}"></td>
+									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="agency-{{$b}}" id="agency-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agency']}}"></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-2],0,',','.')}}</td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-1],0,',','.')}}</td>
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],0,',','.')}}"></td>
@@ -174,7 +174,7 @@
 											 <select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
 									            <option selected='true' value="">Select a Client</option>
 									            @for ($s=0; $s < sizeof($list); $s++)
-									                <option value='{{$list[$s]['id']}}'> {{$list[$s]["client"]}} - {{$list[$s]["agency"]}} </option> 
+									                <option value='{{$list[$s]['id']}},{{$list[$s]['aID']}}'> {{$list[$s]["client"]}} - {{$list[$s]["agency"]}} </option> 
                         						@endfor
 									        </select>												
 										</div>

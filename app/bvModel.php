@@ -307,13 +307,14 @@ class bvModel extends Model{
         return $client;
     }
 
-    public function newClientInclusion(Object $con, String $agencyGroup, String $salesRep, String $client){
+    public function newClientInclusion(Object $con, String $agencyGroup, String $salesRep, String $client,String $agency){
         $updateTime = date("Y-m-d");
 
         $insertQuery = "INSERT INTO  bv_new_clients
                         SET created_date = '$updateTime',
                         sales_rep_id = $salesRep,
                         client_id = $client,
+                        agency_id = $agency,
                         agency_group_id = $agencyGroup
                         ";
         //var_dump($insertQuery);
@@ -326,22 +327,24 @@ class bvModel extends Model{
         $pYear = $year-1;
         $ppYear = $year-2;
 
-         $selectClient = "SELECT distinct  c.id as id     
+         $selectClient = "SELECT distinct  c.id as id, a.id as agency 
                             from bv_new_clients b
                             left join sales_rep sr on sr.ID = b.sales_rep_id 
                             left join client c on c.ID = b.client_id 
-                            left join agency_group ag on ag.ID = b.agency_group_id 
+                            left join agency_group ag on ag.ID = b.agency_group_id
+                            left join agency a on a.ID = b.agency_id
                             where ag.ID = $agencyGroupId
                             and (sr.ID IN ($salesRep))";
 
             $resultClient = $con->query($selectClient);
-            $from = array('id');
+            $from = array('id','agency');
             $client = $sql->fetch($resultClient, $from, $from);
             //var_dump($selectClient);
 
             if ($client != null) {
                 for ($c=0; $c < sizeof($client); $c++) {
-                    $tmp1[] = $client[$c]['id'];                      
+                    $tmp1[] = $client[$c]['id']; 
+                    $tmp2[] = $client[$c]['agency']; 
                     
                     $queryClient[$c] = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd cm 
                            left join agency a on a.ID = cm.agency_id 
@@ -349,6 +352,7 @@ class bvModel extends Model{
                            left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
                            left join agency_group ag on ag.ID = a.agency_group_id 
                            where c.id in ($tmp1[$c])
+                           and a.id in ($tmp2[$c])
                            and cm.`year` in ($year,$pYear,$ppYear)
                            order by 1 asc";
                 
