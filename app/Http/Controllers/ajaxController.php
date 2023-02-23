@@ -224,9 +224,8 @@ class ajaxController extends Controller{
         $cYear = (date('Y'));
         $pYear = (date('Y')-1);
         $ppYear = (date('Y')-2);
-        $pppYear = (date('Y')-3);
 
-        $years = array($cYear,$pYear,$ppYear,$pppYear);
+        $years = array($cYear,$pYear,$ppYear);
         $rID = array();
 
         $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$years,array($regionID),array($salesRep));
