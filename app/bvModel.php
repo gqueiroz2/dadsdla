@@ -294,12 +294,13 @@ class bvModel extends Model{
     public function listOFClients(Object $con, int $year){
         $sql = new sql();
 
-        $select = "SELECT DISTINCT c.ID AS id ,c.name as client
+        $select = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
                     FROM wbd w
                     left join client c on c.ID = w.client_id
+                    left join agency a on a.ID = w.agency_id
                     WHERE c.client_group_id = 1 ";
 
-        $from = array('id','client');
+        $from = array('id','client','aID','agency');
         $selectQuery = $con->query($select);
         $client = $sql->fetch($selectQuery, $from, $from);
 
@@ -532,7 +533,7 @@ class bvModel extends Model{
 
     public function totalperBrand($table){
 
-        
+
     }
 
 }
