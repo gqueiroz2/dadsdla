@@ -73,8 +73,7 @@ class bvModel extends Model{
 
         $valueWbd = $valueType."_value";
         $queryALEPH = "SELECT SUM($valueWbd) from wbd
-                 WHERE (current_sales_rep_id IN ($salesRep))
-                 AND agency_id = $agency
+                 where agency_id = $agency
                  AND client_id = $client
                  AND year = $year";
         //var_dump($queryALEPH);
@@ -177,7 +176,7 @@ class bvModel extends Model{
             }
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
-            $pivotArray = array('client' => $result[$i]['clientName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
+            $pivotArray = array('client' => $result[$i]['clientName'],'agency' => $result[$i]['agencyName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
             
             //var_dump($pivotArray);
             array_push($bvTable, $pivotArray);
@@ -529,6 +528,11 @@ class bvModel extends Model{
         }
 
         return $total;
+    }
+
+    public function totalperBrand($table){
+
+        
     }
 
 }

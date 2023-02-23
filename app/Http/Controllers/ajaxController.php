@@ -177,6 +177,33 @@ class ajaxController extends Controller{
 
     }
 
+    public function BVAgencyGroupNoRep(){
+
+        $db = new dataBase();
+        $sr = new salesRep();
+        $agency = new agency(); 
+
+        $regionID = '1';
+
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $year = array(date('Y'));
+        $rID = array();
+
+        $agencies = $agency->getAgencyGroupByRegion($con,$year,false);
+        //var_dump($agencies);
+        if ($agencies != '') {
+            echo "<option value=''> Select </option>";
+            for ($a=0; $a < sizeof($agencies); $a++){ 
+                echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";
+            }
+        }else{
+           echo "<option value=''> There is no Data for this Sales Rep. </option>";
+        }
+        
+    }
+
     public function BVAgencyGroup(){
 
         $db = new dataBase();

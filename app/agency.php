@@ -441,7 +441,7 @@ class agency extends Management{
     public function getAgencyGroupByRegionCMAPSWithValuesBV($con,$year=false,$agencyRegion=false,$salesRep=false){
         $sql = new sql();
 
-        $tableCmaps = "wbd y";
+       /* $tableCmaps = "cmaps y";
 
         $columns = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -485,7 +485,7 @@ class agency extends Management{
 
         $from = array('id','agencyGroup');
 
-        $agencyCmaps = $sql->fetch($res,$from,$from);
+        $agencyCmaps = $sql->fetch($res,$from,$from);*/
         
         // ========================================= // 
 
@@ -535,13 +535,13 @@ class agency extends Management{
 
         $agencyAleph = $sql->fetch($resAleph,$fromAleph,$fromAleph);
 
-        if ($agencyAleph == "") {
+       /* if ($agencyAleph == "") {
             $agency = $agencyCmaps;
-        }elseif ($agencyCmaps == "") {
+        }elseif ($agencyCmaps == "") {*/
             $agency = $agencyAleph;
-        }else{
+        /*}else{
             $agency = array_merge($agencyCmaps,$agencyAleph);
-        }        
+        } */       
 
         return $agency;
 
@@ -591,15 +591,14 @@ class agency extends Management{
 
     }
 
-    public function getAgencyGroupByRegion($con,$agencyRegion=false, $year=false){
+    public function getAgencyGroupByRegion($con, $year=false,$agencyRegion=false){
 
         $sql = new sql();
 
-        $table = "ytd y";
+        $table = "wbd y";
 
         $columns = "ag.ID AS 'id',
-                    ag.name AS 'agencyGroup',
-                    r.name AS 'region'
+                    ag.name AS 'agencyGroup'
                    ";
 
         $where = "";
@@ -620,14 +619,14 @@ class agency extends Management{
                 $where .= ")";                
             }
         }
+        $where .= "WHERE ag.region_id = 1";
 
         $join = "LEFT JOIN agency a ON a.ID = y.agency_id
-                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
-                 LEFT JOIN region r ON r.ID = y.sales_representant_office_id";
+                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id";
         
         $res = $sql->selectGroupBy($con,$columns,$table,$join,$where, "ag.name", "ag.id");
 
-        $from = array('id','agencyGroup', 'region');
+        $from = array('id','agencyGroup');
 
         $agency = $sql->fetch($res,$from,$from);
 

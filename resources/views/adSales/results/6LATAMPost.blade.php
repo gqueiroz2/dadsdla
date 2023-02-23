@@ -97,20 +97,20 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> CMAPS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCAST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SCREENSHOT </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SAP </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> BKGS </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SCREENSHOT </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SAP {{$pYear}} </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> SAP {{$ppYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> BKGS {{$pYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> BKGS {{$ppYear}} </td>
 					    </tr>
 					    @for($m = 0; $m < 3; $m++)
 					    	<div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
@@ -230,20 +230,20 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> CMAPS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SCREENSHOT </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SAP </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> BKGS </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SREENSHOT </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SAP {{$pYear}} </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> SAP {{$ppYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> BKGS {{$pYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> BKGS {{$ppYear}} </td>
 					    </tr>
 					    @for($m = 0; $m < 3; $m++)
 					    <div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
@@ -363,20 +363,20 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> CMAPS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SCREENSHOT </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SAP </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> BKGS </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SREENSHOT </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SAP {{$pYear}} </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> SAP {{$ppYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> BKGS {{$pYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> BKGS {{$ppYear}} </td>
 					    </tr>
 					    @for($m = 0; $m < 3; $m++)
 					    <div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	
@@ -495,20 +495,20 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-siz-e: 16px;"> CMAPS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-siz-e: 16px;"> BOOKINGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SCREENSHOT </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SAP </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> SAP </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> BKGS </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SREENSHOT </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> SAP {{$pYear}} </td>
-					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> SAP {{$ppYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px;"> BKGS {{$pYear}} </td>
+					    	<td class="smBlue center" style="width: 3% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> BKGS {{$ppYear}} </td>
 					    </tr>
 					    @for($m = 0; $m < 3; $m++)
 					    <div style="display: none;"> {{ $monthForm = $base->intToMonth(array($month + $m))[0]}}</div>	

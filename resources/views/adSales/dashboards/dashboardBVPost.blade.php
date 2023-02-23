@@ -101,10 +101,11 @@
 								<td class="col oddGrey center" style="font-size:14px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">{{$updateInfo[0]['salesRep']}}</td>
 							</tr>
 							<tr>
-								<th class='newBlue center' colspan='9' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> Control Panel - {{$agencyGroupName}}</th>
+								<th class='newBlue center' colspan='10' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> Control Panel - {{$agencyGroupName}}</th>
 							</tr>
 							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
 								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Client</td>
+								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Agency</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-2}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-1}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year}}</td>
@@ -119,6 +120,7 @@
 								<input type='hidden' readonly='true' type="text" name="agencyID-{{$b}}" id="agencyID-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agencyId']}}">
 								<tr class='center' style='font-size:16px;'>
 									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['client']}}"></td>
+									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="client-{{$b}}" id="client-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agency']}}"></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-2],0,',','.')}}</td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-1],0,',','.')}}</td>
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],0,',','.')}}"></td>
@@ -131,6 +133,7 @@
 							@endfor
 							<tr style='font-size:16px;'>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">TOTAL</td>
+								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year-2],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;" name="total-pYear" id="total-pYear">{{number_format($total[$year-1],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$year],0,',','.')}}</td>
@@ -139,6 +142,7 @@
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;" name="total-forecast-spt" id="total-forecast-spt">{{number_format($total['sptPrev'],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;" name="total-var" id="total-var">{{$total['variation']}}%</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+
 							</tr>		
 						</table>						
 
