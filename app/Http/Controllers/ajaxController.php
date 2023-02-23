@@ -188,10 +188,15 @@ class ajaxController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $year = array(date('Y'));
+        $cYear = (date('Y'));
+        $pYear = (date('Y')-1);
+        $ppYear = (date('Y')-2);
+        $pppYear = (date('Y')-3);
+
+        $years = array($cYear,$pYear,$ppYear,$pppYear);
         $rID = array();
 
-        $agencies = $agency->getAgencyGroupByRegion($con,$year,false);
+        $agencies = $agency->getAgencyGroupByRegion($con,$years,false);
         //var_dump($agencies);
         if ($agencies != '') {
             echo "<option value=''> Select </option>";
@@ -216,10 +221,15 @@ class ajaxController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $year = array(date('Y'));
+        $cYear = (date('Y'));
+        $pYear = (date('Y')-1);
+        $ppYear = (date('Y')-2);
+        $pppYear = (date('Y')-3);
+
+        $years = array($cYear,$pYear,$ppYear,$pppYear);
         $rID = array();
 
-        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$year,array($regionID),array($salesRep));
+        $agencies = $agency->getAgencyGroupByRegionCMAPSWithValuesBV($con,$years,array($regionID),array($salesRep));
         //var_dump($agencies);
         if ($agencies != '') {
             echo "<option value=''> Select </option>";

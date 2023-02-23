@@ -161,7 +161,7 @@
 			              <div class="modal-dialog" role="document">
 			                <div class="modal-content">
 			                  <div class="modal-header">
-			                    <h5 class="modal-title" id="exampleModalLabel">ID Numbers</h5>
+			                    <h5 class="modal-title" id="exampleModalLabel">New Client</h5>
 				                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 				                      <span aria-hidden="true">&times;</span>
 				                    </button>
@@ -174,7 +174,7 @@
 											 <select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
 									            <option selected='true' value="">Select a Client</option>
 									            @for ($s=0; $s < sizeof($list); $s++)
-									                <option value='{{$list[$s]['id']}}'> {{$list[$s]["client"]}} </option> 
+									                <option value='{{$list[$s]['id']}}'> {{$list[$s]["client"]}} - {{$list[$s]["agency"]}} </option> 
                         						@endfor
 									        </select>												
 										</div>
