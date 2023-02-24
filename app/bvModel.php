@@ -26,7 +26,7 @@ class bvModel extends Model{
                    where ag.ID = $agencyGroupId
                    and (sr.id in ($salesRep))
                    and al.`year` in ($year,$pYear,$ppYear)
-                   order by 1 asc";
+                   order by c.name asc";
         //echo"<pre>$queryAleph</pre>";
         $resultAleph = $con->query($queryAleph);
         $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
@@ -298,12 +298,13 @@ class bvModel extends Model{
                     FROM wbd w
                     left join client c on c.ID = w.client_id
                     left join agency a on a.ID = w.agency_id
-                    WHERE c.client_group_id = 1 ";
+                    WHERE c.client_group_id = 1 
+                    ORDER BY c.name ASC";
 
         $from = array('id','client','aID','agency');
         $selectQuery = $con->query($select);
         $client = $sql->fetch($selectQuery, $from, $from);
-
+        $client = $client;
         return $client;
     }
 
@@ -354,7 +355,7 @@ class bvModel extends Model{
                            where c.id in ($tmp1[$c])
                            and a.id in ($tmp2[$c])
                            and cm.`year` in ($year,$pYear,$ppYear)
-                           order by 1 asc";
+                           order by c.name asc";
                 
                     $result[$c] = $con->query($queryClient[$c]);
                     $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
@@ -392,7 +393,7 @@ class bvModel extends Model{
                    left join agency_group ag on ag.ID = a.agency_group_id 
                    where ag.ID = $agencyGroupId
                    and w.`year` in ($pYear,$ppYear,$pppYear)
-                   order by 1 asc";
+                   order by c.name asc";
         //var_dump($queryAleph);
         $resultAleph = $con->query($queryAleph);
         $from = array('agency', 'agencyName', 'client', 'clientName');
