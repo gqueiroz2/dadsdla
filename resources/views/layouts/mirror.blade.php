@@ -114,10 +114,11 @@
 										<a class="dropdown-item" href="{{ route('resultsShareGet') }}"> Share </a>
 										<a class="dropdown-item" href="{{ route('resultsYoYGet') }}"> YoY - Brand </a>
 										<a class="dropdown-item" href="{{ route('resultsMonthlyYoYGet') }}"> YoY - Month </a>
-										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>	
+										
 										@endif
 										@if($userLevel == 'L0' || $userLevel == 'SU' || $userLevel == 'L1' )
 										<a class="dropdown-item" href="{{ route('consolidateResultsGetOffice') }}"> Pacing Office </a>	
+										<a class="dropdown-item" href="{{ route('resultsLATAMGet') }}"> Daily Results </a>	
 										@endif
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										
