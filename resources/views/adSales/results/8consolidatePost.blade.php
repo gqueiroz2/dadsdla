@@ -95,7 +95,7 @@
 						<div class="row">
 							<div class="col lightBlue">
 								<center>
-									<span style='font-size:24px;'> 										
+									<span style='font-size:24px; z-index: 1 !important;'>
 										{{ $salesRegion }} - Consolidate - Brand : ({{$currencyName}}/{{strtoupper($value)}})
 									</span>
 								</center>
@@ -115,11 +115,7 @@
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor
-						        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-						        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-						        	@for($q=0; $q < sizeof($quarter); $q++)
-						        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-						        	@endfor
+						        		<td class='darkBlue center' style="width: 4%;"> Total </td>				        		
 				        		</tr>
 							
 								<tr class="center">
@@ -131,18 +127,6 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousAdSales'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousSAP'][$d]) }} </td>
 						        	@endfor
 					        	</tr>
 
@@ -179,18 +163,6 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentAdSales'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentSAP'][$d]) }} </td>
 						        	@endfor
 					        	</tr>
 
@@ -249,10 +221,6 @@
 							        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 							        	@endfor
 							        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-							        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-							        	@for($q=0; $q < sizeof($quarter); $q++)
-							        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-							        	@endfor
 						        	</tr>
 
 						        	<tr class="center">
@@ -264,18 +232,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousAdSales'][$c][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -312,18 +268,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentAdSales'][$c][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -400,15 +344,12 @@
 
 							<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 								<tr class="center">
-					        		<td class='darkBlue center' style="width: 7% !important;"> DN </td>
+					        		<td class='darkBlue center' style="width: 7% !important;"> WBD </td>
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor
 						        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-						        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-						        	@for($q=0; $q < sizeof($quarter); $q++)
-						        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-						        	@endfor
+						 
 				        		</tr>
 							
 								<tr class="center">
@@ -423,18 +364,7 @@
 						        	@endfor
 					        	</tr>
 
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousSAP'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
+					        	
 					        	<tr class="center">
 					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} Target </td>
 						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
@@ -468,18 +398,6 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentAdSales'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentSAP'][$d]) }} </td>
 						        	@endfor
 					        	</tr>
 
@@ -538,10 +456,6 @@
 							        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 							        	@endfor
 							        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-							        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-							        	@for($q=0; $q < sizeof($quarter); $q++)
-							        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-							        	@endfor
 						        	</tr>
 
 						        	<tr class="center">
@@ -553,18 +467,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousAdSales'][$c][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -601,18 +503,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentAdSales'][$c][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -706,15 +596,11 @@
 
 							<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 								<tr class="center">
-					        		<td class='darkBlue center' style="width: 7% !important;"> DN </td>
+					        		<td class='darkBlue center' style="width: 7% !important;"> WBD </td>
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor
-						        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-						        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-						        	@for($q=0; $q < sizeof($quarter); $q++)
-						        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-						        	@endfor
+						        		<td class='darkBlue center' style="width: 4%;"> Total </td>						        		
 				        		</tr>
 							
 								<tr class="center">
@@ -726,18 +612,6 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousAdSales'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousSAP'][$d]) }} </td>
 						        	@endfor
 					        	</tr>
 
@@ -774,18 +648,6 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentAdSales'][$d]) }} </td>
-						        	@endfor
-					        	</tr>
-
-					        	<tr class="center">
-					        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentSAP'][$d]) }} </td>
 						        	@endfor
 					        	</tr>
 
@@ -848,11 +710,7 @@
 							        	@for($m=0; $m < sizeof($month); $m++)
 							        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 							        	@endfor
-							        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-							        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-							        	@for($q=0; $q < sizeof($quarter); $q++)
-							        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-							        	@endfor
+							        		<td class='darkBlue center' style="width: 4%;"> Total </td>							        		
 						        	</tr>
 
 						        	<tr class="center">
@@ -864,18 +722,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousAdSales'][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['previousSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 
@@ -912,18 +758,6 @@
 							        			<?php $clr = 'medBlue'; ?>
 							        		@endif
 							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentAdSales'][$d]) }} </td>
-							        	@endfor
-						        	</tr>
-
-						        	<tr class="center">
-						        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-							        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-							        		@if($d == 12)
-							        			<?php $clr = 'smBlue'; ?>
-							        		@else
-							        			<?php $clr = 'rcBlue'; ?>
-							        		@endif
-							        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($newMtx[$c]['currentSAP'][$d]) }} </td>
 							        	@endfor
 						        	</tr>
 

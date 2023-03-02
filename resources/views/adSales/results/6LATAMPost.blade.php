@@ -39,7 +39,7 @@
 						{{$render->value2()}}
 					</div>
 
-					<div class="row justify-content-center">          
+					<!--<div class="row justify-content-center">          
 						<div class="col">       
 							<div class="form-group">
 								<label><b> Date: </b></label> 
@@ -49,7 +49,7 @@
 								<input type="date" class="form-control" name="log" value="{{date("m/d/Y")}}">
 							</div>
 						</div>
-					</div>  
+					</div>  -->
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
@@ -96,11 +96,7 @@
 					    <tr>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
-					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
-					    	@else
-					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
-					    	@endif
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>					    	
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCAST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SCREENSHOT </td>
@@ -161,7 +157,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}})  </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> (JAN-{{$actualMonth}})  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentYTD'],0,',','.')}} </td>
@@ -230,7 +226,7 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
@@ -294,7 +290,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}}) </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> (JAN-{{$actualMonth}}) </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentYTD'],0,',','.')}} </td>
@@ -363,7 +359,7 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BOOKINGS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
@@ -427,7 +423,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    		<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}})  </td>
+					    		<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> (JAN-{{$actualMonth}})  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentYTD'],0,',','.')}} </td>
@@ -495,7 +491,7 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> MONTH </td>
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	@if($regionID == "1")
-					    		<td class="smBlue center" style="width: 7% !important; font-siz-e: 16px;"> BOOKINGS </td>
+					    		<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
 					    	@else
 					    	   	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> YTD </td>
 					    	@endif
@@ -559,7 +555,7 @@
 						    </tr>
 						@endfor
 						<tr>
-					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> YTD (JAN-{{$actualMonth}}) </td>
+					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> (JAN-{{$actualMonth}}) </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentYTD'],0,',','.')}} </td>

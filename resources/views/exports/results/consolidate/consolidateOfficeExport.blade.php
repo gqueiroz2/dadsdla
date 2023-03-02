@@ -10,15 +10,11 @@
 
 <table>
 	<tr>
-		<td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold;"> DN </td>
+		<td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold;"> WBD </td>
 		@for($m=0; $m < sizeof($data['monthView']); $m++)
 			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['monthView'][$m] }} </td>
 		@endfor
 			<td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold; text-align: right;"> Total </td>
-			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> YTD </td>
-		@for($q=0; $q < sizeof($data['quarter']); $q++)
-			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['quarter'][$q] }} </td>
-		@endfor
 	</tr>
 
 	<tr>
@@ -29,18 +25,6 @@
 			@else 
 				<td style="background-color: #c3d8ef; font-weight: bold;"> {{$data['mtxDN']['previousAdSales'][$d] }} </td>
 			@endif			
-		@endfor
-	</tr>
-
-	<tr>
-		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
-		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
-			@if($d == 12)
-				<td style=" color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtxDN']['previousSAP'][$d] }} </td>
-			@else
-				<td style="background-color: #dce6f1; font-weight: bold;"> {{$data['mtxDN']['previousSAP'][$d] }} </td>
-			@endif
-			
 		@endfor
 	</tr>
 
@@ -73,17 +57,6 @@
 				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
 			@else
 				<td style="background-color: #c3d8ef; font-weight: bold;"> {{$data['mtxDN']['currentAdSales'][$d] }} </td>
-			@endif
-		@endfor
-	</tr>
-
-	<tr>
-		<td style="background-color: #143052; color: #FFFFFF; font-weight: bold;"> {{ $data['years'][0] }} SAP </td>
-		@for($d=0; $d < sizeof($data['mtxDN']['previousAdSales']); $d++)
-			@if($d == 12)
-				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtxDN']['currentSAP'][$d] }} </td>
-			@else
-				<td style="background-color: #dce6f1; font-weight: bold;"> {{$data['mtxDN']['currentSAP'][$d] }} </td>
 			@endif
 		@endfor
 	</tr>
@@ -143,10 +116,6 @@
     		<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['monthView'][$m] }} </td>
     	@endfor
     		<td style="background-color: #0f243e; color: #FFFFFF; font-weight: bold; text-align: right;"> Total </td>
-    		<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> YTD </td>
-    	@for($q=0; $q < sizeof($data['quarter']); $q++)
-    		<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;">  {{ $data['quarter'][$q] }} </td>
-    	@endfor
 	</tr>
 
 	<tr>
@@ -156,17 +125,6 @@
 				<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
     		@else
 				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx']['previousAdSales'][$c][$d] }} </td>
-    		@endif
-    	@endfor
-	</tr>
-
-	<tr>
-		<td style="background-color: #dce6f1; font-weight: bold;"> {{ $data['years'][1] }} SAP </td>
-    	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
-    		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
-    		@else
-    			<td style="background-color: #dce6f1; font-weight: bold;"> {{$data['mtx']['previousSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>
@@ -200,17 +158,6 @@
     			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
     		@else
     			<td style="background-color: #c3d8ef; font-weight: bold;"> {{$data['mtx']['currentAdSales'][$c][$d] }} </td>
-    		@endif
-    	@endfor
-	</tr>
-
-	<tr>
-		<td style="background-color: #dce6f1; font-weight: bold; "> {{ $data['years'][0] }} SAP </td>
-    	@for($d=0; $d < sizeof($data['mtx']['previousAdSales'][$c]); $d++)
-    		@if($d == 12)
-    			<td style="color: #FFFFFF; font-weight: bold; background-color: #143052;"> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
-    		@else
-    			<td style="background-color: #dce6f1; font-weight: bold;"> {{$data['mtx']['currentSAP'][$c][$d] }} </td>
     		@endif
     	@endfor
 	</tr>

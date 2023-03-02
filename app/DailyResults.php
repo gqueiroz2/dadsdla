@@ -9,7 +9,7 @@ class DailyResults extends Model{
 
     // == Essa função é usada para consultar a tabela 'CMAPS' ou 'YTD' de acordo com a região == //
     public function ytd($con, $sql, Int $region, Float $pRate, Float $brlPRate, String $value, String $day, String $month, String $realMonth, String $year, String $brands, Int $currencyID){
-        if ($region == 1) {
+       /* if ($region == 1) {
             // == Caso a região seja "Brazil (1)", ele leva em consideração a base do CMAPS e o valor do log diario == //
             $regionYtd = "daily_results";
             $month = $month + 0;
@@ -42,46 +42,56 @@ class DailyResults extends Model{
                     //var_dump($querryONL);
                     break;
             }
-        } else {
+        } else {*/
             // == Caso a região não seja "Brazil (1)", ele leva em consideração a base do YTD e ignora o valor do log diario (levando só em consideração o mês e o ano) == //
-            $regionYtd = "YTD";
+            $regionYtd = "wbd";
             $month = $month + 0;
             $realMonth = $realMonth + 0;
 
             // == Alteração na $value para usar como parametro de consulta, de acordo como esta no banco == //
             if ($value == "gross") {
-                $value = "gross_revenue";
+                $value = "gross_value";
             } else {
-                $value = "net_revenue";
+                $value = "net_value";
             }
 
             switch ($brands){
                 case "total":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9,10,13,14,15,16,25,26) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16,25,26,34,48,49,50) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "discovery":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (9,10,13,14,15,16) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "sony":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN IN (22, 23) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (22, 23) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (25, 26) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "wm":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id NOT IN IN (22, 23) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE sales_representant_office_id = $region AND brand_id IN (25, 26) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,50) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
             }
             
+       // }
+
+        if($currencyID == '1'){
+            $pRateWM = 1; // Temporary value for WM pRate, will need change after 2023
+        }else {
+            if ($year <= 2022 ) {
+                $pRateWM = 4.99;
+            }else{
+                $pRateWM = $brlPRate;
+            }
         }
 
         $resultTV = $con->query($querryTV);
@@ -90,17 +100,11 @@ class DailyResults extends Model{
         $resultONL = $con->query($querryONL);
         $valueONL = $sql->fetchSUM($resultONL, $value);
     
-        if ($region == 1 && $currencyID == 1 && $value == 'net') {
-            $monthValues = array(($valueTV[$value]) * 0.8, ($valueONL[$value]) * 0.8, (($valueTV[$value] + $valueONL[$value])) * 0.8);
-        }elseif($region == 1 && $currencyID == 1 && $value == 'gross'){
-            $monthValues = array(($valueTV[$value]), ($valueONL[$value]), (($valueTV[$value] + $valueONL[$value])));
-        }elseif($region == 1 && $currencyID != 1 && $value == 'net'){
-            $monthValues = array(($valueTV[$value] / $brlPRate) * 0.8, ($valueONL[$value] / $brlPRate) * 0.8, (($valueTV[$value] + $valueONL[$value] / $brlPRate) * 0.8));
-        }elseif($region == 1 && $currencyID != 1 && $value == 'gross'){
-            $monthValues = array($valueTV[$value] / $brlPRate, $valueONL[$value] / $brlPRate, ($valueTV[$value] + $valueONL[$value]) / $brlPRate);
-        }elseif($value == 'gross_revenue' || $value == 'net_revenue'){
+        //if($region == 1 && $currencyID != 1 && $regionYtd == 'wbd'){
+            $monthValues = array($valueTV[$value] * $pRateWM, $valueONL[$value] * $pRateWM, ($valueTV[$value] + $valueONL[$value]) * $pRateWM);
+        /*}elseif($value == 'gross_value' || $value == 'net_value'){
             $monthValues = array($valueTV[$value] * $pRate, $valueONL[$value] * $pRate, ($valueTV[$value] + $valueONL[$value]) * $pRate);
-        }
+        }*/
        
         return $monthValues;
     }
@@ -412,6 +416,7 @@ class DailyResults extends Model{
         if($region == 1){
             $sql = new sql();
             $querry = "SELECT DISTINCT (log) FROM daily_results WHERE real_date = '$date'";
+            //var_dump($querry);
             $result = $con->query($querry);
             $from = array("log");
             $value = $sql->fetch($result, $from, $from);
@@ -432,6 +437,20 @@ class DailyResults extends Model{
         }
         
 
+    }
+
+    public function getCurrentDate($con){
+        $sql = new sql();
+
+        $select = "SELECT sd.current_throught AS 'date'
+                    from sources_date sd 
+                    where sd.source = 'ALEPH / WBD'";
+
+        $result = $con->query($select);
+        $from = array('date');
+        $date = $sql->fetch($result, $from, $from)[0]['date'];
+
+        return $date;
     }
 
 }

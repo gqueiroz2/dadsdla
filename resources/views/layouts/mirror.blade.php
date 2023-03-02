@@ -143,6 +143,8 @@
 										<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
 										<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>
 										
+										<a class="dropdown-item" href="{{ route('resumeBVGet') }}"> Resume BV </a>
+										
 									</div>
 								</li>
 								@endif

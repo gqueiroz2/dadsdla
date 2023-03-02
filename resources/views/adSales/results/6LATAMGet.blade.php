@@ -39,7 +39,7 @@
 						{{$render->value2()}}
 					</div>
 
-					<div class="row justify-content-center">          
+					<!--<div class="row justify-content-center">          
 						<div class="col">       
 							<div class="form-group">
 								<label><b> Date: </b></label> 
@@ -49,7 +49,7 @@
 								<input type="date" class="form-control" name="log" value="{{date("m/d/Y")}}">
 							</div>
 						</div>
-					</div>  
+					</div>  -->
 
 					<div class="col-sm">
 						<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>

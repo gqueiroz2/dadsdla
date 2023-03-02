@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post("BV-BaseFilter","ajaxController@BVBaseFilter");
 
 			Route::post("BV-agencyGroup","ajaxController@BVAgencyGroup");
+			Route::post("resume-agencyGroup","ajaxController@BVAgencyGroupNoRep");
 
 			Route::post('typeByRegionBV', 'ajaxController@typeByRegionBV');
 

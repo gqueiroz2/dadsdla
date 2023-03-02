@@ -88,12 +88,13 @@ class consolidateResults extends Model{
 		$form = "bts";
 		$year = date('Y');
 		$pYear = $year - 1;
+		$b = new brand();
 		switch ($type) {
 			case 'brand':	
 			//var_dump($typeSelect);
 
 				if ($year >= '2022' || $pYear >= '2022' && $region == '1') {
-					for ($b=0; $b < sizeof($typeSelect); $b++) {		           
+					for ($b=0; $b < sizeof($typeSelect); $b++) {							
 			            for ($m=0; $m < sizeof($month); $m++) { 
 			            	
 			            	//var_dump("=====");
@@ -329,7 +330,7 @@ class consolidateResults extends Model{
 				$rtr = false;
 				break;
 		}
-
+		//var_dump($rtr);
 		return $rtr;
 	}
 
@@ -1233,7 +1234,7 @@ class consolidateResults extends Model{
             //var_dump($where);
             $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
             //var_dump($selectSum);
-            
+            //var_dump($sql->fetchSum($selectSum, $as));
             $tmp = $sql->fetchSum($selectSum, $as)["sum"];
             //var_dump($tmp);
 
@@ -1264,7 +1265,7 @@ class consolidateResults extends Model{
             }           
 
         }
-
+        //var_dump($rtr);
         return $rtr;
 		
     }    
@@ -1274,7 +1275,7 @@ class consolidateResults extends Model{
 
     public function addDN($mtx){
 		
-		for ($j=0; $j < 18; $j++) { 
+		for ($j=0; $j < 13; $j++) { 
 			$mtxDN['previousAdSales'][$j] = 0.0;
 			$mtxDN['previousSAP'][$j] = 0.0;
 			$mtxDN['currentTarget'][$j] = 0.0;
@@ -1283,7 +1284,7 @@ class consolidateResults extends Model{
 			$mtxDN['currentCorporate'][$j] = 0.0;
 		}
 		
-		for ($j=0; $j < 18; $j++) { 
+		for ($j=0; $j < 13; $j++) { 
 			for ($k=0; $k < sizeof($mtx['previousAdSales']); $k++) { 		
 				$mtxDN['previousAdSales'][$j] += $mtx['previousAdSales'][$k][$j];
 				$mtxDN['previousSAP'][$j] += $mtx['previousSAP'][$k][$j];
@@ -1300,8 +1301,8 @@ class consolidateResults extends Model{
 	public function assemble($mtx){
 		$pivot = date('m');
 		$mtx = $this->addTotal($mtx);
-		$mtx = $this->sumYTD($mtx,$pivot);
-		$mtx = $this->addQuarters($mtx);
+		/*$mtx = $this->sumYTD($mtx,$pivot);
+		$mtx = $this->addQuarters($mtx);*/
 		return $mtx;
 	}
 

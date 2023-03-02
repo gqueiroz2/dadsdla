@@ -38,6 +38,15 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('bvSaveForecast');
 		});
 
+		Route::group(['prefix'=>'resumeBV'],function(){
+			Route::get('/','bvController@resumeBVGet')
+							->name('resumeBVGet');
+			Route::post('/','bvController@resumeBVPost')
+								->name('resumeBVPost');
+			/*Route::post('/save','bvController@bvSaveForecast')
+										->name('bvSaveForecast');*/
+		});
+
 
 	});
 });

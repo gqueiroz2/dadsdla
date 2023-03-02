@@ -32,7 +32,6 @@ class bvModel extends Model{
         $from = array('srID' , 'srName','agency', 'agencyName', 'client', 'clientName');
         $valueAleph = $sql->fetch($resultAleph, $from, $from);
     
-        
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
         $value = $valueAleph;
 

@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Request;
 use App\Render;
 use App\dataBase;
 use App\region;
+use App\salesRep;
 use App\pRate;
 use App\brand;
+use App\base;
 use App\agency;
 use App\bvModel;
 use App\sql;
@@ -45,7 +47,7 @@ class bvController extends Controller{
       $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
       $currency = Request::get('currency');
       $value = Request::get('value');
-      //var_dump(Request::all());
+      
       $year = (int)date("Y");
       $salesRegion = array(
          array(
@@ -57,12 +59,14 @@ class bvController extends Controller{
 
       $render = new Render();
       $bvModel = new bvModel();
+
+      $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
+
       $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
       $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
       $list = $bvModel->listOFClients($con, $year);
-      $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
-      
+
       $title = "Control Panel - BV";
       $titleExcel = "Control Panel - BV.xlsx";
 
@@ -104,7 +108,7 @@ class bvController extends Controller{
       $currency = (int) Request::get('currency');
       $salesRep = (int) Request::get('salesRep');
       $saveButtonGet = Request::all();
-
+      //var_dump(Request::all());
       $default = $db->defaultConnection();
       $con = $db->openConnection($default);
       $year = (int)date("Y");
@@ -123,7 +127,11 @@ class bvController extends Controller{
 
       // == Getting and saving any new client inclusion by salesRep == //
       if ($saveButtonGet['client'][0] != null) {
-         $saveNewClient = $bvModel->newClientInclusion($con,$agencyGroup,$salesRep,$saveButtonGet['client'][0]);
+         //var_dump('aki');
+         //var_dump($saveButtonGet['client'][0]);
+         $test = explode(',', $saveButtonGet['client'][0]);
+         //var_dump($test);
+         $saveNewClient = $bvModel->newClientInclusion($con,$agencyGroup,$salesRep,$test[0],$test[1]);
       
 
       }else{
@@ -132,9 +140,7 @@ class bvController extends Controller{
             $clientsByAE = array_values($clientsByAE);
          }
          
-      }
-
-      
+      }      
 
       // == Using the size of $clientByAE we can do a for to get the correcty match for every registry get by front == //
       for ($i = 0; $i < sizeof($clientsByAE); $i++) {
@@ -182,6 +188,109 @@ class bvController extends Controller{
          }      
       }
 
-      return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color', 'title', 'titleExcel'));
+     return view("adSales.dashboards.dashboardBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color', 'title', 'titleExcel'));
+   }
+
+   public function resumeBVGet(){
+      $db = new dataBase();
+      $default = $db->defaultConnection();
+      $con = $db->openConnection($default);
+      $region = new region();
+      $salesRegion = array(
+         array(
+            'id' => '1',
+            'name' => 'Brazil',
+            'role' => 'Regional Office'
+         )
+      );
+
+      $render = new Render();
+
+      return view("adSales.dashboards.resumeBVGet", compact('region', 'salesRegion', 'render'));
+   }
+
+   public function resumeBVPost(){
+      $db = new dataBase();
+      $sql = new sql();
+      $default = $db->defaultConnection();
+      $con = $db->openConnection($default);
+      $a = new agency();
+      $sr = new salesRep();
+      $base = new base();
+      $region = new region();
+      $agencyGroup = Request::get('agencyGroup');
+      $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
+      $currency = Request::get('currency');
+      $value = Request::get('value');
+      //var_dump(Request::all());
+      $year = (int)date("Y");
+      $salesRegion = array(
+         array(
+            'id' => '1',
+            'name' => 'Brazil',
+            'role' => 'Regional Office'
+         )
+      );
+
+      $render = new Render();
+      $bvModel = new bvModel();
+      $b = new brand();
+      $brand = $b->getBrandFromTable($con,false);
+      $tmp = $sr->getSalesRepByRegionBV($con, array($salesRegion[0]['id']),false, $year);
+      for ($s=0; $s <sizeof($tmp); $s++) { 
+         $tmp2[] = $tmp[$s]['id'];
+      }
+
+      $salesRep = $base->arrayToString($tmp2,false,false);
+      //var_dump($salesRep);
+
+      $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
+      
+      $total = $bvModel->getBVTotal($bvTest, $year);
+      $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
+      $list = $bvModel->listOFClients($con, $year);
+      $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
+
+      $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroup, $salesRep, $year, $con, $sql);
+      
+      for ($c=0; $c <sizeof($clientsByAE) ; $c++) { 
+         for ($b=0; $b <sizeof($brand) ; $b++) { 
+            $tableBrandPyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-1, $clientsByAE[$c]['client']);
+            $tableBrandPpyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-2, $clientsByAE[$c]['client']);
+            $tableBrandPppyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-3, $clientsByAE[$c]['client']);
+         }
+      }
+
+     var_dump($tableBrandPppyear);
+
+      $liquid = $bvModel->liquidTable($agencyGroup, $year, $con, $value, $salesRep, $currency,$brand);
+      $investTotalBrand = $bvModel->totalperBrandInvest($liquid);
+      $totalYearInvest = $bvModel->totalInvestYear($liquid, $investTotalBrand);
+      
+      $title = "Control Panel - BV";
+      $titleExcel = "Control Panel - BV.xlsx";
+
+      
+      for ($b=0; $b <sizeof($bvTest) ; $b++) { 
+         $color[$b] = 'even';
+
+         if ($newClient) {
+            for ($c=0; $c <sizeof($newClient) ; $c++) { 
+               if ($bvTest[$b]['clientId'] == $newClient[$c]['client']) {
+                  $tmpColor = true;
+               }else{
+                  $tmpColor = false;
+               }
+
+               if ($tmpColor) {
+                  $color[$b] = 'oddGrey';
+               }else{
+                  $color[$b] = 'even';
+               }
+            }
+         }      
+      }
+
+      return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','tableBrandPyear','tableBrandPpyear','tableBrandPppyear'));
    }
 }

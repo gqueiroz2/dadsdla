@@ -10,6 +10,25 @@ use App\sql;
 
 class brand extends Management{
 
+    public function getBrandFromTable($con , $ID = false){
+		
+		$sql = new sql();
+		$table = "wbd w";
+		$columns = "b.id,b.name,b.type,b.brand_group_id";
+		$from = array('id','name','type','brand_group_id');	
+		$where = "WHERE sub_brand = '0' AND gross_value > 0";//false;//"WHERE name != 'OTH'";
+
+		if($ID){
+			$IDS = implode(",", $ID);
+			$where.= " WHERE b.id IN ($IDS)";
+		}
+
+		$join = "left join brand b on b.id = w.brand_id";
+		$result = $sql->selectDistinct($con,$columns,$table,$join,$where);
+		$brand = $sql->fetch($result,$from,$from);
+		return $brand;
+	}
+
     public function getBrand($con , $ID = false){
 		
 		$sql = new sql();
@@ -23,7 +42,8 @@ class brand extends Management{
 			$where.= " WHERE brand.id IN ($IDS)";
 		}
 
-		$result = $sql->select($con,$columns,$table,null,$where);
+		$order = 'ORDER BY brand.brand_group_id';
+		$result = $sql->select($con,$columns,$table,null,$where,$order);
 		$brand = $sql->fetch($result,$from,$from);
 		return $brand;
 	}

@@ -42,8 +42,12 @@ class resultsLATAMController extends Controller{
         $regionID = Request::get('region');
         $currencyID = Request::get('currency');
         $value = Request::get('value');
-        $log = Request::get('log');
 
+        //this function get always the date of the last update of wbd base
+        $date = $dr->getCurrentDate($con);
+        $log = $date;
+        
+        //var_dump($log);
         // == Gera o valor do pRate com base na moeda(currency) e o ano atual == //
         if ($currencyID == '4') {
             $pRate = 1.0;

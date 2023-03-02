@@ -15,17 +15,17 @@
 <tr>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> MONTH </td>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -80,7 +80,7 @@
 @endfor
 
 <tr>
-    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> YTD (JAN-{{$data['actualMonth']}} </td>
+    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> (JAN-{{$data['actualMonth']}}) </td>
 </tr>
 
 <tr>
@@ -147,17 +147,17 @@
 <tr>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> MONTH </td>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST  </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -212,7 +212,7 @@
 @endfor
 
 <tr>
-    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> YTD (JAN-{{$data['actualMonth']}} </td>
+    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> (JAN-{{$data['actualMonth']}}) </td>
 </tr>
 
 <tr>
@@ -279,17 +279,17 @@
 <tr>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> MONTH </td>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST  </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -344,7 +344,7 @@
 @endfor
 
 <tr>
-    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> YTD (JAN-{{$data['actualMonth']}} </td>
+    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> (JAN-{{$data['actualMonth']}}) </td>
 </tr>
 
 <tr>
@@ -411,17 +411,17 @@
 <tr>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> MONTH </td>
     <td style="background-color: #a6a6a6; color: #000000; font-weight: bold; text-align: center;"> PLATAFORM </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> CMAPS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> PLAN </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> FCST  </td>
     <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SCREENSHOT </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['pYear']}} </td>
-    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> SAP {{$data['ppYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['pYear']}} </td>
+    <td style="background-color: #143052; color: #ffffff; font-weight: bold; text-align: center;"> BKGS {{$data['ppYear']}} </td>
 </tr>
 
 @for($m = 0; $m < 3; $m++)
@@ -476,7 +476,7 @@
 @endfor
 
 <tr>
-    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> YTD (JAN-{{$data['actualMonth']}} </td>
+    <td style="background-color: #e6e6e6; color: #000000; font-weight: bold; text-align: center; float: center;" rowspan="4"> (JAN-{{$data['actualMonth']}}) </td>
 </tr>
 
 <tr>

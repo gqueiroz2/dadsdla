@@ -112,10 +112,6 @@
 					        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 					        	@endfor
 					        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-					        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-					        	@for($q=0; $q < sizeof($quarter); $q++)
-					        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-					        	@endfor
 			        		</tr>
 						
 							<tr class="center">
@@ -130,7 +126,7 @@
 					        	@endfor
 				        	</tr>
 
-				        	<tr class="center">
+				        	<!--<tr class="center">
 				        		<td class="smBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
 					        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
 					        		@if($d == 12)
@@ -140,7 +136,7 @@
 					        		@endif
 					        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousSAP'][$d]) }} </td>
 					        	@endfor
-				        	</tr>
+				        	</tr>-->
 
 				        	<tr class="center">
 				        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} Target </td>
@@ -178,7 +174,7 @@
 					        	@endfor
 				        	</tr>
 
-				        	<tr class="center">
+				        	<!--<tr class="center">
 				        		<td class="smBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
 					        	@for($d=0; $d < sizeof($mtxDN['previousAdSales']); $d++)
 					        		@if($d == 12)
@@ -188,7 +184,7 @@
 					        		@endif
 					        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['currentSAP'][$d]) }} </td>
 					        	@endfor
-				        	</tr>
+				        	</tr>-->
 
 				        	<tr class="center">
 				        		<td class="smBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
@@ -244,11 +240,7 @@
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor
-						        		<td class='darkBlue center' style="width: 4%;"> Total </td>
-						        		<td class='lightGrey center' style="width: 4%;"> YTD </td>
-						        	@for($q=0; $q < sizeof($quarter); $q++)
-						        		<td class='lightGrey center' style="width: 4%;"> {{ $quarter[$q] }} </td>
-						        	@endfor
+						        		<td class='darkBlue center' style="width: 4%;"> Total </td>						        		
 					        	</tr>
 
 					        	<tr class="center">
@@ -263,7 +255,7 @@
 						        	@endfor
 					        	</tr>
 
-					        	<tr class="center">
+					        	<!--<tr class="center">
 					        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
 						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
 						        		@if($d == 12)
@@ -273,7 +265,7 @@
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
 						        	@endfor
-					        	</tr>
+					        	</tr>-->
 
 					        	<tr class="center">
 					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[0] }} Target </td>
@@ -311,7 +303,7 @@
 						        	@endfor
 					        	</tr>
 
-					        	<tr class="center">
+					        	<!--<tr class="center">
 					        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
 						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
 						        		@if($d == 12)
@@ -321,7 +313,7 @@
 						        		@endif
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
 						        	@endfor
-					        	</tr>
+					        	</tr>-->
 
 					        	<tr class="center">
 					        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
