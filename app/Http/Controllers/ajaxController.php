@@ -234,7 +234,7 @@ class ajaxController extends Controller{
         if ($agencies != '') {
             echo "<option value=''> Select </option>";
             for ($a=0; $a < sizeof($agencies); $a++){ 
-                echo "<option value=".$agencies[$a]['id'].">".$agencies[$a]['agencyGroup']."</option>";
+                echo "<option value=".$agencies[$a]['id'].">".strtoupper($agencies[$a]['agencyGroup'])."</option>";
             }
         }else{
            echo "<option value=''> There is no Data for this Sales Rep. </option>";
