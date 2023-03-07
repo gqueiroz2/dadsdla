@@ -218,6 +218,7 @@ class ajaxController extends Controller{
         $regionID = '1';
 
         $salesRep = Request::get('salesRep');
+        var_dump($salesRep);
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 

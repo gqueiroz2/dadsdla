@@ -441,52 +441,6 @@ class agency extends Management{
     public function getAgencyGroupByRegionCMAPSWithValuesBV($con,$year=false,$agencyRegion=false,$salesRep=false){
         $sql = new sql();
 
-       /* $tableCmaps = "cmaps y";
-
-        $columns = "ag.ID AS 'id',
-                    ag.name AS 'agencyGroup'
-                   ";
-
-        $where = "";
-        //var_dump($salesRep);
-        if($agencyRegion){
-            $agencyRegions = implode(",", $agencyRegion);
-
-            if ($year) {
-                $where .= "WHERE  (gross_value > 0) AND year IN (";
-                for ($y=0; $y < sizeof($year); $y++) { 
-                    $where .= "'".$year[$y]."'";
-                    if($y < ( sizeof($year) - 1) ){
-                        $where .= ",";
-                    }
-                }
-
-                $where .= ")";  
-                $where .= " AND sr.ID IN (";
-                for ($s=0; $s < sizeof($salesRep); $s++) { 
-                    $where .= " '".$salesRep[$s]."' ";
-                    if($s < ( sizeof($salesRep) - 1) ){
-                        $where .= ",";
-                    }
-                }
-
-                $where .= ")";                
-            }else{
-                $where = "WHERE (sr.ID IN ($salesRep)) AND (gross_value > 0)";
-            }
-        }
-        //var_dump($where);
-        $join = "LEFT JOIN agency a ON a.ID = y.agency_id
-                 LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
-                 LEFT JOIN sales_rep sr ON sr.ID = y.current_sales_rep_id
-                 ";
-        
-        $res = $sql->selectGroupBy($con,$columns,$tableCmaps,$join,$where, "ag.name", "ag.id");
-
-        $from = array('id','agencyGroup');
-
-        $agencyCmaps = $sql->fetch($res,$from,$from);*/
-        
         // ========================================= // 
 
         $tableAleph = "wbd y";
@@ -535,13 +489,9 @@ class agency extends Management{
 
         $agencyAleph = $sql->fetch($resAleph,$fromAleph,$fromAleph);
 
-       /* if ($agencyAleph == "") {
-            $agency = $agencyCmaps;
-        }elseif ($agencyCmaps == "") {*/
-            $agency = $agencyAleph;
-        /*}else{
-            $agency = array_merge($agencyCmaps,$agencyAleph);
-        } */       
+      
+        $agency = $agencyAleph;
+               
 
         return $agency;
 
