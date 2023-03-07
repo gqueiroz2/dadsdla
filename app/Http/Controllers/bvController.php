@@ -59,7 +59,7 @@ class bvController extends Controller{
 
       $render = new Render();
       $bvModel = new bvModel();
-
+      //var_dump($salesRep);
       $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
 
       $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
@@ -159,7 +159,7 @@ class bvController extends Controller{
          $clientsByAE = array_values($clientsByAE);
 
       }
-
+     // var_dump($clientsByAE);
       $agencyGroupName = $a->getAgencyGroupByID($con, $agencyGroup, '1');
       $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
