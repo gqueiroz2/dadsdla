@@ -38,6 +38,31 @@ class bvModel extends Model{
         return $value;
     }
 
+    public function getClientByYear(String $agencyGroupId, string $salesRep, int $year, Object $con, Object $sql){
+        $base = new base();   
+        
+
+        // == This part make the integration with WarnerMedia ALEPH base == //
+        $queryAleph = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
+                   left join agency a on a.ID = al.agency_id 
+                   left join client c on c.ID = al.client_id 
+                   left join sales_rep sr on sr.ID = al.current_sales_rep_id  
+                   left join agency_group ag on ag.ID = a.agency_group_id 
+                   where ag.ID = $agencyGroupId
+                   and (sr.id in ($salesRep))
+                   and al.`year` in ($year)
+                   order by c.name asc";
+        //echo"<pre>$queryAleph</pre>";
+        $resultAleph = $con->query($queryAleph);
+        $from = array('agency', 'agencyName', 'client', 'clientName');
+        $valueAleph = $sql->fetch($resultAleph, $from, $from);
+    
+        // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
+        $value = $valueAleph;
+
+        return $value;
+    }
+
 
     public function unique_multidim_array($array, $key) {
         $temp_array = array();
@@ -299,7 +324,7 @@ class bvModel extends Model{
                     left join agency a on a.ID = w.agency_id
                     WHERE c.client_group_id = 1 
                     ORDER BY c.name ASC";
-
+        //var_dump($select);
         $from = array('id','client','aID','agency');
         $selectQuery = $con->query($select);
         $client = $sql->fetch($selectQuery, $from, $from);
@@ -535,8 +560,18 @@ class bvModel extends Model{
         return $total;
     }
 
-    public function totalperBrand($table){
+    public function totalperBrand( $table,$brand){
+        //var_dump($table);
+        $totalBrand = 0;
 
+        for ($c=0; $c <sizeof($brand); $c++) { 
+            $totalBrand += $table[$c]['SUM(net_value)'];
+        }
+        
+                
+       var_dump($totalBrand);
+
+        return $totalBrand;
 
     }
 

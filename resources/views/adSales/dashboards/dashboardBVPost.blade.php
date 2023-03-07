@@ -93,27 +93,27 @@
 					<div class="col"> 				       			
 						<table id='table' style='width: 100%; zoom: 85%;'>
 							<tr>
-								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">Updated date</td>
+								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">UPDATED DATE</td>
 								<td class="col oddGrey center" style="font-size:14px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">{{$updateInfo[0]['updateDate']}}</td>
 							</tr>
 							<tr>
-								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">Sales Rep</td>
+								<td class="col medBlue center" style="font-size:16px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">SALES REP</td>
 								<td class="col oddGrey center" style="font-size:14px; width:3%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">{{$updateInfo[0]['salesRep']}}</td>
 							</tr>
 							<tr>
-								<th class='newBlue center' colspan='10' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> Control Panel - {{$agencyGroupName}}</th>
+								<th class='newBlue center' colspan='10' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> CONTROL PANEL - {{$agencyGroupName}}</th>
 							</tr>
 							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
-								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Client</td>
-								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Agency</td>
+								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">CLIENT</td>
+								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">AGENCY</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-2}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-1}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year}}</td>
-								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Forecast {{$year}}</td>
-								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Total {{$year}}</td>
-								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Forecast SPT {{$year}}</td>
-								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Percentage</td>
-								<td class="col oddGrey" style="width:14%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">Status</td>
+								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST {{$year}}</td>
+								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL {{$year}}</td>
+								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST SPT {{$year}}</td>
+								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">PERCENTAGE</td>
+								<td class="col oddGrey" style="width:14%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">STATUS</td>
 							</tr>
 							@for($b = 0; $b < sizeof($bvTest) ; $b++)	
 								<input type='hidden' readonly='true' type="text" name="clientID-{{$b}}" id="clientID-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['clientId']}}">

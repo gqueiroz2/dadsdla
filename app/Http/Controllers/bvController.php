@@ -242,7 +242,7 @@ class bvController extends Controller{
       }
 
       $salesRep = $base->arrayToString($tmp2,false,false);
-      //var_dump($salesRep);
+     // var_dump($salesRep);
 
       $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       
@@ -252,16 +252,33 @@ class bvController extends Controller{
       $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
 
       $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroup, $salesRep, $year, $con, $sql);
+
+      $clientsByPYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-1, $con, $sql);
+      //var_dump($clientsByPYear);
+      $clientsByPpYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-2, $con, $sql);
+      $clientsByPppYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-3, $con, $sql);      
       
-      for ($c=0; $c <sizeof($clientsByAE) ; $c++) { 
+      for ($c=0; $c <sizeof($clientsByPYear) ; $c++) { 
          for ($b=0; $b <sizeof($brand) ; $b++) { 
-            $tableBrandPyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-1, $clientsByAE[$c]['client']);
-            $tableBrandPpyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-2, $clientsByAE[$c]['client']);
-            $tableBrandPppyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-3, $clientsByAE[$c]['client']);
+            $tableBrandPyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-1, $clientsByPYear[$c]['client']);            
+         }
+
+         $totalBrandPyear = $bvModel->totalperBrand($tableBrandPyear[$c],$brand);
+      }
+
+      var_dump($totalBrandPyear);
+      for ($c=0; $c <sizeof($clientsByPpYear) ; $c++) { 
+         for ($b=0; $b <sizeof($brand) ; $b++) { 
+            $tableBrandPpyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-2, $clientsByPpYear[$c]['client']);
+            
          }
       }
 
-     var_dump($tableBrandPppyear);
+      for ($c=0; $c <sizeof($clientsByPppYear) ; $c++) { 
+         for ($b=0; $b <sizeof($brand) ; $b++) {
+           $tableBrandPppyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-3, $clientsByPppYear[$c]['client']);
+         }
+      }
 
       $liquid = $bvModel->liquidTable($agencyGroup, $year, $con, $value, $salesRep, $currency,$brand);
       $investTotalBrand = $bvModel->totalperBrandInvest($liquid);
@@ -291,6 +308,7 @@ class bvController extends Controller{
          }      
       }
 
-      return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','tableBrandPyear','tableBrandPpyear','tableBrandPppyear'));
+      //var_dump($totalBrandPyear);
+      return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','tableBrandPyear','tableBrandPpyear','tableBrandPppyear','clientsByPYear','clientsByPpYear','clientsByPppYear','totalBrandPyear'));
    }
 }
