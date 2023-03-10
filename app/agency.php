@@ -477,7 +477,7 @@ class agency extends Management{
                 $whereAleph = "WHERE (sr.ID IN ($salesRep))";
             }
         }
-        //var_dump($where);
+        //var_dump($whereAleph);
         $joinAleph = "LEFT JOIN agency a ON a.ID = y.agency_id
                  LEFT JOIN agency_group ag ON ag.id = a.agency_group_id
                  LEFT JOIN sales_rep sr ON sr.ID = y.current_sales_rep_id
