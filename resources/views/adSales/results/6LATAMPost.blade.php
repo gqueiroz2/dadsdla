@@ -120,11 +120,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -134,11 +134,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[$m][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['ppSapPercent'],0,'.',',')}}% </td>	
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[$m][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['ppSapPercent'],0,',','.')}}% </td>	
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
@@ -148,11 +148,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($total[$m][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($total[$m][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    </tr>
 						@endfor
@@ -166,11 +166,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -180,11 +180,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[3][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($total[3][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
@@ -194,11 +194,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 					    	</tr>
 					    </tr>
@@ -253,11 +253,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[$m][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[$m][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -267,11 +267,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($disc[$m][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['ppSapPercent'],0,'.',',')}}% </td>	
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[$m][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[$m][1]['ppSapPercent'],0,',','.')}}% </td>	
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
@@ -281,11 +281,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($disc[$m][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($disc[$m][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    </tr>
 						@endfor
@@ -299,11 +299,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($disc[3][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($disc[3][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -313,11 +313,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($disc[3][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($disc[3][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($disc[3][1]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
@@ -327,11 +327,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($disc[3][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($disc[3][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 					    	</tr>
 					    </tr>
@@ -386,11 +386,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[$m][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[$m][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -400,11 +400,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($sony[$m][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['ppSapPercent'],0,'.',',')}}% </td>	
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[$m][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[$m][1]['ppSapPercent'],0,',','.')}}% </td>	
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
@@ -414,11 +414,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($sony[$m][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($sony[$m][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    </tr>
 						@endfor
@@ -432,11 +432,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($sony[3][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($sony[3][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -446,11 +446,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($sony[3][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($sony[3][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($sony[3][1]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
@@ -460,11 +460,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($sony[3][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($sony[3][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 					    	</tr>
 					</table>
@@ -518,11 +518,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[$m][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[$m][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[$m][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[$m][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[$m][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -532,11 +532,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($wm[$m][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[$m][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[$m][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[$m][1]['ppSapPercent'],0,'.',',')}}% </td>	
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[$m][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[$m][1]['ppSapPercent'],0,',','.')}}% </td>	
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
@@ -546,11 +546,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($wm[$m][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($wm[$m][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($wm[$m][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; "> {{number_format($wm[$m][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($wm[$m][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    </tr>
 						@endfor
@@ -564,11 +564,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[3][0]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[3][0]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[3][0]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($wm[3][0]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($wm[3][0]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
@@ -578,11 +578,11 @@
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($wm[3][1]['previousSS'],0,',','.')}}</td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[3][1]['previousSap'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[3][1]['pPSap'],0,',','.')}} </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[3][1]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px;">{{number_format($wm[3][1]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="even center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($wm[3][1]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
@@ -592,11 +592,11 @@
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['previousSS'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($wm[3][2]['previousSap'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($wm[3][2]['pPSap'],0,',','.')}} </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['currentPlanPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['currentFcstPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['ssPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['pSapPercent'],0,'.',',')}}% </td>
-						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($wm[3][2]['ppSapPercent'],0,'.',',')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['currentPlanPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['currentFcstPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['ssPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($wm[3][2]['pSapPercent'],0,',','.')}}% </td>
+						    		<td class="odd center" style="width: 3% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($wm[3][2]['ppSapPercent'],0,',','.')}}% </td>
 						    	</tr>
 					    	</tr>
 					    </tr>
