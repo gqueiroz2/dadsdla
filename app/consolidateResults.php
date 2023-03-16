@@ -37,6 +37,7 @@ class consolidateResults extends Model{
         $cYear = $years[0];
         $pYear = $years[1];    
         
+        
         if ($pYear >= '2022' && $region[0] == '1') {
         	for ($r=0; $r < sizeof($region); $r++) { 
             	for ($m=0; $m < sizeof($month); $m++) {  
@@ -49,7 +50,22 @@ class consolidateResults extends Model{
 	            	$currentTarget[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "TARGET",$brand,$company);
 	            	$currentCorporate[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "CORPORATE",$brand,$company);
 	            	$currentSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "ACTUAL",$brand,$company);
-	            	$previousSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL",$brand,$company);	
+	            	$previousSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL",$brand,$company);
+
+	            	for ($c=0; $c <sizeof($company); $c++) { 
+	            		$totalCurrent[$c] = 0.0;
+
+            			$currentCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "wbd", $currency, $month[$m][1], $region[$r], $value, $cYear,null,null,$company[$c]);
+            			//var_dump($currentCompany[$r][$m]);
+            			//$totalCurrent[$c] += $currentCompany[$r][$m];
+            			$previousCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "wbd", $currency, $month[$m][1], $region[$r], $value,$pYear,null,null,$company[$c]);
+		            	$currentTargetCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "TARGET",$brand,$company[$c]);
+		            	$currentCorporateCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "CORPORATE",$brand,$company[$c]);
+		            	$currentSAPCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "ACTUAL",$brand,$company[$c]);
+		            	$previousSAPCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL",$brand,$company[$c]);
+		            	$totalCurrent += $currentCompany;
+		            	//var_dump($currentCompany[$r][$m][$c]); 
+            		}	
 	          	}
 	        }
         }else{
@@ -68,7 +84,7 @@ class consolidateResults extends Model{
             	}
         	}	
         }
-        
+        //var_dump($totalCurrent);
 
         $rtr = array( 
                       "typeSelect" => $region,
@@ -77,9 +93,15 @@ class consolidateResults extends Model{
                       "currentTarget" => $currentTarget,
                       "currentCorporate" => $currentCorporate,
                       "currentSAP" => $currentSAP,
-                      "previousSAP" => $previousSAP                   
+                      "previousSAP" => $previousSAP,
+                      "currentCompany" => $currentCompany,
+					  "previousCompany" => $previousCompany,
+					  "currentTargetCompany" => $currentTargetCompany, 
+					  "currentCorporateCompany" => $currentCorporateCompany,
+					  "currentSAPCompany" => $currentSAPCompany,
+					  "previousSAPCompany" => $previousSAPCompany
         );
-        //var_dump($rtr['previousAdSales']);
+        //var_dump($rtr['currentCorporateCompany']);
         return $rtr;
         
     }
@@ -913,6 +935,182 @@ class consolidateResults extends Model{
         return $rtr;        
     }
 
+    public function defineValuesOfficeCompany($con, $table, $currency, $month, $region, $value, $keyYear, $source=false,$brand=false, $company){
+
+        $sql = new sql();
+        $p = new pRate();
+        //var_dump($company);
+        $year = $keyYear;
+        $valueView = $value;
+        //var_dump($value);
+        if ($table != "plan_by_brand" && $table != "digital") {
+            if ($currency == "4") {
+                if($table == "cmaps"){
+                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                }elseif($table == "aleph" || $table == 'wbd'){
+                	if ($year <= 2022) {
+                		$pRate = 4.99;
+                		$pRateSel = 4.99;	
+                	}else{
+                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+                	}               		
+              	}else{
+              		$pRate = 1.0;
+              		$pRateSel = $pRate;
+              	}           	        	
+
+            }else{
+
+                if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
+                    $pRate = 1.0;
+                    $pRateSel = $pRate;
+
+                }else{                       
+                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($keyYear));
+                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($keyYear));
+                }                
+            }    
+        }else{   
+
+            if ($currency == "4") {
+                $pRate = 1.0;
+                $pRateSel = $pRate;
+            }else{
+                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($keyYear)); 
+            }           
+        } 
+        //var_dump($company);       
+
+        switch ($table) {
+
+            case 'cmaps':
+                if (sizeof($company) == 1) {
+                    if ($company == 'dc' ) {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"1");
+                    }elseif ($company = 'spt') {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"2");
+                    }elseif ($company = 'wm') {
+                        $columns = array("brand_id", "year", "month", "b.brand_group_id");
+                        $columnsValue = array($brand, $year, $month,"3");
+                    }
+                }else{
+                    $columns = array("brand_id", "year", "month");
+                    $columnsValue = array($brand, $year, $month);
+                }
+                $join = "LEFT JOIN brand b ON (c.brand_id = b.ID)";
+                
+                $table .= " c";
+                break;
+
+            case 'ytd':  
+	       		
+       			$columns = array("y.sales_representant_office_id","y.year", "y.month", "b.brand_group_id");                
+        		$columnsValue = array($region,$year,$month, $company);  		                                                       
+
+                $value .= "_revenue_prate";
+                $join = "LEFT JOIN brand b ON (y.brand_id = b.ID)";
+                $table .= " y";
+                $where = $sql->where($columns, $columnsValue);
+                break;
+
+            case 'aleph':
+            	
+       			$columns = array("a.sales_office_id","a.year", "a.month", "b.brand_group_id");                
+        		$columnsValue = array($region,$year,$month, $company);	       		                              
+                
+                if ($value == 'net') {
+                    $value = "gross_revenue";
+                }else{
+                    $value .= '_revenue';
+                }
+                
+                $join = "LEFT JOIN brand b ON (a.brand_id = b.ID)";
+                $table .= " a";
+                $where  = $sql->where($columns, $columnsValue);
+                break;
+
+            case 'wbd':
+            	
+       			$columns = array("w.year", "w.month", "b.brand_group_id");                
+        		$columnsValue = array($year,$month, $company);	       		                              
+                
+                $value .='_value';
+                
+                $join = "LEFT JOIN brand b ON (w.brand_id = b.ID)";
+                $table .= " w";
+                $where  = $sql->where($columns, $columnsValue);
+                break;
+
+            case 'plan_by_brand':
+        		$columns = array("pbb.sales_office_id","pbb.source","pbb.type_of_revenue","pbb.year","pbb.month","b.brand_group_id");
+           		$columnsValue = array($region,strtoupper($source),$value,$year,$month, $company);
+                	
+                $value = "revenue";
+                $join = "left join brand b ON (pbb.brand_id = b.ID)";
+                $table .= " pbb";
+                $where = $sql->where($columns, $columnsValue);
+                //var_dump($where);
+                break;
+
+            default:
+                $columns = false;
+                $join = null;
+                break;
+        }
+
+        if (!$columns) {
+            $rtr = false;
+        }else{
+            $sql = new sql();
+
+            $as = "sum";
+
+            $selectSum = $sql->selectSum($con, $value, $as, $table, $join, $where);
+
+            $tmp = $sql->fetchSum($selectSum, $as)["sum"];
+            //var_dump($tmp);
+
+            if($table == "cmaps c" || $table == 'wbd w' || $table == 'aleph a'){     
+            	if ($table == 'aleph a'){
+            		if ($valueView == 'net') {
+                    	$rtr = ($tmp*0.80)/$pRate;
+                	}else{
+                    	$rtr = $tmp/$pRate;
+                	}   
+            	}else{
+            		$rtr = $tmp/$pRate;
+            	}  
+            }else if($table == "plan_by_brand pbb"){ 
+            	if ($currency == "4") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	                $rtr = $tmp*$pRate;   
+            	}else{
+        			if ($year  <= 2022) {
+        				if ($company == '3') {
+	        				$pRateSel = 4.99;
+	        				$rtr = $tmp*$pRateSel;                    
+	        			}else{
+	           				$rtr = $tmp*$pRateSel;	
+	        			}
+        			}else{
+        				$rtr = $tmp*$pRateSel;
+        			}            			            		      
+            	}  
+            }else{
+                $rtr = $tmp*$pRate;
+            }
+        }
+        //var_dump($rtr);
+        return $rtr;
+     
+    }
+
     public function defineValuesOffice($con, $table, $currency, $month, $region, $value, $keyYear, $source=false,$brand=false, $company){
 
         $sql = new sql();
@@ -1272,7 +1470,6 @@ class consolidateResults extends Model{
 
 
 
-
     public function addDN($mtx){
 		
 		for ($j=0; $j < 13; $j++) { 
@@ -1280,8 +1477,15 @@ class consolidateResults extends Model{
 			$mtxDN['previousSAP'][$j] = 0.0;
 			$mtxDN['currentTarget'][$j] = 0.0;
 			$mtxDN['currentAdSales'][$j] = 0.0;
-			$mtxDN['currentSAP'][$j] = 0.0;
+			$mtxDN['currentSAP'][$j] = 0.0;	
 			$mtxDN['currentCorporate'][$j] = 0.0;
+			/*$mtxDN['currentCompany'][$j] = 0.0;
+			$mtxDN['previousCompany'][$j] = 0.0;
+			$mtxDN['currentTargetCompany'][$j] = 0.0;
+			$mtxDN['currentCorporateCompany'][$j] = 0.0;
+			$mtxDN['currentSAPCompany'][$j] = 0.0;
+			$mtxDN['previousSAPCompany'][$j] = 0.0;*/
+
 		}
 		
 		for ($j=0; $j < 13; $j++) { 
@@ -1291,7 +1495,13 @@ class consolidateResults extends Model{
 				$mtxDN['currentTarget'][$j] += $mtx['currentTarget'][$k][$j];
 				$mtxDN['currentAdSales'][$j] += $mtx['currentAdSales'][$k][$j];
 				$mtxDN['currentSAP'][$j] += $mtx['currentSAP'][$k][$j];
-				$mtxDN['currentCorporate'][$j] += $mtx['currentCorporate'][$k][$j];					
+				$mtxDN['currentCorporate'][$j] += $mtx['currentCorporate'][$k][$j];	
+				/*$mtxDN['currentCompany'][$j] += $mtx['currentCompany'][0][$j][$k];	
+				$mtxDN['previousCompany'][$j] += $mtx['previousCompany'][0][$j][$k];	
+				$mtxDN['currentTargetCompany'][$j] += $mtx['currentTargetCompany'][0][$j][$k];	
+				$mtxDN['currentCorporateCompany'][$j] += $mtx['currentCorporateCompany'][0][$j][$k];	
+				$mtxDN['currentSAPCompany'][$j] += $mtx['currentSAPCompany'][0][$j][$k];	
+				$mtxDN['previousSAPCompany'][$j] += $mtx['previousSAPCompany'][0][$j][$k];*/
 			}
 		}
 		return $mtxDN;
@@ -1301,6 +1511,9 @@ class consolidateResults extends Model{
 	public function assemble($mtx){
 		$pivot = date('m');
 		$mtx = $this->addTotal($mtx);
+		//$mtxCompany = $this->addTotalCompany($mtx);
+		//$tmp = array_merge($mtx,$mtxCompany);
+		//var_dump($mtxCompany);
 		/*$mtx = $this->sumYTD($mtx,$pivot);
 		$mtx = $this->addQuarters($mtx);*/
 		return $mtx;
@@ -1438,6 +1651,41 @@ class consolidateResults extends Model{
 		return $mtx;
 	}
 
+	public function addTotalCompany($mtx,$company){
+		
+		
+		for ($j=0; $j <sizeof($company); $j++) { 				
+			
+				$sum['currentCompany'][$j] = 0.0;
+				$sum['previousCompany'][$j] = 0.0;
+				$sum['currentTargetCompany'][$j] = 0.0;
+				$sum['currentCorporateCompany'][$j] = 0.0;
+				$sum['currentSAPCompany'][$j] = 0.0;
+				$sum['previousSAPCompany'][$j] = 0.0;
+
+			for ($i=0; $i <= 11; $i++) { 
+				$sum['currentCompany'][$j] += $mtx['currentCompany'][0][$i][$j];	
+				$sum['previousCompany'][$j] += $mtx['previousCompany'][0][$i][$j];	
+				$sum['currentTargetCompany'][$j] += $mtx['currentTargetCompany'][0][$i][$j];	
+				$sum['currentCorporateCompany'][$j] += $mtx['currentCorporateCompany'][0][$i][$j];	
+				$sum['currentSAPCompany'][$j] += $mtx['currentSAPCompany'][0][$i][$j];	
+				$sum['previousSAPCompany'][$j] += $mtx['previousSAPCompany'][0][$i][$j];
+			}	
+			
+
+		}	
+
+		 $mtx = array( "currentCompany" => $sum['currentCompany'],
+					   "previousCompany" =>	$sum['previousCompany'],
+					   "currentTargetCompany" => $sum['currentTargetCompany'],
+					   "currentCorporateCompany" => $sum['currentCorporateCompany'],
+					   "currentSAPCompany" => $sum['currentSAPCompany'],
+					   "previousSAPCompany" => $sum['previousSAPCompany'] 			  
+		        );
+		//var_dump($mtx);
+		return $mtx;
+	}
+
 	public function addTotal($mtx){
 		
 		for ($i=0; $i < sizeof($mtx['previousAdSales']); $i++) { 
@@ -1447,7 +1695,9 @@ class consolidateResults extends Model{
 				$sum['currentAdSales'][$i] = 0.0;
 				$sum['currentSAP'][$i] = 0.0;
 				$sum['currentCorporate'][$i] = 0.0;
+
 			for ($j=0; $j < sizeof($mtx['previousAdSales'][$i]); $j++) { 
+				//var_dump($mtx['previousAdSales'][$i][$j]);
 				$sum['previousAdSales'][$i] += $mtx['previousAdSales'][$i][$j];
 				$sum['previousSAP'][$i] += $mtx['previousSAP'][$i][$j];
 				$sum['currentTarget'][$i] += $mtx['currentTarget'][$i][$j];
@@ -1462,6 +1712,7 @@ class consolidateResults extends Model{
 			array_push($mtx['currentAdSales'][$i],$sum['currentAdSales'][$i]);
 			array_push($mtx['currentSAP'][$i],$sum['currentSAP'][$i]);
 			array_push($mtx['currentCorporate'][$i],$sum['currentCorporate'][$i]);
+
 		}	
 
 		return $mtx;

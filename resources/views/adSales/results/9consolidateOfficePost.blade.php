@@ -60,17 +60,18 @@
 	</div>
 
 	<div class="row justify-content-end mt-2">
-		<div class="col-sm" style="color: #0070c0;font-size: 22px;">
-				<span style="float: right;"> Pacing Office </span>
-			</div>
+		<div class="col-7"></div>
+		<div class="col-sm" style="color: #0070c0;font-size: 24px; margin-right: 27px;">
+			<span style="float: right;"> Pacing Office </span>
+		</div>
 
-			<div class="col-3">
-	            <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
-	                Generate Excel
-	            </button>               
-	        </div>   
-		</div> 
-	</div>	
+		<div class="col-sm">
+            <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+                Generate Excel
+            </button>               
+        </div>   
+	</div> 
+</div>	
 
 	<div class="row justify-content-end mt-2"></div>
 	</div>
@@ -122,6 +123,7 @@
 					        		@else
 					        			<?php $clr = 'medBlue'; ?>
 					        		@endif
+
 					        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtxDN['previousAdSales'][$d]) }} </td>
 					        	@endfor
 				        	</tr>
@@ -232,11 +234,11 @@
 				        </table>
 			        </div>
 
-			        @for ($c=0; $c < sizeof($mtx['previousAdSales']); $c++)
+			        @for ($c=0; $c < sizeof($company); $c++)
 					    <div class="row mt-2">
 					    	<table style='width: 100%; zoom: 85%;font-size: 16px;'>
 					        	<tr class="center">
-					        		<td class='lightBlue center' style="width: 7% !important;"> {{ $typeSelectN[$c]['name'] }} </td>
+					        		<td class='lightBlue center' style="width: 7% !important;"> {{ strtoupper($company[$c]) }} </td>
 						        	@for($m=0; $m < sizeof($month); $m++)
 						        		<td class='lightGrey center' style="width: 4%;"> {{ $month[$m] }} </td>
 						        	@endfor
@@ -245,113 +247,112 @@
 
 					        	<tr class="center">
 					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[1] }} Ad Sales </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
+						        	@for($z=0; $z < sizeof($mtx['previousCompany'][0]); $z++)
+						        		@if($z == 12)
 						        			<?php $clr = 'smBlue'; ?>
 						        		@else
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousAdSales'][$c][$d]) }} </td>
+						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousCompany'][0][$z][$c]) }} </td>
 						        	@endfor
-					        	</tr>
-
-					        	<!--<tr class="center">
-					        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[1] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['previousSAP'][$c][$d]) }} </td>
-						        	@endfor
-					        	</tr>-->
-
-					        	<tr class="center">
-					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[0] }} Target </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'medBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentTarget'][$c][$d]) }} </td>
-						        	@endfor
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($totalsCompany['previousCompany'][$c]) }} </td>
 					        	</tr>
 					        	
 					        	<tr class="center">
-					        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} Corporate </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
+					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[0] }} Target </td>
+						        	@for($t=0; $t < sizeof($mtx['previousCompany'][0]); $t++)
+						        		@if($t == 12)
 						        			<?php $clr = 'smBlue'; ?>
 						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
+						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentCorporate'][$c][$d]) }} </td>
+						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentTargetCompany'][0][$t][$c]) }} </td>
 						        	@endfor
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($totalsCompany['currentTargetCompany'][$c]) }} </td>
+					        	</tr>
+
+					        	<tr class="center">
+					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[0] }} Corporate </td>
+						        	@for($z=0; $z < sizeof($mtx['previousCompany'][0]); $z++)
+						        		@if($z == 12)
+						        			<?php $clr = 'smBlue'; ?>
+						        		@else
+						        			<?php $clr = 'medBlue'; ?>
+						        		@endif						        		
+						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentCorporateCompany'][0][$z][$c]) }} </td>
+						        	@endfor
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($totalsCompany['currentCorporateCompany'][$c]) }} </td>
 					        	</tr>
 
 					        	<tr class="center">
 					        		<td class="medBlue" style="width: 7% !important;"> {{ $years[0] }} Ad Sales </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
+						        	@for($z=0; $z < sizeof($mtx['previousCompany'][0]); $z++)
+						        		@if($z == 12)
 						        			<?php $clr = 'smBlue'; ?>
 						        		@else
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentAdSales'][$c][$d]) }} </td>
+						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentCompany'][0][$z][$c]) }} </td>
 						        	@endfor
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($totalsCompany['currentCompany'][$c]) }} </td>
 					        	</tr>
-
-					        	<!--<tr class="center">
-					        		<td class="rcBlue" style="width: 7% !important;"> {{ $years[0] }} SAP </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
-						        			<?php $clr = 'smBlue'; ?>
-						        		@else
-						        			<?php $clr = 'rcBlue'; ?>
-						        		@endif
-						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($mtx['currentSAP'][$c][$d]) }} </td>
-						        	@endfor
-					        	</tr>-->
-
+					        	
 					        	<tr class="center">
 					        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - {{ $years[1] }}) </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
+						        	@for($z=0; $z < sizeof($mtx['previousCompany'][0]); $z++)
+						        		@if($z == 12)
 						        			<?php $clr = 'smBlue'; ?>
 						        		@else
 						        			<?php $clr = 'medBlue'; ?>
-						        		@endif				        		 
-					        			<?php
-					        				if($mtx['previousAdSales'][$c][$d] > 0){
-					        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['previousAdSales'][$c][$d])*100; 
-					        				}else{
-					        					$temp = 0.0;
-					        				}
-					        			?>
+						        		@endif
+						        		<?php
+						        			if($mtx['previousCompany'][0][$z] > 0){
+						        				$temp = ($mtx['currentCorporateCompany'][0][$z][$c]/$mtx['previousCompany'][0][$z][$c])*100;
+						        				
+						        			}else{
+						        				$temp = 0.0;
+						        			}
+
+						        			if($totalsCompany['previousCompany'][$c] > 0){
+						        				$temp2 = ($totalsCompany['currentCorporateCompany'][$c]/$totalsCompany['previousCompany'][$c])*100;
+						        				
+						        			}else{
+						        				$temp2 = 0.0;
+						        			}
+
+						        		?>
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($temp) }}% </td>
 						        	@endfor
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($temp2) }} %</td>
 					        	</tr>
 
 					        	<tr class="center">
-					        		<td class="rcBlue" style="width: 7% !important;"> %({{ $years[0] }}F - Target) </td>
-						        	@for($d=0; $d < sizeof($mtx['previousAdSales'][$c]); $d++)
-						        		@if($d == 12)
+					        		<td class="medBlue" style="width: 7% !important;"> %({{ $years[0] }}F - Target) </td>
+						        	@for($z=0; $z < sizeof($mtx['previousCompany'][0]); $z++)
+						        		@if($z == 12)
 						        			<?php $clr = 'smBlue'; ?>
 						        		@else
 						        			<?php $clr = 'rcBlue'; ?>
 						        		@endif
 						        		<?php
-					        				if($mtx['currentTarget'][$c][$d]){
-					        					$temp = ($mtx['currentCorporate'][$c][$d]/$mtx['currentTarget'][$c][$d])*100;
-					        				}else{
-					        					$temp = 0.0;
-					        				}
-					        			?>
+						        			if($mtx['currentTargetCompany'][0][$z] > 0){
+						        				$temp = ($mtx['currentCorporateCompany'][0][$z][$c]/$mtx['currentTargetCompany'][0][$z][$c])*100;
+						        			}else{
+						        				$temp = 0.0;
+						        			}
+
+						        			if($totalsCompany['currentTargetCompany'][$c] > 0){
+						        				$temp2 = ($totalsCompany['currentCorporateCompany'][$c]/$totalsCompany['currentTargetCompany'][$c])*100;
+						        				
+						        			}else{
+						        				$temp2 = 0.0;
+						        			}
+						        		?>
 						        		<td class="{{$clr}}" style="width: 4%;"> {{ number_format($temp) }}% </td>
 						        	@endfor
-					        	</tr>	
+						        	<td class="smBlue" style="width: 4%;"> {{ number_format($temp2) }} %</td>
+					        	</tr>
+					        	
 					        </table>	
 					    </div>	        	
 		        	@endfor		        	

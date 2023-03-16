@@ -324,7 +324,7 @@ class bvModel extends Model{
         $year = (int)date("Y");
         $pYear = $year-1;
         $ppYear = $year-2;
-        
+
         $select = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
                     FROM wbd w
                     left join client c on c.ID = w.client_id
@@ -439,51 +439,6 @@ class bvModel extends Model{
         return $value;
     }
 
-
-    public function getBrandByClient(Object $sql, Object $con, $agencyGroupId, $brand, int $year,$client){
-       
-        //var_dump($client);
-        $queryALEPH = "SELECT SUM(net_value) from wbd
-                left join agency a on a.ID = wbd.agency_id 
-                left join agency_group ag on ag.ID = a.agency_group_id 
-                left join client c on c.ID = wbd.client_id
-              WHERE (brand_id = $brand)
-              AND ag.ID = $agencyGroupId
-              and c.ID = $client
-              AND year = $year
-         ";
-       
- 
-        $resultALEPH = $con->query($queryALEPH);
-        $from = "SUM(net_value)";
-        $valuePivot = $sql->fetchSUM($resultALEPH, $from);
-
-        /*for ($b=0; $b < sizeof($brand); $b++) { 
-            $tmp = $brand[$b]['id'];
-
-            $selectQuery = "SELECT distinct b.id as brandId, b.name as brand, c.id as cId, c.name as clientName
-                        from wbd w
-                        left join client c on c.ID = w.client_id
-                        left join brand b on b.ID = w.brand_id
-                        left join agency a on a.ID = w.agency_id 
-                        left join agency_group ag on ag.ID = a.agency_group_id 
-                        where ag.ID = $agencyGroupId
-                        and (b.id in ($tmp))
-                        and (w.year in ($year))
-                        ";
-        }
-                
-
-        $result = $con->query($selectQuery);
-        $from = array('brandId', 'brand','cId','clientName');
-        $resultBrand = $sql->fetch($result,$from,$from);*/
-
-       //var_dump($valuePivot);
-
-        return $valuePivot;
-        
-    }
-
     public function getLiquidValues(string $brand, int $year, String $agencyGroupId, Object $con, Object $sql, String $salesRep){
 
         $queryALEPH = "SELECT SUM(net_value) from wbd w
@@ -569,19 +524,32 @@ class bvModel extends Model{
         return $total;
     }
 
-    public function totalperBrand( $table,$brand){
+    public function bvTable(int $year, int $agencyGroupId, Object $con){
+
+        $fromValue = $this->getBV($year,$agencyGroupId,$con,'from_value');
+        $toValue = $this->getBV($year, $agencyGroupId,$con,'to_value');
+        $percentage = $this->getBV($year, $agencyGroupId,$con,'percentage');
+
+        $table = array('fromValue' => $fromValue, 'toValue' => $toValue, 'percentage' => $percentage);
+
         //var_dump($table);
-        $totalBrand = 0;
 
-        for ($c=0; $c <sizeof($brand); $c++) { 
-            $totalBrand += $table[$c]['SUM(net_value)'];
-        }
-        
-                
-       var_dump($totalBrand);
-
-        return $totalBrand;
-
+        return $table;
     }
+
+    public function getBv(int $year, int $agencyGroupId, Object $con,String $type){
+        $sql = new sql();
+
+        $select = "SELECT $type
+                    FROM bv_band
+                    WHERE agency_group_id = $agencyGroupId
+                    AND (year in ($year))";
+       
+         $result = $con->query($select);
+         $from = array($type);
+         $value = $sql->fetch($result, $from,$from);
+
+         return $value;
+   }
 
 }

@@ -16,7 +16,7 @@ class bvBand extends Model{
 				}
 
 				if($this->column[$n] == "to_value" && $mtx[$m][$this->column[$n]] == ""){
-					$mtx[$m][$this->column[$n]] = -1;
+					$mtx[$m][$this->column[$n]] = 0;
 				}
 			}
 		}

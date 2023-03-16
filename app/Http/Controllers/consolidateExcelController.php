@@ -176,7 +176,8 @@ class consolidateExcelController extends Controller{
 
         $mtx = $cR->constructOffice($con,$currencyID,$month,$regionID,$value,$years,$company);
         $mtx = $cR->assemble($mtx);
-        $mtxDN = $cR->addDN($mtx);        
+        $mtxDN = $cR->addDN($mtx);   
+        $totalsCompany = $cR->addTotalCompany($mtx,$company);     
 
         $currencyS = $pr->getCurrencyByRegion($con,array($currencyID))[0]['name'];
 
@@ -185,7 +186,7 @@ class consolidateExcelController extends Controller{
 
         $years = array($cYear, $pYear);
 
-        $data = array('typeSelectN' => $typeSelectN, 'mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years, 'userRegion' => $userRegion);
+        $data = array('typeSelectN' => $typeSelectN, 'mtx' => $mtx, 'mtxDN' => $mtxDN, 'currencyS' => $currencyS, 'cYear' => $cYear, 'pYear' => $pYear, 'value' => $value, 'quarter' => $quarter, 'monthView' => $monthView, 'years' => $years, 'userRegion' => $userRegion, 'company' => $company, 'totalsCompany' => $totalsCompany);
 
         $label = 'exports.results.consolidate.consolidateOfficeExport';
 

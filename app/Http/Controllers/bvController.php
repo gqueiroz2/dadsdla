@@ -253,32 +253,12 @@ class bvController extends Controller{
 
       $clientsByAE = $bvModel->getSalesRepByAgencyGroup($agencyGroup, $salesRep, $year, $con, $sql);
 
-      $clientsByPYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-1, $con, $sql);
-      //var_dump($clientsByPYear);
-      $clientsByPpYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-2, $con, $sql);
-      $clientsByPppYear = $bvModel->getClientByYear($agencyGroup, $salesRep, $year-3, $con, $sql);      
-      
-      for ($c=0; $c <sizeof($clientsByPYear) ; $c++) { 
-         for ($b=0; $b <sizeof($brand) ; $b++) { 
-            $tableBrandPyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-1, $clientsByPYear[$c]['client']);            
-         }
 
-         $totalBrandPyear = $bvModel->totalperBrand($tableBrandPyear[$c],$brand);
-      }
+      $bvPppYear = $bvModel->bvTable($year-3,$agencyGroup,$con);
+      $bvPpYear = $bvModel->bvTable($year-2,$agencyGroup,$con);
+      $bvPYear = $bvModel->bvTable($year-1,$agencyGroup,$con);
 
-      var_dump($totalBrandPyear);
-      for ($c=0; $c <sizeof($clientsByPpYear) ; $c++) { 
-         for ($b=0; $b <sizeof($brand) ; $b++) { 
-            $tableBrandPpyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-2, $clientsByPpYear[$c]['client']);
-            
-         }
-      }
-
-      for ($c=0; $c <sizeof($clientsByPppYear) ; $c++) { 
-         for ($b=0; $b <sizeof($brand) ; $b++) {
-           $tableBrandPppyear[$c][$b] = $bvModel->getBrandByClient($sql, $con, $agencyGroup, $brand[$b]['id'], $year-3, $clientsByPppYear[$c]['client']);
-         }
-      }
+      //var_dump($bvPpYear);
 
       $liquid = $bvModel->liquidTable($agencyGroup, $year, $con, $value, $salesRep, $currency,$brand);
       $investTotalBrand = $bvModel->totalperBrandInvest($liquid);
@@ -309,6 +289,6 @@ class bvController extends Controller{
       }
 
       //var_dump($totalBrandPyear);
-      return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','tableBrandPyear','tableBrandPpyear','tableBrandPppyear','clientsByPYear','clientsByPpYear','clientsByPppYear','totalBrandPyear'));
+      return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','bvPppYear','bvPpYear','bvPYear'));
    }
 }

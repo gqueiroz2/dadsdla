@@ -78,7 +78,63 @@
 				</div>
 			<div class="container-fluid" id="body">
 				<div class="row ">
-					<div class="col"> 				       			
+					<div class="col"> 		
+
+						<table style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
+				     		<tr>
+				     			<th class='newBlue center' style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">FAIXAS</th>
+				     		</tr>
+				     		<tr>
+				     			<td class='medBlue center' colspan="3" style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;"> {{$year-3}} TABLE</td>
+				     		</tr>
+				     		<tr class='medBlue center'>
+				     			<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">FROM R$</td>
+				     			<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TO R$</td>
+				     			<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">%</td>				     			
+				     		</tr>
+				     		@for($z = 0; $z<sizeof($bvPppYear['fromValue']); $z++)
+				        		<tr class="even center">
+				        			<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($bvPppYear['fromValue'][$z]['from_value'],0,',','.')}}</td>
+				        			@if($bvPppYear['toValue'][$z]['to_value'] == -1)
+				        				<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">0</td>
+				        			@else
+				        				<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($bvPppYear['toValue'][$z]['to_value'],0,',','.')}}</td>
+				        			@endif
+				        			<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($bvPppYear['percentage'][$z]['percentage']*100),0,',','.')}}%</td>
+				        		</tr>
+				        	@endfor       	
+
+				        	<table>
+				        		<tr class='medBlue center'>
+				     				<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">FROM R$</td>
+				     				<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TO R$</td>
+				     				<td style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">%</td>				     			
+				     			</tr>
+
+				     			<tr>
+					     			<td class='medBlue center' colspan="3" style="font-size: 14px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;"> {{$year-2}} TABLE</td>
+					     		</tr>
+
+					     		@for($z = 0; $z<sizeof($bvPppYear['fromValue']); $z++)
+				        		<tr class="even center">
+				        			<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($bvPpYear['fromValue'][$z]['from_value'],0,',','.')}}</td>
+				        			@if($bvPpYear['toValue'][$z]['to_value'] == -1)
+				        				<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">0</td>
+				        			@else
+				        				<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($bvPpYear['toValue'][$z]['to_value'],0,',','.')}}</td>
+				        			@endif
+				        			<td class="col" style="width: 15% !important; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($bvPpYear['percentage'][$z]['percentage']*100),0,',','.')}}%</td>
+				        		</tr>
+				        		@endfor
+				        	</table>
+				        	
+				     	</table>
+
+				     	<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+							<tr class="center">
+				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+				        	</tr>
+				        </table>
 
 						<!-- forecast table-->
 
@@ -190,110 +246,7 @@
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
 				        </table>
-
-				        <!-- 3 years ago historic table-->
-
-				        <table style='width: 100%; zoom: 85%; font-size: 16px;'>
-				        	<tr>
-				        		<th class='newBlue center' colspan="2" style="font-size: 16px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$year-3}}</th>
-				        	</tr>
-							<tr class="medBlue center" >
-								<td class="col" style="width: 10%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">CLIENT</td>
-								<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">AGENCY</td>
-				        		@for($x = 0; $x<sizeof($brand); $x++)
-				        			<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$brand[$x]['name']}}</td>
-				        		@endfor
-				        		<td class="col" style="border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TOTAL</td>
-				        	</tr>
-				        	@for($b = 0; $b < sizeof($clientsByPppYear) ; $b++)	
-								<tr class='center' style='font-size:16px;'>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['clientName']}}</td>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['agencyName']}}</td>
-									@for ($x=0; $x <sizeof($brand) ; $x++) 
-     									<td style="width: 15%; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($tableBrandPppyear[$b][$x]['SUM(net_value)'],0,',','.')}}</td>	
-     								@endfor
-								</tr>
-							@endfor
-							<tr class="smBlue center">
-								<td  style="width: 10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
-							
-							</tr>
-
-				        </table>
-
-				        <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-							<tr class="center">
-				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-				        	</tr>
-				        </table>
-
-				        <!-- 2 years ago historic table-->
-
-				        <table style='width: 100%; zoom: 85%; font-size: 16px;'>
-				        	<tr>
-				        		<th class='newBlue center' colspan="2" style="font-size: 16px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$year-2}}</th>
-				        	</tr>
-							<tr class="medBlue center" >
-								<td class="col" style="width: 10%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">CLIENT</td>
-			        			<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">AGENCY</td>
-				        		@for($x = 0; $x<sizeof($brand); $x++)
-				        			<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$brand[$x]['name']}}</td>
-				        		@endfor
-				        		<td class="col" style="border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TOTAL</td>
-				        	</tr>
-				        	@for($b = 0; $b < sizeof($clientsByPpYear) ; $b++)	
-								<tr class='center' style='font-size:16px;'>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['clientName']}}</td>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['agencyName']}}</td>
-									@for ($x=0; $x <sizeof($brand) ; $x++) 
-     									<td style="width: 15%; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($tableBrandPpyear[$b][$x]['SUM(net_value)'],0,',','.')}}</td>	
-     								@endfor
-								</tr>
-							@endfor
-							<tr>
-								<td class="smBlue center" style="width: 10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
-							</tr>
-
-				        </table>
-
-				        <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-							<tr class="center">
-				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-				        	</tr>
-				        </table>
-
-				        <!-- 1 year ago historic table-->
-
-				        <table style='width: 100%; zoom: 85%; font-size: 16px;'>
-				        	<tr>
-				        		<th class='newBlue center' colspan="2" style="font-size: 16px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$year-1}}</th>
-				        	</tr>
-							<tr class="medBlue center" >
-								<td class="col" style="width: 10%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">CLIENT</td>
-								<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">AGENCY</td>
-				        		@for($x = 0; $x<sizeof($brand); $x++)
-				        			<td class="col" style="width: 15%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$brand[$x]['name']}}</td>				        			
-				        		@endfor
-				        		<td class="col" style="border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TOTAL</td>
-				        	</tr>
-				        	@for($b = 0; $b < sizeof($clientsByPYear) ; $b++)	
-								<tr class='center' style='font-size:16px;'>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['clientName']}}</td>
-									<td class='{{$color[$b]}}' style="width: 10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;">{{$clientsByAE[$b]['agencyName']}}</td>
-									@for ($c=0; $c <sizeof($brand) ; $c++) 
-     									<td style="width: 15%; border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format($tableBrandPyear[$b][$c]['SUM(net_value)'],0,',','.')}}</td>	
-     								@endfor
-								</tr>
-							@endfor
-							<tr>
-								<td class="smBlue center" style="width: 10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
-								<td class="smBlue center" style="width: 10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"></td>
-								@for($x = 0; $x < sizeof($brand); $x++)
-									<td class="smBlue center" style="width: 10%; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($totalBrandPyear[$x],0,',','.')}}</td>
-								@endfor
-							</tr>
-
-				        </table>
+				     	
 
 					</div>
 				</div>
