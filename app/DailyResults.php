@@ -64,7 +64,7 @@ class DailyResults extends Model{
             switch ($brands){
                 case "total":
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69) AND year = $year AND month = $month";
-                    var_dump($querryTV);
+                    //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16,25,26,34,48,49,50,55,58,60,62,67,68,69) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
