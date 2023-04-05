@@ -28,21 +28,22 @@ class chainCmaps extends excel{
         $parametter = 'daily_results';
 
         
-        if ($spreadSheet != "") {
+       /* if ($spreadSheet != "") {
             $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-        }
+        }*/
         
         //var_dump($spreadSheet);
 
         for ($i=0; $i <sizeof($spreadSheet); $i++) { 
-            $spreadSheet[$i]['real_date'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i]['real_date']);
-            $spreadSheet[$i]['extract_date'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i]['extract_date']);
-            $spreadSheet[$i]['log'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i]['log']);
+            $spreadSheet[$i][0] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][0]);
+            $spreadSheet[$i][1] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][1]);
+            $spreadSheet[$i][2] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][2]);
+            $spreadSheet[$i][3] = $base->monthToIntWBD($spreadSheet[$i][3]);
         }
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
-
+        //var_dump($spreadSheet);
         for ($s=0; $s < sizeof($spreadSheet); $s++) {             
             $error = $this->insert($con,$spreadSheet[$s],$columns,'daily_results',$into);         
             if(!$error){
@@ -887,6 +888,8 @@ class chainCmaps extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
+                            //var_dump($spreadSheet[$s][$columns[$c]]);
+
     						if($columns[$c] == 'campaign_option_start_date'  || $columns[$c] == 'date_event'){
                                 $temp = $base->formatData("dd/mm/aaaa","aaaa-mm-dd",trim($spreadSheet[$s][$c]));    
                                 
@@ -978,7 +981,8 @@ class chainCmaps extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
                                 }
-                            }elseif($columns[$c] == 'month'){                                
+                            }elseif($columns[$c] == 'month'){     
+                            //var_dump('aki');                           
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));                                
     						}else{
     							$spreadSheetV2[$s][$columns[$c]] = trim($spreadSheet[$s][$c]);
@@ -992,8 +996,8 @@ class chainCmaps extends excel{
 			}
 		} 
         
-		$spreadSheetV2 = array_values($spreadSheetV2);
-		return $spreadSheetV2;
+		//$spreadSheetV2 = array_values($spreadSheetV2);
+		//return $spreadSheetV2;
 	}
 
 	public function into($columns){
@@ -1028,7 +1032,7 @@ class chainCmaps extends excel{
                 }else if($columns[$c] == "from_value" || $columns[$c] == "to_value"){
                     $values .= "\"".round( $excel->fixExcelNumber( $spreadSheet[$columns[$c]] ) ,5)."\"";
                 }else{
-                    $values .= "\"".  addslashes($spreadSheet[$columns[$c]])."\"";
+                    $values .= "\"".  addslashes($spreadSheet[$c])."\"";
                 }
             }
             if($c != (sizeof($columns) - 1) ){
