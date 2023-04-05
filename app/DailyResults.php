@@ -63,9 +63,9 @@ class DailyResults extends Model{
 
             switch ($brands){
                 case "total":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54) AND year = $year AND month = $month";
-                    //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16,25,26,34,48,49,50) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,22,23,24,28,30,31,32,33,35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69) AND year = $year AND month = $month";
+                    var_dump($querryTV);
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16,25,26,34,48,49,50,55,58,60,62,67,68,69) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "discovery":
@@ -77,13 +77,13 @@ class DailyResults extends Model{
                 case "sony":
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (22, 23) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (25, 26) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (25, 26,60) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
                 case "wm":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,56,57,59,61) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,50) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,5062,63,64,65,66,67,68,69) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
             }
@@ -109,14 +109,14 @@ class DailyResults extends Model{
         if( $currencyID != 1 && $regionYtd == 'wbd'){
             $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
         }elseif($value == 'gross_value' || $value == 'net_value'){
-            $monthValues = array($valueTV[$value] / $pRate, $valueONL[$value] / $pRate, ($valueTV[$value] + $valueONL[$value]) / $pRate);
+            $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
         }
 
         if ($valueView == 'net net' && $currencyID == 1) {
-            $monthValues = array((($valueTV[$value] / $pRate) * 0.8915), (($valueONL[$value] / $pRate) * 0.8915), ((($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.8915));   
+            $monthValues = array((($valueTV[$value] / $pRateWM) * 0.8915), (($valueONL[$value] / $pRateWM) * 0.8915), ((($valueTV[$value] + $valueONL[$value]) / $pRateWM) * 0.8915));   
            // var_dump($monthValues);
         }elseif ($currencyID != 1 && $valueView == 'net net') {
-            $monthValues = array((($valueTV[$value] / $pRate) * 0.14162005), (($valueONL[$value] / $pRate) * 0.14162005), ((($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.14162005));
+            $monthValues = array((($valueTV[$value] / $pRateWM) * 0.14162005), (($valueONL[$value] / $pRateWM) * 0.14162005), ((($valueTV[$value] + $valueONL[$value]) / $pRateWM) * 0.14162005));
         }
        
         return $monthValues;
