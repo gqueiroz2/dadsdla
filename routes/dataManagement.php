@@ -26,6 +26,16 @@ Route::group(['middleware' => ['auth']],function(){
 
 		Route::get('insertBvBandG','dataManagementController@insertBvBandG')
 							->name('insertBvBandG');	
+		
+		Route::post('insertPayTV','dataManagementController@insertPayTV')
+							->name('insertPayTV');
+		
+		Route::post('insertCurrentTarget','dataManagementController@insertCurrentTarget')
+							->name('insertCurrentTarget');
+							
+		Route::post('insertMonthTarget','dataManagementController@insertMonthTarget')
+							->name('insertMonthTarget');
+
 		Route::post('insertBvBandP','dataManagementController@insertBvBandP')
 							->name('insertBvBandP');
 

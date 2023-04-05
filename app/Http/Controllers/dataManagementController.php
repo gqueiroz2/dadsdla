@@ -25,7 +25,191 @@ use App\chain;
 use App\excel;
 
 class dataManagementController extends Controller{
+
+    public function insertPayTV(){
+        $db = new dataBase();
+        $sql = new sql();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $i = new import();
+        $bb = new bvBand();
+
+        $spreadSheet = $i->base();
+        $table = Request::get('table');
+        $columns = $bb->columnPayTv;
+        $year = date("Y")-1;
+
+        unset($spreadSheet[0]);
+        $spreadSheet = array_values($spreadSheet);
+
+        for ($i=0; $i <sizeof($spreadSheet); $i++) { 
+            
+            $spreadSheet[$i][1] = (str_replace("%","",$spreadSheet[$i][1] ))/100;
+            
+            
+            $ins[$i] = "INSERT INTO $table (station,percentage,year)
+                    VALUES  (\"".$spreadSheet[$i][0]."\",
+                            \"".$spreadSheet[$i][1]."\",
+                                $year)";
+
+            if($con->query($ins[$i]) === TRUE ){
+                $error = false;
+                //var_dump($ins);
+            }else{
+                var_dump($spreadSheet[$i]);            
+                echo "<pre>".($ins[$i])."</pre>";
+                var_dump($con->error);
+                $error = true;
+            }     
+
+            
+        }
+        
+            
+        return back()->with('paytvSuccess',"The Excel Data Was Succesfully Inserted :)");
+        
+    }
+
+    public function insertCurrentTarget(){
+        $db = new dataBase();
+        $sql = new sql();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $conFM = $db->openConnection('firstmatch');
+        $i = new import();
+        $bb = new bvBand();
+
+        $spreadSheet = $i->base();
+        $table = Request::get('table');
+        $columns = $bb->columnCurrentTarget;
+        $year = date("Y")-1;
+
+        unset($spreadSheet[0]);
+        $spreadSheet = array_values($spreadSheet);
+        //var_dump($table);
+        for ($i=0; $i <sizeof($spreadSheet); $i++) {                         
+            
+            $insFM[$i] = "INSERT INTO $table (agency_group,dsc_target,spt_target,year,company)
+                    VALUES  (\"".$spreadSheet[$i][0]."\",
+                            \"".$spreadSheet[$i][1]."\",
+                            \"".$spreadSheet[$i][2]."\",
+                            \"".$spreadSheet[$i][3]."\",
+                            \"".$spreadSheet[$i][4]."\")";
+
+            $conFM->query($insFM[$i]);
+        }
+
+
+        $select = "SELECT * FROM $table";
+
+        $res = $conFM->query($select);
+
+        $from = array('agency_group','dsc_target','spt_target','year','company');
+
+        $list = $sql->fetch($res,$from,$from);
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $seek[$l] = "SELECT agency_group_id FROM agency_group_unit WHERE (name = '".$list[$l]['agency_group']."')";
+
+            $resultSeek[$l] = $con->query($seek[$l]);
+            $from = array('agency_group_id');
+            $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
+            //var_dump($agencyGroupSeek);
+
+            $ins[$l] = "INSERT INTO $table (agency_group_id,dsc_target,spt_target,year,company) 
+                                            VALUES (\"".$agencyGroupSeek[$l]."\",
+                                                  \"".$list[$l]['dsc_target']."\",
+                                                  \"".$list[$l]['spt_target']."\",
+                                                  \"".$list[$l]['year']."\",
+                                                  \"".$list[$l]['company']."\")";
+        
+            if($con->query($ins[$l])===TRUE){
+                $error = false;
+            }else{
+                $temp = "Error: " . $sql . "<br>" . $con->error;
+
+                var_dump($agencyGroupSeek[$l]);
+                var_dump($temp);
+                var_dump($seek[$l]);
+                var_dump($agencyGroupSeek[$l]);
+                var_dump($ins[$l]);
+            } 
+
+        }    
+        
+        //var_dump($ins);
+        return back()->with('targetSuccess',"The Excel Data Was Succesfully Inserted :)");
+    }
     
+
+    public function insertMonthTarget(){
+        $db = new dataBase();
+        $sql = new sql();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+        $conFM = $db->openConnection('firstmatch');
+        $i = new import();
+        $bb = new bvBand();
+
+        $spreadSheet = $i->base();
+        $table = Request::get('table');
+        $columns = $bb->columnCurrentTarget;
+        $year = date("Y")-1;
+
+        unset($spreadSheet[0]);
+        $spreadSheet = array_values($spreadSheet);
+        //var_dump($table);
+        for ($i=0; $i <sizeof($spreadSheet); $i++) {                         
+            
+            $insFM[$i] = "INSERT INTO $table (agency_group,dsc_target,spt_target,year,company)
+                    VALUES  (\"".$spreadSheet[$i][0]."\",
+                            \"".$spreadSheet[$i][1]."\",
+                            \"".$spreadSheet[$i][2]."\",
+                            \"".$spreadSheet[$i][3]."\",
+                            \"".$spreadSheet[$i][4]."\")";
+
+            $conFM->query($insFM[$i]);
+        }
+
+
+        $select = "SELECT * FROM $table";
+
+        $res = $conFM->query($select);
+
+        $from = array('agency_group','dsc_target','spt_target','year','company');
+
+        $list = $sql->fetch($res,$from,$from);
+        for ($l=0; $l < sizeof($list); $l++) { 
+            $seek[$l] = "SELECT agency_group_id FROM agency_group_unit WHERE (name = '".$list[$l]['agency_group']."')";
+
+            $resultSeek[$l] = $con->query($seek[$l]);
+            $from = array('agency_group_id');
+            $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
+            var_dump($agencyGroupSeek);
+
+            $ins[$l] = "INSERT INTO $table (agency_group_id,dsc_target,spt_target,year,company) 
+                                            VALUES (\"".$agencyGroupSeek[$l]."\",
+                                                  \"".$list[$l]['dsc_target']."\",
+                                                  \"".$list[$l]['spt_target']."\",
+                                                  \"".$list[$l]['year']."\",
+                                                  \"".$list[$l]['company']."\")";
+        
+            if($con->query($ins[$l])===TRUE){
+                $error = false;
+            }else{
+                $temp = "Error: " . $sql . "<br>" . $con->error;
+
+                var_dump($agencyGroupSeek[$l]);
+                var_dump($temp);
+                var_dump($seek[$l]);
+                var_dump($agencyGroupSeek[$l]);
+                var_dump($ins[$l]);
+            } 
+
+        }    
+        
+        return back()->with('targetMonthSuccess',"The Excel Data Was Succesfully Inserted :)");
+    }
+
     public function insertBvBandAfterCheck(){
         $db = new dataBase();
         $sql = new sql();
@@ -66,7 +250,7 @@ class dataManagementController extends Controller{
 
                 $res = $conFM->query($select);
 
-                $from = array('agency_group','from_value','to_value','percentage','year');
+                $from = array('agency_group','from_value','to_value','percentage','year','company','platform');
 
                 $list = $sql->fetch($res,$from,$from);
 
@@ -80,12 +264,14 @@ class dataManagementController extends Controller{
                     $agencyGroupSeek[$l] = $sql->fetch($resultSeek[$l],$from,$from)[0]['agency_group_id'];
                     $list[$l]['agency_group_id'] = $agencyGroupSeek[$l];
 
-                    $insertSeek[$l] = "INSERT INTO bv_band (agency_group_id,from_value,to_value,percentage,year) 
+                    $insertSeek[$l] = "INSERT INTO bv_band (agency_group_id,from_value,to_value,percentage,year,company,platform) 
                                             VALUES (\"".$list[$l]['agency_group_id']."\",
                                                   \"".$list[$l]['from_value']."\",
                                                   \"".$list[$l]['to_value']."\",
                                                   \"".$list[$l]['percentage']."\",
-                                                  \"".$list[$l]['year']."\")";
+                                                  \"".$list[$l]['year']."\",
+                                                  \"".$list[$l]['company']."\",
+                                                  \"".$list[$l]['platform']."\")";
 
                     
                     if($con->query($insertSeek[$l])===TRUE){
@@ -257,16 +443,16 @@ class dataManagementController extends Controller{
         $column = $bb->column;
         $into = $chain->into($column); 
 
-        $mtx = $bb->workOnSheet($spreadSheet);
-        //var_dump($mtx);
+        $mtx = $bb->workOnSheet($spreadSheet);        
         
         $mtx = $bb->fixColumnWorkSheet($column,$mtx);
-
+        //var_dump($mtx);
         $count = 0;
 
         for ($m=0; $m < sizeof($mtx); $m++) { 
+           // var_dump($column);
             $values[$m] = $chain->values($mtx[$m],$column);
-
+            //var_dump($column);
             $ins[$m] = "INSERT INTO $table ($into) VALUES (".$values[$m].")";
             
             if($con->query($ins[$m]) === TRUE ){

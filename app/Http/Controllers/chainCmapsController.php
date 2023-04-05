@@ -81,7 +81,7 @@ class chainCmapsController extends Controller{
 
         $truncateStatement = "TRUNCATE TABLE daily_results";
         
-        $truncateStatement =$con->query($truncateStatement);
+        $truncateStatement = $con->query($truncateStatement);
 
 
         switch ($table) {

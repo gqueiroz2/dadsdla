@@ -53,18 +53,14 @@ class consolidateResults extends Model{
 	            	$previousSAP[$r][$m] = $this->defineValuesOffice($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL",$brand,$company);
 
 	            	for ($c=0; $c <sizeof($company); $c++) { 
-	            		$totalCurrent[$c] = 0.0;
 
             			$currentCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "wbd", $currency, $month[$m][1], $region[$r], $value, $cYear,null,null,$company[$c]);
-            			//var_dump($currentCompany[$r][$m]);
-            			//$totalCurrent[$c] += $currentCompany[$r][$m];
             			$previousCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "wbd", $currency, $month[$m][1], $region[$r], $value,$pYear,null,null,$company[$c]);
 		            	$currentTargetCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "TARGET",$brand,$company[$c]);
 		            	$currentCorporateCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "CORPORATE",$brand,$company[$c]);
 		            	$currentSAPCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $cYear, "ACTUAL",$brand,$company[$c]);
 		            	$previousSAPCompany[$r][$m][$c] = $this->defineValuesOfficeCompany($con, "plan_by_brand", $currency, $month[$m][1], $region[$r], $value, $pYear, "ACTUAL",$brand,$company[$c]);
-		            	$totalCurrent += $currentCompany;
-		            	//var_dump($currentCompany[$r][$m][$c]); 
+		            
             		}	
 	          	}
 	        }
@@ -1039,8 +1035,14 @@ class consolidateResults extends Model{
        			$columns = array("w.year", "w.month", "b.brand_group_id");                
         		$columnsValue = array($year,$month, $company);	       		                              
                 
-                $value .='_value';
-                
+                if($value == 'net net' && $currency == '4'){
+                	$value = 'gross_value';
+                }elseif ($value == 'net net' && $currency == "1") {
+                	$value = 'net_value';
+                }else{
+                	$value .='_value';	
+                }
+                                
                 $join = "LEFT JOIN brand b ON (w.brand_id = b.ID)";
                 $table .= " w";
                 $where  = $sql->where($columns, $columnsValue);
@@ -1083,8 +1085,14 @@ class consolidateResults extends Model{
                     	$rtr = $tmp/$pRate;
                 	}   
             	}else{
-            		$rtr = $tmp/$pRate;
-            	}  
+            		if($value == 'net net' && $currency == '4'){
+                		$rtr = ($tmp*0.14162005)/$pRate;
+	                }elseif ($value == 'net net' && $currency == "1") {
+	                	$rtr = ($tmp*0.8915)/$pRate;
+	                }else{
+	                	$rtr = $tmp/$pRate;
+	                }            		
+            	} 
             }else if($table == "plan_by_brand pbb"){ 
             	if ($currency == "4") {
 	                $pRate = 1.0;
@@ -1215,7 +1223,13 @@ class consolidateResults extends Model{
        			$columns = array("w.year", "w.month", "b.brand_group_id");                
         		$columnsValue = array($year,$month, $company);	       		                              
                 
-                $value .='_value';
+                if($value == 'net net' && $currency == '4'){
+                	$value = 'gross_value';
+                }elseif ($value == 'net net' && $currency == "1") {
+                	$value = 'net_value';
+                }else{
+                	$value .='_value';	
+                }                    
                 
                 $join = "LEFT JOIN brand b ON (w.brand_id = b.ID)";
                 $table .= " w";
@@ -1259,7 +1273,13 @@ class consolidateResults extends Model{
                     	$rtr = $tmp/$pRate;
                 	}   
             	}else{
-            		$rtr = $tmp/$pRate;
+            		if($value == 'net net' && $currency == '4'){
+                		$rtr = ($tmp*0.14162005)/$pRate;
+	                }elseif ($value == 'net net' && $currency == "1") {
+	                	$rtr = ($tmp*0.8915)/$pRate;
+	                }else{
+	                	$rtr = $tmp/$pRate;
+	                }     
             	}  
             }else if($table == "plan_by_brand pbb"){ 
             	if ($currency == "4") {

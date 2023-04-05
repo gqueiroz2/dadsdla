@@ -332,6 +332,12 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function yearViewer(){     
+        echo "<select id='year' name='year[]' class='selectpicker' data-selected-text-format='count' multiple='true'  multiple data-actions-box='true' data-size='2' data-width='100%'>";
+            echo "<option value=''> Select Region </option>";
+        echo "</select>";
+    }    
+
     public function year(){    	
     	echo "<select id='year' name='year' style='width:100%;' class='form-control'>";
             echo "<option value=''> Select Region </option>";
@@ -573,6 +579,14 @@ class Render extends Model{
         echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
             echo "<option value='gross'> Gross </option>"; 
             echo "<option value='net'> Net </option>";                   
+        echo "</select>";
+    }
+
+    public function value4(){
+        echo "<select id='value' name='value' style='width:100%;' class='form-control'>";
+            echo "<option value='gross'> Gross </option>"; 
+            echo "<option value='net'> Net </option>";  
+            echo "<option value='net net'> Net Net </option>";                   
         echo "</select>";
     }
 

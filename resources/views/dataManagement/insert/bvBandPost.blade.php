@@ -13,8 +13,7 @@
 						<center><h4> Data Management - <b> Insert AVB </b> </h4></center>
 					</div>
 					<div class="card-body">
-						<div class="container-fluid">
-							
+						<div class="container-fluid">							
 							<div class="row justify-content-center">
 								<div class="col">
 									<center>
@@ -68,7 +67,7 @@
 
             				</form>
 							
-							<br><hr>								
+							<br><hr>
 						</div>
 					</div>
 				</div>

@@ -36,7 +36,7 @@
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->value2()}}
+						{{$render->value4()}}
 					</div>
 
 					<!--<div class="row justify-content-center">          
@@ -98,7 +98,7 @@
 					    	<td class="lightGrey center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 1px;"> PLATAFORM </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>					    	
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> PLAN </td>
-					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCAST </td>
+					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"> FCST </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> SNAPSHOT </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px;"> BKGS </td>
 					    	<td class="smBlue center" style="width: 7% !important; font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> BKGS </td>

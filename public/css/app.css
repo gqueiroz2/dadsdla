@@ -630,6 +630,12 @@ pre code {
   margin-right: 0;
   margin-left: 0;
 }
+.wrap{
+  display: inline-flex;
+  padding: 10px;
+  justify-content: space-evenly;  
+
+}
 
 .no-gutters > .col,
 .no-gutters > [class*=col-] {

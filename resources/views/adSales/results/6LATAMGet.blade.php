@@ -36,7 +36,7 @@
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->value2()}}
+						{{$render->value4()}}
 					</div>
 
 					<!--<div class="row justify-content-center">          

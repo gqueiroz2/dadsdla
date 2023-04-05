@@ -47,7 +47,7 @@
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
 						@endif
-						{{$render->value3()}}
+						{{$render->value4()}}
 					</div>
 
 					<div class="col-sm">
@@ -306,7 +306,7 @@
 						        			<?php $clr = 'medBlue'; ?>
 						        		@endif
 						        		<?php
-						        			if($mtx['previousCompany'][0][$z] > 0){
+						        			if($mtx['previousCompany'][0][$z][$c] > 0){
 						        				$temp = ($mtx['currentCorporateCompany'][0][$z][$c]/$mtx['previousCompany'][0][$z][$c])*100;
 						        				
 						        			}else{
@@ -335,7 +335,7 @@
 						        			<?php $clr = 'rcBlue'; ?>
 						        		@endif
 						        		<?php
-						        			if($mtx['currentTargetCompany'][0][$z] > 0){
+						        			if($mtx['currentTargetCompany'][0][$z][$c] > 0){
 						        				$temp = ($mtx['currentCorporateCompany'][0][$z][$c]/$mtx['currentTargetCompany'][0][$z][$c])*100;
 						        			}else{
 						        				$temp = 0.0;
