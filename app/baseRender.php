@@ -265,7 +265,7 @@ class baseRender extends Render{
 
 				}elseif ($source == 'WBD') {
 					echo "<tr>";	
-						echo "<th class='newBlue center' colspan='13' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
+						echo "<th class='newBlue center' colspan='14' style='font-size:22px; width:100%;'> $regions - Viewer $source $year - ($currencies) </th>";
 					echo "</tr>";
 
 					echo "<tr class='center'>";
@@ -278,6 +278,7 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:3%;'>Platform</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Brand Code</td>";
+						echo "<td class='rcBlue' style='width:3%;'>Internal Code</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Director</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
@@ -286,7 +287,7 @@ class baseRender extends Render{
 
 					echo "<tr style='font-size:14px;'>";
 							echo "<td class='darkBlue center'>Total</td>";
-							echo "<td class='darkBlue' colspan='10'></td>";
+							echo "<td class='darkBlue' colspan='11'></td>";
 							echo "<td class='darkBlue center' >".number_format($total['sumGrossRevenue'],0,",",".")."</td>";
 							echo "<td class='darkBlue center' >".number_format($total['sumNetRevenue'],0,",",".")."</td>";
 					echo"</tr>";
@@ -308,6 +309,7 @@ class baseRender extends Render{
 						echo "<td class='$color'>".$mtx[$m]['feedType']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['brand']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['feedCode']."</td>";
+						echo "<td class='$color'>".$mtx[$m]['internalCode']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['manager']."</td>";
 						echo "<td class='$color'>".$mtx[$m]['salesRep']."</td>";						
 						echo "<td class='$color'>".number_format($mtx[$m]['grossRevenue'],0,",",".")."</td>";
