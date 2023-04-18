@@ -83,7 +83,7 @@ class DailyResults extends Model{
                 case "wm":
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,56,57,59,61) AND year = $year AND month = $month";
                     //var_dump($querryTV);
-                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,5062,63,64,65,66,67,68,69) AND year = $year AND month = $month";
+                    $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,50,62,63,64,65,66,67,68,69) AND year = $year AND month = $month";
                     //var_dump($querryONL);
                     break;
             }

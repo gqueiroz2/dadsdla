@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'LATAM Results')
+@section('title', 'Daily Results')
 @section('head')	
 	<script src="/js/resultsLATAM.js"></script>
 	<?php include(resource_path('views/auth.php')); ?>

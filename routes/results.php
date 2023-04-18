@@ -29,9 +29,9 @@ Route::group(['middleware' => 'auth'],function(){
 		Route::post('consolidate','consolidateResultsController@post')
 						->name('consolidateResultsPost');
 
-		Route::get('LATAM','resultsLATAMController@get')
+		Route::get('daily','resultsLATAMController@get')
 							->name('resultsLATAMGet');
-		Route::post('LATAM','resultsLATAMController@post')
+		Route::post('daily','resultsLATAMController@post')
 						->name('resultsLATAMPost');
 
 

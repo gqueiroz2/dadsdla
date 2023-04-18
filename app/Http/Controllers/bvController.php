@@ -307,7 +307,7 @@ class bvController extends Controller{
       //WM TARGET FOR PREVIOUS YEAR
       $monthTargetWM = $bvModel->getMonthTarget($con,$agencyGroup,$year-1,'WM');
 
-      $bvTargetDSCWM = $bvModel->getBvTarget($con,$agencyGroup,$year-1,'WM');
+      $bvTargetWM = $bvModel->getBvTarget($con,$agencyGroup,$year-1,'WM');
       //END OF WM TARGET
 
       // GETTING REAL VALUE OF WICH COMPANY FOR PREVIOUS YEAR
@@ -316,12 +316,20 @@ class bvController extends Controller{
       $realSPTPyear = $bvModel->getReal($con,$agencyGroup,$year-1,2);
 
       $realWMPyear = $bvModel->getReal($con,$agencyGroup,$year-1,3);
-
-      //TABLE OF LIQUID INVEST
-      $liquid = $bvModel->liquidTable($agencyGroup, $year, $con, $value, $salesRep, $currency,$brand);
-      $investTotalBrand = $bvModel->totalperBrandInvest($liquid);
-      $totalYearInvest = $bvModel->totalInvestYear($liquid, $investTotalBrand);
       
+      //this part is to the historical tables
+      $historyPyear = $bvModel->historyTable($con, $agencyGroup, $year-1);
+
+      $totalClusterPyear = $bvModel->totalByCluster($historyPyear);
+
+      $totalByClientPyear = $bvModel->totalByClientHistory($historyPyear);
+
+      $historyPpyear = $bvModel->historyTable($con, $agencyGroup, $year-2);
+
+      $totalClusterPpyear = $bvModel->totalByCluster($historyPpyear);
+
+      $totalByClientPpyear = $bvModel->totalByClientHistory($historyPpyear);
+
       $title = "Control Panel - BV";
       $titleExcel = "Control Panel - BV.xlsx";
 
@@ -347,7 +355,7 @@ class bvController extends Controller{
       }
 
       //var_dump($totalBrandPyear);
-       return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','liquid','brand', 'investTotalBrand','totalYearInvest','clientsByAE','bvWMPyear', 'bvWMPpyear','bvDSCPyear', 'bvDSCPpyear','payTv','monthTargetDSC','bvTargetDSC','monthTargetWM','bvTargetDSC','realWMPyear','realDSCPyear','realSPTPyear','pRateWM'));
+       return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','brand', 'clientsByAE','bvWMPyear', 'bvWMPpyear','bvDSCPyear', 'bvDSCPpyear','payTv','monthTargetDSC','bvTargetDSC','monthTargetWM','bvTargetWM','realWMPyear','realDSCPyear','realSPTPyear','pRateWM','historyPyear','historyPpyear', 'totalClusterPyear','totalByClientPyear', 'totalClusterPpyear','totalByClientPpyear'));
       
    }
 }

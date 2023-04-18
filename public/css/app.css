@@ -632,10 +632,12 @@ pre code {
 }
 .wrap{
   display: inline-flex;
-  padding: 10px;
-  justify-content: space-evenly;  
-
+  justify-content: space-evenly;
+  max-width: 80%;
+  width: auto;
+  
 }
+
 
 .no-gutters > .col,
 .no-gutters > [class*=col-] {

@@ -48,12 +48,6 @@
 				</form>
 			</div>
 		</div>
-
-		<div class="row justify-content-end mt-2">
-			<div class="col-sm" style="color: #0070c0; font-size: 22px;">
-				<div style="float: right;"> RESUME </div>
-			</div>
-		</div>	
 	</div>
 
 	<form method="POST" runat="server" name="tableForm" onkeyup="calculate()" action="{{ route('bvSaveForecast') }}"> 
@@ -69,23 +63,32 @@
                 <div class="col">
                     <div class="container-fluid">
                         <div class="row justify-content-end">
-                           <!-- <div class="col-2">
-								<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-								<input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%">
-							</div>-->
+                        	
+                        	<div class="col-2" style="color: #0070c0; font-size: 22px;">
+                        		<br>
+								<div style="float: right;"> RESUME </div>
+							</div>		
 
-							<div class='col-3'>
+                            <div class="col-2" style="margin-left: 27px;">
+                            	<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
+				                <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
+				                    Generate Excel
+				                </button>
+				            </div>
+
+						<!--	<div class='col-2'>
 								<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
 						        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
 						          PAY TV {{$year-1}}
 						        </button>
-						    </div>
+						    </div>-->
+
 						</div>
 					</div>
 				</div>	
 			</div>
 		
-		    <!-- Modal -->
+		    <!-- Modal
 		    <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		      <div class="modal-dialog" role="document">
 		        <div class="modal-content">
@@ -119,8 +122,8 @@
 		          </div>
 		        </div>
 		      </div>
-		    </div>
-
+		    </div> -->
+				
 			<div class="container-fluid" id="body">
 				<div class="row ">
 					<div class="col"> 	
@@ -133,6 +136,7 @@
 				        </table>
 
 						<div class="wrap" >
+
 							<!-- WM PART PPYEAR INFO -->
 							@if($bvWMPpyear['wmPaytv']['fromValue'] != false)
 							<table style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
@@ -159,9 +163,7 @@
 					        		</tr>
 					        	@endfor 					        	
 					        </table>
-					        @endif
-
-					        
+					        @endif					        
 
 					        @if($bvWMPpyear['wmDigital']['fromValue'] != false)
 							<table style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
@@ -352,7 +354,26 @@
 					        	@endfor    					        	
 					        </table>
 					        @endif
-				        </div>
+				        	
+				        </div>	
+
+				        <table style='max-width: 15%; width: auto; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px; float: right;'>
+				          	<tr class="center" style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
+					       		<td style='width: 10%;' class="newBlue col">PAY TV {{$year-1}}</td>
+					    	   	<td style='width: 5%;' class="medBlue col">SOA</td>
+					   		</tr>
+				           	@for($p = 0; $p<sizeof($payTv); $p++)
+				           	<tr class="center">
+				           		@if($payTv[$p]['station'] == 'WBD')
+					           		<td style='width: 10%;' class="medBlue col">{{$payTv[$p]['station']}}</td>
+					           		<td style='width: 5%;' class="medBlue col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
+				           		@else
+				           			<td style='width: 10%;' class="even col">{{$payTv[$p]['station']}}</td>
+				           			<td style='width: 5%;' class="even col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
+				           		@endif
+				           	</tr>	
+				           	@endfor
+				        </table>			        
 
 				        <table style='width: 100%; zoom: 85%;font-size: 16px;'>
 				        	<tr class="center">
@@ -362,14 +383,13 @@
 
 						<!-- forecast table-->
 
-						<table id='table' style='width: 100%; zoom: 85%;'>
-							
+						<table class="table-responsive" id='table' style='width: 100%; zoom: 85%;'>							
 							<tr>
-								<th class='newBlue center' colspan='10' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> {{$agencyGroupName}}</th>
+								<th class='newBlue center' colspan='11' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> {{$agencyGroupName}}</th>
 							</tr>
 							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
-								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">CLIENT</td>
-								<td class="col" style="width:12%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">AGENCY</td>
+								<td class="col" style="width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">CLIENT</td>
+								<td class="col" style="width:10%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">AGENCY</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-2}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-1}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year}}</td>
@@ -377,6 +397,7 @@
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL {{$year}}</td>
 								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST SPT {{$year}}</td>
 								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">PERCENTAGE</td>
+								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SALES REP</td>
 								<td class="col oddGrey" style="width:14%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">STATUS</td>
 							</tr>
 							@for($b = 0; $b < sizeof($bvTest) ; $b++)	
@@ -392,6 +413,9 @@
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],0,',','.')}}"></td>
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value={{number_format($bvTest[$b]['sptPrev'],0,',','.')}}></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['variation']}}%</td>
+									@for($u = 0; $u < sizeof($updateInfo) ; $u++)
+										<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$updateInfo[$u]['salesRep']}}</td>
+									@endfor
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="100" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 								</tr>
 							@endfor
@@ -406,6 +430,7 @@
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;" name="total-forecast-spt" id="total-forecast-spt">{{number_format($total['sptPrev'],0,',','.')}}</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;" name="total-var" id="total-var">{{$total['variation']}}%</td>
 								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+								<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
 							</tr>		
 						</table>						
 
@@ -415,46 +440,9 @@
 				        	</tr>
 				        </table>
 
-				        <!-- net investment table-->
-
-				        <table style='width: 100%; zoom: 85%; font-size: 16px;'>
-				        	<tr>
-				        		<th class='newBlue center' colspan="2" style="font-size: 16px; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">NET INVESTMENT</th>
-				        	</tr>
-				        	<tr class="medBlue center" >
-								<td class="col" style="width: 5%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">YEAR</td>
-				        		@for($x = 0; $x<sizeof($liquid); $x++)
-				        			<td class="col" style="width: 3% !important; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{$liquid[$x]['brand']}}</td>
-				        		@endfor
-				        		<td class="col" style="width: 10% !important; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">TOTAL</td>
-				        	</tr>
-				        	<tr class="even center" >
-				        		<td  style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{$year-1}}</td>	       		
-				        		@for($x = 0; $x<sizeof($liquid); $x++)
-				        			<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($liquid[$x]['liquidPyear']/$pRateWM),0,',','.')}}</td>	      			
-				        		@endfor
-				        		<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($totalYearInvest['totalPYear']/$pRateWM),0,',','.')}}</td>
-				        	</tr>
-				        	<tr class="even center">
-				        		<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{$year-2}}</td>
-				        		@for($x = 0; $x<sizeof($liquid); $x++)
-									<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($liquid[$x]['liquidPpyear']/$pRateWM),0,',','.')}}</td>
-								@endfor
-								<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($totalYearInvest['totalPpYear']/$pRateWM),0,',','.')}}</td>
-				        	</tr>
-				        	<tr class="even center">
-				        		<td style="border-style:solid; border-color: black; border-width: 0px 1px 1px 1px;">{{$year-3}}</td>
-				        		@for($x = 0; $x<sizeof($liquid); $x++)
-									<td style="border-style:solid; border-color: black; border-width: 0px 1px 1px 1px;">{{number_format(($liquid[$x]['liquidPppyear']/$pRateWM),0,',','.')}}</td>
-								@endfor
-								<td style="border-style:solid; border-color: black; border-width: 0px 1px 0px 1px;">{{number_format(($totalYearInvest['totalPppYear']/$pRateWM),0,',','.')}}</td>
-				        	</tr>
-				        	<tr>
-				        		<td class="smBlue center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
-				        		@for($x = 0; $x<sizeof($liquid); $x++)
-				        			<td class="smBlue center" style="border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{number_format(($investTotalBrand[$x]/$pRateWM),0,',','.')}}</td>
-				        		@endfor
-				        		<td class="smBlue center" style="border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;">{{number_format(($totalYearInvest['all']/$pRateWM),0,',','.')}}</td>
+				        <table style='width: 100%; zoom: 85%;font-size: 20px;'>
+							<tr class="smBlue center">
+				        		<td style="width: 7% !important;"> Historical Investment </td>
 				        	</tr>
 				        </table>
 
@@ -462,9 +450,89 @@
 							<tr class="center">
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
 				        	</tr>
-				        </table>
-				     	
+				        </table>    
+				      	
+				      	<table  style='table-layout: fixed; width: 100%; zoom: 85%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>							
+							<tr>
+								<th class='newBlue center' colspan='8' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> {{$year-1}}</th>
+							</tr>
+							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">CLIENT</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">AGENCY</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">GE</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SPORTS</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">NEWS</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">DIGITAL</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+								<td class="col sony" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SPT</td>								
+							</tr>
+							@for($h = 0; $h < sizeof($historyPyear) ; $h++)	
+							<tr class="even center" style="font-size:16px; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$historyPyear[$h]['clientName']}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$historyPyear[$h]['agencyName']}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPyear[$h]['geCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPyear[$h]['sportsCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPyear[$h]['newsCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPyear[$h]['digitalCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalByClientPyear[$h]/$pRateWM)}}</td>
+								<td class="col " style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPyear[$h]['sptCluster'][0]['netRevenue']/$pRateWM)}}</td>								
+							</tr>
+							@endfor
+							<tr class ='smBlue center' style="font-size:16px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPyear['geCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPyear['sportsCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPyear['newsCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPyear['digitalCluster']/$pRateWM)}}</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;">{{number_format($totalClusterPyear['totalCluster']/$pRateWM)}}</td>
+								<td class="col sony" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPyear['sptCluster']/$pRateWM)}}</td>
+							</tr>
+						</table>
 
+						<table style='width: 100%; zoom: 85%;font-size: 16px;'>
+							<tr class="center">
+				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+				        	</tr>
+				        </table>
+
+						<table style='table-layout: fixed; width: 100%; zoom: 85%;  border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'>							
+							<tr>
+								<th class='newBlue center' colspan='8' style='font-size:22px; width:100%; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;'> {{$year-2}}</th>
+							</tr>
+							<tr class="medBlue center" style="font-size:16px; border-style:solid; border-color:black; border-width: 1px 1px 1px 1px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">CLIENT</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">AGENCY</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">GE</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SPORTS</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">NEWS</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">DIGITAL</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+								<td class="col sony" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SPT</td>								
+							</tr>
+							@for($h1 = 0; $h1 < sizeof($historyPpyear) ; $h1++)	
+							<tr class="even center" style="font-size:16px; border-style:solid; border-color:black; border-width: 0px 0px 0px 1px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$historyPpyear[$h1]['clientName']}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$historyPpyear[$h1]['agencyName']}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPpyear[$h1]['geCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPpyear[$h1]['sportsCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPpyear[$h1]['newsCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPpyear[$h1]['digitalCluster'][0]['netRevenue']/$pRateWM)}}</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalByClientPpyear[$h1]/$pRateWM)}}</td>
+								<td class="col " style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($historyPpyear[$h1]['sptCluster'][0]['netRevenue']/$pRateWM)}}</td>								
+							</tr>
+							@endfor
+							<tr class ='smBlue center' style="font-size:16px;">
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"></td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPpyear['geCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPpyear['sportsCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPpyear['newsCluster']/$pRateWM)}}</td>
+								<td class="col" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPpyear['digitalCluster']/$pRateWM)}}</td>
+								<td class="col smBlue" style="width:12.5%; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;">{{number_format($totalClusterPpyear['totalCluster']/$pRateWM)}}</td>
+								<td class="col sony" style="width:12.5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($totalClusterPpyear['sptCluster']/$pRateWM)}}</td>
+							</tr>
+						</table>  
 					</div>
 				</div>
 			</div>

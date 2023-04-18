@@ -202,13 +202,13 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
 
 					
-					$cellRange = 'A3:M3';
+					$cellRange = 'A3:N3';
 					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
 
-					$cellRange = 'A2:M2';
+					$cellRange = 'A2:N2';
 					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
 
-					$letter = 'M';
+					$letter = 'N';
 
 					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
 						$cellRange = "A".($d+4).":".$letter.($d+4);
@@ -274,8 +274,8 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 				];
 			}elseif ($this->data['source'] == 'wbd') {
 				return[
-				'L' => '#,##0',
-				'M' => '#,##0'
+				'M' => '#,##0',
+				'N' => '#,##0'
 				];
 			}
 		}
