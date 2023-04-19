@@ -106,17 +106,19 @@ class DailyResults extends Model{
         $resultONL = $con->query($querryONL);
         $valueONL = $sql->fetchSUM($resultONL, $value);
     
-        if( $currencyID != 1 && $regionYtd == 'wbd'){
+        if( $currencyID != 1 && $regionYtd == 'wbd' && $valueView != 'net net'){
             $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
-        }elseif($value == 'gross_value' || $value == 'net_value'){
-            $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
+        }elseif($valueView != 'net net'){
+            if ($value == 'gross_value' || $value == 'net_value'){
+                $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
+            }
         }
 
         if ($valueView == 'net net' && $currencyID == 1) {
-            $monthValues = array((($valueTV[$value] / $pRateWM) * 0.8915), (($valueONL[$value] / $pRateWM) * 0.8915), ((($valueTV[$value] + $valueONL[$value]) / $pRateWM) * 0.8915));   
+            $monthValues = array((($valueTV[$value]) * 0.8915), (($valueONL[$value]) * 0.8915), ((($valueTV[$value] + $valueONL[$value])) * 0.8915));   
            // var_dump($monthValues);
         }elseif ($currencyID != 1 && $valueView == 'net net') {
-            $monthValues = array((($valueTV[$value] / $pRateWM) * 0.14162005), (($valueONL[$value] / $pRateWM) * 0.14162005), ((($valueTV[$value] + $valueONL[$value]) / $pRateWM) * 0.14162005));
+            $monthValues = array((($valueTV[$value]) * 0.14162005), (($valueONL[$value]) * 0.14162005), ((($valueTV[$value] + $valueONL[$value])) * 0.14162005));
         }
        
         return $monthValues;
@@ -180,7 +182,7 @@ class DailyResults extends Model{
              $monthValues = array((($valueTV[$value]) * 0.8) * 0.8915, (($valueONL[$value]) * 0.8) * 0.8915, ((($valueTV[$value] + $valueONL[$value])) * 0.8) * 0.8915);
             //$monthValues = array(($valueTV[$value] / $pRate) , ($valueONL[$value] / $pRate) * 0.8915, (($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.8915);   
         }if ($currencyID != 1 && $valueView == 'net net') {
-            $monthValues = array((($valueTV[$value] / $brlPRate)) * 0.14162005, (($valueONL[$value] / $brlPRate)) * 0.14162005, (($valueTV[$value] + $valueONL[$value] / $brlPRate)) * 0.14162005);
+            $monthValues = array((($valueTV[$value])) * 0.14162005, (($valueONL[$value])) * 0.14162005, (($valueTV[$value] + $valueONL[$value])) * 0.14162005);
             //$monthValues = array(($valueTV[$value] / $pRate) * 0.14162005, ($valueONL[$value] / $pRate) * 0.14162005, (($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.14162005);
         }
        
