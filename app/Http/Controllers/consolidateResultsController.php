@@ -220,7 +220,7 @@ class consolidateResultsController extends Controller{
 
         $month = $base->getMonth();
 
-        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value);
+        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value,$brand,'DLA');
 
         $mtx = $cR->assemble($mtx);
 
@@ -374,7 +374,7 @@ class consolidateResultsController extends Controller{
 
         $month = $base->getMonth();
         //var_dump($typeSelect);
-        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value,$brand);
+        $mtx = $cR->construct($con,$currencyIDs,$month,$type,$typeSelect,$regionID,$value,$brand,'pacing');
         //var_dump($mtx);
 
         $mtx = $cR->assemble($mtx);

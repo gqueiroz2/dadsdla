@@ -102,7 +102,7 @@ class consolidateResults extends Model{
         
     }
 
-	public function construct($con,$currency,$month,$type,$typeSelect,$region,$value,$brand){
+	public function construct($con,$currency,$month,$type,$typeSelect,$region,$value,$brand,$report){
 		$form = "bts";
 		$year = date('Y');
 		$pYear = $year - 1;
@@ -120,20 +120,20 @@ class consolidateResults extends Model{
 			                if ($typeSelect[$b][1] != 'ONL' && $typeSelect[$b][1] != 'VIX') {
 	                            //$currentAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
 	                            //$previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
-			                    $currentWBD[$b][$m] = $this->defineValuesBrand($con, "wbd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
+			                    $currentWBD[$b][$m] = $this->defineValuesBrand($con, "wbd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year,false,false,$report);
 	                            $currentAdSales[$b][$m] = $currentWBD[$b][$m];
-	                            //$previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
-			                    $previousWBD[$b][$m] = $this->defineValuesBrand($con, "wbd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+	                            //$previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,$report);
+			                    $previousWBD[$b][$m] = $this->defineValuesBrand($con, "wbd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);
 	                            $previousAdSales[$b][$m] = $previousWBD[$b][$m];
 			                }else{
-			                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
-	                            $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
-			                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);                    
+			                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year,false,false,$report);
+	                            $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year,false,false,$report);
+			                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);                    
 			                }        
-			                $currentTarget[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET", $typeSelect[$b][2]);
-			                $currentCorporate[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "CORPORATE",$typeSelect[$b][2]);
-			                $currentSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL",$typeSelect[$b][2]);
-			                $previousSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL",$typeSelect[$b][2]);
+			                $currentTarget[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET", $typeSelect[$b][2],$report);
+			                $currentCorporate[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "CORPORATE",$typeSelect[$b][2],$report);
+			                $currentSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL",$typeSelect[$b][2],$report);
+			                $previousSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL",$typeSelect[$b][2],$report);
 			            }
 			        }
 			    }else{
@@ -143,22 +143,22 @@ class consolidateResults extends Model{
 			            	//var_dump("=====");
 			            	
 			                if ($typeSelect[$b][1] != 'ONL' && $typeSelect[$b][1] != 'VIX') {
-	                            $currentAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
-	                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
-			                    $currentYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year);
+	                            $currentAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year,false,false,$report);
+	                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);
+			                    $currentYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$year,false,false,$report);
 	                            $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
-	                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
-			                    $previousYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);
+	                            $previousAleph[$b][$m] = $this->defineValuesBrand($con, "aleph", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);
+			                    $previousYtd[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);
 	                            $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m];
 			                }else{
-			                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
-	                            $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year);
-			                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear);                    
+			                    $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year,false,false,$report);
+	                            $currentAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year,false,false,$report);
+			                    $previousAdSales[$b][$m] = $this->defineValuesBrand($con, "ytd", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value,$pYear,false,false,$report);                    
 			                }        
-			                $currentTarget[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET", $typeSelect[$b][2]);
-			                $currentCorporate[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "CORPORATE",$typeSelect[$b][2]);
-			                $currentSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL",$typeSelect[$b][2]);
-			                $previousSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL",$typeSelect[$b][2]);
+			                $currentTarget[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "TARGET", $typeSelect[$b][2],$report);
+			                $currentCorporate[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "CORPORATE",$typeSelect[$b][2],$report);
+			                $currentSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $year, "ACTUAL",$typeSelect[$b][2],$report);
+			                $previousSAP[$b][$m] = $this->defineValuesBrand($con, "plan_by_brand", $currency, $typeSelect[$b][0], $month[$m][1], $region, $value, $pYear, "ACTUAL",$typeSelect[$b][2],$report);
 			            }
 			        }
 			    }
@@ -180,10 +180,10 @@ class consolidateResults extends Model{
 				if ($year >= '2022' || $pYear == '2022' && $region == '1') {
 					for ($b=0; $b < sizeof($typeSelect); $b++) { 
 			            for ($m=0; $m < sizeof($month); $m++) {
-	                        //$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-	                        //$previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-		                    $currentWBD[$b][$m] = $this->defineValuesAdvertiser($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-		                    $previousWBD[$b][$m] = $this->defineValuesAdvertiser($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+	                        //$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,$report);
+	                        //$previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,$report);            	
+		                    $currentWBD[$b][$m] = $this->defineValuesAdvertiser($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+		                    $previousWBD[$b][$m] = $this->defineValuesAdvertiser($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
 	                        $currentAdSales[$b][$m] = $currentWBD[$b][$m];
 	                        $previousAdSales[$b][$m] = $previousWBD[$b][$m]; 
 			                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -194,10 +194,10 @@ class consolidateResults extends Model{
 			            }
 			        }
 			    }else{
-			    	$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-                    $previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-                    $currentYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-                    $previousYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+			    	$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,false,$report);
+                    $previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);            	
+                    $currentYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+                    $previousYtd[$b][$m] = $this->defineValuesAdvertiser($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
                     $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
                     $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m]; 
 	                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAdvertiser($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -221,10 +221,10 @@ class consolidateResults extends Model{
 				if ($year >= '2022' || $pYear == '2022' && $region == '1') {
 					for ($b=0; $b < sizeof($typeSelect); $b++) { 
 			            for ($m=0; $m < sizeof($month); $m++) {
-	                        //$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-	                        //$previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-		                    $currentWBD[$b][$m] = $this->defineValuesAgency($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-		                    $previousWBD[$b][$m] = $this->defineValuesAgency($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+	                        //$currentAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,$report);
+	                        //$previousAleph[$b][$m] = $this->defineValuesAdvertiser($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,$report);            	
+		                    $currentWBD[$b][$m] = $this->defineValuesAgency($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+		                    $previousWBD[$b][$m] = $this->defineValuesAgency($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
 	                        $currentAdSales[$b][$m] = $currentWBD[$b][$m];
 	                        $previousAdSales[$b][$m] = $previousWBD[$b][$m]; 
 			                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAgency($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -235,10 +235,10 @@ class consolidateResults extends Model{
 			            }
 			        }
 			    }else{
-			    	$currentAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-                    $previousAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-                    $currentYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-                    $previousYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+			    	$currentAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,false,$report);
+                    $previousAleph[$b][$m] = $this->defineValuesAgency($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);            	
+                    $currentYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+                    $previousYtd[$b][$m] = $this->defineValuesAgency($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
                     $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
                     $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m]; 
 	                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAgency($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -263,10 +263,10 @@ class consolidateResults extends Model{
               if ($year >= '2022' || $pYear == '2022' && $region == '1') {
 					for ($b=0; $b < sizeof($typeSelect); $b++) { 
 			            for ($m=0; $m < sizeof($month); $m++) {
-	                        //$currentAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-	                        //$previousAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-		                    $currentWBD[$b][$m] = $this->defineValuesAgencyGroup($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-		                    $previousWBD[$b][$m] = $this->defineValuesAgencyGroup($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+	                        //$currentAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,false,$report);
+	                        //$previousAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);            	
+		                    $currentWBD[$b][$m] = $this->defineValuesAgencyGroup($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+		                    $previousWBD[$b][$m] = $this->defineValuesAgencyGroup($con, "wbd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
 	                        $currentAdSales[$b][$m] = $currentWBD[$b][$m];
 	                        $previousAdSales[$b][$m] = $previousWBD[$b][$m]; 
 			                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAgencyGroup($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -277,10 +277,10 @@ class consolidateResults extends Model{
 			            }
 			        }
 			    }else{
-			    	$currentAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
-                    $previousAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-                    $currentYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year);
-                    $previousYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);    
+			    	$currentAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year,false,$report);
+                    $previousAleph[$b][$m] = $this->defineValuesAgencyGroup($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);            	
+                    $currentYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year,false,$report);
+                    $previousYtd[$b][$m] = $this->defineValuesAgencyGroup($con, "ytd", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear,false,$report);    
                     $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
                     $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m]; 
 	                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAgencyGroup($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -308,8 +308,8 @@ class consolidateResults extends Model{
 			            for ($m=0; $m < sizeof($month); $m++) {
 	                        //$currentAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$year);
 	                        //$previousAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value,$pYear);            	
-		                    $currentWBD[$b][$m] = $this->defineValuesAE($con, "wbd", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year);
-		                    $previousWBD[$b][$m] = $this->defineValuesAE($con, "wbd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);    
+		                    $currentWBD[$b][$m] = $this->defineValuesAE($con, "wbd", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year,false,$report);
+		                    $previousWBD[$b][$m] = $this->defineValuesAE($con, "wbd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear,false,$report);    
 	                        $currentAdSales[$b][$m] = $currentWBD[$b][$m];
 	                        $previousAdSales[$b][$m] = $previousWBD[$b][$m]; 
 			                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -320,10 +320,10 @@ class consolidateResults extends Model{
 			            }
 			        }
 			    }else{
-			    	$currentAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year);
-                    $previousAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);            	
-                    $currentYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year);
-                    $previousYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear);    
+			    	$currentAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$year,false,$report);
+                    $previousAleph[$b][$m] = $this->defineValuesAE($con, "aleph", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear,false,$report);            	
+                    $currentYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value, $year,false,$report);
+                    $previousYtd[$b][$m] = $this->defineValuesAE($con, "ytd", $currency, $typeSelect[$b], $month[$m][1], $region, $value,$pYear,false,$report);    
                     $currentAdSales[$b][$m] = $currentAleph[$b][$m] + $currentYtd[$b][$m];
                     $previousAdSales[$b][$m] = $previousAleph[$b][$m] + $previousYtd[$b][$m]; 
 	                $currentTarget[$b][$m] = 0.0;//$this->defineValuesAE($con, "plan_by_brand", $currency, $typeSelect[$b]['id'], $month[$m][1], $region, $value, $year, "TARGET");
@@ -352,49 +352,76 @@ class consolidateResults extends Model{
 		return $rtr;
 	}
 
-	public function defineValuesAE($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
+	public function defineValuesAE($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false,$report=false){
         $p = new pRate();
 
         $year = $keyYear;
         $valueView = $value;
         //var_dump($table);
 
-        if ($table != "plan_by_brand" && $table != "digital") {
-            if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif($table == "aleph" || $table == 'wbd'){
-                	if ($year <= 2022) {
-                		$pRate = 4.99;
-                		$pRateSel = 4.99;	
-                	}else{
-                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}   
-                } 
-            }else{
-                if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }else{
-                    
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                    
- 
-                }                
-            }    
-        }else{            
-            if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
-                $pRateSel = $pRate;
-            }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
-            }            
-        }
+        
+        if ($report == 'DLA') {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con,array('1'),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con,array('1'),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+        }else{
 
+	        if ($table != "plan_by_brand" && $table != "digital") {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "cmaps"){
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                }elseif($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                	}   
+	                } 
+	            }else{
+	                if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{
+	                    
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                    
+	 
+	                }                
+	            }    
+	        }else{            
+	            if ($currency[0]['name'] == "USD") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	            }else{
+	                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+	                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+	            }            
+	        }
+	    }
         switch ($table) {
             case 'ytd':
                 $columns = array("sales_representant_office_id","sales_rep_id", "year", "month");
@@ -469,46 +496,72 @@ class consolidateResults extends Model{
         return $rtr;		
     }  
 
-    public function defineValuesAdvertiser($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
+    public function defineValuesAdvertiser($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false, $report=false){
         $p = new pRate();
 
         $year = $keyYear;
         $valueView = $value;
 
-        if ($table != "plan_by_brand" && $table != "digital") {
-            if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif($table == "aleph" || $table == 'wbd'){
-                	if ($year <= 2022) {
-                		$pRate = 4.99;
-                		$pRateSel = 4.99;	
-                	}else{
-                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}
-                }    
-            }else{
-                if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }else{
-                  
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                }                
-            }    
-        }else{            
-            if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
-                $pRateSel = $pRate;
-            }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
-            }            
-        }
+       if ($report == 'DLA') {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array('1'),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con,array('1'),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+        }else{
+        	 if ($table != "plan_by_brand" && $table != "digital") {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "cmaps"){
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                }elseif($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                	}
+	                }    
+	            }else{
+	                if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{
+	                  
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+	        }else{            
+	            if ($currency[0]['name'] == "USD") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	            }else{
+	                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+	                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+	            }            
+	        }
+	    }
 
         switch ($table) {
             case 'ytd':
@@ -619,48 +672,73 @@ class consolidateResults extends Model{
         return $rtr;		
     }      
 
-    public function defineValuesAgency($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
+    public function defineValuesAgency($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false,$report=false){
         $p = new pRate();
         //r_dump($typeSelect);
         $year = $keyYear;
         $valueView = $value;
 
 
-        if ($table != "plan_by_brand" && $table != "digital") {
-            if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif($table == "aleph" || $table == 'wbd'){
-                	if ($year <= 2022) {
-                		$pRate = 4.99;
-                		$pRateSel = 4.99;	
-                	}else{
-                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}  
-                }  
-            }else{
-                if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }else{
-                  
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                }                
-            }    
-        }else{            
-            if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
-                $pRateSel = $pRate;
-            }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
-            }            
-        }
-
+        if ($report == 'DLA') {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con,array('1'),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con,array('1'),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+        }else{
+        	if ($table != "plan_by_brand" && $table != "digital") {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "cmaps"){
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                }elseif($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                	}  
+	                }  
+	            }else{
+	                if($table == "cmaps" || $table == "aleph" || $table == 'wbd'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{
+	                  
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+	        }else{            
+	            if ($currency[0]['name'] == "USD") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	            }else{
+	                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+	                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+	            }            
+	        }
+	    }
         switch ($table) {
             case 'ytd':
                 $columns = array("sales_representant_office_id","agency_id", "year", "month");
@@ -770,47 +848,72 @@ class consolidateResults extends Model{
         return $rtr;		
     }      
 
-    public function defineValuesAgencyGroup($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false){
+    public function defineValuesAgencyGroup($con, $table, $currency, $typeSelect, $month, $region, $value, $keyYear, $source=false,$report=false){
         $p = new pRate();
 
         $year = $keyYear;
         $valueView = $value;
 
-        if ($table != "plan_by_brand" && $table != "digital") {
-            if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif($table == "aleph" || $table == 'wbd'){
-                	if ($year <= 2022) {
-                		$pRate = 4.99;
-                		$pRateSel = 4.99;	
-                	}else{
-                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}   
-                } 
-            }else{
-                if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }else{
-                    
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                }                
-            }    
-        }else{            
-            if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
-                $pRateSel = $pRate;
-            }else{
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
-            }            
-        }
-
+        if ($report == 'DLA') {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con,array('1'),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con,array('1'),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+        }else{
+        	if ($table != "plan_by_brand" && $table != "digital") {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "cmaps"){
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                }elseif($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                	}   
+	                } 
+	            }else{
+	                if($table == "cmaps" || $table == 'aleph' || $table == 'wbd'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{
+	                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+	        }else{            
+	            if ($currency[0]['name'] == "USD") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	            }else{
+	                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($keyYear));
+	                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($year));
+	            }            
+	        }
+	    }
         switch ($table) {
             case 'ytd':
                 $columns = array("sales_representant_office_id","agency_group_id", "year", "month");
@@ -1309,51 +1412,77 @@ class consolidateResults extends Model{
      
     }
     
-	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false,$brandGroup=false){
+	public function defineValuesBrand($con, $table, $currency, $brand, $month, $region, $value, $keyYear, $source=false,$brandGroup=false, $report=false){
 
         $p = new pRate();
         $year = $keyYear;
         $join = null;
 
 
-        if ($table != "plan_by_brand" && $table != "digital") {
-            if ($currency[0]['name'] == "USD") {
-                if($table == "cmaps"){
-                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                }elseif($table == "aleph" || $table == 'wbd'){
-                	if ($year <= 2022) {
-                		$pRate = 4.99;
-                		$pRateSel = 4.99;	
-                	}else{
-                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
-                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
-                	}                    	
-                }else{
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }
-            }else{
-                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
-                    $pRate = 1.0;
-                    $pRateSel = $pRate;
-                }else{                    
-                    $ccYear = date('Y');
-                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
-                }                
-            }    
-        }else{            
-            if ($currency[0]['name'] == "USD") {
-                $pRate = 1.0;
-                $pRateSel = $pRate;
-            }else{
-            	$ccYear = $year;
-                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
-                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
-                //var_dump($pRateSel);
-            }            
-        }
+       	if ($report == 'DLA') {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con,array('1'),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con,array('1'),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+        }else{
+        	if ($table != "plan_by_brand" && $table != "digital") {
+	            if ($currency[0]['name'] == "USD") {
+	                if($table == "cmaps"){
+	                    $pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    $pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                }elseif($table == "aleph" || $table == 'wbd'){
+	                	if ($year <= 2022) {
+	                		$pRate = 4.99;
+	                		$pRateSel = 4.99;	
+	                	}else{
+	                		$pRate = $p->getPRateByRegionAndYear($con, array($region),array($keyYear));
+	                    	$pRateSel = $p->getPRateByRegionAndYear($con, array($region),array($year));
+	                	}                    	
+	                }else{
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }
+	            }else{
+	                if($table == "cmaps" || $table == 'wbd' || $table == 'aleph'){
+	                    $pRate = 1.0;
+	                    $pRateSel = $pRate;
+	                }else{                    
+	                    $ccYear = date('Y');
+	                    $pRate = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                    $pRateSel = $p->getPRateByRegionAndYearIBMS($con, array($region), array($ccYear));
+	                }                
+	            }    
+	        }else{            
+	            if ($currency[0]['name'] == "USD") {
+	                $pRate = 1.0;
+	                $pRateSel = $pRate;
+	            }else{
+	            	$ccYear = $year;
+	                $pRate = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
+	                $pRateSel = $p->getPRateByRegionAndYear($con,array($region),array($ccYear));
+	                //var_dump($pRateSel);
+	            }            
+	        }	
+        } 
 
 
         switch ($table) {
