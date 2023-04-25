@@ -664,15 +664,15 @@ class bvModel extends Model{
 
         for ($c=0; $c <sizeof($client); $c++) { 
             
-            $geCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$con,$year,$geBrands);
+            $geCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$client[$c]['agencyID'],$con,$year,$geBrands);
 
-            $sportsCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$con,$year,$sportsBrands);
+            $sportsCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$client[$c]['agencyID'],$con,$year,$sportsBrands);
 
-            $newsCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$con,$year,$newsBrands);
+            $newsCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$client[$c]['agencyID'],$con,$year,$newsBrands);
 
-            $digitalCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$con,$year,$digitalBrands);
+            $digitalCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$client[$c]['agencyID'],$con,$year,$digitalBrands);
 
-            $sptCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$con,$year,$sptBrands);
+            $sptCluster[$c] = $this->valueByCluster($client[$c]['clientID'],$client[$c]['agencyID'],$con,$year,$sptBrands);
 
             $pivotArray = array('client' => $client[$c]['clientID'], 'clientName' => $client[$c]['clientName'], 'agencyName' => $client[$c]['agencyName'],'geCluster' => $geCluster[$c],'sportsCluster' => $sportsCluster[$c],'newsCluster' => $newsCluster[$c],'digitalCluster' => $digitalCluster[$c],'sptCluster' => $sptCluster[$c]);
 
@@ -722,7 +722,8 @@ class bvModel extends Model{
                 LEFT JOIN agency a ON a.ID = w.agency_id
                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
                 WHERE w.year = $year
-                AND ag.ID = $agencyGroupId";
+                AND ag.ID = $agencyGroupId
+                ORDER BY c.name ASC";
 
     $result = $con->query($select);
     $from = array('clientID','clientName','agencyID','agencyName');
@@ -732,15 +733,16 @@ class bvModel extends Model{
 
    }
 
-   public function valueByCluster(Int $client, Object $con, Int $year, String $brands){
+   public function valueByCluster(Int $client, Int $agency, Object $con, Int $year, String $brands){
     $sql = new sql();
 
     $select = "SELECT SUM(net_value) as netRevenue
                 FROM wbd
                 WHERE client_id = $client
                 and year = $year
+                and agency_id = $agency
                 and (brand_id IN ($brands))";
-    
+    //var_dump($select);
     $result = $con->query($select);
     $from = array('netRevenue');
     $tmp = $sql->fetch($result, $from,$from);

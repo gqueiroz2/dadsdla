@@ -77,6 +77,9 @@ Route::group(['middleware' => 'auth'],function(){
 				Route::post('dashBV','dashboardExcelController@dashBV')
 								    ->name('bvExcel');
 
+				Route::post('dashResume','dashboardExcelController@dashResume')
+								    ->name('resumeExcel');
+
 			});
 
 			Route::group(['prefix'=>'pandr'], function(){

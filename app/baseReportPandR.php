@@ -35,6 +35,8 @@ class baseReportPandR extends pAndR
 
         $week = $this->weekOfMonth($data);
 
+        $splitted = 0;
+
         if (is_array($salesRepID)) {
             $salesRepIDString = implode(",", $salesRepID);
         }

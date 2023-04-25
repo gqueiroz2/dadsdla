@@ -271,7 +271,7 @@ class rank extends Model{
 
     }
 
-    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, &$type2, $order_by=null, $leftName2=null, $secondaryFilter=false){
+    public function getAllValues($con, $tableName, $leftName, $type, $brands, $region, $value, $years, $months, $currency, $type2, $order_by=null, $leftName2=null, $secondaryFilter=false){
 
         for ($b=0; $b < sizeof($brands); $b++) { 
             $brands_id[$b] = $brands[$b][0];

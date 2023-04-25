@@ -236,6 +236,8 @@ class bvController extends Controller{
       $render = new Render();
       $bvModel = new bvModel();
       $b = new brand();
+
+      $currencyName = $pRate->getCurrency($con,array($currency))[0]['name'];
       $brand = $b->getBrandFromTable($con,false);
       $tmp = $sr->getSalesRepByRegionBV($con, array($salesRegion[0]['id']),false, $year);
       for ($s=0; $s <sizeof($tmp); $s++) { 
@@ -330,8 +332,8 @@ class bvController extends Controller{
 
       $totalByClientPpyear = $bvModel->totalByClientHistory($historyPpyear);
 
-      $title = "Control Panel - BV";
-      $titleExcel = "Control Panel - BV.xlsx";
+      $title = "RESUME - BV";
+      $titleExcel = "Resume - BV.xlsx";
 
       
       for ($b=0; $b <sizeof($bvTest) ; $b++) { 
@@ -355,7 +357,7 @@ class bvController extends Controller{
       }
 
       //var_dump($totalBrandPyear);
-       return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','brand', 'clientsByAE','bvWMPyear', 'bvWMPpyear','bvDSCPyear', 'bvDSCPpyear','payTv','monthTargetDSC','bvTargetDSC','monthTargetWM','bvTargetWM','realWMPyear','realDSCPyear','realSPTPyear','pRateWM','historyPyear','historyPpyear', 'totalClusterPyear','totalByClientPyear', 'totalClusterPpyear','totalByClientPpyear'));
+       return view("adSales.dashboards.resumeBVPost", compact('region', 'salesRegion', 'render', 'year', 'bvTest', 'agencyGroupName', 'total', 'salesRep', 'currency', 'value', 'agencyGroup','updateInfo','list','color','title', 'titleExcel','brand', 'clientsByAE','bvWMPyear', 'bvWMPpyear','bvDSCPyear', 'bvDSCPpyear','payTv','monthTargetDSC','bvTargetDSC','monthTargetWM','bvTargetWM','realWMPyear','realDSCPyear','realSPTPyear','pRateWM','historyPyear','historyPpyear', 'totalClusterPyear','totalByClientPyear', 'totalClusterPpyear','totalByClientPpyear','currencyName'));
       
    }
 }

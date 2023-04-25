@@ -66,7 +66,7 @@
                         	
                         	<div class="col-2" style="color: #0070c0; font-size: 22px;">
                         		<br>
-								<div style="float: right;"> RESUME </div>
+								<div style="float: right;"> RESUME - {{$currencyName}}</div>
 							</div>		
 
                             <div class="col-2" style="margin-left: 27px;">
@@ -75,54 +75,10 @@
 				                    Generate Excel
 				                </button>
 				            </div>
-
-						<!--	<div class='col-2'>
-								<label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
-						        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
-						          PAY TV {{$year-1}}
-						        </button>
-						    </div>-->
-
 						</div>
 					</div>
 				</div>	
 			</div>
-		
-		    <!-- Modal
-		    <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		      <div class="modal-dialog" role="document">
-		        <div class="modal-content">
-		          <div class="modal-header">
-		            <h5 class="modal-title" id="exampleModalLabel"></h5>
-		            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-		              <span aria-hidden="true">&times;</span>
-		            </button>
-		          </div>
-		          <div class="modal-body">
-		          	<table style='width: 100%; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px;'>
-		          	<tr class="center" style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
-			       		<td style='width: 50%; ' class="newBlue col">PAY TV {{$year-1}}</td>
-			    	   	<td style='width: 50%;' class="medBlue col">SOA</td>
-			   		</tr>
-		           	@for($p = 0; $p<sizeof($payTv); $p++)
-		           	<tr class="center">
-		           		@if($payTv[$p]['station'] == 'WBD')
-			           		<td style='width: 50%;' class="medBlue col">{{$payTv[$p]['station']}}</td>
-			           		<td style='width: 50%;' class="medBlue col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
-		           		@else
-		           			<td style='width: 50%;' class="even col">{{$payTv[$p]['station']}}</td>
-		           			<td style='width: 50%;' class="even col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
-		           		@endif
-		           	</tr>	
-		           	@endfor
-		           </table>
-		          </div>
-		          <div class="modal-footer">
-		            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-		          </div>
-		        </div>
-		      </div>
-		    </div> -->
 				
 			<div class="container-fluid" id="body">
 				<div class="row ">
@@ -356,7 +312,7 @@
 					        @endif
 				        	
 				        </div>	
-
+				        <!-- pay tv table -->
 				        <table style='max-width: 15%; width: auto; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px; float: right;'>
 				          	<tr class="center" style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
 					       		<td style='width: 10%;' class="newBlue col">PAY TV {{$year-1}}</td>
@@ -538,6 +494,69 @@
 			</div>
 		</form>
 
+<!-- javascript to make the excel export -->
+<script type="text/javascript">
+            
+    $(document).ready(function(){
+
+        ajaxSetup();
+
+        $('#excel').click(function(event){
+
+            var agencyGroup = "<?php echo $agencyGroup; ?>";
+            var currency = "<?php echo $currency; ?>";
+            var value = "<?php echo $value; ?>";
+
+            var div = document.createElement('div');
+            var img = document.createElement('img');
+            img.src = '/loading_excel.gif';
+            div.innerHTML ="Generating File...</br>";
+            div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+            div.appendChild(img);
+            document.body.appendChild(div);
+
+            var typeExport = $("#excel").val();
+
+            var title = "<?php echo $titleExcel; ?>";
+            var auxTitle = "<?php echo $titleExcel; ?>";
+                
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                url: "/generate/excel/dashboard/dashResume",
+                type: "POST",
+                data: {agencyGroup,currency,value,title, typeExport, auxTitle},
+                /*success: function(output){
+                    $("#vlau").html(output);
+                },*/
+                success: function(result,status,xhr){
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                    //download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                    document.body.removeChild(div);
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    document.body.removeChild(div);
+                    alert(xhr.status+" "+thrownError);
+                }
+            });                    
+        });
+    });
+</script>
 @endsection
 
 

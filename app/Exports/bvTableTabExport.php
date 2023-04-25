@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Exports;
+
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class idNumberTabExport implements FromView, ShouldAutoSize, WithTitle{
+class bvTableTabExport implements FromView, ShouldAutoSize, WithTitle{
     protected $view;
     protected $data;
     public function __construct($view,$data){
@@ -17,7 +19,6 @@ class idNumberTabExport implements FromView, ShouldAutoSize, WithTitle{
         return view($this->view, ['data'=> $this->data]);
     }
     public function title(): String{
-        return 'Id Number - Insights';
+        return 'AVB %';
     }
 }
-
