@@ -123,10 +123,10 @@
 									<td class='{{$color[$b]}}' style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="agency-{{$b}}" id="agency-{{$b}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$bvTest[$b]['agency']}}"></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-2],0,',','.')}}</td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($bvTest[$b][$year-1],0,',','.')}}</td>
-									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],0,',','.')}}"></td>
-									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-{{$b}}" id="forecast-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prev'],0,',','.')}}"></td>
-									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],0,',','.')}}"></td>
-									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value={{number_format($bvTest[$b]['sptPrev'],0,',','.')}}></td>
+									<td class="{{$color[$b]}} " style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="real-{{$b}}" id="real-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b][$year],0,',','.')}}"></td>
+									<td class="{{$color[$b]}} "  style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$b}}" id="forecast-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prev'],0,',','.')}}"></td>
+									<td class="{{$color[$b]}} " style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],0,',','.')}}"></td>
+									<td class="{{$color[$b]}} " style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value={{number_format($bvTest[$b]['sptPrev'],0,',','.')}}></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['variation']}}%</td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="300" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 								</tr>
@@ -197,11 +197,95 @@
 
 <!-- javascript to be able to edit the front and make calculations of numbers -->
 <script type="text/javascript">
+	$("input[data-type='currency']").on({
+	    keyup: function() {
+	      formatCurrency($(this));
+	    },
+	    blur: function() { 
+	      formatCurrency($(this), "blur");
+	    }
+	});
+
+
+	function formatNumber(n) {
+	  // format number 1000000 to 1,234,567
+	  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+	}
+
+
+	function formatCurrency(input, blur) {
+	  // appends $ to value, validates decimal side
+	  // and puts cursor back in right position.
+	  
+	  // get input value
+	  var input_val = input.val();
+	  
+	  // don't validate empty input
+	  if (input_val === "") { return; }
+	  
+	  // original length
+	  var original_len = input_val.length;
+
+	  // initial caret position 
+	  var caret_pos = input.prop("selectionStart");
+	    
+	  // check for decimal
+	  if (input_val.indexOf(",") >= 0) {
+
+	    // get position of first decimal
+	    // this prevents multiple decimals from
+	    // being entered
+	    var decimal_pos = input_val.indexOf(",");
+
+	    // split number by decimal point
+	    var left_side = input_val.substring(0, decimal_pos);
+	    var right_side = input_val.substring(decimal_pos);
+
+	    // add commas to left side of number
+	    left_side = formatNumber(left_side);
+
+	    // validate right side
+	    right_side = formatNumber(right_side);
+	    
+	    // On blur make sure 2 numbers after decimal
+	    if (blur === "blur") {
+	      right_side += "00";
+	    }
+	    
+	    // Limit decimal to only 2 digits
+	    right_side = right_side.substring(0, 2);
+
+	    // join number by .
+	    input_val =  left_side + "," + right_side;
+
+	  } else {
+	    // no decimal entered
+	    // add commas to number
+	    // remove all non-digits
+	    input_val = formatNumber(input_val);
+	    input_val = input_val;
+	    
+	  /*  // final formatting
+	    if (blur === "blur") {
+	      input_val += ",00";
+	    }*/
+	  }
+	  
+	  // send updated string to input
+	  input.val(input_val);
+
+	  // put caret back in the right position
+	  var updated_len = input_val.length;
+	  caret_pos = updated_len - original_len + caret_pos;
+	  input[0].setSelectionRange(caret_pos, caret_pos);
+	}
+
+
 
 	$(document).ready(function () {    
         $('.numberonly').keypress(function (e) {    
             var charCode = (e.which) ? e.which : event.keyCode    
-            if (String.fromCharCode(charCode).match(/[^0-9]/g))    
+            if (String.fromCharCode(charCode).match('/\B(?=(\d{3})+(?!\d))/g, "."'))  
                 return false;                        
         });    
     });

@@ -141,7 +141,7 @@ class bvController extends Controller{
          }
          
       }      
-
+      
       // == Using the size of $clientByAE we can do a for to get the correcty match for every registry get by front == //
       for ($i = 0; $i < sizeof($clientsByAE); $i++) {
          $clientID = (int) $saveButtonGet['clientID-' . $i];
