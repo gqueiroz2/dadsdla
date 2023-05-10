@@ -115,7 +115,7 @@
                             </tr>
                             
                         </table>
-
+                        <!--START OF SALES REP TABLE-->
                          <table style='width: 100%; zoom: 85%;font-size: 22px;'>
                             <tr>
                                 <th class="newBlue center">{{$salesRepName[0]['salesRep']}} - {{$currency}}/{{strtoupper($value)}}</th>
@@ -131,8 +131,7 @@
                         <table style='width: 100%; zoom: 85%;font-size: 14px;'>
                             <input type='hidden' id='clickBoolHeader' value='1'>
                             <tr class="center">
-                                <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-                                <td class="darkBlue">{{$salesRepName[0]['abName']}}</td>
+                                <td colspan="2" class="darkBlue">{{$salesRepName[0]['abName']}}</td>
                                 @for($m=0; $m <sizeof($month) ; $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class='quarter' style='width:5%;'>{{$month[$m]}}</td>
@@ -179,7 +178,7 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
                             </tr>
                             <tr>
-                                <td class="odd center">BKGS 2023</td>
+                                <td class="odd center">BKGS {{$cYear}}</td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
@@ -190,7 +189,7 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
                             </tr>
                             <tr>
-                                <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS 2022</td>
+                                <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['total']['previousBookings'][$m])}}</td>
@@ -241,7 +240,7 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
-                                    <td class="odd center">BKGS 2023</td>
+                                    <td class="odd center">BKGS {{$cYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
@@ -252,7 +251,7 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
-                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS 2022</td>
+                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['companyValues'][$c]['previousBookings'][$m])}}</td>
@@ -265,6 +264,7 @@
                             @endfor
                         </table>
 
+                        <!--START OF CLIENTS TABLE-->
                         @for($a=0; $a <sizeof($clientsTable['clientInfo']) ; $a++)
                             <input type='hidden' readonly='true' type="text" name="currency" id="currency" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$currencyID}}">
                             <input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">
@@ -280,8 +280,7 @@
                             <table style='width: 100%; zoom: 85%;font-size: 14px;'>
                                 <input type='hidden' id='clickBool-{{$a}}' value='1'>
                                 <tr class="center">
-                                    <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-                                    <td class="darkBlue">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
+                                    <td colspan="2" class="darkBlue">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
                                     @for($m=0; $m <sizeof($month) ; $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class='quarter' style='width:5%;'>{{$month[$m]}}</td>
@@ -317,7 +316,7 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="odd center">BKGS 2023</td>
+                                    <td class="odd center">BKGS {{$cYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
@@ -328,7 +327,7 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS 2022</td>
+                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
@@ -339,7 +338,7 @@
                                     <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
                                 </tr>
 
-                                <!--PART OF TOTAL OF WHICH COMPANY PART -->
+                                <!--PART OF WHICH COMPANY BY CLIENT -->
 
                                 @for($c=0; $c <sizeof($company); $c++)
                                     <tr class="clickLoop-{{$a}}">
@@ -378,7 +377,7 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="odd center">BKGS 2023</td>
+                                        <td class="odd center">BKGS {{$cYear}}</td>
                                          @for($m=0; $m <sizeof($month); $m++)
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
@@ -389,7 +388,7 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS 2022</td>
+                                        <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                          @for($m=0; $m <sizeof($month); $m++)
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'][$m])}}</td>
@@ -410,6 +409,7 @@
 
 <div id="vlau"></div>
 
+<!--THIS SCRIPT IS TO OPEN THE COMPANY VALUES FOR WICH CLIENT OR OPEN THE COMPANY VALUES OF SALES REP-->
 <script type="text/javascript">
     $(document).ready(function() {
 
@@ -561,6 +561,72 @@
 
     };  
 
+</script>
+
+<!-- javascript to make the excel export -->
+<script type="text/javascript">
+            
+    $(document).ready(function(){
+
+        ajaxSetup();
+
+        $('#excel').click(function(event){
+
+            var currency = "<?php echo $currency; ?>";
+            var value = "<?php echo $value; ?>";
+            var salesRep = "<?php echo $salesRepID; ?>";
+            var region = "<? echo $region?>";
+            var year = "<? echo $cYear?>"
+
+            var div = document.createElement('div');
+            var img = document.createElement('img');
+            img.src = '/loading_excel.gif';
+            div.innerHTML ="Generating File...</br>";
+            div.style.cssText = 'position: absolute; left: 0px; top:0px;  margin:0px;        width: 100%;        height: 100%;        display:block;        z-index: 99999;        opacity: 0.9;        -moz-opacity: 0;        filter: alpha(opacity = 45);        background: white;    background-repeat: no-repeat;        background-position:50% 50%;        text-align: center;        overflow: hidden;   font-size:30px;     font-weight: bold;        color: black;        padding-top: 20%';
+            div.appendChild(img);
+            document.body.appendChild(div);
+
+            var typeExport = $("#excel").val();
+
+            var title = "<?php echo $titleExcel; ?>";
+            var auxTitle = "<?php echo $titleExcel; ?>";
+                
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                url: "/generate/excel/pandr/aeView",
+                type: "POST",
+                data: {currency,value,salesRep,title, typeExport, auxTitle,region,year},
+                /*success: function(output){
+                    $("#vlau").html(output);
+                },*/
+                success: function(result,status,xhr){
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : title);
+
+                    //download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                    document.body.removeChild(div);
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    document.body.removeChild(div);
+                    alert(xhr.status+" "+thrownError);
+                }
+            });                    
+        });
+    });
 </script>
 @endsection
 

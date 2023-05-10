@@ -44,11 +44,11 @@ class AEController extends Controller{
 
         $db = new dataBase();
         $b = new base();
-        $render = new PAndRRender();
         $r = new region();
         $pr = new pRate();
         $ae = new AE();     
-        $sr = new salesRep();   
+        $sr = new salesRep();
+        $render = new PAndRRender();   
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
@@ -80,9 +80,12 @@ class AEController extends Controller{
         
         $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
         //var_dump($aeTable['total']);
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);        
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
+        
+        $title = "Forecast.xlsx";
+        $titleExcel = "Forecast.xlsx";      
         //var_dump($clientsTable);
-       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID'));
+       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear'));
     }
     
     public function save(){
@@ -90,10 +93,10 @@ class AEController extends Controller{
         $sql = new sql();
         $pr = new pRate();
         $r = new region();
+        $render = new PAndRRender();
         $ae = new AE();
         $sr = new salesRep();
         $base = new base();
-        $render = new PAndRRender();
         $excel = new excel();
 
         $default = $db->defaultConnection();
@@ -138,10 +141,13 @@ class AEController extends Controller{
         }
        
         $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
-        //var_dump($aeTable['total']);
+
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
 
-        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID'));
+        $title = "Forecast.xlsx";
+        $titleExcel = "Forecast.xlsx";      
+
+        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear'));
         
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\base;
 use App\brand;
+use App\salesRep;
 use App\region;
 use App\PAndRRender;
 use App\AE;
@@ -25,87 +26,61 @@ class aeExcelController extends Controller{
     
     public function aeView(){
         $db = new dataBase();
+        $b = new base();
         $render = new PAndRRender();
         $r = new region();
         $pr = new pRate();
-        $ae = new AE();        
+        $ae = new AE();     
+        $sr = new salesRep();   
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $cYear = intval( Request::get('yearExcel') );
+        $cYear = date('Y');
         $pYear = $cYear - 1;
+        $region = $r->getRegion($con,false);
+        $currency = $pr->getCurrency($con,false)[0]['name'];
+        $permission = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
+        $title = Request::get('title');
+        $typeExport = Request::get('typeExport');
+        $regionID = (int) Request::get('region');
+        $salesRepID = Request::get('salesRep');
+        $currencyID = (int) Request::get('currency');
+        $value = Request::get('value');
+        $regionName = Request::session()->get('userRegion');
 
-        $title = Request::get("title");
-
-        $typeExport = Request::get("typeExport");
-    
-        $auxTitle = Request::get("auxTitle");
-
-        $currencyID = Request::get('currencyExcel');
-
-        $regionID = Request::get('regionExcel');
+        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
-        $value = Request::get('valueExcel');
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
         
-        $salesRepID = array(Request::get('salesRepExcel'));
-
-        $userRegion = Request::get('userRegionExcel');
-
-        $tmp = $ae->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
-
-        $forRender = $tmp; 
-
-        $sourceSave = $forRender['sourceSave'];
-        $tfArray = array();
-        $odd = array();
-        $even = array();
-
-        $error = false;
-
-        //lines of sales rep table
-        /*$rollingSalesRep = $forRender['executiveRevenueCYear'];
-        $pending = $forRender['pending'];
-        $RFvsTarget = $forRender['RFvsTarget'];*/
-
-        $totalTarget = 0.0;
-
-     	$month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
-
-        $splitted = $forRender['splitted'];
-
-     	for ($c=0; $c <sizeof($forRender['client']) ; $c++) {
-		 	 if($splitted){
-                if($splitted[$c]['splitted']){
-                    $clr = "lightBlue";
-                }else{
-                    $clr = "lightBlue";
-                }                        
-            }else{
-                $clr = "lightBlue";                    
-            }
-
-            if($splitted){
-                if($splitted[$c]['splitted']){
-                    if(is_null($splitted[$c]['owner'])){
-                        $ow = "(?)";
-                    }else{
-                        if($splitted[$c]['owner']){
-                            $ow = "(P)";
-                        }else{
-                            $ow = "(S)";
-                        }
-                    }
-                }else{
-                    $ow = "";
-                }
-            }else{
-                $ow = false;
-            }
-     	}
+        //var_dump($aeTable['total']);
+        
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
+        
+        $title = "Forecast.xlsx";
+        $titleExcel = "Forecast.xlsx";      
      	
         $label = "exports.PandR.AE.aeExport";
 
-       	$data = array('forRender' => $forRender, 'tfArray' => $tfArray, 'error' => $error, 'cYear' => $cYear, "pYear" => $pYear, "odd" => $odd, "even" => $even, "tfArray" => $tfArray, "month" => $month, 'ow' => $ow, 'userRegion' => $userRegion);
+         $auxTitle = $title;
+
+        $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+        $company = array('3','1','2');
+
+        for ($c=0; $c < sizeof($company); $c++) { 
+            if ($company[$c] == '1') {
+                $color[$c] = '#0070c0;';
+                $companyView[$c] = 'DN';
+            }elseif ($company[$c] == '2') {
+                $color[$c] = '#000000;';
+                $companyView[$c] = 'SPT';
+            }elseif ($company[$c]) {
+                $color[$c] = '#0f243e;';
+                $companyView[$c] = 'WM';
+            }
+        }
+
+       	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value);
 
        	return Excel::download(new aeExport($data, $label, $typeExport, $auxTitle), $title);
     }

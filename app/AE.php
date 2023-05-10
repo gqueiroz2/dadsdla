@@ -13,6 +13,7 @@ use App\pRate;
 
 class AE extends pAndR{
     
+    //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
     public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value){
         $company = array('3','1','2');
         $month = array('1','2','3','4','5','6','7','8','9','10','11','12');
@@ -68,6 +69,7 @@ class AE extends pAndR{
         return $table;
     }
 
+    //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
     public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value){
         $month = 0;
         $company = array('3','1','2');
@@ -134,6 +136,7 @@ class AE extends pAndR{
        return $table;
     }
 
+    //THIS FUNCTION SAVE OR UPDATE THE FORECAST MADE BY THE SALES REP
     public function saveForecast(Object $con, int $client, int $agency, int $year, String $value, String $company, String $month, int $salesRep, String $platform, string $forecastValue, int $currency){
         $sql = new sql();
         //var_dump($forecastValue);
@@ -185,6 +188,7 @@ class AE extends pAndR{
         }
     }
 
+    //THIS FUNCTION GET THE VALUE BY MONTH AND COMPANY BY CLIENT AND REP
     public function getValueByMonth(Object $con, int $salesRep, int $year, string $value, int $month, string $table, int $client=null, int $agency=null, int $regionID, string $platform=null, string $company=null){
         $sql = new sql();
 
@@ -333,6 +337,7 @@ class AE extends pAndR{
         return $result;
     }
 
+    //THIS FUNCTION GET ALL THE CLIENTS FOR THE SELECTED SALES REP
     public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear){
         $sql = new sql();
 
@@ -351,7 +356,8 @@ class AE extends pAndR{
         return $result;
     }
 
-    public function addQuartersAndTotal($tgt){
+    //THIS FUNCTION ADD THE QUARTERS AND THE TOTAL TO THE VARIABLE
+    public function addQuartersAndTotal( Array $tgt){
         //JAN,FEB,MAR
         $tgtWQ[0] = $tgt[0];
         $tgtWQ[1] = $tgt[1];
@@ -389,7 +395,8 @@ class AE extends pAndR{
         return $tgtWQ;
     }
 
-    public function addFcstWithBooking($booking,$fcst){
+    //THIS FUNCTION PLACE THE BOOKINGS VALUES TO CLOSED MONTHS IN THE FORECAST ARRAY
+    public function addFcstWithBooking(Array $booking, Array $fcst){
 
         $date = date('n')-2;
 
