@@ -401,6 +401,14 @@
                                 @endfor
                             </table>
                         @endfor
+
+                         <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                            <tr class="center">
+                                <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                            </tr>
+                            
+                        </table>
+                        
                     </div>
                 </div>  
             </div>

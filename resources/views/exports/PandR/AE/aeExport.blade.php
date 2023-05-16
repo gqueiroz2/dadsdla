@@ -72,7 +72,7 @@
             <td style="text-align: center; font-weight: bold; background-color:#e7eff9;">{{$data['aeTable']['total']['previousBookings'][$m]}}</td>
         @endif
     @endfor
-    <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>{{$data['aeTable']['total']['previousBookings'][$m]}}</td>
+    <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{$data['aeTable']['total']['previousBookings'][$m]}}</td>
     </tr>
 
     <!--PART OF TOTAL OF WHICH COMPANY PART -->
