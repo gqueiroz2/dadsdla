@@ -1961,6 +1961,7 @@ class chain extends excel{
                             'current_sales_rep',
                             'agency_group',
                             'internal_code',
+                            'property',
                             'gross_revenue'
     );
 
@@ -1977,6 +1978,7 @@ class chain extends excel{
                             'current_sales_rep_id',
                             'agency_group',
                             'internal_code',
+                            'property',
                             'gross_revenue'
     );
 
@@ -1993,6 +1995,7 @@ class chain extends excel{
                             'current_sales_rep_id',
                             'agency_group_id',
                             'internal_code',
+                            'property',
                             'gross_revenue'
     );
 
@@ -2009,6 +2012,7 @@ class chain extends excel{
                             'current_sales_rep_id',
                             'agency_group_id',
                             'internal_code',
+                            'property',
                             'gross_revenue'
     );
 

@@ -203,6 +203,7 @@ class viewer extends Model{
 								AND (y.year = '$year')
 								AND (y.month IN ($monthString))
 								AND (r.ID = '$salesRegion')
+								AND (a.ID IN ($agencyString))
 								AND ( cl.ID IN ($clientString) )  
 								AND (sr.ID IN ($salesRepString))
 						ORDER BY y.month";			
@@ -394,6 +395,7 @@ class viewer extends Model{
 							AND (sr.ID IN ($salesRepString))
 							AND (a.brand_id IN ($brandString)) 
 							AND (a.month IN ($monthString))
+							AND (a.ID IN ($agencyString))
 							AND ( c.ID IN ($clientString) ) 
 						";
 		}elseif ($source == 'WBD') {
@@ -424,9 +426,11 @@ class viewer extends Model{
 							AND (w.brand_id IN ($brandString))
 							AND (sr.ID IN ($salesRepString)) 
 							AND (w.month IN ($monthString))
+							AND (a.ID IN ($agencyString))
 							AND ( c.ID IN ($clientString) ) 
 						";
 		}
+		//var_dump($agencyString);
 		//echo "<pre>".$select."</pre>";
 		
 		$result = $con->query($select);
