@@ -1,6 +1,6 @@
 <table>
 	<tr>
-		<th style="text-align: center; font-weight: bold; background-color: #0070c0; color: #FFFFFF;" colspan="27">{{$data['salesRepName'][0]['salesRep']}} - {{$data['currency']}}/{{strtoupper($data['value'])}} </th>
+		<th style="text-align: center; font-weight: bold; background-color: #0070c0; color: #FFFFFF;" colspan="19">{{$data['salesRepName'][0]['salesRep']}} - {{$data['currency']}}/{{strtoupper($data['value'])}} </th>
 	</tr>
 </table>
 

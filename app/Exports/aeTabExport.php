@@ -91,14 +91,7 @@ class aeTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, Wit
 			    'P' => "#,##0",
 			    'Q' => "#,##0",
 			    'R' => "#,##0",
-			    'T' => "#,##0",
-			    'U' => "0%",
-			    'V' => "#,##0",
-			    'W' => "#,##0",
-			    'X' => "#,##0",
-			    'Y' => "#,##0",
-			    'Z' => "#,##0",
-			    'AA' => "#,##0"
+			    'S' => "#,##0"
 			];
 		//}
 	}
