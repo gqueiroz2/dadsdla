@@ -57,7 +57,7 @@
 								<div class="col">
 									<button class="btn btn-primary" style="width: 100%;" id="agency"> 
 										<a href="{{ route('insightsChain') }}" style="color: white">
-											Insert (INSIGHTS)
+											Insert (FORECAST)
 										</a>
 									</button>
 								</div>

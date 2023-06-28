@@ -851,6 +851,12 @@ class chain extends excel{
 
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,1,$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,1,$regionName,$current[$c]['client']);
+            }elseif($table == "forecast"){
+
+                $regionName = "Brazil";
+                
+                $current[$c]['client_id'] = $this->seekClientID($con,1,$regionName,$current[$c]['client_id']);
+
             }elseif ($table == 'aleph') {
                 $regionName = $rr->getRegion($con,array($current[$c]['sales_office_id']))[0]['name'];
 
@@ -1395,29 +1401,7 @@ class chain extends excel{
                 if($columns[$c] != ''){
                     $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
                 	if($bool){
-                        if($columns[$c] == 'gross_revenue' ||
-                           $columns[$c] == 'gross' ||
-    					   $columns[$c] == 'net_revenue' ||						
-                           $columns[$c] == 'net' ||                     
-                           $columns[$c] == 'booked_spots' ||                     
-    					   $columns[$c] == 'net_net_revenue' ||						
-    					   $columns[$c] == 'gross_revenue_prate' ||
-    					   $columns[$c] == 'net_revenue_prate' ||						
-    					   $columns[$c] == 'net_net_revenue_prate' ||						
-    					   $columns[$c] == 'revenue' ||
-    					   $columns[$c] == 'campaign_option_spend' ||
-    					   $columns[$c] == 'spot_duration' ||
-    				       $columns[$c] == 'impression_duration'||
-                           $columns[$c] == 'duration_impression' ||
-                           $columns[$c] == 'fcst_amount_gross' ||
-                           $columns[$c] == 'fcst_amount_net' ||
-                           $columns[$c] == 'success_probability' ||
-                           $columns[$c] == 'amount' ||
-                           $columns[$c] == 'amount_converted' ||
-                           $columns[$c] == 'num_spot' ||
-                           $columns[$c] == 'gross_value' ||
-                           $columns[$c] == 'net_value' ||
-                           $columns[$c] == 'gross_revenue_curr_prate'
+                        if($columns[$c] == 'gross_revenue' || $columns[$c] == 'gross' || $columns[$c] == 'net_revenue' || $columns[$c] == 'net' || $columns[$c] == 'booked_spots' || $columns[$c] == 'net_net_revenue' || $columns[$c] == 'gross_revenue_prate' || $columns[$c] == 'net_revenue_prate' || $columns[$c] == 'net_net_revenue_prate' || $columns[$c] == 'revenue' || $columns[$c] == 'campaign_option_spend' || $columns[$c] == 'spot_duration' || $columns[$c] == 'impression_duration'||$columns[$c] == 'duration_impression' ||$columns[$c] == 'fcst_amount_gross' ||$columns[$c] == 'fcst_amount_net' ||$columns[$c] == 'success_probability' ||$columns[$c] == 'amount' ||$columns[$c] == 'amount_converted' ||$columns[$c] == 'num_spot' ||$columns[$c] == 'gross_value' ||$columns[$c] == 'net_value' ||$columns[$c] == 'gross_revenue_curr_prate' ||$columns[$c] == 'january' || $columns[$c] == 'february' || $columns[$c] == 'march' || $columns[$c] == 'april' || $columns[$c] == 'may' || $columns[$c] == 'june' || $columns[$c] == 'july' || $columns[$c] == 'august' || $columns[$c] == 'september' || $columns[$c] == 'october' || $columns[$c] == 'november'|| $columns[$c] == 'december'
     				      ){
                             if ($columns[$c] == 'gross_revenue_prate' || $columns[$c] == 'gross_revenue_curr_prate'){
                                 explode("$", $columns[$c]);
@@ -1430,8 +1414,8 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-                            if($table == 'wbd'){
-                                if ($columns[$c] == 'company'){
+                            if($table == 'wbd' || $table == 'forecast'){
+                                if ($columns[$c] == 'company' || $columns[$c] == 'company_id'){
                                     switch ($spreadSheet[$s][$c]){
                                         case 'DSC':
                                             $spreadSheet[$s][$c] = 1;
@@ -1525,6 +1509,14 @@ class chain extends excel{
                                 $temp = number_format($spreadSheetV2[$s][$columns[$c]],2,'.',',');
                                 $spreadSheetV2[$s][$columns[$c]] = $temp;
 
+                            }elseif($columns[$c] == 'january' || $columns[$c] == 'february' || $columns[$c] == 'march' || $columns[$c] == 'april' || $columns[$c] == 'may' || $columns[$c] == 'june' || $columns[$c] == 'july' || $columns[$c] == 'august' || $columns[$c] == 'september' || $columns[$c] == 'october' || $columns[$c] == 'november'|| $columns[$c] == 'december' && $table == 'forecast'){
+                                 $spreadSheet[$s][$c] = trim($spreadSheet[$s][$c]);
+                                if ($spreadSheet[$s][$c] == '-') {
+                                    $spreadSheet[$s][$c] = "0";
+                                }else{
+                                    $temp = number_format($spreadSheet[$s][$c],2,'.',',');
+                                    $spreadSheetV2[$s][$columns[$c]] = $temp; 
+                                }
                             }elseif($columns[$c] == "brand" && $table == "sf_pr"){
                                 
                                 if(!is_null($spreadSheet[$s][$c])){

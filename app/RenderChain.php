@@ -116,13 +116,15 @@ class RenderChain extends Render{
 
    public function tableinsights($name){
         echo "<select class='form-control' name='$name' data-width='100%'>";
-            echo "<option value='insights'> INSIGHTS </option>";
+            //echo "<option value='insights'> INSIGHTS </option>";
+            echo "<option value='forecast'> T-REX </option>";
         echo "</select>";
     }
 
     public function reportInsights(){
         echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
-            echo "<option value='insights'> INSIGHTS </option>";            
+            //echo "<option value='insights'> INSIGHTS </option>";
+            echo "<option value='forecast'> T-REX </option>";            
         echo "</select>";
     }
 

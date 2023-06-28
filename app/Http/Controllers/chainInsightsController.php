@@ -33,7 +33,7 @@ class chainInsightsController extends Controller{
         
     	$db = new dataBase();
 		
-		$connections = array('firstmatch','secondmatch','thirdmatch');
+		$connections = array('firstmatch','secondmatch','thirdmatch','dla');
 
 		$truncateStatement = "TRUNCATE TABLE $table";
 
@@ -88,8 +88,16 @@ class chainInsightsController extends Controller{
                 $spreadSheet = array_values($spreadSheet);
                 //var_dump($spreadSheet);
                 break;
+
+            case 'forecast':
+                unset($spreadSheet[0]);
+                $spreadSheet = array_values($spreadSheet);
+                //var_dump($spreadSheet);
+                break;
 			
 		}
+
+
 
 		$complete = $iChain->handler($con,$table,$spreadSheet,$year);
 

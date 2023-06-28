@@ -31,12 +31,12 @@ class InsightsChain extends excel{
 
 		$columns = $this->defineColumns($table,'first');
 
-		 if($table == "insights" || $table == "insights_bts"){
+		 if($table == "insights" || $table == "insights_bts" || $table == 'forecast'){
             $parametter = $table;
         }else{
             $parametter = false;
         }
-
+        
         $spreadSheet = $chain->assembler($spreadSheet,$columns,$base,$parametter);
 
         $into = $chain->into($columns);
@@ -182,9 +182,104 @@ class InsightsChain extends excel{
                         return $this->insightsColumns;
                         break;
                 }
+            case 'forecast':
+                switch ($recurrency) {
+                    case 'first':
+                        return $this->forecastColumnsF;
+                        break;
+                    case 'second':
+                        return $this->forecastColumnsS;
+                        break;
+                    case 'third':
+                        return $this->forecastColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->forecastColumns;
+                        break;
+                }
                 break;
         }
     }
+
+    public $forecastColumnsF = array('company_id',
+                                     'client_id',
+                                     'platform',
+                                     'brand',
+                                     'brand_feed',
+                                     'sales_rep',
+                                     'january',
+                                     'february',
+                                     'march',
+                                     'april',
+                                     'may',
+                                     'june',
+                                     'july',
+                                     'august',
+                                     'september',
+                                     'october',
+                                     'november',
+                                     'december'
+    );
+
+    public $forecastColumnsS = array('company_id',
+                                     'client_id',
+                                     'platform',
+                                     'brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'january',
+                                     'february',
+                                     'march',
+                                     'april',
+                                     'may',
+                                     'june',
+                                     'july',
+                                     'august',
+                                     'september',
+                                     'october',
+                                     'november',
+                                     'december'
+    );
+
+    public $forecastColumnsT = array('company_id',
+                                     'client_id',
+                                     'platform',
+                                     'brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'january',
+                                     'february',
+                                     'march',
+                                     'april',
+                                     'may',
+                                     'june',
+                                     'july',
+                                     'august',
+                                     'september',
+                                     'october',
+                                     'november',
+                                     'december'
+    );
+
+    public $forecastColumns = array('company_id',
+                                     'client_id',
+                                     'platform',
+                                     'brand_id',
+                                     'brand_feed',
+                                     'sales_rep_id',
+                                     'january',
+                                     'february',
+                                     'march',
+                                     'april',
+                                     'may',
+                                     'june',
+                                     'july',
+                                     'august',
+                                     'september',
+                                     'october',
+                                     'november',
+                                     'december'
+    );
 
     public $insightsColumnsF = array('brand',
                                      'brand_feed',
