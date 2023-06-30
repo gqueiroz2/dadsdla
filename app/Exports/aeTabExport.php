@@ -44,35 +44,6 @@ class aeTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, Wit
 
 	public function columnFormats(): array{
 
-		/*if ($this->data['userRegion'] == 'Miami' || $this->data['userRegion'] == 'Mexico' ) {
-			return[
-				'B' => "#.##0",
-				'C' => "#.##0", 
-				'D' => "#.##0",
-				'E' => "#.##0",
-			   	'F' => "#.##0",
-			   	'G' => "#.##0",
-			    'H' => "#.##0",
-			    'I' => "#.##0",
-			    'J' => "#.##0",
-			    'K' => "#.##0",
-			    'L' => "#.##0",
-			    'M' => "#.##0",
-			    'N' => "#.##0",
-			    'O' => "#.##0",
-			    'P' => "#.##0",
-			    'Q' => "#.##0",
-			    'R' => "#.##0",
-			    'T' => "#.##0",
-			    'U' => "0%",
-			    'V' => "#.##0",
-			    'W' => "#.##0",
-			    'X' => "#.##0",
-			    'Y' => "#.##0",
-			    'Z' => "#.##0",
-			    'AA' => "#.##0"
-			];
-		}else{*/
 			return[
 				'B' => "#,##0",
 				'C' => "#,##0", 
@@ -93,6 +64,5 @@ class aeTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitle, Wit
 			    'R' => "#,##0",
 			    'S' => "#,##0"
 			];
-		//}
 	}
 }

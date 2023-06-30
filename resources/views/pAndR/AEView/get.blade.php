@@ -36,14 +36,14 @@
 					@endif
 					{{$render->salesRep2()}}
 				</div>
-				<div class="col">
+				<div class="col" style="display: none;">
 					<label class='labelLeft'><span class="bold">Currency:</span></label>
 					@if($errors->has('currency'))
 						<label style="color: red;">* Required</label>
 					@endif
 					{{$render->currency($currency)}}
 				</div>	
-				<div class="col">
+				<div class="col" style="display: none;">
 					<label class="labelLeft"><span class="bold"> Value: </span></label>
 						@if($errors->has('value'))
 							<label style="color: red;">* Required</label>
@@ -57,21 +57,6 @@
 				</div>			
 			</div>
 			<br>
-			<div class="row">
-				<center style="width: 100%;">
-					<div class="col-3">
-						@if($typeMsg == "Success")
-							<div class="alert alert-info">
-								{{$msg}}
-							</div>
-						@elseif($typeMsg == "Error")
-							<div class="alert alert-danger">
-								{{$msg}}
-							</div>
-						@endif
-					</div>
-				</center>
-			</div>
 		</div>
 	</form>
 	<div class="container-fluid">

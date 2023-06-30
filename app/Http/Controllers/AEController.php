@@ -61,10 +61,9 @@ class AEController extends Controller{
 
         $regionID = Request::get('region');
         $salesRepID = Request::get('salesRep');
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
+        $currencyID = '1';
+        $value = 'gross';
         $regionName = Request::session()->get('userRegion');
-
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
         $validator = Validator::make(Request::all(),[
@@ -111,8 +110,9 @@ class AEController extends Controller{
         $currentMonth = date('n');
         $regionID = 1;
         $salesRepID = Request::get('salesRep');
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
+        $currencyID = '1';
+        $value = 'gross';
+
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
         $saveInfo = Request::all();

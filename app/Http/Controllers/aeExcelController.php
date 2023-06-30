@@ -60,17 +60,18 @@ class aeExcelController extends Controller{
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
      	
-        $label = "exports.PandR.AE.aeExport";
+        $label = array("exports.PandR.AE.aeExport", "exports.PandR.AE.aeConsolidateExport");
 
          $auxTitle = $title;
 
         $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+        $monthConsolidate = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $company = array('3','1','2');
 
         for ($c=0; $c < sizeof($company); $c++) { 
             if ($company[$c] == '1') {
                 $color[$c] = '#0070c0;';
-                $companyView[$c] = 'DN';
+                $companyView[$c] = 'DSC';
             }elseif ($company[$c] == '2') {
                 $color[$c] = '#000000;';
                 $companyView[$c] = 'SPT';
@@ -80,7 +81,7 @@ class aeExcelController extends Controller{
             }
         }
 
-       	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value);
+       	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate);
 
        	return Excel::download(new aeExport($data, $label, $typeExport, $auxTitle), $title);
     }

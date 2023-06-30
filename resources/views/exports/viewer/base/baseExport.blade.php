@@ -194,12 +194,12 @@
 
 	@elseif ($data['source'] == 'wbd')
 		<tr>	
-			<th style="background-color: #0047b3;" colspan='14'> {{$data['regions']}} - Viewer WBD {{$data['year']}} - ({{$data['currencies']}}) </th>
+			<th style="background-color: #0047b3;" colspan='16'> {{$data['regions']}} - Viewer WBD {{$data['year']}} - ({{$data['currencies']}}) </th>
 		</tr>
 
 		<tr>
 			<td style="background-color: #0f243e;">Total</td>
-			<td style="background-color: #0f243e;" colspan='11'></td>
+			<td style="background-color: #0f243e;" colspan='13'></td>
 			<td style="background-color: #0f243e;" >{{$data['total']['sumGrossRevenue']}}</td>
 			<td style="background-color: #0f243e;" >{{$data['total']['sumNetRevenue']}}</td>
 		</tr>
@@ -213,8 +213,10 @@
 			<td style="background-color: #e6e6e6;">Agency</td>
 			<td style="background-color: #e6e6e6;">Platform</td>
 			<td style="background-color: #e6e6e6;">Brand</td>
-			<td style="background-color: #e6e6e6;">Brand Code</td>
-			<td style="background-color: #e6e6e6;">Internal Code</td>
+			<td style="background-color: #e6e6e6;">Feed Code</td>
+			<td style="background-color: #e6e6e6;">Order</td>
+			<td style="background-color: #e6e6e6;">Pi Number</td>
+			<td style="background-color: #e6e6e6;">Property</td>
 			<td style="background-color: #e6e6e6;">Director</td>
 			<td style="background-color: #e6e6e6;">Current AE</td>
 			<td style="background-color: #e6e6e6;">Gross Revenue</td>
@@ -233,6 +235,8 @@
 				<td>{{$data['mtx'][$m]['brand']}}</td>
 				<td>{{$data['mtx'][$m]['feedCode']}}</td>
 				<td>{{$data['mtx'][$m]['internalCode']}}</td>
+				<td>{{$data['mtx'][$m]['piNumber']}}</td>
+				<td>{{$data['mtx'][$m]['property']}}</td>
 				<td>{{$data['mtx'][$m]['manager']}}</td>
 				<td>{{$data['mtx'][$m]['salesRep']}}</td>
 				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>

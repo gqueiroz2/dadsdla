@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class idNumberTabExport implements FromView, ShouldAutoSize, WithTitle{
     protected $view;
     protected $data;
+    
     public function __construct($view,$data){
         $this->view = $view;
         $this->data = $data;

@@ -9,7 +9,7 @@
     for ($c=0; $c < sizeof($company); $c++) { 
         if ($company[$c] == '1') {
             $color[$c] = 'dc';
-            $companyView[$c] = 'DN';
+            $companyView[$c] = 'DSC';
         }elseif ($company[$c] == '2') {
             $color[$c] = 'sony';
             $companyView[$c] = 'SPT';
@@ -53,14 +53,14 @@
                     @endif
                     {{$render->salesRep2()}}
                 </div>
-                <div class="col">
+                <div class="col" style="display: none;">
                     <label class='labelLeft'><span class="bold">Currency:</span></label>
                     @if($errors->has('currency'))
                         <label style="color: red;">* Required</label>
                     @endif
                     {{$render->currency($currency)}}
                 </div>  
-                <div class="col">
+                <div class="col" style="display: none;">
                     <label class="labelLeft"><span class="bold"> Value: </span></label>
                         @if($errors->has('value'))
                             <label style="color: red;">* Required</label>
@@ -76,11 +76,11 @@
     </form>
     <div class="container-fluid">
         <div class="row justify-content-end mt-2">
-            <div class="col-3" style="color: #0070c0;font-size: 25px;">
+            <div class="col-2" style="color: #0070c0;font-size: 25px;">
                 Account Executive Report
             </div>
 
-            <div class="col-2">
+            <div class="col-3">
                 <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
                     Generate Excel
                 </button>               
