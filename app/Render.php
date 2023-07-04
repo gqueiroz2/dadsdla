@@ -498,6 +498,15 @@ class Render extends Model{
 
     }
 
+    public function director(){
+        echo "<select id='director' class='selectpicker' data-selected-text-format='count' multiple='true' name='director[]' multiple data-actions-box='true' data-size='2' data-width='100%'>";
+            echo "<option value=''> Select Region </option>";
+
+        echo "</select>";   
+
+    }
+
+
     public function months(){
 
     	echo "<select class='selectpicker' id='month' name='month[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-size='6' data-width='100%'>";

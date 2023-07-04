@@ -71,6 +71,15 @@
                     </div>
 
                     <div class="row">
+                    
+                         <div class="col">
+                            <label class='labelLeft'><span class="bold">Manager:</span></label>
+                            @if($errors->has('director'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                                {{$render->director()}}
+                        </div>
+
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
@@ -111,9 +120,6 @@
                             {{$render->stageFCST()}}
                         </div>-->
 
-                        <div class="col" >
-                            <label class="labelLeft"><span class="bold"> &nbsp; </span></label>                            
-                        </div>
                         <div class="col">
                             <label> &nbsp; </label>
                             <input type="submit" value="Generate" class="btn btn-primary" style="width: 100%;">     

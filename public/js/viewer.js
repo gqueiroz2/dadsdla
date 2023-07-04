@@ -17,6 +17,18 @@ $(document).ready(function(){
             var option = "<option> Select Year </option>";           
           }else{
             $.ajax({
+              url:"/ajax/adsales/getDirector",
+              method:"POST",
+              data:{regionID, year},
+              success: function(output){
+                $('#director').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
+
+            $.ajax({
               url:"/ajax/adsales/repByRegionAndYear",
               method:"POST",
               data:{regionID, year},
@@ -144,6 +156,19 @@ $(document).ready(function(){
             }
           });  
         }else{
+
+          $.ajax({
+              url:"/ajax/adsales/getDirector",
+              method:"POST",
+              data:{regionID, year},
+              success: function(output){
+                $('#director').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
+
           $.ajax({
             url:"/ajax/adsales/newSalesRepByRegion",
             method:"POST",
@@ -198,6 +223,19 @@ $(document).ready(function(){
           });
 
         }else{
+
+          $.ajax({
+              url:"/ajax/adsales/getDirector",
+              method:"POST",
+              data:{regionID, year},
+              success: function(output){
+                $('#director').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
+
           $.ajax({
             url:"/ajax/adsales/repByRegionAndYear",
             method:"POST",

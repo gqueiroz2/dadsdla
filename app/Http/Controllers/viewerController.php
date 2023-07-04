@@ -265,6 +265,8 @@ class viewerController extends Controller{
 
         $regionName = Request::session()->get('userRegion');
 
+        $manager = Request::get("director");
+
         $permission = Request::session()->get('userLevel');
         $regionName = Request::session()->get('userRegion');
         $user = Request::session()->get('userName');
@@ -296,7 +298,7 @@ class viewerController extends Controller{
         if ($permission == "L8" ) {
             $table = $viewer->getTablesReps($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$user);
         }else{
-            $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient);
+            $table = $viewer->getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$manager);
         }
         
         

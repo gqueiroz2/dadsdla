@@ -990,6 +990,32 @@ class ajaxController extends Controller{
         }
     }
 
+    
+    public function getDirector(){
+        $regionID = Request::get('regionID');
+
+        $year = Request::get('year');
+
+        if (is_null($regionID)) {
+            
+        }else{
+            $db = new dataBase();
+
+            $default = $db->defaultConnection();
+            $con = $db->openConnection($default);
+            $cYear = intval(date('Y'));
+            $sr = new salesRep();
+
+            $regionID = array($regionID);
+
+            $director = $sr->getDirectorWBD($con);
+
+            for ($s=0; $s < sizeof($director); $s++) {
+                echo "<option value='".$director[$s]['director']."' selected='true'> ".$director[$s]["director"]." </option>";
+            }
+        }
+    }
+
     public function getRepByRegionAndYear(){
         $regionID = Request::get('regionID');
 

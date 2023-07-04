@@ -15,6 +15,21 @@ class salesRep extends Management
 		sru = sales_rep_unit
 		o = origin
 	*/
+	
+
+	public function getDirectorWBD($con,$regionID=false,$year=false){
+		$sql = new sql();
+		$table = "wbd w";
+		$columns = "w.manager AS 'director'
+				    ";
+
+		$res = $sql->selectDistinct($con, $columns, $table, null, null);
+		$from = array('director');
+		$director = $sql->fetch($res, $from, $from);
+		return $director;
+
+	}
+
 	public function getSalesRepFilteredYear($con, $salesRepGroupID, $regionID, $year, $source)
 	{
 		$sql = new sql();

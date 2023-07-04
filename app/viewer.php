@@ -8,7 +8,7 @@ use App\pRate;
 
 class viewer extends Model{
 
-	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient){
+	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$manager){
 		$base = new base();
 		//var_dump($salesRep);
 
@@ -23,6 +23,8 @@ class viewer extends Model{
 		$clientString = $base->arrayToString($client,false,0);
 
 		$agencyString = $base->arrayToString($agency,false,0);
+
+		$managerString = $base->arrayToString($manager,false,0);
 
 		//var_dump($source);
 		if ($source == "CMAPS"){
@@ -427,6 +429,7 @@ class viewer extends Model{
 					   WHERE (w.year = '$year')
 							AND (w.brand_id IN ($brandString))
 							AND (sr.ID IN ($salesRepString)) 
+							AND (w.manager IN ($managerString)) 
 							AND (w.month IN ($monthString))
 							AND (a.ID IN ($agencyString))
 							AND ( c.ID IN ($clientString) ) 
