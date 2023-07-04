@@ -8,9 +8,10 @@ use App\pRate;
 
 class viewer extends Model{
 
-	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$manager){
+	public function getTables($con,$salesRegion,$source,$month,$brand,$year,$salesCurrency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient=null,$manager){
 		$base = new base();
-		//var_dump($salesRep);
+		
+		//var_dump($manager);
 
 		$brandString = $base->arrayToString($brand,false,0);
 		

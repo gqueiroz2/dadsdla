@@ -316,6 +316,7 @@ class viewerController extends Controller{
         $monthExcel = $month;
         $brandExcel = $brand;
         $salesRepExcel = $salesRep;
+        $managerExcel = $manager;
         $agencyExcel = $agency;
         $clientExcel = $client;
         $currencyExcel = $salesCurrency;
@@ -327,7 +328,7 @@ class viewerController extends Controller{
         $titleExcel = $source." - Viewer Base.xlsx";
         $titlePdf = $source." - Viewer Base.pdf";
 
-        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base","userRegionExcel", "user", "permission"));
+        return view("adSales.viewer.basePost", compact("years","render","bRender", "salesRep", "region","salesCurrency","currencies","brands","viewer","mtx","months","value","brand","source","regions","year","total","regionExcel","sourceExcel","yearExcel","monthExcel","brandExcel","salesRepExcel","agencyExcel","clientExcel","currencyExcel","valueExcel", 'especificNumberExcel', "title", "titleExcel", "titlePdf","base","userRegionExcel", "managerExcel", "user", "permission"));
 
 	}
 

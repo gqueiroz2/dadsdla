@@ -46,6 +46,8 @@ class viewerExcelController extends Controller {
 	    $brand = json_decode(base64_decode(Request::get("brandExcel")));
 
 	    $salesRep = json_decode(base64_decode(Request::get("salesRepExcel")));
+        //var_dump($salesRep);
+        $manager = json_decode(base64_decode(Request::get("managerExcel")));
 
 	    $agency = json_decode(base64_decode(Request::get("agencyExcel")));
 
@@ -72,12 +74,14 @@ class viewerExcelController extends Controller {
             $checkEspecificNumber = false;
         }
         
+        $checkClient = false; 
+
 	    $viewer = new viewer();
 
         if ($permission == "L8") {
             $table = $viewer->getTablesReps($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false,$user);
         }else{
-            $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
+            $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$manager);
         }
 
 	    //$table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);

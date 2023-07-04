@@ -192,6 +192,7 @@
                     var monthExcel = "<?php echo base64_encode(json_encode($monthExcel)); ?>";
                     var brandExcel = "<?php echo base64_encode(json_encode($brandExcel)); ?>";
                     var salesRepExcel = "<?php echo base64_encode(json_encode($salesRepExcel)); ?>";
+                    var managerExcel = "<?php echo base64_encode(json_encode($managerExcel)); ?>";
                     var agencyExcel = "<?php echo base64_encode(json_encode($agencyExcel)); ?>";
                     var clientExcel = "<?php echo base64_encode(json_encode($clientExcel)); ?>";
                     var currencyExcel = "<?php echo $currencyExcel; ?>";
@@ -222,7 +223,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                             type: "POST",
-                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle, mtx,total, userRegionExcel},
+                            data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,managerExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle, mtx,total, userRegionExcel},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/
@@ -259,7 +260,7 @@
                             },
                             url: "/generate/excel/viewer/vBase",
                                 type: "POST",
-                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx,total,stageExcel},
+                                data: {regionExcel,sourceExcel,yearExcel,monthExcel,brandExcel,salesRepExcel,managerExcel,agencyExcel,clientExcel,currencyExcel,valueExcel,title,especificNumber, typeExport, auxTitle,mtx,total,stageExcel},
                             /*success: function(output){
                                 $("#vlau").html(output);
                             },*/
