@@ -95,7 +95,7 @@ class chainCmapsController extends Controller{
         /*for ($s=0; $s < sizeof($spreadSheet); $s++) { 
             $spreadSheet[$s][3] = $base->monthToIntCMAPS(trim($spreadSheet[$s][3]));
         }*/
-        //var_dump($spreadSheet);
+       // var_dump($spreadSheet);
         $complete = $chain->dailyChain($con,$table,$spreadSheet);
         
         if($complete){

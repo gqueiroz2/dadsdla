@@ -26,19 +26,30 @@ class chainCmaps extends excel{
         $base = new base();
         $columns = $this->defineColumns($table,'DLA');
         $parametter = 'daily_results';
-
         
-       /* if ($spreadSheet != "") {
-            $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
-        }*/
-        
-        //var_dump($spreadSheet);
+        //var_dump($spreadSheet[0]);
 
         for ($i=0; $i <sizeof($spreadSheet); $i++) { 
             $spreadSheet[$i][0] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][0]);
             $spreadSheet[$i][1] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][1]);
             $spreadSheet[$i][2] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][2]);
             $spreadSheet[$i][3] = $base->monthToIntWBD($spreadSheet[$i][3]);
+
+            for ($d=0; $d <sizeof($spreadSheet[$i]) ; $d++) { 
+                if ($spreadSheet[$i][$d] == '  - ') {
+                    $spreadSheet[$i][$d] = 0;
+                }
+                $temp[$i][$d] = $spreadSheet[$i][$d];
+
+                
+                if ($temp[$i][$d] != $spreadSheet[$i][0] && $temp[$i][$d] != $spreadSheet[$i][1] && $temp[$i][$d] != $spreadSheet[$i][2] && $temp[$i][$d] != $spreadSheet[$i][3] && $temp[$i][$d] != 0) {
+                    
+                    $spreadSheet[$i][$d] = str_replace(',','',trim($temp[$i][$d]));
+
+                    //var_dump($temp[$i][$d]);
+                }
+                
+            }
         }
         $into = $this->into($columns);      
         $check = 0;               
