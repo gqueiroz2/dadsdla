@@ -184,9 +184,22 @@ class viewerController extends Controller{
         $b = new brand();
         $brand = $b->getBrand($con);
 
+        $currentMonth = date('m');
+        $cYear = date('Y');
+        $nYear = $cYear + 1;
+        $pYear = $cYear - 1;
+        $ppYear = $pYear - 1;
+        $pppYear = $ppYear - 1;
+        
+        if($currentMonth == 12){
+            $year = array($cYear,$nYear,$pYear,$ppYear,$pppYear);           
+        }else{
+            $year = array($cYear,$pYear,$ppYear,$pppYear);           
+        }
+
         $v = new viewer();
 
-        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand","bs", "permission", "user"));
+        return view("adSales.viewer.baseGet",compact("render","bRender","years","region","currency","currencies","brand","bs", "permission", "user","year"));
 	}
 
 
@@ -212,6 +225,7 @@ class viewerController extends Controller{
             'month' => 'required',
             'brand' => 'required',
             'salesRep' => 'required',
+            'manager' => 'required',
             'currency' => 'required',
         ]);
 

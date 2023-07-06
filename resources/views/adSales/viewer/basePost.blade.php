@@ -74,7 +74,7 @@
                     
                          <div class="col">
                             <label class='labelLeft'><span class="bold">Manager:</span></label>
-                            @if($errors->has('director'))
+                            @if($errors->has('manager'))
                                 <label style="color: red;">* Required</label>
                             @endif
                                 {{$render->director()}}
@@ -161,7 +161,7 @@
                     @if($mtx)
                         {{$bRender->assemble($mtx,$months,$year,$regions,$brand,$source,$currencies,$total)}}
                     @else
-                        THE IS NO DATA TO THE SELECTED YEAR !!!
+                        THERE IS NO DATA TO THE SELECTED YEAR !!!
                     @endif
                 </div>
             </div>
