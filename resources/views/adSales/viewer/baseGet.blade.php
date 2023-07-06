@@ -34,7 +34,7 @@
                             @if($errors->has('year'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->yearViewer($year)}}                    
+                            {{$render->year($regionID)}}                    
                         </div> 
 
                         <div class="col">
