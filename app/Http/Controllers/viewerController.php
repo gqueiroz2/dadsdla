@@ -225,7 +225,6 @@ class viewerController extends Controller{
             'month' => 'required',
             'brand' => 'required',
             'salesRep' => 'required',
-            'manager' => 'required',
             'currency' => 'required',
         ]);
 
