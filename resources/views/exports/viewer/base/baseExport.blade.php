@@ -224,23 +224,23 @@
 		</tr>
 
 		@for ($m=0; $m <sizeof($data['mtx']) ; $m++) 
-			<tr>
-				<td>{{$data['mtx'][$m]['company']}}</td>
-				<td>{{$data['mtx'][$m]['year']}}</td>
-				<td>{{$data['mtx'][$m]['month']}}</td>
-				<td>{{$data['mtx'][$m]['oldRep']}}</td>
-				<td>{{$data['mtx'][$m]['client']}}</td>
-				<td>{{$data['mtx'][$m]['agency']}}</td>
-				<td>{{$data['mtx'][$m]['feedType']}}</td>
-				<td>{{$data['mtx'][$m]['brand']}}</td>
-				<td>{{$data['mtx'][$m]['feedCode']}}</td>
-				<td>{{$data['mtx'][$m]['internalCode']}}</td>
-				<td>{{$data['mtx'][$m]['piNumber']}}</td>
-				<td>{{$data['mtx'][$m]['property']}}</td>
-				<td>{{$data['mtx'][$m]['manager']}}</td>
-				<td>{{$data['mtx'][$m]['salesRep']}}</td>
-				<td>{{$data['mtx'][$m]['grossRevenue']}}</td>
-				<td>{{$data['mtx'][$m]['netRevenue']}}</td>		
+			<tr> 
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['company']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['year']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['month']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['oldRep']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['client']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['agency']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['feedType']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['brand']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['feedCode']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['internalCode']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['piNumber']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['property']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['manager']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['salesRep']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['grossRevenue']}}</td>
+				<td style="background-color: #c3d8ef;">{{$data['mtx'][$m]['netRevenue']}}</td>		
 			</tr>
 		@endfor			
 	@endif

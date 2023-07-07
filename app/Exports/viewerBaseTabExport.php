@@ -197,29 +197,8 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
 						}
 					}
-				}elseif ($this->data['source'] == 'wbd') {
-					$cellRange = 'A1';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-					
-					$cellRange = 'A3:P3';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
-
-					$cellRange = 'A2:P2';
-					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
-
-					$letter = 'P';
-
-					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-						$cellRange = "A".($d+4).":".$letter.($d+4);
-						if (($d+3) % 2 == 0) {
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
-						}else{
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
-						}
-					}
 				}
-
+				
 				if ($this->type != "Excel") {
 
                     $event->sheet->getDelegate()->getPageSetup()
