@@ -227,6 +227,8 @@ class consolidateExcelController extends Controller{
         $typeSelect = json_decode(base64_decode(Request::get("typeSelectExcel")));
 
         $currencyID = Request::get("currencyExcel");
+        $tmp = $pr->getCurrency($con,array($currencyID));
+        $currencyIDs = $tmp;
         $value = Request::get( "valueExcel"); 
 
         $userRegion = Request::get('userRegionExcel');
@@ -250,17 +252,38 @@ class consolidateExcelController extends Controller{
                 }
                 break;
             case 'advertiser':                
-                $typeSelectS = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
+                if ($regionID == '1') {
+                    $tmp1 = $cl->getClientByRegionWithValueAleph($con,array($regionID),$cYear);         
+                }else{
+                    $tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);    
+                }          
+                /*$tmp1 = $cl->getClientByRegionWithValue($con,array($regionID),$cYear);
+                $tmp2 = $cl->getClientByRegionWithValueAleph($con,array($regionID),$cYear);
+                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
                 break;
-            case 'agency':                               
-                $typeSelectS = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
+            case 'agency':
+                if ($regionID == '1') {
+                    $tmp1 = $ag->getAgencyByRegionWithValueAleph($con,array($regionID),$cYear);
+                }else{
+                    $tmp1 = $ag->getAgencyByRegionWithValue($con,array($regionID),$cYear);    
+                }             
+               /* $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
                 break; 
-            case 'agencyGroup':                               
-                $typeSelectS = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
-                $typeSelect = $typeSelectS;
-                break; 
+            case 'agencyGroup': 
+                if ($regionID == '1') {
+                    $tmp1 = $ag->getAgencyGroupByRegionWithValueAleph($con,array($regionID),$cYear);
+                }else{
+                    $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                }
+               /* $tmp1 = $ag->getAgencyGroupByRegionWithValue($con,array($regionID),$cYear);
+                $tmp2 = $ag->getAgencyGroupByRegionWithValueAleph($con,array($regionID),$cYear);
+                $typeSelectS = array_merge($typeSelectS,$tmp1,$tmp2);
+                $typeSelectS = array_unique($typeSelectS,SORT_REGULAR);*/
+                $typeSelect = array_values($tmp1);
             default:
                 $typeSelect = "all";
                 $typeSelectS = false;
@@ -271,7 +294,8 @@ class consolidateExcelController extends Controller{
 
         $months = $base->getMonth();
 
-        $mtx = $cR->construct($con,$currency,$months,$type,$typeSelect,$regionID,$value,$brand);
+
+        $mtx = $cR->construct($con,$currencyIDs,$months,$type,$typeSelect,$regionID,$value,$brand,'pacing');
 
         $mtx = $cR->assemble($mtx);
 
@@ -295,7 +319,7 @@ class consolidateExcelController extends Controller{
         $month = array("January","February","March","April","May","June","July","August","September","October","November","December");
 		$quarter = array("Q1","Q2","Q3","Q4");
 
-        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies,'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'typeSelectS' => $typeSelectS, 'brandID' => $brandID, 'newMtx' => $newMtx, 'userRegion' => $userRegion);
+        $data = array('month' => $month, 'quarter' => $quarter, 'render' => $render, 'region' => $region, 'brand' => $brand, 'currency' => $currency, 'regionCurrencies' => $regionCurrencies,'mtx' => $mtx, 'years' => $years, 'typeSelect' => $typeSelect, 'mtxDN' => $mtxDN, 'salesRegion' => $salesRegion, 'currencyS' => $currencyS, 'value' => $value, 'type' => $type, 'brandID' => $brandID, 'newMtx' => $newMtx, 'userRegion' => $userRegion);
 
         $label = 'exports.results.consolidate.consolidateExport';
 

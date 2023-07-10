@@ -579,7 +579,7 @@
 @for ($c=0; $c < sizeof($data['mtx']['previousAdSales']); $c++)
 <table>
 	<tr>
-		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['typeSelectS'][$c]['client'] }} </td>
+		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['newMtx'][$c]['typeSelect']['client'] }} </td>
     	@for($m=0; $m < sizeof($data['month']); $m++)
 			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['month'][$m] }} </td>
 		@endfor
@@ -814,7 +814,7 @@
 @for ($c=0; $c < sizeof($data['mtx']['previousAdSales']); $c++)
 <table>
 	<tr>
-		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['typeSelectS'][$c]['agency'] }} </td>
+		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['newMtx'][$c]['typeSelect']['agency'] }} </td>
     	@for($m=0; $m < sizeof($data['month']); $m++)
 			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['month'][$m] }} </td>
 		@endfor
@@ -1049,7 +1049,7 @@
 @for ($c=0; $c < sizeof($data['mtx']['previousAdSales']); $c++)
 <table>
 	<tr>
-		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['typeSelectS'][$c]['agencyGroup'] }} </td>
+		<td style="background-color: #0070c0; color: #FFFFFF; font-weight: bold;"> {{ $data['$newMtx'][$c]['typeSelect']['agencyGroup'] }} </td>
     	@for($m=0; $m < sizeof($data['month']); $m++)
 			<td style="background-color: #a6a6a6; font-weight: bold; text-align: right;"> {{ $data['month'][$m] }} </td>
 		@endfor
