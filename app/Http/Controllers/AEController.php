@@ -83,7 +83,7 @@ class AEController extends Controller{
         
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
-        //var_dump($clientsTable);
+        //var_dump($clientsTable['clientInfo'][0]['probability']);
        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear'));
     }
     
@@ -116,6 +116,7 @@ class AEController extends Controller{
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
         $saveInfo = Request::all();
+        //var_dump(Request::all());
        // var_dump(str_replace('.', '', $saveInfo['payTvForecast-0-0-May']));
         $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
         //var_dump($aeTable['total']);
@@ -128,14 +129,15 @@ class AEController extends Controller{
         for ($a=0; $a <sizeof($clientsTable['clientInfo']) ; $a++) { 
             $client = (int) $saveInfo['client-'.$a];
             $agency = (int) $saveInfo['agency-'.$a];
+            $probability = (int) $saveInfo['probability-'.$a];
 
             for ($c=0; $c <sizeof($company) ; $c++) { 
                 for ($m=$currentMonth-1; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
          
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID);
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID);
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID,$probability);
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID,$probability);
                 }
             }
         }

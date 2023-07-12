@@ -90,7 +90,7 @@
 
     <br>
     <div class="container-fluid" id="body">
-        <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()">
+        <form method="POST" action="{{ route('AESave') }}" runat="server"  onsubmit="ShowLoading()" id="forecastForm">
         @csrf
 
             <div class="row justify-content-end">
@@ -142,7 +142,7 @@
                                 <td class='darkBlue' style='width:5%;'>Total</td>
                             </tr>
                             <tr>
-                                <td class='grey clickBoolHeader' id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                <td class='grey clickBoolHeader' id='' rowspan='6' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                     <span style='font-size:12px;'> WBD</span>
                                 </td> 
                                 <td class="even center">TARGET</td>
@@ -178,15 +178,26 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
                             </tr>
                             <tr>
-                                <td class="odd center">BKGS {{$cYear}}</td>
+                                <td class="odd center">BKGS {{$cYear}} - PAY TV </td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentPayTvBookings'][$m])}}</td>
                                     @else
-                                        <td class="odd center" style='width:5%;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                                        <td class="odd center" style='width:5%;'>{{number_format($aeTable['total']['currentPayTvBookings'][$m])}}</td>
                                     @endif
                                 @endfor
-                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentPayTvBookings'][$m])}}</td>
+                            </tr>
+                            <tr>
+                                <td class="odd center">BKGS {{$cYear}} - DIGITAL </td>
+                                 @for($m=0; $m <sizeof($month); $m++)
+                                    @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentDigitalBookings'][$m])}}</td>
+                                    @else
+                                        <td class="odd center" style='width:5%;'>{{number_format($aeTable['total']['currentDigitalBookings'][$m])}}</td>
+                                    @endif
+                                @endfor
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentDigitalBookings'][$m])}}</td>
                             </tr>
                             <tr>
                                 <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -204,7 +215,7 @@
 
                             @for($c=0; $c <sizeof($company); $c++)
                                 <tr class="clickLoopHeader">
-                                    <td class="{{$color[$c]}} " id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                    <td class="{{$color[$c]}} " id='' rowspan='6' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                         <span style='font-size:12px;'> {{$companyView[$c]}}</span>
                                     </td> 
                                     <td class="even center">TARGET</td>
@@ -240,15 +251,26 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
-                                    <td class="odd center">BKGS {{$cYear}}</td>
+                                    <td class="odd center">BKGS {{$cYear}} - PAY TV </td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentPayTvBookings'][$m])}}</td>
                                         @else
-                                            <td class="odd center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                            <td class="odd center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentPayTvBookings'][$m])}}</td>
                                         @endif
                                     @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentPayTvBookings'][$m])}}</td>
+                                </tr>
+                                <tr class="clickLoopHeader">
+                                    <td class="odd center">BKGS {{$cYear}} - DIGITAL </td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentDigitalBookings'][$m])}}</td>
+                                        @else
+                                            <td class="odd center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentDigitalBookings'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentDigitalBookings'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
                                     <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -276,7 +298,40 @@
                                     <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
                                 </tr>
                             </table>
-
+                            <label class='labelLeft'><span class="bold">Probability: </span></label>
+                                <select class='selectpicker' name='probability-{{$a}}' data-width='5%'>
+                                    @if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 25)
+                                        <option value='0'> 0% </option>
+                                        <option value='25' selected='true'> 25% </option>
+                                        <option value='50'> 50% </option>   
+                                        <option value='75'> 75% </option>
+                                        <option value='100'> 100% </option>
+                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 50)
+                                        <option value='0'> 0% </option>
+                                        <option value="25"> 25% </option>
+                                        <option value='50' selected='true'> 50% </option>   
+                                        <option value='75'> 75% </option>
+                                        <option value='100'> 100% </option>
+                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 75)
+                                        <option value='0'> 0% </option>
+                                        <option value="25"> 25% </option>
+                                        <option value='50'> 50% </option>
+                                        <option value='75' selected='true'> 75% </option>                                        
+                                        <option value='100'> 100% </option>
+                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 100)
+                                        <option value='0'> 0% </option>
+                                        <option value='25'> 25% </option>
+                                        <option value='50'> 50% </option>   
+                                        <option value='75'> 75% </option>
+                                        <option value='100' selected='true'> 100% </option>   
+                                    @else
+                                        <option value='0'> 0% </option>
+                                        <option value='25'> 25% </option>
+                                        <option value='50'> 50% </option>   
+                                        <option value='75'> 75% </option>
+                                        <option value='100'> 100% </option>
+                                    @endif         
+                                </select>
                             <table style='width: 100%; zoom: 85%;font-size: 14px;'>
                                 <input type='hidden' id='clickBool-{{$a}}' value='1'>
                                 <tr class="center">
@@ -291,7 +346,7 @@
                                     <td class='darkBlue' style='width:5%;'>Total</td>
                                 </tr>
                                 <tr>
-                                    <td class='grey clickBool-{{$a}}' id='' rowspan='4' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                    <td class='grey clickBool-{{$a}}' id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                         <span style='font-size:12px;'> WBD</span>
                                     </td>                                     
                                     <td class="odd center">FCST - PAY TV</td>
@@ -316,15 +371,26 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="odd center">BKGS {{$cYear}}</td>
+                                    <td class="odd center">BKGS {{$cYear}} - PAY TV</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'][$m])}}</td>
                                         @else
-                                            <td class="odd center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                            <td class="odd center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'][$m])}}</td>
                                         @endif
                                     @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'][$m])}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="odd center">BKGS {{$cYear}} - DIGITAL</td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'][$m])}}</td>
+                                        @else
+                                            <td class="odd center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'][$m])}}</td>
                                 </tr>
                                 <tr>
                                     <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -342,7 +408,7 @@
 
                                 @for($c=0; $c <sizeof($company); $c++)
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="{{$color[$c]}} " id='' rowspan='4' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                        <td class="{{$color[$c]}} " id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                             <span style='font-size:12px;'> {{$companyView[$c]}}</span>
                                         </td>                                         
                                         <td class="odd center">FCST - PAY TV</td>
@@ -377,15 +443,26 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="odd center">BKGS {{$cYear}}</td>
+                                        <td class="odd center">BKGS {{$cYear}} - PAY TV</td>
                                          @for($m=0; $m <sizeof($month); $m++)
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                                <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                                <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'][$m])}}</td>
                                             @else
-                                                <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                                <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'][$m])}}</td>
                                             @endif
                                         @endfor
-                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'][$m])}}</td>
+                                    </tr>
+                                    <tr class="clickLoop-{{$a}}">
+                                        <td class="odd center">BKGS {{$cYear}} - DIGITAL</td>
+                                         @for($m=0; $m <sizeof($month); $m++)
+                                            @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                                <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'][$m])}}</td>
+                                            @else
+                                                <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'][$m])}}</td>
+                                            @endif
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'][$m])}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
                                         <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>

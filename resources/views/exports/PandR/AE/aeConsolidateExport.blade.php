@@ -6,6 +6,7 @@
         <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Agency</td>
         <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Plataform</td>
         <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Type</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Probability</td>
         @for($m=0; $m <sizeof($data['monthConsolidate']) ; $m++)
             <td style="text-align: center; font-weight: bold; background-color: #0f243e; color: white;'">{{$data['monthConsolidate'][$m]}}</td>
         @endfor
@@ -21,6 +22,7 @@
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['agencyName']}}</td>
             <td style='text-align:center;'>Pay TV</td>
             <td style='text-align: center;'>BKGS</td>
+            <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
                 <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentPayTvBookings'][$m]}}</td>            
             @endfor
@@ -33,6 +35,7 @@
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['agencyName']}}</td>
             <td style='text-align:center;'>Pay TV</td>
             <td style='text-align: center;'>FCST</td> 
+            <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
             @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
                 <td style="text-align: center;">{{$data['clientsTable']['companyValues'][$a][$c]['payTvForecastC'][$m]}}</td>
             @endfor  
@@ -44,6 +47,7 @@
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['agencyName']}}</td>
             <td style='text-align:center;'>Digital</td>
             <td style='text-align: center;'>BKGS</td>
+            <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
                 <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentDigitalBookings'][$m]}}</td>
             @endfor
@@ -55,6 +59,7 @@
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['agencyName']}}</td>
             <td style='text-align:center;'>Digital</td>
             <td style='text-align: center;'>FCST</td>
+            <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
                 <td style="text-align: center;">{{$data['clientsTable']['companyValues'][$a][$c]['digitalForecastC'][$m]}}</td>
              @endfor

@@ -60,7 +60,7 @@ class aeExcelController extends Controller{
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
      	
-        $label = array("exports.PandR.AE.aeExport", "exports.PandR.AE.aeConsolidateExport");
+        $label = "exports.PandR.AE.aeConsolidateExport";
 
          $auxTitle = $title;
 

@@ -26,10 +26,12 @@ class aeExport implements FromArray, WithMultipleSheets, WithTitle {
 
     public function sheets(): array{
     	
-        $sheet = array();
+        //$sheet = array();
 
-    	array_push($sheet, new aeTabExport($this->labels[0], $this->sheets, $this->typeExport));
-        array_push($sheet, new aeConsolidateTabExport($this->labels[1], $this->sheets, $this->typeExport));
+    	//array_push($sheet, new aeTabExport($this->labels[0], $this->sheets, $this->typeExport));
+        $sheet = [
+            new aeConsolidateTabExport($this->labels, $this->sheets, $this->typeExport)
+        ];
         
 
         return $sheet;

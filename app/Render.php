@@ -332,9 +332,14 @@ class Render extends Model{
         echo "</select>";
     }
 
-    public function yearViewer(){     
-        echo "<select id='year' name='year[]' class='selectpicker' data-selected-text-format='count' multiple='true'  multiple data-actions-box='true' data-size='2' data-width='100%'>";
-            echo "<option value=''> Select Region </option>";
+    public function yearViewer($year){   
+
+        echo "<select id='year' class='selectpicker' data-selected-text-format='count' multiple='true' name='year[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+        for ($y=0; $y <sizeof($year); $y++) { 
+            var_dump($year);
+             echo "<option selected='true' value='".$year[$y]."'>".$year[$y]."</option>";
+        }
+           
         echo "</select>";
     }    
 

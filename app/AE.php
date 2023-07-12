@@ -78,7 +78,7 @@ class AE extends pAndR{
                 
             }
             
-            $pivot[$c] = array('currentBookings' => $this->addQuartersAndTotal($currentBookings[$c]),'previousBookings' => $this->addQuartersAndTotal($previousBookings[$c]), 'currentTarget' => $this->addQuartersAndTotal($currentTarget[$c]), 'payTvForecast' => $this->addQuartersAndTotal($payTvForecast[$c]), 'digitalForecast' => $this->addQuartersAndTotal($digitalForecast[$c])); 
+            $pivot[$c] = array('currentBookings' => $this->addQuartersAndTotal($currentBookings[$c]),'previousBookings' => $this->addQuartersAndTotal($previousBookings[$c]), 'currentTarget' => $this->addQuartersAndTotal($currentTarget[$c]), 'payTvForecast' => $this->addQuartersAndTotal($payTvForecast[$c]), 'digitalForecast' => $this->addQuartersAndTotal($digitalForecast[$c]), 'currentDigitalBookings' => $this->addQuartersAndTotal($currentDigitalBookings[$c]), 'currentPayTvBookings' => $this->addQuartersAndTotal($currentPayTvBookings[$c])); 
 
             
             
@@ -88,7 +88,7 @@ class AE extends pAndR{
 
         $totalDigitalForecast = $this->addFcstWithBooking($totalCurrentDigitalBookings,$totalDigitalForecast);
 
-        $pivotTotal = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast));  
+        $pivotTotal = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast), 'currentDigitalBookings' => $this->addQuartersAndTotal($totalCurrentDigitalBookings), 'currentPayTvBookings' => $this->addQuartersAndTotal($totalCurrentPayTvBookings));  
         
        
 
@@ -132,7 +132,7 @@ class AE extends pAndR{
                 $payTvForecast[$a][$c] = $this->addFcstWithBooking($currentPayTvBookings[$a][$c],$payTvForecast[$a][$c]);
                 $digitalForecast[$a][$c] = $this->addFcstWithBooking($currentDigitalBookings[$a][$c],$digitalForecast[$a][$c]);
 
-                $pivot[$a][$c] = array('currentBookings' => $this->addQuartersAndTotal($currentBookings[$a][$c]),'previousBookings' => $this->addQuartersAndTotal($previousBookings[$a][$c]), 'payTvForecast' => $this->addQuartersAndTotal($payTvForecast[$a][$c]), 'digitalForecast' => $this->addQuartersAndTotal($digitalForecast[$a][$c]), 'currentTarget' => $this->addQuartersAndTotal($currentTarget[$a][$c]), 'currentDigitalBookings' => $currentDigitalBookings[$a][$c], 'currentPayTvBookings' => $currentPayTvBookings[$a][$c], 'payTvForecastC' => $payTvForecast[$a][$c], 'digitalForecastC' => $digitalForecast[$a][$c]);
+                $pivot[$a][$c] = array('currentBookings' => $this->addQuartersAndTotal($currentBookings[$a][$c]),'previousBookings' => $this->addQuartersAndTotal($previousBookings[$a][$c]), 'payTvForecast' => $this->addQuartersAndTotal($payTvForecast[$a][$c]), 'digitalForecast' => $this->addQuartersAndTotal($digitalForecast[$a][$c]), 'currentTarget' => $this->addQuartersAndTotal($currentTarget[$a][$c]), 'currentDigitalBookings' => $currentDigitalBookings[$a][$c], 'currentPayTvBookings' => $currentPayTvBookings[$a][$c], 'payTvForecastC' => $payTvForecast[$a][$c], 'digitalForecastC' => $digitalForecast[$a][$c], 'currentDigitalBookings' => $this->addQuartersAndTotal($currentDigitalBookings[$a][$c]), 'currentPayTvBookings' => $this->addQuartersAndTotal($currentPayTvBookings[$a][$c]));
                 
             } 
 
@@ -147,13 +147,14 @@ class AE extends pAndR{
                 $totalCurrentDigitalBookings[$a][$m] = floatval($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')[0]['revenue'])/$pRate;
                  
             }              
-            
+            $probability[$a] = $this->getProbability($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep);
+            //var_dump($probability[$a]);
             $totalPayTvForecast[$a] = $this->addFcstWithBooking($totalCurrentPayTvBookings[$a],$totalPayTvForecast[$a]);
             $totalDigitalForecast[$a] = $this->addFcstWithBooking($totalCurrentDigitalBookings[$a],$totalDigitalForecast[$a]);
 
-            $totalPivot[$a] = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings[$a]),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings[$a]), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget[$a]), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast[$a]), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast[$a]));
+            $totalPivot[$a] = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings[$a]),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings[$a]), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget[$a]), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast[$a]), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast[$a]), 'currentDigitalBookings' => $this->addQuartersAndTotal($totalCurrentDigitalBookings[$a]), 'currentPayTvBookings' => $this->addQuartersAndTotal($totalCurrentPayTvBookings[$a]));
        
-            $clientInfo[$a] = array('clientName' => $clients[$a]['clientName'], 'clientID' => $clients[$a]['clientID'],'agencyName' => $clients[$a]['agencyName'],'agencyID' => $clients[$a]['agencyID']);
+            $clientInfo[$a] = array('clientName' => $clients[$a]['clientName'], 'clientID' => $clients[$a]['clientID'],'agencyName' => $clients[$a]['agencyName'],'agencyID' => $clients[$a]['agencyID'], 'probability' => $probability[$a]);
         }
 
        
@@ -166,9 +167,10 @@ class AE extends pAndR{
     }
 
     //THIS FUNCTION SAVE OR UPDATE THE FORECAST MADE BY THE SALES REP
-    public function saveForecast(Object $con, int $client, int $agency, int $year, String $value, String $company, String $month, int $salesRep, String $platform, string $forecastValue, int $currency){
+    public function saveForecast(Object $con, int $client, int $agency, int $year, String $value, String $company, String $month, int $salesRep, String $platform, string $forecastValue, int $currency, int $probability){
         $sql = new sql();
-        //var_dump($forecastValue);
+        //var_dump($forecastValue); 
+        
         $selectQuery = "SELECT agency_id AS agency, client_id AS client, sales_rep_id as salesRep
                         FROM ae_forecast
                         WHERE sales_rep_id = $salesRep
@@ -180,14 +182,14 @@ class AE extends pAndR{
                         AND company_id = $company
                         AND month = $month
                         AND year = $year";
-       //var_dump($selectQuery);
+      // echo "<pre>$selectQuery</pre>";
         $from = array('agency', 'client','salesRep');
         $selectResultQuery = $con->query($selectQuery);
         $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
         //var_dump($resultSelect);
         if ($resultSelect != false){
-            $updateQuery = "UPDATE ae_forecast 
-                        SET revenue = $forecastValue                        
+            $updateQuery = "UPDATE ae_forecast
+                        SET revenue = $forecastValue, success_probability = $probability
                         WHERE sales_rep_id = $salesRep
                         AND client_id = $client
                         AND agency_id = $agency
@@ -197,7 +199,7 @@ class AE extends pAndR{
                         AND value = '$value'
                         AND year = $year 
                         AND platform = '$platform'";
-            //var_dump($updateQuery);
+            //echo "<pre>$updateQuery</pre>";
             $resultQuery = $con->query($updateQuery);
         }else{
             $insertQuery = "INSERT INTO  ae_forecast
@@ -210,7 +212,8 @@ class AE extends pAndR{
                         currency = $currency,
                         value = '$value',
                         year = $year,
-                        platform = '$platform'";
+                        platform = '$platform',
+                        success_probability = $probability";
 
             $resultInsertQuery = $con->query($insertQuery);
             //var_dump($insertQuery);
@@ -385,6 +388,26 @@ class AE extends pAndR{
         return $result;
     }
 
+
+    public function getProbability(Object $con, int $client, int $agency, int $salesRep){
+        $sql = new sql();
+
+        $selectQuery = "SELECT DISTINCT success_probability AS probability
+                        FROM ae_forecast
+                        WHERE sales_rep_id = $salesRep
+                        AND client_id = $client
+                        AND agency_id = $agency";
+       //var_dump($selectQuery);
+        $from = array('probability');
+        $selectResultQuery = $con->query($selectQuery);
+        $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
+
+        if ($resultSelect == false) {
+            $resultSelect = 0;
+        }
+
+        return $resultSelect;
+    }
     //THIS FUNCTION GET ALL THE CLIENTS FOR THE SELECTED SALES REP
     public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear){
         $sql = new sql();
