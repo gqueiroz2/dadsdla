@@ -114,7 +114,12 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['agency']."'></div>";
+									if ($table == 'forecast') {
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['agency_id']."'></div>";
+									}else{
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value='".$newValues[$dependencies[$d]][$n]['agency']."'></div>";	
+									}
+									
 									if($table != "cmaps"){
 										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
 									}
@@ -154,7 +159,12 @@ class RenderStuff extends Model{
 											
 										echo "</select>";
 									echo "</div>";
-									echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value=\"". $newValues[$dependencies[$d]][$n]['client']."\"></div>";
+									if ($table == 'forecast') {
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value=\"". $newValues[$dependencies[$d]][$n]['client_id']."\"></div>";
+									}else{
+										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' name='$dependencies[$d]-unit-$n' value=\"". $newValues[$dependencies[$d]][$n]['client']."\"></div>";
+									}
+									
 									if($table != "cmaps"){
 										echo "<div class='col'><input type='text' class='form-control' readonly='true' style='width:100%;' value='".$newValues[$dependencies[$d]][$n]['region']."'></div>";
 									}

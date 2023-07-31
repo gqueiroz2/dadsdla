@@ -16,88 +16,6 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 	protected $data;
 	protected $type;
 
-	protected $headStyle = [
-		'font' => [
-			'bold' => true,
-			'name' => 'Verdana',
-			'size' => 12,
-			'color' => array('rgb' => 'FFFFFF')
-		],
-		'alignment' => [
-			'horizontal' => 'left',
-			'vertical' => 'center',
-			'wrapText' => true
-		],
-	];
-
-	protected $indexStyle = [
-		'font' => [
-			'bold' => true,
-			'name' => 'Verdana',
-			'size' => 10,
-			'color' => array('rgb' => '000000')
-		],
-		'alignment' => [
-			'horizontal' => 'center',
-			'vertical' => 'center',
-			'wrapText' => true
-		],
-	]; 
-
-	protected $totalStyle = [
-		'font' => [
-			'bold' => true,
-			'name' => 'Verdana',
-			'size' => 10,
-			'color' => array('rgb' => 'FFFFFF')
-		],
-		'alignment' => [
-			'horizontal' => 'center',
-			'vertical' => 'center',
-			'wrapText' => true
-		],
-	];
-
-	protected $linePair = [
-		'font' => [
-			'bold' => true,
-			'name' => 'Verdana',
-			'size' => 10,
-			'color' => array('rgb' => '000000')
-		],
-		'alignment' => [
-			'horizontal' => 'center',
-			'vertical' => 'center',
-			'wrapText' => true
-		],
-		'fill' => [
-			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-			'startColor' => [
-				'rgb' => 'f9fbfd',
-			],
-		],
-	];
-
-	protected $lineOdd = [
-		'font' => [
-			'bold' => true,
-			'name' => 'Verdana',
-			'size' => 10,
-			'color' => array('rgb' => '000000')
-		],
-		'alignment' => [
-			'horizontal' => 'center',
-			'vertical' => 'center',
-			'wrapText' => true
-		],
-		'fill' => [
-			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-			'startColor' => [
-				'rgb' => 'c3d8ef',
-			],
-		],
-	];
-
 	public function __construct($view, $data, $type){
         $this->view = $view;
         $this->data = $data;
@@ -117,88 +35,9 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 		return [
 			AfterSheet::class => function(AfterSheet $event){
-				if ($this->data['source'] == 'cmaps') {
-					$cellRange = 'A1';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-					$cellRange = 'A3:N3';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
-
-					$cellRange = 'A2:N2';
-					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
-
-					$letter = 'N';
-
-					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-						$cellRange = "A".($d+4).":".$letter.($d+4);
-						if (($d+3) % 2 == 0) {
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
-						}else{
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
-						}
-					}
-				}elseif ($this->data['source'] == 'bts'){
-					$cellRange = 'A1';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-					$cellRange = 'A3:L3';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
-
-					$cellRange = 'A2:L2';
-					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
-
-					$letter = 'L';
-
-					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-						$cellRange = "A".($d+4).":".$letter.($d+4);
-						if (($d+3) % 2 == 0) {
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
-						}else{
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
-						}
-					}
-				}elseif ($this->data['source'] == 'sf'){
-					$cellRange = 'A1';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-					$cellRange = 'A3:M3';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
-
-					$cellRange = 'A2:M2';
-					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
-
-					$letter = 'M';
-
-					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-						$cellRange = "A".($d+4).":".$letter.($d+4);
-						if (($d+3) % 2 == 0) {
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
-						}else{
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
-						}
-					}
-				}elseif ($this->data['source'] == 'aleph') {
-					$cellRange = 'A1';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->headStyle);
-
-					$cellRange = 'A3:L3';
-					$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->indexStyle);
-
-					$cellRange = 'A2:L2';
-					$event->sheet->getdelegate()->getStyle($cellRange)->applyFromArray($this->totalStyle);
-
-					$letter = 'L';
-
-					for ($d = 0; $d < sizeof($this->data['mtx']); $d++) { 
-						$cellRange = "A".($d+4).":".$letter.($d+4);
-						if (($d+3) % 2 == 0) {
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->linePair);
-						}else{
-							$event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->lineOdd);
-						}
-					}
-				}
 				
+				$event->sheet->setShowGridlines(false);
+
 				if ($this->type != "Excel") {
 
                     $event->sheet->getDelegate()->getPageSetup()
@@ -211,52 +50,32 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 
 	public function columnFormats(): array{
 
-		if ($this->data['userRegion'] == 'Miami' ||$this->data['userRegion'] == 'Mexico' ) {
-			if ($this->data['source'] == 'cmaps' ) {
-				return[
-				'J' => '0%',
-				'M' => '#.##0',
-				'N' => '#.##0'
-				];
-			}elseif ($this->data['source'] == 'bts') {
-				return[
-				'K' => '#.##0',
-				'L' => '#.##0'
-				];
-			}elseif ($this->data['source'] == 'sf') {
-				return[
-				'L' => '#.##0',
-				'M' => '#.##0'
-				];
-			}
-		}else{
-			if ($this->data['source'] == 'cmaps' ) {
-				return[
-				'J' => '0%',
-				'M' => '#,##0',
-				'N' => '#,##0'
-				];
-			}elseif ($this->data['source'] == 'bts') {
-				return[
-				'K' => '#,##0',
-				'L' => '#,##0'
-				];
-			}elseif ($this->data['source'] == 'sf') {
-				return[
-				'L' => '#,##0',
-				'M' => '#,##0'
-				];
-			}elseif ($this->data['source'] == 'aleph') {
-				return[
-				'K' => '#,##0',
-				'L' => '#,##0'
-				];
-			}elseif ($this->data['source'] == 'wbd') {
-				return[
-				'O' => '#,##0',
-				'P' => '#,##0'
-				];
-			}
+		if ($this->data['source'] == 'cmaps' ) {
+			return[
+			'J' => '0%',
+			'M' => '#,##0',
+			'N' => '#,##0'
+			];
+		}elseif ($this->data['source'] == 'bts') {
+			return[
+			'K' => '#,##0',
+			'L' => '#,##0'
+			];
+		}elseif ($this->data['source'] == 'sf') {
+			return[
+			'L' => '#,##0',
+			'M' => '#,##0'
+			];
+		}elseif ($this->data['source'] == 'aleph') {
+			return[
+			'K' => '#,##0',
+			'L' => '#,##0'
+			];
+		}elseif ($this->data['source'] == 'wbd') {
+			return[
+			'O' => '#,##0',
+			'P' => '#,##0'
+			];
 		}
 		
 	}		

@@ -65,6 +65,7 @@ class AEController extends Controller{
         $value = 'gross';
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+        $list = $ae->listOFClients($con, $cYear);
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -84,7 +85,7 @@ class AEController extends Controller{
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
         //var_dump($clientsTable['clientInfo'][0]['probability']);
-       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear'));
+       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear','list'));
     }
     
     public function save(){
@@ -100,6 +101,8 @@ class AEController extends Controller{
 
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
+        $saveInfo = Request::all();
+        //pegando o valor certo
 
         $cYear = date('Y');
         $pYear = $cYear - 1;
@@ -114,19 +117,32 @@ class AEController extends Controller{
         $value = 'gross';
 
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+        
+        $list = $ae->listOFClients($con, $cYear);
+               
+        $newClient = $ae->getSalesRepByClient($salesRepID,$con, $sql);
 
-        $saveInfo = Request::all();
-        //var_dump(Request::all());
-       // var_dump(str_replace('.', '', $saveInfo['payTvForecast-0-0-May']));
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
-        //var_dump($aeTable['total']);
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
-        //$forecastinfo = 
+        $clients = $ae->getClientByRep($con, $salesRepID, $regionID, $cYear, $pYear);
+
+        if($saveInfo['client'][0] != null){
+           // var_dump('aki');
+            $test = explode(',', $saveInfo['client'][0]);
+            
+            $saveNewClient = $ae->newClientInclusion($con,$salesRepID,$test[0],$test[1]);
+
+        }else{
+            if ($newClient != null)  {
+                $clients = array_merge($clients,$newClient);
+                $clients = array_values($clients);
+             }
+        } //ta funcionando
+        
         $company = array('3','1','2');
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
+        $check = $ae->checkForecast($con, $salesRepID);//check if exists forecast for this rep in database
 
-        for ($a=0; $a <sizeof($clientsTable['clientInfo']) ; $a++) { 
+        for ($a=0; $a <sizeof($clients) ; $a++) { 
             $client = (int) $saveInfo['client-'.$a];
             $agency = (int) $saveInfo['agency-'.$a];
             $probability = (int) $saveInfo['probability-'.$a];
@@ -135,21 +151,29 @@ class AEController extends Controller{
                 for ($m=$currentMonth-1; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
-         
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID,$probability);
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID,$probability);
+                    
+                    //insere valores de pay tv
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID,$probability,$check);
+                    
+                    //insere valores de digital
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID,$probability,$check);
                 }
             }
         }
-       
+
+        if ($newClient != null)  {
+            $clients = array_merge($clients,$newClient);
+            $clients = array_values($clients);
+        }        
+        
         $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
 
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
 
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
 
-        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear'));
+        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list'));
         
     }
 

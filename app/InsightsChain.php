@@ -93,13 +93,13 @@ class InsightsChain extends excel{
     	$into = $chain->into($columnsT);
 
     	$current = $chain->fixToInput($chain->selectFromCurrentTable($sql,$sCon,$table,$columnsS),$columnsS);
-
+        //var_dump($current);
     	$cleanedValues = $current;
-
+       // var_dump($cleanedValues);
     	$next = $chain->handleForLastTable($con,$table,$cleanedValues,$columnsS);
-
+        //var_dump($next);
     	$bool = $chain->insertToLastTable($tCon,$table,$columnsT,$next,$into);
-
+        //var_dump($bool);
     	return $bool;
 	}
 
@@ -203,10 +203,12 @@ class InsightsChain extends excel{
 
     public $forecastColumnsF = array('company_id',
                                      'client_id',
+                                     'agency_id',
                                      'platform',
                                      'brand',
                                      'brand_feed',
                                      'sales_rep',
+                                     'area',
                                      'january',
                                      'february',
                                      'march',
@@ -223,10 +225,12 @@ class InsightsChain extends excel{
 
     public $forecastColumnsS = array('company_id',
                                      'client_id',
+                                     'agency_id',
                                      'platform',
                                      'brand_id',
                                      'brand_feed',
                                      'sales_rep_id',
+                                     'area',
                                      'january',
                                      'february',
                                      'march',
@@ -243,10 +247,12 @@ class InsightsChain extends excel{
 
     public $forecastColumnsT = array('company_id',
                                      'client_id',
+                                     'agency_id',
                                      'platform',
                                      'brand_id',
                                      'brand_feed',
                                      'sales_rep_id',
+                                     'area',
                                      'january',
                                      'february',
                                      'march',
@@ -263,10 +269,12 @@ class InsightsChain extends excel{
 
     public $forecastColumns = array('company_id',
                                      'client_id',
+                                     'agency_id',
                                      'platform',
                                      'brand_id',
                                      'brand_feed',
                                      'sales_rep_id',
+                                     'area',
                                      'january',
                                      'february',
                                      'march',

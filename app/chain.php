@@ -830,7 +830,7 @@ class chain extends excel{
     public function handleForLastTable($con,$table,$current,$columns){
     	for ($c=0; $c < sizeof($current); $c++) {             
                 $rr = new region();
-                
+            //var_dump($table);    
             if($table == "cmaps"){
 
                 $regionName = $rr->getRegion($con,array(1))[0]['name'];
@@ -856,6 +856,7 @@ class chain extends excel{
                 $regionName = "Brazil";
                 
                 $current[$c]['client_id'] = $this->seekClientID($con,1,$regionName,$current[$c]['client_id']);
+                $current[$c]['agency_id'] = $this->seekAgencyID($con,1,$regionName,$current[$c]['agency_id']);
 
             }elseif ($table == 'aleph') {
                 $regionName = $rr->getRegion($con,array($current[$c]['sales_office_id']))[0]['name'];
@@ -1423,6 +1424,9 @@ class chain extends excel{
                                         case 'SPT':
                                             $spreadSheet[$s][$c] = 2;
                                             break;
+                                        case 'SONY':
+                                            $spreadSheet[$s][$c] = 2;
+                                            break;
                                         case 'WM':
                                             $spreadSheet[$s][$c] = 3;
                                             break;
@@ -1515,6 +1519,7 @@ class chain extends excel{
                                     $spreadSheet[$s][$c] = "0";
                                 }else{
                                     $temp = number_format($spreadSheet[$s][$c],2,'.',',');
+                                    $temp = implode(',','',$temp);
                                     $spreadSheetV2[$s][$columns[$c]] = $temp; 
                                 }
                             }elseif($columns[$c] == "brand" && $table == "sf_pr"){

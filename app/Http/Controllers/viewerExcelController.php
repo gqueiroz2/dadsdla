@@ -104,7 +104,7 @@ class viewerExcelController extends Controller {
 	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
     }
 
-    public function viewerInsights(){
+   /* public function viewerInsights(){
     	$db =  new dataBase();
 	    $default = $db->defaultConnection();
         $con = $db->openConnection($default);
@@ -180,5 +180,5 @@ class viewerExcelController extends Controller {
 
         return Excel::download(new insightsExport($data, $label,$auxTitle,$typeExport), $title);
 
-    }
+    }*/
 }

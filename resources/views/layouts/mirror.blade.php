@@ -185,9 +185,9 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 											<!--<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE View </a>-->
-											<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View - NEW </a>
-											<!--<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> MT View </a>-->
-											<!--<a class="dropdown-item" href="{{ route('AEGet') }}"> Test </a>-->
+											<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
+											<a class="dropdown-item" href="{{ route('propertyGet') }}"> Property View </a>
+											<!--<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> MT View </a>-->											
 										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
 										
 								</li>

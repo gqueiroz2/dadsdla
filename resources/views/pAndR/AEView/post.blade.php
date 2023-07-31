@@ -298,40 +298,29 @@
                                     <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
                                 </tr>
                             </table>
-                            <label class='labelLeft'><span class="bold">Probability: </span></label>
-                                <select class='selectpicker' name='probability-{{$a}}' data-width='5%'>
+                            <div class="container-fluid col">
+                                <label class='bold' style="font-size: 14px; text-align: center;">Probability:</label>
+                                <select class='selectpicker' name='probability-{{$a}}' data-width='5%' style="font-size: 5px;">
                                     @if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 25)
-                                        <option value='0'> 0% </option>
                                         <option value='25' selected='true'> 25% </option>
                                         <option value='50'> 50% </option>   
                                         <option value='75'> 75% </option>
-                                        <option value='100'> 100% </option>
                                     @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 50)
-                                        <option value='0'> 0% </option>
                                         <option value="25"> 25% </option>
                                         <option value='50' selected='true'> 50% </option>   
                                         <option value='75'> 75% </option>
-                                        <option value='100'> 100% </option>
                                     @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 75)
-                                        <option value='0'> 0% </option>
                                         <option value="25"> 25% </option>
                                         <option value='50'> 50% </option>
                                         <option value='75' selected='true'> 75% </option>                                        
-                                        <option value='100'> 100% </option>
-                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 100)
-                                        <option value='0'> 0% </option>
-                                        <option value='25'> 25% </option>
-                                        <option value='50'> 50% </option>   
-                                        <option value='75'> 75% </option>
-                                        <option value='100' selected='true'> 100% </option>   
                                     @else
                                         <option value='0'> 0% </option>
                                         <option value='25'> 25% </option>
                                         <option value='50'> 50% </option>   
                                         <option value='75'> 75% </option>
-                                        <option value='100'> 100% </option>
                                     @endif         
                                 </select>
+                            </div>
                             <table style='width: 100%; zoom: 85%;font-size: 14px;'>
                                 <input type='hidden' id='clickBool-{{$a}}' value='1'>
                                 <tr class="center">
@@ -417,14 +406,14 @@
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
                                             @else
                                                 @if($m >= date('n'))
-                                                    <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}"></td>
+                                                    <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}"></td>
                                                 @else
-                                                    <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
+                                                    <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
                                                 @endif
                                             @endif
                                         @endfor
                                         
-                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
                                         <td class="even center">FCST - DIGITAL</td>
@@ -433,14 +422,14 @@
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
                                             @else
                                                  @if($m >= date('n'))
-                                                    <td class="even center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}"></td>
+                                                    <td class="even center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}"></td>
 
                                                 @else
-                                                    <td class="even center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
+                                                    <td class="even center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
                                                 @endif
                                             @endif
                                         @endfor
-                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
                                         <td class="odd center">BKGS {{$cYear}} - PAY TV</td>
@@ -478,6 +467,49 @@
                                 @endfor
                             </table>
                         @endfor
+                         <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                            <tr class="center">
+                                <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                            </tr>
+                            
+                        </table>
+                        
+                        <div class='col'>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
+                              Add Client to Forecast
+                            </button>
+                        </div>
+                       <!-- Modal to insert a new client -->
+                        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New Client</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                              <div class="modal-body">
+                                <div class="row justify-content-center">          
+                                    <div class="col">       
+                                        <div class="form-group">
+                                            <label><b> Client: </b></label> 
+                                             <select class='selectpicker' id='client' name='client[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                <option selected='true' value="">Select a Client</option>
+                                                @for ($s=0; $s < sizeof($list); $s++)
+                                                    <option value='{{$list[$s]['id']}},{{$list[$s]['aID']}}'> {{$list[$s]["client"]}} - {{$list[$s]["agency"]}} </option> 
+                                                @endfor
+                                            </select>                                                                             
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                          <table style='width: 100%; zoom: 85%;font-size: 16px;'>
                             <tr class="center">
@@ -640,11 +672,6 @@
             return false;
         }
     });
-
-    window.calculate = function () {
-
-
-    };  
 
 </script>
 

@@ -28,6 +28,7 @@ class CheckElementsController extends Controller{
 		$table = Request::get('table');
 		$region = Request::get('region');
 		$newValues = $cE->newValues($con,$conFM,$region,$table);
+		
 		$dependencies = array('regions','brands','salesReps','clients','agencies','currencies');
 		return view('dataManagement.Chain.pendingStuff',compact('base','rS','con','newValues','dependencies','table','region'));
 	}

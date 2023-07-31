@@ -51,6 +51,19 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('AESave');
 
 		});
+
+		Route::group(['prefix'=>'propertyReport'],function(){
+			
+			Route::get('/','propertyController@get')
+										->name('propertyGet');
+			Route::post('/','propertyController@post')
+										->name('propertyPost');
+			//Route::post('save','propertyController@save')
+										//->name('AESave');
+
+		});
+
+
 		/*
 		Route::group(['prefix'=>'MonthAdjust'],function(){
 			

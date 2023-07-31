@@ -36,7 +36,7 @@ class chainInsightsController extends Controller{
 		$connections = array('firstmatch','secondmatch','thirdmatch','dla');
 
 		$truncateStatement = "TRUNCATE TABLE $table";
-
+		//var_dump($table);
 		$check = 0;
 
 		for ($c=0; $c < sizeof($connections); $c++) { 
