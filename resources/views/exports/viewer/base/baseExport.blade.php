@@ -225,22 +225,22 @@
 
 		@for ($m=0; $m <sizeof($data['mtx']) ; $m++) 
 			<tr> 
-				<td >{{$data['mtx'][$m]['company']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['year']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['month']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['oldRep']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['client']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['agency']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['feedType']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['brand']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['feedCode']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['internalCode']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['piNumber']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['property']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['manager']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['salesRep']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['grossRevenue']}}</td>
-				<td style="background-color: #c3d8ef; font-weight: bold;">{{$data['mtx'][$m]['netRevenue']}}</td>		
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['company']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['year']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['month']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['oldRep']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['client']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['agency']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['feedType']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['brand']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['feedCode']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['internalCode']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['piNumber']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['property']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['manager']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['salesRep']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['grossRevenue']}}</td>
+				<td style="font-weight: bold;">{{$data['mtx'][$m]['netRevenue']}}</td>		
 			</tr>
 		@endfor			
 	@endif
