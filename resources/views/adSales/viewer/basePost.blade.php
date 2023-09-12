@@ -148,21 +148,10 @@
                 <span style="float: right; margin-right: 2.5%;">Data Current Through: <?php echo $bs->sourceCMAPS($source); ?></span>
             </div> 
             <div class="col-2">
-                @if($source == 'WBD')
-                    @if($year == '2023')
-                        <a href="https://warnermedia-my.sharepoint.com/:x:/g/personal/gabriela_queiroz_wbd_com/EY1NZ6_wXvtOpS9zPMxkNHUBZ1EqUyVXhNiYDcdLn4ivbA?download=1" class="btn btn-primary" style="width: 100%"> Generate Excel</a>
-                    @elseif($year == '2022')
-                        <a href="https://warnermedia-my.sharepoint.com/:x:/g/personal/gabriela_queiroz_wbd_com/Ea3gZGkCCeRMiTl6gUqKXgkBPZSwEQk28oHzKvOxq3UaLw?download=1" class="btn btn-primary" style="width: 100%"> Generate Excel</a>
-                    @elseif($year == '2021')
-                        <a href="https://warnermedia-my.sharepoint.com/:x:/g/personal/gabriela_queiroz_wbd_com/EWplZi1J8a9MksWd2Zw9N0cBiZO9rocY-CaQGdE5JuC9Fg?e=dsavCO?download=1" class="btn btn-primary" style="width: 100%"> Generate Excel</a>
-                    @elseif($year == '2020')
-                        <a href="https://warnermedia-my.sharepoint.com/:x:/g/personal/gabriela_queiroz_wbd_com/ETmmqcGR7lFHkMXq7qSpF5UBgwYibYt02nmkynIe_qwHdg?download=1" class="btn btn-primary" style="width: 100%"> Generate Excel</a>
-                    @endif
-                @else
                     <button type="button" id="excel" class="btn btn-primary" style="width: 100%">
                         Generate Excel
                     </button>
-                @endif               
+                
             </div>           
     	</div>
     </div>

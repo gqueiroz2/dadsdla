@@ -37,13 +37,6 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
 			AfterSheet::class => function(AfterSheet $event){
 				
 				$event->sheet->setShowGridlines(false);
-
-				if ($this->type != "Excel") {
-
-                    $event->sheet->getDelegate()->getPageSetup()
-                        ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
-                        ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
-                }
 			},
 		];
 	}
