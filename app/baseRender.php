@@ -281,7 +281,7 @@ class baseRender extends Render{
 						echo "<td class='rcBlue' style='width:3%;'>Order</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Pi Number</td>";
 						echo "<td class='rcBlue' style='width:3%;'>Property</td>";
-						echo "<td class='rcBlue' style='width:5%;'>Director</td>";
+						echo "<td class='rcBlue' style='width:5%;'>Core</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Current AE</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Gross Revenue</td>";
 						echo "<td class='rcBlue' style='width:5%;'>Net Revenue</td>";					
