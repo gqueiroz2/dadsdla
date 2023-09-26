@@ -61,6 +61,7 @@ class DailyExcelController extends Controller{
         //var_dump($total);
         $wm = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "wm", $currencyID);
         //var_dump($sony);
+        //$total[] = $disc + $sony + $wm;
 
         $month = $dr->getActiveMonth();
         $day = date('d', strtotime($log));

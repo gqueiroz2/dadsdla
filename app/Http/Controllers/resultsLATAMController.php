@@ -65,7 +65,7 @@ class resultsLATAMController extends Controller{
         $disc = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "discovery", $currencyID);
         $sony = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "sony", $currencyID);
         $wm = $dr->tableDailyResults($con, $regionID, $value, $log, $pRate, $brlPRate, "wm", $currencyID);
-
+       // $total = $disc + $wm + $sony;
         $month = $dr->getActiveMonth();
         $day = date('d', strtotime($log));
         $cYear = date('Y', strtotime($log));

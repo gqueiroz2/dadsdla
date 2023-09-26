@@ -35,7 +35,7 @@
     </tr>
     <tr>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> TV </td>
-        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][0]['currentYTD']}} </td>
+        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][$m][0]['currentYTD']+$data['wm'][$m][0]['currentYTD']+$data['sony'][$m][0]['currentYTD']}}</td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][0]['currentPlan']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][0]['currentFcst']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][0]['previousSS']}} </td>
@@ -50,7 +50,7 @@
 
     <tr>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> ONL </td>
-        <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][1]['currentYTD']}} </td>
+        <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][$m][1]['currentYTD']+$data['wm'][$m][1]['currentYTD']+$data['sony'][$m][1]['currentYTD']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][1]['currentPlan']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][1]['currentFcst']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][1]['previousSS']}} </td>
@@ -65,7 +65,7 @@
 
     <tr>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> TOTAL </td>
-        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][2]['currentYTD']}} </td>
+        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][$m][2]['currentYTD']+$data['wm'][$m][2]['currentYTD']+$data['sony'][$m][2]['currentYTD']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][2]['currentPlan']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][2]['currentFcst']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][$m][2]['previousSS']}} </td>
@@ -85,7 +85,7 @@
 
 <tr>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> TV </td>
-        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][0]['currentYTD']}} </td>
+        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][3][0]['currentYTD']+$data['wm'][3][0]['currentYTD']+$data['sony'][3][0]['currentYTD']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][0]['currentPlan']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][0]['currentFcst']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][0]['previousSS']}} </td>
@@ -100,7 +100,7 @@
 
     <tr>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> ONL </td>
-        <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][1]['currentYTD']}} </td>
+        <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][3][1]['currentYTD']+$data['wm'][3][1]['currentYTD']+$data['sony'][3][1]['currentYTD']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][1]['currentPlan']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][1]['currentFcst']}} </td>
         <td style="background-color: #f9fbfd; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][1]['previousSS']}} </td>
@@ -115,7 +115,7 @@
 
     <tr>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> TOTAL </td>
-        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][2]['currentYTD']}} </td>
+        <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['disc'][3][2]['currentYTD']+$data['wm'][3][2]['currentYTD']+$data['sony'][3][2]['currentYTD']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][2]['currentPlan']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][2]['currentFcst']}} </td>
         <td style="background-color: #e7eff9; color: #000000; font-weight: bold; text-align: center;"> {{$data['total'][3][2]['previousSS']}} </td>

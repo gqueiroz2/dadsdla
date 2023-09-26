@@ -52,11 +52,7 @@ class DailyResults extends Model{
             if ($value == "gross") {
                 $value = "gross_value";
             }elseif ($value == "net net") {
-                if ($currencyID == 1) {
-                    $value = "net_value";
-                }else{
-                    $value = "gross_value";
-                }                   
+                $value = "gross_value";
             }else {
                 $value = "net_value";
             }
@@ -67,24 +63,32 @@ class DailyResults extends Model{
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16,25,26,34,48,49,50,55,58,60,62,67,68,69,70) AND year = $year AND month = $month";
                     //var_dump($querryONL);
+
+                    $mult = 1;
                     break;
                 case "discovery":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33,71,72,73,74) AND year = $year AND month = $month";
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (9,10,13,14,15,16) AND year = $year AND month = $month";
-                    //var_dump($querryONL);
+                    
+                    $mult = 0.72650;
+
                     break;
                 case "sony":
                     $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (22, 23) AND year = $year AND month = $month";
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (25, 26,60) AND year = $year AND month = $month";
-                    //var_dump($querryONL);
+                    
+                    $mult = 0.71960;
+
                     break;
                 case "wm":
-                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,56,57,59,61) AND year = $year AND month = $month";
+                    $querryTV = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id  IN  (35,36,37,38,39,40,41,42,43,44,45,46,47,51,52,53,54,56,57,59,61,75) AND year = $year AND month = $month";
                     //var_dump($querryTV);
                     $querryONL = "SELECT SUM($value) AS $value FROM $regionYtd WHERE brand_id IN (34,48,49,50,62,63,64,65,66,67,68,69,70) AND year = $year AND month = $month";
-                    //var_dump($querryONL);
+
+                    $mult = 0.71320;
+                    
                     break;
             }
             
@@ -113,12 +117,11 @@ class DailyResults extends Model{
                 $monthValues = array($valueTV[$value] / $pRateWM, $valueONL[$value] / $pRateWM, ($valueTV[$value] + $valueONL[$value]) / $pRateWM);
             }
         }
-
         if ($valueView == 'net net' && $currencyID == 1) {
-            $monthValues = array((($valueTV[$value]) * 0.8915), (($valueONL[$value]) * 0.8915), ((($valueTV[$value] + $valueONL[$value])) * 0.8915));   
+            $monthValues = array((($valueTV[$value]) * $mult), (($valueONL[$value]) * $mult), ((($valueTV[$value] + $valueONL[$value])) * $mult));   
            // var_dump($monthValues);
         }elseif ($currencyID != 1 && $valueView == 'net net') {
-            $monthValues = array((($valueTV[$value]) * 0.14162005), (($valueONL[$value]) * 0.14162005), ((($valueTV[$value] + $valueONL[$value])) * 0.14162005));
+            $monthValues = array((($valueTV[$value]) * $mult), (($valueONL[$value]) * $mult), ((($valueTV[$value] + $valueONL[$value])) * $mult));
         }
        
         return $monthValues;
@@ -138,24 +141,31 @@ class DailyResults extends Model{
                 //var_dump($querryTV);
                 $querryONL = "SELECT SUM(read_dsc_onl + read_spt_onl + read_wm_onl) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryONL);
+                $mult = 1;
                 break;
             case "discovery":
                 $querryTV = "SELECT SUM(read_dsc_tv) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryTV);
                 $querryONL = "SELECT SUM(read_dsc_onl) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                //var_dump($querryONL);
+                  
+                $mult = 0.72650;
+
                 break;
             case "sony":
                 $querryTV = "SELECT SUM(read_spt_tv) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryTV);
                 $querryONL = "SELECT SUM(read_spt_onl) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                //var_dump($querryONL);
+                 
+                $mult = 0.71960;
+
                 break;
             case "wm":
                 $querryTV = "SELECT SUM(read_wm_tv) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
                 //var_dump($querryTV);
                 $querryONL = "SELECT SUM(read_wm_onl) AS '$value' FROM $regionYtd WHERE real_date = '$date' AND month = '$month'";
-                //var_dump($querryONL);
+                
+                $mult = 0.71320;
+                    
                 break;
         }
         
@@ -179,10 +189,10 @@ class DailyResults extends Model{
             $monthValues = array($valueTV[$value] * $pRate, $valueONL[$value] * $pRate, ($valueTV[$value] + $valueONL[$value]) * $pRate);
         }elseif($valueView == 'net net' && $currencyID == 1) {
             //var_dump($valueTV[$value]);
-             $monthValues = array((($valueTV[$value]) * 0.8) * 0.8915, (($valueONL[$value]) * 0.8) * 0.8915, ((($valueTV[$value] + $valueONL[$value])) * 0.8) * 0.8915);
+             $monthValues = array(($valueTV[$value]) * $mult, ($valueONL[$value]) * $mult, (($valueTV[$value] + $valueONL[$value])) * $mult);
             //$monthValues = array(($valueTV[$value] / $pRate) , ($valueONL[$value] / $pRate) * 0.8915, (($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.8915);   
         }if ($currencyID != 1 && $valueView == 'net net') {
-            $monthValues = array((($valueTV[$value])) * 0.14162005, (($valueONL[$value])) * 0.14162005, (($valueTV[$value] + $valueONL[$value])) * 0.14162005);
+            $monthValues = array((($valueTV[$value])) * $mult, (($valueONL[$value])) * $mult, (($valueTV[$value] + $valueONL[$value])) * $mult);
             //$monthValues = array(($valueTV[$value] / $pRate) * 0.14162005, ($valueONL[$value] / $pRate) * 0.14162005, (($valueTV[$value] + $valueONL[$value]) / $pRate) * 0.14162005);
         }
        

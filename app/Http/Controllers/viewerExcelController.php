@@ -28,8 +28,10 @@ class viewerExcelController extends Controller {
 	    $db =  new dataBase();
 	    $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-
+        $base = new base();
 	    $sql = new sql();
+        $objPHPExcel = new Spreadsheet();
+
 
 	    $region = Request::get("regionExcel");
         $r = new region();
@@ -73,7 +75,7 @@ class viewerExcelController extends Controller {
         }else{
             $checkEspecificNumber = false;
         }
-        
+
         $checkClient = false; 
 
 	    $viewer = new viewer();
@@ -90,7 +92,6 @@ class viewerExcelController extends Controller {
         $total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
         
         $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
-
         $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total, 'regions' => $regions, 'currencies' => $currencies, "userRegion" => $userRegion);
 
         $label = "exports.viewer.base.baseExport";
