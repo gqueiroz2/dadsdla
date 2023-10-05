@@ -266,7 +266,52 @@ class DailyResults extends Model{
 
         return $month;
     }
+    /*this function is to mke the total table, because the companies needs individual calculations before the consolidated total
+    public function makeTotal($disc,$sony,$wm){
+        
+        $table = array();
 
+        $anualYTD[][] = array();
+        $anualPLAN[][] = array();
+        $anualFCST[][] = array();
+        $anualSAP[][] = array();
+        $anualPSAP[][] = array();
+        $anualSs[][] = array();
+
+        for ($m=0; $m < 3; $m++) { //this for is month indicate
+           for ($t=0; $t < 3; $t++) { //this is the index between tv, onl and total(in this order)
+                $monthYTD[$m][$t] = $disc[$m][$t]['currentYTD'] + $sony[$m][$t]['currentYTD'] + $wm[$m][$t]['currentYTD'];
+                $monthPLAN[$m][$t] = $disc[$m][$t]['currentPlan'] + $sony[$m][$t]['currentPlan'] + $wm[$m][$t]['currentPlan'];
+                $monthFCST[$m][$t] = $disc[$m][$t]['currentFcst'] + $sony[$m][$t]['currentFcst'] + $wm[$m][$t]['currentFcst'];
+                $monthSAP[$m][$t] = $disc[$m][$t]['previousSap'] + $sony[$m][$t]['previousSap'] + $wm[$m][$t]['previousSap'];
+                $monthPSAP[$m][$t] = $disc[$m][0]['pPSap'] + $sony[$m][$t]['pPSap'] + $wm[$m][$t]['pPSap'];     
+                $monthSs[$m][$t] = $disc[$m][$t]['previousSS'] + $sony[$m][$t]['previousSS'] + $wm[$m][$t]['previousSS']; 
+
+                $monthPerSs = $this->percentageCalculator($monthYTD[$m][$t],$monthSs[$m][$t]);;
+                $monthPerPLAN = $this->percentageCalculator($monthYTD[$m][$t],$monthPLAN[$m][$t]);
+                $monthPerFCST = $this->percentageCalculator($monthYTD[$m][$t],$monthFCST[$m][$t]);
+                $monthPerSAP = $this->percentageCalculator($monthYTD[$m][$t],$monthSAP[$m][$t]);
+                $monthPerPSAP = $this->percentageCalculator($monthYTD[$m][$t],$monthPSAP[$m][$t]);  
+
+                $monthCalcs = array("currentYTD" => $monthYTD, 
+                                    "currentPlan" => $monthPLAN, 
+                                    "currentFcst" => $monthFCST, 
+                                    "previousSS" => $monthSs, 
+                                    "previousSap" => $monthSAP, 
+                                    "pPSap"  => $monthPSAP, 
+                                    "currentPlanPercent" => $monthPerPLAN, 
+                                    "currentFcstPercent" => $monthPerFCST, 
+                                    "ssPercent" => $monthPerSs, 
+                                    "pSapPercent" => $monthPerSAP, 
+                                    "ppSapPercent" => $monthPerPSAP);  
+                array_push($table, $monthCalcs);
+           }
+        }
+        
+       
+    var_dump($table);
+        //return $table;
+    }*/
     // == Função construtora de matriz, ela é a responsavel em enviar para o front-end o formato final da tabela com os calculos realizados == //
     public function tableDailyResults($con, Int $region, String $value, String $log, Float $pRate, Float $brlPRate, String $brands, Int $currencyID){
         $sql = new sql();

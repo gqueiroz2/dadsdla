@@ -114,7 +114,7 @@
 							 	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px;  border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> {{$monthForm}} </td>
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format(($disc[$m][0]['currentYTD']+$wm[$m][0]['currentYTD']+$sony[$m][0]['currentYTD']),0,',','.')}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format(($total[$m][0]['currentYTD']),0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['currentPlan'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[$m][0]['currentFcst'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[$m][0]['previousSS'],0,',','.')}} </td>
@@ -128,7 +128,7 @@
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format(($disc[$m][1]['currentYTD']+$wm[$m][1]['currentYTD']+$sony[$m][1]['currentYTD']),0,',','.')}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format(($total[$m][1]['currentYTD']),0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[$m][1]['currentPlan'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[$m][1]['currentFcst'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[$m][1]['previousSS'],0,',','.')}}</td>
@@ -142,7 +142,7 @@
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> TOTAL</td>
-						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format(($disc[$m][2]['currentYTD']+$wm[$m][2]['currentYTD']+$sony[$m][2]['currentYTD']),0,',','.')}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format(($total[$m][2]['currentYTD']),0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($total[$m][2]['currentPlan'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;"> {{number_format($total[$m][2]['currentFcst'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; "> {{number_format($total[$m][2]['previousSS'],0,',','.')}} </td>
@@ -160,7 +160,7 @@
 					    	<td class="oddGrey center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px;" rowspan="4"> (JAN-{{$actualMonth}})  </td>
 					    	<tr>
 					    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;"> TV </td>
-						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format(($disc[3][0]['currentYTD']+$wm[3][0]['currentYTD']+$sony[3][0]['currentYTD']),0,',','.')}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format(($total[3][0]['currentYTD']),0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['currentPlan'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 1px 0px 0px;"> {{number_format($total[3][0]['currentFcst'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"> {{number_format($total[3][0]['previousSS'],0,',','.')}} </td>
@@ -174,7 +174,7 @@
 						    	</tr>
 						    	<tr>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> ONL </td>
-						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format(($disc[3][1]['currentYTD']+$wm[3][1]['currentYTD']+$sony[3][1]['currentYTD']),0,',','.')}} </td>
+						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format(($total[3][1]['currentYTD']),0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[3][1]['currentPlan'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 0px 0px;">{{number_format($total[3][1]['currentFcst'],0,',','.')}} </td>
 						    		<td class="even center" style="width: 7% !important;  font-size: 16px;"> {{number_format($total[3][1]['previousSS'],0,',','.')}}</td>
@@ -188,7 +188,7 @@
 						    	</tr>				    	
 						    	<tr>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px;"> TOTAL</td>
-						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format(($disc[3][2]['currentYTD']+$wm[3][2]['currentYTD']+$sony[3][2]['currentYTD']),0,',','.')}} </td>
+						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format(($total[3][2]['currentYTD']),0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['currentPlan'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style: solid; border-color:black; border-width: 0px 1px 1px 0px;"> {{number_format($total[3][2]['currentFcst'],0,',','.')}} </td>
 						    		<td class="odd center" style="width: 7% !important;  font-size: 16px; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;"> {{number_format($total[3][2]['previousSS'],0,',','.')}} </td>
