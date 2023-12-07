@@ -18,6 +18,9 @@ use App\cmaps;
 
 use App\viewer;
 use App\insights;
+use App\packets;
+use App\pipeline;
+
 
 use App\sql;
 use App\pRate;
@@ -345,4 +348,310 @@ class viewerController extends Controller{
 
 	}
 
+
+    public function packetsGet(){
+        $bs = new base();
+
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $base = new base();
+
+        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+        $render = new Render();
+
+        $r = new region();
+        $region = $r->getRegion($con, NULL);
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $p = new packets();
+
+        return view("adSales.viewer.packetsGet",compact("render","years","region","brand","base"));
+    }
+
+    public function packetsPost(){
+       // var_dump(Request::all());
+
+        $render =  new Render();
+        $inRender =  new insightsRender();
+        $base = new base();
+        $sr = new salesRep();
+        $months = $base->month;
+
+        $in = new insights();
+
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $sql = new sql();
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $totalPerPacket = 0;
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
+
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        //var_dump($rep);
+        $r = new region();
+
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $p = new packets();
+
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql);
+
+        if ($table != false) {
+            $totalPerPacket = $p->makeTotal($table);
+
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
+            }
+        }
+
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+
+    }
+
+    public function savePackets(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $p = new packets();
+        $render =  new Render();
+        $inRender =  new insightsRender();
+        $base = new base();
+        $sr = new salesRep();
+        $r = new region();
+        $months = $base->month;
+        $b = new brand();
+        $brand = $b->getBrand($con);
+        $p = new packets();        
+
+        $sql = new sql();
+        $totalPerPacket = 0;
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
+
+        $saveInfo = Request::all();
+        unset($saveInfo['_token']);
+        //var_dump($saveInfo);
+        if ($saveInfo['newClient'] != null) {
+            $p->insertNewLines($con,$sql,$saveInfo);    
+        }
+
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $table = $p->table($con,$sql);
+
+        if ($table != false) {
+            if (!$saveInfo['newClient']) {
+                for ($t=0; $t <sizeof($table) ; $t++) { 
+                    $saveInfo['tv-'.$t] = str_replace('.', '', $saveInfo['tv-'.$t]);
+                    $saveInfo['digital-'.$t] = str_replace('.', '', $saveInfo['digital-'.$t]);
+
+
+                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['holding-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['segment-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['payment-'.$t],$saveInfo['installments-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                }
+            }
+            //var_dump($table);
+        
+            $totalPerPacket = $p->makeTotal($table);
+
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
+            }
+        }
+        
+        $table = $p->table($con,$sql);
+
+        $region = $r->getRegion($con,null);
+        ///var_dump($salesRegion);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];     
+
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        
+        $info = $p->getOptions($con);
+        //var_dump($table);
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+
+    }
+
+     public function pipelineGet(){
+        $bs = new base();
+
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $base = new base();
+
+        $years = array( $cYear = intval(date('Y')) , $cYear - 1 );     
+        $render = new Render();
+
+        $r = new region();
+        $region = $r->getRegion($con, NULL);
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $p = new pipeline();
+
+        return view("adSales.viewer.pipelineGet",compact("render","years","region","brand","base"));
+    }
+
+    public function pipelinePost(){
+       // var_dump(Request::all());
+
+        $render =  new Render();
+        $inRender =  new insightsRender();
+        $base = new base();
+        $sr = new salesRep();
+        $months = $base->month;
+
+        $in = new insights();
+
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $sql = new sql();
+
+        $validator = Validator::make(Request::all(),[
+            'region' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $totalPerPacket = 0;
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
+
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        //var_dump($rep);
+        $r = new region();
+
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $p = new pipeline();
+
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql);
+        //var_dump($info);
+        //var_dump($table);
+        if ($table != false) {
+            $totalPerPacket = $p->makeTotal($table);
+
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
+            }
+        }
+
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+
+    }
+
+    public function savePipeline(){
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $p = new pipeline();
+        $render =  new Render();
+        $inRender =  new insightsRender();
+        $base = new base();
+        $sr = new salesRep();
+        $r = new region();
+        $months = $base->month;
+        $b = new brand();
+        $brand = $b->getBrand($con);
+
+        $sql = new sql();
+
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
+
+        $saveInfo = Request::all();
+        unset($saveInfo['_token']);
+        
+        if ($saveInfo['newClient'] != null) {
+            $p->insertNewLines($con,$sql,$saveInfo);    
+        }
+        
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $table = $p->table($con,$sql);
+
+        if ($table != false) {
+            if (!$saveInfo['newClient']) {
+                for ($t=0; $t <sizeof($table) ; $t++) { 
+                    $saveInfo['tv-'.$t] = str_replace('.', '', $saveInfo['tv-'.$t]);
+                    $saveInfo['digital-'.$t] = str_replace('.', '', $saveInfo['digital-'.$t]);
+
+
+                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['product-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                }
+            }
+                       
+            $table = $p->table($con,$sql);
+
+        
+            $totalPerPacket = $p->makeTotal($table);
+
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
+            }
+        }
+
+        $region = $r->getRegion($con,null);
+        ///var_dump($salesRegion);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];     
+
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        
+        $info = $p->getOptions($con);
+        //var_dump($table);
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+
+    }
 }

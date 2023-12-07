@@ -42,31 +42,30 @@ class forecastController extends Controller{
 
     public function byAEPost(){
     	$db = new dataBase();
-        $render = new forecastRender();
-        $base = new base();
+        $b = new base();
         $r = new region();
         $pr = new pRate();
-        $fcst = new forecast();        
+        $fcst = new forecast();
+        $sr = new salesRep();
+        $render = new PAndRRender();   
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
         $cYear = intval( Request::get('year') );
         $pYear = $cYear - 1;
         $region = $r->getRegion($con,false);
-        $currency = $pr->getCurrency($con,false);
-
-        $typeMsg = false;
-        $msg = "";
-
+        $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
-        $regionName = Request::session()->get('userRegion');
         $user = Request::session()->get('userName');
 
         $regionID = Request::get('region');
-        $salesRepID = array( Request::get('salesRep') );
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
-
+        $salesRepID = Request::get('salesRep');
+        $currencyID = '1'; 
+        $value = 'gross';
+        $regionName = Request::session()->get('userRegion');
+        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+        $list = $fcst->listOFClients($con, $cYear);
+        //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
             'year' => 'required',
@@ -74,249 +73,150 @@ class forecastController extends Controller{
             'value' => 'required',
             'salesRep' => 'required'
         ]);
-
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+        /*if ($salesRepID == '59') {
+            $salesRepID = '59,7,132,224';
+        }elseif ($salesRepID == '222') {
+            $salesRepID = '8,221,222';
+        }elseif ($salesRepID == '9') {
+            $salesRepID = '9,137';
+        }*/
 
-        $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
-        $forRender = $tmp;
-        //var_dump($forRender['salesRep']['region']);
 
-        $regionExcel = $regionID;
-        $salesRepExcel = Request::get('salesRep');
-        $valueExcel = $value;
-        $currencyExcel = $currencyID;
-        $yearExcel = $cYear;
-        $userRegionExcel = $regionName;
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
+        //var_dump($salesRepID);
 
-        $titleExcel = "PandR - AE.xlsx";
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']); 
+        //var_dump($newClientsTable);
+        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);
+        
        
-        return view('pAndR.forecastByAE.post',compact('render','region','currency','forRender','msg','typeMsg', 'regionExcel', 'salesRepExcel','valueExcel', 'currencyExcel','yearExcel','userRegionExcel', 'titleExcel'));
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID', 'cYear','pYear','list','newClientsTable'));
 
     }
 
     public function byAESave(){
         $db = new dataBase();
-        $sql = new sql();
-        $pr = new pRate();
+        $b = new base();
         $r = new region();
+        $pr = new pRate();
         $fcst = new forecast();
-        $base = new base();
-        $render = new PAndRRender();
-        $excel = new excel();
-
+        $sr = new salesRep();
+        $render = new PAndRRender();   
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
-
-        $user = Request::session()->get('userName');
+        $saveInfo = Request::all();
+        $sql =  new sql();
+        
+        $cYear = date('Y');
+        $pYear = $cYear - 1;
+        $region = $r->getRegion($con,false);
+        $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
+        $currentMonth = date('n');
+        $regionID = 1;
+        $salesRepID = Request::get('salesRep');
+        $currencyID = '1';
+        $value = 'gross';
 
-        $region = $r->getRegion($con,null);
-        $currency = $pr->getCurrency($con,null);
+        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+        
+        $list = $fcst->listOFClients($con, $cYear);       
 
-        $regionID = json_decode( base64_decode( Request::get('region') ));
-        $salesRep = json_decode( base64_decode( Request::get('salesRep') ));
-        $currencyID = json_decode( base64_decode( Request::get('currency') ));
-        $value = json_decode( base64_decode( Request::get('value') ));
-        $user = json_decode( base64_decode( Request::get('user') ));
-        $year = json_decode( base64_decode( Request::get('year') ));
-        $brandPerClient = json_decode( base64_decode (Request::get ('brandsPerClient') ));
-        $splitted = json_decode( base64_decode( Request::get('splitted') ));
-        $submit = Request::get('options');
+        $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $cYear, $pYear);
+        //print_r($saveInfo);
 
-        $sourceSave = Request::get('sourceSave');
+        $company = array('3','1','2');
+        $month = date('F');
+        $intMonth = date('n');
+        $check = $fcst->checkForecast($con, $salesRepID);//check if exists forecast for this rep in database
 
-        $salesRepID = $salesRep->id;
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);  
 
-        $currentMonth = intval(date('m')) -1;
-
-
-        $date = date('Y-m-d');
-        $time = date('H:i');
-        $fcstMonth = date('m');
-        $month = $base->month;
-        $monthWQ = $base->monthWQ;        
-
-        $client = json_decode( base64_decode( Request::get('client') ) );
-
-        for ($m=0; $m < sizeof($monthWQ); $m++) { 
-            $manualEstimantionBySalesRep[$m] = $excel->fixExcelNumberWithComma(Request::get("fcstSalesRep-$m"));
-        }
-
-        unset($manualEstimantionBySalesRep[3]);
-        unset($manualEstimantionBySalesRep[7]);
-        unset($manualEstimantionBySalesRep[11]);
-        unset($manualEstimantionBySalesRep[15]);
-
-        $manualEstimantionBySalesRep = array_values($manualEstimantionBySalesRep);
-
-
-
-        for ($c=0; $c < sizeof($client); $c++) { 
-            for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                //var_dump(Request::get("fcstClient-DISC-$c-$m"));
-                if (Request::get("fcstClient-DISC-$c-$m") == null) {
-                    $manualEstimantionByClientDISC[$c][$m] = '0';    
-                }else{
-                    $manualEstimantionByClientDISC[$c][$m] = str_replace(',', '',Request::get("fcstClient-DISC-$c-$m"));     
-                }                
-            }
-        }
-
-        for ($c=0; $c < sizeof($client); $c++) { 
-            for ($m=0; $m < sizeof($monthWQ); $m++) { 
-                if (Request::get("fcstClient-SONY-$c-$m") == null) {
-                    $manualEstimantionByClientSONY[$c][$m] = '0';    
-                }else{
-                    $manualEstimantionByClientSONY[$c][$m] = str_replace(',', '',Request::get("fcstClient-SONY-$c-$m"));    
-                }
-            }
-        }
-
-        $holderDISC = $manualEstimantionByClientDISC;
-        $holderSONY = $manualEstimantionByClientSONY;
-
-        for ($c=0; $c < sizeof($client); $c++) { 
+        if($saveInfo['newClient']){            
+            $newAgency = $saveInfo['newAgency'];
+            $newClient = $saveInfo['newClient'];
+            $newProbability = $saveInfo['newProbability'];
             
-            unset($holderDISC[$c][3]);
-            unset($holderDISC[$c][7]);
-            unset($holderDISC[$c][11]);
-            unset($holderDISC[$c][15]);
+            $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'digital',$newProbability,$intMonth);
+            $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'pay tv',$newProbability,$intMonth);
 
-            $holderDISC[$c] = array_values($holderDISC[$c]);
+            $fcst->checkClient($con,$sql,$newClient,$salesRepName[0]['salesRep']);           
 
-            unset($holderSONY[$c][3]);
-            unset($holderSONY[$c][7]);
-            unset($holderSONY[$c][11]);
-            unset($holderSONY[$c][15]);
-
-            $holderSONY[$c] = array_values($holderSONY[$c]);
         }
 
-        $somaSeTemFcst = 0.0;
-
+        $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName[0]['salesRep']);
+        //var_dump($newClientsTable);
+        //ta funcionando
+       // var_dump($newClient);
+        $companyName = array('wm','dc','spt');
         
+        $checkNew = $fcst->checkForecastNew($con, $salesRepID);//check if exists forecast for this rep in database
+        
+        for ($a=0; $a <sizeof($clients) ; $a++) { 
+            $client = $saveInfo['client-'.$a];
+            $agency = $saveInfo['agency-'.$a];
+            $probability = (int) $saveInfo['probability-'.$a];
 
-        for ($h=0; $h < sizeof($holderDISC); $h++) { 
-            for ($i=0; $i < sizeof($holderDISC[$h]); $i++) { 
-                if($i >= $currentMonth){
-                    //var_dump($holderDISC[$h][$i]);
-                    $somaSeTemFcst += $holderDISC[$h][$i];
-                }
+            for ($c=0; $c <sizeof($company) ; $c++) { 
+                $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month]);
+                $digitalForecast[$a][$c] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month]);
+
+                $fcst->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth, $salesRepID, 'pay tv',$payTvForecast[$a][$c],$currencyID,$probability,$check);
+                
+                //insere valores de digital
+                $fcst->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth, $salesRepID, 'digital',$digitalForecast[$a][$c],$currencyID,$probability,$check);
+                
             }
         }
 
-        for ($h=0; $h < sizeof($holderSONY); $h++) { 
-            for ($i=0; $i < sizeof($holderSONY[$h]); $i++) { 
-                if($i >= $currentMonth){
-                    $somaSeTemFcst += $holderSONY[$h][$i];
-                }
-            }
-        }
+        if ($newClientsTable != null) {
+            for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
+                $clientN = $saveInfo['clientNew-'.$t];
+                $agencyN = $saveInfo['agencyNew-'.$t];
+                $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
 
-        
-        if($somaSeTemFcst <= 0 ){
-            
-            $msg = "No FCST Value to Submit";
-
-            if($value == "Gross"){$value = "gross";}else{$value = "net";}
-
-            $forRender = $fcst->baseSaved($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
-
-            $region = $r->getRegion($con,false);
-            $currency = $pr->getCurrency($con,false);
-
-            $client = $forRender['client'];
-            $tfArray = array();
-            $odd = array();
-            $even = array();
-            $error = "Cannot Submit, There is no forecast on CRM Discovery (Sales Force)";
-        
-            return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
-            
-        }
-
-        
-        //FUNÇÃO RESPONSÁVEL POR VALIDAR DE O MANUAL ESTIMATION CORRESPONDE AO ROLLINGFCST, REVALIDAR PARA FUTURO AO SER IMPLEMENTADO
-
-        for ($c=0; $c < sizeof($client); $c++) { 
-            $passTotal[$c] = $excel->fixExcelNumberWithComma(Request::get("passTotal-$c"));
-            $totalClient[$c] = $excel->fixExcelNumberWithComma(Request::get("totalClient-$c"));
-            if ($passTotal[$c] != $totalClient[$c] && $submit == "submit" && ($splitted == false || ($splitted == true && $splitted[$c]->splitted == true && $splitted[$c]->owner == true) || $splitted[$c]->splitted == false) ) {
-                $msg = "Incorrect value submited";
-
-                if ($value == "Gross") {
-                    $value = "gross";
-                }else{
-                    $value = "net";
+                for ($c=0; $c <sizeof($company) ; $c++) { 
+                    $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$month]);
+                    $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$month]);
+                    
                 }
 
-                $forRender = $fcst->baseSaved($con,$r,$pr,$year,$regionID,$salesRep->id,$currencyID,$value,$manualEstimantionByClient);
-
-                $region = $r->getRegion($con,false);
-                $currency = $pr->getCurrency($con,false);
-
-                $client = $forRender['client'];
-                $tfArray = array();
-                $odd = array();
-                $even = array();
-
-                $error = "Cannot Submit, Manual Estimation does not match with Rolling FCST";
-        
-                //return view('pAndR.AEView.post',compact('render','region','currency','forRender','client',"tfArray","odd","even", "error","sourceSave"));
-
+                $fcst->saveForecastNew($con, $clientN, $agencyN, $cYear, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
+                    
+                //insere valores de digital
+                $fcst->saveForecastNew($con, $clientN, $agencyN, $cYear, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
             }
         }
-        //TERMINO DA FUNÇÃO
         
-
-        for ($c=0; $c < sizeof($client); $c++) { 
+       /* for ($z=0; $z <sizeof($newClient) ; $z++) { 
             
-            unset($manualEstimantionByClientDISC[$c][3]);
-            unset($manualEstimantionByClientDISC[$c][7]);
-            unset($manualEstimantionByClientDISC[$c][11]);
-            unset($manualEstimantionByClientDISC[$c][15]);
+            
 
-            $manualEstimantionByClientDISC[$c] = array_values($manualEstimantionByClientDISC[$c]);
 
-            unset($manualEstimantionByClientSONY[$c][3]);
-            unset($manualEstimantionByClientSONY[$c][7]);
-            unset($manualEstimantionByClientSONY[$c][11]);
-            unset($manualEstimantionByClientSONY[$c][15]);
+            
 
-            $manualEstimantionByClientSONY[$c] = array_values($manualEstimantionByClientSONY[$c]);
-        }
-
-        $today = $date;
-
-        if($submit == "submit"){ $type = "salve";}else{$type = "save";}
-
-        $read = $fcst->weekOfMonth($today);
-        $read = "0".$read;
-        $ID = $fcst->generateID($con,$sql,$pr,$type,$regionID,$year,$salesRep,$currencyID,$value,$read,$fcstMonth);        
-        $currency = $pr->getCurrencybyName($con,$currencyID);
+        }*/
         
-        $bool = $fcst->insertUpdate($con,$ID,$regionID,$salesRep,$currency,$value,$user,$year,$read,$date,$time,$fcstMonth,$manualEstimantionBySalesRep,$manualEstimantionByClientDISC,$manualEstimantionByClientSONY,$client,$splitted,$submit,$brandPerClient);
 
+        /*if ($newClient != null)  {
+            $clients = array_merge($clients,$newClient);
+            $clients = array_values($clients);
+        }*/      
         
-        if ($bool == "Updated") {
-            $msg = "Forecast Updated";
-            $typeMsg = "Success";
-            return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-        }elseif($bool == "Created"){
-            $msg = "Forecast Created";
-            $typeMsg = "Success";
-            return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-        }elseif ($bool == "Already Submitted") {
-            $msg = "You already have submitted the Forecast";
-            $typeMsg = "Error";
-            return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-        }else{
-            $msg = "Error";
-            $typeMsg = "Error";            
-            return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
-        }
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
+
+        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);   
+
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);  
+        //var_dump($newClientsTable['companyValues'][0]);
+        $title = "Forecast.xlsx";
+        $titleExcel = "Forecast.xlsx";
+        
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list','newClientsTable'));
         
     }
 }

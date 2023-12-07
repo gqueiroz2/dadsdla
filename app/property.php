@@ -20,7 +20,7 @@ class property extends pAndR{
         
         $client = $this->getClientByProperty($con,null,$cYear,$pYear,$salesRepID);        
         
-        for ($c=0; $c <sizeof($client) ; $c++) { 
+       /* for ($c=0; $c <sizeof($client) ; $c++) { 
             for ($m=0; $m <sizeof($intMonth); $m++) { 
                 $digitalCurrentBookings[$c][$m] = $this->getValue($con, $client[$c]['clientID'],$client[$c]['agencyID'],$client[$c]['property'], $cYear, $salesRepID,$value,'bookings',$client[$c]['cluster'],$intMonth[$m],'Non-Linear');
                 $payTvCurrentBookings[$c][$m] = $this->getValue($con, $client[$c]['clientID'],$client[$c]['agencyID'],$client[$c]['property'], $cYear, $salesRepID,$value,'bookings',$client[$c]['cluster'],$intMonth[$m],'Linear');    
@@ -28,13 +28,13 @@ class property extends pAndR{
                 $payTvPreviousBookings[$c][$m] = $this->getValue($con, $client[$c]['clientID'],$client[$c]['agencyID'],$client[$c]['property'], $pYear, $salesRepID,$value,'bookings',$client[$c]['cluster'],$intMonth[$m],'Linear');        
             }
             
-        }
+        }*/
 
         //var_dump($currentBookings);
        // var_dump($previousBookings);
-        $table = array('currentPayTv' => $payTvCurrentBookings, 'previousPayTv' => $payTvPreviousBookings,'currentDigital' => $digitalCurrentBookings, 'previousDigital' => $digitalPreviousBookings, 'property' => $property, 'client' => $client);
+        //$table = array('currentPayTv' => $payTvCurrentBookings, 'previousPayTv' => $payTvPreviousBookings,'currentDigital' => $digitalCurrentBookings, 'previousDigital' => $digitalPreviousBookings, 'property' => $property, 'client' => $client);
 
-        return $table;
+        //return $table;
     }
 
     public function getValue(Object $con, String $client,String $agency,String $property, Int $year, Int $salesRep, String $value, String $table, String $cluster, Int $month, String $platform){
@@ -96,7 +96,7 @@ class property extends pAndR{
                     AND w.property != ''
                     AND sr.ID = $salesRep
                     ";
-                //echo "<pre>$selectWBD</pre>";
+                echo "<pre>$selectWBD</pre>";
         $fromWBD = array('clientID','clientName','agencyID','agencyName','salesRep','property', 'company','cluster');
         $queryWBD = $con->query($selectWBD);
         $resultWBD = $sql->fetch($queryWBD, $fromWBD, $fromWBD);
@@ -145,4 +145,6 @@ class property extends pAndR{
 
         return $result;
     }
+
+    
 }

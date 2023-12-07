@@ -80,6 +80,6 @@ class propertyController extends Controller
         $table = $prop->makeRepTable($con, $cYear, $pYear, $salesRepID, $value);
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
         //var_dump($table);
-       return view('pAndR.propertyView.post',compact('render','region','currencyID','salesRepName','currency','value','salesRepID','cYear','pYear','table','intMonth'));
+       //return view('pAndR.propertyView.post',compact('render','region','currencyID','salesRepName','currency','value','salesRepID','cYear','pYear','table','intMonth'));
     }
 }

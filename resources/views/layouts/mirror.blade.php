@@ -174,6 +174,8 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 										<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
 										@if($userLevel == 'SU')
+											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Packets </a>	
+											<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline </a>										
 											<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
 										@endif
 									</div>
@@ -186,9 +188,9 @@
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 											<!--<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE View </a>-->
 											<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
-											<a class="dropdown-item" href="{{ route('propertyGet') }}"> Property View </a>
-											<!--<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> MT View </a>-->											
-										<!--<a class="dropdown-item"> AE - Forecast </a>-->							
+											<!--<a class="dropdown-item" href="{{ route('propertyGet') }}"> Property View </a>
+											 <a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> MT View </a>-->											
+											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>						
 										
 								</li>
 								<!--<li class="nav-item dropdown">

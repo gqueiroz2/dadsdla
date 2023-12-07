@@ -321,7 +321,7 @@ class CheckElements extends Model{
 			//var_dump($selectDistinctFM);
 		}elseif ($table == "wbd") {
 			$selectDistinctFM = "SELECT DISTINCT client FROM $table ORDER BY client";
-			//var_dump($selectDistinctFM);
+			var_dump($selectDistinctFM);
 		}else{
 			$selectDistinctFM = "SELECT DISTINCT client,sales_representant_office FROM $table
 												WHERE (sales_representant_office = '".$seekRegion['name']."')
@@ -333,6 +333,7 @@ class CheckElements extends Model{
 
 		if($table == "cmaps" || $table == "wbd"){
 			$resultsFM = $sql->fetch($res,array("client"),array("client"));
+			//var_dump($resultsFM);
 		}elseif ($table == "forecast") {
 			$resultsFM = $sql->fetch($res,array("client_id"),array("client_id"));
 		}elseif($table == "fw_digital" || $table == "sf_pr" || $table == "sf_pr_brand"){
