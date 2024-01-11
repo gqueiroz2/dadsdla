@@ -80,7 +80,7 @@ class base extends Model{
 
         $sql = new sql();
 
-        $select = "SELECT * FROM sources_date WHERE (source != 'FW' ) AND (source != 'INSIGHTS')";
+        $select = "SELECT * FROM sources_date WHERE (source = 'ALEPH / WBD') ";
 
         $res = $con->query($select);
 
