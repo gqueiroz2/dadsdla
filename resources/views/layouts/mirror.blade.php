@@ -176,7 +176,6 @@
 										@if($userLevel == 'SU')
 											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Packets </a>	
 											<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline </a>										
-											<a class="dropdown-item" href="{{ route('insightsGet') }}"> Insights </a>
 										@endif
 									</div>
 								</li>

@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\base;
 use App\brand;
 use App\region;
+use App\salesRep;
 
 use App\viewer;
 use App\insights;
+use App\packets;
+use App\pipeline;
 
 use App\pRate;
 use App\sql;
@@ -21,6 +24,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 use App\Exports\baseExport;
 use App\Exports\insightsExport;
+use App\Exports\packetsExport;
+use App\Exports\pipelineExport;
+
 
 class viewerExcelController extends Controller {
 
@@ -105,81 +111,127 @@ class viewerExcelController extends Controller {
 	    return Excel::download(new baseExport($data, $label, $typeExport, $auxTitle), $title);
     }
 
-   /* public function viewerInsights(){
-    	$db =  new dataBase();
-	    $default = $db->defaultConnection();
+    public function viewerPackets(){
+      // var_dump(Request::all());
+
+        $base = new base();
+        $sr = new salesRep();
+        $months = $base->month;
+
+        $db = new dataBase();
+        $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-	    $sql = new sql();
+        $sql = new sql();
 
-    	$salesRegion = Request::get('regionExcel');
+        $totalPerPacket = 0;
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
+
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $title = Request::get('title');        
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        //var_dump($rep);
         $r = new region();
 
         $region = $r->getRegion($con,null);
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
-    	$client = json_decode(base64_decode(Request::get('clientExcel')));
+        $b = new brand();
+        $brand = $b->getBrand($con);
 
-    	$month = json_decode(base64_decode(Request::get('monthExcel')));
+        $p = new packets();
 
-    	$brands = json_decode(base64_decode(Request::get('brandExcel')));
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql);
 
-    	$salesRep = json_decode(base64_decode(Request::get('salesRepExcel')));
+         $label = "exports.viewer.packets.packetsExport";
 
-    	$currency = Request::get("currencyExcel");
-	    $p = new pRate();
-        $currencies = $p->getCurrencybyName($con,$currency); 
+        if ($table != false) {
+            $totalPerPacket = $p->makeTotal($table);
 
-    	$value = Request::get('valueExcel');
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
+            }
+        }    
 
-        $in = new insights();
+        $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
+        $month = array('January','February','March','April','May','June','July','August','September','October','November','December');
 
-    	$mtx = $in->assemble($con,$sql,$client,$month,$brands,$salesRep,$currency,$value);
+        $data = array('region' => $region,'brand' => $brand, 'info' => $info, 'rep' => $rep, 'table' => $table, 'base' => $base, 'total' => $total, 'totalPerPacket' => $totalPerPacket,'intMonth' => $intMonth,'month' => $month);    
 
-        $total = $in->total($con,$sql,$client,$month,$brands,$salesRep,$currencies,$salesRegion,$value);
+        return  Excel::download(new packetsExport($data,$label,$typeExport,$auxTitle), $title);
 
-        //INICIO ID NUMBER
+    }
 
-        for ($c=0; $c <sizeof($mtx); $c++) { 
-                        
-            $clients[$c] = $mtx[$c]['client']; 
-        }
+    public function viewerPipeline(){
+      // var_dump(Request::all());
 
-        $clients = array_values(array_unique($clients));
+        $base = new base();
+        $sr = new salesRep();
+        $months = $base->month;
 
-        for ($c=0; $c <sizeof($clients); $c++) { 
-            $idNumber[$c] =  array(); 
-            for ($m=0; $m <sizeof($mtx); $m++) { 
+        $db = new dataBase();
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
-                $temp[$m] = array($mtx[$m]['copyKey'], $mtx[$m]['mediaItem'], $mtx[$m]['client']);
+        $sql = new sql();
 
+        $totalPerPacket = 0;
+        $total['digital'] = 0;
+        $total['tv'] = 0;
+        $total['total'] = 0;
 
-                if ($clients[$c] == $mtx[$m]['client']){
-                    array_push($idNumber[$c], $temp[$m]);
-                }
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $title = Request::get('title');        
+        $typeExport = Request::get("typeExport");
+        $auxTitle = Request::get("auxTitle");
+        $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        //var_dump($rep);
+        $r = new region();
+        $p = new pipeline();
+        
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql);
+
+        $label = "exports.viewer.pipeline.pipelineExport";
+
+        $region = $r->getRegion($con,null);
+        $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
+
+        $b = new brand();
+        $brand = $b->getBrand($con);        
+
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql);
+        //var_dump($info);
+        //var_dump($table);
+        if ($table != false) {
+            $totalPerPacket = $p->makeTotal($table);
+
+            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+                $total['digital'] += $table[$t]['digital_value'];
+                $total['tv'] += $table[$t]['tv_value'];
+                $total['total'] += $totalPerPacket[$t];    
             }
         }
 
-        for ($i=0; $i <sizeof($idNumber); $i++) { 
-            $idNumber[$i] = array_map('unserialize', array_values( array_unique(array_map('serialize', $idNumber[$i]))));
+        $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
+        $month = array('January','February','March','April','May','June','July','August','September','October','November','December');
 
-        }
+        $data = array('region' => $region,'brand' => $brand, 'info' => $info, 'rep' => $rep, 'table' => $table, 'base' => $base, 'total' => $total, 'totalPerPacket' => $totalPerPacket,'intMonth' => $intMonth,'month' => $month);    
+       // var_dump($table);
 
-        $names = array('Copy Key', 'Media Item');
+        return  Excel::download(new pipelineExport($data,$label,$typeExport,$auxTitle), $title);
 
-        //FIM ID NUMBER
-
-        $data = array('mtx' => $mtx,'total' => $total, 'idNumber' => $idNumber, 'currency' => $currencies['name'], 'region' => $regions, 'clientExcel' => $client, 'month' => $month, 'brand' => $brands, 'salesRep' => $salesRep, 'value' => $value, 'client' => $clients, 'names' => $names);
-
-        $label = array('exports.viewer.insights.insightsExport','exports.viewer.insights.idNumberExport');
-
-        $title = Request::get('title');
-
-        $typeExport = Request::get("typeExport");
-
-        $auxTitle = Request::get("auxTitle");
-
-        return Excel::download(new insightsExport($data, $label,$auxTitle,$typeExport), $title);
-
-    }*/
+    }
 }

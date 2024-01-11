@@ -97,6 +97,11 @@ Route::group(['middleware' => 'auth'],function(){
 											->name('baseExcel');
 				Route::post('vInsights', 'viewerExcelController@viewerInsights')
 											->name('insightsExcel');
+				Route::post('vPackets', 'viewerExcelController@viewerPackets')
+											->name('packetsExcel');
+				Route::post('vPipeline', 'viewerExcelController@viewerPipeline')
+											->name('pipelineExcel');
+											
 			});
 
 			Route::group(['prefix'=>'salesManagement'], function(){

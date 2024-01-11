@@ -89,10 +89,10 @@ class viewerBaseTabExport implements FromView,WithEvents, ShouldAutoSize, WithTi
                 
                 $letter = "P";
 
-                for ($d=0; $d < sizeof($this->data); $d++) { 
+                /*for ($d=0; $d < sizeof($this->data); $d++) { 
                 	$cellRange = "A".($d+4).":".$letter.($d+4);
                     $event->sheet->getDelegate()->getStyle($cellRange)->applyFromArray($this->bodyCenter);
-                }
+                }*/
 				$event->sheet->setShowGridlines(false);
 			},
 		];

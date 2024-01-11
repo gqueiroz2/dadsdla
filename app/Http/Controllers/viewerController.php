@@ -429,7 +429,10 @@ class viewerController extends Controller{
             }
         }
 
-        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+         $title = "Closed packets";
+         $titleExcel = "Closed packets.xlsx";
+
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket', 'title','titleExcel'));
 
     }
 
@@ -583,7 +586,10 @@ class viewerController extends Controller{
             }
         }
 
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+         $title = "Pipeline";
+         $titleExcel = "pipeline.xlsx";
+
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
 
     }
 
