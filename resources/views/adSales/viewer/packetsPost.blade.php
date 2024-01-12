@@ -68,8 +68,9 @@
                  <form method="POST" runat="server" action="{{ route('savePackets') }} " name="packetsSave">
                     @csrf
                     <input type='hidden' readonly='true' type="text" name="region" id="region" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$region[0]['id']}}">
-                    <div class="row">           
-                        <div class="col-3">                            
+                    <div class="row">   
+                        <div class="col-10"></div>        
+                        <div class="col-2">                            
                             <input type="submit" id="button" value="Save" class="btn btn-primary" style="width: 100%; float: right;">
                             <label class="labelLeft"><span class="bold"> &nbsp; </span> </label>
                         </div>    

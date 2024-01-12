@@ -44,12 +44,6 @@
                             @endif
                             {{$render->sourceDataBasev2()}}
                         </div>
-                        
-                        <div class="col" id="especificNumberCol" style="display:block;">
-                            <label class="labelLeft"><span class="bold" id="especificNumberName"> Map Number: </span></label>
-                            {{$render->especificNumber($brand)}}
-                        </div>                        
-                        
                         <div class="col">
                             <label class='labelLeft'><span class="bold">Months:</span></label>
                             @if($errors->has('month'))

@@ -995,7 +995,7 @@ class ajaxController extends Controller{
         $regionID = Request::get('regionID');
 
         $year = Request::get('year');
-
+        //var_dump($year);
         if (is_null($regionID)) {
             
         }else{
@@ -1008,7 +1008,7 @@ class ajaxController extends Controller{
 
             $regionID = array($regionID);
 
-            $director = $sr->getDirectorWBD($con);
+            $director = $sr->getDirectorWBD($con,$year);
 
             for ($s=0; $s < sizeof($director); $s++) {
                 echo "<option value='".$director[$s]['director']."' selected='true'> ".$director[$s]["director"]." </option>";

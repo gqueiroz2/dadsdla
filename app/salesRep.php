@@ -17,15 +17,16 @@ class salesRep extends Management
 	*/
 	
 
-	public function getDirectorWBD($con,$regionID=false,$year=false){
+	public function getDirectorWBD($con,$year){
 		$sql = new sql();
 		$table = "wbd w";
 		$columns = "w.manager AS 'director'
 				    ";
-
-		$res = $sql->selectDistinct($con, $columns, $table, null, null);
+		$where = "WHERE year = '$year'";
+		$res = $sql->selectDistinct($con, $columns, $table, null, $where);
 		$from = array('director');
 		$director = $sql->fetch($res, $from, $from);
+		//var_dump($director);
 		return $director;
 
 	}
