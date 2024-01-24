@@ -69,6 +69,33 @@ class ajaxController extends Controller{
 
     }
 
+    public function getPackets(){
+        $db = new dataBase();
+        $sql = new sql();
+
+        $regionID = '1';
+
+        $cluster = Request::get('cluster');
+        //var_dump($cluster);
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+       
+      
+        $select = "SELECT DISTINCT project as packet From projects p where p.cluster = ('$cluster')";
+
+        $selectQuery = $con->query($select);
+        $from = array('packet');
+        $project = $sql->fetch($selectQuery, $from, $from);
+        //var_dump($project);
+        if ($project != '') {        
+            for($p=0; $p<sizeof($project);$p++){
+                echo "<option style='font-size: 13px; width:100%;' value='".$project[$p]['packet']."'>".$project[$p]['packet']."</option>";
+            }                
+        }else{
+           echo "<option value=''> There is no Data for this. </option>";
+        }
+    }
+
     public function typeSelectConsolidate(){
         $type = Request::get('type');
         $region = Request::get('region');
@@ -218,7 +245,7 @@ class ajaxController extends Controller{
         $regionID = '1';
 
         $salesRep = Request::get('salesRep');
-        var_dump($salesRep);
+        //var_dump($salesRep);
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 

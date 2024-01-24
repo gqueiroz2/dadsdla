@@ -18,7 +18,7 @@ class bvModel extends Model{
         $ppYear = $year-2;
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
+        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd_bv al 
                    left join agency a on a.ID = al.agency_id 
                    left join client c on c.ID = al.client_id 
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
@@ -47,7 +47,7 @@ class bvModel extends Model{
 
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
+        $queryAleph = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from wbd_bv al 
                    left join agency a on a.ID = al.agency_id 
                    left join client c on c.ID = al.client_id 
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
@@ -58,7 +58,7 @@ class bvModel extends Model{
                    order by c.name asc";
         //echo"<pre>$queryAleph</pre>";
         $resultAleph = $con->query($queryAleph);
-        $from = array('agency', 'agencyName', 'client', 'clientName');
+        $from = array('agency', 'agencyName', 'client', 'clientName','salesRep','salesRepName');
         $valueAleph = $sql->fetch($resultAleph, $from, $from);
     
         // == This variable return a matrix with Sales Rep Name and ID, Agency Name and ID and Client name and ID == //
@@ -83,7 +83,7 @@ class bvModel extends Model{
         }
 
         $valueWbd = $valueType."_value";
-        $queryALEPH = "SELECT SUM($valueWbd) from wbd
+        $queryALEPH = "SELECT SUM($valueWbd) from wbd_bv
                  where agency_id = $agency
                  AND client_id = $client
                  AND year = $year";
@@ -114,21 +114,24 @@ class bvModel extends Model{
                 $previsionQuery = "SELECT forecast_revenue AS forecast, currency_id AS currency from bv_forecast
                                    WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
-                                   AND agency_id = $agencyID";
+                                   AND agency_id = $agencyID
+                                   AND year = $year";
                 $from = array('forecast', 'currency');
                 break;
             case 'spt':
                 $previsionQuery = "SELECT forecast_spt_revenue AS forecast, currency_id AS currency, value from bv_forecast
                                    WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
-                                   AND agency_id = $agencyID";
+                                   AND agency_id = $agencyID
+                                   AND year = $year";
                 $from = array('forecast', 'currency');
                 break;
             case 'status':
                 $previsionQuery = "SELECT status from bv_forecast
                                    WHERE (sales_rep_id IN ($salesRep))
                                    AND client_id = $clientID
-                                   AND agency_id = $agencyID";
+                                   AND agency_id = $agencyID
+                                   AND year = $year";
                 $from = array('status');
                 break;
         }
@@ -243,7 +246,7 @@ class bvModel extends Model{
             }
 
             // == Pivot Array used for fullfill the matrix, using the structure above == //
-            $pivotArray = array('client' => $result[$i]['clientName'],'agency' => $result[$i]['agencyName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency']);
+            $pivotArray = array('client' => $result[$i]['clientName'],'agency' => $result[$i]['agencyName'], $ppYear => $pPreviousValue, $pYear => $previousValue, $year => $actualValue, "prev" => $prevValue, "prevActualSum" => $actualValue + $prevValue, "sptPrev" => $sptPrev, "variation" => $variation, "status" => $statusString, "clientId" => $result[$i]['client'], "agencyId" => $result[$i]['agency'],'repID' => $result[$i]['salesRep'],'salesRep' => $result[$i]['salesRepName']);
             
             //var_dump($pivotArray);
             array_push($bvTable, $pivotArray);
@@ -291,7 +294,8 @@ class bvModel extends Model{
     // == This function are called by Save button in front-end and verify if the registers are already created in database, if already exist it will make a update, if not, will create a new registry == //
     public function verifyUpdateAndSaveBV(int $salesRep, int $clientID, int $agencyID, int $agencyGroupId, int $currency, String $value, $forecast, $forecastSPT, $status, Object $con, Object $sql){
         $updateTime = date("Y-m-d");
-
+        $year = (int)date("Y");
+        
         $selectQuery = "SELECT agency_id AS agency, client_id AS client
                         FROM bv_forecast
                         WHERE sales_rep_id = $salesRep
@@ -299,12 +303,14 @@ class bvModel extends Model{
                         AND agency_id = $agencyID
                         AND agency_group_id = $agencyGroupId
                         AND currency_id = $currency
-                        AND value = '$value'";
+                        AND value = '$value'
+                        AND year = $year";
         $from = array('agency', 'client');
         $selectResultQuery = $con->query($selectQuery);
         $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
 
         if ($resultSelect != false){
+           // var_dum('aki');
             $updateQuery = "UPDATE bv_forecast 
                         SET forecast_revenue = $forecast,
                         forecast_spt_revenue = $forecastSPT,
@@ -315,10 +321,12 @@ class bvModel extends Model{
                         AND agency_id = $agencyID
                         AND agency_group_id = $agencyGroupId
                         AND currency_id = $currency
-                        AND value = '$value'";
+                        AND value = '$value'
+                        AND year = $year";
 
             $resultQuery = $con->query($updateQuery);
         }else{
+            //var_dump('ali');
             $insertQuery = "INSERT INTO  bv_forecast
                         SET updated_date = '$updateTime',
                         sales_rep_id = $salesRep,
@@ -329,9 +337,10 @@ class bvModel extends Model{
                         value = '$value',
                         forecast_revenue = $forecast,
                         forecast_spt_revenue = $forecastSPT,
-                        status = '$status'";
+                        status = '$status',
+                        year = $year";
             $resultInsertQuery = $con->query($insertQuery);
-            //var_dump($insertQuery);
+            //echo"<pre>$insertQuery</pre>";
         }
 
     }
@@ -339,15 +348,43 @@ class bvModel extends Model{
     //this information get the last date and person who made the forecast in view
     public function getRepAndDateOfPrev(String $salesRep, int $agencyGroupId, Object $con){
         $sql = new sql();
-        
+        $year = (int)date("Y");
+
         $select = "SELECT distinct sales_rep.name as salesRep, updated_date as updateDate
                     FROM bv_forecast
                     LEFT JOIN sales_rep ON bv_forecast.sales_rep_id = sales_rep.ID
                     WHERE (sales_rep_id IN ($salesRep))
                     AND agency_group_id = $agencyGroupId
+                    AND year = $year
                 ";
         
         $from = array('salesRep', 'updateDate'); 
+        $selectQuery = $con->query($select);
+        $resultSelect = $sql->fetch($selectQuery, $from, $from);
+
+        if ($resultSelect != false) {
+           $updateDate = $resultSelect;
+        }else{
+            $updateDate[0] = array('salesRep' => '-', 'updateDate' => '-');
+        }
+
+        return $updateDate;
+    }
+
+     //this information get the last date and person who made the forecast in view
+    public function getRepAndDateOfPrevResume(String $salesRep, int $agencyGroupId, Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+
+        $select = "SELECT distinct sales_rep.name as salesRep, updated_date as updateDate, client_id as clientID, agency_id as agencyID
+                    FROM bv_forecast
+                    LEFT JOIN sales_rep ON bv_forecast.sales_rep_id = sales_rep.ID
+                    WHERE (sales_rep_id IN ($salesRep))
+                    AND agency_group_id = $agencyGroupId
+                    AND year = $year
+                ";
+        
+        $from = array('salesRep', 'updateDate','clientID','agencyID'); 
         $selectQuery = $con->query($select);
         $resultSelect = $sql->fetch($selectQuery, $from, $from);
 
@@ -368,7 +405,7 @@ class bvModel extends Model{
         $ppYear = $year-2;
 
         $select = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
-                    FROM wbd w
+                    FROM wbd_bv w
                     left join client c on c.ID = w.client_id
                     left join agency a on a.ID = w.agency_id
                     WHERE c.client_group_id = 1 
@@ -385,12 +422,15 @@ class bvModel extends Model{
     public function newClientInclusion(Object $con, String $agencyGroup, String $salesRep, String $client,String $agency){
         $updateTime = date("Y-m-d");
 
+        $year = (int)date("Y");
+
         $insertQuery = "INSERT INTO  bv_new_clients
                         SET created_date = '$updateTime',
                         sales_rep_id = $salesRep,
                         client_id = $client,
                         agency_id = $agency,
-                        agency_group_id = $agencyGroup
+                        agency_group_id = $agencyGroup,
+                        year = $year
                         ";
         //var_dump($insertQuery);
         $resultInsertQuery = $con->query($insertQuery);
@@ -409,19 +449,20 @@ class bvModel extends Model{
                             left join agency_group ag on ag.ID = b.agency_group_id
                             left join agency a on a.ID = b.agency_id
                             where ag.ID = $agencyGroupId
-                            and (sr.ID IN ($salesRep))";
+                            and (sr.ID IN ($salesRep))
+                            and b.year = $year";
                         //var_dump($selectClient);
             $resultClient = $con->query($selectClient);
             $from = array('id','agency');
             $client = $sql->fetch($resultClient, $from, $from);
-            //var_dump($client);
+           // var_dump($client);
 
             if ($client != null) {
                 for ($c=0; $c < sizeof($client); $c++) {
                     $tmp1[] = $client[$c]['id']; 
                     $tmp2[] = $client[$c]['agency']; 
                     
-                    $queryClient[$c] = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd cm 
+                    $queryClient[$c] = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd_bv cm 
                            left join agency a on a.ID = cm.agency_id 
                            left join client c on c.ID = cm.client_id 
                            left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
@@ -459,17 +500,18 @@ class bvModel extends Model{
         $pYear = $year-1;
         $ppYear = $year-2;
 
-         $selectClient = "SELECT distinct  c.id as id, a.id as agency 
+         $selectClient = "SELECT distinct  c.id as id, a.id as agency,sr.id as salesRep
                             from bv_new_clients b
                             left join sales_rep sr on sr.ID = b.sales_rep_id 
                             left join client c on c.ID = b.client_id 
                             left join agency_group ag on ag.ID = b.agency_group_id
                             left join agency a on a.ID = b.agency_id
                             where ag.ID = $agencyGroupId
-                            and (sr.ID IN ($salesRep))";
+                            and (sr.ID IN ($salesRep))
+                            AND year = $year";
                         //var_dump($selectClient);
             $resultClient = $con->query($selectClient);
-            $from = array('id','agency');
+            $from = array('id','agency','salesRep');
             $client = $sql->fetch($resultClient, $from, $from);
             //var_dump($client);
 
@@ -477,8 +519,9 @@ class bvModel extends Model{
                 for ($c=0; $c < sizeof($client); $c++) {
                     $tmp1[] = $client[$c]['id']; 
                     $tmp2[] = $client[$c]['agency']; 
+                    $tmp2[] = $client[$c]['salesRep']; 
                     
-                    $queryClient[$c] = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd cm 
+                    $queryClient[$c] = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from  wbd_bv cm 
                            left join agency a on a.ID = cm.agency_id 
                            left join client c on c.ID = cm.client_id 
                            left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
@@ -489,7 +532,7 @@ class bvModel extends Model{
                            order by c.name asc";
                     //echo "<pre>$queryClient[$c]</pre>";
                     $result[$c] = $con->query($queryClient[$c]);
-                    $from = array('agency', 'agencyName', 'client', 'clientName');
+                    $from = array('agency', 'agencyName', 'client', 'clientName','salesRep','salesRepName');
                     $tmp[] = $sql->fetch($result[$c], $from, $from);
                 }
 
@@ -518,7 +561,7 @@ class bvModel extends Model{
         $pppYear = $year-3;
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd w 
+        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd_bv w 
                    left join agency a on a.ID = w.agency_id 
                    left join client c on c.ID = w.client_id 
                    left join brand b on b.ID = w.brand_id  
@@ -629,7 +672,7 @@ class bvModel extends Model{
     $sql = new sql();
 
     $select = "SELECT sum(w.net_value) as netRevenue
-                FROM wbd w
+                FROM wbd_bv w
                 left join agency a on a.ID = w.agency_id
                 left join agency_group ag on ag.ID = a.agency_group_id
                 left join brand b on b.ID = w.brand_id
@@ -650,15 +693,15 @@ class bvModel extends Model{
 
         $historyTable = array();
 
-        $geBrands = "1,2,3,4,5,6,7,8,11,12,18,19,20,24,28,30,31,32,33,35,36,37,41,42,43,46,47,51,53,54";
+        $geBrands = "Entertainment";
 
-        $sportsBrands = "44,45,52";
+        $sportsBrands = "Sports";
 
-        $newsBrands = "38,39,40,64,65,66";
+        $newsBrands = "News";
 
-        $digitalBrands = "9,10,13,14,15,16,34,48,49,50,55,58,62,67,68,69,70";
+        $digitalBrands = "9,10,13,14,15,16,34,48,49,50,55,58,62,67,68,69,76,77,78";
 
-        $sptBrands = "22,23,25,26,60";
+        $sptBrands = "22,23,25,26,59,60,79";
 
         $client = $this->clientByYear($con,$agencyGroupId,$year);
 
@@ -717,7 +760,7 @@ class bvModel extends Model{
     $sql = new sql();
 
     $select = "SELECT DISTINCT c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
-                FROM wbd w
+                FROM wbd_bv w
                 LEFT JOIN client c on c.ID = w.client_id
                 LEFT JOIN agency a ON a.ID = w.agency_id
                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
@@ -733,15 +776,25 @@ class bvModel extends Model{
 
    }
 
-   public function valueByCluster(Int $client, Int $agency, Object $con, Int $year, String $brands){
+   public function valueByCluster(Int $client, Int $agency, Object $con, Int $year, String $cluster){
     $sql = new sql();
 
-    $select = "SELECT SUM(net_value) as netRevenue
-                FROM wbd
+    if ($cluster == 'Entertainment' || $cluster == 'Sports' || $cluster == 'News') {
+         $select = "SELECT SUM(net_value) as netRevenue
+                FROM wbd_bv
                 WHERE client_id = $client
                 and year = $year
                 and agency_id = $agency
-                and (brand_id IN ($brands))";
+                and (cluster = '$cluster')";
+    }else{
+         $select = "SELECT SUM(net_value) as netRevenue
+                FROM wbd_bv
+                WHERE client_id = $client
+                and year = $year
+                and agency_id = $agency
+                and (brand_id IN ($cluster))";
+    }
+   
     //var_dump($select);
     $result = $con->query($select);
     $from = array('netRevenue');

@@ -59,10 +59,10 @@ class bvController extends Controller{
 
       $render = new Render();
       $bvModel = new bvModel();
-      //var_dump($salesRep);
+      //var_dump($agencyGroup);
       $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
-
-      $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
+      //var_dump($newClient);
+     $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
       $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
       $list = $bvModel->listOFClients($con, $year);
@@ -141,7 +141,7 @@ class bvController extends Controller{
          }
          
       }      
-      
+     // var_dump($saveButtonGet);
       // == Using the size of $clientByAE we can do a for to get the correcty match for every registry get by front == //
       for ($i = 0; $i < sizeof($clientsByAE); $i++) {
          $clientID = (int) $saveButtonGet['clientID-' . $i];
@@ -259,9 +259,10 @@ class bvController extends Controller{
       }
 
       $bvTest = $bvModel->tableResume($agencyGroup, $year, $con, $value, $salesRep, $currency);
-      
+      //var_dump($bvTest);
       $total = $bvModel->getBVTotal($bvTest, $year);
-      $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
+      $updateInfo = $bvModel->getRepAndDateOfPrevResume($salesRep, $agencyGroup, $con);
+      //var_dump($updateInfo);
       $list = $bvModel->listOFClients($con, $year);
       $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
 
@@ -332,8 +333,8 @@ class bvController extends Controller{
 
       $totalByClientPpyear = $bvModel->totalByClientHistory($historyPpyear);
 
-      $title = "RESUME - BV";
-      $titleExcel = "Resume - BV.xlsx";
+      $title = "RESUME - BV -".$agencyGroupName;
+      $titleExcel = "$agencyGroupName - Resume - BV.xlsx";
 
       
       for ($b=0; $b <sizeof($bvTest) ; $b++) { 

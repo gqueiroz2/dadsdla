@@ -67,9 +67,10 @@ class RenderChain extends Render{
     	echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
             echo "<option value='data_hub'> DATA HUB </option>";            
             echo "<option value='aleph'> ALEPH </option>";            
-            echo "<option value='sf_pr'> SF P&R </option>";
-            echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";            
+            //echo "<option value='sf_pr'> SF P&R </option>";
+            //echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";            
             echo "<option value='wbd'> WBD </option>";
+            echo "<option value='wbd_bv'> WBD AVB </option>";
             //echo "<option value='ytdFN'> YTD FN </option>";
             //echo "<option value='fw_digital'> FW Digital </option>";
             //echo "<option value='insights'> INSIGHTS </option>";           
@@ -83,9 +84,10 @@ class RenderChain extends Render{
     		echo "<option value=''> Select </option>";
     		echo "<option value='aleph'> ALEPH </option>";            
             echo "<option value='data_hub'> DATA HUB </option>";
-            echo "<option value='sf_pr'> SF P&R </option>";
-            echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";
+            //echo "<option value='sf_pr'> SF P&R </option>";
+            //echo "<option value='sf_pr_brand'> SF P&R BRAND </option>";
             echo "<option value='wbd'> WBD </option>";
+            echo "<option value='wbd_bv'> WBD AVB </option>";
             //echo "<option value='ytdFN'> YTD FN </option>";
 			//echo "<option value='ytd'> YTD </option>";
             //echo "<option value='fw_digital'> FW Digital </option>";

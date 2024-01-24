@@ -460,7 +460,7 @@ class viewerController extends Controller{
 
         $saveInfo = Request::all();
         unset($saveInfo['_token']);
-        //var_dump($saveInfo);
+        //var_dump($saveInfo['newProject']);
         if ($saveInfo['newClient'] != null) {
             $p->insertNewLines($con,$sql,$saveInfo);    
         }
@@ -500,8 +500,11 @@ class viewerController extends Controller{
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         
         $info = $p->getOptions($con);
+
+         $title = "Closed packets";
+         $titleExcel = "Closed packets.xlsx";
         //var_dump($table);
-        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
 
     }
 
@@ -656,8 +659,11 @@ class viewerController extends Controller{
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         
         $info = $p->getOptions($con);
+
+        $title = "Pipeline";
+        $titleExcel = "pipeline.xlsx";
         //var_dump($table);
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket'));
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
 
     }
 }

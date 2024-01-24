@@ -182,6 +182,10 @@ class ChainController extends Controller{
                 unset($spreadSheet[2]);
                 $spreadSheet = array_values($spreadSheet);
                 break;
+            case 'wbd_bv':
+                unset($spreadSheet[0]);
+                $spreadSheet = array_values($spreadSheet);
+                break;
 		}
         
 		$complete = $chain->handler($con,$table,$spreadSheet,$year);

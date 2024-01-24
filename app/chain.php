@@ -106,7 +106,7 @@ class chain extends excel{
 
         $columns = array_values($columns);
     	$columnsS = $this->defineColumns($table,'second');
-
+        var_dump($table);
         if($table == 'bts'){
             $tempBase = 'bts';
             $table = 'ytd';
@@ -114,7 +114,7 @@ class chain extends excel{
             $tempBase = false;
         }
 
-        if ($table == 'aleph' || $table == 'wbd') {
+        if ($table == 'aleph' || $table == 'wbd' || $table == 'wbd_bv') {
             //$test = $this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS);
             $current = $this->fixToInput($this->selectFromCurrentTableAleph($sql,$fCon,$table,$columns,$columnsS),$columnsS);       
         }else{
@@ -147,7 +147,7 @@ class chain extends excel{
             
         }
 
-        if ($table == "aleph" || $table == 'wbd') {
+        if ($table == "aleph" || $table == 'wbd' || $table == 'wbd_bv') {
             //var_dump($current);
             $next = $this->handleForNextTable($con,$table,$current,$columnsS,$year);
         }else{
@@ -162,7 +162,7 @@ class chain extends excel{
 
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		//var_dump($complete);
-        return $complete;                     
+        return $complete;                
 
     }  
 
@@ -845,7 +845,7 @@ class chain extends excel{
                 $current[$c]['agency_id'] = $this->seekAgencyID($con,$current[$c]['region_id'],$regionName,$current[$c]['agency']);
                 $current[$c]['client_id'] = $this->seekClientID($con,$current[$c]['region_id'],$regionName,$current[$c]['client']);      
 
-            }elseif($table == "insights" || $table == "wbd"){
+            }elseif($table == "insights" || $table == "wbd" || $table == 'wbd_bv'){
 
                 $regionName = "Brazil";
 
@@ -1054,6 +1054,17 @@ class chain extends excel{
                 }
             }
         }elseif ($table == "wbd" && $column == 'brand_id') {
+            $rtr =  array(false,'brand_id');
+            
+            $temp = $current;            
+
+            for ($b=0; $b < sizeof($brands); $b++) { 
+                if( $temp  == $brands[$b]['brandUnit']){    
+
+                    $rtr =  array( $brands[$b]['brandID'],'brand_id');
+                }
+            }
+        }elseif ($table == "wbd_bv" && $column == 'brand_id') {
             $rtr =  array(false,'brand_id');
             
             $temp = $current;            
@@ -1415,7 +1426,7 @@ class chain extends excel{
     						}
     						$spreadSheetV2[$s][$columns[$c]] = $this->fixExcelNumber( trim($spreadSheet[$s][$columnValue]) );
     					}else{
-                            if($table == 'wbd' || $table == 'forecast'){
+                            if($table == 'wbd' || $table == 'forecast' || $table == 'wbd_bv'){
                                 if ($columns[$c] == 'company' || $columns[$c] == 'company_id'){
                                     switch ($spreadSheet[$s][$c]){
                                         case 'DSC':
@@ -1572,7 +1583,7 @@ class chain extends excel{
                                     $temp = strtoupper($spreadSheet[$s][$c]);
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph($temp);
                                     //var_dump($spreadSheetV2[$s][$columns[$c]]);
-                                }elseif( $table && ($table == "wbd") ){
+                                }elseif( $table && ($table == "wbd" || $table == 'wbd_bv') ){
                                     $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntWBD($spreadSheet[$s][$c]);
                                     //var_dump($spreadSheetV2[$s][$columns[$c]]);
                                 }else{
@@ -1869,11 +1880,120 @@ class chain extends excel{
                     
                 break;
                 }
+            case 'wbd_bv':
+                switch ($recurrency){
+                    case 'first':
+                        return $this->wbdBVColumnsF;
+                        break;
+                    case 'second':
+                        return $this->wbdBVColumnsS;
+                        break;
+                    case 'third':
+                        return $this->wbdBVColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->wbdBVColumns;
+                        break;
+                    
+                break;
+                }
 
     		
     	}
 
     }
+
+    public $wbdBVColumnsF = array(
+                            'company_id',
+                            'year',
+                            'month',
+                            'cluster',
+                            'feed_type',
+                            'brand',
+                            'feed_code',
+                            'property',
+                            'property_name',
+                            'old_sales_rep',
+                            'client',
+                            'agency',
+                            'agency_group',
+                            'convenio',
+                            'internal_code',
+                            'pi_number',
+                            'commission',
+                            'gross_value',
+                            'net_value',
+                            'current_sales_rep'
+    );
+
+    public $wbdBVColumnsS = array(
+                            'company_id',
+                            'year',
+                            'month',
+                            'cluster',
+                            'feed_type',
+                            'brand_id',
+                            'feed_code',
+                            'property',
+                            'property_name',
+                            'old_sales_rep',
+                            'client',
+                            'agency',
+                            'agency_group',
+                            'convenio',
+                            'internal_code',
+                            'pi_number',
+                            'commission',
+                            'gross_value',
+                            'net_value',
+                            'current_sales_rep_id'
+    );
+
+    public $wbdBVColumnsT = array(
+                            'company_id',
+                            'year',
+                            'month',
+                            'cluster',
+                            'feed_type',
+                            'brand_id',
+                            'feed_code',
+                            'property',
+                            'property_name',
+                            'old_sales_rep',
+                            'client_id',
+                            'agency_id',
+                            'agency_group',
+                            'convenio',
+                            'internal_code',
+                            'pi_number',
+                            'commission',
+                            'gross_value',
+                            'net_value',
+                            'current_sales_rep_id'
+    );
+
+    public $wbdBVColumns = array(
+                            'company_id',
+                            'year',
+                            'month',
+                            'cluster',
+                            'feed_type',
+                            'brand_id',
+                            'feed_code',
+                            'property',
+                            'property_name',
+                            'old_sales_rep',
+                            'client_id',
+                            'agency_id',
+                            'agency_group',
+                            'convenio',
+                            'internal_code',
+                            'pi_number',
+                            'commission',
+                            'gross_value',
+                            'net_value',
+                            'current_sales_rep_id'
+    );
 
     public $wbdColumnsF = array(
                             'company',

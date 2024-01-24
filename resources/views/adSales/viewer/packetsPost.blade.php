@@ -110,25 +110,25 @@
                             <td >Notes</td>
                         </tr>
                         @for($t=0; $t<sizeof($table);$t++)
-                        <tr class="even col center">
+                        <tr class="even col center" style="font-size: 13px;">
                             <input type='hidden' readonly='true' type="text" name="ID-{{$t}}" id="ID-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}}">
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="register-{{$t}}" id="register-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['register']}}"></td> 
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='holding-{{$t}}' id='holding-{{$t}}' style="text-align: center;">
+                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" >
+                                <select name='holding-{{$t}}' id='holding-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                     @for($h=0; $h<sizeof($info[0]);$h++)
                                         <option <?php if($info[0][$h]['holding'] == $table[$t]['holding']){ echo "selected";}?> value="{{$info[0][$h]['id']}}">{{$info[0][$h]['holding']}}</option>
                                     @endfor
                                 </select>
                             </td>
                             <td>
-                                <select name='cluster-{{$t}}' id='cluster-{{$t}}' style="text-align: center;">
+                                <select name='cluster-{{$t}}' id='cluster-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                     @for($c=0; $c<sizeof($info[1]);$c++)
                                         <option <?php if($info[1][$c]['cluster'] == $table[$t]['cluster']) { echo "selected";}?> value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
                                     @endfor
                                 </select>
                             </td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='project-{{$t}}' id='project-{{$t}}' style="text-align: center;">
+                                <select name='project-{{$t}}' id='project-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                      @for($p=0; $p<sizeof($info[3]);$p++)
                                         <option <?php if($info[3][$p]['project'] == $table[$t]['project']) { echo "selected";}?> value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
                                     @endfor                                        
@@ -138,13 +138,13 @@
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:3% !important"><input type="text" name="agency-{{$t}}" id="agency-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['agency']}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input type="text" name="segment-{{$t}}" id="segment-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['segment']}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae1-{{$t}}' id='ae1-{{$t}}' style="text-align: center;">
+                                <select name='ae1-{{$t}}' id='ae1-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                 @for($s=0; $s<sizeof($rep);$s++)
                                     <option  <?php if($rep[$s]['salesRep'] == $table[$t]['primary_ae']) { echo "selected";}?> value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
                                 @endfor
                             </select></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae2-{{$t}}' id='ae2-{{$t}}' style="text-align: center;">
+                                <select name='ae2-{{$t}}' id='ae2-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                 @for($ss=0; $ss<sizeof($rep);$ss++)
                                     <option  <?php if($rep[$ss]['salesRep'] == $table[$t]['second_ae']) { echo "selected";}?> value="{{$rep[$ss]['id']}}">{{$rep[$ss]['salesRep']}}</option>
                                 @endfor
@@ -153,14 +153,14 @@
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digital-{{$t}}" id="digital-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="total-{{$t}}" id="total-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($totalPerPacket[$t])}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
-                                <select  name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="text-align: center;">
+                                <select  name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                       @for($m=0; $m<sizeof($intMonth);$m++)
                                         <option <?php if($intMonth[$m] == $table[$t]['start_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                     @endfor                                        
                                 </select>
                             </td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
-                                <select  name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="text-align: center;">
+                                <select  name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                       @for($m=0; $m<sizeof($intMonth);$m++)
                                         <option <?php if($intMonth[$m] == $table[$t]['end_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                     @endfor                                        
@@ -168,7 +168,7 @@
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input  type="text" name="payment-{{$t}}" id="payment-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['payment']}}"> </td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input type="text" name="installments-{{$t}}" id="installments-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['installments']}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"> 
-                                <select name='quota-{{$t}}' id='quota-{{$t}}' style="text-align: center;">
+                                <select name='quota-{{$t}}' id='quota-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
                                 @for($q=0; $q<sizeof($info[2]);$q++)
                                     <option <?php if($info[2][$q]['quota'] == $table[$t]['quota']) { echo "selected";}?>value="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
                                 @endfor
@@ -215,18 +215,18 @@
                                                 <label>Register</label>
                                                 <input type="text" name="newRegister" id="newRegister" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="Actuals"><br>
                                                 <label>Holding</label> 
-                                                <select name='newHolding' id='newHolding' style="width: 100%; ">
+                                                <select name='newHolding' id='newHolding' style="width: 100%;">
                                                     @for($h=0; $h<sizeof($info[0]);$h++)
                                                         <option value="{{$info[0][$h]['id']}}">{{$info[0][$h]['holding']}}</option>
                                                     @endfor
                                                 </select><br>
                                                 <label>Cluster</label>                                                
-                                                    <select name='newCluster' id='newCluster' style="width: 100%; ">
+                                                    <select name='newCluster' id='newCluster' style="width: 100%;">
                                                         @for($c=0; $c<sizeof($info[1]);$c++)
                                                             <option value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>project</label>
+                                                <label>Project</label><br>
                                                         <select name='newProject' id='newProject' style="width: 100%; ">
                                                         @for($p=0; $p<sizeof($info[3]);$p++)
                                                             <option value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
@@ -467,6 +467,58 @@
 
    
 
+</script>
+
+<script type="text/javascript">
+    
+    $('#newCluster').change(function(){
+    
+    var cluster = $("#newCluster").val();
+        if (cluster != "") {
+
+          $.ajax({
+            url:"/ajax/adsales/getPackets",
+            method:"POST",
+            data:{cluster},
+            success: function(output){
+              $('#newProject').html(output).selectpicker('refresh');
+              //$('#vlau ').html(output).selectpicker('refresh');
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });  
+        }else{
+          var option = "<option> Select Cluster </option>";
+          $('#newProject').empty().append(option).selectpicker('refresh');
+        }
+    });
+
+
+    @for($t=0; $t<sizeof($table);$t++)
+       $('#cluster-'+{{$t}}).change(function(){
+        
+        var cluster = $("#cluster-"+{{$t}}).val();
+        if (cluster != "") {
+
+          $.ajax({
+            url:"/ajax/adsales/getPackets",
+            method:"POST",
+            data:{cluster},
+            success: function(output){                 
+                $('#project-'+{{$t}}).html(output).selectpicker('refresh');
+                //$('#vlau ').html(output).selectpicker('refresh');
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });  
+        }else{
+          var option = "<option> Select Cluster </option>";
+          $('#project-'+{{$t}}).empty().append(option).selectpicker('refresh');
+        }
+      });
+    @endfor     
 </script>
 
 @endsection

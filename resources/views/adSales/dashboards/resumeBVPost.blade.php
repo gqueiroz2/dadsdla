@@ -312,25 +312,27 @@
 					        @endif
 				        	
 				        </div>	
-				        <!-- pay tv table -->
-				        <table style='max-width: 15%; width: auto; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px; float: right;'>
-				          	<tr class="center" style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
-					       		<td style='width: 10%;' class="newBlue col">PAY TV {{$year-1}}</td>
-					    	   	<td style='width: 5%;' class="medBlue col">SOA</td>
-					   		</tr>
-				           	@for($p = 0; $p<sizeof($payTv); $p++)
-				           	<tr class="center">
-				           		@if($payTv[$p]['station'] == 'WBD')
-					           		<td style='width: 10%;' class="medBlue col">{{$payTv[$p]['station']}}</td>
-					           		<td style='width: 5%;' class="medBlue col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
-				           		@else
-				           			<td style='width: 10%;' class="even col">{{$payTv[$p]['station']}}</td>
-				           			<td style='width: 5%;' class="even col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
-				           		@endif
-				           	</tr>	
-				           	@endfor
-				        </table>			        
 
+				        @if($payTv[0]['station'] != false)
+					        <!-- pay tv table -->
+					        <table style='max-width: 15%; width: auto; border-style:solid; border-color: black; border-width: 1px 1px 1px 1px; float: right;'>
+					          	<tr class="center" style="border-style:solid; border-color: black; border-width: 0px 0px 1px 0px;">
+						       		<td style='width: 10%;' class="newBlue col">PAY TV {{$year-1}}</td>
+						    	   	<td style='width: 5%;' class="medBlue col">SOA</td>
+						   		</tr>
+					           	@for($p = 0; $p<sizeof($payTv); $p++)
+					           	<tr class="center">
+					           		@if($payTv[$p]['station'] == 'WBD')
+						           		<td style='width: 10%;' class="medBlue col">{{$payTv[$p]['station']}}</td>
+						           		<td style='width: 5%;' class="medBlue col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
+					           		@else
+					           			<td style='width: 10%;' class="even col">{{$payTv[$p]['station']}}</td>
+					           			<td style='width: 5%;' class="even col">{{number_format(($payTv[$p]['percentage']*100),0,',','.')}}%</td>
+					           		@endif
+					           	</tr>	
+					           	@endfor
+					        </table>			        
+					    @endif
 				        <table style='width: 100%; zoom: 85%;font-size: 16px;'>
 				        	<tr class="center">
 				        		<td style="width: 7% !important; background-color: white;"> &nbsp; </td>
@@ -349,9 +351,9 @@
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-2}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year-1}}</td>
 								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$year}}</td>
-								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST {{$year}}</td>
-								<td class="col" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL {{$year}}</td>
-								<td class="col oddGrey" style="width:6%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST SPT {{$year}}</td>
+								<td class="col oddGrey" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST {{$year}}</td>
+								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">TOTAL {{$year}}</td>
+								<td class="col oddGrey" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">FORECAST SPT {{$year}}</td>
 								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">PERCENTAGE</td>
 								<td class="col" style="width:5%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">SALES REP</td>
 								<td class="col oddGrey" style="width:14%; border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">STATUS</td>
@@ -369,9 +371,7 @@
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input readonly='true' type="text" name="forecast-total-{{$b}}" id="forecast-total-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($bvTest[$b]['prevActualSum'],0,',','.')}}"></td>
 									<td class="{{$color[$b]}} numberonly" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" name="forecast-spt-{{$b}}" id="forecast-spt-{{$b}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value={{number_format($bvTest[$b]['sptPrev'],0,',','.')}}></td>
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['variation']}}%</td>
-									@for($u = 0; $u < sizeof($updateInfo) ; $u++)
-										<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$updateInfo[$u]['salesRep']}}</td>
-									@endfor
+									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;">{{$bvTest[$b]['salesRep']}}</td>									
 									<td class="{{$color[$b]}}" style="border-style:solid; border-color:black; border-width: 0px 1px 0px 0px;"><input type="text" maxlength="100" name="status-{{$b}}" id="status-{{$b}}" style="width: 100%; background-color:transparent; border:none; font-weight:bold;" value="{{$bvTest[$b]['status']}}"></td>
 								</tr>
 							@endfor

@@ -443,7 +443,7 @@ class agency extends Management{
 
         // ========================================= // 
 
-        $tableAleph = "wbd y";
+        $tableAleph = "wbd_bv y";
 
         $columnsAleph = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
@@ -455,7 +455,7 @@ class agency extends Management{
             $agencyRegions = implode(",", $agencyRegion);
 
             if ($year) {
-                $whereAleph .= "WHERE year IN (";
+                $whereAleph .= "WHERE (ag.id != (130)) AND year IN (";
                 for ($y=0; $y < sizeof($year); $y++) { 
                     $whereAleph .= "'".$year[$y]."'";
                     if($y < ( sizeof($year) - 1) ){

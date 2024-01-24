@@ -1,3 +1,4 @@
+@if($data['payTv'][0]['station'] != false)
 <table>
 	<tr>
 		<td style='background-color: #0047b3; text-align: center; font-weight: bold;' > PAY TV {{$data['year']-1}}</td>
@@ -15,3 +16,6 @@
 	</tr>	
 	@endfor
 </table>
+@else
+<td>No information</td>
+@endif
