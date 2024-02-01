@@ -1,11 +1,11 @@
 <table>
     <tr>
-        <td colspan="8"></td>
+        <td colspan="9"></td>
         <td colspan="2" style="background-color: #e7eff9;">SUBTOTAL</td>
         <td style="background-color: #e7eff9;">TOTAL</td>
     </tr>
     <tr>
-        <td colspan="8"></td>
+        <td colspan="9"></td>
         <td style="background-color: #e7eff9; text-align: center;">{{$data['total']['tv']}}</td>
         <td style="background-color: #e7eff9; text-align: center;">{{$data['total']['digital']}}</td>
         <td style="background-color: #e7eff9; text-align: center;">{{$data['total']['total']}}</td>
@@ -19,9 +19,12 @@
         <td style="background-color: #0f243e; color: white; text-align: center;">Products</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">AE 1</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">AE 2 </td>
+        <td style="background-color: #0f243e; color: white; text-align: center;">Manager</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">TV</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">Digital</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">Total</td>
+        <td style="background-color: #0f243e; color: white; text-align: center;">Start Month</td>
+        <td style="background-color: #0f243e; color: white; text-align: center;">End Month </td>
         <td style="background-color: #0f243e; color: white; text-align: center;">Quota</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">Status</td>
         <td style="background-color: #0f243e; color: white; text-align: center;">Notes</td>
@@ -36,9 +39,12 @@
             <td style="text-align: center;">{{$data['table'][$t]['product']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['primary_ae']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['second_ae']}}</td>
+            <td style="text-align: center;">{{$data['table'][$t]['manager']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['tv_value']}}</td>
             <td style="text-align: center;"> {{$data['table'][$t]['digital_value']}}</td>
             <td style="text-align: center;">{{$data['totalPerPacket'][$t]}}</td>
+            <td style="text-align: center;">{{$data['table'][$t]['start_month']}}</td>
+            <td style="text-align: center;">{{$data['table'][$t]['end_month']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['quota']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['status']}}</td>
             <td style="text-align: center;">{{$data['table'][$t]['notes']}}</td>

@@ -23,13 +23,23 @@ class pipeline extends Model{
         
         $quota = $this->getQuota($con);
 
-        $status = array('0 - Exploração','6 - Negado/Perdido','1 - Proposta Submetida','2 - Proposta em Análise','3 - Proposta em Negociação','4 - Aprovação','5 - Fechado');
+        $client = $this->listOFClients($con);
+
+        $agency = $this->listOFAgencies($con);
+
+        $status = array('0 - Exploração','1 - Proposta Submetida','2 - Proposta em Análise','3 - Proposta em Negociação','4 - Aprovação','5 - Fechado','6 - Negado/Perdido');
+
+        $manager = array('FM','BP','RA');
 
         array_push($result, $holding);
         array_push($result,$cluster);
         array_push($result,$quota);
         array_push($result,$project);
         array_push($result,$status);
+        array_push($result,$client);
+        array_push($result,$agency);
+        array_push($result,$manager);
+
        // var_dump($result);
         return $result;
     }
@@ -51,8 +61,8 @@ class pipeline extends Model{
     public function getCluster($con){
         $sql = new sql();
 
-        $select = "SELECT DISTINCT p.cluster as cluster
-            FROM projects p
+        $select = "SELECT DISTINCT TRIM(p.cluster) as cluster
+            FROM clusters p
         ";
 
         $selectQuery = $con->query($select);
@@ -65,10 +75,10 @@ class pipeline extends Model{
     public function getProp($con){
         $sql = new sql();
 
-        $select = "SELECT DISTINCT p.project as project
-            FROM projects p
+        $select = "SELECT DISTINCT TRIM(p.project) as project
+            FROM clusters p
         ";
-
+        //var_dump($select);
         $selectQuery = $con->query($select);
         $from = array('project');
         $project = $sql->fetch($selectQuery, $from, $from);
@@ -93,19 +103,22 @@ class pipeline extends Model{
     public function insertNewLines($con,$sql,$info){
 
         $register = $info['newRegister'];
-        $cluster = $info['newCluster'];
-        $project = $info['newProject'];
-        $client = $info['newClient'];
-        $agency = $info['newAgency'];
+        $cluster = $info['newCluster'][0];
+        $project = $info['newProject'][0];
+        $client = $info['newClient'][0];
+        $agency = $info['newAgency'][0];
         $product = $info['newProduct'];
-        $ae1 = $info['newAe1'];
-        $ae2 = $info['newAe2'];
+        $ae1 = $info['newAe1'][0];
+        $ae2 = $info['newAe2'][0];
+        $manager = $info['newManager'][0];
         $tv = $info['newTv'];
         $digital = $info['newDigital'];
+        $start = $info['newFirstMonth'][0];
+        $end = $info['newEndMonth'][0];
         $quota = $info['newQuota'];
         $status = $info['newStatus'];
         $notes = $info['newNotes'];
-
+        //var_dump($manager);
         $insertQuery = "INSERT INTO  pipeline
                         SET register = '$register', 
                             cluster = '$cluster',
@@ -115,8 +128,11 @@ class pipeline extends Model{
                             product = '$product',
                             primary_ae_id = '$ae1',
                             second_ae_id = '$ae2',
+                            manager = '$manager',
                             tv_value = '$tv',
                             digital_value = '$digital',
+                            start_month = '$start',
+                            end_month = '$end',
                             quota = '$quota',
                             status = '$status',
                             notes = '$notes'";
@@ -127,8 +143,8 @@ class pipeline extends Model{
 
     }
 
-     public function updateLines($con,$sql,$id,$register,$cluster,$project,$client,$agency,$product,$ae1,$ae2,$tv,$digital,$quota,$status,$notes){
-
+     public function updateLines($con,$sql,$id,$register,$cluster,$project,$client,$agency,$product,$ae1,$ae2,$manager,$tv,$digital,$start,$end,$quota,$status,$notes){
+        //var_dump($manager);
          $query = "UPDATE pipeline
                         SET register = '$register', 
                             cluster = '$cluster',
@@ -138,27 +154,32 @@ class pipeline extends Model{
                             product = '$product',
                             primary_ae_id = '$ae1',
                             second_ae_id = '$ae2',
+                            manager = '$manager',
                             tv_value = '$tv',
                             digital_value = '$digital',
+                            start_month = '$start',
+                            end_month = '$end',
                             quota = '$quota',
                             status = '$status',
                             notes = '$notes'
                         WHERE ID = $id";
-
+            //print_r($query);  
         $resultQuery = $con->query($query);
 
     }
 
     public function table($con,$sql){
 
-        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,client,agency,product,sr.name as primary_ae, ss.name as second_ae,tv_value,digital_value,quota,status,notes
+        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,cl.name as client,a.name as agency,product,sr.name as primary_ae, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
                         FROM pipeline c
                         LEFT JOIN sales_rep sr ON (sr.ID = c.primary_ae_id) 
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
+                        LEFT JOIN client cl ON (cl.ID = c.client)
+                        LEFT JOIN agency a ON (a.ID = c.agency)
                          ";
 
         $selectQuery = $con->query($select);
-        $from = array('packetID','register','cluster','project','client','agency','product','primary_ae','second_ae','tv_value','digital_value','quota','status','notes');
+        $from = array('packetID','register','cluster','project','client','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes');
         $result = $sql->fetch($selectQuery, $from, $from);
 
         //var_dump($select);
@@ -175,11 +196,48 @@ class pipeline extends Model{
             
         }
 
-
-
         return $total;
     }
 
+
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFAgencies(Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+
+        $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
+                    FROM agency a                    
+                    left join agency_group ag on ag.ID = a.agency_group_id
+                    and ag.region_id = 1
+                    ORDER BY a.name ASC";
+        //var_dump($select);
+        $from = array('aID','agency');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        return $client;
+    }
+
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFClients(Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+
+        $select = "SELECT DISTINCT c.ID AS clientId ,c.name as client
+                    FROM client c                   
+                    WHERE c.client_group_id = 1
+                    ORDER BY c.name ASC";
+        //var_dump($select);
+        $from = array('clientId','client');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        return $client;
+    }
     
 }
 

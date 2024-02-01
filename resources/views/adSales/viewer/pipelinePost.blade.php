@@ -2,7 +2,12 @@
 @section('title', 'Pipelines')
 @section('head')
 
-    <?php include(resource_path('views/auth.php'));?>
+    <?php include(resource_path('views/auth.php'));
+
+        $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
+        $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+
+    ?>
 
 @endsection
 @section('content')
@@ -59,7 +64,7 @@
 		</div>
 
 		<div class="row mt-2 justify-content-end">
-            <div class="col" style="width: 100%;">
+            <div class="col">
                  <form method="POST" runat="server" action="{{ route('savePipeline') }} " name="pipelineSave">
                     @csrf
                     <input type='hidden' readonly='true' type="text" name="region" id="region" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$region[0]['id']}}">
@@ -71,85 +76,120 @@
                         </div>    
                     </div> 
                 @if($table)
-                    <table id="tabelaDados" class="table-responsive" style='width: 100% zoom: 85%;'>
+                    <table class="table-responsive-sm" >
                         <tr>
-                            <td colspan="8"></td>
+                            <td colspan="9"></td>
                             <td class="odd center" colspan="2" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">SUBTOTAL</td>
                             <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
                         </tr>
                         <tr>
-                            <td colspan="8"></td>
+                            <td colspan="9"></td>
                             <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['tv'])}}</td>
                             <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['digital'])}}</td>
                             <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['total'])}}</td>
                         </tr>
-                        <tr class="darkBlue center">
-                            <td>Register</td> 
-                            <td>Cluster</td>
-                            <td>Property</td>
-                            <td style="width:3% !important">Client</td>
-                            <td style="width:3% !important">Agency</td>
-                            <td >Products</td>
-                            <td >AE 1</td>
-                            <td >AE 2 </td>
-                            <td >TV</td>
-                            <td >Digital</td>
-                            <td >Total</td>
-                            <td >Quota</td>
-                            <td >Status</td>
-                            <td >Notes</td>
+                        <tr class="darkBlue center" style="font-size: 14px;">
+                            <td style="width:3% !important;">Register</td> 
+                            <td style="width:3% !important;">Cluster</td>
+                            <td style="width:3% !important;">Property</td>
+                            <td style="width:3% !important;">Client</td>
+                            <td style="width:3% !important;">Agency</td>
+                            <td style="width:3% !important;" >Products</td>
+                            <td style="width:3% !important;" >AE 1</td>
+                            <td style="width:3% !important;" >AE 2 </td>
+                            <td style="width:3% !important;" >MNG </td>
+                            <td style="width:3% !important;" >TV</td>
+                            <td style="width:3% !important;" >Digital</td>
+                            <td style="width:3% !important;" >Total</td>
+                            <td style="width:3% !important;" >Start Month</td>
+                            <td style="width:3% !important;" >End Month </td>
+                            <td style="width:3% !important;" >Quota</td>
+                            <td style="width:3% !important;" >Status</td>
+                            <td style="width:10% !important;" >Notes</td>
                         </tr>
                         @for($t=0; $t<sizeof($table);$t++)
-                        <tr class="even col center">
-                            <input type='hidden' readonly='true' type="text" name="ID-{{$t}}" id="ID-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}}">
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="register-{{$t}}" id="register-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['register']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> 
-                                <select name='cluster-{{$t}}' id='cluster-{{$t}}' style="text-align: center;">
-                                    @for($c=0; $c<sizeof($info[1]);$c++)
-                                        <option <?php if($info[1][$c]['cluster'] == $table[$t]['cluster']) { echo "selected";}?> value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
-                                    @endfor
-                                </select>
-                            </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='project-{{$t}}' id='project-{{$t}}' style="text-align: center;">
+                        <input type='hidden' readonly='true' type="text" name="ID-{{$t}}" id="ID-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}}">
+                            <tr class="even center" style="font-size: 14px;">
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="register-{{$t}}" id="register-{{$t}}" style="width: 80px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['register']}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"> 
+                                    <select name='cluster-{{$t}}' id='cluster-{{$t}}' style="width: 100px; font-size: 13px; font-weight:bold; text-align:center;" class='btn'>
+                                        @for($c=0; $c<sizeof($info[1]);$c++)
+                                            <option <?php if($info[1][$c]['cluster'] == $table[$t]['cluster']) { echo "selected";}?> value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
+                                        @endfor
+                                    </select>
+                                </td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px ; width:3%;">
+                                <select name='project-{{$t}}' id='project-{{$t}}' style="width: 100px; font-size: 13px; font-weight:bold; text-align:center;" class='btn'>
                                      @for($p=0; $p<sizeof($info[3]);$p++)
                                         <option <?php if($info[3][$p]['project'] == $table[$t]['project']) { echo "selected";}?> value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
                                     @endfor                                        
                                 </select>
-                            </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:3% !important"><input type="text" name="client-{{$t}}" id="client-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['client']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:3% !important"><input type="text" name="agency-{{$t}}" id="agency-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['agency']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="product-{{$t}}" id="product-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['product']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae1-{{$t}}' id='ae1-{{$t}}' style="text-align: center;">
-                                @for($s=0; $s<sizeof($rep);$s++)
-                                    <option  <?php if($rep[$s]['salesRep'] == $table[$t]['primary_ae']) { echo "selected";}?> value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae2-{{$t}}' id='ae2-{{$t}}' style="text-align: center;">
-                                @for($ss=0; $ss<sizeof($rep);$ss++)
-                                    <option  <?php if($rep[$ss]['salesRep'] == $table[$t]['second_ae']) { echo "selected";}?> value="{{$rep[$ss]['id']}}">{{$rep[$ss]['salesRep']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="tv-{{$t}}" id="tv-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['tv_value'],0,',','.')}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="digital-{{$t}}" id="digital-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="total-{{$t}}" id="total-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($totalPerPacket[$t])}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"> 
-                                <select name='quota-{{$t}}' id='quota-{{$t}}' style="text-align: center;">
-                                @for($q=0; $q<sizeof($info[2]);$q++)
-                                    <option <?php if($info[2][$q]['quota'] == $table[$t]['quota']) { echo "selected";}?>value="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='status-{{$t}}' id='status-{{$t}}'>
-                                    @for($q=0; $q<sizeof($info[4]);$q++)
-                                        <option <?php if($info[4][$q] == $table[$t]['status']) { echo "selected";}?> value="{{$info[4][$q]}}">{{$info[4][$q]}}</option>
+                                </td>
+                                <td style=" font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" >
+                                    <select class='selectpicker' name="client-{{$t}}" id="client-{{$t}}" style="width: 80px; font-size: 13px; font-weight:bold; text-align:center; background-color:transparent; border:none;"  data-selected-text-format='count' data-width='80%' class='form-control' data-live-search='true' data-size='4'> 
+                                    @for($x=0; $x<sizeof($info[5]);$x++)
+                                        <option style="font-size: 13px; font-weight:bold;" <?php if($info[5][$x]['client'] == $table[$t]['client']) { echo "selected";}?> value="{{$info[5][$x]['clientId']}}">{{$info[5][$x]['client']}}</option>
+                                    @endfor
+                                    </select>
+                                </td>
+                                <td style="font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
+                                    <select class='selectpicker' name="agency-{{$t}}" id="agency-{{$t}}" style="width: 80px; font-size: 13px; font-weight:bold; text-align:center; background-color:transparent; border:none;" data-selected-text-format='count' data-width='80%' class='form-control' data-live-search='true' data-size='4'>
+                                    @for($z=0; $z<sizeof($info[6]);$z++)
+                                        <option <?php if($info[6][$z]['agency'] == $table[$t]['agency']) { echo "selected";}?> value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
+                                    @endfor
+                                    </select></td>
+                                
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="product-{{$t}}" id="product-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['product']}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
+                                    <select name='ae1-{{$t}}' id='ae1-{{$t}}' style="width: 100px; font-weight:bold; text-align:center; font-size: 13px;" class='btn'>
+                                    @for($s=0; $s<sizeof($rep);$s++)
+                                        <option  <?php if($rep[$s]['salesRep'] == $table[$t]['primary_ae']) { echo "selected";}?> value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
                                     @endfor
                                 </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" maxlength="300" name="notes"><input  type="text" name="notes-{{$t}}" id="notes-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['notes']}}"></td>
-                        </tr>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
+                                    <select name='ae2-{{$t}}' id='ae2-{{$t}}' style="width: 100px; font-size: 13px; font-weight:bold; text-align:center;" class='btn'>
+                                    @for($ss=0; $ss<sizeof($rep2);$ss++)
+                                        <option  <?php if($rep2[$ss]['salesRep'] == $table[$t]['second_ae']) { echo "selected";}?> value="{{$rep2[$ss]['id']}}">{{$rep2[$ss]['salesRep']}}</option>
+                                    @endfor
+                                </select></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                    <select name="manager-{{$t}}" id="manager-{{$t}}" style="font-size: 13px; width: 100px; text-align: center; font-weight:bold;" class='btn'>
+                                    @for($l=0; $l<sizeof($info[7]);$l++)
+                                        <option <?php if($info[7][$l] == $table[$t]['manager']) { echo "selected";}?> value="{{$info[7][$l]}}">{{$info[7][$l]}}</option>
+                                    @endfor
+                                    </select></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="tv-{{$t}}" id="tv-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['tv_value'],0,',','.')}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="digital-{{$t}}" id="digital-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="total-{{$t}}" id="total-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($totalPerPacket[$t])}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                    <select  name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="font-size: 13px; width: 100px; text-align: center; font-weight:bold;" class='btn'>
+                                          @for($m=0; $m<sizeof($intMonth);$m++)
+                                            <option <?php if($intMonth[$m] == $table[$t]['start_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                        @endfor                                        
+                                    </select>
+                                </td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                    <select  name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="width: 100px; text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
+                                          @for($m=0; $m<sizeof($intMonth);$m++)
+                                            <option <?php if($intMonth[$m] == $table[$t]['end_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                        @endfor                                        
+                                    </select></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"> 
+                                    <select name='quota-{{$t}}' id='quota-{{$t}}' style="width: 100px; font-size: 13px; font-weight:bold; text-align:center;" class='btn'>
+                                    @for($q=0; $q<sizeof($info[2]);$q++)
+                                        <option <?php if($info[2][$q]['quota'] == $table[$t]['quota']) { echo "selected";}?> bvvalue="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
+                                    @endfor
+                                </select></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
+                                    <select name='status-{{$t}}' id='status-{{$t}}' style="font-size: 13px; width: 100px; font-weight:bold; text-align:center;" class='btn'>
+                                        @for($v=0; $v<sizeof($info[4]);$v++)
+                                            <option <?php if($info[4][$v] == $table[$t]['status']) { echo "selected";}?> value="{{$info[4][$v]}}">{{$info[4][$v]}}</option>
+                                        @endfor
+                                    </select></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" maxlength="300" name="notes"><input  type="text" name="notes-{{$t}}" id="notes-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['notes']}}"></td>
+                            </tr>
                         @endfor
+                      
                         <tr>
                             <td colspan='19' style="border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"></td>
                         </tr>               
@@ -186,55 +226,92 @@
                                         <div class="col">       
                                             <div class="form-group">
                                                 <label>Register</label>
-                                                <input type="text" name="newRegister" id="newRegister" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="forecast"><br>
+                                                <input type="text" name="newRegister" id="newRegister" class='form-control' readonly='true' style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="forecast"><br>
                                                 <label>Cluster</label>                                                
-                                                    <select name='newCluster' id='newCluster' style="width: 100%; ">
+                                                    <select class='selectpicker' id='newCluster' name='newCluster[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
                                                         @for($c=0; $c<sizeof($info[1]);$c++)
                                                             <option value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Property</label>
-                                                        <select name='newProject' id='newProject' style="width: 100%; ">
+                                                    <select class='selectpicker' id='newProject' name='newProject[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
                                                         @for($p=0; $p<sizeof($info[3]);$p++)
                                                             <option value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Client</label>
-                                                <input type="text" name="newClient" id="newClient" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                    <select class='selectpicker' id='newClient' name='newClient[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value='0' selected='true'> Select </option>
+                                                        @for($x=0; $x<sizeof($info[5]);$x++)
+                                                            <option value="{{$info[5][$x]['clientId']}}">{{$info[5][$x]['client']}}</option>
+                                                        @endfor
+                                                    </select><br>
                                                 <label>Agency</label>
-                                                <input type="text" name="newAgency" id="newAgency" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                 <select class='selectpicker' id='newAgency' name='newAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                    <option value=''> Select </option>
+                                                        @for($z=0; $z<sizeof($info[6]);$z++)
+                                                            <option value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
+                                                        @endfor
+                                                    </select><br>                                               
                                                 <label>Product</label>
-                                               <input type="text" name="newProduct" id="newProduct" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                               <input type="text" name="newProduct" id="newProduct" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value=""><br>
                                                 <label>Ae 1</label>
-                                                    <select name='newAe1' id='newAe1' style="width: 100%; ">
+                                                     <select class='selectpicker' id='newAe1' name='newAe1[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
                                                         @for($s=0; $s<sizeof($rep);$s++)
                                                             <option value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>AE 2</label>
-                                                    <select name='newAe2' id='newAe2' style="width: 100%; ">
-                                                        @for($ss=0; $ss<sizeof($rep);$ss++)
-                                                            <option value="{{$rep[$ss]['id']}}">{{$rep[$ss]['salesRep']}}</option>
+                                                    <select class='selectpicker' id='newAe2' name='newAe2[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
+                                                        @for($ss=0; $ss<sizeof($rep2);$ss++)
+                                                            <option value="{{$rep2[$ss]['id']}}">{{$rep2[$ss]['salesRep']}}</option>
                                                         @endfor
                                                     </select> <br>
+                                                 <label>Manager</label>
+                                                 <select class='selectpicker' id='newManager' name='newManager[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                    <option value=''> Select </option>
+                                                        @for($l=0; $l<sizeof($info[7]);$l++)
+                                                            <option value="{{$info[7][$l]}}">{{$info[7][$l]}}</option>
+                                                        @endfor
+                                                    </select><br>
                                                 <label>TV Values</label>
-                                                <input  type="text" name="newTv" id="newTv" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <input  type="text" name="newTv" id="newTv" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value=""><br>
                                                 <label>Digital Values</label>
-                                                <input  type="text" name="newDigital" id="newDigital" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <input  type="text" name="newDigital" id="newDigital" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value=""><br>
+                                                 <label>First Month</label>
+                                                    <select class='selectpicker' id='newFirstMonth' name='newFirstMonth[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
+                                                        @for($m=0; $m<sizeof($intMonth);$m++)
+                                                            <option value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                                        @endfor
+                                                    </select><br>
+                                                <label>Last Month</label>
+                                                    <select class='selectpicker' id='newEndtMonth' name='newEndMonth[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
+                                                        @for($m=0; $m<sizeof($intMonth);$m++)
+                                                            <option value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                                        @endfor
+                                                    </select><br>
                                                 <label>Quota</label>
-                                                    <select name='newQuota' id='newQuota' style="width: 100%; ">
+                                                    <select class='selectpicker' id='newQuota' name='newQuota' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
                                                         @for($q=0; $q<sizeof($info[2]);$q++)
                                                             <option value="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Status</label>
-                                                <select name='newStatus' id='newStatus' style="width: 100%; ">
-                                                        @for($q=0; $q<sizeof($info[4]);$q++)
-                                                            <option value="{{$info[4][$q]}}">{{$info[4][$q]}}</option>
+                                                <select class='selectpicker' id='newStatus' name='newStatus' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                    <option value=''> Select </option>
+                                                        @for($v=0; $v<sizeof($info[4]);$v++)
+                                                            <option value="{{$info[4][$v]}}">{{$info[4][$v]}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Note</label>
-                                                <input type="text" maxlength="300" name="newNotes" id="newNotes" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="">
+                                                <input type="text" maxlength="300" name="newNotes" id="newNotes" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="">
                                             </div>
                                         </div>
                                     </div>

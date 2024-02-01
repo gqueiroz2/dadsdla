@@ -361,6 +361,52 @@ class salesRep extends Management
 		//var_dump($salesRep);
 		return $salesRep;
 	}
+
+	public function getSecondRepPackets($con, $region = false, $notIN = false, $year)
+	{
+		$sql = new sql();
+		$table = "sales_rep sr";
+		$columns = "sr.ID AS 'id',
+				sr.name AS 'salesRep',	
+				srg.name AS 'salesRepGroup',
+				r.name AS 'region',
+				r.ID AS 'regionID',
+				srs.status AS 'status'";
+		$where = "";
+		
+		if ($region) {
+
+			$where .= "WHERE r.ID IN (";
+			for ($r = 0; $r < sizeof($region); $r++) {
+				$where .= "\"" . $region[$r] . "\"";
+				if ($r < sizeof($region) - 1) {
+					$where .= ",";
+				}
+			}
+			$where .= ")";
+		}
+		
+		$where .= "AND ( srs.status != '0') AND (srs.year = '$year') AND (srg.ID = '5')";
+		if ($notIN) {
+			if (!$region) {
+				$where .= " WHERE";
+			} else {
+				$where .= " AND";
+			}
+			$where .= " ( srs.status != '0') AND (srs.year = '$year[0]') AND (srg.ID = '5')";
+		}
+		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
+				LEFT JOIN region r ON r.ID = srg.region_id
+				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
+				";
+		$order = "5,1";
+		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
+		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
+		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
+		$salesRep = $sql->fetch($res, $from, $from);
+		//var_dump($salesRep);
+		return $salesRep;
+	}
 	public function getSalesRepByRegion($con, $region = false, $notIN = false, $year)
 	{
 		$sql = new sql();

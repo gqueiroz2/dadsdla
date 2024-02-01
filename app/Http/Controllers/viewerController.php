@@ -405,6 +405,12 @@ class viewerController extends Controller{
         $year = intval(date('Y'));
         $salesRegion = Request::get("region");
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        $noRep['id'] = '10';
+        $noRep['salesRep'] = 'Não';
+        $noRep['salesRepGroup'] = 'Bruno Paula';
+        $noRep['region'] = 'Brazil';
+
+        array_push($rep,$noRep);
         //var_dump($rep);
         $r = new region();
 
@@ -498,6 +504,12 @@ class viewerController extends Controller{
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];     
 
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        $noRep['id'] = '10';
+        $noRep['salesRep'] = 'Não';
+        $noRep['salesRepGroup'] = 'Bruno Paula';
+        $noRep['region'] = 'Brazil';
+
+        array_push($rep,$noRep);
         
         $info = $p->getOptions($con);
 
@@ -564,7 +576,16 @@ class viewerController extends Controller{
         $year = intval(date('Y'));
         $salesRegion = Request::get("region");
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
-        //var_dump($rep);
+        $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
+
+        $noRep['id'] = '10';
+        $noRep['salesRep'] = 'Não';
+        $noRep['salesRepGroup'] = 'Bruno Paula';
+        $noRep['region'] = 'Brazil';
+
+        array_push($rep2,$noRep);
+
+        //var_dump($rep2);
         $r = new region();
 
         $region = $r->getRegion($con,null);
@@ -577,7 +598,11 @@ class viewerController extends Controller{
 
         $info = $p->getOptions($con);
         $table = $p->table($con,$sql);
-        //var_dump($info);
+
+        /*for ($t=0; $t <sizeOf($table) ; $t++) { 
+            var_dump($table[$t]['cluster']);
+        }*/
+        //var_dump($info[1]);
         //var_dump($table);
         if ($table != false) {
             $totalPerPacket = $p->makeTotal($table);
@@ -592,7 +617,7 @@ class viewerController extends Controller{
          $title = "Pipeline";
          $titleExcel = "pipeline.xlsx";
 
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel'));
 
     }
 
@@ -616,11 +641,16 @@ class viewerController extends Controller{
         $total['digital'] = 0;
         $total['tv'] = 0;
         $total['total'] = 0;
+        $totalPerPacket = 0;
 
         $saveInfo = Request::all();
         unset($saveInfo['_token']);
-        
-        if ($saveInfo['newClient'] != null) {
+        //var_dump($saveInfo);
+        if ($saveInfo['newClient'][0] != 0) {
+            if ($saveInfo['newAe2'][0] == '10') {
+                $saveInfo['newAe2'] = $saveInfo['newAe1'];
+            }
+
             $p->insertNewLines($con,$sql,$saveInfo);    
         }
         
@@ -630,13 +660,13 @@ class viewerController extends Controller{
         $table = $p->table($con,$sql);
 
         if ($table != false) {
-            if (!$saveInfo['newClient']) {
+            if (!$saveInfo['newClient'][0]) {
                 for ($t=0; $t <sizeof($table) ; $t++) { 
                     $saveInfo['tv-'.$t] = str_replace('.', '', $saveInfo['tv-'.$t]);
                     $saveInfo['digital-'.$t] = str_replace('.', '', $saveInfo['digital-'.$t]);
 
 
-                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['product-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['product-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
                 }
             }
                        
@@ -657,13 +687,21 @@ class viewerController extends Controller{
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];     
 
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
+
+        $noRep['id'] = '10';
+        $noRep['salesRep'] = 'Não';
+        $noRep['salesRepGroup'] = 'Bruno Paula';
+        $noRep['region'] = 'Brazil';
+
+        array_push($rep2,$noRep);
         
         $info = $p->getOptions($con);
 
         $title = "Pipeline";
         $titleExcel = "pipeline.xlsx";
         //var_dump($table);
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel','rep2'));
 
     }
 }
