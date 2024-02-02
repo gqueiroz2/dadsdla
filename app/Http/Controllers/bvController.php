@@ -62,7 +62,7 @@ class bvController extends Controller{
       //var_dump($agencyGroup);
       $newClient = $bvModel->getSalesRepByClient($agencyGroup, $salesRep,$con, $sql);
       //var_dump($newClient);
-     $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
+      $bvTest = $bvModel->tableBV($agencyGroup, $year, $con, $value, $salesRep, $currency);
       $total = $bvModel->getBVTotal($bvTest, $year);
       $updateInfo = $bvModel->getRepAndDateofPrev($salesRep, $agencyGroup, $con);
       $list = $bvModel->listOFClients($con, $year);

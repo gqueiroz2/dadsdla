@@ -39,7 +39,7 @@ class dashboardExcelController extends Controller{
          $value = Request::get('value');
          $title = Request::get('title');
          $typeExport = Request::get('typeExport');
-         var_dump(Request::all());
+         //var_dump(Request::all());
          $year = (int)date("Y");
          $salesRegion = array(
             array(
