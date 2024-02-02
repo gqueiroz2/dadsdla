@@ -15,17 +15,17 @@ use App\CheckElements;
 class forecast extends pAndR{
     
     //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
-    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value){
+    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, int $month){
         $company = array('3','1','2');
-        $month = date('m');
-             
+        //$month = date('m');
+       // var_dump($month);
         if($currencyID == 1 ){
             $pRate = 1;
         }else{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
 
-        $check = $this->checkForecast($con, $salesRep);//check if exists forecast for this rep in database
+        $check = $this->checkForecast($con, $salesRep,$month);//check if exists forecast for this rep in database
 
         for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companie
 
@@ -115,11 +115,11 @@ class forecast extends pAndR{
 
 
     //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
-    public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName){
+    public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
         $sql = new sql();
-        $month = 0;
+        //$month = 0;
         $company = array('3','1','2');
-        $month = date('m');
+        //$month = date('m');
         
         if($currencyID == 1){
             $pRate = 1;
@@ -130,7 +130,7 @@ class forecast extends pAndR{
         $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear);
                 
         //var_dump($newClient);
-        $check = $this->checkForecast($con, $salesRep);//check if exists forecast for this rep in database
+        $check = $this->checkForecast($con, $salesRep,$month);//check if exists forecast for this rep in database
        // var_dump($clients);
         for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
             for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
@@ -190,11 +190,11 @@ class forecast extends pAndR{
     }
 
      //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
-    public function makeNewClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName){
+    public function makeNewClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
         $sql = new sql();
-        $month = 0;
+       // $month = 0;
         $company = array('wm','dc','spt');
-        $month = date('m');
+        //$month = date('m');
         
         if($currencyID == 1){
             $pRate = 1;
@@ -203,21 +203,22 @@ class forecast extends pAndR{
         }
          
         $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName);
+        //var_dump($clients);
         if ($clients == null) {
             $table = 0;
         }else{
-            $check = $this->checkForecast($con, $salesRep);//check if exists forecast for this rep in database
+            $check = $this->checkForecast($con, $salesRep,$month);//check if exists forecast for this rep in database
            
            // var_dump($clients);
             for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
                 for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
                     //var_dump($salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c]);
                     if($check != false){
-                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c])['revenue']);
-                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'digital',$company[$c])['revenue']);
+                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);
+                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
                     }else{
-                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c])['revenue']);    
-                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'digital',$company[$c])['revenue']);
+                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);    
+                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
                     }
 
                     $pivot[$a][$c] = array('payTvForecast' => ($payTvForecast[$a][$c]), 'digitalForecast' => ($digitalForecast[$a][$c]), 'payTvForecastC' => $payTvForecast[$a][$c], 'digitalForecastC' => $digitalForecast[$a][$c]);
@@ -225,20 +226,20 @@ class forecast extends pAndR{
                 } 
 
                 if($check != false){ 
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', '1,2,3')['revenue']);
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'digital','1,2,3')['revenue']);
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
                 }else{
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', '1,2,3')['revenue']);
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'digital','1,2,3')['revenue']);
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
                 }   
                 
                  
-                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['clientName'],$clients[$a]['agencyName'],$salesRep);
+                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['cID'],$clients[$a]['aID'],$salesRep);
                 
 
                 $totalPivot[$a] = array('payTvForecast' => ($totalPayTvForecast[$a]), 'digitalForecast' => ($totalDigitalForecast[$a]));
            
-                $clientInfo[$a] = array('clientName' => $clients[$a]['clientName'], 'clientName' => $clients[$a]['clientName'],'agencyName' => $clients[$a]['agencyName'], 'probability' => $probability[$a]);
+                $clientInfo[$a] = array('clientName' => $clients[$a]['client'], 'clientID' => $clients[$a]['cID'],'agencyName' => $clients[$a]['agency'], 'agencyID' => $clients[$a]['aID'], 'probability' => $probability[$a]);
             }
 
            
@@ -248,26 +249,43 @@ class forecast extends pAndR{
 
         //var_dump($table);
        
-       // var_dump($table['clientInfo']);
+        //var_dump($table['clientInfo']);
         return $table;
     }
 
-    //make a list of clients for the front-end button to add a new client basis on existing clients
-    public function listOFClients(Object $con, int $year){
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFAgencies(Object $con){
         $sql = new sql();
         $year = (int)date("Y");
         $pYear = $year-1;
         $ppYear = $year-2;
 
-        $select = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
-                    FROM wbd w
-                    left join client c on c.ID = w.client_id
-                    left join agency a on a.ID = w.agency_id
-                    WHERE c.client_group_id = 1 
-                    and w.year in ($year,$pYear)
+        $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
+                    FROM agency a                    
+                    left join agency_group ag on ag.ID = a.agency_group_id
+                    and ag.region_id = 1
+                    ORDER BY a.name ASC";
+        //var_dump($select);
+        $from = array('aID','agency');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        return $client;
+    }
+
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFClients(Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+
+        $select = "SELECT DISTINCT c.ID AS clientId ,c.name as client
+                    FROM client c                   
+                    WHERE c.client_group_id = 1
                     ORDER BY c.name ASC";
         //var_dump($select);
-        $from = array('id','client','aID','agency');
+        $from = array('clientId','client');
         $selectQuery = $con->query($select);
         $client = $sql->fetch($selectQuery, $from, $from);
         $client = $client;
@@ -281,8 +299,8 @@ class forecast extends pAndR{
         $insertQuery = "INSERT INTO  new_clients_fcst
                         SET created_date = '$updateTime',
                         sales_rep_id = $salesRep,
-                        client = '$client',
-                        agency = '$agency',
+                        client_id = '$client',
+                        agency_id = '$agency',
                         platform = '$platform',
                         wm = $wm,
                         spt = $spt,
@@ -300,60 +318,20 @@ class forecast extends pAndR{
         $pYear = $year-1;
         $ppYear = $year-2;
 
-         $selectClient = "SELECT distinct  f.client as clientName, f.agency as agencyName
+         $selectClient = "SELECT distinct  c.ID as cID, c.name as client, a.ID as aID, a.name as agency
                             from new_clients_fcst f
                             left join sales_rep sr on sr.ID = f.sales_rep_id 
+                            LEFT JOIN client c ON c.id = f.client_id
+                            LEFT JOIN agency a ON a.id = f.agency_id
                             WHERE (sr.ID IN ($salesRep))";
-                        //var_dump($selectClient);
+                    // var_dump($selectClient);
             $resultClient = $con->query($selectClient);
-            $from = array('clientName','agencyName');
+            $from = array('cID','client','aID','agency');
             $client = $sql->fetch($resultClient, $from, $from);
             //var_dump($client);
 
             return $client;
             
-    }
-
-    public function checkClient(Object $con, Object $sql, $client=false,$salesRepName){
-        //$check = new CheckElements();
-        $temp = 0;
-        
-       // $clients = $this->checkNewClients($con,$con,'new_clients_fcst',$sql,'1',$salesRepName);
-       // var_dump($clients);
-        /*for ($u=0; $u <sizeof($client) ; $u++) { 
-            $select = "SELECT DISTINCT c.name as clientName, c.client_id as clientID
-                    FROM client_unit c
-                    WHERE (c.name = (\"".$client[$u]['clientName']."\"))
-                    ";
-
-            $result = $con->query($select);
-            $from = array('clientName','clientID');
-            $clientUnit = $sql->fetch($result, $from, $from);    
-            //var_dump($clientUnit);
-        }
-        
-        for ($c=0; $c <sizeof($clientUnit) ; $c++) { 
-            $selectC[$c] = "SELECT DISTINCT c.name as clientName, c.ID as client
-                FROM client c
-                WHERE (c.id = (\"".$clientUnit[$c]['clientID']."\"))
-                AND c.client_group_id = 1
-                ";
-
-            $result = $con->query($selectC[$c]);
-            $from = array('clientName','client');
-            $clientF[$c] = $sql->fetch($result, $from, $from);  
-            /*var_dump($clientF);
-            if ($clientF == false) {
-                unset($clientF);
-                array_values($clientF);
-                //$temp = $clientF[$c][0];
-
-            }*/
-        //}
-        //var_dump($clientF);
-        //}(\"$year\") \"".$month."\" 
-        
-
     }
 
     //THIS FUNCTION SAVE OR UPDATE THE FORECAST MADE BY THE SALES REP
@@ -400,8 +378,8 @@ class forecast extends pAndR{
             mysqli_query($con,"INSERT INTO  new_clients_fcst
                         SET created_date = '$updateTime',
                         sales_rep_id = $salesRep,
-                        client = '$client',
-                        agency = '$agency',
+                        client_id = '$client',
+                        agency_id = '$agency',
                         platform = '$platform',
                         wm = $wm,
                         spt = $spt,
@@ -414,11 +392,12 @@ class forecast extends pAndR{
              mysqli_query($con,"UPDATE new_clients_fcst
                         SET  wm = $wm, spt = $spt, dc = $dc, probability = $probability
                         WHERE sales_rep_id = $salesRep
-                        AND client = '$client'
-                        AND agency = '$agency'
+                        AND client_id = '$client'
+                        AND agency_id = '$agency'
                         AND platform = '$platform'                        
                         AND month = $month
                         ");
+            
              
         }
     }
@@ -447,7 +426,7 @@ class forecast extends pAndR{
                                 AND w.year = $year
                                 AND w.month = $month
                                 AND (b.brand_group_id IN ($company))
-                                AND b.type = 'Linear'
+                                AND b.type = 'Linear'                                
                                 "; 
                                 //var_dump($select);
                         }else{
@@ -486,6 +465,7 @@ class forecast extends pAndR{
                                 AND a.ID = $agency
                                 AND (b.brand_group_id IN ($company))
                                 AND b.type = 'Linear'
+                                AND $value != 0
                                 "; 
                         }else{
                             $select = "SELECT sum($value) as revenue
@@ -499,6 +479,7 @@ class forecast extends pAndR{
                                 AND a.ID = $agency
                                 AND (b.brand_group_id IN ($company))
                                 AND b.type = 'Non-Linear'
+                                AND $value != 0
                                 "; 
                         }
                     }else{
@@ -512,6 +493,7 @@ class forecast extends pAndR{
                             AND c.ID = $client
                             AND a.ID = $agency
                             AND (b.brand_group_id IN ($company))
+                            AND $value != 0
                             ";    
                     }                   
 
@@ -670,10 +652,11 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
                                 WHERE f.sales_rep_id = $salesRep
-                                AND f.client = '$client'
-                                AND f.agency = '$agency'
+                                AND f.client_id = '$client'
+                                AND f.agency_id = '$agency'
                                 AND (f.platform = '$platform')
                                 AND f.month = $month
+                                AND $company != 0
                                 ";
                         //var_dump($selectAE);
                     $query = $con->query($selectAE);
@@ -707,10 +690,11 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
                                 WHERE f.sales_rep_id = $salesRep
-                                AND c.id = $client
-                                AND a.id = $agency
+                                AND f.client_id = $client
+                                AND f.client_id = $agency
                                 AND (b.brand_group_id IN ($company)) 
-                                AND (f.platform = '$platform')                                
+                                AND (f.platform = '$platform') 
+                                AND $month != 0                               
                                 ";
                         //var_dump($select);
                     $query = $con->query($selectForecast);
@@ -729,12 +713,13 @@ class forecast extends pAndR{
        
     }
     //this function check if exists forecast in database for the current rep
-    public function checkForecast(Object $con, int $salesRep){
+    public function checkForecast(Object $con, int $salesRep, int $month){
         $sql = new sql();
 
         $selectQuery = "SELECT sales_rep_id as salesRep
                         FROM monthly_forecast
                         WHERE sales_rep_id = $salesRep
+                        AND month = $month
                         ";
             // echo "<pre>$selectQuery</pre>";
         $from = array('salesRep');
@@ -795,8 +780,8 @@ class forecast extends pAndR{
         $selectQuery = "SELECT DISTINCT probability AS probability
                         FROM new_clients_fcst
                         WHERE sales_rep_id = $salesRep
-                        AND client = $client
-                        AND agency = $agency";
+                        AND client_id = $client
+                        AND agency_id = $agency";
        //var_dump($selectQuery);
         $from = array('probability');
         $selectResultQuery = $con->query($selectQuery);

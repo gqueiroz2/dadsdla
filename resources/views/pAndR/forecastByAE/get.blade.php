@@ -23,6 +23,13 @@
                     @endif
                 </div>
                 <div class="col">
+                    <label class='labelLeft'><span class="bold">Month:</span></label>
+                    @if($errors->has('year'))
+                        <label style="color: red;">* Required</label>
+                    @endif
+                    {{$render->month($months)}}
+                </div>
+                <div class="col" style="display:none;">
                     <label class='labelLeft'><span class="bold">Year:</span></label>
                     @if($errors->has('year'))
                         <label style="color: red;">* Required</label>

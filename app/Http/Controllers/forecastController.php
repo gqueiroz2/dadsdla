@@ -33,10 +33,14 @@ class forecastController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
+        $months = array(intval(date('n')),intval(date('n')) + 1);    
+        $year = date('Y');
+        //var_dump($months);
+
         $typeMsg = false;
         $msg = "";
 
-        return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+        return view('pAndR.forecastByAE.get',compact('con','render','region','currency','permission','user','msg','typeMsg','months','year'));
 
     }
 
@@ -51,8 +55,9 @@ class forecastController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $cYear = intval( Request::get('year') );
-        $pYear = $cYear - 1;
+        $intMonth = Request::get('month');
+        $year = date('Y');
+        $pYear = $year - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
@@ -64,7 +69,9 @@ class forecastController extends Controller{
         $value = 'gross';
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
-        $list = $fcst->listOFClients($con, $cYear);
+
+        $months = array(intval(date('n')),intval(date('n')) + 1);   
+        $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -84,16 +91,19 @@ class forecastController extends Controller{
             $salesRepID = '9,137';
         }*/
 
+        $listOfClients = $fcst->listOFClients($con);
 
-        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
-        //var_dump($salesRepID);
+        $listOfAgencies = $fcst->listOFAgencies($con);
 
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']); 
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$intMonth);
+        //var_dump($listOfClients);
+
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
         //var_dump($newClientsTable);
-        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);
+        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
         
        
-       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID', 'cYear','pYear','list','newClientsTable'));
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID', 'year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies'));
 
     }
 
@@ -110,8 +120,8 @@ class forecastController extends Controller{
         $saveInfo = Request::all();
         $sql =  new sql();
         
-        $cYear = date('Y');
-        $pYear = $cYear - 1;
+        $year = date('Y');
+        $pYear = $year - 1;
         $region = $r->getRegion($con,false);
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
@@ -121,30 +131,36 @@ class forecastController extends Controller{
         $salesRepID = Request::get('salesRep');
         $currencyID = '1';
         $value = 'gross';
+        $months = array(intval(date('n')),intval(date('n')) + 1);    
 
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
-        $list = $fcst->listOFClients($con, $cYear);       
+        $listOfClients = $fcst->listOFClients($con);
 
-        $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $cYear, $pYear);
+        $listOfAgencies = $fcst->listOFAgencies($con);      
+
+        $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $year, $pYear);
         //print_r($saveInfo);
 
         $company = array('3','1','2');
         $month = date('F');
-        $intMonth = date('n');
-        $check = $fcst->checkForecast($con, $salesRepID);//check if exists forecast for this rep in database
+        $intMonth = Request::get('month');
+        //var_dump($intMonth);
+        $monthName = $b->intToMonth2(array($intMonth)); 
+       // var_dump($intMonth);
+        $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);//check if exists forecast for this rep in database
 
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);  
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);  
 
-        if($saveInfo['newClient']){            
-            $newAgency = $saveInfo['newAgency'];
-            $newClient = $saveInfo['newClient'];
+        if($saveInfo['newClient'][0] != 0){            
+            $newAgency = $saveInfo['newAgency'][0];
+            $newClient = $saveInfo['newClient'][0];
             $newProbability = $saveInfo['newProbability'];
             
             $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'digital',$newProbability,$intMonth);
             $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'pay tv',$newProbability,$intMonth);
 
-            $fcst->checkClient($con,$sql,$newClient,$salesRepName[0]['salesRep']);           
+            //$fcst->checkClient($con,$sql,$newClient,$salesRepName[0]['salesRep']);           
 
         }
 
@@ -162,13 +178,13 @@ class forecastController extends Controller{
             $probability = (int) $saveInfo['probability-'.$a];
 
             for ($c=0; $c <sizeof($company) ; $c++) { 
-                $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month]);
-                $digitalForecast[$a][$c] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month]);
+                $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$intMonth]);
+                $digitalForecast[$a][$c] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$intMonth]);
 
-                $fcst->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth, $salesRepID, 'pay tv',$payTvForecast[$a][$c],$currencyID,$probability,$check);
+                $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'pay tv',$payTvForecast[$a][$c],$currencyID,$probability,$check);
                 
                 //insere valores de digital
-                $fcst->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth, $salesRepID, 'digital',$digitalForecast[$a][$c],$currencyID,$probability,$check);
+                $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'digital',$digitalForecast[$a][$c],$currencyID,$probability,$check);
                 
             }
         }
@@ -180,43 +196,28 @@ class forecastController extends Controller{
                 $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
 
                 for ($c=0; $c <sizeof($company) ; $c++) { 
-                    $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$month]);
-                    $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$month]);
-                    
+                    $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$intMonth]);
+                    $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$intMonth]);                    
                 }
 
-                $fcst->saveForecastNew($con, $clientN, $agencyN, $cYear, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
+                $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
                     
                 //insere valores de digital
-                $fcst->saveForecastNew($con, $clientN, $agencyN, $cYear, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
+                $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
             }
         }
+             
         
-       /* for ($z=0; $z <sizeof($newClient) ; $z++) { 
-            
-            
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$intMonth);
 
+        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);   
 
-            
-
-        }*/
-        
-
-        /*if ($newClient != null)  {
-            $clients = array_merge($clients,$newClient);
-            $clients = array_values($clients);
-        }*/      
-        
-        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
-
-        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);   
-
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep']);  
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);  
         //var_dump($newClientsTable['companyValues'][0]);
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";
-        
-       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list','newClientsTable'));
+        //var_dump($newClientsTable);
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies'));
         
     }
 }

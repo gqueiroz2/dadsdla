@@ -542,6 +542,18 @@ class Render extends Model{
         echo "</select>";
     }
     
+    public function month($months){
+        $base = new base();
+        $monthName = $base->intToMonth2($months);
+        
+        echo "<select id='month' name='month' style='width:100%;' class='form-control'>";
+            for ($m=0; $m < sizeof($months); $m++) { 
+                echo "<option value='".$months[$m]."'>".$monthName[$m]."</option>";
+            }
+        echo "</select>";
+        
+    }
+
     public function newCurrency($regionName,$regionCurrencies){
     	echo "<select id='currency' name='currency' style='width:100%;' class='form-control'>";
     		for ($c=0; $c < sizeof($regionCurrencies[$regionName]); $c++) { 
