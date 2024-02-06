@@ -5,7 +5,7 @@
     <?php include(resource_path('views/auth.php'));
 
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
-        $month = array('January','February','March','April','May','June','July','August','September','October','November','December');
+        $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
     ?>
 
 @endsection
@@ -76,109 +76,103 @@
                         </div>    
                     </div> 
                 @if($table)
-                    <table id="tabelaDados" class="table-responsive" style='width: 100% zoom: 85%; table-layout: fixed;' >
+                    <table class="table-responsive" style='width: 100% zoom: 85%;' >
                         <tr>
-                            <td colspan="9"></td>
-                            <td class="odd center" colspan="2" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">SUBTOTAL</td>
-                            <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">TOTAL</td>
+                            <td colspan="8"></td>
+                            <td class="dc center" colspan="2" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">DSC</td>
+                            <td class="sony center" colspan='2' style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">SPT</td>
+                            <td class="dn center" colspan='3' style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">WM</td>
+                            <td class="grey center" colspan='3' style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">WBD</td>
                         </tr>
                         <tr>
-                            <td colspan="9"></td>
-                            <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['tv'])}}</td>
-                            <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['digital'])}}</td>
-                            <td class="odd center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['total'])}}</td>
+                            <td colspan="8"></td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['dsc_tv'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['dsc_digital'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['spt_tv'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['spt_digital'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['wm_tv'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['wm_digital'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['wbd_max'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['total_tv'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['total_digital'])}}</td>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 1px 1px 0px 1px;">{{number_format($total['total'])}}</td>
+                            
                         </tr>
-                        <tr class="darkBlue center">
-                            <td>Register</td> 
-                            <td>Holding</td>
-                            <td >Cluster</td>
-                            <td >Property</td>
-                            <td >Client</td>
-                            <td >Agency</td>
-                            <td >Segment</td>
+                        <tr class="smBlue col center">
+                            <td >CLUSTER</td>
+                            <td >PROPERTY</td>
+                            <td >CLIENT</td>
+                            <td >AGENCY</td>
+                            <td >PRODUCT</td>
+                            <td>SEGMENT</td>
                             <td>AE 1</td>
-                            <td>AE 2 </td>
-                            <td >TV</td>
-                            <td >Digital</td>
-                            <td >Total</td>
-                            <td >Start Month</td>
-                            <td >End Month </td>
-                            <td >Payment </td>
-                            <td >Installments</td>
-                            <td  >Quota</td>
-                            <td style="width:3px;">Status</td>
-                            <td >Notes</td>
+                            <td>AE 2 </td>                            
+                            <td class='dc' >TV</td>
+                            <td class="dc" >DIG</td>
+                            <td class="sony" >TV</td>
+                            <td class="sony" >DIG</td>
+                            <td class='dn' >TV</td>
+                            <td class="dn" >DIG</td>
+                            <td class='dn' >WM MAX</td>
+                            <td class='grey' >TV</td>
+                            <td class="grey">DIG</td>
+                            <td class='grey'>TOTAL</td>
+                            <td >PAYMENT </td>
+                            <td >INST</td>
+                            <td >START</td>
+                            <td >END</td>
+                            <td>MONTHS</td>
+                            <td>QUOTA</td>
+                            <td>LETTER</td>
+                            <td >NOTES</td>
+                            <td></td>
                         </tr>
                         @for($t=0; $t<sizeof($table);$t++)
-                        <tr class="even col center" style="font-size: 13px;">
+                        <tr class="even center" style="font-size: 13px; border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;">
                             <input type='hidden' readonly='true' type="text" name="ID-{{$t}}" id="ID-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}}">
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;"><input readonly='true' type="text" name="register-{{$t}}" id="register-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['register']}}"></td> 
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" >
-                                <select name='holding-{{$t}}' id='holding-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                    @for($h=0; $h<sizeof($info[0]);$h++)
-                                        <option <?php if($info[0][$h]['holding'] == $table[$t]['holding']){ echo "selected";}?> value="{{$info[0][$h]['id']}}">{{$info[0][$h]['holding']}}</option>
-                                    @endfor
-                                </select>
-                            </td>
-                            <td>
-                                <select name='cluster-{{$t}}' id='cluster-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                    @for($c=0; $c<sizeof($info[1]);$c++)
-                                        <option <?php if($info[1][$c]['cluster'] == $table[$t]['cluster']) { echo "selected";}?> value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
-                                    @endfor
-                                </select>
-                            </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='project-{{$t}}' id='project-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                     @for($p=0; $p<sizeof($info[3]);$p++)
-                                        <option <?php if($info[3][$p]['project'] == $table[$t]['project']) { echo "selected";}?> value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
-                                    @endfor                                        
-                                </select>
-                            </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:3% !important"><input type="text" name="client-{{$t}}" id="client-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['client']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:3% !important"><input type="text" name="agency-{{$t}}" id="agency-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['agency']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input type="text" name="segment-{{$t}}" id="segment-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['segment']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae1-{{$t}}' id='ae1-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                @for($s=0; $s<sizeof($rep);$s++)
-                                    <option  <?php if($rep[$s]['salesRep'] == $table[$t]['primary_ae']) { echo "selected";}?> value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px">
-                                <select name='ae2-{{$t}}' id='ae2-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                @for($ss=0; $ss<sizeof($rep);$ss++)
-                                    <option  <?php if($rep[$ss]['salesRep'] == $table[$t]['second_ae']) { echo "selected";}?> value="{{$rep[$ss]['id']}}">{{$rep[$ss]['salesRep']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="tv-{{$t}}" id="tv-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['tv_value'],0,',','.')}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digital-{{$t}}" id="digital-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="total-{{$t}}" id="total-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($totalPerPacket[$t])}}"></td>
+                            <input  type="hidden" name="register-{{$t}}" id="register-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['register']}}">
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;" ><input  type="text" name="cluster-{{$t}}" id="cluster-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['cluster']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;" ><input  type="text" name="project-{{$t}}" id="project-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['project']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;" ><input  type="text" name="client-{{$t}}" id="client-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['client']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;" ><input  type="text" name="agency-{{$t}}" id="agency-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['agency']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;" ><input  type="text" name="product-{{$t}}" id="product-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['product']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="segment-{{$t}}" id="segment-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['segment']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="ae1-{{$t}}" id="ae1-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['primary_ae']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="ae2-{{$t}}" id="ae2-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['second_ae']}}"></td>                  
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="dsc_tv-{{$t}}" id="dsc_tv-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['dsc_tv'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="dsc_digital-{{$t}}" id="dsc_digital-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['dsc_digital'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="spt_tv-{{$t}}" id="spt_tv-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['spt_tv'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="spt_digital-{{$t}}" id="spt_digital-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['spt_digital'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="wm_tv-{{$t}}" id="wm_tv-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['wm_tv'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="wm_digital-{{$t}}" id="wm_digital-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['wm_digital'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="wbd_max-{{$t}}" id="wbd_max-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['wbd_max'],0,',','.')}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;">{{number_format($totalPerPacket['tv'][$t],0,',','.')}}</td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;">{{number_format($totalPerPacket['digital'][$t],0,',','.')}}</td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;">{{number_format($totalPerPacket['wbd'][$t],0,',','.')}}</td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="payment-{{$t}}" id="payment-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['payment']}}"> </td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="installments-{{$t}}" id="installments-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['installments']}}"></td>
                             <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
-                                <select  name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                      @for($m=0; $m<sizeof($intMonth);$m++)
-                                        <option <?php if($intMonth[$m] == $table[$t]['start_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
-                                    @endfor                                        
-                                </select>
-                            </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
-                                <select  name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                      @for($m=0; $m<sizeof($intMonth);$m++)
-                                        <option <?php if($intMonth[$m] == $table[$t]['end_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
-                                    @endfor                                        
-                                </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input  type="text" name="payment-{{$t}}" id="payment-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['payment']}}"> </td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input type="text" name="installments-{{$t}}" id="installments-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['installments']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"> 
-                                <select name='quota-{{$t}}' id='quota-{{$t}}' style="text-align: center; font-weight:bold; font-size: 13px;" class='btn'>
-                                @for($q=0; $q<sizeof($info[2]);$q++)
-                                    <option <?php if($info[2][$q]['quota'] == $table[$t]['quota']) { echo "selected";}?>value="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
-                                @endfor
-                            </select></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' type="text" name="status-{{$t}}" id="status-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['status']}}"></td>
-                            <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" maxlength="300" name="notes"><input type="text" name="notes-{{$t}}" id="notes-{{$t}}" style=" background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['notes']}}"></td>
-                        </tr>
+                                    <select name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="-webkit-appearance: none; font-size: 13px; width: 70px; text-align: center; font-weight:bold; background-color:transparent; border:none; font-weight:bold; text-align:center;">
+                                          @for($m=0; $m<sizeof($intMonth);$m++)
+                                            <option <?php if($intMonth[$m] == $table[$t]['start_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                        @endfor                                        
+                                    </select>
+                                </td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                    <select name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="-webkit-appearance: none; width: 70px; text-align: center; font-weight:bold; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;">
+                                          @for($m=0; $m<sizeof($intMonth);$m++)
+                                            <option <?php if($intMonth[$m] == $table[$t]['end_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
+                                        @endfor                                        
+                                    </select></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;">{{$table[$t]['end_month'] - $table[$t]['start_month']}}</td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="quota-{{$t}}" id="quota-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['quota']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="letter-{{$t}}" id="letter-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['letter']}}"></td>
+                            <td style="border-style:solid; border-color: lightgrey; border-width: 0px 1px 0px 1px;"><input  type="text" name="notes-{{$t}}" id="notes-{{$t}}" style="width: 100%; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['notes']}}"></td>
+                            <td style="width:1% !important;"><button class="btn btn-primary" class="click-trigger">Edit</button></td>
+                        </tr>  
                         @endfor
                         <tr>
-                            <td colspan='19' style="border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"></td>
+                            <td colspan='28' style="border-style:solid; border-color:black; border-width: 1px 0px 0px 0px;"></td>
                         </tr>               
                         
                     </table>
@@ -212,73 +206,97 @@
                                     <div class="row justify-content-center">          
                                         <div class="col">       
                                             <div class="form-group">
-                                                <label>Register</label>
-                                                <input type="text" name="newRegister" id="newRegister" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="Actuals"><br>
-                                                <label>Holding</label> 
-                                                <select name='newHolding' id='newHolding' style="width: 100%;">
-                                                    @for($h=0; $h<sizeof($info[0]);$h++)
-                                                        <option value="{{$info[0][$h]['id']}}">{{$info[0][$h]['holding']}}</option>
-                                                    @endfor
-                                                </select><br>
-                                                <label>Cluster</label>                                                
+                                                <label style="font-weight:bold; text-align:center;">Register</label>
+                                                <input type="text" name="newRegister" id="newRegister" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="Actuals"><br>                                                
+                                                <label style="font-weight:bold; text-align:center;">Cluster</label>                                                
                                                     <select name='newCluster' id='newCluster' style="width: 100%;">
                                                         @for($c=0; $c<sizeof($info[1]);$c++)
                                                             <option value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>Project</label><br>
+                                                <label style="font-weight:bold; text-align:center;">Project</label><br>
                                                         <select name='newProject' id='newProject' style="width: 100%; ">
                                                         @for($p=0; $p<sizeof($info[3]);$p++)
                                                             <option value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Client</label>
-                                                <input type="text" name="newClient" id="newClient" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                    <select class='selectpicker' id='newClient' name='newClient[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value='0' selected='true'> Select </option>
+                                                        @for($x=0; $x<sizeof($info[5]);$x++)
+                                                            <option value="{{$info[5][$x]['clientId']}}">{{$info[5][$x]['client']}}</option>
+                                                        @endfor
+                                                    </select><br>
                                                 <label>Agency</label>
-                                                <input type="text" name="newAgency" id="newAgency" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>Segment</label>
+                                                 <select class='selectpicker' id='newAgency' name='newAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                    <option value=''> Select </option>
+                                                        @for($z=0; $z<sizeof($info[6]);$z++)
+                                                            <option value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
+                                                        @endfor
+                                                    </select><br>    
+                                                 <label style="font-weight:bold; text-align:center;">Product</label>
+                                                <input type="text" name="newProduct" id="newProduct" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Segment</label>
                                                <input type="text" name="newSegment" id="newSegment" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>Ae 1</label>
+                                                <label style="font-weight:bold; text-align:center;">Ae 1</label>
                                                     <select name='newAe1' id='newAe1' style="width: 100%; ">
                                                         @for($s=0; $s<sizeof($rep);$s++)
                                                             <option value="{{$rep[$s]['id']}}">{{$rep[$s]['salesRep']}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>AE 2</label>
+                                                <label style="font-weight:bold; text-align:center;">AE 2</label>
                                                     <select name='newAe2' id='newAe2' style="width: 100%; ">
-                                                        @for($ss=0; $ss<sizeof($rep);$ss++)
-                                                            <option value="{{$rep[$ss]['id']}}">{{$rep[$ss]['salesRep']}}</option>
+                                                        @for($ss=0; $ss<sizeof($rep2);$ss++)
+                                                            <option value="{{$rep2[$ss]['id']}}">{{$rep2[$ss]['salesRep']}}</option>
                                                         @endfor
                                                     </select> <br>
-                                                <label>TV Values</label>
-                                                <input  type="text" name="newTv" id="newTv" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>Digital Values</label>
-                                                <input  type="text" name="newDigital" id="newDigital" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>First Month</label>
+                                                <label style="font-weight:bold; text-align:center;">Dsc Tv Value</label>
+                                                <input  type="text" name="new_dsc_tv" id="new_dsc_tv" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Dsc Digital Value</label>
+                                                <input  type="text" name="new_dsc_digital" id="new_dsc_digital" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                 <label style="font-weight:bold; text-align:center;">Wm Tv Value</label>
+                                                <input  type="text" name="new_wm_tv" id="new_wm_tv" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Wm Digital Value</label>
+                                                <input  type="text" name="new_wm_digital" id="new_wm_digital" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Wbd Max Value</label>
+                                                <input  type="text" name="new_wbd_max" id="new_wbd_max" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Spt Tv Value</label>
+                                                <input  type="text" name="new_spt_tv" id="new_spt_tv" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
+                                                <label style="font-weight:bold; text-align:center;">Spt Digital Value</label>
+                                                <input  type="text" name="new_spt_digital" id="new_spt_digital" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>                                              
+                                                <label style="font-weight:bold; text-align:center;">First Month</label>
                                                     <select name='newFirstMonth' id='newFirstMonth' style="width: 100%; ">
                                                         @for($m=0; $m<sizeof($intMonth);$m++)
                                                             <option value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>Last Month</label>
+                                                <label style="font-weight:bold; text-align:center;">Last Month</label>
                                                     <select name='newEndMonth' id='newEndMonth' style="width: 100%; ">
                                                         @for($m=0; $m<sizeof($intMonth);$m++)
                                                             <option value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>Payment</label>
-                                                <input placeholder="Payment" type="text" name="newPayment" id="newPayment" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>Installments</label>
+                                                <label style="font-weight:bold; text-align:center;">Payment</label>
+                                                <select name='newPayment' id='newPayment' style="width: 100%; ">
+                                                        @for($b=0; $b<sizeof($info[4]);$b++)
+                                                            <option value="{{$info[4][$b]}}">{{$info[4][$b]}}</option>
+                                                        @endfor
+                                                    </select><br>
+                                                <label style="font-weight:bold; text-align:center;">Installments</label>
                                                 <input placeholder="Installments" type="text" name="newInstallments" id="newInstallments" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value=""><br>
-                                                <label>Quota</label>
+                                                <label style="font-weight:bold; text-align:center;">Quota</label>
                                                     <select name='newQuota' id='newQuota' style="width: 100%; ">
                                                         @for($q=0; $q<sizeof($info[2]);$q++)
                                                             <option value="{{$info[2][$q]['quota']}}">{{$info[2][$q]['quota']}}</option>
                                                         @endfor
                                                     </select><br>
-                                                <label>Status</label>
-                                                <input readonly='true' type="text" name="newStatus" id="newStatus" value="5 - Closed" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;"><br>
-                                                <label>Note</label>
+                                                <label style="font-weight:bold; text-align:center;">Letter Of Agreement</label>
+                                                <select name='newLetter' id='newLetter' style="width: 100%; ">
+                                                        @for($l=0; $l<sizeof($info[0]);$l++)
+                                                            <option value="{{$info[0][$l]}}">{{$info[0][$l]}}</option>
+                                                        @endfor
+                                                    </select><br>
+                                                <label style="font-weight:bold; text-align:center;">Note</label>
                                                 <input type="text" maxlength="300" name="newNotes" id="newNotes" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px;" value="">
                                             </div>
                                         </div>
@@ -365,6 +383,9 @@
 
 <!-- javascript to be able to edit the front and make calculations of numbers -->
 <script type="text/javascript">
+
+   
+
     $("input[data-type='currency']").on({
         keyup: function() {
           formatCurrency($(this));
@@ -495,30 +516,48 @@
     });
 
 
-    @for($t=0; $t<sizeof($table);$t++)
-       $('#cluster-'+{{$t}}).change(function(){
-        
-        var cluster = $("#cluster-"+{{$t}}).val();
-        if (cluster != "") {
+    @if($table != null)
+        @for($t=0; $t<sizeof($table);$t++)
 
-          $.ajax({
-            url:"/ajax/adsales/getPackets",
-            method:"POST",
-            data:{cluster},
-            success: function(output){                 
-                $('#project-'+{{$t}}).html(output).selectpicker('refresh');
-                //$('#vlau ').html(output).selectpicker('refresh');
-            },
-            error: function(xhr, ajaxOptions,thrownError){
-                alert(xhr.status+" "+thrownError);
+            jQuery(document).ready(function () {    
+                var widthOfSelect = $("#select-"+{{$t}}).width();
+                widthOfSelect = widthOfSelect - 13;
+                //alert(widthOfSelect);
+                jQuery('#select-'+{{$t}}).wrap("<div id='sss' style='text-align:left; width: "+widthOfSelect+"px; overflow: hidden; width=25;'></div>");
+            });
+
+             jQuery(document).ready(function () {    
+                var widthOfSelect = $("#select-"+{{$t}}).width();
+                widthOfSelect = widthOfSelect - 13;
+                //alert(widthOfSelect);
+                jQuery('#select-'+{{$t}}).wrap("<div id='sss' style='text-align:left; width: "+widthOfSelect+"px; overflow: hidden; width=25;'></div>");
+            });
+
+
+           $('#cluster-'+{{$t}}).change(function(){
+            
+            var cluster = $("#cluster-"+{{$t}}).val();
+            if (cluster != "") {
+
+              $.ajax({
+                url:"/ajax/adsales/getPackets",
+                method:"POST",
+                data:{cluster},
+                success: function(output){                 
+                    $('#project-'+{{$t}}).html(output).selectpicker('refresh');
+                    //$('#vlau ').html(output).selectpicker('refresh');
+                },
+                error: function(xhr, ajaxOptions,thrownError){
+                    alert(xhr.status+" "+thrownError);
+                }
+              });  
+            }else{
+              var option = "<option> Select Cluster </option>";
+              $('#project-'+{{$t}}).empty().append(option).selectpicker('refresh');
             }
-          });  
-        }else{
-          var option = "<option> Select Cluster </option>";
-          $('#project-'+{{$t}}).empty().append(option).selectpicker('refresh');
-        }
-      });
-    @endfor     
+          });
+        @endfor     
+    @endif
 </script>
 
 @endsection

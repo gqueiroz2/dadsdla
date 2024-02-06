@@ -101,12 +101,14 @@ class RenderChain extends Render{
     public function tableCmaps($name){
         echo "<select class='form-control' name='$name' data-width='100%'>";
             echo "<option value='cmaps'> CMAPS </option>";
+
         echo "</select>";
     }
 
     public function dailyResults($name){
         echo "<select class='form-control' name='$name' data-width='100%'>";
-            echo "<option value='daily'> DAILY RESULTS </option>";
+            echo "<option value='daily_results'> DAILY RESULTS </option>";
+            echo "<option value='pipeline'> PIPELINE </option>";
         echo "</select>";
     }
 

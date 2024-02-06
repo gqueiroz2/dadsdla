@@ -79,7 +79,7 @@ class chainCmapsController extends Controller{
 
         $table = Request::get('daily_results');
 
-        $truncateStatement = "TRUNCATE TABLE daily_results";
+        $truncateStatement = "TRUNCATE TABLE $table";
         
         $truncateStatement = $con->query($truncateStatement);
 

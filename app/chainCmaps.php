@@ -24,43 +24,54 @@ class chainCmaps extends excel{
 
     public function dailyChain($con,$table,$spreadSheet){
         $base = new base();
-        $columns = $this->defineColumns($table,'DLA');
-        $parametter = 'daily_results';
-        
-        //var_dump($spreadSheet[0]);
-
-        for ($i=0; $i <sizeof($spreadSheet); $i++) { 
-            $spreadSheet[$i][0] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][0]);
-            $spreadSheet[$i][1] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][1]);
-            $spreadSheet[$i][2] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][2]);
-            $spreadSheet[$i][3] = $base->monthToIntWBD($spreadSheet[$i][3]);
-
-            for ($d=0; $d <sizeof($spreadSheet[$i]) ; $d++) { 
-                if ($spreadSheet[$i][$d] == '  - ') {
-                    $spreadSheet[$i][$d] = 0;
-                }
-                $temp[$i][$d] = $spreadSheet[$i][$d];
-
-                
-                if ($temp[$i][$d] != $spreadSheet[$i][0] && $temp[$i][$d] != $spreadSheet[$i][1] && $temp[$i][$d] != $spreadSheet[$i][2] && $temp[$i][$d] != $spreadSheet[$i][3] && $temp[$i][$d] != 0) {
-                    
-                    $spreadSheet[$i][$d] = str_replace(',','',trim($temp[$i][$d]));
-
-                    //var_dump($temp[$i][$d]);
-                }
-                
-            }
-        }
+        $columns = $this->defineColumns('pipeline','DLA');
+        $parametter = 'pipeline';
+        //var_dump($table);
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
-        //var_dump($spreadSheet);
-        for ($s=0; $s < sizeof($spreadSheet); $s++) {             
-            $error = $this->insert($con,$spreadSheet[$s],$columns,'daily_results',$into);         
-            if(!$error){
-                $check++;
-            }            
+        
+        //var_dump($spreadSheet[0]);
+        if ($table == 'daily_results') {
+            for ($i=0; $i <sizeof($spreadSheet); $i++) { 
+                $spreadSheet[$i][0] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][0]);
+                $spreadSheet[$i][1] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][1]);
+                $spreadSheet[$i][2] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$i][2]);
+                $spreadSheet[$i][3] = $base->monthToIntWBD($spreadSheet[$i][3]);
+
+                for ($d=0; $d <sizeof($spreadSheet[$i]) ; $d++) { 
+                    if ($spreadSheet[$i][$d] == '  - ') {
+                        $spreadSheet[$i][$d] = 0;
+                    }
+                    $temp[$i][$d] = $spreadSheet[$i][$d];
+
+                    
+                    if ($temp[$i][$d] != $spreadSheet[$i][0] && $temp[$i][$d] != $spreadSheet[$i][1] && $temp[$i][$d] != $spreadSheet[$i][2] && $temp[$i][$d] != $spreadSheet[$i][3] && $temp[$i][$d] != 0) {
+                        
+                        $spreadSheet[$i][$d] = str_replace(',','',trim($temp[$i][$d]));
+
+                        //var_dump($temp[$i][$d]);
+                    }
+                    
+                }
+            }
+            
+            //var_dump($spreadSheet);
+            for ($s=0; $s < sizeof($spreadSheet); $s++) {             
+                $error = $this->insert($con,$spreadSheet[$s],$columns,'daily_results',$into);         
+                if(!$error){
+                    $check++;
+                }            
+            }
+        }else{
+            for ($s=0; $s < sizeof($spreadSheet); $s++) {             
+                $error = $this->insert($con,$spreadSheet[$s],$columns,'pipeline',$into);         
+                if(!$error){
+                    $check++;
+                }            
+            }
         }
+        
 
         if($check == (sizeof($spreadSheet) - $mark) ){ $complete = true;}
         else{ $complete = false; }
@@ -1088,9 +1099,14 @@ class chainCmaps extends excel{
     					return $this->cmapsColumns;
     					break;
     			}
-            case 'daily':
+            case 'daily_results':
                   case 'DLA':
                       return $this->dailyColumns;
+                      break;
+                  break;  
+            case 'pipeline':
+                  case 'DLA':
+                      return $this->pipelineColumns;
                       break;
                   break;  
             break;   		
@@ -1098,7 +1114,22 @@ class chainCmaps extends excel{
 
     }
 
-    
+    public $pipelineColumns = array('register',
+                                    'cluster',
+                                    'property',
+                                    'client',
+                                    'agency',
+                                    'product',
+                                    'primary_ae_id',
+                                    'second_ae_id',
+                                    'manager',
+                                    'tv_value',
+                                    'digital_value',
+                                    'start_month',
+                                    'end_month',
+                                    'quota',
+                                    'status',
+                                    'notes');
 
     public $cmapsColumnsF = array('decode',
                                   'month',

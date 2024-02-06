@@ -15,18 +15,28 @@ class packets extends Model{
 
         $result = array();
 
-        $holding = $this->getHolding($con);
+        $letter = array('Yes','No');
 
         $cluster = $this->getCluster($con);
 
         $project = $this->getProp($con);
         
-        $quota = $this->getQuota($con);
+        $quota = $this->getQuota($con);  
 
-        array_push($result, $holding);
+        $client = $this->listOFClients($con);
+
+        $agency = $this->listOFAgencies($con);
+
+        $payment = array('','Installments','Anticipated','30 DFM');      
+
+        array_push($result,$letter);
         array_push($result,$cluster);
         array_push($result,$quota);
         array_push($result,$project);
+        array_push($result,$payment);
+        array_push($result,$client);
+        array_push($result,$agency);
+
        // var_dump($result);
         return $result;
     }
@@ -91,27 +101,30 @@ class packets extends Model{
     public function insertNewLines($con,$sql,$info){
 
         $register = $info['newRegister'];
-        $holding = $info['newHolding'];
         $cluster = $info['newCluster'];
         $project = $info['newProject'];
-        $client = $info['newClient'];
-        $agency = $info['newAgency'];
+        $client = $info['newClient'][0];
+        $agency = $info['newAgency'][0];
         $segment = $info['newSegment'];
         $ae1 = $info['newAe1'];
         $ae2 = $info['newAe2'];
-        $tv = $info['newTv'];
-        $digital = $info['newDigital'];
-        $first = $info['newFirstMonth'];
-        $end = $info['newEndMonth'];
-        $payment = $info['newPayment'];
+        $dsc_tv = $info['new_dsc_tv'];
+        $dsc_digital = $info['new_dsc_digital'];
+        $wm_tv = $info['new_wm_tv'];
+        $wm_digital = $info['new_wm_digital'];
+        $spt_tv = $info['new_spt_tv'];
+        $spt_digital = $info['new_spt_digital'];
+        $wbd_max = $info['new_wbd_max'];
+        $first = $info['newFirstMonth'][0];
+        $end = $info['newEndMonth'][0];
+        $payment = $info['newPayment'][0];
         $installments = $info['newInstallments'];
         $quota = $info['newQuota'];
-        $status = $info['newStatus'];
+        $letter = $info['newLetter'];
         $notes = $info['newNotes'];
 
         $insertQuery = "INSERT INTO  closed_packets
                         SET register = '$register', 
-                            holding_id = '$holding',
                             cluster = '$cluster',
                             property = '$project',
                             client = '$client',
@@ -119,14 +132,19 @@ class packets extends Model{
                             segment = '$segment',
                             primary_ae_id = '$ae1',
                             second_ae_id = '$ae2',
-                            tv_value = '$tv',
-                            digital_value = '$digital',
+                            dsc_tv = '$dsc_tv',
+                            dsc_digital = '$dsc_digital',
+                            wm_tv = '$wm_tv',
+                            wm_digital = '$wm_digital',
+                            spt_tv = '$spt_tv',
+                            spt_digital = '$spt_digital',
+                            wbd_max = '$wbd_max',
                             start_month = '$first',
                             end_month = '$end',
                             payment = '$payment',
                             installments = '$installments',
                             quota = '$quota',
-                            status = '$status',
+                            letter = '$letter',
                             notes = '$notes'";
             //print_r($insertQuery);  
 
@@ -134,7 +152,7 @@ class packets extends Model{
         //var_dump($resultInsertQuery);
 
     }
-    public function updateLines($con,$sql,$id,$register,$holding,$cluster,$project,$client,$agency,$segment,$ae1,$ae2,$tv,$digital,$startMonth,$endMonth,$payment,$installments,$quota,$status,$notes){
+    public function updateLines($con,$sql,$id,$register,$holding,$cluster,$project,$client,$agency,$segment,$ae1,$ae2,$dsc_tv,$dsc_digital,$wm_tv,$wm_digital,$spt_tv,$spt_digital,$wbd_max,$startMonth,$endMonth,$payment,$installments,$quota,$letter,$notes){
 
          $query = "UPDATE  closed_packets
                         SET register = '$register', 
@@ -146,14 +164,19 @@ class packets extends Model{
                             segment = '$segment',
                             primary_ae_id = '$ae1',
                             second_ae_id = '$ae2',
-                            tv_value = '$tv',
-                            digital_value = '$digital',
+                            dsc_tv = '$dsc_tv',
+                            dsc_digital = '$dsc_digital',
+                            wm_tv = '$wm_tv',
+                            wm_digital = '$wm_digital',
+                            spt_tv = '$spt_tv',
+                            spt_digital = '$spt_digital',
+                            wbd_max = '$wbd_max',
                             start_month = '$startMonth',
                             end_month = '$endMonth',
                             payment = '$payment',
                             installments = '$installments',
                             quota = '$quota',
-                            status = '$status',
+                            letter = '$letter',
                             notes = '$notes'
                         WHERE ID = $id";
 
@@ -163,15 +186,14 @@ class packets extends Model{
 
     public function table($con,$sql){
 
-        $select = "SELECT DISTINCT c.ID as packetID, register, bg.abv as holding,cluster,property as project,client,agency,segment,sr.name as primary_ae, ss.name as second_ae,tv_value,digital_value,start_month,end_month,payment,installments,quota,status,notes
+        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,client,agency,segment,sr.name as primary_ae, ss.name as second_ae,dsc_tv,dsc_digital,wm_tv,wm_digital,spt_tv,spt_digital,wbd_max,start_month,end_month,payment,installments,quota,letter,notes,product
                         FROM closed_packets c
-                        LEFT JOIN brand_group bg on bg.ID = c.holding_id
                         LEFT JOIN sales_rep sr ON (sr.ID = c.primary_ae_id) 
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
                          ";
-
+        //echo "<pre>$select</pre>";
         $selectQuery = $con->query($select);
-        $from = array('packetID','register', 'holding','cluster','project','client','agency','segment','primary_ae','second_ae','tv_value','digital_value','start_month','end_month','payment','installments','quota','status','notes');
+        $from = array('packetID','register','cluster','project','client','agency','segment','primary_ae','second_ae','dsc_tv','dsc_digital','wm_tv','wm_digital','spt_tv','spt_digital','wbd_max','start_month','end_month','payment','installments','quota','letter','notes','product');
         $result = $sql->fetch($selectQuery, $from, $from);
 
         //var_dump($select);
@@ -179,18 +201,55 @@ class packets extends Model{
         return $result;
     }
 
-    public function makeTotal($table){
+    public function makeTotal($table,$type){
 
 
         for ($t=0; $t <sizeof($table); $t++) { 
             
-            $total[$t] = $table[$t]['tv_value'] + $table[$t]['digital_value'];
+            $total[$t] = $table[$t]['dsc_'.$type] + $table[$t]['wm_'.$type] + $table[$t]['spt_'.$type];
             
         }
 
-
-
         return $total;
+    }
+
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFAgencies(Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+
+        $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
+                    FROM agency a                    
+                    left join agency_group ag on ag.ID = a.agency_group_id
+                    and ag.region_id = 1
+                    ORDER BY a.name ASC";
+        //var_dump($select);
+        $from = array('aID','agency');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        return $client;
+    }
+
+     //make a list of clients for the front-end button to add a new client basis on existing clients
+    public function listOFClients(Object $con){
+        $sql = new sql();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+
+        $select = "SELECT DISTINCT c.ID AS clientId ,c.name as client
+                    FROM client c                   
+                    WHERE c.client_group_id = 1
+                    ORDER BY c.name ASC";
+        //var_dump($select);
+        $from = array('clientId','client');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        return $client;
     }
 
     

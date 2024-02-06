@@ -177,7 +177,7 @@ class pipeline extends Model{
                         LEFT JOIN client cl ON (cl.ID = c.client)
                         LEFT JOIN agency a ON (a.ID = c.agency)
                          ";
-
+        
         $selectQuery = $con->query($select);
         $from = array('packetID','register','cluster','project','client','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes');
         $result = $sql->fetch($selectQuery, $from, $from);

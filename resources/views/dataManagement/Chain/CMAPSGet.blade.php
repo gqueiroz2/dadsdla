@@ -19,6 +19,10 @@
 				                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
 				                  Update Daily
 				                </button>
+				                <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+				                 <button type="button" class="btn btn-primary" data-toggle="modalPipeline" data-target="#modalPipeline" style="width: 100%">
+				                  Update Pipeline
+				                </button>
 				            </div>
 				            <!-- Modal -->
 				            <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -77,7 +81,85 @@
 															@if($errors->has('dailyResults'))
 																<label style="color: red;">* Required</label>
 															@endif
-															{{$rC->dailyResults('daily_results')}}					
+															{{$rC->dailyResults('pipeline')}}					
+															
+														</div>
+													</div>
+												</div>
+
+												<div class="row justify-content-end">          
+											 		<div class="col">		
+												    	<button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+													</div>
+												</div>
+											</form>
+				               
+					                    	<div class="modal-footer">
+						                   		<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+						                  </div>
+						                </div>
+					               </div>
+				              	</div>
+				            </div>
+
+				            <!-- Modal -->
+				            <div class="modal fade" id="modalPipeline" tabindex="-1" role="dialog" aria-labelledby="pipelineModalLabel" aria-hidden="true">
+				              <div class="modal-dialog" role="document">
+				                <div class="modal-content">
+				                  	<div class="modal-header">
+				                  		<b> Add a Excel File </b>
+				                  	</div>
+									
+				                  	<div class="modal-body">
+				                  		<div class="row justify-content-center">
+
+											<div class="col">
+												<span style="font-size: 16px;">
+												
+												</span>
+												@if($errors->has('file'))
+													<span style="color: red;">* Required</span>
+												@endif									
+											</div>
+										</div>
+								
+											<form action="{{ route('dailyResults') }}" runat="server"  onsubmit="ShowLoading()" method="POST" enctype="multipart/form-data">
+											@csrf
+											 	<div class="row justify-content-center">          
+											 		<div class="col">		
+														<div class="form-group">
+															<input type="file" name="file">               
+
+												    	</div>
+												    </div>
+												</div>
+
+												<div class="row justify-content-center">
+													<div class="col">
+														@if(session('dailyError'))
+															<div class="alert alert-danger">
+					  											{{ session('dailyError') }}
+															</div>
+														@endif
+
+														@if(session('dailyComplete'))
+															<div class="alert alert-info">
+					  											{{ session('dailyComplete') }}
+															</div>
+														@endif
+													</div>
+												</div>
+												
+
+
+												<div class="row justify-content-center">          
+											 		<div class="col">		
+														<div class="form-group">
+															<label><b> Table: </b></label> 
+															@if($errors->has('dailyResults'))
+																<label style="color: red;">* Required</label>
+															@endif
+															{{$rC->dailyResults('pipeline')}}					
 															
 														</div>
 													</div>

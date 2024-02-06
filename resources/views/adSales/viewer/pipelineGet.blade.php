@@ -27,6 +27,7 @@
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
 						</div>
+						                 
                    
                         {{--<div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>

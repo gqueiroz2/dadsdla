@@ -396,21 +396,31 @@ class viewerController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        $totalPerPacket = 0;
-        $total['digital'] = 0;
-        $total['tv'] = 0;
+        $totalPerPacket['digital'] = 0;
+        $totalPerPacket['tv'] = 0;
+        $totalPerPacket['wbd'] = 0;
+        $total['dsc_digital'] = 0;
+        $total['dsc_tv'] = 0;
+        $total['total_tv'] = 0;
+        $total['total_digital'] = 0;
+        $total['wm_digital'] = 0;
+        $total['wm_tv'] = 0;
+        $total['spt_tv'] = 0;
+        $total['spt_digital'] = 0;
+        $total['wbd_max'] = 0;
         $total['total'] = 0;
 
         $years = array($cYear = intval(date('Y')), $cYear - 1);
         $year = intval(date('Y'));
         $salesRegion = Request::get("region");
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
         $noRep['id'] = '10';
         $noRep['salesRep'] = 'Não';
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep,$noRep);
+        array_push($rep2,$noRep);
         //var_dump($rep);
         $r = new region();
 
@@ -426,19 +436,30 @@ class viewerController extends Controller{
         $table = $p->table($con,$sql);
 
         if ($table != false) {
-            $totalPerPacket = $p->makeTotal($table);
+             $totalPerPacket['tv'] = $p->makeTotal($table,'tv');
+             $totalPerPacket['digital'] = $p->makeTotal($table,'digital');
+             $totalPerPacket['wbd'] = $totalPerPacket['tv'] + $totalPerPacket['digital'];
 
-            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
-                $total['digital'] += $table[$t]['digital_value'];
-                $total['tv'] += $table[$t]['tv_value'];
-                $total['total'] += $totalPerPacket[$t];    
+            for ($t=0; $t <sizeof($totalPerPacket['tv']); $t++) { 
+                $total['dsc_tv'] += $table[$t]['dsc_tv'];
+                $total['dsc_digital'] += $table[$t]['dsc_digital'];
+                $total['wm_tv'] += $table[$t]['wm_tv'];
+                $total['wm_digital'] += $table[$t]['wm_digital'];
+                $total['spt_tv'] += $table[$t]['spt_tv'];
+                $total['spt_digital'] += $table[$t]['spt_digital'];
+                $total['wbd_max'] += $table[$t]['wbd_max'];
+                $total['total_tv'] += $totalPerPacket['tv'][$t];
+                $total['total_digital'] += $totalPerPacket['digital'][$t];
+                $total['total'] = $total['total_tv'] + $total['total_digital'];
             }
+
+
         }
 
          $title = "Closed packets";
          $titleExcel = "Closed packets.xlsx";
 
-        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket', 'title','titleExcel'));
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket', 'title','titleExcel'));
 
     }
 
@@ -459,9 +480,18 @@ class viewerController extends Controller{
         $p = new packets();        
 
         $sql = new sql();
-        $totalPerPacket = 0;
-        $total['digital'] = 0;
-        $total['tv'] = 0;
+        $totalPerPacket['digital'] = 0;
+        $totalPerPacket['tv'] = 0;
+        $totalPerPacket['wbd'] = 0;
+        $total['dsc_digital'] = 0;
+        $total['dsc_tv'] = 0;
+        $total['total_tv'] = 0;
+        $total['total_digital'] = 0;
+        $total['wm_digital'] = 0;
+        $total['wm_tv'] = 0;
+        $total['spt_tv'] = 0;
+        $total['spt_digital'] = 0;
+        $total['wbd_max'] = 0;
         $total['total'] = 0;
 
         $saveInfo = Request::all();
@@ -479,22 +509,38 @@ class viewerController extends Controller{
         if ($table != false) {
             if (!$saveInfo['newClient']) {
                 for ($t=0; $t <sizeof($table) ; $t++) { 
-                    $saveInfo['tv-'.$t] = str_replace('.', '', $saveInfo['tv-'.$t]);
-                    $saveInfo['digital-'.$t] = str_replace('.', '', $saveInfo['digital-'.$t]);
+                    $saveInfo['dsc_tv-'.$t] = str_replace('.', '', $saveInfo['dsc_tv-'.$t]);
+                    $saveInfo['dsc_digital-'.$t] = str_replace('.', '', $saveInfo['dsc_digital-'.$t]);
+                    $saveInfo['wm_tv-'.$t] = str_replace('.', '', $saveInfo['wm_tv-'.$t]);
+                    $saveInfo['wm_digital-'.$t] = str_replace('.', '', $saveInfo['wm_digital-'.$t]);
+                    $saveInfo['spt_tv-'.$t] = str_replace('.', '', $saveInfo['spt_tv-'.$t]);
+                    $saveInfo['spt_digital-'.$t] = str_replace('.', '', $saveInfo['spt_digital-'.$t]);
+                    $saveInfo['wbd_max-'.$t] = str_replace('.', '', $saveInfo['wbd_max-'.$t]);
 
 
-                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['holding-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['segment-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['payment-'.$t],$saveInfo['installments-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['product-'.$t],$saveInfo['letter-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['segment-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['dsc_tv-'.$t],$saveInfo['dsc_digital-'.$t],$saveInfo['wm_tv-'.$t],$saveInfo['wm_digital-'.$t],$saveInfo['spt_tv-'.$t],$saveInfo['spt_digital-'.$t],$saveInfo['wbd_max-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['payment-'.$t],$saveInfo['installments-'.$t],$saveInfo['quota-'.$t],$saveInfo['notes-'.$t]);
                 }
             }
             //var_dump($table);
         
-            $totalPerPacket = $p->makeTotal($table);
+            $totalPerPacket['tv'] = $p->makeTotal($table,'tv');
+            $totalPerPacket['digital'] = $p->makeTotal($table,'digital');
+            $totalPerPacket['wbd'] = $totalPerPacket['tv'] + $totalPerPacket['digital'];
 
-            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
-                $total['digital'] += $table[$t]['digital_value'];
-                $total['tv'] += $table[$t]['tv_value'];
-                $total['total'] += $totalPerPacket[$t];    
+            for ($t=0; $t <sizeof($totalPerPacket['tv']); $t++) { 
+                $total['dsc_tv'] += $table[$t]['dsc_tv'];
+                $total['dsc_digital'] += $table[$t]['dsc_digital'];
+                $total['wm_tv'] += $table[$t]['wm_tv'];
+                $total['wm_digital'] += $table[$t]['wm_digital'];
+                $total['spt_tv'] += $table[$t]['spt_tv'];
+                $total['spt_digital'] += $table[$t]['spt_digital'];
+                $total['wbd_max'] += $table[$t]['wbd_max'];
+                $total['total_tv'] += $totalPerPacket['tv'][$t];
+                $total['total_digital'] += $totalPerPacket['digital'][$t];
+                $total['total'] = $total['total_tv'] + $total['total_digital'];
             }
+
+            
         }
         
         $table = $p->table($con,$sql);
@@ -504,19 +550,20 @@ class viewerController extends Controller{
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];     
 
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
+        $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
         $noRep['id'] = '10';
         $noRep['salesRep'] = 'Não';
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep,$noRep);
+        array_push($rep2,$noRep);
         
         $info = $p->getOptions($con);
 
          $title = "Closed packets";
          $titleExcel = "Closed packets.xlsx";
         //var_dump($table);
-        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel'));
+        return view("adSales.viewer.packetsPost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel'));
 
     }
 
