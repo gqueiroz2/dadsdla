@@ -49,7 +49,7 @@
 			<!-- Image and text -->
 			<nav class="navbar navbar-light bg-light">
 				<a class="navbar-brand" href="{{ route('home')}}">
-					<img src="/portalLogo.png" width="225" height="60">
+					<img src="/miniLogo.png" width="225" height="60">
 					<!--<span class="navbar-text"> |ADS - DLA </span>-->
 				</a>
 			</nav>

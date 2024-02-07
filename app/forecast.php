@@ -127,7 +127,7 @@ class forecast extends pAndR{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
 
-        $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear);
+        $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear,$month);
                 
         //var_dump($newClient);
         $check = $this->checkForecast($con, $salesRep,$month);//check if exists forecast for this rep in database
@@ -195,7 +195,9 @@ class forecast extends pAndR{
        // $month = 0;
         $company = array('wm','dc','spt');
         //$month = date('m');
-        
+        $totalPayTvForecast = 0;
+        $totalDigitalForecast = 0;
+
         if($currencyID == 1){
             $pRate = 1;
         }else{
@@ -226,14 +228,19 @@ class forecast extends pAndR{
                 } 
 
                 if($check != false){ 
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
+                    $totalPayTvForecast = array();
+                    $totalDigitalForecast = array();
+
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '2')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '3')['revenue']);
+
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '1')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '2')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '3')['revenue']);
+                    //var_dump($totalPayTvForecast);
                 }else{
                     $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
                     $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
                 }   
                 
-                 
+                
                 $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['cID'],$clients[$a]['aID'],$salesRep);
                 
 
@@ -307,6 +314,22 @@ class forecast extends pAndR{
                         dc = $dc,
                         month = $month,
                         probability = $probability
+                        ";
+        //var_dump($insertQuery);
+        $resultInsertQuery = $con->query($insertQuery);
+    }
+
+    //this function make the inclusion of new clients to make forecast
+    public function newClientRequest(Object $con, String $salesRep, String $client,String $agency,int $month){
+        $updateTime = date("Y-m-d");
+
+        $insertQuery = "INSERT INTO  requests
+                        SET 
+                        sales_rep_id = $salesRep,
+                        client = '$client',
+                        agency = '$agency',
+                        month = $month,
+                        request_date = '$updateTime'
                         ";
         //var_dump($insertQuery);
         $resultInsertQuery = $con->query($insertQuery);
@@ -641,7 +664,6 @@ class forecast extends pAndR{
                                 AND f.value = '$value'
                                 AND (f.platform = '$platform')
                                 AND f.month = $month
-
                                 ";
                     $query = $con->query($selectAE);
                     $from = 'revenue';
@@ -794,7 +816,7 @@ class forecast extends pAndR{
         return $resultSelect;
     }
     //THIS FUNCTION GET ALL THE CLIENTS FOR THE SELECTED SALES REP
-    public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear){
+    public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear, $month){
         $sql = new sql();
 
         $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
@@ -803,6 +825,7 @@ class forecast extends pAndR{
                     LEFT JOIN agency a ON a.ID = w.agency_id
                     WHERE (w.current_sales_rep_id = \"$salesRep\" )
                     AND w.year IN (\"$year\")
+                    AND w.month = $month
                     AND gross_value > 0                
                     ORDER BY 1
                     ";
@@ -816,6 +839,7 @@ class forecast extends pAndR{
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
                     WHERE (w.sales_rep_id = \"$salesRep\" )
+                    AND $month > 0
                     ORDER BY 1
                     ";
         $queryForecast = $con->query($selectForecast);

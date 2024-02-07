@@ -33,7 +33,7 @@ class forecastController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-        $months = array(intval(date('n')),intval(date('n')) + 1);    
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
         $year = date('Y');
         //var_dump($months);
 
@@ -70,7 +70,7 @@ class forecastController extends Controller{
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
-        $months = array(intval(date('n')),intval(date('n')) + 1);   
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);   
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
@@ -132,25 +132,30 @@ class forecastController extends Controller{
         $currencyID = '1';
         $value = 'gross';
         $months = array(intval(date('n')),intval(date('n')) + 1);    
-
+        $intMonth = Request::get('month');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
         $listOfClients = $fcst->listOFClients($con);
 
         $listOfAgencies = $fcst->listOFAgencies($con);      
 
-        $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $year, $pYear);
+        $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $year, $pYear,$intMonth);
         //print_r($saveInfo);
 
         $company = array('3','1','2');
         $month = date('F');
-        $intMonth = Request::get('month');
+        
         //var_dump($intMonth);
         $monthName = $b->intToMonth2(array($intMonth)); 
        // var_dump($intMonth);
         $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);//check if exists forecast for this rep in database
 
         $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);  
+
+        if ($saveInfo['clientSubmit'] != null) {
+            
+            $submit = $fcst->newClientRequest($con,$salesRepID,$saveinfo['clientSubmit'],$saveInfo['agencySubmit'],$month);
+        }
 
         if($saveInfo['newClient'][0] != 0){            
             $newAgency = $saveInfo['newAgency'][0];
@@ -213,7 +218,7 @@ class forecastController extends Controller{
         $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);   
 
         $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);  
-        //var_dump($newClientsTable['companyValues'][0]);
+        var_dump($newClientsTable);
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";
         //var_dump($newClientsTable);

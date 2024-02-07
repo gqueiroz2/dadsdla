@@ -23,7 +23,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- CSRF Token -->
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<link rel="sortcut icon" href=/miniLogo.png type="image/png" />
+		<link rel="sortcut icon" href=/shortCutLogo.png type="image/png" />
 		<title> D|Ad Sales Portal - @yield('title') </title>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
@@ -62,7 +62,7 @@
 			<!-- Image and text -->
 			<nav class="navbar navbar-light bg-light">
 				<a class="navbar-brand" href="{{ route('home')}}">
-					<img src="/portalLogo.png" width="225" height="60">
+					<img src="/miniLogo.png" width="225" height="60">
 					<!--<span class="navbar-text"> |ADS - DLA </span>-->
 				</a>
 			</nav>

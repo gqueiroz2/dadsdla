@@ -49,12 +49,12 @@
             <div id="map" class="aligh-middle" >
                 <center>
                     <img src="\portalLogo.png" style="width: 65%; margin-top: 10%; height: auto;">                    
-                </center>                
-                <center>
-                    <span style="font-weight: bold;font-size: 18px; margin-top:-5%;"> Contact Us 
-                        <a href="mailto:d_ads@discovery.com">Ad Sales Portal</a>
-                    </span>
                 </center>
+                 <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                    <tr rowspan='20' class="center">
+                        <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                    </tr>
+                </table>                              
             </div> <!-- This one wants to be 100% height -->
         </div>
     </div>
