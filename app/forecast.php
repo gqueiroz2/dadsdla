@@ -17,6 +17,8 @@ class forecast extends pAndR{
     //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
     public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, int $month){
         $company = array('3','1','2');
+
+        $companyName = array('wm','dc','spt');
         //$month = date('m');
        // var_dump($month);
         if($currencyID == 1 ){
@@ -49,8 +51,20 @@ class forecast extends pAndR{
             }  
 
             if($check != false){
-                $payTvForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'pay tv', $company[$c])['revenue']);                 
-                $digitalForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'digital',$company[$c])['revenue']);
+
+                $tempPayTvForecast = array();
+                $tempDigitalForecast = array();
+
+                $payTvForecastNew[$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'pay tv', $companyName[$c])['revenue']);
+                        
+                $digitalForecastNew[$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'digital',$companyName[$c])['revenue']);
+
+                $tempPayTvForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'pay tv', $company[$c])['revenue']);                 
+                $tempDigitalForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'digital',$company[$c])['revenue']);
+
+                $payTvForecast[$c] = $payTvForecastNew[$c] + $tempPayTvForecast[$c];
+
+                $digitalForecast[$c] = $digitalForecastNew[$c] + $tempDigitalForecast[$c];
             }else{
                 $payTvForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',null, null, $region,'pay tv', $company[$c])['revenue']);                 
                 $digitalForecast[$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',null, null, $region,'digital',$company[$c])['revenue']);
@@ -78,8 +92,21 @@ class forecast extends pAndR{
             }    
 
             if ($check != false) {
-                $totalPayTvForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'pay tv', '1,2,3')['revenue']);
-                $totalDigitalForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'digital','1,2,3')['revenue']);
+                $tempPayTvForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'pay tv', '1,2,3')['revenue']);
+                $tempDigitalForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',null, null, $region,'digital','1,2,3')['revenue']);
+
+                 $totalPayTvForecastNew = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'pay tv', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'pay tv', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'pay tv', 'wm')['revenue']);
+
+                $totalDigitalForecastNew = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'digital', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'digital', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',null,null, $region,'digital', 'wm')['revenue']);
+
+                //var_dump($totalPayTvForecastNew);
+
+                $totalPayTvForecast = $tempPayTvForecast + $totalPayTvForecastNew;
+
+
+
+                $totalDigitalForecast = $tempDigitalForecast + $totalDigitalForecastNew;                
+
             }else{
                 $totalPayTvForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',null, null, $region,'pay tv', '1,2,3')['revenue']);
                 $totalDigitalForecast = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',null, null, $region,'digital','1,2,3')['revenue']);
@@ -102,7 +129,7 @@ class forecast extends pAndR{
        // $totalPayTvForecast = $this->addFcstWithBooking($totalCurrentPayTvBookings,$totalPayTvForecast);
 
        // $totalDigitalForecast = $this->addFcstWithBooking($totalCurrentDigitalBookings,$totalDigitalForecast);
-
+        //var_dump($totalPayTvForecast);
         $pivotTotal = array('currentBookings' => ($totalCurrentBookings),'previousBookings' => ($totalPreviousBookings), 'currentTarget' => ($totalCurrentTarget), 'payTvForecast' => ($totalPayTvForecast), 'digitalForecast' => ($totalDigitalForecast), 'currentDigitalBookings' => ($totalCurrentDigitalBookings), 'currentPayTvBookings' => ($totalCurrentPayTvBookings));  
         
        
@@ -162,6 +189,8 @@ class forecast extends pAndR{
             if($check != false){ 
                 $totalPayTvForecast[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', '1,2,3')['revenue']);
                 $totalDigitalForecast[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')['revenue']);
+
+               
             }else{
                 $totalPayTvForecast[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', '1,2,3')['revenue']);
                 $totalDigitalForecast[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')['revenue']);
@@ -204,7 +233,7 @@ class forecast extends pAndR{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
          
-        $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName);
+        $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
         //var_dump($clients);
         if ($clients == null) {
             $table = 0;
@@ -217,6 +246,7 @@ class forecast extends pAndR{
                     //var_dump($salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c]);
                     if($check != false){
                         $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);
+
                         $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
                     }else{
                         $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);    
@@ -231,9 +261,9 @@ class forecast extends pAndR{
                     $totalPayTvForecast = array();
                     $totalDigitalForecast = array();
 
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '2')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '3')['revenue']);
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'wm')['revenue']);
 
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '1')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '2')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', '3')['revenue']);
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'wm')['revenue']);
                     //var_dump($totalPayTvForecast);
                 }else{
                     $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
@@ -335,7 +365,7 @@ class forecast extends pAndR{
         $resultInsertQuery = $con->query($insertQuery);
     }
 
-    public function getSalesRepByClient(String $salesRep, Object $con, Object $sql,$repName){
+    public function getSalesRepByClient(String $salesRep, Object $con, Object $sql,string $repName, int $month){
         
         $year = (int)date("Y");
         $pYear = $year-1;
@@ -346,7 +376,8 @@ class forecast extends pAndR{
                             left join sales_rep sr on sr.ID = f.sales_rep_id 
                             LEFT JOIN client c ON c.id = f.client_id
                             LEFT JOIN agency a ON a.id = f.agency_id
-                            WHERE (sr.ID IN ($salesRep))";
+                            WHERE (sr.ID IN ($salesRep))
+                            AND month = $month";
                     // var_dump($selectClient);
             $resultClient = $con->query($selectClient);
             $from = array('cID','client','aID','agency');
@@ -410,7 +441,17 @@ class forecast extends pAndR{
                         month = $month,
                         probability = $probability");
             //$resultQuery = $con->query($insertQuery);
-              //var_dump($insertQuery);
+              /*var_dump("INSERT INTO  new_clients_fcst
+                        SET created_date = '$updateTime',
+                        sales_rep_id = $salesRep,
+                        client_id = '$client',
+                        agency_id = '$agency',
+                        platform = '$platform',
+                        wm = $wm,
+                        spt = $spt,
+                        dc = $dc
+                        month = $month,
+                        probability = $probability");*/
         }else{
              mysqli_query($con,"UPDATE new_clients_fcst
                         SET  wm = $wm, spt = $spt, dc = $dc, probability = $probability
@@ -419,7 +460,7 @@ class forecast extends pAndR{
                         AND agency_id = '$agency'
                         AND platform = '$platform'                        
                         AND month = $month
-                        ");
+                        ");   
             
              
         }
@@ -661,10 +702,10 @@ class forecast extends pAndR{
                     $selectAE = "SELECT SUM(f.$company) as revenue
                                 FROM new_clients_fcst f                                
                                 WHERE f.sales_rep_id = $salesRep
-                                AND f.value = '$value'
                                 AND (f.platform = '$platform')
                                 AND f.month = $month
                                 ";
+                    //var_dump($selectAE);
                     $query = $con->query($selectAE);
                     $from = 'revenue';
                     $resultAE = $sql->fetchSUM($query,$from);

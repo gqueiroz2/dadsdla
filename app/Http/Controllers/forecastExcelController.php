@@ -28,54 +28,69 @@ class forecastExcelController extends Controller{
 
 
 	public function forecastAE(){
-                $db = new dataBase();
-                $render = new forecastRender();
-                $r = new region();
-                $pr = new pRate();
-                $fcst = new forecast();        
-                $default = $db->defaultConnection();
-                $con = $db->openConnection($default);
+         $db = new dataBase();
+        $b = new base();
+        $r = new region();
+        $pr = new pRate();
+        $fcst = new forecast();
+        $sr = new salesRep();
+        $render = new PAndRRender();   
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
 
-                $cYear = intval( Request::get('yearExcel') );
-                $pYear = $cYear - 1;
-                $region = $r->getRegion($con,false);
-                $currency = $pr->getCurrency($con,false);
+        $intMonth = Request::get('intMonth');
+        $year = date('Y');
+        $pYear = $year - 1;
+        $region = $r->getRegion($con,false);
+        $currency = $pr->getCurrency($con,false)[0]['name'];
+        $permission = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
 
-                $regionID = Request::get('regionExcel');
-                
-                $salesRepID = array(Request::get('salesRepExcel'));
-                
-                $currencyID = Request::get('currencyExcel');
-                
-                $value = Request::get('valueExcel');
+        $regionID = Request::get('regionID');
+        $salesRepID = Request::get('salesRepID');
+        $currencyID = '1'; 
+        $value = 'gross';
+        $typeExport = Request::get('typeExport');
+        $title = Request::get('title');
+        $auxTitle = Request::get('auxTitle');
+        $regionName = Request::session()->get('userRegion');
+        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
-                $regionName = Request::get('userRegionExcel');
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);   
+        $monthName = $b->intToMonth2(array($intMonth)); 
+        //var_dump($salesRepID);
 
-                $typeExport = 'Excel';
+        $company = array('3','1','2');
 
-                $title = Request::get('title');
+        for ($c=0; $c < sizeof($company); $c++) { 
+            if ($company[$c] == '1') {
+                $color[$c] = '#0070c0';
+                $companyView[$c] = 'DSC';
+            }elseif ($company[$c] == '2') {
+                $color[$c] = '#000000';
+                $companyView[$c] = 'SPT';
+            }elseif ($company[$c]) {
+                $color[$c] = '#0f243e;';
+                $companyView[$c] = 'WM';
+            }
+        }
 
-                $auxTitle = $title;
+        $listOfClients = $fcst->listOFClients($con);
 
-                $tmp = $fcst->baseLoad($con,$r,$pr,$cYear,$pYear,$regionID,$salesRepID,$currencyID,$value);
+        $listOfAgencies = $fcst->listOFAgencies($con);
 
-                $forRender = $tmp;
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$intMonth);
+        //var_dump($listOfClients);
 
-                $totalTarget = 0.0;
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+        //var_dump($newClientsTable);
+        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
 
-                //$totalTarget += $forRender['targetValues'];
+        $data = array('regionName' => $regionName,'regionID' => $regionID, 'salesRepID' => $salesRepID, 'currencyID' => $currencyID, 'value' => $value, 'regionName' => $regionName, 'aeTable' => $aeTable, 'newClientsTable' => $newClientsTable, 'clientsTable' => $clientsTable, 'company' => $company, 'companyView' => $companyView,'monthName' => $monthName,'year' => $year,'pYear' => $pYear,'salesRepName' => $salesRepName,'color' => $color);
 
-                $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
+        $label = "exports.PandR.ForecastAE.forecastExport";
 
-                $channel = array('DC','HH','DK','AP','TLC','ID','DT','FN','ONL','VIX','OTH','HGTV');
-                
-                $head = array('Closed','$Cons.','Prop','Fcast','Total');
-
-                $data = array('regionName' => $regionName,'regionID' => $regionID, 'salesRepID' => $salesRepID, 'currencyID' => $currencyID, 'value' => $value, 'regionName' => $regionName, 'tmp' => $tmp, 'forRender' => $forRender, 'cYear' => $cYear, 'pYear' => $pYear, 'month' => $month, 'channel' => $channel, 'head' => $head, 'totalTarget' => $totalTarget);
-
-                $label = "exports.PandR.ForecastAE.forecastExport";
-
-                return Excel::download(new forecastExport($data, $label, $typeExport, $auxTitle), $title);
+        return Excel::download(new forecastExport($data, $label, $typeExport, $auxTitle), $title);
 	}
     
 }

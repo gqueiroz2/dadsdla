@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
 @section('title', 'Pipelines')
 @section('head')
-
+    <script src="/js/pipeline.js"></script>
     <?php include(resource_path('views/auth.php'));
 
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
@@ -18,9 +18,8 @@
 				<form method="POST" action="{{route('pipelinePost')}}" runat="server" onsubmit="ShowLoading()">
 					@csrf
 					<div class="row">
-						
-						<div class="col">
-							<label class="labelLeft"><span class="bold"> Region: </span></label>
+                        <div class="col">
+                            <label class="labelLeft"><span class="bold"> Region: </span></label>
 
                             @if($errors->has('region'))
                                 <label style="color: red;">* Required</label>
@@ -31,14 +30,51 @@
                             @else
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
-						</div>
-                        <div class="col">
+                        </div>
+                        
+                        <div class="col" style="display:none;">
+                            <label class="labelLeft"><span class="bold"> Year: </span></label>
+                            @if($errors->has('year'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->year($regionID)}}                    
+                        </div> 
+
+                         <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
                             @if($errors->has('salesRep'))
                                 <label style="color: red;">* Required</label>
                             @endif
-                            {{$render->salesRep2()}}
+                                {{$render->salesRep()}}
                         </div>
+
+                         <div class="col">
+                            <label class='labelLeft'><span class="bold">Property:</span></label>
+                            @if($errors->has('salesRep'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                                {{$render->properties()}}
+                        </div>
+                        
+
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Agency:</span></label>
+                            @if($errors->has('agency'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->AgencyForm()}}
+                        </div>
+
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Client:</span></label>
+                            @if($errors->has('client'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->ClientForm()}}
+
+                            <input type="hidden" name="sizeOfClient" id="sizeOfClient" value="">
+                        </div>         
+
                    
                         {{--<div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>
@@ -75,6 +111,10 @@
                  <form method="POST" runat="server" action="{{ route('savePipeline') }} " name="pipelineSave">
                     @csrf
                     <input type='hidden' readonly='true' type="text" name="region" id="region" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$region[0]['id']}}">
+                    <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRep}}">
+                    <input type='hidden' readonly='true' type="text" name="agencyString" id="agencyString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$agencyString}}">
+                    <input type='hidden' readonly='true' type="text" name="clientString" id="clientString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientString}}">
+                    <input type='hidden' readonly='true' type="text" name="propString" id="propString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$propString}}">
                     <div class="row">    
                         <div class="col-10"></div>        
                         <div class="col-2">                             
@@ -257,7 +297,7 @@
                                                         @endfor
                                                     </select><br>
                                                 <label>Status</label>
-                                                <select class='selectpicker' id='newStatus' name='newStatus' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                <select class='selectpicker' id='newStatus' name='newStatus' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true' required>
                                                     <option value=''> Select </option>
                                                         @for($v=0; $v<sizeof($info[4]);$v++)
                                                             <option value="{{$info[4][$v]}}">{{$info[4][$v]}}</option>
@@ -346,6 +386,31 @@
                 }
             });                    
         });
+    });
+</script>
+
+<script type="text/javascript">
+    $('#newCluster').change(function(){
+    
+    var cluster = $("#newCluster").val();
+        if (cluster != "") {
+
+          $.ajax({
+            url:"/ajax/adsales/getPackets",
+            method:"POST",
+            data:{cluster},
+            success: function(output){
+              $('#newProject').html(output).selectpicker('refresh');
+              //$('#vlau ').html(output).selectpicker('refresh');
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });  
+        }else{
+          var option = "<option> Select Cluster </option>";
+          $('#newProject').empty().append(option).selectpicker('refresh');
+        }
     });
 </script>
 

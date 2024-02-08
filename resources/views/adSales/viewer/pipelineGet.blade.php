@@ -1,7 +1,7 @@
 @extends('layouts.mirror')
 @section('title', 'Pipelines')
 @section('head')
-
+	 <script src="/js/pipeline.js"></script>
     <?php include(resource_path('views/auth.php'));?>
    
 @endsection
@@ -27,7 +27,49 @@
                                 {{$render->regionFiltered($region, $regionID, $special)}}
                             @endif
 						</div>
-						                 
+						
+						<div class="col" style="display:none;">
+                            <label class="labelLeft"><span class="bold"> Year: </span></label>
+                            @if($errors->has('year'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->year($regionID)}}                    
+                        </div> 
+
+						 <div class="col">
+                            <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
+                            @if($errors->has('salesRep'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                                {{$render->salesRep()}}
+                        </div>
+
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Property:</span></label>
+                            @if($errors->has('salesRep'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                                {{$render->properties()}}
+                        </div>
+                        
+
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Agency:</span></label>
+                            @if($errors->has('agency'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->AgencyForm()}}
+                        </div>
+
+                        <div class="col">
+                            <label class='labelLeft'><span class="bold">Client:</span></label>
+                            @if($errors->has('client'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                            {{$render->ClientForm()}}
+
+                            <input type="hidden" name="sizeOfClient" id="sizeOfClient" value="">
+                        </div>                 
                    
                         {{--<div class="col">
                             <label class="labelLeft"><span class="bold"> Value: </span></label>

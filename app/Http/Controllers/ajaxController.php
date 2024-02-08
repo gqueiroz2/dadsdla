@@ -69,6 +69,91 @@ class ajaxController extends Controller{
 
     }
 
+     public function getAgencyPipeline(){
+        $sql = new sql();
+        $db = new dataBase();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
+                    FROM agency a                    
+                    left join agency_group ag on ag.ID = a.agency_group_id
+                    and ag.region_id = 1
+                    and ag.name != 'Others'
+                    ORDER BY a.name ASC";
+        //var_dump($select);
+        $from = array('aID','agency');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        //var_dump($project);
+        if ($client != '') {        
+            for($p=0; $p<sizeof($client);$p++){
+                echo "<option style='font-size: 16px; width:100%;' value='".$client[$p]['aID']."' selected='true'>".$client[$p]['agency']."</option>";
+            }                
+        }else{
+           echo "<option value=''> There is no Data for this. </option>";
+        }
+    }
+
+     public function getClientPipeline(){
+        $sql = new sql();
+        $db = new dataBase();
+        $year = (int)date("Y");
+        $pYear = $year-1;
+        $ppYear = $year-2;
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+
+        $select = "SELECT DISTINCT c.ID AS clientId ,c.name as client
+                    FROM client c                   
+                    WHERE c.client_group_id = 1
+                    ORDER BY c.name ASC";
+        //var_dump($select);
+        $from = array('clientId','client');
+        $selectQuery = $con->query($select);
+        $client = $sql->fetch($selectQuery, $from, $from);
+        $client = $client;
+        //var_dump($project);
+        if ($client != '') {        
+            for($p=0; $p<sizeof($client);$p++){
+                echo "<option style='font-size: 16px; width:100%;' value='".$client[$p]['clientId']."' selected='true'>".$client[$p]['client']."</option>";
+            }                
+        }else{
+           echo "<option value=''> There is no Data for this. </option>";
+        }
+    }
+
+     public function getPacketsFilter(){
+        $db = new dataBase();
+        $sql = new sql();
+
+        $regionID = '1';
+
+        $cluster = Request::get('cluster');
+        //var_dump($cluster);
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+       
+      
+        $select = "SELECT DISTINCT project as packet From projects p";
+
+        $selectQuery = $con->query($select);
+        $from = array('packet');
+        $project = $sql->fetch($selectQuery, $from, $from);
+        //var_dump($project);
+        if ($project != '') {        
+            for($p=0; $p<sizeof($project);$p++){
+                echo "<option style='font-size: 16px; width:100%;' value='".$project[$p]['packet']."' selected='true'>".$project[$p]['packet']."</option>";
+            }                
+        }else{
+           echo "<option value=''> There is no Data for this. </option>";
+        }
+    }
+
     public function getPackets(){
         $db = new dataBase();
         $sql = new sql();
@@ -89,7 +174,7 @@ class ajaxController extends Controller{
         //var_dump($project);
         if ($project != '') {        
             for($p=0; $p<sizeof($project);$p++){
-                echo "<option style='font-size: 13px; width:100%;' value='".$project[$p]['packet']."'>".$project[$p]['packet']."</option>";
+                echo "<option style='font-size: 16px; width:100%;' value='".$project[$p]['packet']."'>".$project[$p]['packet']."</option>";
             }                
         }else{
            echo "<option value=''> There is no Data for this. </option>";

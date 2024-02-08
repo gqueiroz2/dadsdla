@@ -48,7 +48,7 @@
         <div class="row">
             <div id="map" class="aligh-middle" >
                 <center>
-                    <img src="\portalLogo.png" style="width: 65%; margin-top: 10%; height: auto;">                    
+                    <img src="\portalLogo.png" style="width: 65%; margin-top: 10%; height: auto;" <?php echo(date("U")); ?>>                    
                 </center>
                  <table style='width: 100%; zoom: 85%;font-size: 16px;'>
                     <tr rowspan='20' class="center">

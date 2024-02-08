@@ -107,7 +107,7 @@ class pipeline extends Model{
         $project = $info['newProject'][0];
         $client = $info['newClient'][0];
         $agency = $info['newAgency'][0];
-        $product = $info['newProduct'];
+        $product = 0;
         $ae1 = $info['newAe1'][0];
         $ae2 = $info['newAe2'][0];
         $manager = $info['newManager'][0];
@@ -151,7 +151,7 @@ class pipeline extends Model{
                             property = '$project',
                             client = '$client',
                             agency = '$agency',
-                            product = '$product',
+                            product = 0, 
                             primary_ae_id = '$ae1',
                             second_ae_id = '$ae2',
                             manager = '$manager',
@@ -168,7 +168,7 @@ class pipeline extends Model{
 
     }
 
-    public function table($con,$sql){
+    public function table(Object $con,Object $sql,string $agency,string $client,String $salesRep,String $propString){
 
         $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,cl.name as client,a.name as agency,product,sr.name as primary_ae, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
                         FROM pipeline c
@@ -176,6 +176,10 @@ class pipeline extends Model{
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
                         LEFT JOIN client cl ON (cl.ID = c.client)
                         LEFT JOIN agency a ON (a.ID = c.agency)
+                        WHERE  (a.ID IN ($agency))
+                        AND ( cl.ID IN ($client) )  
+                        AND (sr.ID IN ($salesRep))
+                        AND (c.property IN ($propString))
                          ";
         
         $selectQuery = $con->query($select);
@@ -188,7 +192,6 @@ class pipeline extends Model{
     }
 
     public function makeTotal($table){
-
 
         for ($t=0; $t <sizeof($table); $t++) { 
             

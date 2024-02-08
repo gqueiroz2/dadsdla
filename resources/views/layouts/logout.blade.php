@@ -49,7 +49,7 @@
 			<!-- Image and text -->
 			<nav class="navbar navbar-light bg-light">
 				<a class="navbar-brand" href="{{ route('home')}}">
-					<img src="/miniLogo.png" width="225" height="60">
+					<img src="/miniLogo.png" width="225" height="60" <?php echo(date("U")); ?>>
 					<!--<span class="navbar-text"> |ADS - DLA </span>-->
 				</a>
 			</nav>

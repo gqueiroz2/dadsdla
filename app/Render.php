@@ -487,6 +487,14 @@ class Render extends Model{
 
     }
 
+    public function properties(){
+        echo "<select id='property' class='selectpicker' data-selected-text-format='count' multiple='true' name='property[]' multiple data-actions-box='true' data-size='8' data-width='100%'>";
+            echo "<option value=''> Select Region </option>";
+
+        echo "</select>";   
+
+    }
+
     public function salesRepHide(){
         echo "<select id='salesRep' class='selectpicker' data-selected-text-format='count' multiple='true' name='salesRep[]' multiple data-actions-box='true' data-size='8' data-width='100%' style='display:none'>";
             echo "<option value=''> Select Region </option>";
