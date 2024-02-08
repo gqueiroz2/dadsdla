@@ -89,7 +89,7 @@
 							        
 							    </li>
 							    <li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> RESULTS </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										@if($userLevel == 'L0' || $userLevel == 'SU')
@@ -102,7 +102,7 @@
 								</li>
 							@else
 								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> RESULTS </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
 												
