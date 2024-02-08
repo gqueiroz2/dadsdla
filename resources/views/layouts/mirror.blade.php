@@ -89,7 +89,7 @@
 							        
 							    </li>
 							    <li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> RESULTS </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 										<a class="dropdown-item" href="{{ route('consolidateResultsGet') }}"> Pacing </a>
 										@if($userLevel == 'L0' || $userLevel == 'SU')
@@ -102,7 +102,7 @@
 								</li>
 							@else
 								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Results </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> RESULTS </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										
 												
@@ -141,7 +141,13 @@
 									<li class="nav-item dropdown">
 										<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
 										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-											<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>
+											<a class="dropdown-item" href="{{ route('overviewGet') }}"> Overview </a>											
+										</div>
+									</li>
+
+									<li class="nav-item dropdown">
+										<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> AVB </a>
+										<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 											<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>										
 											<a class="dropdown-item" href="{{ route('resumeBVGet') }}"> Resume BV </a>
 											
@@ -149,7 +155,7 @@
 									</li>
 								@else
 								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dashboards </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> AVB </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('dashboardBVGet') }}"> BV </a>																			
 									</div>
@@ -158,7 +164,7 @@
 
 								@if($userLevel == 'SU')
 		                       <li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rankings </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Rakings </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
 			                        				<a class="nav-link" href="{{ route('brandGet') }}"> Brand </a>
 										<a class="nav-link" href="{{ route('marketGet') }}"> Market </a>                                
@@ -173,22 +179,24 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
 										<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-										@if($userLevel == 'SU')
-											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Packets </a>	
-											<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline </a>										
-										@endif
 									</div>
 								</li>
-							
+
+							 <li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Projects </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">		
+										@if($userLevel == 'SU')
+											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Closed Projects </a>	
+											<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline Projects </a>										
+										@endif
+									</div>
+								</li>							
 
 							@if($userLevel == 'SU')
 								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> FCST MGT </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-											<!--<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE View </a>-->
-											<a class="dropdown-item" href="{{ route('AEGet') }}"> AE View </a>
-											<!--<a class="dropdown-item" href="{{ route('propertyGet') }}"> Property View </a>
-											 <a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> MT View </a>-->											
+											<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>										
 											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>						
 										
 								</li>

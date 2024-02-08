@@ -2,7 +2,7 @@
 @section('title', 'AE Report')
 @section('head')
     <?php include resource_path('views/auth.php'); 
-        $company = array('3','1','2');
+        $company = array('1','2','3');
 
         for ($c=0; $c < sizeof($company); $c++) { 
             if ($company[$c] == '1') {
