@@ -307,7 +307,7 @@ class salesRep extends Management
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$order = "5,1";
+		$order = "sr.name ASC";
 		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
 		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
@@ -353,7 +353,7 @@ class salesRep extends Management
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$order = "5,1";
+		$order = "sr.name ASC";
 		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
 		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
@@ -399,7 +399,7 @@ class salesRep extends Management
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$order = "5,1";
+		$order = "sr.name ASC";
 		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
 		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
@@ -444,7 +444,7 @@ class salesRep extends Management
 				LEFT JOIN region r ON r.ID = srg.region_id
 				LEFT JOIN sales_rep_status srs ON srs.sales_rep_id = sr.ID
 				";
-		$order = "5,1";
+		$order = "sr.name ASC";
 		$res = $sql->selectDistinct($con, $columns, $table, $join, $where, $order);
 		//var_dump($sql->selectDistinct($con, $columns, $table, $join, $where, $order));
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');

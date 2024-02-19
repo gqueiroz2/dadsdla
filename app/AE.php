@@ -614,9 +614,14 @@ class AE extends pAndR{
         $resultForecast = $sql->fetch($queryForecast,$fromForecast,$fromForecast);
 
         //var_dump($resultForecast);
-        $result = array_merge($resultWBD,$resultForecast);
-        $result = array_unique($result, SORT_REGULAR);
-        $result = array_values($result);
+        if ($resultForecast != false) {
+            $result = array_merge($resultWBD,$resultForecast);
+            $result = array_unique($result, SORT_REGULAR);
+            $result = array_values($result);
+        }else{
+            $result = array_values($resultWBD);
+
+        }
         //var_dump($result);
         return $result;
     }

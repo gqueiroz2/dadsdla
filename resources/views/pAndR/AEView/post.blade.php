@@ -4,7 +4,7 @@
     <?php include(resource_path('views/auth.php')); 
 
     $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
-    $company = array('3','1','2');
+    $company = array('1','2','3');
 
     for ($c=0; $c < sizeof($company); $c++) { 
         if ($company[$c] == '1') {

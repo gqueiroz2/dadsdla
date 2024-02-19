@@ -255,7 +255,7 @@ class Render extends Model{
             for ($t=0; $t < sizeof($temp) ; $t++) { 
                 echo "<optgroup label='".$temp[$t]."'>";
                     for ($r=0; $r < sizeof($tempId[$t]) ; $r++) {
-                        echo "<option value='".$tempId[$t][$r]."'>".$tempName[$t][$r]."</option>";
+                        echo "<option value='".$tempId[0][0]."' selected='true'>".$tempName[0][0]."</option>";
                     }
                 echo "</optgroup>";
             }

@@ -55,16 +55,13 @@
         @csrf
         <div class="container-fluid">       
             <div class="row">
-                <div class="col">
+                <div class="col" style="display:none;">
                     <label class='labelLeft'><span class="bold">Region:</span></label>
                     @if($errors->has('region'))
                         <label style="color: red;">* Required</label>
                     @endif
-                    @if($userLevel == 'L0' || $userLevel == 'SU')
-                        {{$render->region($region)}}
-                    @else
-                        {{$render->regionFiltered($region, $regionID, $special )}}
-                    @endif
+                    
+                    {{$render->regionFiltered($region, $regionID, $special )}}
                 </div>
                 <div class="col">
                     <label class='labelLeft'><span class="bold">Month:</span></label>
@@ -210,9 +207,18 @@
                             <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentDigitalBookings'],0,',','.')}}</td>
                         </tr>
                         <tr>
-                            <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                            <td class="grey center">TOTAL (BKGS+FCST) </td>
                             @for($c=0; $c <sizeof($company); $c++)
-                                <td class="odd" id='' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                <td class="grey" id='' style='text-align:center; width:3%;'>
+                                   {{number_format($aeTable['companyValues'][$c]['forecastBookings'],0,',','.')}}
+                                </td>   
+                            @endfor
+                            <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['forecastBookings'],0,',','.')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                            @for($c=0; $c <sizeof($company); $c++)
+                                <td class="even" id='' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                    {{number_format($aeTable['companyValues'][$c]['previousBookings'],0,',','.')}}
                                 </td>   
                             @endfor
@@ -237,8 +243,14 @@
                         </table>
 
                         <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                            <?php if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == null){
+                                    $probability[$a] = intval(100);
+                                }else{
+                                    $probability[$a] = $clientsTable['clientInfo'][$a]['probability'][0]['probability'];
+                                }
+                            ?>
                             <tr>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; width:1%;">Probability: <input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="probability-{{$a}}" id="probability-{{$a}}" style=" width:25%; background-color:transparent; border:0px; font-weight:bold; text-align:center;" value={{number_format($clientsTable['clientInfo'][$a]['probability'][0]['probability'])}}>%</td>    
+                                <td style="border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; width:1%;">Probability: <input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="probability-{{$a}}" id="probability-{{$a}}" style=" width:25%; background-color:transparent; border:0px; font-weight:bold; text-align:center;" value={{number_format($probability[$a])}}>%</td>    
                             </tr>
                             <tr class="center">
                                 <td class="darkBlue" style="width:5%;">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
@@ -278,9 +290,16 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'],0,',','.')}}</td>
                             </tr>
                             <tr>
-                                <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                <td class="grey center">TOTAL (BKGS+FCST)</td>
                                 @for($c=0; $c <sizeof($company); $c++)
-                                    <td class="odd center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'],0,',','.')}}</td>
+                                    <td class="grey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['forecastBookings'],0,',','.')}}</td>
+                                @endfor
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecastBookings'],0,',','.')}}</td>
+                            </tr>
+                            <tr>
+                                <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                @for($c=0; $c <sizeof($company); $c++)
+                                    <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'],0,',','.')}}</td>
                                 @endfor
                                 <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'],0,',','.')}}</td>
                             </tr>
@@ -397,7 +416,7 @@
                                                  <input type='hidden' readonly='true' type="text" name="wm" id="wm" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
                                                   <input type='hidden' readonly='true' type="text" name="spt" id="spt" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
                                                    <input type='hidden' readonly='true' type="text" name="dc" id="dc" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
-                                                   <input type='hidden' readonly='true' type="text" name="newProbability" id="newProbability" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                                                   <input type='hidden' readonly='true' type="text" name="newProbability" id="newProbability" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="100">
                                                     <label>Client</label>
                                                         <select class='selectpicker' id='newClient' name='newClient[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                                             <option value='0' selected='true'> Select </option>

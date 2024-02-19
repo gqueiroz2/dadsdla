@@ -60,6 +60,15 @@
         <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['currentDigitalBookings']}}</td>
     </tr>
     <tr>
+        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>TOTAL (BKGS+FCST) </td>
+        @for($c=0; $c <sizeof($data['company']); $c++)
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
+               {{$data['aeTable']['companyValues'][$c]['forecastBookings']}}
+            </td>   
+        @endfor
+        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['forecastBookings']}}</td>
+    </tr>
+    <tr>
         <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
         @for($c=0; $c <sizeof($data['company']); $c++)
             <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
