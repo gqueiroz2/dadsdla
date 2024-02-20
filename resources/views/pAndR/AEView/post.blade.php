@@ -33,11 +33,7 @@
                     @if($errors->has('region'))
                         <label style="color: red;">* Required</label>
                     @endif
-                    @if($userLevel == 'L0' || $userLevel == 'SU')
-                        {{$render->region($region)}}
-                    @else
-                        {{$render->regionFiltered($region, $regionID, $special )}}
-                    @endif
+                    {{$render->regionFiltered($region, $regionID, $special )}}
                 </div>
                 <div class="col">
                     <label class='labelLeft'><span class="bold">Year:</span></label>
