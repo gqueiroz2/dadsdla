@@ -443,7 +443,7 @@ class agency extends Management{
 
         // ========================================= // 
 
-        $tableAleph = "wbd_bv y";
+        $tableAleph = "wbd y";
 
         $columnsAleph = "ag.ID AS 'id',
                     ag.name AS 'agencyGroup'
