@@ -186,27 +186,24 @@
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Projects </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">		
 										@if($userLevel == 'SU')
-											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Closed Projects </a>	
-											<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline Projects </a>										
+											<a class="dropdown-item" href="{{ route('packetsGet') }}"> Closed Projects </a>																					
 										@endif
+										<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline Projects </a>	
 									</div>
 								</li>							
 
-							@if($userLevel == 'SU')
-								<li class="nav-item dropdown">
-									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> FCST MGT </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-											<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>										
-											<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>						
-										
-								</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> FCST MGT </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>										
+									<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>				
+							</li>
 								<!--<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> AE View </a>
 										<a class="dropdown-item" href="{{ route('BaseReportPandRGet') }}"> Consolidate View </a>
 								</li>-->
-							@endif
 
 							@if( ( $userLevel == "SU" ) )
 								<li class="nav-item dropdown">
