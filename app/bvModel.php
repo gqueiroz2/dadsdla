@@ -71,7 +71,7 @@ class bvModel extends Model{
     public function getValueForBvByYear(String $salesRep=NULL, String $agency, String $client, int $year, String $valueType, Object $con, Object $sql, String $currency){
          // == ALEPH integration == //
         $pRate = new pRate();
-
+        //var_dump($salesRep);
         if($currency == '1'){
             $pRateWM = 1; // Temporary value for WM pRate, will need change after 2023
         }else {
@@ -86,6 +86,7 @@ class bvModel extends Model{
         $queryALEPH = "SELECT SUM($valueWbd) from wbd
                  where agency_id = $agency
                  AND client_id = $client
+                 AND current_sales_rep_id = $salesRep
                  AND year = $year";
         //var_dump($queryALEPH);
         $resultALEPH = $con->query($queryALEPH);
@@ -179,9 +180,9 @@ class bvModel extends Model{
         [Sales Rep Name, Agency Name, Client Name, Antepenultimate Year Value, Penultimate Year Value, Actual Year Value, Actual Year Prevision, (Actual Year Value + Actual Year Prevision) and Variation] == */
        for ($i = 0; $i < sizeof($result); $i++){
 
-            $pPreviousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql,$currency);
-            $previousValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql,$currency);
-            $actualValue = $this->getValueForBvByYear($result[$i]['srID'], $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql,$currency);
+            $pPreviousValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $ppYear, $valueType, $con, $sql,$currency);
+            $previousValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $pYear, $valueType, $con, $sql,$currency);
+            $actualValue = $this->getValueForBvByYear($salesRep, $result[$i]['agency'], $result[$i]['client'], $year, $valueType, $con, $sql,$currency);
             $prevValue = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'], $currency, 'wbd', $con, $sql,$year);
             $sptPrev = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'],$currency, 'spt', $con, $sql,$year);
             $statusString = $this->getPrevision($salesRep, $result[$i]['client'], $result[$i]['agency'],$currency, 'status', $con, $sql,$year);
