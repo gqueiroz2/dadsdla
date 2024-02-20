@@ -719,7 +719,7 @@ class viewerController extends Controller{
 
         $saveInfo = Request::all();
         unset($saveInfo['_token']);
-        //print_r($saveInfo);
+       
         if ($saveInfo['newClient'][0] != 0) {
             if ($saveInfo['newAe2'][0] == '10') {
                 $saveInfo['newAe2'] = $saveInfo['newAe1'];
@@ -755,7 +755,7 @@ class viewerController extends Controller{
                    // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
                 }*/
             }
-                       
+             //print_r($saveInfo);       
             $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
         
             $totalPerPacket = $p->makeTotal($table);

@@ -259,9 +259,9 @@
                                             @endfor
                                         </select><br>
                                     <label>TV Values</label>
-                                    <input  type="text" name="editTv" id="editTv" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" value=""><br>
+                                    <input  type="text" name="editTv" id="editTv" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0"  value=""><br>
                                     <label>Digital Values</label>
-                                    <input  type="text" name="editDigital" id="editDigital" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" value=""><br>
+                                    <input  type="text" name="editDigital" id="editDigital" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0"  value=""><br>
                                      <label>First Month</label>
                                         <select class='selectpicker' id='editFirstMonth' name='editFirstMonth[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                             <option value=''> Select </option>
