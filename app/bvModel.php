@@ -18,7 +18,7 @@ class bvModel extends Model{
         $ppYear = $year-2;
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd_bv al 
+        $queryAleph = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd al 
                    left join agency a on a.ID = al.agency_id 
                    left join client c on c.ID = al.client_id 
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
@@ -47,7 +47,7 @@ class bvModel extends Model{
 
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from wbd_bv al 
+        $queryAleph = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from wbd al 
                    left join agency a on a.ID = al.agency_id 
                    left join client c on c.ID = al.client_id 
                    left join sales_rep sr on sr.ID = al.current_sales_rep_id  
@@ -83,7 +83,7 @@ class bvModel extends Model{
         }
 
         $valueWbd = $valueType."_value";
-        $queryALEPH = "SELECT SUM($valueWbd) from wbd_bv
+        $queryALEPH = "SELECT SUM($valueWbd) from wbd
                  where agency_id = $agency
                  AND client_id = $client
                  AND year = $year";
@@ -405,7 +405,7 @@ class bvModel extends Model{
         $ppYear = $year-2;
 
         $select = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
-                    FROM wbd_bv w
+                    FROM wbd w
                     left join client c on c.ID = w.client_id
                     left join agency a on a.ID = w.agency_id
                     WHERE c.client_group_id = 1 
@@ -462,7 +462,7 @@ class bvModel extends Model{
                     $tmp1[] = $client[$c]['id']; 
                     $tmp2[] = $client[$c]['agency']; 
                     
-                    $queryClient[$c] = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd_bv cm 
+                    $queryClient[$c] = "SELECT distinct sr.id as srID, sr.name as srName, a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from  wbd cm 
                            left join agency a on a.ID = cm.agency_id 
                            left join client c on c.ID = cm.client_id 
                            left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
@@ -521,7 +521,7 @@ class bvModel extends Model{
                     $tmp2[] = $client[$c]['agency']; 
                     $tmp2[] = $client[$c]['salesRep']; 
                     
-                    $queryClient[$c] = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from  wbd_bv cm 
+                    $queryClient[$c] = "SELECT distinct  a.id as agency, a.name as agencyName, c.id as client, c.name as clientName, sr.id salesRep, sr.name as salesRepName from  wbd cm 
                            left join agency a on a.ID = cm.agency_id 
                            left join client c on c.ID = cm.client_id 
                            left join sales_rep sr on sr.ID = cm.current_sales_rep_id  
@@ -561,7 +561,7 @@ class bvModel extends Model{
         $pppYear = $year-3;
 
         // == This part make the integration with WarnerMedia ALEPH base == //
-        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd_bv w 
+        $queryAleph = "SELECT distinct a.id as agency, a.name as agencyName, c.id as client, c.name as clientName from wbd w 
                    left join agency a on a.ID = w.agency_id 
                    left join client c on c.ID = w.client_id 
                    left join brand b on b.ID = w.brand_id  
@@ -672,7 +672,7 @@ class bvModel extends Model{
     $sql = new sql();
 
     $select = "SELECT sum(w.net_value) as netRevenue
-                FROM wbd_bv w
+                FROM wbd w
                 left join agency a on a.ID = w.agency_id
                 left join agency_group ag on ag.ID = a.agency_group_id
                 left join brand b on b.ID = w.brand_id
@@ -760,7 +760,7 @@ class bvModel extends Model{
     $sql = new sql();
 
     $select = "SELECT DISTINCT c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
-                FROM wbd_bv w
+                FROM wbd w
                 LEFT JOIN client c on c.ID = w.client_id
                 LEFT JOIN agency a ON a.ID = w.agency_id
                 LEFT JOIN agency_group ag ON ag.ID = a.agency_group_id
@@ -781,14 +781,14 @@ class bvModel extends Model{
 
     if ($cluster == 'Entertainment' || $cluster == 'Sports' || $cluster == 'News') {
          $select = "SELECT SUM(net_value) as netRevenue
-                FROM wbd_bv
+                FROM wbd
                 WHERE client_id = $client
                 and year = $year
                 and agency_id = $agency
                 and (cluster = '$cluster')";
     }else{
          $select = "SELECT SUM(net_value) as netRevenue
-                FROM wbd_bv
+                FROM wbd
                 WHERE client_id = $client
                 and year = $year
                 and agency_id = $agency
