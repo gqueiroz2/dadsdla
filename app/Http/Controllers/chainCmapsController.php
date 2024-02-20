@@ -127,7 +127,11 @@ class chainCmapsController extends Controller{
             case 'cmaps':
                 unset($spreadSheet[0]);
                 $spreadSheet = array_values($spreadSheet);
-                break;          
+                break;   
+            case 'pipeline':
+                unset($spreadSheet[0]);
+                $spreadSheet = array_values($spreadSheet);
+                break;        
         }
         
         $complete = $chain->handler($con,$table,$spreadSheet,$year);

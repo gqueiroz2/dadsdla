@@ -628,6 +628,7 @@ class viewerController extends Controller{
         $client = Request::get('client');
         $property = Request::get('property');
         $manager = Request::get('director');
+        //var_dump($manager);
         for ($m=0; $m <sizeof($manager) ; $m++) { 
             if ($manager[$m] == 'Bruno Paula') {
                 $manager[$m] = 'BP';

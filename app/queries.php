@@ -162,7 +162,7 @@ class queries extends Model
 
 		//posso passar região se for necessario para ter mais certeza na busca
 
-		$sql = "SELECT ID,name FROM sales_rep";
+		$sql = "SELECT ID,name FROM sales_rep ORDER BY name ASC";
 
 		$salesRep = array();
 

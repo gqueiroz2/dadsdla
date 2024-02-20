@@ -244,7 +244,7 @@ class salesRep extends Management
 		}
 		$join = "LEFT JOIN sales_rep_group srg ON srg.ID = sr.sales_group_id
 				 LEFT JOIN region r ON r.ID = srg.region_id";
-		$order = "srg.ID,sr.name";
+		$order = "sr.name ASC";
 		$res = $sql->larica($con, $columns, $table, $join, $where, $order);
 		$from = array('id', 'salesRep', 'salesRepGroup', 'region');
 		$salesRep = $sql->fetch($res, $from, $from);
@@ -660,7 +660,8 @@ class salesRep extends Management
 		LEFT JOIN sales_rep_status srs ON sr.ID = srs.sales_rep_id 
 		WHERE srs.status = 1 
 		and (srs.year = $year)
-		and (sr.sales_group_id = $salesRepGroupID)";
+		and (sr.sales_group_id = $salesRepGroupID) 
+		ORDER BY sr.name ASC";
 		//var_dump($query);
 		$from = array('ID', 'sales_group_id', 'name');
 		$res = $con->query($query);

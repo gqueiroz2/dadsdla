@@ -82,17 +82,28 @@ class chainCmaps extends excel{
     public function firstChain($con,$table,$spreadSheet,$base,$year){
         $columns = $this->defineColumns($table,'first');
         $parametter = $table;
-        //var_dump($parametter);
         
-        $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+       
         
-        array_push($columns, 'sales_rep_representatives');
-        $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet);
+        //var_dump($spreadSheet);
+        if ($table == 'cmaps') {
+            array_push($columns, 'sales_rep_representatives');
+            for ($s=0; $s <sizeof($spreadSheet); $s++) { 
+                $spreadSheet = $this->assembler($spreadSheet,$columns,$base,$parametter);
+                $spreadSheet[$s]['log'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$s]['log']);    
+            }  
 
-        for ($s=0; $s <sizeof($spreadSheet); $s++) { 
-            $spreadSheet[$s]['log'] = $base->formatData('mm/dd/aaaa','aaaa-mm-dd',$spreadSheet[$s]['log']);    
+            $spreadSheet = $this->addSalesRepRepresentatives($spreadSheet); 
+
+        }else{
+            for ($i=0; $i <sizeof($spreadSheet); $i++) { 
+               // $spreadSheet[$i][11] = $base->monthToIntWBD(trim($spreadSheet[$i][11]));
+                //$spreadSheet[$i][12] = $base->monthToIntWBD(trim($spreadSheet[$i][12]));
+            }
+            
         }        
-
+                     
+        //var_dump($spreadSheet);
         $into = $this->into($columns);      
         $check = 0;               
         $mark = 0;
@@ -126,14 +137,14 @@ class chainCmaps extends excel{
         $tempBase = false;
         
         $current = $this->fixToInput($this->selectFromCurrentTable($sql,$fCon,$table,$columns),$columns);            
-
+        //var_dump($current);
         $into = $this->into($columnsS);		
-
+        
         $next = $this->handleForNextTable($con,$table,$current,$columns,$year);
-
+        //var_dump($columnsS);
         $complete = $this->insertToNextTable($sCon,$table,$columnsS,$next,$into,$columnsS);
   		
-        return $complete;                     
+        return $complete;
 
     }  
 
@@ -203,13 +214,13 @@ class chainCmaps extends excel{
     	$into = $this->into($columnsT);
 
         $tempBase = false;
-        
+            
+       
+       $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
+        var_dump($current);
+/*    	$bool = $this->insertToDLA($con,$table,$columnsT,$current,$into);
 
-        $current = $this->fixToInput($this->selectFromCurrentTable($sql,$tCon,$table,$columns),$columns);
-
-    	$bool = $this->insertToDLA($con,$table,$columnsT,$current,$into);
-
-        return $bool;
+        return $bool;*/
 
     }   
 
@@ -224,7 +235,7 @@ class chainCmaps extends excel{
 
     public function insert($con,$spreadSheet,$columns,$table,$into,$nextColumns = false){
 
-        $values = $this->values($spreadSheet,$columns);
+        $values = $this->values($spreadSheet,$columns,$nextColumns);
         $ins = " INSERT INTO $table ($into) VALUES ($values)"; 
         if($con->query($ins) === TRUE ){
             $error = false;
@@ -435,11 +446,11 @@ class chainCmaps extends excel{
     	$salesReps = $sr->getSalesRepUnit($con);
         $salesRepRepresentatives = $sr->getSalesRepUnitWithRepresentatives($con);
     	$currencies = $pr->getCurrency($con);
-
+        //var_dump($columns);
         for ($c=0; $c < sizeof($current); $c++) { 
     		for ($cc=0; $cc < sizeof($columns); $cc++) { 
                 $tmp = $this->handle($con,$table,$current[$c][$columns[$cc]],$columns[$cc],$regions,$brands,$salesReps,$salesRepRepresentatives,$currencies,$year,$current[$c]);
-    			
+    			//var_dump($tmp);
                 if($columns[$cc] == "ad_unit" || $columns[$cc] == "from_date" || $columns[$cc] == "to_date"){
                     $current[$c][$tmp[1][1]] = $tmp[1][0];
                     $current[$c][$tmp[0][1]] = $tmp[0][0];                    
@@ -455,6 +466,7 @@ class chainCmaps extends excel{
                 $current[$c]['year'] = $year;
             }
     	}
+        //var_dump($current);
 		return $current;
     }
 
@@ -606,7 +618,7 @@ class chainCmaps extends excel{
                 //var_dump($current);
             }
 
-        }elseif($column == 'sales_rep'){
+        }elseif($column == 'sales_rep' ){
             $rtr =  array(false,'sales_rep_id');
             $check = -1;
 
@@ -644,6 +656,78 @@ class chainCmaps extends excel{
                 //var_dump($current);
             }
 
+        }elseif($column == 'primary_ae'){
+            $rtr =  array(false,'primary_ae_id');
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['salesRepID'],'primary_ae_id');
+
+                    $check++;
+                }
+
+                if($check > 0){
+
+                    if($table == "fw_digital"){
+                        $frt = "region_id";
+                    }else{
+                        $frt = "campaign_sales_office_id";                        
+                    }
+
+                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                        if($current == $salesReps[$srr]['salesRepUnit']){
+                            
+                            $rtr =  array( $salesReps[$srr]['salesRepID'],'primary_ae_id');   
+                        }                        
+                    }
+                }
+            }
+            
+            if(!$rtr[0]){
+                //var_dump($current);
+            }
+        }elseif($column == 'second_ae'){
+            $rtr =  array(false,'second_ae_id');
+            $check = -1;
+
+            $current = trim($current);
+
+            /*
+                O Check vai comparar o executivo, e ao encontrar um 'match' , colocará o ID no executivo encontrado na posição atual "current" e incrementará ++ ao seu valor , se o valor final do check for 0 significa que apenas 1 ocorrência do executivo foi encontrada, se for maior que isso irá ser feito o 'match' da região para inserção correta.
+            */
+            for ($sr=0; $sr < sizeof($salesReps); $sr++) { 
+                if($current == $salesReps[$sr]['salesRepUnit']){    
+                    $rtr =  array( $salesReps[$sr]['salesRepID'],'second_ae_id');
+
+                    $check++;
+                }
+
+                if($check > 0){
+
+                    if($table == "fw_digital"){
+                        $frt = "region_id";
+                    }else{
+                        $frt = "campaign_sales_office_id";                        
+                    }
+
+                    for ($srr=0; $srr < sizeof($salesReps); $srr++) {
+                        if($current == $salesReps[$srr]['salesRepUnit']){
+                            
+                            $rtr =  array( $salesReps[$srr]['salesRepID'],'second_ae_id');   
+                        }                        
+                    }
+                }
+            }
+            
+            if(!$rtr[0]){
+                //var_dump($current);
+            }
         }elseif($column == 'sales_rep_representatives'){
             $rtr =  array(false,'sales_rep_representatives_id');
             $check = -1;
@@ -738,6 +822,8 @@ class chainCmaps extends excel{
     	for ($c=0; $c < sizeof($current); $c++) { 
             if($table == 'cmaps'){
                 $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
+            }elseif($table == 'pipeline'){
+                $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
                 $bool[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
             }
@@ -759,9 +845,12 @@ class chainCmaps extends excel{
         if($table == 'bts'){
             $table = 'ytd';
         }
-
+        //var_dump($nextColumns);
     	for ($c=0; $c < sizeof($current); $c++) { 
     		if($nextColumns && ($table == 'cmaps')){
+                $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
+            }elseif($nextColumns && ($table == 'pipeline')){
+                //var_dump('expression');
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into,$nextColumns);
             }else{
                 $error[$c] = $this->insert($con,$current[$c],$columns,$table,$into);
@@ -812,7 +901,8 @@ class chainCmaps extends excel{
             $column == 'fcst_amount_gross' ||
             $column == 'fcst_amount_net' ||
             $column == 'success_probability' ||
-
+            $column == 'tv_value' ||
+            $column == 'digital_value' ||
             $column == 'rep_commission_percentage' 
 
     	  ){
@@ -861,7 +951,9 @@ class chainCmaps extends excel{
                 if($columns[$c] != ''){
                     $bool = $this->searchEmptyStrings($spreadSheet[$s],$columns);
                 	if($bool){
-                        if($columns[$c] == 'gross_revenue' ||
+                        if($columns[$c] == 'tv_value' ||
+                            $columns[$c] == 'digital_value' ||
+                            $columns[$c] == 'gross_revenue' ||
                            $columns[$c] == 'gross' ||
     					   $columns[$c] == 'net_revenue' ||						
                            $columns[$c] == 'net' ||                     
@@ -1003,7 +1095,10 @@ class chainCmaps extends excel{
                                 }else{
                                     $spreadSheetV2[$s][$columns[$c]] = intval($spreadSheet[$s][$c]);
                                 }
-                            }elseif($columns[$c] == 'month'){     
+                            }elseif($columns[$c] == 'start_month' || $columns[$c] == 'end_month'){
+                               $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntAleph(trim($spreadSheet[$s][$c]));
+                            }
+                            elseif($columns[$c] == 'month'){     
                             //var_dump('aki');                           
                                    $spreadSheetV2[$s][$columns[$c]] = $base->monthToIntCMAPS(trim($spreadSheet[$s][$c]));                                
     						}else{
@@ -1041,7 +1136,7 @@ class chainCmaps extends excel{
         $excel = new excel();
         for ($c=0; $c < sizeof($columns); $c++) { 
             if($nextColumns){   
-                if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount"){
+                if($nextColumns[$c] == "gross" || $nextColumns[$c] == "net" || $nextColumns[$c] == "discount" || $nextColumns[$c] == "tv_value" || $nextColumns[$c] == "digital_value"){
                     $values .= "\"".round($spreadSheet[$nextColumns[$c]],5)."\"";
                 }else if($nextColumns[$c] == "from_value" || $nextColumns[$c] == "to_value"){
                     $values .= "\"".round($excel->fixExcelNumber($spreadSheet[$nextColumns[$c]]),5)."\"";
@@ -1049,11 +1144,12 @@ class chainCmaps extends excel{
                     $values .= "\"".  addslashes($spreadSheet[$nextColumns[$c]])."\"";
                 }
             }else{
-                if($columns[$c] == "gross" || $columns[$c] == "net" || $columns[$c] == "discount"){
+                if($columns[$c] == "gross" || $columns[$c] == "net" || $columns[$c] == "discount" || $nextColumns[$c] == "tv_value" || $nextColumns[$c] == "digital_value"){
                     $values .= "\"".round($spreadSheet[$columns[$c]],5)."\"";
                 }else if($columns[$c] == "from_value" || $columns[$c] == "to_value"){
                     $values .= "\"".round( $excel->fixExcelNumber( $spreadSheet[$columns[$c]] ) ,5)."\"";
                 }else{
+                    //var_dump($columns);
                     $values .= "\"".  addslashes($spreadSheet[$c])."\"";
                 }
             }
@@ -1105,14 +1201,76 @@ class chainCmaps extends excel{
                       break;
                   break;  
             case 'pipeline':
-                  case 'DLA':
-                      return $this->pipelineColumns;
-                      break;
+                  switch ($recurrency) {
+                    case 'first':
+                        return $this->pipelineColumnsF;
+                        break;
+                    case 'second':
+                        return $this->pipelineColumnsS;
+                        break;
+                    case 'third':
+                        return $this->pipelineColumnsT;
+                        break;
+                    case 'DLA':
+                        return $this->pipelineColumns;
+                        break;
+                }
                   break;  
             break;   		
     	}
 
     }
+
+    public $pipelineColumnsF = array('register',
+                                    'cluster',
+                                    'property',
+                                    'client',
+                                    'agency',
+                                    'product',
+                                    'primary_ae',
+                                    'second_ae',
+                                    'manager',
+                                    'tv_value',
+                                    'digital_value',
+                                    'start_month',
+                                    'end_month',
+                                    'quota',
+                                    'status',
+                                    'notes');
+
+    public $pipelineColumnsS = array('register',
+                                    'cluster',
+                                    'property',
+                                    'client',
+                                    'agency',
+                                    'product',
+                                    'primary_ae_id',
+                                    'second_ae_id',
+                                    'manager',
+                                    'tv_value',
+                                    'digital_value',
+                                    'start_month',
+                                    'end_month',
+                                    'quota',
+                                    'status',
+                                    'notes');
+
+    public $pipelineColumnsT = array('register',
+                                    'cluster',
+                                    'property',
+                                    'client',
+                                    'agency',
+                                    'product',
+                                    'primary_ae_id',
+                                    'second_ae_id',
+                                    'manager',
+                                    'tv_value',
+                                    'digital_value',
+                                    'start_month',
+                                    'end_month',
+                                    'quota',
+                                    'status',
+                                    'notes');
 
     public $pipelineColumns = array('register',
                                     'cluster',

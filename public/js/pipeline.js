@@ -14,18 +14,7 @@ $(document).ready(function(){
           var year = $('#year').val();
           if(year == ""){
             var option = "<option> Select Year </option>";           
-          }else{
-             $.ajax({
-              url:"/ajax/adsales/getDirector",
-              method:"POST",
-              data:{regionID, year},
-              success: function(output){
-                $('#director').html(output).selectpicker("refresh");
-              },
-              error: function(xhr, ajaxOptions,thrownError){
-                alert(xhr.status+" "+thrownError);
-              }
-            });
+          }else{            
             $.ajax({
               url:"/ajax/adsales/repByRegionAndYear",
               method:"POST",
@@ -80,6 +69,18 @@ $(document).ready(function(){
               data:{regionID},
               success: function(output){
                 $('#sizeOfClient').val(output);
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
+
+             $.ajax({
+              url:"/ajax/adsales/getDirector",
+              method:"POST",
+              data:{regionID, year},
+              success: function(output){
+                $('#director').html(output).selectpicker("refresh");
               },
               error: function(xhr, ajaxOptions,thrownError){
                 alert(xhr.status+" "+thrownError);

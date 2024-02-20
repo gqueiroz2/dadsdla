@@ -259,9 +259,9 @@
                                             @endfor
                                         </select><br>
                                     <label>TV Values</label>
-                                    <input  type="text" name="editTv" id="editTv" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value=""><br>
+                                    <input  type="text" name="editTv" id="editTv" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" value=""><br>
                                     <label>Digital Values</label>
-                                    <input  type="text" name="editDigital" id="editDigital" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value=""><br>
+                                    <input  type="text" name="editDigital" id="editDigital" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" value=""><br>
                                      <label>First Month</label>
                                         <select class='selectpicker' id='editFirstMonth' name='editFirstMonth[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                             <option value=''> Select </option>
@@ -454,8 +454,8 @@
         document.getElementById("editAe1").value = dados[5];
         document.getElementById("editAe2").value = dados[7];
         document.getElementById("editManager").value = dados[9];
-        document.getElementById("editTv").value = dados[10];
-        document.getElementById("editDigital").value = dados[11];
+        document.getElementById("editTv").value = dados[10].replace(/\.00000$/,'');
+        document.getElementById("editDigital").value = dados[11].replace(/\.00000$/,'');
         document.getElementById("editFirstMonth").value = dados[12];
         document.getElementById("editEndMonth").value = dados[13];
         document.getElementById("editQuota").value = dados[14];
@@ -598,12 +598,24 @@
 
         // split number by decimal point
         var left_side = input_val.substring(0, decimal_pos);
+        var right_side = input_val.substring(decimal_pos);
 
         // add commas to left side of number
         left_side = formatNumber(left_side);
 
+        // validate right side
+        right_side = formatNumber(right_side);
+        
+        // On blur make sure 2 numbers after decimal
+        if (blur === "blur") {
+          right_side += "00";
+        }
+        
+        // Limit decimal to only 2 digits
+        right_side = right_side.substring(0, 2);
+
         // join number by .
-        input_val =  left_side + ",";
+        input_val =  left_side + "," + right_side;
 
       } else {
         // no decimal entered

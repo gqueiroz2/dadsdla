@@ -101,7 +101,7 @@ class RenderChain extends Render{
     public function tableCmaps($name){
         echo "<select class='form-control' name='$name' data-width='100%'>";
             echo "<option value='cmaps'> CMAPS </option>";
-
+            echo "<option value='pipeline'> PIPELINE </option>";
         echo "</select>";
     }
 
@@ -114,7 +114,8 @@ class RenderChain extends Render{
 
     public function reportCmaps(){
         echo "<select class='form-control' name='table' id='tableToCheck' data-width='100%'>";
-            echo "<option value='cmaps'> CMAPS </option>";            
+            echo "<option value='cmaps'> CMAPS </option>";  
+            echo "<option value='pipeline'> PIPELINE </option>";          
         echo "</select>";
     }
 
