@@ -1,8 +1,7 @@
 // Considerations: use the front-end filters for generating data for the table and not the actual :D
 
 $(document).ready(function(){
-  $('#region').change(function(){
-    var regionID = $(this).val();
+    var regionID = 1;
     var year = $('#year').val();
     ajaxSetup();
     if (regionID != "") {
@@ -16,6 +15,17 @@ $(document).ready(function(){
           if(year == ""){
             var option = "<option> Select Year </option>";           
           }else{
+             $.ajax({
+              url:"/ajax/adsales/getDirector",
+              method:"POST",
+              data:{regionID, year},
+              success: function(output){
+                $('#director').html(output).selectpicker("refresh");
+              },
+              error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+              }
+            });
             $.ajax({
               url:"/ajax/adsales/repByRegionAndYear",
               method:"POST",
@@ -83,7 +93,7 @@ $(document).ready(function(){
         }
       });
       
-      
+     
 
       $('#year').change(function(){ 
 
@@ -158,7 +168,4 @@ $(document).ready(function(){
         alert(xhr.status+" "+thrownError);
       }
     });    
-
-  });
-
 });

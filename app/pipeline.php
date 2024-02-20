@@ -143,10 +143,10 @@ class pipeline extends Model{
 
     }
 
-     public function updateLines($con,$sql,$id,$register,$cluster,$project,$client,$agency,$product,$ae1,$ae2,$manager,$tv,$digital,$start,$end,$quota,$status,$notes){
+     public function updateLines($con,$sql,$id,$cluster,$project,$client,$agency,$ae1,$ae2,$manager,$tv,$digital,$start,$end,$quota,$status,$notes){
         //var_dump($manager);
          $query = "UPDATE pipeline
-                        SET register = '$register', 
+                        SET register = 'FORECAST', 
                             cluster = '$cluster',
                             property = '$project',
                             client = '$client',
@@ -168,9 +168,9 @@ class pipeline extends Model{
 
     }
 
-    public function table(Object $con,Object $sql,string $agency,string $client,String $salesRep,String $propString){
+    public function table(Object $con,Object $sql,string $agency,string $client,String $salesRep,String $propString, String $manager, String $status){
 
-        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,cl.name as client,a.name as agency,product,sr.name as primary_ae, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
+        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,cl.name as client, cl.ID as cID, a.ID as aID, a.name as agency,product,sr.name as primary_ae, sr.ID as primary_ae_id, ss.ID as second_ae_id, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
                         FROM pipeline c
                         LEFT JOIN sales_rep sr ON (sr.ID = c.primary_ae_id) 
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
@@ -180,13 +180,15 @@ class pipeline extends Model{
                         AND ( cl.ID IN ($client) )  
                         AND (sr.ID IN ($salesRep))
                         AND (c.property IN ($propString))
+                        AND (c.manager IN ($manager))
+                        AND (c.status IN ($status))
                          ";
         
         $selectQuery = $con->query($select);
-        $from = array('packetID','register','cluster','project','client','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes');
+        $from = array('packetID','register','cluster','project','cID','client','aID','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes', 'primary_ae_id','second_ae_id');
         $result = $sql->fetch($selectQuery, $from, $from);
 
-        //var_dump($select);
+        //echo"<pre>$select</pre>";
      
         return $result;
     }

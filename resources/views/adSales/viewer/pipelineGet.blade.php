@@ -2,7 +2,9 @@
 @section('title', 'Pipelines')
 @section('head')
 	 <script src="/js/pipeline.js"></script>
-    <?php include(resource_path('views/auth.php'));?>
+    <?php include(resource_path('views/auth.php'));
+    	$status = array('0 - Exploração','1 - Proposta Submetida','2 - Proposta em Análise','3 - Proposta em Negociação','4 - Aprovação','5 - Fechado','6 - Negado/Perdido');
+    ?>
    
 @endsection
 @section('content')
@@ -14,18 +16,13 @@
 					@csrf
 					<div class="row">
 						
-						<div class="col">
-							<label class="labelLeft"><span class="bold"> Region: </span></label>
+						<div class="col" style="display:none;">
+							<label class="labelLeft" ><span class="bold"> Region: </span></label>
 
                             @if($errors->has('region'))
                                 <label style="color: red;">* Required</label>
                             @endif
-
-                            @if($userLevel == 'L0' || $userLevel == 'SU')
-                                {{$render->region($region)}}                            
-                            @else
                                 {{$render->regionFiltered($region, $regionID, $special)}}
-                            @endif
 						</div>
 						
 						<div class="col" style="display:none;">
@@ -35,6 +32,14 @@
                             @endif
                             {{$render->year($regionID)}}                    
                         </div> 
+
+                         <div class="col">
+                            <label class='labelLeft'><span class="bold">Manager:</span></label>
+                            @if($errors->has('manager'))
+                                <label style="color: red;">* Required</label>
+                            @endif
+                                {{$render->director()}}
+                        </div>
 
 						 <div class="col">
                             <label class='labelLeft'><span class="bold">Sales Rep:</span></label>
@@ -50,6 +55,15 @@
                                 <label style="color: red;">* Required</label>
                             @endif
                                 {{$render->properties()}}
+                        </div>
+
+                        <div class="col">
+	                        <label class='labelLeft'><span class="bold">Status:</span></label>
+	                        <select class='selectpicker' id='status' name='status[]' multiple='true' multiple data-actions-box='true' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true' required>
+	                            @for($i=0; $i<sizeof($status);$i++)
+	                                <option value="{{$status[$i]}}" selected='true'>{{$status[$i]}}</option>
+	                            @endfor
+	                        </select><br>
                         </div>
                         
 

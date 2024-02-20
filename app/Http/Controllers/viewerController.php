@@ -420,7 +420,7 @@ class viewerController extends Controller{
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep2,$noRep);
+        array_unshift($rep2,$noRep);
         //var_dump($rep);
         $r = new region();
 
@@ -556,7 +556,7 @@ class viewerController extends Controller{
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep2,$noRep);
+        array_unshift($rep2,$noRep);
         
         $info = $p->getOptions($con);
 
@@ -614,7 +614,7 @@ class viewerController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-       // var_dump(Request::all());
+         //var_dump(Request::all());
         $totalPerPacket = 0;
         $total['digital'] = 0;
         $total['tv'] = 0;
@@ -627,24 +627,38 @@ class viewerController extends Controller{
         $agency = Request::get('agency');
         $client = Request::get('client');
         $property = Request::get('property');
+        $manager = Request::get('director');
+        for ($m=0; $m <sizeof($manager) ; $m++) { 
+            if ($manager[$m] == 'Bruno Paula') {
+                $manager[$m] = 'BP';
+            }elseif ($manager[$m] == 'Fabio Morgado') {
+                $manager[$m] = 'FM';
+            }else{
+                $manager[$m] = 'RA';
+            }
+        }
+        
+        $status = Request::get('status');
 
         $clientString = $base->arrayToString($client,false,0);
         $agencyString = $base->arrayToString($agency,false,0);
         $salesRep = $base->arrayToString($salesRep,false,false);
         $propString = $base->arrayToString($property,false,0);
-
+        $managerString = $base->arrayToString($manager,false,0);
+        $statusString = $base->arrayToString($status,false,0);
+        
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
 
         //var_dump($agencyString);
-        $noRep['id'] = '10';
+        $noRep['id'] = '289';
         $noRep['salesRep'] = 'Não';
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep2,$noRep);
+        array_unshift($rep2,$noRep);
 
-        //var_dump($propString);
+        //var_dump($managerString);
         $r = new region();
 
         $region = $r->getRegion($con,null);
@@ -656,7 +670,7 @@ class viewerController extends Controller{
         $p = new pipeline();
 
         $info = $p->getOptions($con);
-        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString);
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
 
         /*for ($t=0; $t <sizeOf($table) ; $t++) { 
             var_dump($table[$t]['cluster']);
@@ -676,7 +690,7 @@ class viewerController extends Controller{
          $title = "Pipeline";
          $titleExcel = "pipeline.xlsx";
 
-       return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel','clientString','agencyString','salesRep','propString'));
+       return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel','clientString','agencyString','salesRep','propString','managerString','statusString'));
 
     }
 
@@ -704,7 +718,7 @@ class viewerController extends Controller{
 
         $saveInfo = Request::all();
         unset($saveInfo['_token']);
-        //var_dump($saveInfo);
+        //print_r($saveInfo);
         if ($saveInfo['newClient'][0] != 0) {
             if ($saveInfo['newAe2'][0] == '10') {
                 $saveInfo['newAe2'] = $saveInfo['newAe1'];
@@ -720,26 +734,28 @@ class viewerController extends Controller{
         $agencyString = Request::get('agencyString');
         $clientString = Request::get('clientString');
         $propString = Request::get('propString');
-        //var_dump(Request::all());
-        //$clientString = $base->arrayToString($client,false,0);
-        //$agencyString = $base->arrayToString($agency,false,0);
-        //$salesRep = $base->arrayToString($salesRep,false,false);
-        //$propString = $base->arrayToString($property,false,0);
-        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString);
-
+        $managerString = Request::get('managerString');
+        $statusString = Request::get('statusString');
+        
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
+        //var_dump($table);
         if ($table != false) {
             if (!$saveInfo['newClient'][0]) {
-                for ($t=0; $t <sizeof($table) ; $t++) { 
-                    $saveInfo['tv-'.$t] = str_replace('.', '', $saveInfo['tv-'.$t]);
-                    $saveInfo['digital-'.$t] = str_replace('.', '', $saveInfo['digital-'.$t]);
-
-
-                    $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['register-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],'0',$saveInfo['product-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                if ($saveInfo['editClient'][0] != 0) {
+                    $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
+                    $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);
+                    //var_dump($editNotes);
+                    $p->updateLines($con,$sql,$saveInfo['editID'][0],$saveInfo['editCluster'][0],$saveInfo['editProject'][0],$saveInfo['editClient'][0],$saveInfo['editAgency'][0],$saveInfo['editAe1'][0],$saveInfo['editAe2'][0],$saveInfo['editManager'][0],$saveInfo['editTv'],$saveInfo['editDigital'],$saveInfo['editFirstMonth'][0],$saveInfo['editEndMonth'][0],$saveInfo['editQuota'][0],$saveInfo['editStatus'][0],$saveInfo['editNotes']);
                 }
+               /*for ($t=0; $t <sizeof($table) ; $t++) { 
+                    
+
+
+                   // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+                }*/
             }
                        
-            $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString);
-
+            $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
         
             $totalPerPacket = $p->makeTotal($table);
 
@@ -757,19 +773,22 @@ class viewerController extends Controller{
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
 
-        $noRep['id'] = '10';
+        $noRep['id'] = '289';
         $noRep['salesRep'] = 'Não';
         $noRep['salesRepGroup'] = 'Bruno Paula';
         $noRep['region'] = 'Brazil';
 
-        array_push($rep2,$noRep);
+        array_unshift($rep2,$noRep);
         
         $info = $p->getOptions($con);
 
         $title = "Pipeline";
         $titleExcel = "pipeline.xlsx";
-        //var_dump($table);
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel','rep2','clientString','agencyString','salesRep','propString'));
+       // var_dump($table);
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel','rep2','clientString','agencyString','salesRep','propString','managerString','statusString'));
 
     }
+
+    
+
 }
