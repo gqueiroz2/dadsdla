@@ -95,14 +95,20 @@ class forecastController extends Controller{
 
         $listOfAgencies = $fcst->listOFAgencies($con);
 
-        //var_dump($listOfClients);
-
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
-        //var_dump($newClientsTable);
         $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
-
-        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
-
+        //var_dump($clientsTable);
+        if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
+           $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+        //var_dump($newClientsTable);
+        
+           //var_dump('aki');
+            $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+        }else{
+            $newClientsTable = 0;
+            $aeTable = 0;
+        }
+        
+       //var_dump($aeTable);
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";   
         

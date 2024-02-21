@@ -183,8 +183,8 @@ class ajaxController extends Controller{
 
     public function typeSelectConsolidate(){
         $type = Request::get('type');
-        $region = Request::get('region');
-
+        $region = 1;
+        //var_dump($region);
         switch ($type) {
             case 'brand':                    
                 $base = new base();

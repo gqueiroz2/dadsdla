@@ -28,7 +28,7 @@
         @csrf
         <div class="container-fluid">       
             <div class="row">
-                <div class="col">
+                <div class="col" style="display:none;">
                     <label class='labelLeft'><span class="bold">Region:</span></label>
                     @if($errors->has('region'))
                         <label style="color: red;">* Required</label>

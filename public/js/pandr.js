@@ -1,5 +1,6 @@
 $(document).ready(function(){
   var regionID = 1;
+  var type = 'ae';
   ajaxSetup();
   if (regionID != "") {
     $.ajax({
@@ -22,9 +23,9 @@ $(document).ready(function(){
         $('#year').html(output);
         var year = $("#year").val();
         $.ajax({
-          url:"/ajax/adsales/repByRegionAndYear",
+          url:"/ajax/typeSelectConsolidate",
           method:"POST",
-          data:{regionID,year},
+          data:{type,regionID},
           success: function(output){
             $('#salesRep').html(output);
           },
