@@ -33,7 +33,7 @@ class forecastController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
         $year = date('Y');
         //var_dump($months);
 
@@ -70,7 +70,7 @@ class forecastController extends Controller{
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);   
+        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
@@ -135,7 +135,7 @@ class forecastController extends Controller{
         $salesRepID = Request::get('salesRep');
         $currencyID = '1';
         $value = 'gross';
-        $months = array(intval(date('n')),intval(date('n')) + 1, intval(date('n')) + 2);    
+        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
         $intMonth = Request::get('month');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
@@ -146,7 +146,7 @@ class forecastController extends Controller{
         $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $year, $pYear,$intMonth);
         //print_r($saveInfo);
 
-        $company = array('3','1','2');
+        $company = array('1','2','3');
         $month = date('F');
         
         //var_dump($intMonth);
