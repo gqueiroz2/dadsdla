@@ -141,14 +141,14 @@ class AEController extends Controller{
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
         $check = $ae->checkForecast($con, $salesRepID);//check if exists forecast for this rep in database
-
+        //var_dump($saveInfo);
         for ($a=0; $a <sizeof($clients) ; $a++) { 
             $client = (int) $saveInfo['client-'.$a];
             $agency = (int) $saveInfo['agency-'.$a];
             $probability = (int) $saveInfo['probability-'.$a];
 
             for ($c=0; $c <sizeof($company) ; $c++) { 
-                for ($m=$currentMonth-1; $m <sizeof($month) ; $m++) { 
+                for ($m=$currentMonth; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     
