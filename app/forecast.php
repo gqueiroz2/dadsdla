@@ -134,7 +134,7 @@ class forecast extends pAndR{
     public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
         $sql = new sql();
         //$month = 0;
-        $company = array('3','1','2');
+        $company = array('1','2','3');
         //$month = date('m');
         
         if($currencyID == 1){

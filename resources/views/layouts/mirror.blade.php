@@ -77,11 +77,17 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
 					 @if($userLevel == 'L7' || $userLevel == "L8")
-						    <li class="nav-item dropdown">
-								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Analytics </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
-									<a class="dropdown-item" href="{{ route('baseGet') }}"> Base </a>
-								</div>
+					 		<li class="nav-item dropdown">
+									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Projects </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">		
+										<a class="dropdown-item" href="{{ route('pipelineGet') }}"> Pipeline Projects </a>	
+									</div>
+								</li>							
+
+							<li class="nav-item dropdown">
+								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> FCST MGT </a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>				
 							</li>
 						@else
 							@if( $userRegionName != "Brazil" )
