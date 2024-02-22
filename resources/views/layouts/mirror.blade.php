@@ -76,7 +76,7 @@
 			@if($userName != null)
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
-					 @if($userLevel == 'L7' || $userLevel == "L8")
+					 @if($userLevel == "L8")
 					 		<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Projects </a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdown">		
