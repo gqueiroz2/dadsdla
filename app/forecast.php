@@ -90,11 +90,10 @@ class forecast extends pAndR{
                  $totalCurrentTarget = floatval($this->getValueByMonth($con,$salesRep,$year,$value,$month,'target',null, null, $region,null,'1,2,3')['revenue'])*$pRate;
             } 
 
-            $totalPayTvForecast = 0;
-            $totalPayTvForecast += $payTvForecast[$c];
-
-            $totalDigitalForecast = 0;
-            $totalDigitalForecast += $digitalForecast[$c];     
+           
+            
+            
+           
 
                 
       
@@ -112,7 +111,11 @@ class forecast extends pAndR{
         
             
         }
+        $totalPayTvForecast = $payTvForecast[0] + $payTvForecast[1] + $payTvForecast[2];
+//var_dump($totalPayTvForecast);
 
+        $totalDigitalForecast = $digitalForecast[0] + $digitalForecast[1] + $digitalForecast[2];     
+       // var_dump($totalPayTvForecast);
         $totalCurrentPayTvBookings = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',null,null, $region,'pay tv','1,2,3')['revenue']);           
         
         $totalCurrentDigitalBookings = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',null,null, $region,'digital','1,2,3')['revenue']);     
