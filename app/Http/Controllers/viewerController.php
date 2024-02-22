@@ -628,7 +628,7 @@ class viewerController extends Controller{
         $client = Request::get('client');
         $property = Request::get('property');
         $manager = Request::get('director');
-        //var_dump($manager);
+        //var_dump($salesRep);
         for ($m=0; $m <sizeof($manager) ; $m++) { 
             if ($manager[$m] == 'Bruno Paula') {
                 $manager[$m] = 'BP';
@@ -643,7 +643,7 @@ class viewerController extends Controller{
 
         $clientString = $base->arrayToString($client,false,0);
         $agencyString = $base->arrayToString($agency,false,0);
-        $salesRep = $base->arrayToString($salesRep,false,false);
+        $salesRepString = $base->arrayToString($salesRep,false,false);
         $propString = $base->arrayToString($property,false,0);
         $managerString = $base->arrayToString($manager,false,0);
         $statusString = $base->arrayToString($status,false,0);
@@ -651,7 +651,7 @@ class viewerController extends Controller{
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         $rep2 = $sr->getSecondRepPackets($con, array($salesRegion),false, $year);
 
-        //var_dump($agencyString);
+        //echo "<pre>$clientString</pre>";
         $noRep['id'] = '289';
         $noRep['salesRep'] = 'Não';
         $noRep['salesRepGroup'] = 'Bruno Paula';
@@ -671,7 +671,7 @@ class viewerController extends Controller{
         $p = new pipeline();
 
         $info = $p->getOptions($con);
-        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
 
         /*for ($t=0; $t <sizeOf($table) ; $t++) { 
             var_dump($table[$t]['cluster']);
@@ -691,7 +691,7 @@ class viewerController extends Controller{
          $title = "Pipeline";
          $titleExcel = "pipeline.xlsx";
 
-       return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel','clientString','agencyString','salesRep','propString','managerString','statusString'));
+       return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','rep2','table','base','total','totalPerPacket','title','titleExcel','clientString','agencyString','salesRep','propString','managerString','statusString','salesRepString'));
 
     }
 
@@ -737,35 +737,35 @@ class viewerController extends Controller{
         $propString = Request::get('propString');
         $managerString = Request::get('managerString');
         $statusString = Request::get('statusString');
-        
-        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
+        $salesRepString = Request::get('salesRepString');
+        //var_dump($saveInfo['editTv']);
+        //$table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
         //var_dump($table);
-        if ($table != false) {
-            if (!$saveInfo['newClient'][0]) {
-                if ($saveInfo['editClient'][0] != 0) {
-                    $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
-                    $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);
-                    //var_dump($editNotes);
-                    $p->updateLines($con,$sql,$saveInfo['editID'][0],$saveInfo['editCluster'][0],$saveInfo['editProject'][0],$saveInfo['editClient'][0],$saveInfo['editAgency'][0],$saveInfo['editAe1'][0],$saveInfo['editAe2'][0],$saveInfo['editManager'][0],$saveInfo['editTv'],$saveInfo['editDigital'],$saveInfo['editFirstMonth'][0],$saveInfo['editEndMonth'][0],$saveInfo['editQuota'][0],$saveInfo['editStatus'][0],$saveInfo['editNotes']);
-                }
-               /*for ($t=0; $t <sizeof($table) ; $t++) { 
-                    
-
-
-                   // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
-                }*/
+        if (!$saveInfo['newClient'][0]) {
+            if ($saveInfo['editClient'][0] != 0) {
+                $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
+                $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);
+                //var_dump($editNotes);
+               $p->updateLines($con,$sql,$saveInfo['editID'],$saveInfo['editCluster'][0],$saveInfo['editProject'][0],$saveInfo['editClient'][0],$saveInfo['editAgency'][0],$saveInfo['editAe1'][0],$saveInfo['editAe2'][0],$saveInfo['editManager'][0],$saveInfo['editTv'],$saveInfo['editDigital'],$saveInfo['editFirstMonth'][0],$saveInfo['editEndMonth'][0],$saveInfo['editQuota'][0],$saveInfo['editStatus'][0],$saveInfo['editNotes']);
             }
-             //print_r($saveInfo);       
-            $table = $p->table($con,$sql,$agencyString,$clientString,$salesRep,$propString,$managerString,$statusString);
-        
-            $totalPerPacket = $p->makeTotal($table);
+           /*for ($t=0; $t <sizeof($table) ; $t++) { 
+                
 
-            for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
-                $total['digital'] += $table[$t]['digital_value'];
-                $total['tv'] += $table[$t]['tv_value'];
-                $total['total'] += $totalPerPacket[$t];    
-            }
+
+               // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+            }*/
         }
+             //print_r($saveInfo);       
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
+    
+        $totalPerPacket = $p->makeTotal($table);
+
+        for ($t=0; $t <sizeof($totalPerPacket); $t++) { 
+            $total['digital'] += $table[$t]['digital_value'];
+            $total['tv'] += $table[$t]['tv_value'];
+            $total['total'] += $totalPerPacket[$t];    
+        }
+        
 
         $region = $r->getRegion($con,null);
         ///var_dump($salesRegion);
@@ -786,7 +786,7 @@ class viewerController extends Controller{
         $title = "Pipeline";
         $titleExcel = "pipeline.xlsx";
        // var_dump($table);
-        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel','rep2','clientString','agencyString','salesRep','propString','managerString','statusString'));
+        return view("adSales.viewer.pipelinePost",compact("render","years","region","brand","info",'rep','table','base','total','totalPerPacket','title','titleExcel','rep2','clientString','agencyString','salesRep','propString','managerString','statusString','salesRepString'));
 
     }
 

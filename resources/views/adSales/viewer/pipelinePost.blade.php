@@ -120,12 +120,12 @@
                         </div>    
                     </div> 
                     <input type='hidden' readonly='true' type="text" name="region" id="region" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$region[0]['id']}}">
-                    <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRep}}">
                     <input type='hidden' readonly='true' type="text" name="agencyString" id="agencyString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$agencyString}}">
                     <input type='hidden' readonly='true' type="text" name="clientString" id="clientString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientString}}">
                     <input type='hidden' readonly='true' type="text" name="propString" id="propString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$propString}}">                  
                     <input type='hidden' readonly='true' type="text" name="managerString" id="managerString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$managerString}}">
                     <input type='hidden' readonly='true' type="text" name="statusString" id="statusString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$statusString}}">
+                    <input type='hidden' readonly='true' type="text" name="salesRepString" id="salesRepString" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepString}}">
 
                 @if($table)
                     <table class="table-responsive-sm">

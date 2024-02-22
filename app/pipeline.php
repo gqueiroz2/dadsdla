@@ -144,7 +144,7 @@ class pipeline extends Model{
     }
 
      public function updateLines($con,$sql,$id,$cluster,$project,$client,$agency,$ae1,$ae2,$manager,$tv,$digital,$start,$end,$quota,$status,$notes){
-        //var_dump($manager);
+       // var_dump($id);
          $query = "UPDATE pipeline
                         SET register = 'FORECAST', 
                             cluster = '$cluster',
@@ -176,19 +176,18 @@ class pipeline extends Model{
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
                         LEFT JOIN client cl ON (cl.ID = c.client)
                         LEFT JOIN agency a ON (a.ID = c.agency)
-                        WHERE  (a.ID IN ($agency))
-                        AND ( cl.ID IN ($client) )  
-                        AND (sr.ID IN ($salesRep))
+                        WHERE (sr.ID IN ($salesRep))
                         AND (c.property IN ($propString))
                         AND (c.manager IN ($manager))
                         AND (c.status IN ($status))
+                        AND (c.agency IN ($agency))
                          ";
         
         $selectQuery = $con->query($select);
         $from = array('packetID','register','cluster','project','cID','client','aID','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes', 'primary_ae_id','second_ae_id');
         $result = $sql->fetch($selectQuery, $from, $from);
 
-        //echo"<pre>$select</pre>";
+       // echo"<pre>$select</pre>";
      
         return $result;
     }

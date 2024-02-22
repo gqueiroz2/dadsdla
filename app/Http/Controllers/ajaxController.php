@@ -66,7 +66,6 @@ class ajaxController extends Controller{
                 break;
         }
 
-
     }
 
      public function getAgencyPipeline(){
@@ -78,11 +77,10 @@ class ajaxController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
-                    FROM agency a                    
-                    left join agency_group ag on ag.ID = a.agency_group_id
-                    and ag.region_id = 1
-                    and ag.name != 'Others'
+        $select = "SELECT DISTINCT a.id AS aID, a.name as agency 
+                    from pipeline p
+                    left join agency a on p.agency = a.id
+                    where p.agency != 0
                     ORDER BY a.name ASC";
         //var_dump($select);
         $from = array('aID','agency');
@@ -108,9 +106,11 @@ class ajaxController extends Controller{
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
 
-        $select = "SELECT DISTINCT c.ID AS clientId ,c.name as client
-                    FROM client c                   
-                    WHERE c.client_group_id = 1
+        $select = "SELECT DISTINCT c.ID as clientId, c.name as client  
+                    from pipeline p
+                    left join client c on p.client = c.id
+                    where (c.client_group_id = 1)
+                    and p.client != 0
                     ORDER BY c.name ASC";
         //var_dump($select);
         $from = array('clientId','client');
