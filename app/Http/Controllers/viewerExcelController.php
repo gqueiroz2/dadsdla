@@ -195,13 +195,20 @@ class viewerExcelController extends Controller {
         $title = Request::get('title');        
         $typeExport = Request::get("typeExport");
         $auxTitle = Request::get("auxTitle");
+
+        $salesRepString = Request::get('salesRepString');
+        $clientString = Request::get('clientString');
+        $agencyString = Request::get('agencyString');
+        $propString = Request::get('propString');
+        $managerString = Request::get('managerString');
+        $statusString = Request::get('statusString'); 
         $rep = $sr->getSalesRepPackets($con, array($salesRegion),false, $year);
         //var_dump($rep);
         $r = new region();
         $p = new pipeline();
         
         $info = $p->getOptions($con);
-        $table = $p->table($con,$sql);
+         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
 
         $label = "exports.viewer.pipeline.pipelineExport";
 
@@ -209,10 +216,14 @@ class viewerExcelController extends Controller {
         $regions = $r->getRegion($con,array($salesRegion))[0]['name'];
 
         $b = new brand();
-        $brand = $b->getBrand($con);        
+        $brand = $b->getBrand($con);       
+
+       
 
         $info = $p->getOptions($con);
-        $table = $p->table($con,$sql);
+        $info = $p->getOptions($con);
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
+
         //var_dump($info);
         //var_dump($table);
         if ($table != false) {

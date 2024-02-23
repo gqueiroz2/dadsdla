@@ -41,7 +41,7 @@ class viewerController extends Controller{
         var_dump(Request::all());
     }
 
-    public function insightsGet(){
+    /*public function insightsGet(){
         $bs = new base();
 
         $db = new dataBase();
@@ -157,9 +157,9 @@ class viewerController extends Controller{
         $titleExcel = "Viewer Insights.xlsx";
         $titlePdf = "Viewer Insights.pdf";
 
-       return view("adSales.viewer.insightsPost",compact("render","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel"/*,"header"*/,"mtx","inRender","value","regions","total","titleExcel","titlePdf","title"));
+       return view("adSales.viewer.insightsPost",compact("render","years","region","currency","currencies","brand","regionExcel","monthExcel","brandExcel", "salesRepExcel","clientExcel", "currencyExcel","valueExcel","header","mtx","inRender","value","regions","total","titleExcel","titlePdf","title"));
 
-    }
+    }*/
 
 	public function baseGet(){
 	
@@ -604,6 +604,8 @@ class viewerController extends Controller{
         $db = new dataBase();
         $default = $db->defaultConnection();
         $con = $db->openConnection($default);
+        $userLevel = Request::session()->get('userLevel');
+        $user = Request::session()->get('userName');
 
         $sql = new sql();
 
@@ -623,7 +625,14 @@ class viewerController extends Controller{
         $years = array($cYear = intval(date('Y')), $cYear - 1);
         $year = intval(date('Y'));
         $salesRegion = Request::get("region");
-        $salesRep = Request::get('salesRep');
+        if ($userLevel == 'L8') {
+            $salesRep = Request::get('salesRep');
+            $salesRepString = ($sr->getSalesRepByName($con,$salesRep[0]))[0]['id'];
+        }else{
+            $salesRep = Request::get('salesRep');  
+            $salesRepString = $base->arrayToString($salesRep,false,false);  
+        }
+        
         $agency = Request::get('agency');
         $client = Request::get('client');
         $property = Request::get('property');
@@ -642,8 +651,7 @@ class viewerController extends Controller{
         $status = Request::get('status');
 
         $clientString = $base->arrayToString($client,false,0);
-        $agencyString = $base->arrayToString($agency,false,0);
-        $salesRepString = $base->arrayToString($salesRep,false,false);
+        $agencyString = $base->arrayToString($agency,false,0);        
         $propString = $base->arrayToString($property,false,0);
         $managerString = $base->arrayToString($manager,false,0);
         $statusString = $base->arrayToString($status,false,0);

@@ -162,32 +162,32 @@
                             <input type='hidden' readonly='true' type="text" name="pipeline-{{$t}}" id="pipeline-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}},{{$table[$t]['cluster']}},{{$table[$t]['project']}},{{$table[$t]['cID']}},{{$table[$t]['aID']}},{{$table[$t]['primary_ae_id']}},{{$table[$t]['primary_ae']}},{{$table[$t]['second_ae_id']}},
 {{$table[$t]['second_ae']}},{{$table[$t]['manager']}},{{$table[$t]['tv_value']}},{{$table[$t]['digital_value']}},{{$table[$t]['start_month']}},{{$table[$t]['end_month']}},{{$table[$t]['quota']}},{{$table[$t]['status']}},{{$table[$t]['notes']}}">
                             <tr class="even center" style="font-size: 14px;">
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px;" type="text"><span name="cluster-{{$t}}" id="cluster-{{$t}}">{{$table[$t]['cluster']}}</span></td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px ; width:3%;" type="text" name="project-{{$t}}" id="project-{{$t}}">{{$table[$t]['project']}}</td>
-                                <td style=" font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="client-{{$t}}" id="client-{{$t}}" value="{{$table[$t]['cID']}}">{{ucfirst($table[$t]['client'])}}</td>
-                                <td style="font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="agency-{{$t}}" id="agency-{{$t}}" value="{{$table[$t]['aID']}}">{{ucfirst($table[$t]['agency'])}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="ae1-{{$t}}" id="ae1-{{$t}}" value="{{$table[$t]['primary_ae_id']}}">{{$table[$t]['primary_ae']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="ae2-{{$t}}" id="ae2-{{$t}}" value="{{$table[$t]['second_ae_id']}}">{{$table[$t]['second_ae']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important" type="text" name="manager-{{$t}}" id="manager-{{$t}}">{{$table[$t]['manager']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="tv-{{$t}}" id="tv-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['tv_value'],0,',','.')}}"></td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px"><input readonly='true' placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="digital-{{$t}}" id="digital-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="total-{{$t}}" id="total-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;">{{number_format($totalPerPacket[$t],0,',','.')}}</td>
-                               <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                <td style="border-style:solid; border-color:grey; border-width: 0px 1px 1px 1px;" type="text"><span name="cluster-{{$t}}" id="cluster-{{$t}}">{{$table[$t]['cluster']}}</span></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px ; width:3%;" type="text" name="project-{{$t}}" id="project-{{$t}}">{{$table[$t]['project']}}</td>
+                                <td style=" font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="client-{{$t}}" id="client-{{$t}}" value="{{$table[$t]['cID']}}">{{ucfirst($table[$t]['client'])}}</td>
+                                <td style="font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="agency-{{$t}}" id="agency-{{$t}}" value="{{$table[$t]['aID']}}">{{ucfirst($table[$t]['agency'])}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="ae1-{{$t}}" id="ae1-{{$t}}" value="{{$table[$t]['primary_ae_id']}}">{{$table[$t]['primary_ae']}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="ae2-{{$t}}" id="ae2-{{$t}}" value="{{$table[$t]['second_ae_id']}}">{{$table[$t]['second_ae']}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" style="width:2% !important" type="text" name="manager-{{$t}}" id="manager-{{$t}}">{{$table[$t]['manager']}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px"><input readonly='true' placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="tv-{{$t}}" id="tv-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['tv_value'],0,',','.')}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px"><input readonly='true' placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency"  type="text" name="digital-{{$t}}" id="digital-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{number_format($table[$t]['digital_value'],0,',','.')}}"></td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="total-{{$t}}" id="total-{{$t}}" style="width: 100px; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;">{{number_format($totalPerPacket[$t],0,',','.')}}</td>
+                               <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" style="width:2% !important">
                                     <select name="startMonth-{{$t}}" id="startMonth-{{$t}}" style="-webkit-appearance: none; font-size: 13px; width: 70px; text-align: center; font-weight:bold; background-color:transparent; border:none; font-weight:bold; text-align:center;">
                                           @for($m=0; $m<sizeof($intMonth);$m++)
                                             <option <?php if($intMonth[$m] == $table[$t]['start_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                         @endfor                                        
                                     </select>
                                 </td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" style="width:2% !important">
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" style="width:2% !important">
                                     <select name="endMonth-{{$t}}" id="endMonth-{{$t}}" style="-webkit-appearance: none; width: 70px; text-align: center; font-weight:bold; font-size: 13px; background-color:transparent; border:none; font-weight:bold; text-align:center;">
                                           @for($m=0; $m<sizeof($intMonth);$m++)
                                             <option <?php if($intMonth[$m] == $table[$t]['end_month']) { echo "selected";}?> value="{{$intMonth[$m]}}">{{$month[$m]}}</option>
                                         @endfor                                        
                                     </select></td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="quota-{{$t}}" id="quota-{{$t}}">{{$table[$t]['quota']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" name="status-{{$t}}" id="status-{{$t}}">{{$table[$t]['status']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 0px 1px" type="text" maxlength="300" name="notes" type="text" name="notes-{{$t}}" id="notes-{{$t}}">{{$table[$t]['notes']}}</td> 
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="quota-{{$t}}" id="quota-{{$t}}">{{$table[$t]['quota']}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="status-{{$t}}" id="status-{{$t}}">{{$table[$t]['status']}}</td>
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" maxlength="300" name="notes" type="text" name="notes-{{$t}}" id="notes-{{$t}}">{{$table[$t]['notes']}}</td> 
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm edit" data-toggle="modal" data-target="#modalEditar-{{$t}}" onclick="edit({{$t}})"><span class="glyphicon glyphicon-edit">Edit</span></button>
                                 </td>                              
@@ -475,6 +475,12 @@
         $('#excel').click(function(event){
 
             var region = "<?php echo $region[0]['id']; ?>";
+            var clientString = "<?php echo $clientString; ?>";
+            var agencyString = "<?php echo $agencyString; ?>";
+            var propString = "<?php echo $propString; ?>";
+            var managerString = "<?php echo $managerString; ?>";
+            var statusString = "<?php echo $statusString; ?>";
+            var salesRepString = "<?php echo $salesRepString ?>";
             var rep = "<?php echo base64_encode(json_encode($rep)); ?>";
 
             var div = document.createElement('div');
@@ -496,7 +502,7 @@
                 },
                 url: "/generate/excel/viewer/vPipeline",
                 type: "POST",
-                data: {region,rep, typeExport, auxTitle,title},
+                data: {region,rep, typeExport, auxTitle,title,clientString,agencyString,propString,managerString,statusString,salesRepString},
                 /*success: function(output){
                     $("#vlau").html(output);
                 },*/
