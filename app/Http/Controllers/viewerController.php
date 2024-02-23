@@ -753,6 +753,9 @@ class viewerController extends Controller{
             if ($saveInfo['editClient'][0] != 0) {
                 $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
                 $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);
+                if ($saveInfo['editAe2'][0] == 0) {
+                    $saveInfo['editAe2'][0] = '289';
+                }
                 //var_dump($editNotes);
                $p->updateLines($con,$sql,$saveInfo['editID'],$saveInfo['editCluster'][0],$saveInfo['editProject'][0],$saveInfo['editClient'][0],$saveInfo['editAgency'][0],$saveInfo['editAe1'][0],$saveInfo['editAe2'][0],$saveInfo['editManager'][0],$saveInfo['editTv'],$saveInfo['editDigital'],$saveInfo['editFirstMonth'][0],$saveInfo['editEndMonth'][0],$saveInfo['editQuota'][0],$saveInfo['editStatus'][0],$saveInfo['editNotes']);
             }
@@ -763,7 +766,7 @@ class viewerController extends Controller{
                // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
             }*/
         }
-             //print_r($saveInfo);       
+            //print_r($saveInfo);       
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
     
         $totalPerPacket = $p->makeTotal($table);
