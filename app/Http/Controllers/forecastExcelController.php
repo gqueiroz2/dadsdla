@@ -60,7 +60,7 @@ class forecastExcelController extends Controller{
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepID);
 
-        $company = array('3','1','2');
+        $company = array('1','2','3');
 
         for ($c=0; $c < sizeof($company); $c++) { 
             if ($company[$c] == '1') {
@@ -77,14 +77,16 @@ class forecastExcelController extends Controller{
 
         $listOfClients = $fcst->listOFClients($con);
 
-        $listOfAgencies = $fcst->listOFAgencies($con);
+        $listOfAgencies = $fcst->listOFAgencies($con); 
 
-        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$intMonth);
-        //var_dump($listOfClients);
-
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
-        //var_dump($newClientsTable);
         $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
+        
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+            //var_dump($newClientsTable);
+            
+               //var_dump('aki');
+        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+        //var_dump($company);
 
         $data = array('regionName' => $regionName,'regionID' => $regionID, 'salesRepID' => $salesRepID, 'currencyID' => $currencyID, 'value' => $value, 'regionName' => $regionName, 'aeTable' => $aeTable, 'newClientsTable' => $newClientsTable, 'clientsTable' => $clientsTable, 'company' => $company, 'companyView' => $companyView,'monthName' => $monthName,'year' => $year,'pYear' => $pYear,'salesRepName' => $salesRepName,'color' => $color);
 

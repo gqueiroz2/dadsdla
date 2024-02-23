@@ -133,56 +133,59 @@
 </table>
 @endfor
 
-                     <!--START OF NEW CLIENTS TABLE-->
-@for($z=0; $z <sizeof($data['newClientsTable']['clientInfo']) ; $z++)    
+@if($data['newClientsTable']['clientInfo'] != null)
 
-<table>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['clientInfo'][$z]['probability'][0]['probability']}}%</td>    
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>{{$data['newClientsTable']['clientInfo'][$z]['clientName']}} - {{$data['newClientsTable']['clientInfo'][$z]['agencyName']}}</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: {{$data['color'][$c]}}; color: #FFFFFF;'>
-                {{$data['companyView'][$c]}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>Total</td>
-    </tr>
-    <tr>                                 
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - PAY TV</td>
-         @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['payTvForecast']}}</td> 
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['payTvForecast']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - DIGITAL</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['digitalForecast']}}</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['digitalForecast']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - PAY TV</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
+                         <!--START OF NEW CLIENTS TABLE-->
+    @for($z=0; $z <sizeof($data['newClientsTable']['clientInfo']) ; $z++)    
+
+    <table>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['clientInfo'][$z]['probability'][0]['probability']}}%</td>    
+        </tr>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>{{$data['newClientsTable']['clientInfo'][$z]['clientName']}} - {{$data['newClientsTable']['clientInfo'][$z]['agencyName']}}</td>
+            @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: {{$data['color'][$c]}}; color: #FFFFFF;'>
+                    {{$data['companyView'][$c]}}
+                </td>   
+            @endfor
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>Total</td>
+        </tr>
+        <tr>                                 
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - PAY TV</td>
+             @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['payTvForecast']}}</td> 
+            @endfor
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['payTvForecast']}}</td>
+        </tr>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - DIGITAL</td>
+            @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['digitalForecast']}}</td>
+            @endfor
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['digitalForecast']}}</td>
+        </tr>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - PAY TV</td>
+            @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
+            @endfor
             <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - DIGITAL</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
+        </tr>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - DIGITAL</td>
+            @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
+            @endfor
             <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
+        </tr>
+        <tr>
+            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
+            @for($c=0; $c <sizeof($data['company']); $c++)
+                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
+            @endfor
             <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-    </tr>
-</table>
-@endfor
+        </tr>
+    </table>
+    @endfor
+@endif
