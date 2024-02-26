@@ -727,29 +727,37 @@ class viewerController extends Controller{
 
         $saveInfo = Request::all();
         unset($saveInfo['_token']);
-       
+        $clientString = Request::get('clientString');
+        $agencyString = Request::get('agencyString');
+
         if ($saveInfo['newClient'][0] != 0) {
             if ($saveInfo['newAe2'][0] == '10') {
                 $saveInfo['newAe2'] = $saveInfo['newAe1'];
             }
 
-            $p->insertNewLines($con,$sql,$saveInfo);    
+            $p->insertNewLines($con,$sql,$saveInfo);   
+
+            $clientString .= " ,'";
+            $clientString .= $saveInfo['newClient'][0];
+            $clientString .= "'"; 
+            $agencyString .= " ,'";
+            $agencyString .= $saveInfo['newAgency'][0];
+            $agencyString .= "'";
         }
+
         
         $years = array($cYear = intval(date('Y')), $cYear - 1);
         $year = intval(date('Y'));
         $salesRegion = Request::get("region");
         $salesRep = Request::get('salesRep');
-        $agencyString = Request::get('agencyString');
-        $clientString = Request::get('clientString');
         $propString = Request::get('propString');
         $managerString = Request::get('managerString');
         $statusString = Request::get('statusString');
         $salesRepString = Request::get('salesRepString');
         //var_dump($saveInfo['editTv']);
-        //$table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
         //var_dump($table);
-        if (!$saveInfo['newClient'][0]) {
+       if (!$saveInfo['newClient'][0]) {
             if ($saveInfo['editClient'][0] != 0) {
                 $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
                 $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);

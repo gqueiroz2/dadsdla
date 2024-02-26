@@ -181,13 +181,14 @@ class pipeline extends Model{
                         AND (c.manager IN ($manager))
                         AND (c.status IN ($status))
                         AND (c.agency IN ($agency))
+                        AND (c.client IN ($client))
                          ";
         
         $selectQuery = $con->query($select);
         $from = array('packetID','register','cluster','project','cID','client','aID','agency','product','primary_ae','second_ae','manager','tv_value','digital_value','start_month','end_month','quota','status','notes', 'primary_ae_id','second_ae_id');
         $result = $sql->fetch($selectQuery, $from, $from);
 
-       // echo"<pre>$select</pre>";
+        //echo"<pre>$select</pre>";
      
         return $result;
     }
