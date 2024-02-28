@@ -139,7 +139,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection($default);
        
       
-        $select = "SELECT DISTINCT project as packet From projects p";
+        $select = "SELECT DISTINCT project as packet From projects p ORDER BY project ASC";
 
         $selectQuery = $con->query($select);
         $from = array('packet');
@@ -166,7 +166,7 @@ class ajaxController extends Controller{
         $con = $db->openConnection($default);
        
       
-        $select = "SELECT DISTINCT project as packet From projects p where p.cluster = ('$cluster')";
+        $select = "SELECT DISTINCT project as packet From projects p where p.cluster = ('$cluster') ORDER BY project ASC";
 
         $selectQuery = $con->query($select);
         $from = array('packet');

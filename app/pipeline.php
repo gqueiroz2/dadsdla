@@ -63,6 +63,7 @@ class pipeline extends Model{
 
         $select = "SELECT DISTINCT TRIM(p.cluster) as cluster
             FROM projects p
+            ORDER BY p.cluster ASC
         ";
 
         $selectQuery = $con->query($select);
@@ -77,6 +78,7 @@ class pipeline extends Model{
 
         $select = "SELECT DISTINCT TRIM(p.project) as project
             FROM projects p
+            ORDER BY p.project ASC
         ";
         //var_dump($select);
         $selectQuery = $con->query($select);
