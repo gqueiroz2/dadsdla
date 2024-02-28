@@ -231,7 +231,7 @@
                                         </select><br>
                                     <label>Agency</label>
                                         <select class='selectpicker' id='editAgency' name='editAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
-                                        <option value=''> Select </option>
+                                        <option value='578'> Select </option>
                                             @for($z=0; $z<sizeof($info[6]);$z++)
                                                 <option value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
                                             @endfor
@@ -245,7 +245,7 @@
                                         </select><br>
                                     <label>Ae 2</label>
                                         <select class='selectpicker' id='editAe2' name='editAe2[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
-                                            <option value=''> Select </option>
+                                            <option value='289'> Select </option>
                                             @for($ss=0; $ss<sizeof($rep2);$ss++)
                                                 <option  value="{{$rep2[$ss]['id']}}">{{$rep2[$ss]['salesRep']}}</option>
                                             @endfor
@@ -284,7 +284,7 @@
                                         </select><br>
                                     <label>Status</label>
                                     <select class='selectpicker' id='editStatus' name='editStatus[]' data-selected-text-format='count' data-width='100%' data-live-search='true'>
-                                        <option value=''> Select </option>
+                                        <option value='0 - Exploração'> Select </option>
                                             @for($v=0; $v<sizeof($info[4]);$v++)
                                                 <option  value="{{$info[4][$v]}}">{{$info[4][$v]}}</option>
                                             @endfor
@@ -334,7 +334,7 @@
                                                     <select class='selectpicker' id='newCluster' name='newCluster[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                                         <option value=''> Select </option>
                                                         @for($c=0; $c<sizeof($info[1]);$c++)
-                                                            <option value="{{$info[1][$c]['cluster']}}" selected='true'>{{$info[1][$c]['cluster']}}</option>
+                                                            <option value="{{$info[1][$c]['cluster']}}">{{$info[1][$c]['cluster']}}</option>
                                                         @endfor
                                                     </select><br>
                                                 <label>Property</label>
@@ -353,7 +353,7 @@
                                                     </select><br>
                                                 <label>Agency</label>
                                                  <select class='selectpicker' id='newAgency' name='newAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
-                                                    <option value=''> Select </option>
+                                                    <option value='578'> Select </option>
                                                         @for($z=0; $z<sizeof($info[6]);$z++)
                                                             <option value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
                                                         @endfor

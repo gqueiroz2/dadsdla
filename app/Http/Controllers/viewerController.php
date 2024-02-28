@@ -685,7 +685,7 @@ class viewerController extends Controller{
             var_dump($table[$t]['cluster']);
         }*/
         //var_dump($info[3]);
-        //var_dump($table);
+        //var_dump($salesRep);
         if ($table != false) {
             $totalPerPacket = $p->makeTotal($table);
 
@@ -730,7 +730,39 @@ class viewerController extends Controller{
         $clientString = Request::get('clientString');
         $agencyString = Request::get('agencyString');
 
-        if ($saveInfo['newClient'][0] != 0) {
+        
+        $years = array($cYear = intval(date('Y')), $cYear - 1);
+        $year = intval(date('Y'));
+        $salesRegion = Request::get("region");
+        $salesRep = Request::get('salesRep');
+        $propString = Request::get('propString');
+        $managerString = Request::get('managerString');
+        $statusString = Request::get('statusString');
+        $salesRepString = Request::get('salesRepString');
+        
+        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
+
+        for ($t=0; $t <sizeof($table) ; $t++) { 
+                
+            $pipes[$t] = $saveInfo['pipeline-'.$t];
+            $pipes[$t] = explode(',',$pipes[$t]);
+            if ($saveInfo['editID'] == $pipes[$t][0]) {
+                if ($saveInfo['editClient'][0] != $pipes[$t][3]) {
+                    $clientString .= " ,'";
+                    $clientString .= $saveInfo['editClient'][0];
+                    $clientString .= "'"; 
+                }
+
+                if ($saveInfo['editAgency'][0] != $pipes[$t][4]) {
+                    $agencyString .= " ,'";
+                    $agencyString .= $saveInfo['editAgency'][0];
+                    $agencyString .= "'"; 
+                }
+            }
+           // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+        }
+
+         if ($saveInfo['newClient'][0] != 0) {
             if ($saveInfo['newAe2'][0] == '10') {
                 $saveInfo['newAe2'] = $saveInfo['newAe1'];
             }
@@ -744,35 +776,16 @@ class viewerController extends Controller{
             $agencyString .= $saveInfo['newAgency'][0];
             $agencyString .= "'";
         }
-
-        
-        $years = array($cYear = intval(date('Y')), $cYear - 1);
-        $year = intval(date('Y'));
-        $salesRegion = Request::get("region");
-        $salesRep = Request::get('salesRep');
-        $propString = Request::get('propString');
-        $managerString = Request::get('managerString');
-        $statusString = Request::get('statusString');
-        $salesRepString = Request::get('salesRepString');
-        //var_dump($saveInfo);
-        $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
+        //var_dump($pipes);
         //var_dump($table);
        if (!$saveInfo['newClient'][0]) {
             if ($saveInfo['editClient'][0] != 0) {
                 $saveInfo['editTv'][0] = str_replace('.', '', $saveInfo['editTv'][0]);
-                $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);
-                if ($saveInfo['editAe2'][0] == 0) {
-                    $saveInfo['editAe2'][0] = '289';
-                }
+                $saveInfo['editDigital'][0] = str_replace('.', '', $saveInfo['editDigital'][0]);               
                 //var_dump($editNotes);
                $p->updateLines($con,$sql,$saveInfo['editID'],$saveInfo['editCluster'][0],$saveInfo['editProject'][0],$saveInfo['editClient'][0],$saveInfo['editAgency'][0],$saveInfo['editAe1'][0],$saveInfo['editAe2'][0],$saveInfo['editManager'][0],$saveInfo['editTv'],$saveInfo['editDigital'],$saveInfo['editFirstMonth'][0],$saveInfo['editEndMonth'][0],$saveInfo['editQuota'][0],$saveInfo['editStatus'][0],$saveInfo['editNotes']);
             }
-           /*for ($t=0; $t <sizeof($table) ; $t++) { 
-                
-
-
-               // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
-            }*/
+           
         }
             //print_r($saveInfo);       
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
