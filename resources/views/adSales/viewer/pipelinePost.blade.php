@@ -159,8 +159,7 @@
                             <td style="width:2% !important;" ></td>
                         </tr>
                         @for($t=0; $t<sizeof($table);$t++)
-                            <input type='hidden' readonly='true' type="text" name="pipeline-{{$t}}" id="pipeline-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}},{{$table[$t]['cluster']}},{{$table[$t]['project']}},{{$table[$t]['cID']}},{{$table[$t]['aID']}},{{$table[$t]['primary_ae_id']}},{{$table[$t]['primary_ae']}},{{$table[$t]['second_ae_id']}},
-{{$table[$t]['second_ae']}},{{$table[$t]['manager']}},{{$table[$t]['tv_value']}},{{$table[$t]['digital_value']}},{{$table[$t]['start_month']}},{{$table[$t]['end_month']}},{{$table[$t]['quota']}},{{$table[$t]['status']}},{{$table[$t]['notes']}}">
+                            <input type='hidden' readonly='true' type="text" name="pipeline-{{$t}}" id="pipeline-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}},{{$table[$t]['cluster']}},{{$table[$t]['project']}},{{$table[$t]['cID']}},{{$table[$t]['aID']}},{{$table[$t]['primary_ae_id']}},{{$table[$t]['primary_ae']}},{{$table[$t]['second_ae_id']}},{{$table[$t]['second_ae']}},{{$table[$t]['manager']}},{{$table[$t]['tv_value']}},{{$table[$t]['digital_value']}},{{$table[$t]['start_month']}},{{$table[$t]['end_month']}},{{$table[$t]['quota']}},{{$table[$t]['status']}},{{$table[$t]['notes']}}">
                             <tr class="even center" style="font-size: 14px;">
                                 <td style="border-style:solid; border-color:grey; border-width: 0px 1px 1px 1px;" type="text"><span name="cluster-{{$t}}" id="cluster-{{$t}}">{{$table[$t]['cluster']}}</span></td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px ; width:3%;" type="text" name="project-{{$t}}" id="project-{{$t}}">{{$table[$t]['project']}}</td>
@@ -220,7 +219,7 @@
                                         <select class='selectpicker' id='editProject' name='editProject[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                             <option value=''> Select </option>
                                             @for($p=0; $p<sizeof($info[3]);$p++)
-                                                <option  value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
+                                                <option value="{{$info[3][$p]['project']}}">{{$info[3][$p]['project']}}</option>
                                             @endfor
                                         </select><br>
                                     <label>Client</label>
@@ -231,7 +230,7 @@
                                             @endfor
                                         </select><br>
                                     <label>Agency</label>
-                                     <select class='selectpicker' id='editAgency' name='editAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                        <select class='selectpicker' id='editAgency' name='editAgency[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                         <option value=''> Select </option>
                                             @for($z=0; $z<sizeof($info[6]);$z++)
                                                 <option value="{{$info[6][$z]['aID']}}">{{$info[6][$z]['agency']}}</option>
@@ -330,7 +329,7 @@
                                         <div class="col">       
                                             <div class="form-group">
                                                 <label>Register</label>
-                                                <input type="text" name="newRegister" id="newRegister" class='form-control' readonly='true' style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="forecast"><br>
+                                                <input type="text" name="newRegister" id="newRegister" class='form-control' readonly='true' style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="FORECAST"><br>
                                                 <label>Cluster</label>                                                
                                                     <select class='selectpicker' id='newCluster' name='newCluster[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
                                                         <option value=''> Select </option>

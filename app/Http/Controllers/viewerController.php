@@ -684,7 +684,7 @@ class viewerController extends Controller{
         /*for ($t=0; $t <sizeOf($table) ; $t++) { 
             var_dump($table[$t]['cluster']);
         }*/
-        //var_dump($info[1]);
+        //var_dump($info[3]);
         //var_dump($table);
         if ($table != false) {
             $totalPerPacket = $p->makeTotal($table);
@@ -754,7 +754,7 @@ class viewerController extends Controller{
         $managerString = Request::get('managerString');
         $statusString = Request::get('statusString');
         $salesRepString = Request::get('salesRepString');
-        //var_dump($saveInfo['editTv']);
+        //var_dump($saveInfo);
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
         //var_dump($table);
        if (!$saveInfo['newClient'][0]) {

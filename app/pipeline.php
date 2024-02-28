@@ -62,7 +62,7 @@ class pipeline extends Model{
         $sql = new sql();
 
         $select = "SELECT DISTINCT TRIM(p.cluster) as cluster
-            FROM clusters p
+            FROM projects p
         ";
 
         $selectQuery = $con->query($select);
@@ -76,7 +76,7 @@ class pipeline extends Model{
         $sql = new sql();
 
         $select = "SELECT DISTINCT TRIM(p.project) as project
-            FROM clusters p
+            FROM projects p
         ";
         //var_dump($select);
         $selectQuery = $con->query($select);
@@ -111,8 +111,8 @@ class pipeline extends Model{
         $ae1 = $info['newAe1'][0];
         $ae2 = $info['newAe2'][0];
         $manager = $info['newManager'][0];
-        $tv = $info['newTv'];
-        $digital = $info['newDigital'];
+        $tv = str_replace('.', '', $info['newTv']);
+        $digital = str_replace('.', '',$info['newDigital']);
         $start = $info['newFirstMonth'][0];
         $end = $info['newEndMonth'][0];
         $quota = $info['newQuota'];
@@ -170,7 +170,7 @@ class pipeline extends Model{
 
     public function table(Object $con,Object $sql,string $agency,string $client,String $salesRep,String $propString, String $manager, String $status){
 
-        $select = "SELECT DISTINCT c.ID as packetID, register,cluster,property as project,cl.name as client, cl.ID as cID, a.ID as aID, a.name as agency,product,sr.name as primary_ae, sr.ID as primary_ae_id, ss.ID as second_ae_id, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
+        $select = "SELECT DISTINCT c.ID as packetID, register,TRIM(cluster) AS cluster,TRIM(property) as project,cl.name as client, cl.ID as cID, a.ID as aID, a.name as agency,product,sr.name as primary_ae, sr.ID as primary_ae_id, ss.ID as second_ae_id, ss.name as second_ae,manager,tv_value,digital_value,start_month,end_month,quota,status,notes
                         FROM pipeline c
                         LEFT JOIN sales_rep sr ON (sr.ID = c.primary_ae_id) 
                         LEFT JOIN sales_rep ss ON (ss.ID = second_ae_id)
