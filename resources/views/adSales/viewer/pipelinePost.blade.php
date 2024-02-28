@@ -160,7 +160,7 @@
                         </tr>
                         @for($t=0; $t<sizeof($table);$t++)
                             <input type='hidden' readonly='true' type="text" name="pipeline-{{$t}}" id="pipeline-{{$t}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$table[$t]['packetID']}},{{$table[$t]['cluster']}},{{$table[$t]['project']}},{{$table[$t]['cID']}},{{$table[$t]['aID']}},{{$table[$t]['primary_ae_id']}},{{$table[$t]['primary_ae']}},{{$table[$t]['second_ae_id']}},{{$table[$t]['second_ae']}},{{$table[$t]['manager']}},{{$table[$t]['tv_value']}},{{$table[$t]['digital_value']}},{{$table[$t]['start_month']}},{{$table[$t]['end_month']}},{{$table[$t]['quota']}},{{$table[$t]['status']}},{{$table[$t]['notes']}}">
-                            <tr class="even center" style="font-size: 14px;">
+                            <tr class="even center" style="font-size: 13px;">
                                 <td style="border-style:solid; border-color:grey; border-width: 0px 1px 1px 1px;" type="text"><span name="cluster-{{$t}}" id="cluster-{{$t}}">{{$table[$t]['cluster']}}</span></td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px ; width:3%;" type="text" name="project-{{$t}}" id="project-{{$t}}">{{$table[$t]['project']}}</td>
                                 <td style=" font-size: 13px; font-weight:bold; border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="client-{{$t}}" id="client-{{$t}}" value="{{$table[$t]['cID']}}">{{ucfirst($table[$t]['client'])}}</td>
@@ -186,7 +186,7 @@
                                     </select></td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="quota-{{$t}}" id="quota-{{$t}}">{{$table[$t]['quota']}}</td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="status-{{$t}}" id="status-{{$t}}">{{$table[$t]['status']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" maxlength="300" name="notes" type="text" > <input type="text" maxlength="300" name="notes-{{$t}}" id="notes-{{$t}}" class="form-control" style="width: 100%; background-color:transparent; border:none; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" readonly='true' value="{{$table[$t]['notes']}}"></td> 
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" maxlength="300" name="notes" type="text" > <input type="text" maxlength="300" name="notes-{{$t}}" id="notes-{{$t}}" class="form-control" style="font-size: 13px; width: 100%; background-color:transparent; border:none; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" readonly='true' value="{{$table[$t]['notes']}}"></td> 
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm edit" data-toggle="modal" data-target="#modalEditar-{{$t}}" onclick="edit({{$t}})"><span class="glyphicon glyphicon-edit">Edit</span></button>
                                 </td>                              
