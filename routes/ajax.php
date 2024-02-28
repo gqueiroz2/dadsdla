@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'],function(){
 			Route::post('repByRegionAndYear','ajaxController@getRepByRegionAndYear');
 			Route::post('getDirector','ajaxController@getDirector');
 			Route::post('getPackets','ajaxController@getPackets');
+			Route::post('getManager','ajaxController@getManager');
 			Route::post('getPacketsFilter','ajaxController@getPacketsFilter');
 			Route::post('getAgencyPipeline','ajaxController@getAgencyPipeline');
 			Route::post('getClientPipeline','ajaxController@getClientPipeline');

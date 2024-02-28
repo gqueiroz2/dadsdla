@@ -72,7 +72,7 @@ class forecastTabExport implements FromView,WithEvents, ShouldAutoSize, WithTitl
 			];
 		}else{*/
 			return[
-				'B' => "#,##",
+				'B' => "#,##0",
 				'C' => "#,##0", 
 				'D' => "#,##0",
 				'E' => "#,##0"			   	

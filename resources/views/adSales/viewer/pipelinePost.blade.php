@@ -186,7 +186,7 @@
                                     </select></td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="quota-{{$t}}" id="quota-{{$t}}">{{$table[$t]['quota']}}</td>
                                 <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" name="status-{{$t}}" id="status-{{$t}}">{{$table[$t]['status']}}</td>
-                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" maxlength="300" name="notes" type="text" name="notes-{{$t}}" id="notes-{{$t}}">{{$table[$t]['notes']}}</td> 
+                                <td style="border-style:solid; border-color:black; border-width: 0px 1px 1px 1px" type="text" maxlength="300" name="notes" type="text" > <input type="text" maxlength="300" name="notes-{{$t}}" id="notes-{{$t}}" class="form-control" style="width: 100%; background-color:transparent; border:none; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" readonly='true' value="{{$table[$t]['notes']}}"></td> 
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm edit" data-toggle="modal" data-target="#modalEditar-{{$t}}" onclick="edit({{$t}})"><span class="glyphicon glyphicon-edit">Edit</span></button>
                                 </td>                              
@@ -367,7 +367,7 @@
                                                     </select><br>
                                                 <label>AE 2</label>
                                                     <select class='selectpicker' id='newAe2' name='newAe2[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
-                                                        <option value=''> Select </option>
+                                                        <option value='289'> Select </option>
                                                         @for($ss=0; $ss<sizeof($rep2);$ss++)
                                                             <option value="{{$rep2[$ss]['id']}}">{{$rep2[$ss]['salesRep']}}</option>
                                                         @endfor
@@ -406,7 +406,7 @@
                                                     </select><br>
                                                 <label>Status</label>
                                                 <select class='selectpicker' id='newStatus' name='newStatus' data-selected-text-format='count' data-width='100%'  data-live-search='true'>
-                                                    <option value=''> Select </option>
+                                                    <option value='0 - Exploração'> Select </option>
                                                         @for($v=0; $v<sizeof($info[4]);$v++)
                                                             <option value="{{$info[4][$v]}}">{{$info[4][$v]}}</option>
                                                         @endfor
@@ -555,6 +555,29 @@
         }else{
           var option = "<option> Select Cluster </option>";
           $('#newProject').empty().append(option).selectpicker('refresh');
+        }
+    });
+
+    $('#newAe1').change(function(){
+    
+    var salesRep = $("#newAe1").val();
+        if (salesRep != "") {
+
+          $.ajax({
+            url:"/ajax/adsales/getManager",
+            method:"POST",
+            data:{salesRep},
+            success: function(output){
+              $('#newManager').html(output).selectpicker('refresh');
+              //$('#vlau ').html(output).selectpicker('refresh');
+            },
+            error: function(xhr, ajaxOptions,thrownError){
+                alert(xhr.status+" "+thrownError);
+            }
+          });  
+        }else{
+          var option = "<option> Select Rep 1 </option>";
+          $('#newManager').empty().append(option).selectpicker('refresh');
         }
     });
 </script>

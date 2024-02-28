@@ -181,6 +181,33 @@ class ajaxController extends Controller{
         }
     }
 
+    public function getManager(){
+        $db = new dataBase();
+        $sql = new sql();
+
+        $regionID = '1';
+
+        $salesRep = Request::get('salesRep');
+        //var_dump($cluster);
+        $default = $db->defaultConnection();
+        $con = $db->openConnection($default);
+       
+      
+        $select = "SELECT DISTINCT ss.ab_name as manager From sales_rep s left join sales_rep_group ss ON s.sales_group_id = ss.id where s.id  = ('$salesRep')";
+
+        $selectQuery = $con->query($select);
+        $from = array('manager');
+        $manager = $sql->fetch($selectQuery, $from, $from);
+        //var_dump($project);
+        if ($manager != '') {        
+            for($p=0; $p<sizeof($manager);$p++){
+                echo "<option style='font-size: 16px; width:100%;' value='".$manager[$p]['manager']."'>".$manager[$p]['manager']."</option>";
+            }                
+        }else{
+           echo "<option value=''> There is no Data for this. </option>";
+        }
+    }
+
     public function typeSelectConsolidate(){
         $type = Request::get('type');
         $region = 1;
@@ -213,6 +240,9 @@ class ajaxController extends Controller{
                 $userLevel = Request::session()->get('userLevel');
                 $special = Request::session()->get('special');
                 $userRegionID = Request::session()->get('userRegionID');
+                $user = Request::session()->get('userName');
+
+                //var_dump($user);
 
                 if($userLevel == "L4"){
                     $userName = Request::session()->get('userName');
@@ -236,7 +266,13 @@ class ajaxController extends Controller{
                     if (!$check) {
                         echo "<option value=''> Sales Rep Not Found </option>";
                     }
-                }else if($userLevel == "L6"){
+                }elseif($userLevel == 'L8') {
+                //$regionID = array($regionID);
+                //$resp = $sr->getSalesRepRepresentativeByRegion($con,$regionID,true,$year);
+                //for ($s=0; $s < sizeof($resp); $s++) { 
+                    echo "<option value='".$user."' selected='true'> ".$user." </option>";
+
+                }elseif($userLevel == "L6"){
                     if($regionID[0] == $userRegionID){
                         $userName = Request::session()->get('userName');
                         $performanceName = Request::session()->get('performanceName');
@@ -1131,25 +1167,35 @@ class ajaxController extends Controller{
     public function getRepByRegionAndYear(){
         $regionID = Request::get('regionID');
 
+        $userLevel = Request::session()->get('userLevel');
+        $special = Request::session()->get('special');
+        $userRegionID = Request::session()->get('userRegionID');
+        $user = Request::session()->get('userName');
+
         $year = Request::get('year');
 
         if (is_null($regionID)) {
             
         }else{
-            $db = new dataBase();
+            if ($userLevel == 'L8') {
+                echo "<option value='".$user."' selected='true'> ".$user." </option>";
+            }else{
+                $db = new dataBase();
 
-            $default = $db->defaultConnection();
-            $con = $db->openConnection($default);
-            $cYear = intval(date('Y'));
-            $sr = new salesRep();
+                $default = $db->defaultConnection();
+                $con = $db->openConnection($default);
+                $cYear = intval(date('Y'));
+                $sr = new salesRep();
 
-            $regionID = array($regionID);
+                $regionID = array($regionID);
 
-            $resp = $sr->getSalesRepByRegion($con,$regionID,true,$year);
+                $resp = $sr->getSalesRepByRegion($con,$regionID,true,$year);
 
-            for ($s=0; $s < sizeof($resp); $s++) {
-                echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                for ($s=0; $s < sizeof($resp); $s++) {
+                    echo "<option value='".$resp[$s]["id"]."' selected='true'> ".$resp[$s]["salesRep"]." </option>";
+                }
             }
+                
         }
     }
 
