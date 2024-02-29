@@ -57,11 +57,14 @@ class forecastExcelController extends Controller{
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
         $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);   
-        $currentMonth = $b->intToMonth2(array($intMonth)); 
-        $nextMonth = $b->intToMonth2(array($intMonth+1)); 
-        $nextNMonth = $b->intToMonth2(array($intMonth+2)); 
+        $currentMonthName = $b->intToMonth2(array(intval(date('n')+1))); 
+        $nextMonthName = $b->intToMonth2(array(intval(date('n')+2)));  
+        $nextNMonthName = $b->intToMonth2(array(intval(date('n')+3)));  
         //var_dump($salesRepID);
 
+        $currentMonth = intval(date('n')+1); 
+        $nextMonth = intval(date('n')+2);  
+        $nextNMonth = intval(date('n')+3);  
         $company = array('1','2','3');
 
         for ($c=0; $c < sizeof($company); $c++) { 
@@ -76,22 +79,22 @@ class forecastExcelController extends Controller{
                 $companyView[$c] = 'WM';
             }
         }
-
-        $clientsTableCMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
+        //var_dump($currentMonth);
+        $clientsTableCMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$currentMonth);
         
-        $newClientsTableCMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+        $newClientsTableCMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$currentMonth); 
 
-        $clientsTableNMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],($intMonth+1));
+        $clientsTableNMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$nextMonth);
         
-        $newClientsTableNMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],($intMonth+1)); 
+        $newClientsTableNMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$nextMonth); 
 
-        $clientsTableNNMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],($intMonth+2));
+        $clientsTableNNMonth = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$nextNMonth);
         
-        $newClientsTableNNMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],($intMonth+2)); 
+        $newClientsTableNNMonth = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$nextNMonth); 
             //var_dump($newClientsTable);
         //var_dump($company);
 
-        $data = array('regionName' => $regionName,'regionID' => $regionID, 'salesRepID' => $salesRepID, 'currencyID' => $currencyID, 'value' => $value, 'regionName' => $regionName, 'newClientsTableCMonth' => $newClientsTableCMonth, 'clientsTableCMonth' => $clientsTableCMonth,'newClientsTableNMonth' => $newClientsTableNMonth, 'clientsTableNMonth' => $clientsTableNMonth,'newClientsTableNNMonth' => $newClientsTableNNMonth, 'clientsTableNNMonth' => $clientsTableNNMonth, 'company' => $company, 'companyView' => $companyView,'currentMonth' => $currentMonth,'nextMonth' => $nextMonth,'nextNMonth' => $nextNMonth,'year' => $year,'pYear' => $pYear,'salesRepName' => $salesRepName,'color' => $color);
+        $data = array('regionName' => $regionName,'regionID' => $regionID, 'salesRepID' => $salesRepID, 'currencyID' => $currencyID, 'value' => $value, 'regionName' => $regionName, 'newClientsTableCMonth' => $newClientsTableCMonth, 'clientsTableCMonth' => $clientsTableCMonth,'newClientsTableNMonth' => $newClientsTableNMonth, 'clientsTableNMonth' => $clientsTableNMonth,'newClientsTableNNMonth' => $newClientsTableNNMonth, 'clientsTableNNMonth' => $clientsTableNNMonth, 'company' => $company, 'companyView' => $companyView,'currentMonthName' => $currentMonthName,'nextMonthName' => $nextMonthName,'nextNMonthName' => $nextNMonthName,'year' => $year,'pYear' => $pYear,'salesRepName' => $salesRepName,'color' => $color);
 
         $label = "exports.PandR.ForecastAE.forecastExport";
 

@@ -22,7 +22,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
     </tr>
     <tr>
@@ -33,7 +33,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -44,7 +44,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
     </tr>
     <tr>
@@ -55,7 +55,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
     </tr>
     @endfor    
@@ -72,7 +72,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -83,7 +83,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -94,7 +94,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -105,7 +105,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['currentMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableCMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
     </tr>
     @endfor
@@ -123,7 +123,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
     </tr>
     <tr>
@@ -134,7 +134,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -145,7 +145,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
     </tr>
     <tr>
@@ -156,7 +156,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
     </tr>
     @endfor    
@@ -173,7 +173,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -184,7 +184,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -195,7 +195,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -206,7 +206,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableNMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
     </tr>
     @endfor
@@ -224,7 +224,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
     </tr>
     <tr>
@@ -235,7 +235,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -246,7 +246,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
     </tr>
     <tr>
@@ -257,7 +257,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
     </tr>
     @endfor    
@@ -274,7 +274,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -285,7 +285,7 @@
         <td style='text-align:center;'>Pay TV</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
@@ -296,7 +296,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>BKGS</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>0</td>
     </tr>
     <tr>
@@ -307,7 +307,7 @@
         <td style='text-align:center;'>Digital</td>
         <td style='text-align: center;'>FCST</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
-        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['nextNMonthName'][0]}}</td>
         <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
     </tr>
     @endfor
