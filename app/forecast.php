@@ -88,9 +88,7 @@ class forecast extends pAndR{
                 $pRate = 1;
 
                  $totalCurrentTarget = floatval($this->getValueByMonth($con,$salesRep,$year,$value,$month,'target',null, null, $region,null,'1,2,3')['revenue'])*$pRate;
-            }   
-            
-           
+            }         
 
                 
       

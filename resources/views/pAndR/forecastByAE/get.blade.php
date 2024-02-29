@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Monthly Report')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>

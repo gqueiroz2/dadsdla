@@ -1,191 +1,317 @@
- <table style='width: 100%; zoom: 85%;font-size: 22px;'>
-    <tr>
-        <th style="text-align: center; font-weight: bold; background-color: #0070c0; color: #FFFFFF;" colspan='5'>{{$data['salesRepName'][0]['salesRep']}} - {{$data['monthName'][0]}}</th>
-    </tr>
-</table>
-
 <table>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>{{$data['salesRepName'][0]['salesRep']}}</td>
-         @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: {{$data['color'][$c]}}; color: #FFFFFF;'>
-                {{$data['companyView'][$c]}}
-            </td>   
-        @endfor
-        <td style="text-align: center; font-weight: bold; background-color: #0070c0; color: #FFFFFF;">Total</td>
+     <tr>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Sales Rep</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Company</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Client</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Agency</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Plataform</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Type</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Probability</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Month</td>
+        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: white;'>Value</td>
     </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>TARGET</td>
-         @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['currentTarget']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['currentTarget']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - PAY TV</td>
-         @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['payTvForecast']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['payTvForecast']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - DIGITAL</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['digitalForecast']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['digitalForecast']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - PAY TV </td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;' >
-               {{$data['aeTable']['companyValues'][$c]['currentPayTvBookings']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['currentPayTvBookings']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - DIGITAL </td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['currentDigitalBookings']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['currentDigitalBookings']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>TOTAL (BKGS+FCST) </td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['forecastBookings']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['forecastBookings']}}</td>
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>
-               {{$data['aeTable']['companyValues'][$c]['previousBookings']}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['aeTable']['total']['previousBookings']}}</td>
-    </tr>
-</table>
 
-                    <!--START OF CLIENTS TABLE-->
-@for($a=0; $a <sizeof($data['clientsTable']['clientInfo']) ; $a++)
-
-<table>
+<!--START OF CURRENT MONTH CLIENTS TABLE-->
+@for($a=0; $a <sizeof($data['clientsTableCMonth']['clientInfo']) ; $a++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
     <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>    
-    </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>{{$data['clientsTable']['clientInfo'][$a]['clientName']}} - {{$data['clientsTable']['clientInfo'][$a]['agencyName']}}</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: {{$data['color'][$c]}}; color: #FFFFFF;'>
-                {{$data['companyView'][$c]}}
-            </td>   
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>Total</td>
-    </tr>
-    <tr>                                 
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - PAY TV</td>
-         @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['companyValues'][$a][$c]['payTvForecast']}}</td> 
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['total'][$a]['payTvForecast']}}</td>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
     </tr>
     <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - DIGITAL</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['companyValues'][$a][$c]['digitalForecast']}}</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['total'][$a]['digitalForecast']}}</td>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
     </tr>
     <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - PAY TV</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['total'][$a]['currentPayTvBookings']}}</td>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
     </tr>
     <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - DIGITAL</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['total'][$a]['currentDigitalBookings']}}</td>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableCMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
     </tr>
-    <tr>
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
-        @for($c=0; $c <sizeof($data['company']); $c++)
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['companyValues'][$a][$c]['previousBookings']}}</td>
-        @endfor
-        <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['clientsTable']['total'][$a]['previousBookings']}}</td>
-    </tr>
-</table>
+    @endfor    
 @endfor
 
-@if($data['newClientsTable']['clientInfo'] != null)
-
-                         <!--START OF NEW CLIENTS TABLE-->
-    @for($z=0; $z <sizeof($data['newClientsTable']['clientInfo']) ; $z++)    
-
-    <table>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['clientInfo'][$z]['probability'][0]['probability']}}%</td>    
-        </tr>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #0f243e; color: #FFFFFF;'>{{$data['newClientsTable']['clientInfo'][$z]['clientName']}} - {{$data['newClientsTable']['clientInfo'][$z]['agencyName']}}</td>
-            @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: {{$data['color'][$c]}}; color: #FFFFFF;'>
-                    {{$data['companyView'][$c]}}
-                </td>   
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>Total</td>
-        </tr>
-        <tr>                                 
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - PAY TV</td>
-             @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['payTvForecast']}}</td> 
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['payTvForecast']}}</td>
-        </tr>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>FCST - DIGITAL</td>
-            @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['companyValues'][$z][$c]['digitalForecast']}}</td>
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>{{$data['newClientsTable']['total'][$z]['digitalForecast']}}</td>
-        </tr>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - PAY TV</td>
-            @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        </tr>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['year']}} - DIGITAL</td>
-            @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        </tr>
-        <tr>
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>BKGS {{$data['pYear']}}</td>
-            @for($c=0; $c <sizeof($data['company']); $c++)
-                <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-            @endfor
-            <td style='text-align: center; font-weight: bold; background-color: #e7eff9;'>0</td>
-        </tr>
-    </table>
+@if($data['newClientsTableCMonth']['clientInfo'] != null)
+@for($z=0; $z <sizeof($data['newClientsTableCMonth']['clientInfo']) ; $z++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['currentMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableCMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
+    </tr>
     @endfor
+@endfor
 @endif
+
+<!--START OF NEXT MONTH CLIENTS TABLE-->
+@for($a=0; $a <sizeof($data['clientsTableNMonth']['clientInfo']) ; $a++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
+    </tr>
+    @endfor    
+@endfor
+
+@if($data['newClientsTableNMonth']['clientInfo'] != null)
+@for($z=0; $z <sizeof($data['newClientsTableNMonth']['clientInfo']) ; $z++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
+    </tr>
+    @endfor
+@endfor
+@endif
+
+<!--START OF NEXT MONTH CLIENTS TABLE-->
+@for($a=0; $a <sizeof($data['clientsTableNNMonth']['clientInfo']) ; $a++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['currentPayTvBookings']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['payTvForecast']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['currentDigitalBookings']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['clientInfo'][$a]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['clientsTableNNMonth']['companyValues'][$a][$c]['digitalForecast']}}</td>
+    </tr>
+    @endfor    
+@endfor
+
+@if($data['newClientsTableNNMonth']['clientInfo'] != null)
+@for($z=0; $z <sizeof($data['newClientsTableNNMonth']['clientInfo']) ; $z++)
+    @for($c=0; $c<sizeof($data['company']); $c++)
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Pay TV</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['companyValues'][$z][$c]['payTvForecast']}}</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>BKGS</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>0</td>
+    </tr>
+    <tr>
+        <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
+        <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['clientName']}}</td>
+        <td style='text-align:center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['agencyName']}}</td>
+        <td style='text-align:center;'>Digital</td>
+        <td style='text-align: center;'>FCST</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['clientInfo'][$z]['probability'][0]['probability']}}%</td>        
+        <td style='text-align: center;'>{{$data['nextNMonth'][0]}}</td>
+        <td style='text-align: center;'>{{$data['newClientsTableNNMonth']['companyValues'][$z][$c]['digitalForecast']}}</td>
+    </tr>
+    @endfor
+@endfor
+@endif
+
+</table>
