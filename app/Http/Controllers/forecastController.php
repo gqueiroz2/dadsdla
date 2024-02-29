@@ -63,12 +63,13 @@ class forecastController extends Controller{
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
 
-        $regionID = Request::get('region');
-        $salesRepID = Request::get('salesRep');
+        $regionID = Request::get('region');      
+
+        //var_dump($salesRepID);
         $currencyID = '1'; 
         $value = 'gross';
         $regionName = Request::session()->get('userRegion');
-        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+       
 
         $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
         $monthName = $b->intToMonth2(array($intMonth)); 
@@ -95,25 +96,51 @@ class forecastController extends Controller{
 
         $listOfAgencies = $fcst->listOFAgencies($con);
 
-        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
-        //var_dump($clientsTable);
-        if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
-           $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
-        //var_dump($newClientsTable);
-        
-           //var_dump('aki');
-            $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+         if ($permission == 'L8') {
+            $salesRep = Request::get('salesRep');
+            $salesRepID = $sr->getSalesRepByName($con,$salesRep)[0]['id'];
+
+            $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth);
+            //var_dump($clientsTable);
+            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
+               $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth); 
+            //var_dump($newClientsTable);
+            
+               //var_dump('aki');
+                $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth,$newClientsTable,$clientsTable);
+            }else{
+                $newClientsTable = 0;
+                $aeTable = 0;
+            }
+
+            //var_dump($salesRepName);
+            $salesRepName[0]['salesRep'] = $salesRep;
+            //var_dump($salesRepName); 
         }else{
-            $newClientsTable = 0;
-            $aeTable = 0;
+            $salesRepID = Request::get('salesRep');
+            $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+
+              $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
+            //var_dump($clientsTable);
+            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
+               $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+            //var_dump($newClientsTable);
+            
+               //var_dump('aki');
+                $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+            }else{
+                $newClientsTable = 0;
+                $aeTable = 0;
+            }
         }
         
        //var_dump($aeTable);
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";   
+
         
        
-       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID', 'year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies','title','titleExcel'));
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID', 'year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies','title','titleExcel','permission'));
 
     }
 
@@ -138,16 +165,23 @@ class forecastController extends Controller{
         $user = Request::session()->get('userName');
         $currentMonth = date('n');
         $regionID = 1;
-        $salesRepID = Request::get('salesRep');
+
+       /*if ($permission == 'L8') {
+            $salesRepName = Request::get('salesRep');
+            $salesRepID = $sr->getSalesRepByName($con,$salesRepName)[0]['id'];
+        }else{*/
+            $salesRepID = Request::get('salesRep');
+            $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
+        //}
         $currencyID = '1';
         $value = 'gross';
         $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
         $intMonth = Request::get('month');
-        $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
-        
+    
         $listOfClients = $fcst->listOFClients($con);
 
-        $listOfAgencies = $fcst->listOFAgencies($con);      
+        $listOfAgencies = $fcst->listOFAgencies($con); 
+        //var_dump($salesRepName);     
 
         $clients = $fcst->getClientByRep($con, $salesRepID, $regionID, $year, $pYear,$intMonth);
         //print_r($saveInfo);
@@ -160,7 +194,12 @@ class forecastController extends Controller{
        // var_dump($intMonth);
         $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);//check if exists forecast for this rep in database
 
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);  
+       /* if ($permission == 'L8') {
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$saveInfo['month']);  
+        }else{*/
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);      
+       // }
+        
 
         if ($saveInfo['clientSubmit'] != null) {
             //var_dump($saveInfo['clientSubmit']);
@@ -179,7 +218,13 @@ class forecastController extends Controller{
 
         }
 
-        $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName[0]['salesRep'],$intMonth);
+        /*if ($permission == 'L8') {
+            $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName,$intMonth);
+        }else{*/
+            $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName[0]['salesRep'],$intMonth);
+        //}
+
+        
         //var_dump($newClientsTable);
         //ta funcionando
        // var_dump($newClient);
@@ -222,17 +267,25 @@ class forecastController extends Controller{
             }
         }        
         
+        /*if ($permission == 'L8') {
+            $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$intMonth);   
 
-        $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);   
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$intMonth); 
 
-        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+            $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$intMonth,$newClientsTable,$clientsTable);    
+        }else{*/
+            $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);   
 
-        $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+
+            $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
+        //}
+        
         //var_dump($newClientsTable);
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";
         //var_dump($newClientsTable);
-       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies'));
+       return view('pAndR.forecastByAE.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','year','pYear','newClientsTable','months','monthName','intMonth','listOfClients','listOfAgencies','permission'));
         
     }
 }
