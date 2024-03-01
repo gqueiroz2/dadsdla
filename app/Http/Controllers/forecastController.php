@@ -33,7 +33,7 @@ class forecastController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
-        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
         $year = date('Y');
         //var_dump($months);
 
@@ -71,7 +71,7 @@ class forecastController extends Controller{
         $regionName = Request::session()->get('userRegion');
        
 
-        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
@@ -175,7 +175,7 @@ class forecastController extends Controller{
         //}
         $currencyID = '1';
         $value = 'gross';
-        $months = array(intval(date('n')) + 1,intval(date('n')) + 2,intval(date('n')) + 3);    
+        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
         $intMonth = Request::get('month');
     
         $listOfClients = $fcst->listOFClients($con);
