@@ -62,7 +62,7 @@ class forecastExcelController extends Controller{
         $nextNMonthName = $b->intToMonth2(array(intval(date('n')+2)));  
         //var_dump($salesRepID);
 
-        $currentMonth = intval(date('n'); 
+        $currentMonth = intval(date('n')); 
         $nextMonth = intval(date('n')+1);  
         $nextNMonth = intval(date('n')+2);  
         $company = array('1','2','3');
