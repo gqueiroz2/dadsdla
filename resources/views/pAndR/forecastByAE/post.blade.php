@@ -190,6 +190,15 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'],0,',','.')}}</td>
                             </tr>
                             <tr>
+                                <td class="grey center">TOTAL FCST</td>
+                                @for($c=0; $c <sizeof($company); $c++)
+                                    <td class="grey" id='' style='text-align:center; width:5%;'>
+                                       {{number_format($aeTable['companyValues'][$c]['forecast'],0,',','.')}}
+                                    </td>   
+                                @endfor
+                                <td class="grey center" style='width:5%;'>{{number_format($aeTable['total']['forecast'],0,',','.')}}</td>
+                            </tr>
+                            <tr>
                                 <td class="odd center">BKGS {{$year}} - PAY TV </td>
                                 @for($c=0; $c <sizeof($company); $c++)
                                     <td class="odd" id='' style='text-align:center; width:3%;'>
@@ -208,13 +217,22 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentDigitalBookings'],0,',','.')}}</td>
                             </tr>
                             <tr>
-                                <td class="grey center">TOTAL (BKGS+FCST) </td>
+                                <td class="grey center">TOTAL BKGS</td>
                                 @for($c=0; $c <sizeof($company); $c++)
                                     <td class="grey" id='' style='text-align:center; width:3%;'>
-                                       {{number_format($aeTable['companyValues'][$c]['forecastBookings'],0,',','.')}}
+                                       {{number_format($aeTable['companyValues'][$c]['bookings'],0,',','.')}}
                                     </td>   
                                 @endfor
-                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['forecastBookings'],0,',','.')}}</td>
+                                <td class="grey center" style='width:5%;'>{{number_format($aeTable['total']['bookings'],0,',','.')}}</td>
+                            </tr>
+                            <tr>
+                                <td class="newBlue center">BKGS PENDING</td>
+                                @for($c=0; $c <sizeof($company); $c++)
+                                    <td class="newBlue" id='' style='text-align:center; width:3%;'>
+                                       {{number_format($aeTable['companyValues'][$c]['pending'],0,',','.')}}
+                                    </td>   
+                                @endfor
+                                <td class="newBlue center" style='width:5%;'>{{number_format($aeTable['total']['pending'],0,',','.')}}</td>
                             </tr>
                             <tr>
                                 <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -277,6 +295,13 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'],0,',','.')}}</td>
                                 </tr>
                                 <tr>
+                                    <td class="grey center">TOTAL FCST</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$a}}-{{$c}}-{{$intMonth}}" id="forecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['forecast'],0,',','.')}}"></td>
+                                    @endfor
+                                    <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecast'],0,',','.')}}</td>
+                                </tr>
+                                <tr>
                                     <td class="odd center">BKGS {{$year}} - PAY TV</td>
                                     @for($c=0; $c <sizeof($company); $c++)
                                         <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'],0,',','.')}}</td>
@@ -289,14 +314,23 @@
                                         <td class="even center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'],0,',','.')}}</td>
                                     @endfor
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'],0,',','.')}}</td>
-                                </tr>
+                                </tr>                                
                                 <tr>
-                                    <td class="grey center">TOTAL (BKGS+FCST)</td>
+                                    <td class="grey center">TOTAL BKGS</td>
                                     @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="grey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['forecastBookings'],0,',','.')}}</td>
+                                        <td class="grey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['bookings'],0,',','.')}}</td>
                                     @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecastBookings'],0,',','.')}}</td>
+                                    <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['bookings'],0,',','.')}}</td>
                                 </tr>
+                                
+                                 <tr>
+                                    <td class="newBlue center">BKGS PENDING</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'],0,',','.')}}</td>
+                                    @endfor
+                                    <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['pending'],0,',','.')}}</td>
+                                </tr>                               
+                            
                                 <tr>
                                     <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                     @for($c=0; $c <sizeof($company); $c++)
@@ -351,19 +385,40 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['digitalForecast'],0,',','.')}}</td>
                                     </tr>
                                     <tr>
-                                        <td class="odd center">BKGS {{$year}} - PAY TV</td>
-                                        @for($c=0; $c <sizeof($company); $c++)
-                                            <td class="odd center" style='width:5%;'>0</td>
-                                        @endfor
-                                        <td class="darkBlue center" style='width:5%;'>0</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="even center">BKGS {{$year}} - DIGITAL</td>
-                                        @for($c=0; $c <sizeof($company); $c++)
-                                            <td class="even center" style='width:5%;'>0</td>
-                                        @endfor
-                                        <td class="darkBlue center" style='width:5%;'>0</td>
-                                    </tr>
+                                    <td class="grey center">TOTAL FCST</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$a}}-{{$c}}-{{$intMonth}}" id="forecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($newClientsTable['companyValues'][$z][$c]['forecast'],0,',','.')}}"></td>
+                                    @endfor
+                                    <td class="grey center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['forecast'],0,',','.')}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="odd center">BKGS {{$year}} - PAY TV</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="odd center" style='width:5%;'>{{number_format($newClientsTable['companyValues'][$z][$c]['currentPayTvBookings'],0,',','.')}}</td>
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['currentPayTvBookings'],0,',','.')}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="even center">BKGS {{$year}} - DIGITAL</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="even center" style='width:5%;'>{{number_format($newClientsTable['companyValues'][$z][$c]['currentDigitalBookings'],0,',','.')}}</td>
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['currentDigitalBookings'],0,',','.')}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="grey center">TOTAL BKGS</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="grey center" style='width:5%;'>{{number_format($newClientsTable['companyValues'][$z][$c]['bookings'],0,',','.')}}</td>
+                                    @endfor
+                                    <td class="grey center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['bookings'],0,',','.')}}</td>
+                                </tr>
+                                 <tr>
+                                    <td class="newBlue center">BKGS PENDING</td>
+                                    @for($c=0; $c <sizeof($company); $c++)
+                                        <td class="newBlue center" style='width:5%;'>{{number_format($newClientsTable['companyValues'][$z][$c]['pending'],0,',','.')}}</td>
+                                    @endfor
+                                    <td class="newBlue center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['pending'],0,',','.')}}</td>
+                                </tr>
                                     <tr>
                                         <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                         @for($c=0; $c <sizeof($company); $c++)
