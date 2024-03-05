@@ -374,7 +374,7 @@
                                                     </select> <br>
                                                  <label>Manager</label>
                                                  <select class='selectpicker' id='newManager' name='newManager[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
-                                                    <option value=''> Select </option>
+                                                    <option value='BP'> Select </option>
                                                         @for($l=0; $l<sizeof($info[7]);$l++)
                                                             <option value="{{$info[7][$l]}}">{{$info[7][$l]}}</option>
                                                         @endfor

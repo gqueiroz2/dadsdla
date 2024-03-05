@@ -638,7 +638,7 @@ class viewerController extends Controller{
         $property = Request::get('property');
         $manager = Request::get('director');
         //var_dump($salesRep);
-        for ($m=0; $m <sizeof($manager) ; $m++) { 
+        /*for ($m=0; $m <sizeof($manager) ; $m++) { 
             if ($manager[$m] == 'Bruno Paula') {
                 $manager[$m] = 'BP';
             }elseif ($manager[$m] == 'Fabio Morgado') {
@@ -646,8 +646,8 @@ class viewerController extends Controller{
             }else{
                 $manager[$m] = 'RA';
             }
-        }
-        
+        }*/
+        //var_dump($manager);
         $status = Request::get('status');
 
         $clientString = $base->arrayToString($client,false,0);
@@ -742,25 +742,28 @@ class viewerController extends Controller{
         
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
 
-        for ($t=0; $t <sizeof($table) ; $t++) { 
+        if ($table != null) {
+            for ($t=0; $t <sizeof($table) ; $t++) { 
                 
-            $pipes[$t] = $saveInfo['pipeline-'.$t];
-            $pipes[$t] = explode(',',$pipes[$t]);
-            if ($saveInfo['editID'] == $pipes[$t][0]) {
-                if ($saveInfo['editClient'][0] != $pipes[$t][3]) {
-                    $clientString .= " ,'";
-                    $clientString .= $saveInfo['editClient'][0];
-                    $clientString .= "'"; 
-                }
+                $pipes[$t] = $saveInfo['pipeline-'.$t];
+                $pipes[$t] = explode(',',$pipes[$t]);
+                if ($saveInfo['editID'] == $pipes[$t][0]) {
+                    if ($saveInfo['editClient'][0] != $pipes[$t][3]) {
+                        $clientString .= " ,'";
+                        $clientString .= $saveInfo['editClient'][0];
+                        $clientString .= "'"; 
+                    }
 
-                if ($saveInfo['editAgency'][0] != $pipes[$t][4]) {
-                    $agencyString .= " ,'";
-                    $agencyString .= $saveInfo['editAgency'][0];
-                    $agencyString .= "'"; 
+                    if ($saveInfo['editAgency'][0] != $pipes[$t][4]) {
+                        $agencyString .= " ,'";
+                        $agencyString .= $saveInfo['editAgency'][0];
+                        $agencyString .= "'"; 
+                    }
                 }
-            }
-           // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+               // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
+            }    
         }
+        
 
          if ($saveInfo['newClient'][0] != 0) {
             if ($saveInfo['newAe2'][0] == '10') {
