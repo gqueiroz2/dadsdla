@@ -192,7 +192,7 @@ class forecastController extends Controller{
         //var_dump($intMonth);
         $monthName = $b->intToMonth2(array($intMonth)); 
        // var_dump($intMonth);
-        $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);//check if exists forecast for this rep in database
+       
 
        /* if ($permission == 'L8') {
             $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$saveInfo['month']);  
@@ -229,13 +229,14 @@ class forecastController extends Controller{
         //ta funcionando
        // var_dump($newClient);
         $companyName = array('wm','dc','spt');
-        
+        $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);
         $checkNew = $fcst->checkForecastNew($con, $salesRepID);//check if exists forecast for this rep in database
         
         for ($a=0; $a <sizeof($clients) ; $a++) { 
             $client = $saveInfo['client-'.$a];
             $agency = $saveInfo['agency-'.$a];
             $probability = (int) $saveInfo['probability-'.$a];
+           //check if exists forecast for this rep in database
 
             for ($c=0; $c <sizeof($company) ; $c++) { 
                 $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$intMonth]);
@@ -248,7 +249,7 @@ class forecastController extends Controller{
                 
             }
         }
-
+        //var_dump($check);
         if ($newClientsTable != null) {
             for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
                 $clientN = $saveInfo['clientNew-'.$t];
