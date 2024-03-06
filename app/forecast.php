@@ -575,6 +575,7 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = w.client_id
                                 LEFT JOIN agency a ON a.ID = w.agency_id
                                 WHERE w.year = $year
+                                AND w.current_sales_rep_id = $salesRep
                                 AND w.month = $month
                                 AND c.ID = $client
                                 AND a.ID = $agency
@@ -589,6 +590,7 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = w.client_id
                                 LEFT JOIN agency a ON a.ID = w.agency_id
                                 WHERE w.year = $year
+                                AND w.current_sales_rep_id = $salesRep
                                 AND w.month = $month
                                 AND c.ID = $client
                                 AND a.ID = $agency
@@ -604,6 +606,7 @@ class forecast extends pAndR{
                             LEFT JOIN client c ON c.ID = w.client_id
                             LEFT JOIN agency a ON a.ID = w.agency_id
                             WHERE w.year = $year
+                            AND w.current_sales_rep_id = $salesRep
                             AND w.month = $month
                             AND c.ID = $client
                             AND a.ID = $agency
