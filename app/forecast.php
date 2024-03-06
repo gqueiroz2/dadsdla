@@ -213,7 +213,7 @@ class forecast extends pAndR{
                 $totalCurrentPayTvBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv','1,2,3')['revenue']);           
                 $totalCurrentDigitalBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')['revenue']);
                  
-                $probability[$a] = $this->getProbability($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep);
+                $probability[$a] = $this->getProbability($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep,$month);
                 //var_dump($probability[$a]);
                 $totalForecast[$a] = ($totalPayTvForecast[$a] + $totalDigitalForecast[$a]);
                 
@@ -321,7 +321,7 @@ class forecast extends pAndR{
                     $totalPending[$a] = 0;
                 }
                 
-                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['cID'],$clients[$a]['aID'],$salesRep);
+                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['cID'],$clients[$a]['aID'],$salesRep,$month);
                 
 
                 $totalPivot[$a] = array('payTvForecast' => ($totalPayTvForecast[$a]), 'digitalForecast' => ($totalDigitalForecast[$a]),'forecast' => ($totalForecast[$a]), 'bookings' => ($totalBookings[$a]),'pending' => ($totalPending[$a]),'currentPayTvBookings' => $totalCurrentPayTvBookings[$a], 'currentDigitalBookings' => $totalCurrentDigitalBookings[$a]);
@@ -872,14 +872,15 @@ class forecast extends pAndR{
     }
 
     //function to get the success probability of forecast
-    public function getProbability(Object $con, int $client, int $agency, int $salesRep){
+    public function getProbability(Object $con, int $client, int $agency, int $salesRep,$month){
         $sql = new sql();
 
         $selectQuery = "SELECT DISTINCT success_probability AS probability
                         FROM monthly_forecast
                         WHERE sales_rep_id = $salesRep
                         AND client_id = $client
-                        AND agency_id = $agency";
+                        AND agency_id = $agency
+                        AND month = $month";
        //var_dump($selectQuery);
         $from = array('probability');
         $selectResultQuery = $con->query($selectQuery);
@@ -892,14 +893,15 @@ class forecast extends pAndR{
         return $resultSelect;
     }
 
-     public function getProbabilityNewClient(Object $con, String $client, String $agency, int $salesRep){
+     public function getProbabilityNewClient(Object $con, String $client, String $agency, int $salesRep,$month){
         $sql = new sql();
 
         $selectQuery = "SELECT DISTINCT probability AS probability
                         FROM new_clients_fcst
                         WHERE sales_rep_id = $salesRep
                         AND client_id = $client
-                        AND agency_id = $agency";
+                        AND agency_id = $agency
+                        AND month = $month";
        //var_dump($selectQuery);
         $from = array('probability');
         $selectResultQuery = $con->query($selectQuery);
