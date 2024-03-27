@@ -122,7 +122,7 @@
     <div class="container-fluid" id="body">
         <form method="POST" action="{{ route('forecastByAESave') }}" runat="server" onsubmit="ShowLoading()">
             @csrf
-            @if($aeTable != 0)
+            @if($clientsTable != 'THERE IS NO INFORMATION TO THIS REP' || $newClientsTable['clientInfo'][0]['clientID'] != null)
                 <div class="row justify-content-end">
                     <div class="col">
                         <div class="container-fluid" style="margin-left: 10px;">
@@ -144,6 +144,8 @@
                                 <th class="newBlue center">{{$salesRepName[0]['salesRep']}} - {{$monthName[0]}}</th>
                             </tr>
                         </table>
+                        <input type='hidden' readonly='true' type="text" name="clientPost" id="clientPost" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                        <input type='hidden' readonly='true' type="text" name="agencyPost" id="agencyPost" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
 
                         <table style='width: 100%; zoom: 85%;font-size: 16px;'>
                             <tr class="center">
@@ -246,107 +248,108 @@
                         </table>
 
                         <!--START OF CLIENTS TABLE-->
-                        @for($a=0; $a <sizeof($clientsTable['clientInfo']) ; $a++)
-                            <input type='hidden' readonly='true' type="text" name="currency" id="currency" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$currencyID}}">
-                            <input type='hidden' readonly='true' type="text" name="month" id="month" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$intMonth}}">
-                            <input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">
-                            <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
-                            <input type='hidden' readonly='true' type="text" name="client-{{$a}}" id="client-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['clientID']}}">
-                            <input type='hidden' readonly='true' type="text" name="agency-{{$a}}" id="agency-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['agencyID']}}">
+                        @if($clientsTable != 'THERE IS NO INFORMATION TO THIS REP')
+                            @for($a=0; $a <sizeof($clientsTable['clientInfo']) ; $a++)
+                                <input type='hidden' readonly='true' type="text" name="currency" id="currency" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$currencyID}}">
+                                <input type='hidden' readonly='true' type="text" name="month" id="month" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$intMonth}}">
+                                <input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">                            
+                                <input type='hidden' readonly='true' type="text" name="client-{{$a}}" id="client-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['clientID']}}">
+                                <input type='hidden' readonly='true' type="text" name="agency-{{$a}}" id="agency-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['agencyID']}}">
 
 
-                            <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-                                <tr class="center">
-                                    <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-                                </tr>
-                            </table>
+                                <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                                    <tr class="center">
+                                        <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                                    </tr>
+                                </table>
 
-                            <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-                                <?php if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == null){
-                                        $probability[$a] = intval(100);
-                                    }else{
-                                        $probability[$a] = $clientsTable['clientInfo'][$a]['probability'][0]['probability'];
-                                    }
-                                ?>
-                                <tr>
-                                    <td style="border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; width:1%;">Probability: <input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="probability-{{$a}}" id="probability-{{$a}}" style=" width:25%; background-color:transparent; border:0px; font-weight:bold; text-align:center;" value={{number_format($probability[$a])}}>%</td>    
-                                </tr>
-                                <tr class="center">
-                                    <td class="darkBlue" style="width:5%;">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="{{$color[$c]}} " id=''style='text-align:center; width:3%;'>
-                                            {{$companyView[$c]}}
-                                        </td>   
-                                    @endfor
-                                    <td class='darkBlue' style="width:5%;">Total</td>
-                                </tr>
-                                <tr>                                 
-                                    <td class="odd center">FCST - PAY TV</td>
-                                     @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$intMonth}}" id="payTvForecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'],0,',','.')}}"></td> 
-                                    @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['payTvForecast'],0,',','.')}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="even center">FCST - DIGITAL</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="even center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$intMonth}}" id="digitalForecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'],0,',','.')}}"></td>
-                                    @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'],0,',','.')}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="grey center">TOTAL FCST</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$a}}-{{$c}}-{{$intMonth}}" id="forecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['forecast'],0,',','.')}}"></td>
-                                    @endfor
-                                    <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecast'],0,',','.')}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="odd center">BKGS {{$year}} - PAY TV</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'],0,',','.')}}</td>
-                                    @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'],0,',','.')}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="even center">BKGS {{$year}} - DIGITAL</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="even center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'],0,',','.')}}</td>
-                                    @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'],0,',','.')}}</td>
-                                </tr>                                
-                                <tr>
-                                    <td class="grey center">TOTAL BKGS</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="grey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['bookings'],0,',','.')}}</td>
-                                    @endfor
-                                    <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['bookings'],0,',','.')}}</td>
-                                </tr>
+                                <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                                    <?php if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == null){
+                                            $probability[$a] = intval(100);
+                                        }else{
+                                            $probability[$a] = $clientsTable['clientInfo'][$a]['probability'][0]['probability'];
+                                        }
+                                    ?>
+                                    <tr>
+                                        <td style="border-style:solid; border-color:black; border-width: 0px 0px 0px 0px; width:1%;">Probability: <input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="probability-{{$a}}" id="probability-{{$a}}" style=" width:25%; background-color:transparent; border:0px; font-weight:bold; text-align:center;" value={{number_format($probability[$a])}}>%</td>    
+                                    </tr>
+                                    <tr class="center">
+                                        <td class="darkBlue" style="width:5%;">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="{{$color[$c]}} " id=''style='text-align:center; width:3%;'>
+                                                {{$companyView[$c]}}
+                                            </td>   
+                                        @endfor
+                                        <td class='darkBlue' style="width:5%;">Total</td>
+                                    </tr>
+                                    <tr>                                 
+                                        <td class="odd center">FCST - PAY TV</td>
+                                         @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$intMonth}}" id="payTvForecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'],0,',','.')}}"></td> 
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['payTvForecast'],0,',','.')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="even center">FCST - DIGITAL</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="even center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$intMonth}}" id="digitalForecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'],0,',','.')}}"></td>
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'],0,',','.')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="grey center">TOTAL FCST</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$a}}-{{$c}}-{{$intMonth}}" id="forecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['forecast'],0,',','.')}}"></td>
+                                        @endfor
+                                        <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecast'],0,',','.')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="odd center">BKGS {{$year}} - PAY TV</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="odd center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentPayTvBookings'],0,',','.')}}</td>
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'],0,',','.')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="even center">BKGS {{$year}} - DIGITAL</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="even center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'],0,',','.')}}</td>
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'],0,',','.')}}</td>
+                                    </tr>                                
+                                    <tr>
+                                        <td class="grey center">TOTAL BKGS</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="grey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['bookings'],0,',','.')}}</td>
+                                        @endfor
+                                        <td class="grey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['bookings'],0,',','.')}}</td>
+                                    </tr>
+                                    
+                                     <tr>
+                                        <td class="newBlue center">BKGS PENDING</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'],0,',','.')}}</td>
+                                        @endfor
+                                        <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['pending'],0,',','.')}}</td>
+                                    </tr>                               
                                 
-                                 <tr>
-                                    <td class="newBlue center">BKGS PENDING</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'],0,',','.')}}</td>
-                                    @endfor
-                                    <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['pending'],0,',','.')}}</td>
-                                </tr>                               
-                            
-                                <tr>
-                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
-                                    @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'],0,',','.')}}</td>
-                                    @endfor
-                                    <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'],0,',','.')}}</td>
-                                </tr>
-                            </table>
-                        @endfor
-
+                                    <tr>
+                                        <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                        @for($c=0; $c <sizeof($company); $c++)
+                                            <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'],0,',','.')}}</td>
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'],0,',','.')}}</td>
+                                    </tr>
+                                </table>
+                            @endfor
+                        @endif
                          <!--START OF NEW CLIENTS TABLE-->
                         @if($newClientsTable['clientInfo'][0]['clientID'] != null)
                             @for($z=0; $z <sizeof($newClientsTable['clientInfo']) ; $z++)
                                 <input type='hidden' readonly='true' type="text" name="currency" id="currency" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$currencyID}}">
                                 <input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">
                                 <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
+                                <input type='hidden' readonly='true' type="text" name="month" id="month" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$intMonth}}">
                                 <input type='hidden' readonly='true' type="text" name="clientNew-{{$z}}" id="clientNew-{{$z}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$newClientsTable['clientInfo'][$z]['clientID']}}">
                                 <input type='hidden' readonly='true' type="text" name="agencyNew-{{$z}}" id="agencyNew-{{$z}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$newClientsTable['clientInfo'][$z]['agencyID']}}">
                                <input type='hidden' readonly='true' type="text" name="count" id="count[]" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$z}}">
@@ -387,7 +390,7 @@
                                     <tr>
                                     <td class="grey center">TOTAL FCST</td>
                                     @for($c=0; $c <sizeof($company); $c++)
-                                        <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$a}}-{{$c}}-{{$intMonth}}" id="forecast-{{$a}}-{{$c}}-{{$intMonth}}" value="{{number_format($newClientsTable['companyValues'][$z][$c]['forecast'],0,',','.')}}"></td>
+                                        <td class="grey center" style="width:3%;"><input readonly='true' style="color: white; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="forecast-{{$z}}-{{$c}}-{{$intMonth}}" id="forecast-{{$z}}-{{$c}}-{{$intMonth}}" value="{{number_format($newClientsTable['companyValues'][$z][$c]['forecast'],0,',','.')}}"></td>
                                     @endfor
                                     <td class="grey center" style='width:5%;'>{{number_format($newClientsTable['total'][$z]['forecast'],0,',','.')}}</td>
                                 </tr>
@@ -510,17 +513,88 @@
                       </div>
                     </div>
                 @else
+                <!--In this elseif the portal permits the user to add a new client  -->
                 <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-                        <tr class="center">
-                            <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-                        </tr>
-                        
-                    </table>
+                    <tr class="center">
+                        <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                    </tr>                    
+                </table>
+
                 <table style='width: 100%; font-size: 16px;'>
                     <tr class="center" style="width:100%; font-weight: bold; font-size: 16px; color: red;">
                         <td class="center">THERE IS NO INFORMATION TO THIS REP THIS MONTH SELECTED.</td>    
                     </tr>      
                 </table>
+
+                <table style='width: 100%; zoom: 85%;font-size: 16px;'>
+                    <tr class="center">
+                        <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                    </tr>                    
+                </table>
+
+                <div class='col'>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalExemplo" style="width: 100%">
+                      Add Client to Forecast
+                    </button>
+                </div>
+                <!-- Modal to insert a new client -->
+                <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New Client</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row justify-content-center">          
+                                <div class="col">       
+                                    <div class="form-group">
+                                        <tr style="font-weight: bold;">
+                                            <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
+                                            <input type='hidden' readonly='true' type="text" name="newClient" id="newClient[]" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                                            <input type='hidden' readonly='true' type="text" name="month" id="month" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$intMonth}}">
+                                             <input type='hidden' readonly='true' type="text" name="wm" id="wm" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                                              <input type='hidden' readonly='true' type="text" name="spt" id="spt" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                                               <input type='hidden' readonly='true' type="text" name="dc" id="dc" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
+                                               <input type='hidden' readonly='true' type="text" name="newProbability" id="newProbability" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="100">
+                                                <label>Client</label>
+                                                    <select class='selectpicker' id='clientPost' name='clientPost[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value='0' selected='true'> Select </option>
+                                                        @for($x=0; $x<sizeof($listOfClients);$x++)
+                                                            <option value="{{$listOfClients[$x]['clientId']}}">{{$listOfClients[$x]['client']}}</option>
+                                                        @endfor
+                                                    </select><br>
+                                                <label>Agency</label>
+                                                     <select class='selectpicker' id='agencyPost' name='agencyPost[]' data-selected-text-format='count' data-width='100%' class='form-control' data-live-search='true'>
+                                                        <option value=''> Select </option>
+                                                            @for($z=0; $z<sizeof($listOfAgencies);$z++)
+                                                                <option value="{{$listOfAgencies[$z]['aID']}}">{{$listOfAgencies[$z]['agency']}}</option>
+                                                            @endfor
+                                                        </select><br>  
+                                        </tr>
+                                        <tr class="center">
+                                            <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
+                                        </tr>
+                                        <tr>
+                                            <button style="font-weight: bold">Can't find? Fill in the information below and we'll create it for you : </button>
+
+                                            <label> Client Name </label>
+                                            <input type="text" maxlength="300" name="clientSubmit" id="clientSubmit" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="">
+                                            <label> Agency Name </label>
+                                            <input type="text" maxlength="300" name="agencySubmit" id="agencySubmit" class="form-control" style="width: 100%; background-color:transparent; border:solid; font-weight:bold; text-align:center; border-width: 1px; border-color: grey;" value="">
+                                        </tr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      <div class="modal-footer">
+                         <button type="submit" class="btn btn-primary" style="width: 100%;">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
                 @endif
                      <table style='width: 100%; zoom: 85%;font-size: 16px;'>
