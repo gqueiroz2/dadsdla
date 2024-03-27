@@ -1,8 +1,7 @@
 // Considerations: use the front-end filters for generating data for the table and not the actual :D
 
 $(document).ready(function(){
-  $('#region').change(function(){
-    var regionID = $(this).val();
+    var regionID = 1;
     var year = $('#year').val();
     ajaxSetup();
     if (regionID != "") {
@@ -263,18 +262,6 @@ $(document).ready(function(){
       var source = $('#sourceDataBase').val();
 
       $.ajax({
-        url:"/ajax/adsales/sourceByRegion",
-        method:"POST",
-        data:{regionID},
-        success: function(output){
-          $('#sourceDataBase').html(output).selectpicker("refresh");
-        },
-        error: function(xhr, ajaxOptions,thrownError){
-          alert(xhr.status+" "+thrownError);
-        }
-      });
-
-      $.ajax({
         url:"/ajax/adsales/clientByRegionSize",
         method:"POST",
         data:{year,regionID},
@@ -334,7 +321,7 @@ $(document).ready(function(){
       $('#stageFCST').css("display", "none");
     }
 
-  });
+ 
 
   $('.agencyChange').change(function(){
     var agency = $(this).val();
