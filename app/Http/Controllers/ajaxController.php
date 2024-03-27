@@ -1164,6 +1164,7 @@ class ajaxController extends Controller{
         }
     }
 
+
     public function getRepByRegionAndYear(){
         $regionID = Request::get('regionID');
 
@@ -1323,7 +1324,7 @@ class ajaxController extends Controller{
 
     public function yearByRegion(){
         $currentMonth = date('m');
-        $regionID = Request::get('regionID');
+        $regionID = 1;
         $cYear = intval(date('Y'));
         $nYear = $cYear + 1;
         $pYear = $cYear - 1;
@@ -1707,7 +1708,7 @@ class ajaxController extends Controller{
         if ($currency) {
             for ($c=0; $c <sizeof($currency); $c++) {
                 if ($currency[$c]["name"] != "USD" && $currency[$c]['id'] <= 6) {
-                    echo "<option value='".$currency[$c]["id"]."'>".$currency[$c]["name"]."</option>";
+                    echo "<option value='".$currency[$c]["id"]."' selected='true'>".$currency[$c]["name"]."</option>";
                 }
             }
             echo "<option value='4'>USD</option>";
@@ -1745,15 +1746,22 @@ class ajaxController extends Controller{
 
 
         if ($region == 1) {
-            $source = array("WBD","CMAPS","BTS","ALEPH");            
-        }else{
-            $source = array("BTS"/*,"FW"*/,"SF");
+            $source = array("WBD"/*,"CMAPS","BTS","ALEPH"*/);            
         }
 
 
         echo "<option value=''> Select </option>";
         for ($s=0; $s < sizeof($source); $s++) { 
-            echo "<option value='".$source[$s]."'>".$source[$s]."</option>";
+            echo "<option value='".$source[$s]."' selected='true'>".$source[$s]."</option>";
+        }
+    }
+    public function platform(){
+        
+        $platform = array("Pay Tv", "Digital"/*,"CMAPS","BTS","ALEPH"*/);            
+
+        echo "<option value=''> Select </option>";
+        for ($s=0; $s < sizeof($platform); $s++) { 
+            echo "<option value='".$platform[$s]."' selected='true'>".$platform[$s]."</option>";
         }
     }
 
@@ -1807,8 +1815,9 @@ class ajaxController extends Controller{
 
     public function company(){
         echo "<select id='company' class='selectpicker form-control' data-selected-text-format='count' multiple='true'  multiple data-actions-box='true' data-size='2' data-width='100%' >";
-            echo "<option value='dc' selected='true'> Discovery </option>";   
-            echo "<option value='spt' selected='true'> Sony </option>";   
+            echo "<option value='1' selected='true'> DSC </option>";   
+            echo "<option value='2' selected='true'> SPT </option>";
+            echo "<option value='3' selected='true'> WM </option>";   
         echo "</select>";
     }
 

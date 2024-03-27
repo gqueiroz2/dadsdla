@@ -15,7 +15,7 @@ use App\CheckElements;
 class forecast extends pAndR{
     
     //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
-    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month,$newClientsTable,$clientsTable){
+    public function makeRepTable(Object $con, $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month,$newClientsTable,$clientsTable){
         $company = array('1','2','3');
 
         $companyName = array('dc','spt','wm');
@@ -51,12 +51,14 @@ class forecast extends pAndR{
             $digitalForecast[$c] = 0;
             $payTvForecast[$c] = 0;
 
-            for ($p=0; $p <sizeof($clientsTable['clientInfo']); $p++) { 
-               // var_dump(($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
-                $tempPayTvForecast[$c] += (($clientsTable['companyValues'][$p][$c]['payTvForecast'])*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
-                //var_dump($tempPayTvForecast);
-                $tempDigitalForecast[$c] += ($clientsTable['companyValues'][$p][$c]['digitalForecast']*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
-               
+            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
+                for ($p=0; $p <sizeof($clientsTable['clientInfo']); $p++) { 
+                   // var_dump(($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                    $tempPayTvForecast[$c] += (($clientsTable['companyValues'][$p][$c]['payTvForecast'])*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                    //var_dump($tempPayTvForecast);
+                    $tempDigitalForecast[$c] += ($clientsTable['companyValues'][$p][$c]['digitalForecast']*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                   
+                }
             }
             //var_dump($tempPayTvForecast);
             if ($newClientsTable != null) {
@@ -147,7 +149,7 @@ class forecast extends pAndR{
 
 
     //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
-    public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
+    public function makeClientsTable(Object $con, $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
         $sql = new sql();
         //$month = 0;
         $company = array('1','2','3');
@@ -241,7 +243,7 @@ class forecast extends pAndR{
     }
 
      //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
-    public function makeNewClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
+    public function makeNewClientsTable(Object $con, $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value, String $salesRepName,int $month){
         $sql = new sql();
        // $month = 0;
         $company = array('wm','dc','spt');
@@ -256,7 +258,7 @@ class forecast extends pAndR{
         }
          
         $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
-        //var_dump($clients);
+       // var_dump($clients);
         if ($clients == null) {
             $table = 0;
         }else{
@@ -496,6 +498,7 @@ class forecast extends pAndR{
 
      public function saveForecastNew(Object $con, string $client, string $agency, int $year, String $value, String $wm, string $dc, string $spt, String $month, int $salesRep, String $platform, int $currency, int $probability, bool $check){
         $sql = new sql();
+        $updateTime = date("Y-m-d");
 
         $selectQuery = "SELECT agency_id AS agency, client_id AS client
                         FROM new_clients_fcst
@@ -529,14 +532,12 @@ class forecast extends pAndR{
                         AND agency_id = '$agency'
                         AND platform = '$platform'                        
                         AND month = $month
-                        ");   
-            
-             
+                        ");  
         }
     }
 
     //THIS FUNCTION GET THE VALUE BY MONTH AND COMPANY BY CLIENT AND REP
-    public function getValueByMonth(Object $con, int $salesRep, int $year, string $value, int $month, string $table, int $client=null, int $agency=null, int $regionID, string $platform=null, string $company=null){
+    public function getValueByMonth(Object $con, $salesRep, int $year, string $value, int $month, string $table, int $client=null, int $agency=null, int $regionID, string $platform=null, string $company=null){
         $sql = new sql();
         $base = new base();
 
@@ -555,7 +556,7 @@ class forecast extends pAndR{
                             $select = "SELECT sum($value) as revenue
                                 FROM wbd w
                                 LEFT JOIN brand b on b.id = w.brand_id
-                                WHERE w.current_sales_rep_id = $salesRep
+                                WHERE w.current_sales_rep_id IN ($salesRep)
                                 AND w.year = $year
                                 AND w.month = $month
                                 AND (b.brand_group_id IN ($company))
@@ -566,7 +567,7 @@ class forecast extends pAndR{
                             $select = "SELECT sum($value) as revenue
                                 FROM wbd w
                                 LEFT JOIN brand b on b.id = w.brand_id
-                                WHERE w.current_sales_rep_id = $salesRep
+                                WHERE w.current_sales_rep_id IN ($salesRep)
                                 AND w.year = $year
                                 AND w.month = $month
                                 AND (b.brand_group_id IN ($company))
@@ -578,7 +579,7 @@ class forecast extends pAndR{
                         $select = "SELECT sum($value) as revenue
                             FROM wbd w
                             LEFT JOIN brand b on b.id = w.brand_id
-                            WHERE w.current_sales_rep_id = $salesRep
+                            WHERE w.current_sales_rep_id IN ($salesRep)
                             AND w.year = $year
                             AND w.month = $month
                             AND (b.brand_group_id IN ($company))
@@ -593,7 +594,7 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = w.client_id
                                 LEFT JOIN agency a ON a.ID = w.agency_id
                                 WHERE w.year = $year
-                                AND w.current_sales_rep_id = $salesRep
+                                AND w.current_sales_rep_id IN ($salesRep)
                                 AND w.month = $month
                                 AND c.ID = $client
                                 AND a.ID = $agency
@@ -608,7 +609,7 @@ class forecast extends pAndR{
                                 LEFT JOIN client c ON c.ID = w.client_id
                                 LEFT JOIN agency a ON a.ID = w.agency_id
                                 WHERE w.year = $year
-                                AND w.current_sales_rep_id = $salesRep
+                                AND w.current_sales_rep_id IN ($salesRep)
                                 AND w.month = $month
                                 AND c.ID = $client
                                 AND a.ID = $agency
@@ -624,7 +625,7 @@ class forecast extends pAndR{
                             LEFT JOIN client c ON c.ID = w.client_id
                             LEFT JOIN agency a ON a.ID = w.agency_id
                             WHERE w.year = $year
-                            AND w.current_sales_rep_id = $salesRep
+                            AND w.current_sales_rep_id IN ($salesRep)
                             AND w.month = $month
                             AND c.ID = $client
                             AND a.ID = $agency
@@ -653,7 +654,7 @@ class forecast extends pAndR{
                 $select = "SELECT sum(pbs.value) as revenue
                             FROM plan_by_sales pbs
                             LEFT JOIN brand b on b.id = pbs.brand_id
-                            WHERE pbs.sales_rep_id = $salesRep
+                            WHERE pbs.sales_rep_id IN ($salesRep)
                             AND pbs.year = $year
                             AND pbs.month = $month
                             AND pbs.type_of_revenue = '$value'
@@ -676,7 +677,7 @@ class forecast extends pAndR{
                 if ($client == null && $agency == null) {
                     $selectAE = "SELECT SUM(f.revenue) as revenue
                                 FROM monthly_forecast f                                
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND f.year = $year
                                 AND f.month = $month
                                 AND f.value = '$value'
@@ -692,7 +693,7 @@ class forecast extends pAndR{
                                 FROM monthly_forecast f
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND f.year = $year
                                 AND f.month = $month
                                 AND f.value = '$value'
@@ -720,7 +721,7 @@ class forecast extends pAndR{
                     $selectForecast = "SELECT sum(f.$monthT) as revenue                                    
                                 FROM forecast f
                                 LEFT JOIN brand b on b.id = f.brand_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND (b.brand_group_id IN ($company)) 
                                 AND (f.platform = '$platform')
                                 ";
@@ -734,7 +735,7 @@ class forecast extends pAndR{
                                 LEFT JOIN brand b on b.id = f.brand_id
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND c.id = $client
                                 AND a.id = $agency
                                 AND (b.brand_group_id IN ($company)) 
@@ -757,7 +758,7 @@ class forecast extends pAndR{
        
     }
 
-     public function getValueByClient(Object $con, int $salesRep, int $year, string $value, String $month, string $table, String $client=null, string $agency=null, int $regionID, string $platform=null, string $company=null){
+     public function getValueByClient(Object $con, $salesRep, int $year, string $value, String $month, string $table, String $client=null, string $agency=null, int $regionID, string $platform=null, string $company=null){
         $sql = new sql();
         $base = new base();
 
@@ -773,7 +774,7 @@ class forecast extends pAndR{
                 if ($client == null && $agency == null) {
                     $selectAE = "SELECT SUM(f.$company) as revenue
                                 FROM new_clients_fcst f                                
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND (f.platform = '$platform')
                                 AND f.month = $month
                                 ";
@@ -787,7 +788,7 @@ class forecast extends pAndR{
                                 FROM new_clients_fcst f 
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND f.client_id = '$client'
                                 AND f.agency_id = '$agency'
                                 AND (f.platform = '$platform')
@@ -811,7 +812,7 @@ class forecast extends pAndR{
                     $selectForecast = "SELECT sum(f.$month) as revenue                                    
                                 FROM forecast f
                                 LEFT JOIN brand b on b.id = f.brand_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND (b.brand_group_id IN ($company)) 
                                 AND (f.platform = '$platform')
                                 ";
@@ -825,7 +826,7 @@ class forecast extends pAndR{
                                 LEFT JOIN brand b on b.id = f.brand_id
                                 LEFT JOIN client c ON c.ID = f.client_id
                                 LEFT JOIN agency a ON a.ID = f.agency_id
-                                WHERE f.sales_rep_id = $salesRep
+                                WHERE f.sales_rep_id IN ($salesRep)
                                 AND f.client_id = $client
                                 AND f.client_id = $agency
                                 AND (b.brand_group_id IN ($company)) 
@@ -854,7 +855,7 @@ class forecast extends pAndR{
 
         $selectQuery = "SELECT sales_rep_id as salesRep
                         FROM monthly_forecast
-                        WHERE sales_rep_id = $salesRep
+                        WHERE sales_rep_id IN ($salesRep)
                         AND month = $month
                         ";
             // echo "<pre>$selectQuery</pre>";
@@ -875,7 +876,7 @@ class forecast extends pAndR{
 
         $selectQuery = "SELECT sales_rep_id as salesRep
                         FROM new_clients_fcst
-                        WHERE sales_rep_id = $salesRep
+                        WHERE sales_rep_id IN ($salesRep)
                         ";
             // echo "<pre>$selectQuery</pre>";
         $from = array('salesRep');
@@ -895,7 +896,7 @@ class forecast extends pAndR{
 
         $selectQuery = "SELECT DISTINCT success_probability AS probability
                         FROM monthly_forecast
-                        WHERE sales_rep_id = $salesRep
+                        WHERE sales_rep_id IN ($salesRep)
                         AND client_id = $client
                         AND agency_id = $agency
                         AND month = $month";
@@ -916,7 +917,7 @@ class forecast extends pAndR{
 
         $selectQuery = "SELECT DISTINCT probability AS probability
                         FROM new_clients_fcst
-                        WHERE sales_rep_id = $salesRep
+                        WHERE sales_rep_id IN ($salesRep)
                         AND client_id = $client
                         AND agency_id = $agency
                         AND month = $month";
@@ -939,7 +940,7 @@ class forecast extends pAndR{
                     FROM wbd w
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
-                    WHERE (w.current_sales_rep_id = \"$salesRep\" )
+                    WHERE (w.current_sales_rep_id IN (\"$salesRep\" ))
                     AND w.year IN (\"$year\",\"$pYear\")
                     AND w.month = $month
                     AND gross_value > 0.0                
@@ -954,7 +955,7 @@ class forecast extends pAndR{
                     FROM forecast w
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
-                    WHERE (w.sales_rep_id = \"$salesRep\" )
+                    WHERE (w.sales_rep_id IN (\"$salesRep\" ))
                     AND $month > 0.0
                     ORDER BY c.name ASC
                     ";

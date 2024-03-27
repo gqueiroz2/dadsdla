@@ -47,21 +47,25 @@ class viewerExcelController extends Controller {
 
 	    $source = Request::get("sourceExcel");
 
-	    $year = json_decode(base64_decode(Request::get("yearExcel")));
+	    $year = Request::get("yearExcel");
 
-	    $month = json_decode(base64_decode(Request::get("monthExcel")));
+	    $month = Request::get("monthExcel");
 
-	    $brand = json_decode(base64_decode(Request::get("brandExcel")));
+	    $brand = Request::get("brandExcel");
 
-	    $salesRep = json_decode(base64_decode(Request::get("salesRepExcel")));
+	    $salesRep = Request::get("salesRepExcel");
         //var_dump($salesRep);
-        $manager = json_decode(base64_decode(Request::get("managerExcel")));
+        $manager = Request::get("managerExcel");
 
-	    $agency = json_decode(base64_decode(Request::get("agencyExcel")));
+	    $agency = Request::get("agencyExcel");
 
-	    $client = json_decode(base64_decode(Request::get("clientExcel")));
+	    $client = Request::get("clientExcel");
 
         $userRegion = Request::get('userRegionExcel');
+
+        $company = Request::get("companyExcel");
+
+        $platform = Request::get("platformExcel");
 
         $permission = Request::session()->get('userLevel');
         //$regionName = Request::session()->get('userRegion');
@@ -73,31 +77,17 @@ class viewerExcelController extends Controller {
         $currencies = $p->getCurrency($con,array($currency))[0]['name']; 
 
 	    $value = Request::get("valueExcel");
-	    
-	    $especificNumber = Request::get("especificNumber");
-
-        if (!is_null($especificNumber) ) {
-            $checkEspecificNumber = true;
-        }else{
-            $checkEspecificNumber = false;
-        }
 
         $checkClient = false; 
 
 	    $viewer = new viewer();
+        
+        $table = $viewer->getTables($con,$source,$month,$company,$year,$currency,$salesRep,$db,$sql,$agency,$client,$checkClient,$manager,$platform);
 
-        if ($permission == "L8") {
-            $table = $viewer->getTablesReps($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false,$user);
-        }else{
-            $table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,$checkClient,$manager);
-        }
-
-	    //$table = $viewer->getTables($con,$region,$source,$month,$brand,$year,$currency,$salesRep,$db,$sql,$especificNumber,$checkEspecificNumber,$agency,$client,false);
-
-        //$total = $viewer->total($con,$sql,$source,$brand,$month,$salesRep,$year,$especificNumber,$checkEspecificNumber,$currencies,$region,$agency,$client);
         $total = $viewer->totalFromTable($con,$table,$source,$region,$currencies);
         
         $mtx = $viewer->assemble($table,$currency,$source,$con,$region,$currencies);
+
         $data = array('mtx' => $mtx, 'currency' => $currency, 'region' => $region, 'source' => strtolower($source), 'year' => $year, 'month' => $month, 'brand' => $brand, 'salesRep' => $salesRep, 'agency' => $agency, 'client' => $client, 'value' => $value, 'total' => $total, 'regions' => $regions, 'currencies' => $currencies, "userRegion" => $userRegion);
 
         $label = "exports.viewer.base.baseExport";

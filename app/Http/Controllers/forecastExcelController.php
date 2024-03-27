@@ -28,7 +28,7 @@ class forecastExcelController extends Controller{
 
 
 	public function forecastAE(){
-         $db = new dataBase();
+        $db = new dataBase();
         $b = new base();
         $r = new region();
         $pr = new pRate();

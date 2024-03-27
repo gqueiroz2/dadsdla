@@ -101,15 +101,14 @@ class forecastController extends Controller{
             $salesRepID = $sr->getSalesRepByName($con,$salesRep)[0]['id'];
 
             $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth);
-            //var_dump($clientsTable);
-            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
-               $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth); 
-            //var_dump($newClientsTable);
-            
+
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth); 
+          
+            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP' || $newClientsTable != null) {
                //var_dump('aki');
                 $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRep,$intMonth,$newClientsTable,$clientsTable);
+
             }else{
-                $newClientsTable = 0;
                 $aeTable = 0;
             }
 
@@ -120,21 +119,20 @@ class forecastController extends Controller{
             $salesRepID = Request::get('salesRep');
             $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
-              $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
-            //var_dump($clientsTable);
-            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP') {
-               $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
-            //var_dump($newClientsTable);
-            
+            $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth);
+
+            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
+             // var_dump($newClientsTable);
+            if ($clientsTable != 'THERE IS NO INFORMATION TO THIS REP' || $newClientsTable != null) {
                //var_dump('aki');
                 $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
             }else{
-                $newClientsTable = 0;
+                
                 $aeTable = 0;
             }
         }
-        
-       //var_dump($aeTable);
+       // var_dump($aeTable);
+       
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";   
 
@@ -197,7 +195,7 @@ class forecastController extends Controller{
        /* if ($permission == 'L8') {
             $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$saveInfo['month']);  
         }else{*/
-            $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);      
+                  
        // }
         
 
@@ -218,6 +216,19 @@ class forecastController extends Controller{
 
         }
 
+        if($saveInfo['clientPost'][0] != 0){            
+            $newAgency = $saveInfo['agencyPost'][0];
+            $newClient = $saveInfo['clientPost'][0];
+            $newProbability = $saveInfo['newProbability'];
+            
+            $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'digital',$newProbability,$intMonth);
+            $saveNewClient = $fcst->newClientInclusion($con,$salesRepID,$newClient,$newAgency,$saveInfo['wm'],$saveInfo['spt'],$saveInfo['dc'],'pay tv',$newProbability,$intMonth);
+
+            //$fcst->checkClient($con,$sql,$newClient,$salesRepName[0]['salesRep']);           
+
+        }
+
+        $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$saveInfo['month']);
         /*if ($permission == 'L8') {
             $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName,$intMonth);
         }else{*/
@@ -231,43 +242,50 @@ class forecastController extends Controller{
         $companyName = array('wm','dc','spt');
         $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);
         $checkNew = $fcst->checkForecastNew($con, $salesRepID);//check if exists forecast for this rep in database
-        
-        for ($a=0; $a <sizeof($clients) ; $a++) { 
-            $client = $saveInfo['client-'.$a];
-            $agency = $saveInfo['agency-'.$a];
-            $probability = (int) $saveInfo['probability-'.$a];
-           //check if exists forecast for this rep in database
 
-            for ($c=0; $c <sizeof($company) ; $c++) { 
-                $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$intMonth]);
-                $digitalForecast[$a][$c] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$intMonth]);
-
-                $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'pay tv',$payTvForecast[$a][$c],$currencyID,$probability,$check);
-                
-                //insere valores de digital
-                $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'digital',$digitalForecast[$a][$c],$currencyID,$probability,$check);
-                
-            }
-        }
-        //var_dump($check);
-        if ($newClientsTable != null) {
-            for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
-                $clientN = $saveInfo['clientNew-'.$t];
-                $agencyN = $saveInfo['agencyNew-'.$t];
-                $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
+        if ($clients != 'THERE IS NO INFORMATION TO THIS REP') {
+            for ($a=0; $a <sizeof($clients) ; $a++) { 
+                $client = $saveInfo['client-'.$a];
+                $agency = $saveInfo['agency-'.$a];
+                $probability = (int) $saveInfo['probability-'.$a];
+               //check if exists forecast for this rep in database
 
                 for ($c=0; $c <sizeof($company) ; $c++) { 
-                    $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$intMonth]);
-                    $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$intMonth]);                    
-                }
+                    $payTvForecast[$a][$c] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$intMonth]);
+                    $digitalForecast[$a][$c] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$intMonth]);
 
-                $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
+                    $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'pay tv',$payTvForecast[$a][$c],$currencyID,$probability,$check);
                     
-                //insere valores de digital
-                $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
+                    //insere valores de digital
+                    $fcst->saveForecast($con, $client, $agency, $year, $value, $company[$c], $intMonth, $salesRepID, 'digital',$digitalForecast[$a][$c],$currencyID,$probability,$check);
+                    
+                }
             }
-        }        
-        
+        }
+      // var_dump($saveInfo['newClient'][0]);
+        if ($saveInfo['clientPost'][0] == '0') {
+            if ($saveInfo['newClient'][0] == '0') {
+          //  var_dump('aki');
+                for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
+                    $clientN = $saveInfo['clientNew-'.$t];
+                    $agencyN = $saveInfo['agencyNew-'.$t];
+                    $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
+
+                    for ($c=0; $c <sizeof($company) ; $c++) { 
+                        $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$intMonth]);
+                        $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$intMonth]);                    
+                    }
+
+                    $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
+                        
+                    //insere valores de digital
+                    $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
+                }
+            }     
+   
+        }  
+          
+       
         /*if ($permission == 'L8') {
             $clientsTable = $fcst->makeClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName,$intMonth);   
 
@@ -279,6 +297,7 @@ class forecastController extends Controller{
 
             $newClientsTable = $fcst->makeNewClientsTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth); 
 
+           
             $aeTable = $fcst->makeRepTable($con,$salesRepID,$pr,$year,$pYear,$regionID,$currencyID,$value,$salesRepName[0]['salesRep'],$intMonth,$newClientsTable,$clientsTable);
         //}
         

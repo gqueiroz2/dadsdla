@@ -413,7 +413,7 @@ class client extends Management{
      
         $sql = new sql();
 
-        $table = "client c";
+        $table = "wbd w";
 
         $columns = "c.name AS 'client',
                     c.ID AS 'id',
@@ -443,7 +443,8 @@ class client extends Management{
 
 
 
-        $join = "LEFT JOIN client_group cg ON cg.ID = c.client_group_id
+        $join = "LEFT JOIN client c ON w.client_id = c.ID
+                 LEFT JOIN client_group cg ON cg.ID = c.client_group_id
                  LEFT JOIN region r ON cg.region_id = r.ID
                 ";
 
