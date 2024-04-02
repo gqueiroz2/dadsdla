@@ -265,21 +265,22 @@ class forecastController extends Controller{
       // var_dump($saveInfo['newClient'][0]);
         if ($saveInfo['clientPost'][0] == '0') {
             if ($saveInfo['newClient'][0] == '0') {
-          //  var_dump('aki');
-                for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
-                    $clientN = $saveInfo['clientNew-'.$t];
-                    $agencyN = $saveInfo['agencyNew-'.$t];
-                    $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
+                if($newClientsTable['clientInfo'][0]['clientID'] != null){
+                    for ($t=0; $t <sizeof($newClientsTable['clientInfo']); $t++) { 
+                        $clientN = $saveInfo['clientNew-'.$t];
+                        $agencyN = $saveInfo['agencyNew-'.$t];
+                        $probabilityNew = (int) $saveInfo['probabilityNew-'.$t];
 
-                    for ($c=0; $c <sizeof($company) ; $c++) { 
-                        $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$intMonth]);
-                        $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$intMonth]);                    
+                        for ($c=0; $c <sizeof($company) ; $c++) { 
+                            $payTvForecastNew[$t][$c] = str_replace('.', '', $saveInfo['payTvForecastNew-'.$t.'-'.$c.'-'.$intMonth]);
+                            $digitalForecastNew[$t][$c] = str_replace('.', '', $saveInfo['digitalForecastNew-'.$t.'-'.$c.'-'.$intMonth]);                    
+                        }
+
+                        $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
+                            
+                        //insere valores de digital
+                        $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
                     }
-
-                    $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $payTvForecastNew[$t][0],$payTvForecastNew[$t][1],$payTvForecastNew[$t][2], $intMonth, $salesRepID, 'pay tv',$currencyID,$probabilityNew,$checkNew);
-                        
-                    //insere valores de digital
-                    $fcst->saveForecastNew($con, $clientN, $agencyN, $year, $value, $digitalForecastNew[$t][0],$digitalForecastNew[$t][1],$digitalForecastNew[$t][2], $intMonth, $salesRepID, 'digital',$currencyID,$probabilityNew,$checkNew);
                 }
             }     
    

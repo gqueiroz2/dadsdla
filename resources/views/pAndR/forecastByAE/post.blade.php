@@ -255,8 +255,7 @@
                                 <input type='hidden' readonly='true' type="text" name="value" id="value" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$value}}">                            
                                 <input type='hidden' readonly='true' type="text" name="client-{{$a}}" id="client-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['clientID']}}">
                                 <input type='hidden' readonly='true' type="text" name="agency-{{$a}}" id="agency-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['agencyID']}}">
-
-
+                                <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
                                 <table style='width: 100%; zoom: 85%;font-size: 16px;'>
                                     <tr class="center">
                                         <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
@@ -472,6 +471,7 @@
                                     <div class="col">       
                                         <div class="form-group">
                                             <tr style="font-weight: bold;">
+                                                <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
                                                  <input type='hidden' readonly='true' type="text" name="wm" id="wm" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
                                                   <input type='hidden' readonly='true' type="text" name="spt" id="spt" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">
                                                    <input type='hidden' readonly='true' type="text" name="dc" id="dc" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="0">

@@ -669,6 +669,23 @@ class salesRep extends Management
 		return $salesRepByGroup;
 	}
 
+	public function getGroupIdByName($con,$group){
+		$sql = new sql();
+
+		for ($g=0; $g <sizeof($group); $g++) { 
+			$select = "SELECT DISTINCT id,name
+						FROM sales_rep_group sr
+						WHERE sr.ab_name IN ('$group[$g]')
+			";
+		}
+		$from = array('id','name');
+		$result = $con->query($select);
+		$groupId = $sql->fetch($result,$from,$from);
+		
+		return $groupId;
+
+	}
+
 	public function getSalesRepUnitByName($con, $salesRepUnit = false)
 	{
 		$sql = new sql();
