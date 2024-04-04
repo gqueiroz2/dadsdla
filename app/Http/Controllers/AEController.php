@@ -110,7 +110,8 @@ class AEController extends Controller{
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
-        $currentMonth = date('n');
+        $currentMonth = date('n')+2;
+       // var_dump($currentMonth);
         $regionID = 1;
         $salesRepID = Request::get('salesRep');
         $currencyID = '1';
@@ -122,7 +123,9 @@ class AEController extends Controller{
                
         $newClient = $ae->getSalesRepByClient($salesRepID,$con, $sql);
 
-        $clients = $ae->getClientByRep($con, $salesRepID, $regionID, $cYear, $pYear);
+        $repInfo = $ae->getClientByRep($con, $salesRepID,'1', $cYear, $pYear);
+
+        $clientsMonthly = $ae->getMonthlyClients($salesRepID,$con, $sql);    
 
         if($saveInfo['client'][0] != null){
            // var_dump('aki');
@@ -131,32 +134,51 @@ class AEController extends Controller{
             $saveNewClient = $ae->newClientInclusion($con,$salesRepID,$test[0],$test[1]);
 
         }else{
-            if ($newClient != null)  {
-                $clients = array_merge($clients,$newClient);
+            
+            if ($newClient != null) {
+                $clients = array_merge($repInfo,$newClient);
+                $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
-             }
+            }elseif ($clientsMonthly != null) {
+                $clients = array_merge($repInfo,$clientsMonthly);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }elseif($newClient != null && $clientsMonthly != null ){
+                $clients = array_merge($repInfo,$newClient);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+                $clients = array_merge($clients,$clientsMonthly);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }else{
+                $clients = $repInfo;
+            }
         } //ta funcionando
         
-        $company = array('3','1','2');
+        $company = array('1','2','3');
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
-        $check = $ae->checkForecast($con, $salesRepID);//check if exists forecast for this rep in database
-        //var_dump($saveInfo);
+        
+        //print_r($clients);
+        //var_dump($check);
         for ($a=0; $a <sizeof($clients) ; $a++) { 
             $client = (int) $saveInfo['client-'.$a];
             $agency = (int) $saveInfo['agency-'.$a];
             $probability = (int) $saveInfo['probability-'.$a];
-
+            //var_dump($client);
             for ($c=0; $c <sizeof($company) ; $c++) { 
                 for ($m=$currentMonth; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
-                    
+                  //  var_dump($payTvForecast);
+                    //$check = $ae->checkForecast($con, $salesRepID,$client,$agency,$company[$c], 'pay tv');//check if exists forecast for this rep in database
+                    //var_dump($check);
                     //insere valores de pay tv
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID,$probability,$check);
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'pay tv', $payTvForecast[$a][$c][$m],$currencyID,$probability);
                     
+                   // $check = $ae->checkForecast($con, $salesRepID,$client,$agency,$company[$c],'digital');//check if exists forecast for this rep in database
                     //insere valores de digital
-                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID,$probability,$check);
+                    $ae->saveForecast($con, $client, $agency, $cYear, $value, $company[$c], $intMonth[$m], $salesRepID, 'digital', $digitalForecast[$a][$c][$m],$currencyID,$probability);
                 }
             }
         }

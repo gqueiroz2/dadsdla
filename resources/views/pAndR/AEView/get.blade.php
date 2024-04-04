@@ -18,7 +18,7 @@
 					@endif
 					{{$render->regionFiltered($region, $regionID, $special )}}
 				</div>
-				<div class="col">
+				<div class="col" style="display:none;">
 					<label class='labelLeft'><span class="bold">Year:</span></label>
 					@if($errors->has('year'))
 						<label style="color: red;">* Required</label>

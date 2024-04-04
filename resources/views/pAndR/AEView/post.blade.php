@@ -24,7 +24,7 @@
 @section('content')
     
 
-    <form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()" onkeydown="return event.key != 'Enter';">
+    <form method="POST" action="{{ route('AEPost') }}" runat="server"  onsubmit="ShowLoading()" onkeydown="return oddt.key != 'Enter';">
         @csrf
         <div class="container-fluid">       
             <div class="row">
@@ -35,7 +35,7 @@
                     @endif
                     {{$render->regionFiltered($region, $regionID, $special )}}
                 </div>
-                <div class="col">
+                <div class="col" style="display:none;">
                     <label class='labelLeft'><span class="bold">Year:</span></label>
                     @if($errors->has('year'))
                         <label style="color: red;">* Required</label>
@@ -138,15 +138,15 @@
                                 <td class='darkBlue' style='width:5%;'>Total</td>
                             </tr>
                             <tr>
-                                <td class='grey clickBoolHeader' id='' rowspan='6' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                <td class='grey clickBoolHeader' id='' rowspan='9' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                     <span style='font-size:12px;'> WBD</span>
                                 </td> 
-                                <td class="even center">TARGET</td>
+                                <td class="odd center">TARGET</td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentTarget'][$m])}}</td>
                                     @else
-                                        <td class="even center" style='width:5%;'>{{number_format($aeTable['total']['currentTarget'][$m])}}</td>
+                                        <td class="odd center" style='width:5%;'>{{number_format($aeTable['total']['currentTarget'][$m])}}</td>
                                     @endif
                                 @endfor
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentTarget'][$m])}}</td>
@@ -163,15 +163,26 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['payTvForecast'][$m])}}</td>
                             </tr>
                             <tr>
-                                <td class="even center">FCST - DIGITAL</td>
+                                <td class="odd center">FCST - DIGITAL</td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
                                     @else
-                                        <td class="even center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
+                                        <td class="odd center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
                                     @endif
                                 @endfor
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['digitalForecast'][$m])}}</td>
+                            </tr>
+                            <tr>
+                                <td class="lightGrey center">TOTAL FCST</td>
+                                 @for($m=0; $m <sizeof($month); $m++)
+                                    @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['forecast'][$m])}}</td>
+                                    @else
+                                        <td class="lightGrey center" style='width:5%;'>{{number_format($aeTable['total']['forecast'][$m])}}</td>
+                                    @endif
+                                @endfor
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['forecast'][$m])}}</td>
                             </tr>
                             <tr>
                                 <td class="odd center">BKGS {{$cYear}} - PAY TV </td>
@@ -196,12 +207,34 @@
                                 <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentDigitalBookings'][$m])}}</td>
                             </tr>
                             <tr>
-                                <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                <td class="lightGrey center">TOTAL BKGS</td>
+                                 @for($m=0; $m <sizeof($month); $m++)
+                                    @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                                    @else
+                                        <td class="lightGrey center" style='width:5%;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                                    @endif
+                                @endfor
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['currentBookings'][$m])}}</td>
+                            </tr>
+                            <tr>
+                                <td class="newBlue center">BKGS PENDINGS</td>
+                                 @for($m=0; $m <sizeof($month); $m++)
+                                    @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                                    @else
+                                        <td class="newBlue center" style='width:5%;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                                    @endif
+                                @endfor
+                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                            </tr>
+                            <tr>
+                                <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                  @for($m=0; $m <sizeof($month); $m++)
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                         <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['total']['previousBookings'][$m])}}</td>
                                     @else
-                                        <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['total']['previousBookings'][$m])}}</td>
+                                        <td class="odd center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['total']['previousBookings'][$m])}}</td>
                                     @endif
                                 @endfor
                                 <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['total']['previousBookings'][$m])}}</td>
@@ -211,15 +244,15 @@
 
                             @for($c=0; $c <sizeof($company); $c++)
                                 <tr class="clickLoopHeader">
-                                    <td class="{{$color[$c]}} " id='' rowspan='6' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                    <td class="{{$color[$c]}} " id='' rowspan='9' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                         <span style='font-size:12px;'> {{$companyView[$c]}}</span>
                                     </td> 
-                                    <td class="even center">TARGET</td>
+                                    <td class="odd center">TARGET</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentTarget'][$m])}}</td>
                                         @else
-                                            <td class="even center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentTarget'][$m])}}</td>
+                                            <td class="odd center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentTarget'][$m])}}</td>
                                         @endif
                                     @endfor
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentTarget'][$m])}}</td>
@@ -236,15 +269,26 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['payTvForecast'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
-                                    <td class="even center">FCST - DIGITAL</td>
+                                    <td class="odd center">FCST - DIGITAL</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
                                         @else
-                                            <td class="even center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
+                                            <td class="odd center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
                                         @endif
                                     @endfor
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['digitalForecast'][$m])}}</td>
+                                </tr>
+                                <tr class="clickLoopHeader">
+                                    <td class="lightGrey center">TOTAL FCST</td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['forecast'][$m])}}</td>
+                                        @else
+                                            <td class="lightGrey center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['forecast'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['forecast'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
                                     <td class="odd center">BKGS {{$cYear}} - PAY TV </td>
@@ -269,12 +313,34 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentDigitalBookings'][$m])}}</td>
                                 </tr>
                                 <tr class="clickLoopHeader">
-                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                    <td class="lightGrey center">TOTAL BKGS </td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                        @else
+                                            <td class="lightGrey center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['currentBookings'][$m])}}</td>
+                                </tr>
+                                <tr class="clickLoopHeader">
+                                    <td class="newBlue center">PENDING BKGS </td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                        @else
+                                            <td class="newBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                </tr>
+                                <tr class="clickLoopHeader">
+                                    <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['companyValues'][$c]['previousBookings'][$m])}}</td>
                                         @else
-                                            <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['companyValues'][$c]['previousBookings'][$m])}}</td>
+                                            <td class="odd center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['companyValues'][$c]['previousBookings'][$m])}}</td>
                                         @endif
                                     @endfor
                                     <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($aeTable['companyValues'][$c]['previousBookings'][$m])}}</td>
@@ -289,35 +355,16 @@
                             <input type='hidden' readonly='true' type="text" name="salesRep" id="salesRep" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$salesRepID}}">
                             <input type='hidden' readonly='true' type="text" name="client-{{$a}}" id="client-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['clientID']}}">
                             <input type='hidden' readonly='true' type="text" name="agency-{{$a}}" id="agency-{{$a}}" style="background-color:transparent; border:none; font-weight:bold; text-align:center;" value="{{$clientsTable['clientInfo'][$a]['agencyID']}}">
-                            <table style='width: 100%; zoom: 85%;font-size: 16px;'>
-                                <tr class="center">
-                                    <td style="width: 7% !important; background-color: white;"> &nbsp; </td>
-                                </tr>
-                            </table>
-                            <div class="container-fluid col">
-                                <label class='bold' style="font-size: 14px; text-align: center;">Probability:</label>
-                                <select class='selectpicker' name='probability-{{$a}}' data-width='5%' style="font-size: 5px;">
-                                    @if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 25)
-                                        <option value='25' selected='true'> 25% </option>
-                                        <option value='50'> 50% </option>   
-                                        <option value='75'> 75% </option>
-                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 50)
-                                        <option value="25"> 25% </option>
-                                        <option value='50' selected='true'> 50% </option>   
-                                        <option value='75'> 75% </option>
-                                    @elseif($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == 75)
-                                        <option value="25"> 25% </option>
-                                        <option value='50'> 50% </option>
-                                        <option value='75' selected='true'> 75% </option>                                        
-                                    @else
-                                        <option value='0'> 0% </option>
-                                        <option value='25'> 25% </option>
-                                        <option value='50'> 50% </option>   
-                                        <option value='75'> 75% </option>
-                                    @endif         
-                                </select>
-                            </div>
                             <table style='width: 100%; zoom: 85%;font-size: 14px;'>
+                                <?php if($clientsTable['clientInfo'][$a]['probability'][0]['probability'] == null){
+                                        $probability[$a] = intval(100);
+                                    }else{
+                                        $probability[$a] = $clientsTable['clientInfo'][$a]['probability'][0]['probability'];
+                                    }
+                                ?>
+                                <tr style="display: inline;">
+                                    <td style="border-style:solid; border-color:black; border-width: 0px 0px 0px 0px;">Probability:<input placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="probability-{{$a}}" id="probability-{{$a}}" style=" width:70%; background-color:transparent; border:0px; font-weight:bold; text-align:center;" value={{number_format($probability[$a])}}>%</td>    
+                                </tr>
                                 <input type='hidden' id='clickBool-{{$a}}' value='1'>
                                 <tr class="center">
                                     <td colspan="2" class="darkBlue">{{$clientsTable['clientInfo'][$a]['clientName']}} - {{$clientsTable['clientInfo'][$a]['agencyName']}}</td>
@@ -331,7 +378,7 @@
                                     <td class='darkBlue' style='width:5%;'>Total</td>
                                 </tr>
                                 <tr>
-                                    <td class='grey clickBool-{{$a}}' id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                    <td class='grey clickBool-{{$a}}' id='' rowspan='8' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                         <span style='font-size:12px;'> WBD</span>
                                     </td>                                     
                                     <td class="odd center">FCST - PAY TV</td>
@@ -345,15 +392,26 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['payTvForecast'][$m])}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="even center">FCST - DIGITAL</td>
+                                    <td class="odd center">FCST - DIGITAL</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
                                         @else
-                                            <td class="even center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
+                                            <td class="odd center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
                                         @endif
                                     @endfor
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['digitalForecast'][$m])}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="lightGrey center">TOTAL FCST</td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['forecast'][$m])}}</td>
+                                        @else
+                                            <td class="lightGrey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecast'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['forecast'][$m])}}</td>
                                 </tr>
                                 <tr>
                                     <td class="odd center">BKGS {{$cYear}} - PAY TV</td>
@@ -366,6 +424,7 @@
                                     @endfor
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentPayTvBookings'][$m])}}</td>
                                 </tr>
+                                
                                 <tr>
                                     <td class="odd center">BKGS {{$cYear}} - DIGITAL</td>
                                      @for($m=0; $m <sizeof($month); $m++)
@@ -378,12 +437,34 @@
                                     <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentDigitalBookings'][$m])}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                    <td class="lightGrey center">TOTAL BKGS</td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                        @else
+                                            <td class="lightGrey center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['currentBookings'][$m])}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="newBlue center">PENDING BKGS</td>
+                                     @for($m=0; $m <sizeof($month); $m++)
+                                        @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['total'][$a]['pending'][$m])}}</td>
+                                        @else
+                                            <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['pending'][$m])}}</td>
+                                        @endif
+                                    @endfor
+                                    <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['total'][$a]['pending'][$m])}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                      @for($m=0; $m <sizeof($month); $m++)
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                             <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
                                         @else
-                                            <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
+                                            <td class="odd center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
                                         @endif
                                     @endfor
                                     <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['total'][$a]['previousBookings'][$m])}}</td>
@@ -393,7 +474,7 @@
 
                                 @for($c=0; $c <sizeof($company); $c++)
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="{{$color[$c]}} " id='' rowspan='5' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
+                                        <td class="{{$color[$c]}} " id='' rowspan='8' style='text-align:center; border-bottom: 1pt solid black;  width:3%;'>
                                             <span style='font-size:12px;'> {{$companyView[$c]}}</span>
                                         </td>                                         
                                         <td class="odd center">FCST - PAY TV</td>
@@ -401,7 +482,7 @@
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
                                             @else
-                                                @if($m >= date('n'))
+                                                @if($m >= date('n')+3)
                                                     <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}"></td>
                                                 @else
                                                     <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
@@ -412,20 +493,31 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="even center">FCST - DIGITAL</td>
+                                        <td class="odd center">FCST - DIGITAL</td>
                                          @for($m=0; $m <sizeof($month); $m++)
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
                                             @else
-                                                 @if($m >= date('n'))
-                                                    <td class="even center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}"></td>
+                                                 @if($m >= date('n')+3)
+                                                    <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}"></td>
 
                                                 @else
-                                                    <td class="even center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
+                                                    <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
                                                 @endif
                                             @endif
                                         @endfor
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
+                                    </tr>
+                                    <tr class="clickLoop-{{$a}}">
+                                        <td class="lightGrey center">TOTAL FCST</td>
+                                         @for($m=0; $m <sizeof($month); $m++)
+                                            @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                                <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['forecast'][$m])}}</td>
+                                            @else                                                
+                                                <td class="lightGrey center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['forecast'][$m],0,',','.')}}</td>
+                                            @endif
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['forecast'][$m],0,',','.')}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
                                         <td class="odd center">BKGS {{$cYear}} - PAY TV</td>
@@ -450,12 +542,34 @@
                                         <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentDigitalBookings'][$m])}}</td>
                                     </tr>
                                     <tr class="clickLoop-{{$a}}">
-                                        <td class="even center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
+                                        <td class="lightGrey center">TOTAL BKGS</td>
+                                         @for($m=0; $m <sizeof($month); $m++)
+                                            @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                                <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                            @else
+                                                <td class="lightGrey center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                            @endif
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['currentBookings'][$m])}}</td>
+                                    </tr>
+                                    <tr class="clickLoop-{{$a}}">
+                                        <td class="newBlue center">PENDING BKGS </td>
+                                         @for($m=0; $m <sizeof($month); $m++)
+                                            @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
+                                                <td class="quarter center" style='width:5%; color: black;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'][$m])}}</td>
+                                            @else
+                                                <td class="newBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'][$m])}}</td>
+                                            @endif
+                                        @endfor
+                                        <td class="darkBlue center" style='width:5%;'>{{number_format($clientsTable['companyValues'][$a][$c]['pending'][$m])}}</td>
+                                    </tr>
+                                    <tr class="clickLoop-{{$a}}">
+                                        <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
                                          @for($m=0; $m <sizeof($month); $m++)
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style='width:5%; color: black; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'][$m])}}</td>
                                             @else
-                                                <td class="even center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'][$m])}}</td>
+                                                <td class="odd center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'][$m])}}</td>
                                             @endif
                                         @endfor
                                         <td class="darkBlue center" style='width:5%; border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;'>{{number_format($clientsTable['companyValues'][$a][$c]['previousBookings'][$m])}}</td>
@@ -656,15 +770,15 @@
 
     $(document).ready(function () {    
         $('.numberonly').keypress(function (e) {    
-            var charCode = (e.which) ? e.which : event.keyCode    
+            var charCode = (e.which) ? e.which : oddt.keyCode    
             if (String.fromCharCode(charCode).match('/\B(?=(\d{3})+(?!\d))/g, "."'))  
                 return false;                        
         });    
     });
 
-    $(window).keydown(function(event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
+    $(window).keydown(function(oddt) {
+        if (oddt.keyCode == 13) {
+            oddt.proddtDefault();
             return false;
         }
     });
@@ -678,7 +792,7 @@
 
         ajaxSetup();
 
-        $('#excel').click(function(event){
+        $('#excel').click(function(oddt){
 
             var currency = "<?php echo $currency; ?>";
             var value = "<?php echo $value; ?>";

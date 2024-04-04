@@ -315,11 +315,11 @@ class Render extends Model{
 
     public function sourceDataBase(){
 
-        $arraySource = array("CMAPS"/*,"IBMS/BTS","FW","SF"*/);
+        $arraySource = array("WBD"/*,"IBMS/BTS","FW","SF"*/);
 
          echo "<select id='sourceDataBase' name='sourceDataBase' style='width:100%;' class='form-control'>";
             for ($a=0; $a < sizeof($arraySource); $a++) { 
-                echo "<option value='".$arraySource[$a]."'>".$arraySource[$a]."</option>";
+                echo "<option value='".$arraySource[$a]."' selected='true'>".$arraySource[$a]."</option>";
             }
             //echo "<option value=''> Select Region </option>";           
         echo "</select>";
@@ -332,6 +332,12 @@ class Render extends Model{
         echo "</select>";
     }
 
+    public function platform(){
+        echo "<select id='platform' name='platform[]' class='selectpicker' data-selected-text-format='count' multiple='true' multiple data-actions-box='true' data-size='4' data-width='100%'>";
+            echo "<option value='Pay TV' selected='true'> Pay TV </option>";
+             echo "<option value='Digital' selected='true'> Digital </option>";
+        echo "</select>";
+    }
     public function yearViewer($year){   
 
         echo "<select id='year' class='selectpicker' data-selected-text-format='count' multiple='true' name='year[]' multiple data-actions-box='true' data-size='4' data-width='100%'>";
@@ -395,9 +401,9 @@ class Render extends Model{
 
     public function company(){
         echo "<select id='company' class='selectpicker' data-selected-text-format='count' multiple='true' name='company[]' multiple data-actions-box='true' data-size='2' data-width='100%'>";
-            echo "<option value='dc' selected='true'> Discovery </option>";   
-            echo "<option value='spt' selected='true'> Sony </option>";  
-            echo "<option value='wm' selected='true'> Warner Midia </option>"; 
+            echo "<option value='1' selected='true'> DSC </option>";   
+            echo "<option value='2' selected='true'> SPT </option>";  
+            echo "<option value='3' selected='true'> WM </option>"; 
         echo "</select>";
     }
 
