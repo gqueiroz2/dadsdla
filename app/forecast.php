@@ -353,7 +353,7 @@ class forecast extends pAndR{
         $select = "SELECT DISTINCT  a.name as agency, a.ID as aID
                     FROM agency a                    
                     left join agency_group ag on ag.ID = a.agency_group_id
-                    and ag.region_id = 1
+                    WHERE ag.region_id = 1
                     AND a.ID != 2831
                     ORDER BY a.name ASC";
         //var_dump($select);

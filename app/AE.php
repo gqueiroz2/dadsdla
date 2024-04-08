@@ -366,7 +366,29 @@ class AE extends pAndR{
         $from = array('id','client','aID','agency');
         $selectQuery = $con->query($select);
         $client = $sql->fetch($selectQuery, $from, $from);
+
+
+
+        $selectPipe = "SELECT DISTINCT c.ID AS id ,c.name as client, a.ID as aID, a.name as agency
+                    FROM pipeline p
+                    left join client c on c.ID = p.client
+                    left join agency a on a.ID = p.agency
+                    where p.client != 0
+                    and p.agency != 0
+                    ";
+        $fromPipe = array('id','client','aID','agency');
+        $queryPipe = $con->query($selectPipe);
+        $clientPipe = $sql->fetch($queryPipe, $fromPipe, $fromPipe);
+        //var_dump($clientPipe);
+
+        if ($clientPipe ) {
+            // code...
+        }
+        array_merge($client,$clientPipe);
+        array_unique($client, SORT_REGULAR);
         $client = $client;
+
+
         return $client;
     }
 
