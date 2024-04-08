@@ -200,9 +200,15 @@
 
 							<li class="nav-item dropdown">
 								<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> FCST MGT </a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>										
-									<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>				
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">									
+									@if($userLevel == 'SU')
+										<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>		
+										<a class="dropdown-item" href="{{ route('VPGet') }}"> VP View </a>	
+										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>																					
+									@else		
+										<a class="dropdown-item" href="{{ route('AEGet') }}"> Forecast Cicle </a>																	
+										<a class="dropdown-item" href="{{ route('forecastByAEGet') }}"> Monthly Forecast </a>	
+									@endif			
 							</li>
 								<!--<li class="nav-item dropdown">
 									<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales Management </a>
