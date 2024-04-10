@@ -78,10 +78,12 @@ class AEController extends Controller{
             return back()->withErrors($validator)->withInput();
         }
         
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
+        
         //var_dump($aeTable['total']);
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
-        
+
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
+
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
         //var_dump($clientsTable['clientInfo'][0]['probability']);
@@ -110,7 +112,7 @@ class AEController extends Controller{
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
-        $currentMonth = date('n')+2;
+        $currentMonth = date('n')-1;
        // var_dump($currentMonth);
         $regionID = 1;
         $salesRepID = Request::get('salesRep');
@@ -126,8 +128,9 @@ class AEController extends Controller{
         $repInfo = $ae->getClientByRep($con, $salesRepID,'1', $cYear, $pYear);
 
         $clientsMonthly = $ae->getMonthlyClients($salesRepID,$con, $sql);    
+        //print_r($saveInfo);
 
-        if($saveInfo['client'][0] != null){
+        if($saveInfo['client'][0] != 0){
            // var_dump('aki');
             $test = explode(',', $saveInfo['client'][0]);
             
@@ -139,7 +142,7 @@ class AEController extends Controller{
                 $clients = array_merge($repInfo,$newClient);
                 $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
-            }elseif ($clientsMonthly != null) {
+            /*}elseif ($clientsMonthly != null) {
                 $clients = array_merge($repInfo,$clientsMonthly);
                 $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
@@ -149,7 +152,7 @@ class AEController extends Controller{
                 $clients = array_values($clients);
                 $clients = array_merge($clients,$clientsMonthly);
                 $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
+                $clients = array_values($clients);*/
             }else{
                 $clients = $repInfo;
             }
@@ -188,9 +191,11 @@ class AEController extends Controller{
             $clients = array_values($clients);
         }        
         
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
+        
 
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
+
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
 
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
