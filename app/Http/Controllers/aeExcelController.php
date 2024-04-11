@@ -51,11 +51,12 @@ class aeExcelController extends Controller{
 
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);
+        
         
         //var_dump($aeTable['total']);
         
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
         
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
@@ -80,6 +81,17 @@ class aeExcelController extends Controller{
                 $companyView[$c] = 'WM';
             }
         }
+
+        for ($a=0; $a <sizeof($clientsTable) ; $a++) { 
+            //var_dump($clientsTable['clientInfo'][$a]['probability']);
+            if($clientsTable['clientInfo'][$a]['probability'] == null){
+                $clientsTable['clientInfo'][$a]['probability'] = intval(100);
+            }else{
+                $clientsTable['clientInfo'][$a]['probability'] = $clientsTable['clientInfo'][$a]['probability'];
+            }
+        }
+       
+                            
 
        	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate);
 
