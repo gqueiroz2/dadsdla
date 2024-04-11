@@ -856,7 +856,7 @@ class AE extends pAndR{
         $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
 
         if ($resultSelect == false) {
-            $resultSelect = 0;
+            $resultSelect = 100;
         }
 
         return $resultSelect;
