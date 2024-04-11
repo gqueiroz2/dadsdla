@@ -82,16 +82,14 @@ class aeExcelController extends Controller{
             }
         }
 
-        for ($a=0; $a <sizeof($clientsTable) ; $a++) { 
+        /*for ($a=0; $a <sizeof($clientsTable) ; $a++) { 
             //var_dump($clientsTable['clientInfo'][$a]['probability']);
             if($clientsTable['clientInfo'][$a]['probability'] == null){
-                $clientsTable['clientInfo'][$a]['probability'] = intval(100);
+                $clientsTable['clientInfo'][$a]['probability'][0] = intval(100);
             }else{
                 $clientsTable['clientInfo'][$a]['probability'] = $clientsTable['clientInfo'][$a]['probability'];
             }
-        }
-       
-                            
+        }*/                            
 
        	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate);
 
