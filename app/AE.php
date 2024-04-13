@@ -580,6 +580,7 @@ class AE extends pAndR{
                                 AND a.ID = $agency
                                 AND (b.brand_group_id IN ($company))
                                 AND b.type = 'Linear'
+                                AND w.current_sales_rep_id = $salesRep
                                 "; 
                         }else{
                             $select = "SELECT sum($value) as revenue
@@ -593,6 +594,7 @@ class AE extends pAndR{
                                 AND a.ID = $agency
                                 AND (b.brand_group_id IN ($company))
                                 AND b.type = 'Non-Linear'
+                                AND w.current_sales_rep_id = $salesRep
                                 "; 
                         }
                     }else{
@@ -606,6 +608,7 @@ class AE extends pAndR{
                             AND c.ID = $client
                             AND a.ID = $agency
                             AND (b.brand_group_id IN ($company))
+                            AND w.current_sales_rep_id = $salesRep
                             ";    
                     }                   
 

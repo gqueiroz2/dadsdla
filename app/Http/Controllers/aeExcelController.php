@@ -90,7 +90,7 @@ class aeExcelController extends Controller{
                 $clientsTable['clientInfo'][$a]['probability'] = $clientsTable['clientInfo'][$a]['probability'];
             }
         }*/                            
-
+        //var_dump($clientsTable['clientInfo']);
        	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate);
 
        	return Excel::download(new aeExport($data, $label, $typeExport, $auxTitle), $title);
