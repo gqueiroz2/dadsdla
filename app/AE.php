@@ -91,8 +91,8 @@ class AE extends pAndR{
                 }                           
                
 
-                $payTvForecast[$c] = $this->addFcstWithBooking($currentPayTvBookings[$c],$payTvForecast[$c]/*,$monthPayTvForecast[$c]*/);
-                $digitalForecast[$c] = $this->addFcstWithBooking($currentDigitalBookings[$c],$digitalForecast[$c]/*,$monthDigitalForecast[$c]*/);
+                $payTvForecast[$c] = $this->addFcstWithBooking($currentPayTvBookings[$c],$payTvForecast[$c],$payTvForecast[$c]/*,$monthPayTvForecast[$c]*/);
+                $digitalForecast[$c] = $this->addFcstWithBooking($currentDigitalBookings[$c],$digitalForecast[$c],$digitalForecast[$c]/*,$monthDigitalForecast[$c]*/);
 
                 $forecast[$c][$m] = $payTvForecast[$c][$m] + $digitalForecast[$c][$m];
 
@@ -145,9 +145,9 @@ class AE extends pAndR{
             
         }
 
-        $totalPayTvForecast = $this->addFcstWithBooking($totalCurrentPayTvBookings,$totalPayTvForecast/*,$totalMonthPayTvForecast*/);
+        $totalPayTvForecast = $this->addFcstWithBooking($totalCurrentPayTvBookings,$totalPayTvForecast,$totalPayTvForecast/*,$totalMonthPayTvForecast*/);
 
-        $totalDigitalForecast = $this->addFcstWithBooking($totalCurrentDigitalBookings,$totalDigitalForecast/*,$totalMonthDigitalForecast*/);
+        $totalDigitalForecast = $this->addFcstWithBooking($totalCurrentDigitalBookings,$totalDigitalForecast,$totalDigitalForecast/*,$totalMonthDigitalForecast*/);
         //var_dump($totalMonthPayTvForecast);
         for ($m=0; $m <sizeof($month) ; $m++) {  //this one is to the months
             
@@ -242,8 +242,8 @@ class AE extends pAndR{
                     $monthDigitalForecast[$a][$c][$m] = $monthDigitalForecast[$a][$c][$m] + $newMonthDigitalForecast[$a][$c][$m];*/
                 }
                 //var_dump($monthPayTvForecast);
-                $payTvForecast[$a][$c] = $this->addFcstWithBooking($currentPayTvBookings[$a][$c],$payTvForecast[$a][$c]/*,$monthPayTvForecast[$a][$c]*/);
-                $digitalForecast[$a][$c] = $this->addFcstWithBooking($currentDigitalBookings[$a][$c],$digitalForecast[$a][$c]/*,$monthDigitalForecast[$a][$c]*/);
+                $payTvForecast[$a][$c] = $this->addFcstWithBooking($currentPayTvBookings[$a][$c],$payTvForecast[$a][$c],$payTvForecast[$a][$c]/*,$monthPayTvForecast[$a][$c]*/);
+                $digitalForecast[$a][$c] = $this->addFcstWithBooking($currentDigitalBookings[$a][$c],$digitalForecast[$a][$c],$digitalForecast[$a][$c]/*,$monthDigitalForecast[$a][$c]*/);
 
                 for ($m=0; $m <sizeof($month) ; $m++) {  //this one is to the months
                     $forecast[$a][$c][$m] = $payTvForecast[$a][$c][$m] + $digitalForecast[$a][$c][$m];
@@ -297,8 +297,8 @@ class AE extends pAndR{
             }              
             $probability[$a] = $this->getProbability($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep);
             //var_dump($probability[$a]);
-            $totalPayTvForecast[$a] = $this->addFcstWithBooking($totalCurrentPayTvBookings[$a],$totalPayTvForecast[$a]/*,$totalMonthPayTvForecast[$a]*/);
-            $totalDigitalForecast[$a] = $this->addFcstWithBooking($totalCurrentDigitalBookings[$a],$totalDigitalForecast[$a]/*,$totalMonthDigitalForecast[$a]*/);
+            $totalPayTvForecast[$a] = $this->addFcstWithBooking($totalCurrentPayTvBookings[$a],$totalPayTvForecast[$a],$totalPayTvForecast[$a]/*,$totalMonthPayTvForecast[$a]*/);
+            $totalDigitalForecast[$a] = $this->addFcstWithBooking($totalCurrentDigitalBookings[$a],$totalDigitalForecast[$a],$totalDigitalForecast[$a]/*,$totalMonthDigitalForecast[$a]*/);
 
             for ($m=0; $m <sizeof($month) ; $m++) {  //this one is to the months
             
@@ -945,7 +945,7 @@ class AE extends pAndR{
     }
 
     //THIS FUNCTION PLACE THE BOOKINGS VALUES TO CLOSED MONTHS IN THE FORECAST ARRAY
-    /*public function addFcstWithBooking(Array $booking, Array $fcst, Array $monthly){
+    public function addFcstWithBooking(Array $booking, Array $fcst, Array $monthly){
 
         $date = intval(date('n')-1);
         $nDate = $date + 1;
@@ -965,11 +965,11 @@ class AE extends pAndR{
         
         //var_dump($sum);
         return $sum;
-    }*/
+    }
 
-    public function addFcstWithBooking($booking,$fcst){
+    /*ublic function addFcstWithBooking($booking,$fcst){
 
-        $date = date('n')-2;
+        $date = date('n');
 
         if ($date < 3) {
         }elseif ($date < 6) {
@@ -1000,7 +1000,7 @@ class AE extends pAndR{
         }             
         //var_dump($sum);
         return $sum;
-    }
+    }*/
 
    
 }
