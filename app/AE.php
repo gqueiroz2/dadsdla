@@ -152,6 +152,7 @@ class AE extends pAndR{
         for ($m=0; $m <sizeof($month) ; $m++) {  //this one is to the months
             
             $totalForecast[$m] = ($totalPayTvForecast[$m] + $totalDigitalForecast[$m]);
+            
             $totalPending[$m] = ($totalForecast[$m]) - ($totalCurrentBookings[$m]);
             if ($totalPending[$m] < 0) {
                 $totalPending[$m] = 0;

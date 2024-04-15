@@ -220,13 +220,24 @@
                             <tr>
                                 <td class="newBlue center">BKGS PENDINGS</td>
                                  @for($m=0; $m <sizeof($month); $m++)
+                                    <?php
+                                        $pending[$m] =  ($aeTable['total']['forecast'][$m] - $aeTable['total']['currentBookings'][$m]); 
+                                        if($pending[$m] < 0){
+                                            $pending[$m] = 0;
+                                        }
+                                    ?>
                                     @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                                        <td class="quarter center" style='width:5%; color: black;'>{{number_format($pending[$m])}}</td>
                                     @else
-                                        <td class="newBlue center" style='width:5%;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                                        <td class="newBlue center" style='width:5%;'>{{number_format($pending[$m])}}</td>
                                     @endif
                                 @endfor
-                                <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['total']['pending'][$m])}}</td>
+                                <?php 
+                                    $ttPending = 0;
+                                    $ttPending = $pending[3] + $pending[7] + $pending[11]+ $pending[15];  
+                                ?>
+                                 <td class="darkBlue center" style='width:5%;'>{{number_format($ttPending)}}</td>
+                               
                             </tr>
                             <tr>
                                 <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -326,13 +337,25 @@
                                 <tr class="clickLoopHeader">
                                     <td class="newBlue center">PENDING BKGS </td>
                                      @for($m=0; $m <sizeof($month); $m++)
+                                     <?php
+                                        $companyPending[$c][$m] =  ($aeTable['companyValues'][$c]['forecast'][$m]) - ($aeTable['companyValues'][$c]['currentBookings'][$m]);
+                                        if($companyPending[$c][$m] < 0){
+                                            $companyPending[$c][$m] = 0;
+                                        }
+                                    ?>
+
                                         @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
-                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                            <td class="quarter center" style='width:5%; color: black;'>{{number_format($companyPending[$c][$m])}}</td>
                                         @else
-                                            <td class="newBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                            <td class="newBlue center" style='width:5%;'>{{number_format($companyPending[$c][$m])}}</td>
                                         @endif
                                     @endfor
-                                    <td class="darkBlue center" style='width:5%;'>{{number_format($aeTable['companyValues'][$c]['pending'][$m])}}</td>
+                                     <?php 
+                                        $ttPendingC = 0;
+                                        $ttPendingC = $companyPending[$c][3] + $companyPending[$c][7] + $companyPending[$c][11]+ $companyPending[$c][15];  
+                                     ?>
+                                 <td class="darkBlue center" style='width:5%;'>{{number_format($ttPendingC)}}</td>
+                                    
                                 </tr>
                                 <tr class="clickLoopHeader">
                                     <td class="odd center" style="border-style:solid; border-color:black; border-width: 0px 0px 1px 0px;">BKGS {{$pYear}}</td>
@@ -482,7 +505,7 @@
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
                                             @else
-                                                @if($m >= date('n'))
+                                                @if($m >= date('n')+3)
                                                     <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}"></td>
                                                 @else
                                                     <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
@@ -498,7 +521,7 @@
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m])}}</td>
                                             @else
-                                                 @if($m >= date('n'))
+                                                 @if($m >= date('n')+3)
                                                     <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}"></td>
 
                                                 @else
