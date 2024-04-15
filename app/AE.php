@@ -14,7 +14,7 @@ use App\pRate;
 class AE extends pAndR{
     
     //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
-    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value,$clientTable){
+    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value,$clientsTable){
         $company = array('1','2','3');
         $month = array('1','2','3','4','5','6','7','8','9','10','11','12');
 
@@ -49,7 +49,25 @@ class AE extends pAndR{
                 }else{
                     $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
                 }  
+                $payTvForecast[$c][$m] = 0;
+                $digitalForecast[$c][$m] = 0;
+                $totalPayTvForecast[$m] = 0; 
+                $totalDigitalForecast[$m] = 0;
 
+                for ($p=0; $p <sizeof($clientsTable['clientInfo']); $p++) { 
+                   // var_dump($clientsTable['clientInfo'][$p]['probability'][0]['probability']);
+                   // var_dump(($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                    $payTvForecast[$c][$m] += (($clientsTable['companyValues'][$p][$c]['payTvForecastC'][$m])*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                    //var_dump($payTvForecast);
+                    $digitalForecast[$c][$m] += ($clientsTable['companyValues'][$p][$c]['digitalForecastC'][$m]*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+
+                    $totalPayTvForecast[$m] += (($clientsTable['total'][$p]['payTvForecastC'][$m])*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                    //var_dump($tempPayTvForecast);
+                    $totalDigitalForecast[$m] += ($clientsTable['total'][$p]['digitalForecastC'][$m]*($clientsTable['clientInfo'][$p]['probability'][0]['probability']/100));
+                   
+                }
+
+                    
                 /*$monthPayTvForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'monthly',null, null, $region,'pay tv', $company[$c])['revenue']);                 
                 $monthDigitalForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'monthly',null, null, $region,'digital',$company[$c])['revenue']);
 
@@ -57,7 +75,7 @@ class AE extends pAndR{
                 $newMonthDigitalForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'newMonthly',null, null, $region,'digital',$companyView[$c])['revenue']);
 
                 $monthPayTvForecast[$c][$m] = $monthPayTvForecast[$c][$m] + $newMonthPayTvForecast[$c][$m];
-                $monthDigitalForecast[$c][$m] = $monthDigitalForecast[$c][$m] + $newMonthDigitalForecast[$c][$m];*/
+                $monthDigitalForecast[$c][$m] = $monthDigitalForecast[$c][$m] + $newMonthDigitalForecast[$c][$m];
 
                 if($check != false){
                     $payTvForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'forecast',null, null, $region,'pay tv', $company[$c])['revenue']);                 
@@ -65,7 +83,7 @@ class AE extends pAndR{
                 }else{
                     $payTvForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'tRex',null, null, $region,'pay tv', $company[$c])['revenue']);                 
                     $digitalForecast[$c][$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'tRex',null, null, $region,'digital',$company[$c])['revenue']);
-                }
+                }*/
                 
 
                 
@@ -120,17 +138,16 @@ class AE extends pAndR{
                 //var_dump(($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'newMonthly',null, null, $region,'pay tv','wm')));
             
                 $totalMonthPayTvForecast[$m] = ($totalMonthPayTvForecast[$m] + $totalNewMonthPayTvD[$m] + $totalNewMonthPayTvW[$m] + $totalNewMonthPayTvS[$m]);
-                $totalMonthDigitalForecast[$m] = $totalMonthDigitalForecast[$m] + $totalNewMonthDigitalD[$m] + $totalNewMonthDigitalW[$m] + $totalNewMonthDigitalS[$m];*/
-
+                $totalMonthDigitalForecast[$m] = $totalMonthDigitalForecast[$m] + $totalNewMonthDigitalD[$m] + $totalNewMonthDigitalW[$m] + $totalNewMonthDigitalS[$m];*/           
 
               
-                if ($check != false) {
+                /*if ($check != false) {
                     $totalPayTvForecast[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'forecast',null, null, $region,'pay tv', '1,2,3')['revenue']);
                     $totalDigitalForecast[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'forecast',null, null, $region,'digital','1,2,3')['revenue']);
                 }else{
                     $totalPayTvForecast[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'tRex',null, null, $region,'pay tv', '1,2,3')['revenue']);
                     $totalDigitalForecast[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'tRex',null, null, $region,'digital','1,2,3')['revenue']);
-                }
+                }*/
                 
                 $totalCurrentPayTvBookings[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'bookings',null,null, $region,'pay tv','1,2,3')['revenue']);           
                 $totalCurrentDigitalBookings[$m] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'bookings',null,null, $region,'digital','1,2,3')['revenue']);   
@@ -152,7 +169,7 @@ class AE extends pAndR{
         for ($m=0; $m <sizeof($month) ; $m++) {  //this one is to the months
             
             $totalForecast[$m] = ($totalPayTvForecast[$m] + $totalDigitalForecast[$m]);
-            
+
             $totalPending[$m] = ($totalForecast[$m]) - ($totalCurrentBookings[$m]);
             if ($totalPending[$m] < 0) {
                 $totalPending[$m] = 0;
@@ -311,7 +328,7 @@ class AE extends pAndR{
             }
 
 
-            $totalPivot[$a] = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings[$a]),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings[$a]), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget[$a]), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast[$a]), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast[$a]), 'currentDigitalBookings' => $this->addQuartersAndTotal($totalCurrentDigitalBookings[$a]), 'currentPayTvBookings' => $this->addQuartersAndTotal($totalCurrentPayTvBookings[$a]),'forecast' => $this->addQuartersAndTotal($totalForecast[$a]), 'pending' => $this->addQuartersAndTotal($totalPending[$a]));
+            $totalPivot[$a] = array('currentBookings' => $this->addQuartersAndTotal($totalCurrentBookings[$a]),'previousBookings' => $this->addQuartersAndTotal($totalPreviousBookings[$a]), 'currentTarget' => $this->addQuartersAndTotal($totalCurrentTarget[$a]), 'payTvForecast' => $this->addQuartersAndTotal($totalPayTvForecast[$a]), 'digitalForecast' => $this->addQuartersAndTotal($totalDigitalForecast[$a]), 'currentDigitalBookings' => $this->addQuartersAndTotal($totalCurrentDigitalBookings[$a]), 'currentPayTvBookings' => $this->addQuartersAndTotal($totalCurrentPayTvBookings[$a]),'forecast' => $this->addQuartersAndTotal($totalForecast[$a]), 'pending' => $this->addQuartersAndTotal($totalPending[$a]), 'payTvForecastC' => ($totalPayTvForecast[$a]), 'digitalForecastC' => ($totalDigitalForecast[$a]));
        
             $clientInfo[$a] = array('clientName' => $clients[$a]['clientName'], 'clientID' => $clients[$a]['clientID'],'agencyName' => $clients[$a]['agencyName'],'agencyID' => $clients[$a]['agencyID'], 'probability' => $probability[$a]);
         }
