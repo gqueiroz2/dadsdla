@@ -64,10 +64,11 @@ class aeExcelController extends Controller{
         $label = "exports.PandR.AE.aeConsolidateExport";
 
          $auxTitle = $title;
+         $date = date('n')+2;
 
         $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
         $monthConsolidate = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-        $company = array('3','1','2');
+        $company = array('1','2','3');
 
         for ($c=0; $c < sizeof($company); $c++) { 
             if ($company[$c] == '1') {
@@ -91,7 +92,7 @@ class aeExcelController extends Controller{
             }
         }*/                            
         //var_dump($clientsTable['clientInfo']);
-       	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate);
+       	$data = array('aeTable' => $aeTable, 'clientsTable' => $clientsTable, 'cYear' => $cYear, "pYear" => $pYear, "salesRepName" => $salesRepName, "currency" => $currency, "month" => $month, 'company' => $company, 'color' => $color,'companyView' => $companyView, 'value' => $value,'monthConsolidate' => $monthConsolidate, 'date' => $date);
 
        	return Excel::download(new aeExport($data, $label, $typeExport, $auxTitle), $title);
     }

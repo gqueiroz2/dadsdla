@@ -24,7 +24,7 @@
             <td style='text-align: center;'>BKGS</td>
             <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
-                <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentPayTvBookings'][$m]}}</td>            
+                <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentPayTvBookingsC'][$m]}}</td>            
             @endfor
 
         </tr>
@@ -37,7 +37,11 @@
             <td style='text-align: center;'>FCST</td> 
             <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
             @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
-                <td style="text-align: center;">{{$data['clientsTable']['companyValues'][$a][$c]['payTvForecastC'][$m]}}</td>
+                @if($m >= $data['date'])
+                    <td style="text-align: center;">{{(($data['clientsTable']['companyValues'][$a][$c]['payTvForecastC'][$m])*($data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']/100))}}</td>
+                @else
+                    <td style="text-align: center;">{{(($data['clientsTable']['companyValues'][$a][$c]['payTvForecastC'][$m]))}}</td>
+                @endif
             @endfor  
         </tr>
         <tr>
@@ -49,7 +53,7 @@
             <td style='text-align: center;'>BKGS</td>
             <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
-                <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentDigitalBookings'][$m]}}</td>
+                <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentDigitalBookingsC'][$m]}}</td>
             @endfor
         </tr>
         <tr>
@@ -61,7 +65,11 @@
             <td style='text-align: center;'>FCST</td>
             <td style='text-align: center;'>{{$data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']}}%</td>
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
-                <td style="text-align: center;">{{$data['clientsTable']['companyValues'][$a][$c]['digitalForecastC'][$m]}}</td>
+                @if($m >= $data['date'])
+                    <td style="text-align: center;">{{(($data['clientsTable']['companyValues'][$a][$c]['digitalForecastC'][$m])*($data['clientsTable']['clientInfo'][$a]['probability'][0]['probability']/100))}}</td>
+                @else
+                    <td style="text-align: center;">{{(($data['clientsTable']['companyValues'][$a][$c]['digitalForecastC'][$m]))}}</td>
+                @endif
              @endfor
         </tr>
         
