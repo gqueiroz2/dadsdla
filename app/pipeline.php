@@ -217,7 +217,7 @@ class pipeline extends Model{
         $select = "SELECT DISTINCT  a.ID as aID, a.name as agency
                     FROM agency a                    
                     left join agency_group ag on ag.ID = a.agency_group_id
-                    and ag.region_id = 1
+                    Where ag.region_id = 1
                     ORDER BY a.name ASC";
         //var_dump($select);
         $from = array('aID','agency');
