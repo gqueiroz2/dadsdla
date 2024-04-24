@@ -346,7 +346,7 @@ class AE extends pAndR{
         
         $year = (int)date("Y");
         $pYear = $year-1;
-        $months =  array(date('n'),date('n')+1,date('n')+2);
+        $months =  array(date('n')+1,date('n')+2,date('n')+3);
 
          $selectClient = "SELECT distinct  c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
                             from new_clients_fcst f
@@ -354,7 +354,7 @@ class AE extends pAndR{
                             LEFT JOIN client c ON c.id = f.client_id
                             LEFT JOIN agency a ON a.id = f.agency_id
                             WHERE (sr.ID IN ($salesRep))
-                            AND (f.month IN ($months[0],$months[1],$month[2]))
+                            AND (f.month IN ($months[0],$months[1],$months[2]))
                             ";
                     // var_dump($selectClient);
             $resultClient = $con->query($selectClient);

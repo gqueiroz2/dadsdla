@@ -15,7 +15,7 @@
     <!--PART OF WHICH COMPANY BY CLIENT -->
 
     @for($c=0; $c <sizeof($data['company']); $c++)
-        <tr>
+       <!-- <tr>
             <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
             <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['clientName']}}</td>
@@ -27,7 +27,7 @@
                 <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentPayTvBookingsC'][$m]}}</td>            
             @endfor
 
-        </tr>
+        </tr>-->
         <tr>
             <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
             <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
@@ -44,7 +44,7 @@
                 @endif
             @endfor  
         </tr>
-        <tr>
+        <!--<tr>
             <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
             <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>
             <td style='text-align:center;'>{{$data['clientsTable']['clientInfo'][$a]['clientName']}}</td>
@@ -55,7 +55,7 @@
              @for($m=0; $m <sizeof($data['monthConsolidate']); $m++)
                 <td style='text-align: center;'>{{$data['clientsTable']['companyValues'][$a][$c]['currentDigitalBookingsC'][$m]}}</td>
             @endfor
-        </tr>
+        </tr>-->
         <tr>
             <td style='text-align:center;'>{{$data['salesRepName'][0]['salesRep']}}</td>
             <td style='text-align:center;'>{{$data['companyView'][$c]}}</td>

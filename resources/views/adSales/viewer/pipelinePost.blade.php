@@ -682,9 +682,21 @@
             event.preventDefault();
             return false;
         }
-    });
+    });   
 
-   
+</script>
+
+<script type="text/javascript">
+    // função para desabilitar a tecla F5.
+    window.onkeydown = function (e) {
+        if (e.keyCode === 116) {
+            alert("Função não permitida para evitar duplicidades indevidas!");
+            e.keyCode = 0;
+            e.returnValue = false;
+            return false;
+        }
+    }
+
 
 </script>
 @endsection

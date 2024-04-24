@@ -56,15 +56,15 @@ class forecastExcelController extends Controller{
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
 
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);   
-        $currentMonthName = $b->intToMonth2(array(intval(date('n')))); 
-        $nextMonthName = $b->intToMonth2(array(intval(date('n')+1)));  
-        $nextNMonthName = $b->intToMonth2(array(intval(date('n')+2)));  
+        $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3);   
+        $currentMonthName = $b->intToMonth2(array(intval(date('n'))+1)); 
+        $nextMonthName = $b->intToMonth2(array(intval(date('n')+2)));  
+        $nextNMonthName = $b->intToMonth2(array(intval(date('n')+3)));  
         //var_dump($salesRepID);
 
-        $currentMonth = intval(date('n')); 
-        $nextMonth = intval(date('n')+1);  
-        $nextNMonth = intval(date('n')+2);  
+        $currentMonth = intval(date('n')+1); 
+        $nextMonth = intval(date('n')+2);  
+        $nextNMonth = intval(date('n')+3);  
         $company = array('1','2','3');
 
         for ($c=0; $c < sizeof($company); $c++) { 

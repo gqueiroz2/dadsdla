@@ -674,51 +674,6 @@
         });
     });
 </script>
-    
-<!--THIS SCRIPT IS TO OPEN THE COMPANY VALUES FOR WICH CLIENT OR OPEN THE COMPANY VALUES OF SALES REP-->
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        $('.clickLoopHeader').hide();
-
-        $(".clickBoolHeader").click(function(e) {
-            var myBool = $("#clickBoolHeader").val();
-
-            if (myBool == 1) {
-                e
-                $(".clickLoopHeader").show();
-                myBool = 0;
-
-            } else {
-                $(".clickLoopHeader").hide();
-                myBool = 1;
-            }
-            $("#clickBoolHeader").val(myBool);
-
-        });
-        @if($clientsTable != 'THERE IS NO INFORMATION TO THIS REP')
-            @for($a=0;$a<sizeof($clientsTable['clientInfo']);$a++)
-
-                $('.clickLoop-'+ {{ $a }}).hide();
-
-                $(".clickBool-"+ {{ $a }}).click(function(e) {
-                    var myBool = $("#clickBool-"+ {{ $a }}).val();
-
-                    if (myBool == 1) {e
-                        $(".clickLoop-"+ {{ $a }}).show();
-                        myBool = 0;
-
-                    } else {
-                        $(".clickLoop-"+ {{ $a }}).hide();
-                        myBool = 1;
-                    }
-                    $("#clickBool-"+ {{ $a }}).val(myBool);
-
-                });
-            @endfor
-        @endif
-    })
-</script>
 
 <!-- javascript to be able to edit the front and make calculations of numbers -->
 <script type="text/javascript">
@@ -822,5 +777,17 @@
         }
     });
 
+</script>
+
+<script type="text/javascript">
+    // função para desabilitar a tecla F5.
+    window.onkeydown = function (e) {
+        if (e.keyCode === 116) {
+            alert("Função não permitida para evitar duplicidades indevidas!");
+            e.keyCode = 0;
+            e.returnValue = false;
+            return false;
+        }
+    }
 </script>
 @endsection
