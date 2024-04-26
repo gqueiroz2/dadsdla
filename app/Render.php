@@ -15,6 +15,7 @@ class Render extends Model{
     protected $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
     protected $stageFCST = array(' 1 - Qualification','2 - Proposal','3 - Negotiation','4 - Verbal');
+    protected $manager = array('BP','FM','RA','VV','REGIONAIS');
 
     public function agencyForm(){
         
@@ -520,6 +521,41 @@ class Render extends Model{
     public function director(){
         echo "<select id='director' class='selectpicker' data-selected-text-format='count' multiple='true' name='director[]' multiple data-actions-box='true' data-size='2' data-width='100%'>";
             echo "<option value=''> Select Region </option>";
+
+        echo "</select>";   
+
+    }
+
+
+    public function manager($user){
+ //var_dump($manager);
+        echo "<select id='director' class='selectpicker' data-selected-text-format='count' multiple='true' name='director[]' multiple data-actions-box='true' data-size='2' data-width='100%'>";
+            if ($user == 'Fabio Morgado') {
+                $manager = array('FM');
+                for ($m=0; $m < sizeof($manager); $m++) { 
+                    echo "<option selected='true' value='".$manager[$m]."'>".$manager[$m]."</option>";
+                }
+            }elseif ($user == 'Bruno Paula') {
+                $manager = array('BP');
+                for ($m=0; $m < sizeof($manager); $m++) { 
+                    echo "<option selected='true' value='".$manager[$m]."'>".$manager[$m]."</option>";
+                }
+            }elseif ($user == 'Ricardo Alves') {
+                $manager = array('RA','REGIONAIS');
+                for ($m=0; $m < sizeof($manager); $m++) { 
+                    echo "<option selected='true' value='".$manager[$m]."'>".$manager[$m]."</option>";
+                }
+            }elseif($user == 'Victor Vasconcelos') {
+                $manager = array('VV','REGIONAIS');
+                for ($m=0; $m < sizeof($manager); $m++) { 
+                    echo "<option selected='true' value='".$manager[$m]."'>".$manager[$m]."</option>";
+                }
+            }else{
+                for ($m=0; $m < sizeof($this->manager); $m++) { 
+                    echo "<option selected='true' value='".$this->manager[$m]."'>".$this->manager[$m]."</option>";
+                }
+            }        
+           
 
         echo "</select>";   
 

@@ -1,5 +1,7 @@
 $(document).ready(function(){
   var regionID = 1;
+  var currentTime = new Date();
+  var year = currentTime.getFullYear();
   var type = 'ae';
   ajaxSetup();
   if (regionID != "") {
@@ -14,7 +16,7 @@ $(document).ready(function(){
         alert(xhr.status+" "+thrownError);
       }
     });
-    
+
     $.ajax({ 
       url:"/ajax/yearOnFcst",
       method:"POST",

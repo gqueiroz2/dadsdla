@@ -10,1197 +10,481 @@ use App\brand;
 use App\salesRep;
 use App\base;
 use App\sql;
+
 class VP extends pAndR{
     
-    public function saveValues($con,$date,$cYear,$value,$submit,$currency,$percentage,$totalFCST,$region,$clients,$clientBrands){
+    public function managerTable(Object $con,Array $manager,String $month, Int $year, Int $pYear,$repsTable){
+        $sales = new salesRep();
 
-        $base = new base();
-        $sql = new sql();
-        $ID = $this->generateID($date,$cYear,$value,$currency,$region,$submit);
-        $time = date('H:i');
-        $fcstMonth = date('m');
-        $tmp = explode("-", $date);
-        $month = $tmp[1];
-    
-        $type = "V1";
+        $managerId = $sales->getGroupIdByName($con,$manager);
+        $company = array('1','2','3');
 
-        $user = Request::session()->get('userName');
+        $totalPayTvForecast = 0;
+        $totalDigitalForecast = 0;
+        $totalForecast = 0;
+        $totalBookings = 0;
+        $totalPending = 0;
+        $totalPayTvBookings = 0;
+        $totalDigitalBookings = 0;
+        $totalPreviousBookings = 0;
+        
+        for ($c=0; $c <sizeof($company) ; $c++) { 
+            $payTvForecast[$c] = 0;
+            $digitalForecast[$c] = 0;
+            $forecast[$c] = 0;
+            $bookings[$c] = 0;
+            $pending[$c] = 0;
+            $digitalBookings[$c] = 0;
+            $payTvBookings[$c] = 0;
+            $previousBookings[$c] = 0;
+        
+            for ($m=0; $m <sizeof($repsTable['repInfo']); $m++) { 
 
-        $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\" AND type_of_forecast = \"".$type."\"";
+                $payTvForecast[$c] += $repsTable['repValues'][$m][$c]['payTvForecast'];
+                $digitalForecast[$c] += $repsTable['repValues'][$m][$c]['digitalForecast'];
+                $forecast[$c] += $repsTable['repValues'][$m][$c]['forecast'];
+                $bookings[$c] += $repsTable['repValues'][$m][$c]['bookings'];
+                $pending[$c] = $forecast[$c] - $bookings[$c];
+                if($pending[$c] < 0){
+                    $pending[$c] = 0;
+                }
+                $digitalBookings[$c] += $repsTable['repValues'][$m][$c]['digitalBookings'];
+                $payTvBookings[$c] += $repsTable['repValues'][$m][$c]['payTvBookings'];
+                $previousBookings[$c] += $repsTable['repValues'][$m][$c]['previousBookings'];
+                //$target[$m][$c] = $this->getValuesByMonth($con,$managerId[$m]['id'],$month,$year,'target',$company[$c]);
 
-        $from = array("ID");
 
-        $read = $this->weekOfMonth($date);
-
-        $res = $con->query($select);
-
-        $resp = $sql->fetch($res,$from,$from)[0]["ID"];
-
-        $percentage = $this->fixPercentage($con,$sql,$percentage,$totalFCST,$cYear,$value,$clients,$region,$currency);
-
-        if($submit == "submit") {
-            $submit = 1;
-            $selectSubmit = "SELECT ID FROM forecast WHERE  submitted = \"1\" AND month = \"".intval($month)."\" AND type_of_forecast = \"V1\" AND region_id = \"".$region['id']."\"";
-            if ($region['id'] == '1') {
-                $selectSubmit .=  " AND read_q = \"".intval($read)."\"";
+                $pivot[$c] = array('payTvForecast' => ($payTvForecast[$c]), 'digitalForecast' => ($digitalForecast[$c]), 'payTvForecastC' => $payTvForecast[$c], 'digitalForecastC' => $digitalForecast[$c],'forecast' => ($forecast[$c]), 'bookings' => ($bookings[$c]), 'pending' => ($pending[$c]), 'digitalBookings' => $digitalBookings[$c], 'payTvBookings' => $payTvBookings[$c], 'previousBookings' => $previousBookings[$c]);
             }
-
-            $from = array("ID");
-
-            $resultSubmit = $con->query($selectSubmit);
             
-            $resSubmit = $sql->fetch($resultSubmit,$from,$from)[0]["ID"];
-
-            if ($resSubmit != null) {
-                return "Already Submitted";
-            }
-        }else{
-            $submit = 0;
         }
 
-        if ($resp) {
-            $update = "UPDATE forecast SET read_q = \"".$read."\", 
-                                            last_modify_by = \"".$user."\",
-                                            last_modify_date = \"".$date."\", 
-                                            last_modify_time = \"".$time."\", 
-                                            oppid = \"".$ID."\",
-                                            currency_id = \"".$currency['id']."\", 
-                                            year = \"".$cYear."\", 
-                                            type_of_value = \"".$value."\",
-                                            month = \"".$month."\" WHERE ID = \"".$resp."\"";
-
-
-            if ($con->query($update) === true) {
-
-            }else{
-                $error = ($con->error);
-                return $error;
+        for ($m=0; $m <sizeof($repsTable['repInfo']); $m++) { 
+            $totalPayTvForecast += $repsTable['total'][$m]['payTvForecast'];
+            $totalDigitalForecast += $repsTable['total'][$m]['digitalForecast'];
+            $totalForecast += $repsTable['total'][$m]['forecast'];
+            $totalBookings += $repsTable['total'][$m]['bookings'];
+            $totalPending = $totalForecast - $totalBookings;
+            if ($totalPending < 0) {
+                $totalPending = 0;
             }
 
-            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"update",$clientBrands); 
-
-            return $bool;
-
-        }else{
-            $columns = "(oppid,
-                        region_id, sales_rep_id,
-                        year, month, read_q, date_m,
-                        currency_id, type_of_value,
-                        last_modify_by, last_modify_date, last_modify_time,
-                        submitted, type_of_forecast)";
-   
-            $values = "(\"".$ID."\",
-                        \"".$region['id']."\",NULL,
-                        \"".$cYear."\", \"".$month."\", \"".$read."\", \"".$date."\",
-                        \"".$currency['id']."\", \"".$value."\",
-                        \"".$user."\", \"".$date."\", \"".$time."\",
-                        \"".$submit."\", \"V1\")";
-
-            $insert = "INSERT INTO forecast $columns VALUES $values";
-
-            if ($con->query($insert) === true) {
-
-            }else{
-                $error = ($con->error);
-                return $error;
-            }
-
-            $bool = $this->FcstClient($con,$sql,$ID,$percentage,$totalFCST,$clients,"insert",$clientBrands);  
-
-            return $bool;
+            $totalPayTvBookings += $repsTable['total'][$m]['payTvBookings'];
+            $totalDigitalBookings += $repsTable['total'][$m]['digitalBookings'];
+            $totalPreviousBookings += $repsTable['total'][$m]['previousBookings'];
         }
- 
+
+        $totalPivot = array('payTvForecast' => ($totalPayTvForecast), 'digitalForecast' => ($totalDigitalForecast),'forecast' => ($totalForecast), 'bookings' => ($totalBookings),'pending' => ($totalPending),'payTvBookings' => $totalPayTvBookings, 'digitalBookings' => $totalDigitalBookings, 'previousBookings' => $totalPreviousBookings);
+
+        //var_dump($totalPivot);
+        
+        $table = array('managerValues' => $pivot, 'total' => $totalPivot);
+
+        return $table;
     }
 
-    public function fixPercentage($con,$sql,$percentage,$totalFCST,$cYear,$value,$clients,$region,$currency){
-        if ($value == "Gross") {
-            $col = "gross_revenue";
+    public function repTable(Object $con,Array $manager,String $month, Int $year, Int $pYear){
+        $sR = new salesRep();
+        
+        if ($manager[0] == 'VV') {
+            $managerId[0]['id'] = '5';
+            $managerId[0]['name'] = 'Victor Vasconcelos';
+        }elseif ($manager[0] == 'REGIONAIS') {
+             $managerId[0]['id'] = '5';
+            $managerId[0]['name'] = 'Regionais';
         }else{
-            $col = "net_revenue";
-        }
-        $from = array("value","month");
-
-        $month = intval(date('n'))-1;
-
-        $whereIn = "month IN (\"".($month+1)."\"";
-
-        for ($m=($month+1); $m <12; $m++) { 
-            $whereIn .= ",\"".($m+1)."\"";
-        }
-        $whereIn .= ")";
-
-
-        for ($c=0; $c <sizeof($clients); $c++) {
-            if (!$percentage[$c] && $totalFCST[$c] != 0) {
-                $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (client_id = \"".$clients[$c]->clientID."\") AND $whereIn  group by month";
-                $res[$c] = $con->query($select[$c]);
-                $resp[$c] = $sql->fetch($res[$c],$from,$from);
-                if (!$resp[$c]) {
-                    $select[$c] = "SELECT SUM($col) as value, month FROM ytd WHERE (year = \"".($cYear-1)."\") AND (sales_representant_office_id = \"".$region['id']."\") AND $whereIn group by month";
-                    $res[$c] = $con->query($select[$c]);
-                    $resp[$c] = $sql->fetch($res[$c],$from,$from);
-                }
-
-                for ($m=0; $m <12 ; $m++) { 
-                    $tmp[$c][$m] = 0;
-                }
-
-                for ($r=0; $r <sizeof($resp[$c]) ; $r++) { 
-                    $tmp[$c][intval($resp[$c][$r]['month'])-1] += floatval($resp[$c][$r]['value']);
-                }
-                $total[$c] = 0;
-
-                for ($t=0; $t <sizeof($tmp[$c]); $t++) { 
-                    if ($t<$month) {
-                        $tmp[$c][$t] = 0;
-                    }else{
-                        $total[$c] += $tmp[$c][$t];
-                    }
-                }
-                for ($t=0; $t <sizeof($tmp[$c]) ; $t++) { 
-                    $percentage[$c][$t] = $tmp[$c][$t]/$total[$c];
-                }
-            }
+            $managerId = $sR->getGroupIdByName($con,$manager);    
         }
 
-        return $percentage;
-    }
+        $company = array('1','2','3');
+        $companyView = array('wm','dc','spt');
+        $rep = $this->getRepByGroup($con,$managerId,$year); 
+        for ($r=0; $r <sizeof($rep); $r++) { 
+            $clients[$r] = $this->getClientByRep($con, $rep[$r]['id'], 1, $year, $pYear,$month);
+            $clientsNew[$r] = $this->getClientByRepNew($con, $rep[$r]['id'], 1, $year, $pYear,$month);
+            for ($c=0; $c <sizeof($company) ; $c++) { 
+                $payTvForecast[$r][$c] = 0;
+                $digitalForecast[$r][$c] = 0;
 
-    public function FcstClient($con,$sql,$ID,$percentage,$fcstValue,$clients,$type,$clientBrands){
-        $select = "SELECT ID FROM forecast WHERE oppid = \"".$ID."\"";
-
-        $from = array("ID");
-
-        $result = $con->query($select);
-
-        $id = $sql->fetch($result,$from,$from)[0]["ID"];
-
-        for ($c=0; $c <sizeof($fcstValue); $c++) {
-            if ($percentage[$c]) {
-                for ($m=0; $m < 12; $m++) { 
-                    $input[$c][$m] = $fcstValue[$c]*$percentage[$c][$m];
-                }
-            }else{
-                for ($m=0; $m <12 ; $m++) { 
-                    $input[$c][$m] = 0;
-                }
-            }
-        }
-
-        switch ($type) {
-            case 'insert':
-
-                $columns = "(forecast_id,month,value,client_id,brand)";
-
-                for ($c=0; $c <sizeof($clients); $c++) { 
-                    for($m=0; $m <sizeof($input[$c]); $m++) { 
-                        $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",\"".$clientBrands[$c]."\")";
+                $payTvForecastNew[$r][$c] = 0;
+                $digitalForecastNew[$r][$c] = 0;
+                //
+                //var_dump($clients);
+                if ($clients[$r] == 'THERE IS NO INFORMATION TO THIS REP') {
+                    $payTvForecastNew[$r][$c] = 0;
+                    $digitalForecastNew[$r][$c] = 0;
+                    $payTvBookings[$r][$c] = 0;
+                    $digitalBookings[$r][$c] = 0;
+                    $previousBookings[$r][$c] = 0;
+                }else{
+                    for ($a=0; $a <sizeof($clients[$r]); $a++) { 
+                        $probability[$r][$a] = $this->getProbability($con,$clients[$r][$a]['clientID'], $clients[$r][$a]['agencyID'], $rep[$r]['id'],$month)[0]['probability'];
                         
-                        if ($con->query($input[$c][$m]) === true) {
+                        $tempPayTv[$r][$a][$c] = $this->getValueByClient($con,$rep[$r]['id'],$month,$year,'forecast',$company[$c], 'pay tv', $clients[$r][$a]['agencyID'],$clients[$r][$a]['clientID'])['revenue']*($probability[$r][$a]/100);
 
-                        }else{
-                            $error = ($con->error);
-                            return $error;
-                        }
+                        $payTvForecast[$r][$c] += $tempPayTv[$r][$a][$c];
+
+                        $tempDigital[$r][$a][$c] = $this->getValueByClient($con,$rep[$r]['id'],$month,$year,'forecast',$company[$c], 'digital', $clients[$r][$a]['agencyID'],$clients[$r][$a]['clientID'])['revenue']*($probability[$r][$a]/100);
+
+                        $digitalForecast[$r][$c] += $tempDigital[$r][$a][$c];
+
+                         $payTvBookings[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'bookings',$company[$c],'pay tv',null,null))['revenue'];
+                
+                        $digitalBookings[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'bookings',$company[$c],'digital',null,null))['revenue'];
+                        $previousBookings[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$pYear,'bookings',$company[$c],null))['revenue'];
                     }
                 }
-                return "Saved";
+
+                if ($clientsNew[$r] != false) {                
+                    for ($n=0; $n <sizeof($clientsNew[$r]); $n++) { 
+                        $probabilityNew[$r][$n] = $this->getProbabilityNewClient($con,$clientsNew[$r][$n]['clientID'], $clientsNew[$r][$n]['agencyID'], $rep[$r]['id'],$month)[0]['probability'];
+
+                        $tempPayTvForecastNew[$r][$n][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecastNew',$companyView[$c],'pay tv',$clientsNew[$r][$n]['clientID'], $clientsNew[$r][$n]['agencyID']))['revenue']*($probabilityNew[$r][$n]/100);
+
+                        $payTvForecastNew[$r][$c] +=  $tempPayTvForecastNew[$r][$n][$c];
+
+                        $tempDigitalForecastNew[$r][$n][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecastNew',$companyView[$c],'digital',$clientsNew[$r][$n]['clientID'], $clientsNew[$r][$n]['agencyID']))['revenue']*($probabilityNew[$r][$n]/100);
+
+                        $digitalForecastNew[$r][$c] += $tempDigitalForecastNew[$r][$n][$c];
+
+                    }
+                }
+                //$target[$m][$c] = $this->getValuesByMonth($con,$managerId[$m]['id'],$month,$year,'target',$company[$c],null);
+               // $payTvForecast[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecast',$company[$c],'pay tv'))['revenue'];
+                //$payTvForecastNew[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecastNew',$companyView[$c],'pay tv',null,null))['revenue'];
+                $payTvForecast[$r][$c] = ($payTvForecast[$r][$c] + $payTvForecastNew[$r][$c]);
+                
+                //$digitalForecast[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecast',$company[$c],'digital'))['revenue'];
+                //$digitalForecastNew[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecastNew',$companyView[$c],'digital',null,null))['revenue'];
+                $digitalForecast[$r][$c] = ($digitalForecast[$r][$c] + $digitalForecastNew[$r][$c]);
+
+                $forecast[$r][$c] = $payTvForecast[$r][$c] + $digitalForecast[$r][$c];
+
+               
+
+                $bookings[$r][$c] = ($payTvBookings[$r][$c] + $digitalBookings[$r][$c]);
+
+                
+                $pending[$r][$c] = $forecast[$r][$c] - $bookings[$r][$c];
+                if ($pending[$r][$c] < 0) {
+                    $pending[$r][$c] = 0;
+                }                
+
+                $pivot[$r][$c] = array('payTvForecast' => ($payTvForecast[$r][$c]), 'digitalForecast' => ($digitalForecast[$r][$c]), 'payTvForecastC' => $payTvForecast[$r][$c], 'digitalForecastC' => $digitalForecast[$r][$c],'forecast' => ($forecast[$r][$c]), 'bookings' => ($bookings[$r][$c]), 'pending' => ($pending[$r][$c]), 'digitalBookings' => $digitalBookings[$r][$c], 'payTvBookings' => $payTvBookings[$r][$c], 'previousBookings' => $previousBookings[$r][$c]);
+                
+            }
+
+            $totalPayTvForecast[$r] = $payTvForecast[$r][0] + $payTvForecast[$r][1] + $payTvForecast[$r][2]; 
+
+            $totalDigitalForecast[$r] = $digitalForecast[$r][0] + $digitalForecast[$r][1] + $digitalForecast[$r][2]; 
+
+            //$totalPayTvForecast[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecast','1,2,3','pay tv'))['revenue'];
+
+            //$totalDigitalForecast[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecast','1,2,3','digital'))['revenue'];
+
+            $totalForecast[$r] = $totalPayTvForecast[$r] + $totalDigitalForecast[$r];
+
+            $totalPayTvBookings[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'bookings','1,2,3','pay tv',null,null))['revenue'];
+            
+            $totalDigitalBookings[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'bookings','1,2,3','digital',null,null))['revenue'];
+
+            $totalBookings[$r] = $totalPayTvBookings[$r] + $totalDigitalBookings[$r];
+
+            
+            $totalPending[$r] = $totalForecast[$r] - $totalBookings[$r];
+            if ($totalPending[$r] < 0) {
+                $totalPending[$r] = 0;
+            }
+            
+
+            $totalPreviousBookings[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$pYear,'bookings','1,2,3',null,null,null))['revenue'];
+            
+            $totalPivot[$r] = array('payTvForecast' => ($totalPayTvForecast[$r]), 'digitalForecast' => ($totalDigitalForecast[$r]),'forecast' => ($totalForecast[$r]), 'bookings' => ($totalBookings[$r]),'pending' => ($totalPending[$r]),'payTvBookings' => $totalPayTvBookings[$r], 'digitalBookings' => $totalDigitalBookings[$r], 'previousBookings' => $totalPreviousBookings[$r]);
+           
+            $repInfo[$r] = array('salesRep' => $rep[$r]['name'], 'repID' => $rep[$r]['id']);
+        }
+        
+        $table = array('repInfo' => $repInfo,'repValues' => $pivot,'total' => $totalPivot);
+        //var_dump($table['repValues']);
+        return $table;
+    }
+
+    public function getValueByClient(Object $con,String $user,String $month,Int $year,String $table,String $company, $platform=null, $agency,$client){
+        $sql = new sql();
+
+        $selectAE = "SELECT SUM(f.revenue) as revenue
+                    FROM monthly_forecast f
+                    LEFT JOIN client c ON c.ID = f.client_id
+                    LEFT JOIN agency a ON a.ID = f.agency_id
+                    WHERE f.sales_rep_id IN ($user)
+                    AND f.year = $year
+                    AND f.month = $month
+                    AND f.value = 'gross'
+                    AND c.id = $client
+                    AND a.id = $agency
+                    AND (f.company_id IN ($company)) 
+                    AND (f.platform = '$platform')
+                    ";
+            //var_dump($select);
+        $query = $con->query($selectAE);
+        $from = 'revenue';
+        $resultAE = $sql->fetchSUM($query,$from);
+        //echo "<pre>$selectAE</pre>";
+        if ($resultAE['revenue'] == null) {
+            $resultAE['revenue'] = 0.0;
+        }
+
+        return $resultAE;
+
+
+    }
+
+    public function getValuesByMonth(Object $con,String $user,String $month,Int $year,String $table,String $company, $platform=null,$client=null,$agency=null){
+        $sql = new sql();
+
+        switch ($table) {
+            case 'forecast':
+               $selectAE = "SELECT SUM(f.revenue) as revenue
+                            FROM monthly_forecast f                                
+                            WHERE f.sales_rep_id = $user
+                            AND f.year = $year
+                            AND f.month = $month
+                            AND f.value = 'gross'
+                            AND (f.company_id IN ($company))
+                            AND (f.platform = '$platform')
+                            ";
+                    //var_dump($selectAE);
+                $query = $con->query($selectAE);
+                $from = 'revenue';
+                $resultAE = $sql->fetchSUM($query,$from);
 
                 break;
-            
-            case 'update':
+            case 'bookings':
+                if ($platform != null) {
+                    if ($platform == 'pay tv') {
+                        $selectAE = "SELECT sum(gross_value) as revenue
+                            FROM wbd w
+                            LEFT JOIN brand b on b.id = w.brand_id
+                            WHERE w.current_sales_rep_id = $user
+                            AND w.year = $year
+                            AND w.month = $month
+                            AND (b.brand_group_id IN ($company))
+                            AND b.type = 'Linear'                                
+                            "; 
+                            //var_dump($select);
+                    }else{
+                        $selectAE = "SELECT sum(gross_value) as revenue
+                            FROM wbd w
+                            LEFT JOIN brand b on b.id = w.brand_id
+                            WHERE w.current_sales_rep_id = $user
+                            AND w.year = $year
+                            AND w.month = $month
+                            AND (b.brand_group_id IN ($company))
+                            AND b.type = 'Non-Linear'
+                            "; 
+                            //var_dump($select);
+                    }                   
+                }else{
+                    $selectAE = "SELECT sum(gross_value) as revenue
+                            FROM wbd w
+                            LEFT JOIN brand b on b.id = w.brand_id
+                            WHERE w.current_sales_rep_id = $user
+                            AND w.year = $year
+                            AND w.month = $month
+                            AND (b.brand_group_id IN ($company))
+                            ";
+                }
 
-                $columns = "(forecast_id,month,value,client_id,brand)";
+                $query = $con->query($selectAE);
+                $from = 'revenue';
+                $resultAE = $sql->fetchSUM($query,$from);
+                break;
+            case 'forecastNew':
 
-
-                for ($c=0; $c <sizeof($clients); $c++) { 
-                    for ($m=0; $m <sizeof($input[$c]); $m++) {
-
-                        $selectUpdate[$c][$m] = "SELECT value FROM forecast_client WHERE client_id = \"".$clients[$c]->clientID."\"  AND forecast_id = \"".$id."\" AND month = \"".($m+1)."\"";
-
-                        $res[$c][$m] = $con->query($selectUpdate[$c][$m]);
-
-                        $resp[$c][$m] = $sql->fetch($res[$c][$m],array("value"),array("value"));
-
-                        if ($resp[$c][$m]) {
-
-                            $update[$c][$m] = "UPDATE forecast_client SET value = \"".$input[$c][$m]."\" WHERE month = \"".($m+1)."\" AND client_id = \"".$clients[$c]->clientID."\" AND forecast_id = \"".$id."\"";
-
-                            if ($con->query($update[$c][$m]) === true) {
-
-                            }else{
-                                $error = ($con->error);
-                                return $error;
-                            }
-                        }else{
-                            $input[$c][$m] = "INSERT INTO forecast_client $columns VALUES (\"".$id."\",\"".($m+1)."\", \"".$input[$c][$m]."\",\"".$clients[$c]->clientID."\",\"".$clientBrands[$c]."\")";
-                        
-                            if ($con->query($input[$c][$m]) === true) {
-
-                            }else{
-                                $error = ($con->error);
-                                return $error;
-                            }
-                        }
-                    }
+                if ($client != null) { 
+                    
+                    $selectAE = "SELECT SUM(f.$company) as revenue
+                    FROM new_clients_fcst f 
+                    LEFT JOIN client c ON c.ID = f.client_id
+                    LEFT JOIN agency a ON a.ID = f.agency_id
+                    WHERE f.sales_rep_id IN ($user)
+                    AND f.client_id = '$client'
+                    AND f.agency_id = '$agency'
+                    AND (f.platform = '$platform')
+                    AND f.month = $month
+                    AND $company != 0";
+                }else{
+                    $selectAE = "SELECT SUM(f.$company) as revenue
+                                FROM new_clients_fcst f                                
+                                WHERE f.sales_rep_id = $user
+                                AND (f.platform = '$platform')
+                                AND f.month = $month
+                                ";
                 }
                 
-                return "Updated";
+                    //var_dump($selectAE);
 
-                break;
-
-
-        }
-
-    }
-
-
-    public function generateID($date,$cYear,$value,$currency,$region,$submit){
-        $week = $this->weekOfMonth($date);
-        if ($submit == "save") {
-            $submitted = "SAV";
-        }else{
-            $submitted = "TRS";
-        }
-        $month = explode("-", $date)[1];
-        $id = "$submitted-".$region["name"]."-$cYear-$month-WEEK-$week-VP-".strtoupper($currency["name"])."-".strtoupper($value);
-        return $id;
-    }
-    public function weekOfMonth($date) {
-        $date = strtotime($date);
-        //Get the first day of the month.
-        $firstOfMonth = strtotime(date("Y-m-01", $date));
-        //Apply above formula.
-        if ((intval(date("W", $date)) - intval(date("W", $firstOfMonth))) == 0) {
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
-        }else{
-            return intval(date("W", $date)) - intval(date("W", $firstOfMonth)) + 1;
-        }
-    }
-    public function base($con,$r,$pr,$cYear,$pYear){
-        $sql = new sql();
-        $base = new base();
-        
-        $regionID = Request::get('region');
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
-        $curr = $pr->getCurrency($con,array($currencyID))[0]['name'];
-        if($curr == "USD"){
-            $div = 1.0;
-        }else{
-            $div = $pr->getPRateByRegionAndYear($con,array($currencyID),array($cYear));
-        }
-
-        $date = date('Y-m-d');
-
-        $currentMonth = intval( date('m') );
-
-        $week = $this->weekOfMonth($date);
-
-        $fcstInfo = $this->getForecast($con,$sql,$regionID,$currentMonth,$week);
-
-        if(!$fcstInfo){
-            return false;
-        }else{
-            $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
-            $save = $fcstInfo;
-            $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear,true);
-            $currencyCheck = $temp["currencyCheck"];
-            $newCurrency = $temp["newCurrency"];
-            $oldCurrency = $temp["oldCurrency"];
-            $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients,true);
-            $valueCheck = $temp2["valueCheck"];
-            $multValue = $temp2["multValue"];
-        }
-        for ($c=0; $c < sizeof($fcstInfo); $c++) { 
-            $adjust[$c]['salesRepID'] = $fcstInfo[$c]['salesRepID'];
-            $adjust[$c]['checkCurrency'] = $currencyCheck[$c]; 
-            $adjust[$c]['newCurrency'] = $newCurrency[$c];
-            $adjust[$c]['oldCurrency'] = $oldCurrency[$c];
-            $adjust[$c]['checkValue'] = $valueCheck[$c];
-            $adjust[$c]['multValue'] = $multValue[$c];
-        }
-        
-        $listOfClients = $this->listFCSTClients($con,$sql,$base,$fcstInfo,$regionID);
-        $salesRepListOfSubmit = $this->salesRepListOfSubmit($fcstInfo);
-
-        $bookingscYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value);
-        $bookingspYTDByClient = $this->currentYTDByClient($con,$sql,"ytd",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value);
-        $varAbsYTDByClient = $this->subArrays($bookingscYTDByClient,$bookingspYTDByClient);
-        $fcstcMonthByClient = $this->currentMonthByClient($con,$sql,"fcst",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
-
-        $tmp = $this->fcstMonths($con,$sql,$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
-        $percentage = $this->getPercentage($tmp);
-        $bookingscMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$cYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
-        $totalcYearMonthByClient = $this->sumArrays($fcstcMonthByClient,$bookingscMonthByClient);
-        $bookingspMonthByClient = $this->currentMonthByClient($con,$sql,"bkg",$regionID,$pYear,$currentMonth,$listOfClients,$div,$value,$fcstInfo);
-        $varAbsMonthByClient = $this->subArrays($totalcYearMonthByClient,$bookingspMonthByClient);
-        $closedFullYearByClient = $this->fullYearByClient($con,$sql,"fcstClosed",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
-
-        $id = $this->verifySaves($con,$sql,$regionID);
-
-        if ($id) {
-            $fcstFullYearByClient = $this->getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients);
-            $fcstFullYearByClientAE = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
-            $clientBrands = $this->fullYearByClient($con,$sql,"brand",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
-            for ($c=0; $c <sizeof($fcstFullYearByClient); $c++) { 
-                if ($fcstFullYearByClient[$c] == 0 && $fcstFullYearByClientAE[$c] != 0) {
-                    $fcstFullYearByClient[$c] = $fcstFullYearByClientAE[$c];
-                }
-            }
-        }else{
-            $fcstFullYearByClient = $this->fullYearByClient($con,$sql,"fcst",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
-            $fcstFullYearByClientAE = $fcstFullYearByClient;
-            $clientBrands = $this->fullYearByClient($con,$sql,"brand",$regionID,$cYear,$listOfClients,$adjust,$div,$value,$fcstInfo);
-        }
-
-        $bookingscYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$cYear,$listOfClients,false,$div,$value,$fcstInfo);
-        $bookingspYearByClient = $this->fullYearByClient($con,$sql,"bkg",$regionID,$pYear,$listOfClients,false,$div,$value,$fcstInfo);
-        $bookedPercentageFullYearByClient = $this->varPer($closedFullYearByClient,$bookingscYearByClient);
-        //$totalFullYearByClient = $this->sumArrays($closedFullYearByClient,$fcstFullYearByClient);
-        $totalFullYearByClient = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClient);
-        $totalFullYearByClientAE = $this->calculateTotalYear($closedFullYearByClient,$bookingscYearByClient,$fcstFullYearByClientAE);
-        $varAbsFullYearByClient = $this->subArrays($totalFullYearByClient,$bookingspYearByClient);
-        $varPerFullYearByClient = $this->varPer($totalFullYearByClient,$bookingspYearByClient);
-        $bookingscYTD = $this->consolidadeColumn($bookingscYTDByClient);
-        $bookingspYTD = $this->consolidadeColumn($bookingspYTDByClient);
-        $varAbsYTD = $this->subArrays(array($bookingscYTD),array($bookingspYTD))[0];
-        $varPerYTD = $this->varPer(array($bookingscYTD),array($bookingspYTD))[0];
-
-        $fcstcMonth = $this->consolidadeColumn($fcstcMonthByClient);
-        $bookingscMonth = $this->consolidadeColumn($bookingscMonthByClient);
-        $totalcYearMonth = $this->consolidadeColumn($totalcYearMonthByClient);
-        $bookingspMonth = $this->consolidadeColumn($bookingspMonthByClient);
-        $varAbscMonth = $this->subArrays(array($totalcYearMonth),array($bookingspMonth))[0];
-        $varPercMonth = $this->varPer(array($totalcYearMonth),array($bookingspMonth))[0];
-        $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
-        $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
-        $closedFullYear = $this->consolidadeColumn($closedFullYearByClient);
-        $fcstFullYear = $this->consolidadeColumn($fcstFullYearByClient);
-        $fcstFullYearAE = $this->consolidadeColumn($fcstFullYearByClientAE);
-        $bookingscYear = $this->consolidadeColumn($bookingscYearByClient);
-        $bookingspYear = $this->consolidadeColumn($bookingspYearByClient);
-        $bookedPercentageFullYear = $this->consolidadeColumn($bookedPercentageFullYearByClient);
-        $totalFullYear = $this->consolidadeColumn($totalFullYearByClient);      
-        $bookingsOverclosed = $this->varPer(array($bookingscYear ),array($closedFullYear))[0];
-        $closedFullYearPercentage = $this->varPer(array($closedFullYear ),array($totalFullYear))[0];
-        $bookingscYearPercentage = $this->varPer(array($bookingscYear),array($totalFullYear))[0];
-        $fcstFullYearPercentage = $this->varPer(array($fcstcMonth),array($totalFullYear))[0];
-        $varAbsFullYear = $this->subArrays( array($totalFullYear) , array($bookingspYear) )[0];
-        $varPerFullYear = $this->varPer(array($totalFullYear),array($bookingspYear))[0];
-
-        $target = $this->getTarget($con,$sql,$pr,$regionID,$currencyID,$value,$cYear);
-
-        $varABS = $this->var($totalFullYear,$target,"ABS");
-        $varPRC = $this->var($totalFullYear,$target,"PRC");
-
-        $currencyName = $pr->getCurrency($con,array($currencyID))[0]['name'];
-        if ($value == "gross") {
-            $valueView = "Gross";
-        }else{
-            $valueView = "Net";
-        }
-
-        $rtr = array(   
-                        "client" => $listOfClients,
-                        "bookingscYTDByClient" => $bookingscYTDByClient,
-                        "bookingspYTDByClient" => $bookingspYTDByClient,
-                        "varAbsYTDByClient" => $varAbsYTDByClient,
-                        "fcstcMonthByClient" => $fcstcMonthByClient,
-                        "bookingscMonthByClient" => $bookingscMonthByClient,
-                        "totalcYearMonthByClient" => $totalcYearMonthByClient,
-                        "bookingspMonthByClient" => $bookingspMonthByClient,
-                        "varAbsMonthByClient" => $varAbsMonthByClient,                        
-                        "closedFullYearByClient" => $closedFullYearByClient,
-                        "fcstFullYearByClient" => $fcstFullYearByClient,
-                        "bookingscYearByClient" => $bookingscYearByClient,
-                        "bookingspYearByClient" => $bookingspYearByClient,
-                        "bookedPercentageFullYearByClient" => $bookedPercentageFullYearByClient,
-                        "totalFullYearByClient" => $totalFullYearByClient,
-                        "varAbsFullYearByClient" => $varAbsFullYearByClient,
-                        "varPerFullYearByClient" => $varPerFullYearByClient,
-                        "bookingscYTD" => $bookingscYTD,
-                        "bookingspYTD" => $bookingspYTD,
-                        "varAbsYTD" => $varAbsYTD,
-                        "varPerYTD" => $varPerYTD,
-                        "fcstcMonth" => $fcstcMonth,
-                        "bookingscMonth" => $bookingscMonth,
-                        "totalcYearMonth" => $totalcYearMonth,
-                        "bookingspMonth" => $bookingspMonth,
-                        "varAbscMonth" => $varAbscMonth,
-                        "varPercMonth" => $varPercMonth,
-                        "closedFullYear" => $closedFullYear,
-                        "fcstFullYear" => $fcstFullYear,
-                        "bookingscYear" => $bookingscYear,
-                        "bookingspYear" => $bookingspYear,
-                        "bookedPercentageFullYear" => $bookedPercentageFullYear,
-                        "totalFullYear" => $totalFullYear,
-                        "fcstFullYearPercentage" => $fcstFullYearPercentage,
-                        "varAbsFullYear" => $varAbsFullYear,
-                        "varPerFullYear" => $varPerFullYear,
-                        "bookingsOverclosed" => $bookingsOverclosed,
-                        "closedFullYearPercentage" => $closedFullYearPercentage,
-                        "bookingscYearPercentage" => $bookingscYearPercentage,
-                        "fcstFullYearPercentage" => $fcstFullYearPercentage,
-                        "salesRepListOfSubmit" => $salesRepListOfSubmit,
-                        "percentage" => $percentage,
-                        "region" => $regionID,
-                        "currency" => $currencyID,
-                        "value" => $value,
-                        "cYear" => $cYear,
-                        "fcstFullYearByClientAE" => $fcstFullYearByClientAE,
-                        "totalFullYearByClientAE" => $totalFullYearByClientAE,
-                        "fcstFullYearAE" => $fcstFullYearAE,
-                        "currencyName" => $currencyName,
-                        "valueView" => $valueView,
-                        "clientBrands" => $clientBrands,
-                        "target" => $target,
-                        "varABS" => $varABS,
-                        "varPRC" => $varPRC
-                    );
-        return $rtr;
-      
-    }
-
-    public function var($totalFullYear,$target,$type){
-        switch ($type) {
-            case 'ABS':
-                $return = $totalFullYear - $target;
-                break;
-            case 'PRC':
-                if ($target != 0) {
-                    $return = ($totalFullYear/$target)*100;
-                }else{
-                    $return = 0;
-                }
+                    $query = $con->query($selectAE);
+                    $from = 'revenue';
+                    $resultAE = $sql->fetchSUM($query,$from);
                 break;
             default:
-                $return = 0;
-                # code...
+                // code...
                 break;
         }
-
-        return $return;
+        return $resultAE;
     }
 
-    public function getTarget($con,$sql,$pr,$regionID,$currencyID,$value,$year){
-
-        if ($value == "gross") {
-            $value = "GROSS";
-        }else{
-            $value = "NET";
-        }
-
-        if ($currencyID != 4) {
-            $div = $pr->getPrateByCurrencyAndYear($con,$currencyID,$year);
-        }else{
-            $div = 1;
-        }
-
-        $select = "SELECT SUM(revenue) AS value FROM plan_by_brand WHERE (source = \"TARGET\") AND (year = \"$year\") AND (sales_office_id = \"$regionID\") AND (type_of_revenue = \"$value\") AND (currency_id = '4')";
-
-        $res = $con->query($select);
-
-        $resp = $sql->fetch($res,array('value'),array('value'))[0]['value']*$div;
-
-        return $resp;
-    }
-
-
-    public function getFcstFromDatabase($con,$r,$pr,$cYear,$pYear,$listOfClients){
-        $sr = new salesRep();        
-        $br = new brand();
-        $base = new base();
+    public function getRepByGroup(Object $con, Array $managerId, Int $year){
         $sql = new sql();
-        $reg = new region();
-       
-        $regionID = Request::get('region');
-        $currencyID = Request::get('currency');
-        $value = Request::get('value');
+        //var_dump($managerId);
 
-        $actualMonth = date('n');
-
-        $data = date('Y-m-d');
-
-        $week = $this->weekOfMonth($data);
-
-        $select = "SELECT oppid,ID,type_of_value,currency_id,submitted 
-                        FROM forecast 
-                        WHERE (submitted = \"0\" OR submitted = \"1\") 
-                        AND month = \"$actualMonth\" 
-                        AND year = \"$cYear\"
-                        AND type_of_forecast = \"V1\"
-                  ";
-
-        if ($regionID == "1") {
-            $select .= "AND read_q = \"$week\"";
+        if ($managerId[0]['name'] == 'Victor Vasconcelos') {
+            $temp = $managerId[0]['id'];
+            $select = "SELECT s.id as id, s.name as name
+                        FROM sales_rep s
+                        LEFT JOIN sales_rep_status sr ON s.id = sr.sales_rep_id
+                        WHERE s.sales_group_id IN ('$temp')
+                        AND sr.status = 1
+                        AND sr.year = $year
+                        AND s.id IN (268,271,273,262,272,275,274,267)
+            ";
+        }elseif ($managerId[0]['name'] == 'Ricardo Alves') {
+            $temp = $managerId[0]['id'];
+            $select = "SELECT s.id as id, s.name as name
+                        FROM sales_rep s
+                        LEFT JOIN sales_rep_status sr ON s.id = sr.sales_rep_id
+                        WHERE s.sales_group_id IN ('$temp')
+                        AND sr.status = 1
+                        AND sr.year = $year
+                        AND s.id IN (270,264,265,266,269)
+            ";
+        }else{
+            $temp = $managerId[0]['id'];
+            $select = "SELECT s.id as id, s.name as name
+                        FROM sales_rep s
+                        LEFT JOIN sales_rep_status sr ON s.id = sr.sales_rep_id
+                        WHERE s.sales_group_id IN ('$temp')
+                        AND sr.status = 1
+                        AND sr.year = $year
+            ";
         }
 
-        $select .= "ORDER BY ID DESC";
-
+        $from = array('id','name');
         $result = $con->query($select);
+        $salesRep = $sql->fetch($result,$from,$from);
 
-        $from = array("oppid","ID","type_of_value","currency_id", "submitted");
+        //var_dump($salesRep);
+        return $salesRep;
+    }
 
-        $save = $sql->fetch($result,$from,$from);
+    public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear, $month){
+        $sql = new sql();
 
-        $temp = $base->adaptCurrency($con,$pr,$save,$currencyID,$cYear);
-
-
-        $currencyCheck = $temp["currencyCheck"][0];
-        $newCurrency = $temp["newCurrency"][0];
-        $oldCurrency = $temp["oldCurrency"][0];
-
-        $temp2 = $base->adaptValue($value,$save,$regionID,$listOfClients);
-
-        $valueCheck = $temp2["valueCheck"][0];
-        $multValue = $temp2["multValue"][0];
-
-        $regionName = $reg->getRegion($con,array($regionID))[0]['name'];
-
-        $brand = $br->getBrandBinary($con);
-        $month = $base->getMonth();
-
-        $tmp = array($cYear);
-        //valor da moeda para divisões
-        $div = $base->generateDiv($con,$pr,$regionID,$tmp,$currencyID);
+        $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+                    FROM wbd w
+                    LEFT JOIN client c ON c.ID = w.client_id
+                    LEFT JOIN agency a ON a.ID = w.agency_id
+                    WHERE (w.current_sales_rep_id IN (\"$salesRep\" ))
+                    AND w.year IN (\"$year\",\"$pYear\")
+                    AND w.month = $month
+                    AND gross_value > 0.0                
+                    ORDER BY c.name ASC
+                    ";
+        $queryWBD = $con->query($selectWBD);
+        $fromWBD = array('clientName', 'clientID','agencyName','agencyID');
+        $resultWBD = $sql->fetch($queryWBD,$fromWBD,$fromWBD);
         
-        //nome da moeda pra view
-        $tmp = array($currencyID);
-        $currency = $pr->getCurrency($con,$tmp)[0]["name"];
-
-        $readable = $this->monthAnalise($base);
-
-        for ($c=0; $c <sizeof($listOfClients) ; $c++) { 
-            $selectClient[$c] = "SELECT SUM(value) AS value FROM forecast_client WHERE forecast_id = \"".$save[0]['ID']."\" AND client_id = \"".$listOfClients[$c]['clientID']."\"";
-            $res[$c] = $con->query($selectClient[$c]);
-
-            $resp[$c] = $sql->fetchSum($res[$c],"value")["value"];
-
-            if ($currencyCheck) {
-                $resp[$c] = (($resp[$c]*$newCurrency)/$oldCurrency);
-            }
-
-            if ($valueCheck) {
-                $resp[$c] = ($resp[$c]*$multValue[$c]);
-            }
-
-        }
-
-        return $resp;
-    }
-
-    public function monthAnalise($base){
-        $month = date('M');
-
-        $tmp = false;
-
-        for ($m=0; $m <sizeof($base->monthWQ) ; $m++) { 
-            if ($month == $base->monthWQ[$m]) {
-                $tmp = true;
-            }
-
-            if ($tmp) {
-                $tfArray[$m] = "";
-                $odd[$m] = "odd";
-                $even[$m] = "rcBlue";
-                $manualEstimation[$m] = "background-color:#235490;";
-                $color[$m] = "color:white;";
-                $color2[$m] = "color:red;";
-            }else{
-                $tfArray[$m] = "readonly='true'";
-                $odd[$m] = "oddGrey";
-                $even[$m] = "evenGrey";
-                $manualEstimation[$m] = "";
-                $color[$m] = "";
-                $color2[$m] = "";
-            }
-        } 
-
-        $rtr = array("tfArray" => $tfArray , "odd" => $odd , "even" => $even, "manualEstimation" => $manualEstimation, "color" => $color, "color2" => $color2);  
-
-        return $rtr;
-    }
-
-    public function verifySaves($con,$sql,$regionID){
-        $date = date('Y-m-d');
-        $tmp = explode("-", $date);
-        $month = $tmp[1];
-
-        $from = array("ID");
-
-        $select = "SELECT ID from forecast WHERE month = \"".$month."\" AND type_of_forecast = \"V1\" AND region_id = \"".$regionID."\"";
-
-        if ($regionID == 1) {
-            $week = $this->weekOfMonth($date);
-            $select .= " AND read_q = \"".$week."\"";
-        }
-
-        $res = $con->query($select);
-
-        $resp = $sql->fetch($res,$from,$from)[0]["ID"];
-
-        return $resp;
-
-    }
-
-    public function salesRepListOfSubmit($fcstInfo){
-        for ($f=0; $f < sizeof($fcstInfo); $f++) { 
-            $array[$f]['salesRepID'] = $fcstInfo[$f]['salesRepID'];
-            $array[$f]['salesRepName'] = $fcstInfo[$f]['name'];
-            $array[$f]['lastModifyDate'] = $fcstInfo[$f]['lastModifyDate'];
-            $array[$f]['lastModifyTime'] = $fcstInfo[$f]['lastModifyTime'];
-        }
-        return $array;
-    }
-    public function calculateTotalYear($closed,$booking,$fcst){
-        for ($a=0; $a < sizeof($closed); $a++) { 
-            
-            if($closed[$a] >= $booking[$a] ){
-                $sum[$a] = $closed[$a] + $fcst[$a];
-            }else{
-                $sum[$a] = $booking[$a] + $fcst[$a];
-            }
-        }
-        return $sum;
-    }
-    public function consolidadeColumn($array){
-        $sum = 0.0;
-        for ($a=0; $a < sizeof($array); $a++) { 
-            $sum += $array[$a];
-        }
-        return $sum;
-    }
-    public function varPer($array1,$array2){
-        for ($a=0; $a < sizeof($array1); $a++) { 
-            if($array2[$a] > 0){
-                $varPer[$a] = ($array1[$a] / $array2[$a]) * 100;
-            }else{
-                $varPer[$a] = 0.0;
-            }
-        }
-        return $varPer;
-    }
-    public function subArrays($array1,$array2){
-        for ($a=0; $a < sizeof($array1); $a++) { 
-            $sub[$a] = $array1[$a]- $array2[$a];
-        }
-        return $sub;
-    }
-    public function sumArrays($array1,$array2){
-        for ($a=0; $a < sizeof($array1); $a++) { 
-            $sum[$a] = $array1[$a] + $array2[$a];
-        }
-        return $sum;
-    }
-    public function makeWhereIN(){
-        $cMonth = date('m');
-        $string = "";
-        for ($m=1; $m < $cMonth; $m++) { 
-            $string .= $m;
-            if($m != ($cMonth-1)){
-                $string .= ",";
-            }
-        }
-        //var_dump($string);
-        return $string;
-    }
-    public function currentYTDByClient($con,$sql,$kind,$regionID,$year,$currentMonth,$listOfClients,$div,$value){
-        $whereIN = $this->makeWhereIN();
-        switch ($kind) {
-            case 'ytd':
-                $revenue = $value."_revenue_prate";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $sumRevenue[$c] = 0.0;
-                    $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
-                                         FROM ytd
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (month IN ($whereIN))
-                                         AND (year = \"".$year."\")                                         
-                                 ";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("revenue");
-                    $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue'])*$div;
-                    $sumRevenue[$c] += $tmp;  
-                }
-                $revenueFW = $value."_revenue";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSumFW[$c] = "SELECT SUM($revenueFW) AS 'revenue' 
-                                         FROM fw_digital
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (month IN ($whereIN))
-                                         AND (year = \"".$year."\")                                         
-                                 ";
-                    $resFW[$c] = $con->query($selectSumFW[$c]);
-                    $fromFW = array("revenue");
-                    $tmpFW = doubleval($sql->fetch($resFW[$c],$fromFW,$fromFW)[0]['revenue'])*$div;
-                    $sumRevenue[$c] += $tmpFW; 
-                }
-                break;
-        }
-        
-        return $sumRevenue;
-    }
-    public function fcstMonths($con,$sql,$regionID,$year,$currentMonth,$listOfClients,$div,$value,$fcstInfo){
-        $tmp = array();
-        for ($f=0; $f <sizeof($fcstInfo); $f++) {
-            if ($f == 0) {
-                array_push($tmp, $fcstInfo[$f]);
-            }else{
-                $check = true;
-                for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                    if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
-                        $check = false;
-                        break;
-                    }
-                }
-                if ($check) {
-                    array_push($tmp, $fcstInfo[$f]);
-                }
-            }
-        }
-        $fcstInfo = $tmp;
-
-        if ($value == "gross") {
-            $col = "gross_revenue";
+       
+        $selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+                    FROM forecast w
+                    LEFT JOIN client c ON c.ID = w.client_id
+                    LEFT JOIN agency a ON a.ID = w.agency_id
+                    WHERE (w.sales_rep_id IN (\"$salesRep\" ))
+                    AND $month > 0.0
+                    ORDER BY c.name ASC
+                    ";
+        $queryForecast = $con->query($selectForecast);
+        $fromForecast = array('clientName', 'clientID','agencyName','agencyID');
+        $resultForecast = $sql->fetch($queryForecast,$fromForecast,$fromForecast);
+        $resultForecast = false;
+        //var_dump($resultForecast);
+        if ($resultForecast != false) {
+            $result = array_merge($resultWBD,$resultForecast);
+            $result = array_unique($result, SORT_REGULAR);
+            $result = array_values($result);
         }else{
-            $col = "net_revenue";
-        }
-
-        $from = array("value","month","client_id");
-        $from2 = array($col, "month", "client_id");
-        $from3 = array("value","month");
-        for ($f=0; $f <sizeof($fcstInfo); $f++) { 
-            for ($c=0; $c <sizeof($listOfClients); $c++) { 
-                $select[$f][$c] = "SELECT value, month, client_id FROM forecast_client WHERE (client_id = \"".$listOfClients[$c]['clientID']."\") AND (forecast_id = \"".$tmp[$f]['ID']."\")";
-                $res[$f][$c] = $con->query($select[$f][$c]);
-                $resp[$f][$c] = $sql->fetch($res[$f][$c],$from,$from);
-            }
-        }
-
-        $saida = array();
-
-        $vlau = array();
-
-        for ($f=0; $f <sizeof($resp); $f++) { 
-            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
-                for ($m=0; $m < 12; $m++) { 
-                    $vlau[$f][$c][$m] = 0;
-                }
-            }
-        }
-
-        for ($f=0; $f <sizeof($resp); $f++) { 
-            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
-                if ($resp[$f][$c]) {
-                    for ($m=0; $m <sizeof($resp[$f][$c]); $m++) { 
-                        $vlau[$f][$c][intval($resp[$f][$c][$m]['month'])-1] += floatval($resp[$f][$c][$m]['value']);
-                    }
-                }else{
-                    $vlau[$f][$c] = false;
-                }
-            }
-        }
-
-        for ($f=0; $f <sizeof($resp); $f++) { 
-            for ($c=0; $c <sizeof($resp[$f]) ; $c++) { 
-                if ($f == 0) {
-                    if ($vlau[$f][$c]) {
-                        for ($m=0; $m<sizeof($vlau[$f][$c]); $m++) { 
-                            $saida[$c][$m] = floatval($vlau[$f][$c][$m]);
-                        }
-                    }else{
-                        $saida[$c] = false;
-                    }
-                }else{
-                    if ($saida[$c]) {
-                        if ($vlau[$f][$c]) {
-                            for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                                $saida[$c][$m] += floatval($vlau[$f][$c][$m]);
-                            }
-                        }
-                    }else{
-                        if ($vlau[$f][$c]) {
-                            for ($m=0; $m<sizeof($vlau[$f][$c]); $m++) { 
-                                $saida[$c][$m] = floatval($vlau[$f][$c][$m]);
-                            }
-                        }else{
-                            $saida[$c] = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $saida;
-    }
-    public function getPercentage($saida){
-        $date = date('n')-1;
-        for ($c=0; $c <sizeof($saida); $c++) {
-            if ($saida[$c]) {
-                $total[$c] = 0;
-                for ($m=0; $m <sizeof($saida[$c]); $m++) { 
-                    if ($m >= $date) {
-                        $total[$c] += $saida[$c][$m];
-                    }
-                }
-                for ($m=0; $m <sizeof($saida[$c]) ; $m++) { 
-                    if ($m >= $date) {
-                        if ($total[$c] != 0) {
-                            $percentage[$c][$m] = $saida[$c][$m]/$total[$c];
-                        }else{
-                            $percentage[$c][$m] = 0;
-                        }
-                    }else{
-                        $percentage[$c][$m] = 0;
-                    }
-                }
+            if ($resultWBD == false || $resultWBD == NULL) {
+                $result = 'THERE IS NO INFORMATION TO THIS REP';
             }else{
-                $total[$c] = false;
-                $percentage[$c] = false;
-            } 
-        }
-        return $percentage;
-    }
-    public function currentMonthByClient($con,$sql,$kind,$regionID,$year,$currentMonth,$listOfClients,$div,$value,$fcstInfo){
-        switch ($kind) {
-            case 'fcst':
-                $tmp = array();
-                for ($f=0; $f <sizeof($fcstInfo); $f++) {
-                    if ($f == 0) {
-                        array_push($tmp, $fcstInfo[$f]);
-                    }else{
-                        $check = true;
-                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
-                                $check = false;
-                                break;
-                            }
-                        }
-                        if ($check) {
-                            array_push($tmp, $fcstInfo[$f]);
-                        }
-                    }
-                }
-                $fcstInfo = $tmp;
-                $whereIn = "AND ( forecast_id IN (";
-                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
-                    if ($f==0) {
-                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
-                    }else{
-                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
-                    }
-                }
-                $whereIn .= "))";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT SUM(value) AS 'revenue' 
-                                         FROM forecast_client
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (month = \"".$currentMonth."\") $whereIn
-                                 ";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("revenue");
-                    $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue'])*$div;
-                }
-                break;
-            case 'bkg':
-                $revenue = $value."_revenue_prate";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $sumRevenue[$c] = 0.0;
-                    $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
-                                         FROM ytd
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (month = \"".$currentMonth."\")
-                                         AND (year = \"".$year."\")                                         
-                                 ";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("revenue");
-                    $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue'])*$div;
-                    $sumRevenue[$c] += $tmp;                    
-                }
-                break;
+                 $result = array_values($resultWBD);     
+            }           
             
-            default:
-                # code...
-                break;
         }
-        return $sumRevenue;
-    }
-    public function fullYearByClient($con,$sql,$kind,$regionID,$year,$listOfClients,$adjust=false,$div,$value,$fcstInfo){
-        $currentMonth = date('m');
-        switch ($kind) {
-            case 'fcst':
-                $tmp = array();
-                for ($f=0; $f <sizeof($fcstInfo); $f++) {
-                    if ($f == 0) {
-                        array_push($tmp, $fcstInfo[$f]);
-                    }else{
-                        $check = true;
-                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
-                                $check = false;
-                                break;
-                            }
-                        }
-                        if ($check) {
-                            array_push($tmp, $fcstInfo[$f]);
-                        }
-                    }
-                }
-                $fcstInfo = $tmp;
-                $whereIn = "AND ( fc.forecast_id IN (";
-                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
-                    if ($f==0) {
-                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
-                    }else{
-                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
-                    }
-                }
-                $whereIn .= "))";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT f.sales_rep_id AS 'salesRepID',
-                                         SUM(fc.value) AS 'revenue' 
-                                         FROM forecast_client fc
-                                         JOIN forecast f ON f.ID = fc.forecast_id
-                                         WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (f.read_q = (SELECT MAX(read_q) AS 'read' FROM forecast where year = ".$year." and month = ".intval($currentMonth)." and region_id = ".$regionID."))
-                                         AND (f.type_of_forecast = 'AE')
-                                         AND (fc.month >= ".intval($currentMonth).") $whereIn
-                                         AND (f.submitted = '1')
-                                         GROUP BY salesRepID
-                                 "; 
-                    //echo "<pre>".($selectSum[$c])."</pre>";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("salesRepID","revenue");
-                    $temp = $sql->fetch($res[$c],$from,$from);
-                    $sumRevenue[$c] = 0;
-                    if ($temp) {
-                        for ($t=0; $t <sizeof($temp); $t++) { 
-                            $salesRepRev[$t] = $temp[$t]['salesRepID'];
-                            $tmp[$c] = doubleval($temp[$t]['revenue']);
-                            for ($a=0; $a < sizeof($adjust); $a++) { 
-                                if($adjust[$a]["salesRepID"] == $salesRepRev[$t]){
-                                    if($adjust[$a]['checkCurrency']){
-                                        $tmp[$c] = ($tmp[$c]*$adjust[$a]['newCurrency'])/$adjust[$a]['oldCurrency'];
-                                    }
-                                    if($adjust[$a]['checkValue']){
-                                        $tmp[$c] = $tmp[$c]*$adjust[$a]['multValue'][$c];
-                                    }
-                                }
-                            }
-                            $sumRevenue[$c] += $tmp[$c];                    
-                        }
-                    }
-                }
-                break;
-            case 'fcstClosed':
-                $revenue = "gross_revenue";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
-                                         FROM sf_pr
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (stage = '5')
-                                 ";            
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("revenue");
-                    $sumRevenue[$c] = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue'])*$div;
-                }
-                break;
-            case 'bkg':               
-                $revenue = $value."_revenue_prate";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $sumRevenue[$c] = 0.0;
-                    $selectSum[$c] = "SELECT SUM($revenue) AS 'revenue' 
-                                         FROM ytd
-                                         WHERE (client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (year = \"".$year."\")                                         
-                                 ";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("revenue");
-                    $tmp = doubleval($sql->fetch($res[$c],$from,$from)[0]['revenue'])*$div;
-                    $sumRevenue[$c] += $tmp;                    
-                }
-                break;
-            case 'brand':
-                $tmp = array();
-                for ($f=0; $f <sizeof($fcstInfo); $f++) {
-                    if ($f == 0) {
-                        array_push($tmp, $fcstInfo[$f]);
-                    }else{
-                        $check = true;
-                        for ($t=0; $t <sizeof($tmp) ; $t++) { 
-                            if ($fcstInfo[$f]['name'] == $tmp[$t]['name']) {
-                                $check = false;
-                                break;
-                            }
-                        }
-                        if ($check) {
-                            array_push($tmp, $fcstInfo[$f]);
-                        }
-                    }
-                }
-                $fcstInfo = $tmp;
-                $whereIn = "AND ( fc.forecast_id IN (";
-                for ($f=0; $f <sizeof($fcstInfo) ; $f++) { 
-                    if ($f==0) {
-                        $whereIn .= "\"".$fcstInfo[$f]['ID']."\"";
-                    }else{
-                        $whereIn .= ",\"".$fcstInfo[$f]['ID']."\"";
-                    }
-                }
-                $whereIn .= "))";
-                for ($c=0; $c < sizeof($listOfClients); $c++) { 
-                    $selectSum[$c] = "SELECT fc.brand AS 'brand'
-                                         FROM forecast_client fc
-                                         JOIN forecast f ON f.ID = fc.forecast_id
-                                         WHERE (fc.client_id = \"".$listOfClients[$c]['clientID']."\")
-                                         AND (f.type_of_forecast = 'AE')
-                                         AND (fc.month >= ".intval($currentMonth).") $whereIn
-                                         AND (f.submitted = '1')
-                                 ";
-                    //echo "<pre>".($selectSum[$c])."</pre>";
-                    $res[$c] = $con->query($selectSum[$c]);
-                    $from = array("brand");
-                    $temp = $sql->fetch($res[$c],$from,$from);
-                    $sumRevenue[$c] = 0;
-                    $aux[$c] = array();
-                    if ($temp) {
-                        for ($t=0; $t <sizeof($temp) ; $t++) { 
-                            if ($temp[$t]['brand'] != "") {
-                                $var = explode(';', $temp[$t]['brand']);
-                                for ($v=0; $v <sizeof($var); $v++) { 
-                                    array_push($aux[$c], $var[$v]);
-                                }
-                            }
-                        }
-                    }
-                    $aux[$c] = array_unique($aux[$c]);
-                    $aux[$c] = array_values($aux[$c]);
-
-                    $sumRevenue[$c] = "";
-
-
-                    for ($a=0; $a<sizeof($aux[$c]); $a++) { 
-                        if ($a == 0) {
-                            $sumRevenue[$c] .= $aux[$c][$a];
-                        }else{
-                            $sumRevenue[$c] .= ";".$aux[$c][$a];
-                        }
-                    }
-                }
-
-
-                break;
-
-            default:
-                # code...
-                break;
-        }
-        
-        return $sumRevenue;
-    }
-    public function listFCSTClients($con,$sql,$base,$fcstInfo,$regionID){
-        $from = array("clientID","client");
-        for ($f=0; $f < sizeof($fcstInfo); $f++) { 
-            $select[$f] = "SELECT DISTINCT c.ID AS 'clientID', 
-                                  c.name AS 'client'
-                                FROM forecast_client fc
-                                LEFT JOIN client c ON c.ID = fc.client_id
-                                WHERE(forecast_id = \"".$fcstInfo[$f]['ID']."\")                                
-                                ORDER BY client
-                          ";
-            $res[$f] = $con->query($select[$f]);
-            $listC[$f] = $sql->fetch($res[$f],$from,$from);
-        }
-        $selectYTD = "SELECT DISTINCT c.name AS 'client',
-                          c.ID AS 'clientID'
-                    FROM ytd y
-                    LEFT JOIN client c ON c.ID = y.client_id
-                    WHERE (sales_representant_office_id = \"".$regionID."\")
-                    AND (sales_representant_office_id = \"".$regionID."\")
-                  ";
-        
-        $resYTD = $con->query($selectYTD);
-        $listCYTD = $sql->fetch($resYTD,$from,$from);
-        $selectFW = "SELECT DISTINCT c.name AS 'client',
-                          c.ID AS 'clientID'
-                    FROM fw_digital y
-                    LEFT JOIN client c ON c.ID = y.client_id
-                    WHERE (region_id = \"".$regionID."\")
-                  ";
-        
-        $resFW = $con->query($selectFW);
-        $listCFW = $sql->fetch($resFW,$from,$from);
-        $cc = 0;
-        if($listC){
-            for ($c=0; $c < sizeof($listC); $c++) { 
-                if($listC[$c]){
-                    for ($d=0; $d < sizeof($listC[$c]); $d++) { 
-                        $list[$cc] = $listC[$c][$d];
-                        $cc++; 
-                    }
-                }
-            }
-        }
-        for ($d=0; $d < sizeof($listCYTD); $d++) { 
-            $list[$cc] = $listCYTD[$d];
-            $cc++;
-        }
-        
-	$list = $base->superUnique($list,'clientID');
-        usort($list, array($this,'orderClient'));
-        return $list;
-    }
-    private static function orderClient($a, $b){
-        if ($a == $b)
-            return 0;
-        
-        return ($a['client'] < $b['client']) ? -1 : 1;
+               // var_dump($result);
+        return $result;
     }
 
-    public function getForecast($con,$sql,$regionID,$month,$week){
-        $select = " SELECT f.ID AS 'ID',
-                           f.oppid AS 'oppid',
-                           f.region_id AS 'region_id',
-                           f.sales_rep_id AS 'sales_rep_id',
-                           f.currency_id AS 'currency_id',
-                           f.type_of_value AS 'type_of_value',
-                           f.read_q AS 'read_q',
-                           f.year AS 'year',
-                           f.date_m AS 'date_m',
-                           f.last_modify_by AS 'last_modify_by',
-                           f.last_modify_date AS 'last_modify_date',
-                           f.last_modify_time AS 'last_modify_time',
-                           f.month AS 'month',
-                           f.submitted AS 'submitted',
-                           f.type_of_forecast AS 'type_of_forecast',
-                           sr.name AS 'name'
-                           FROM forecast f
-                           LEFT JOIN sales_rep sr ON f.sales_rep_id = sr.ID
-                           WHERE(region_id = \"".$regionID."\") 
-                           AND (submitted = '1')
-                           AND (type_of_forecast = 'AE')
-                           AND (month = \"".date('m')."\")
-                  ";
+    public function getClientByRepNew(Object $con,int $salesRep, int $region, int $year, int $pYear, $month){
+        $sql = new sql();
 
-        if ($regionID == "1") {
-            $select .= "AND (read_q = \"".$week."\")";
+        $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+                    FROM new_clients_fcst w
+                    LEFT JOIN client c ON c.ID = w.client_id
+                    LEFT JOIN agency a ON a.ID = w.agency_id
+                    WHERE (w.sales_rep_id IN (\"$salesRep\" ))
+                    AND w.month = $month            
+                    ORDER BY c.name ASC
+                    ";
+        $queryWBD = $con->query($selectWBD);
+        $fromWBD = array('clientName', 'clientID','agencyName','agencyID');
+        $resultWBD = $sql->fetch($queryWBD,$fromWBD,$fromWBD);
+       // var_dump($resultWBD);
+              
+        return $resultWBD;
+    }
+
+     public function getProbability(Object $con, int $client, int $agency, int $salesRep,$month){
+        $sql = new sql();
+
+        $selectQuery = "SELECT DISTINCT success_probability AS probability
+                        FROM monthly_forecast
+                        WHERE sales_rep_id IN ($salesRep)
+                        AND client_id = $client
+                        AND agency_id = $agency
+                        AND month = $month";
+       //var_dump($selectQuery);
+        $from = array('probability');
+        $selectResultQuery = $con->query($selectQuery);
+        $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
+
+        if ($resultSelect == false) {
+            $resultSelect[0]['probability'] = '100';
         }
 
-        $select .= "ORDER BY ID DESC";
+        return $resultSelect;
+    }
 
-        //echo "<pre>".($select)."</pre>";
-        $res = $con->query($select);
-        //var_dump($res);
-        $from = array('ID','oppid','region_id','sales_rep_id','currency_id',
-                      'type_of_value','read_q','year',
-                      'date_m','last_modify_by','last_modify_date','last_modify_time','month','submitted','type_of_forecast','name');
-        $to = array('ID','oppid','regionID','salesRepID','currencyID',
-                    'typeOfValue','readQ','year',
-                    'dateM','lastModifyBy','lastModifyDate','lastModifyTime','month','submitted','type_of_value','name');
-        $fcstInfo = $sql->fetch($res,$from,$to);
-        
-        return $fcstInfo;
+
+    public function getProbabilityNewClient(Object $con, String $client, String $agency, int $salesRep,$month){
+        $sql = new sql();
+
+        $selectQuery = "SELECT DISTINCT probability AS probability
+                        FROM new_clients_fcst
+                        WHERE sales_rep_id IN ($salesRep)
+                        AND client_id = $client
+                        AND agency_id = $agency
+                        AND month = $month";
+       //var_dump($selectQuery);
+        $from = array('probability');
+        $selectResultQuery = $con->query($selectQuery);
+        $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
+        //var_dump($resultSelect);
+        if ($resultSelect == false) {
+            $resultSelect = 0;
+        }
+
+        return $resultSelect;
     }
 
 }
