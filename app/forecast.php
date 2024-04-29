@@ -906,7 +906,7 @@ class forecast extends pAndR{
         $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
 
         if ($resultSelect == false) {
-            $resultSelect[0]['probability'] = 0;
+            $resultSelect[0]['probability'] = 100;
         }
 
         return $resultSelect;
@@ -927,7 +927,7 @@ class forecast extends pAndR{
         $resultSelect = $sql->fetch($selectResultQuery, $from, $from);
 
         if ($resultSelect == false) {
-            $resultSelect[0]['probability'] = 0;
+            $resultSelect[0]['probability'] = 100;
         }
 
         return $resultSelect;
