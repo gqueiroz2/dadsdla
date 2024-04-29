@@ -138,30 +138,33 @@ class AEController extends Controller{
 
         }else{
             
+          // var_dump($clientsMonthly);
             if ($newClient != null) {
                 $clients = array_merge($repInfo,$newClient);
-                $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
-            }elseif ($clientsMonthly != null) {
-                $clients = array_merge($repInfo,$clientsMonthly);
-                $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
-            }elseif($newClient != null && $clientsMonthly != null ){
-                $clients = array_merge($repInfo,$newClient);
-                $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
-                $clients = array_merge($clients,$clientsMonthly);
                 $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
             }else{
                 $clients = $repInfo;
             }
+            
+            if ($clientsMonthly != null) {
+                $clients = array_merge($repInfo,$clientsMonthly);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }else{
+                $clients = $repInfo;
+            }
+
+            $clients = array_unique($clients,SORT_REGULAR);
+            $clients = array_values($clients);
         } //ta funcionando
         
         $company = array('1','2','3');
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
         
+        $clients = array_unique($clients,SORT_REGULAR);
+        $clients = array_values($clients);
         //print_r($clients);
         //var_dump($check);
         for ($a=0; $a <sizeof($clients) ; $a++) { 
