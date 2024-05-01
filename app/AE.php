@@ -305,7 +305,7 @@ class AE extends pAndR{
         
         $year = (int)date("Y");
         $pYear = $year-1;
-        $months =  array(date('n')+1,date('n')+2,date('n')+3);
+        $months =  array(date('n'),date('n')+1,date('n')+2);
 
          $selectClient = "SELECT distinct  c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
                             from new_clients_fcst f
@@ -968,7 +968,7 @@ class AE extends pAndR{
     //THIS FUNCTION PLACE THE BOOKINGS VALUES TO CLOSED MONTHS IN THE FORECAST ARRAY
     public function addFcstWithBooking(Array $booking, Array $fcst, Array $monthly){
 
-        $date = intval(date('n'));
+        $date = intval(date('n')-1);
         $nDate = $date+1;
         $nNDate = $date + 2;
        //var_dump($nDate);

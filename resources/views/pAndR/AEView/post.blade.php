@@ -505,7 +505,7 @@
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m])}}</td>
                                             @else
-                                                @if($m >= date('n')+5)
+                                                @if($m >= date('n')+4)
                                                     <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="payTvForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}"></td>
                                                 @else
                                                     <td class="odd center" style="width:3%;">{{number_format($clientsTable['companyValues'][$a][$c]['payTvForecast'][$m],0,',','.')}}</td>
@@ -521,7 +521,7 @@
                                             @if ($m == 3 || $m == 7 || $m == 11 || $m == 15 ) 
                                                 <td class="quarter center" style="width:3%; color: black;">{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}</td>
                                             @else
-                                                 @if($m >= date('n')+5)
+                                                 @if($m >= date('n')+4)
                                                     <td class="odd center" style="width:3%;"><input style="color: red; width:100%; background-color:transparent; border:none; font-weight:bold; text-align:center;" placeholder="0" pattern="^\$\d{3.3}(.\d{3})*(\,\d+)?" data-type="currency" type="text" name="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" id="digitalForecast-{{$a}}-{{$c}}-{{$month[$m]}}" value="{{number_format($clientsTable['companyValues'][$a][$c]['digitalForecast'][$m],0,',','.')}}"></td>
 
                                                 @else
