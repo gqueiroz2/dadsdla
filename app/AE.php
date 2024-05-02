@@ -317,7 +317,7 @@ class AE extends pAndR{
                             ";
                     // var_dump($selectClient);
             $resultClient = $con->query($selectClient);
-            $from = array('clientID','clientName','agencyID','agencyName');
+            $from = array('clientName', 'clientID','agencyName','agencyID');
             $client = $sql->fetch($resultClient, $from, $from);
             //var_dump($client);
 
@@ -418,7 +418,7 @@ class AE extends pAndR{
                            order by c.name asc";
                     //echo "<pre>$queryClient[$c]</pre>";
                     $result[$c] = $con->query($queryClient[$c]);
-                    $from = array('agencyID', 'agencyName', 'clientID', 'clientName');
+                    $from = array('clientName', 'clientID','agencyName','agencyID');
                     $tmp[] = $sql->fetch($result[$c], $from, $from);
                 }
 
