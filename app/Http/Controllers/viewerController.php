@@ -591,7 +591,7 @@ class viewerController extends Controller{
         $salesRepString = Request::get('salesRepString');
         
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
-
+        //print_r($saveInfo);
         if ($table != null) {
             for ($t=0; $t <sizeof($table) ; $t++) { 
                 
