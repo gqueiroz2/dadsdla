@@ -112,7 +112,7 @@ class AEController extends Controller{
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
-        $currentMonth = date('n')+3;
+        $currentMonth = date('n')+2;
         //var_dump($currentMonth);
         $regionID = 1;
         $salesRepID = Request::get('salesRep');
@@ -128,7 +128,7 @@ class AEController extends Controller{
         $repInfo = $ae->getClientByRep($con, $salesRepID,'1', $cYear, $pYear);
 
         $clientsMonthly = $ae->getMonthlyClients($salesRepID,$con, $sql);    
-       //print_r($saveInfo);
+        //print_r($saveInfo);
 
         if($saveInfo['client'][0] != 0){
            // var_dump('aki');
@@ -166,7 +166,7 @@ class AEController extends Controller{
         $clients = array_unique($clients,SORT_REGULAR);
         $clients = array_values($clients);
         //print_r($clients);
-        //var_dump($check);
+       // var_dump($currentMonth);
         for ($a=0; $a <sizeof($clients) ; $a++) { 
             $client = (int) $saveInfo['client-'.$a];
             $agency = (int) $saveInfo['agency-'.$a];

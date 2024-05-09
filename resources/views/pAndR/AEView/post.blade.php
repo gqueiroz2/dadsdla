@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Forecast Cicle')
 @section('head')    
     <?php include(resource_path('views/auth.php')); 
 
@@ -73,7 +73,7 @@
     <div class="container-fluid">
         <div class="row justify-content-end mt-2">
             <div class="col-2" style="color: #0070c0;font-size: 25px;">
-                Account Executive Report
+                Forecast Cicle
             </div>
 
             <div class="col-3">

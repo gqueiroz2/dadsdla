@@ -1,5 +1,5 @@
 @extends('layouts.mirror')
-@section('title', 'AE Report')
+@section('title', 'Forecast Cicle')
 @section('head')	
     <?php include(resource_path('views/auth.php')); ?>
     <script src="/js/pandr.js"></script>
@@ -58,7 +58,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 25px;">
-				Account Executive Report
+				Forecast Cicle <span style="color:red;">(29/04 - 09/05)</span>
 			</div>
 		</div>
 	</div>
