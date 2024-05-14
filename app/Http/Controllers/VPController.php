@@ -74,8 +74,12 @@ class VPController extends Controller{
         //var_dump(Request::all());
         $repsTable = $vp->repTable($con,$manager,$month,$cYear,$pYear);
 
-        $managerTable = $vp->managerTable($con,$manager,$month,$cYear,$pYear,$repsTable);    
+        $managerTable = $vp->managerTable($con,$manager,$month,$cYear,$pYear,$repsTable);   
+
+        $title = "VP manager";
+        $titleExcel = "VP manager.xlsx";
+
         //var_dump($repsTable);
-        return view('pAndR.VPView.post',compact('base','render','months','cYear','pYear','repsTable','managerTable','managerName','monthName','user'));
+        return view('pAndR.VPView.post',compact('base','render','months','cYear','pYear','repsTable','managerTable','managerName','monthName','user','manager','title','titleExcel','month'));
     }
 }

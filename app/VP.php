@@ -83,7 +83,7 @@ class VP extends pAndR{
         return $table;
     }
 
-    public function repTable(Object $con,Array $manager,String $month, Int $year, Int $pYear){
+    public function repTable(Object $con,Array $manager, $month, Int $year, Int $pYear){
         $sR = new salesRep();
         
         if ($manager[0] == 'VV') {

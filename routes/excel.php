@@ -89,6 +89,8 @@ Route::group(['middleware' => 'auth'],function(){
 								    ->name('forecastExcel');
 				Route::post('baseReport','PAndRBaseExcelController@baseReport')
 								    ->name('basePandRExcel');
+				Route::post('vpView', 'vpExcelController@vpView')
+									->name('vpExcel');
 
 			});
 
