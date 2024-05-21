@@ -188,7 +188,7 @@ class AE extends pAndR{
         $clients = array_unique($clients,SORT_REGULAR);
         $clients = array_values($clients);
         //check if exists forecast for this rep in database
-        //var_dump($clients);
+       // var_dump($clients);
         for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
             for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
                 $check = $this->checkForecast($con, $salesRep,$clients[$a]['clientID'],$clients[$a]['agencyID'],$company[$c], 'pay tv');
@@ -314,6 +314,7 @@ class AE extends pAndR{
                             LEFT JOIN agency a ON a.id = f.agency_id
                             WHERE (sr.ID IN ($salesRep))
                             AND (f.month IN ($months[0],$months[1],$months[2]))
+
                             ";
                     // var_dump($selectClient);
             $resultClient = $con->query($selectClient);
@@ -846,19 +847,32 @@ class AE extends pAndR{
     //THIS FUNCTION GET ALL THE CLIENTS FOR THE SELECTED SALES REP
     public function getClientByRep(Object $con,int $salesRep, int $region, int $year, int $pYear){
         $sql = new sql();
-
-        $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+        //var_dump($salesRep);
+        if ($salesRep == '287') {
+            $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
                     FROM wbd w
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
                     WHERE (w.current_sales_rep_id = \"$salesRep\" )
-                    AND w.year IN (\"$year\",\"$pYear\")                    
+                    AND w.year IN (\"$year\")   
+                    AND w.gross_value > 0                 
                     ORDER BY 1
-                    ";
+                    ";    
+        }else{
+            $selectWBD = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+                    FROM wbd w
+                    LEFT JOIN client c ON c.ID = w.client_id
+                    LEFT JOIN agency a ON a.ID = w.agency_id
+                    WHERE (w.current_sales_rep_id = \"$salesRep\" )
+                    AND w.year IN (\"$year\",\"$pYear\")  
+                    AND w.gross_value > 0                  
+                    ORDER BY 1
+                    ";    
+        }
         $queryWBD = $con->query($selectWBD);
         $fromWBD = array('clientName', 'clientID','agencyName','agencyID');
         $resultWBD = $sql->fetch($queryWBD,$fromWBD,$fromWBD);
-        //var_dump($result);
+        //var_dump($resultWBD);
 
        /* $selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
                     FROM forecast w
