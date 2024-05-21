@@ -136,6 +136,14 @@ class AEController extends Controller{
             
             $saveNewClient = $ae->newClientInclusion($con,$salesRepID,$test[0],$test[1]);
 
+            if ($newClient != null) {
+                $clients = array_merge($repInfo,$newClient);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }else{
+                $clients = $repInfo;
+            }
+            
         }else{
             
           // var_dump($clientsMonthly);

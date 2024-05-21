@@ -865,7 +865,6 @@ class AE extends pAndR{
                     LEFT JOIN agency a ON a.ID = w.agency_id
                     WHERE (w.current_sales_rep_id = \"$salesRep\" )
                     AND w.year IN (\"$year\",\"$pYear\")  
-                    AND w.gross_value > 0                  
                     ORDER BY 1
                     ";    
         }
@@ -874,8 +873,8 @@ class AE extends pAndR{
         $resultWBD = $sql->fetch($queryWBD,$fromWBD,$fromWBD);
         //var_dump($resultWBD);
 
-       /* $selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
-                    FROM forecast w
+        /*$selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+                    FROM ae_forecast w
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
                     WHERE (w.sales_rep_id = \"$salesRep\" )                  
