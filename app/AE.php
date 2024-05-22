@@ -168,14 +168,7 @@ class AE extends pAndR{
         $repInfo = $this->getClientByRep($con, $salesRep, $region, $year, $pYear);
 
         $clientsMonthly = $this->getMonthlyClients($salesRep,$con, $sql);
-       // var_dump($clientsMonthly);
-        if ($newClient != null) {
-            $clients = array_merge($repInfo,$newClient);
-            $clients = array_unique($clients,SORT_REGULAR);
-            $clients = array_values($clients);
-        }else{
-            $clients = $repInfo;
-        }
+        //var_dump($newClient);
         
         if ($clientsMonthly != null) {
             $clients = array_merge($repInfo,$clientsMonthly);
@@ -185,10 +178,20 @@ class AE extends pAndR{
             $clients = $repInfo;
         }
 
+        if ($newClient != null) {
+            $clients = array_merge($repInfo,$newClient);
+            $clients = array_unique($clients,SORT_REGULAR);
+            $clients = array_values($clients);
+        }else{
+            $clients = $repInfo;
+        }
+        //var_dump($clients);
+        
+       // var_dump($clients);
         $clients = array_unique($clients,SORT_REGULAR);
         $clients = array_values($clients);
         //check if exists forecast for this rep in database
-       // var_dump($clients);
+        //var_dump($clients);
         for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
             for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
                 $check = $this->checkForecast($con, $salesRep,$clients[$a]['clientID'],$clients[$a]['agencyID'],$company[$c], 'pay tv');
@@ -402,7 +405,7 @@ class AE extends pAndR{
             $resultClient = $con->query($selectClient);
             $from = array('id','agency');
             $client = $sql->fetch($resultClient, $from, $from);
-            //var_dump($client);
+           // var_dump($client);
 
             if ($client != null) {
                 for ($c=0; $c < sizeof($client); $c++) {
@@ -422,7 +425,7 @@ class AE extends pAndR{
                     $from = array('clientName', 'clientID','agencyName','agencyID');
                     $tmp[] = $sql->fetch($result[$c], $from, $from);
                 }
-
+                //var_dump($tmp);
                 for ($x=0; $x <sizeof($tmp) ; $x++) { 
                    if ($tmp != false) {
                         $valueClient[] = $tmp[$x][0];
@@ -430,7 +433,7 @@ class AE extends pAndR{
                         $valueClient = "";
                     }
                 } 
-                
+               // var_dump($valueClient);
                 return $valueClient;
             }else{
                 $valueClient = "";
@@ -873,7 +876,7 @@ class AE extends pAndR{
         $resultWBD = $sql->fetch($queryWBD,$fromWBD,$fromWBD);
         //var_dump($resultWBD);
 
-        /*$selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
+        $selectForecast = "SELECT DISTINCT c.name as clientName, c.ID as clientID, a.name as agencyName, a.ID as agencyID
                     FROM ae_forecast w
                     LEFT JOIN client c ON c.ID = w.client_id
                     LEFT JOIN agency a ON a.ID = w.agency_id
@@ -882,8 +885,8 @@ class AE extends pAndR{
                     ";
         $queryForecast = $con->query($selectForecast);
         $fromForecast = array('clientName', 'clientID','agencyName','agencyID');
-        $resultForecast = $sql->fetch($queryForecast,$fromForecast,$fromForecast);*/
-        $resultForecast = false;
+        $resultForecast = $sql->fetch($queryForecast,$fromForecast,$fromForecast);
+        //$resultForecast = false;
         //var_dump($resultForecast);
         if ($resultForecast != false) {
             $result = array_merge($resultWBD,$resultForecast);

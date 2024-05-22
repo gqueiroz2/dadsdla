@@ -136,25 +136,6 @@ class AEController extends Controller{
             
             $saveNewClient = $ae->newClientInclusion($con,$salesRepID,$test[0],$test[1]);
 
-            if ($newClient != null) {
-                $clients = array_merge($repInfo,$newClient);
-                $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
-            }else{
-                $clients = $repInfo;
-            }
-            
-        }else{
-            
-          // var_dump($clientsMonthly);
-            if ($newClient != null) {
-                $clients = array_merge($repInfo,$newClient);
-                $clients = array_unique($clients,SORT_REGULAR);
-                $clients = array_values($clients);
-            }else{
-                $clients = $repInfo;
-            }
-            
             if ($clientsMonthly != null) {
                 $clients = array_merge($repInfo,$clientsMonthly);
                 $clients = array_unique($clients,SORT_REGULAR);
@@ -165,8 +146,30 @@ class AEController extends Controller{
 
             $clients = array_unique($clients,SORT_REGULAR);
             $clients = array_values($clients);
+
+        }else{
+             if ($clientsMonthly != null) {
+                $clients = array_merge($repInfo,$clientsMonthly);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }else{
+                $clients = $repInfo;
+            }
+            $clients = array_unique($clients,SORT_REGULAR);
+            $clients = array_values($clients);
+          // var_dump($clientsMonthly);
+            if ($newClient != null) {
+                $clients = array_merge($repInfo,$newClient);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            }else{
+                $clients = $repInfo;
+            }      
+
+            $clients = array_unique($clients,SORT_REGULAR);
+            $clients = array_values($clients);
         } //ta funcionando
-        
+        //var_dump($clients);
         $company = array('1','2','3');
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
@@ -197,12 +200,12 @@ class AEController extends Controller{
             }
         }
 
-        if ($newClient != null)  {
+       /* if ($newClient != null)  {
             $clients = array_merge($clients,$newClient);
             $clients = array_values($clients);
-        }        
+        } */       
         
-        
+        //var_dump($clients);
 
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
 
@@ -210,7 +213,7 @@ class AEController extends Controller{
 
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
-
+        //var_dump($clientsTable['clientInfo']);
         return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list'));
         
     }
