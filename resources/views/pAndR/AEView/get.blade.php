@@ -58,7 +58,7 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 24px;">
-				Forecast Cicle <span style="color:red;">(Aguarde o próximo ciclo)</span>
+				Forecast Cicle <span style="color:red;">(22/05 - 07/06)</span>
 			</div>
 		</div>
 	</div>
