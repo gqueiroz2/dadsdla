@@ -32,9 +32,16 @@ class forecastController extends Controller{
 
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
-
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $cMonth = date('M');
         $year = date('Y');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+        if ($cDate >= $lastMonday) {
+            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        }else{
+            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        }           
         //var_dump($months);
 
         $typeMsg = false;
@@ -69,9 +76,15 @@ class forecastController extends Controller{
         $currencyID = '1'; 
         $value = 'gross';
         $regionName = Request::session()->get('userRegion');
-       
-
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+        if ($cDate >= $lastMonday) {
+            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        }else{
+            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        }    
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
@@ -173,7 +186,17 @@ class forecastController extends Controller{
         //}
         $currencyID = '1';
         $value = 'gross';
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+
+        if ($cDate >= $lastMonday) {
+            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        }else{
+            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        }   
+        
         $intMonth = Request::get('month');
     
         $listOfClients = $fcst->listOFClients($con);

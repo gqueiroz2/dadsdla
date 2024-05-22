@@ -51,7 +51,17 @@ class aeExcelController extends Controller{
 
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
         
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
+        if ($cDate >= $lastMonday) {
+            $num = 5;
+            $u = 3;
+        }else{
+            $num = 4;
+            $u = 2;
+        }
         
         //var_dump($aeTable['total']);
         
@@ -63,8 +73,8 @@ class aeExcelController extends Controller{
      	
         $label = "exports.PandR.AE.aeConsolidateExport";
 
-         $auxTitle = $title;
-         $date = date('n')+2;
+        $auxTitle = $title;
+        $date = date('n')+$u;
 
         $month = array('Jan','Feb','Mar','Q1','Apr','May','Jun','Q2','Jul','Aug','Sep','Q3','Oct','Nov','Dec','Q4');
         $monthConsolidate = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');

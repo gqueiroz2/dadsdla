@@ -30,8 +30,17 @@ class VPController extends Controller{
         $pr = new pRate();
 
         $user = Request::session()->get('userName');
-       //var_dump($user);
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $year = date('Y');
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+        if ($cDate >= $lastMonday) {
+            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        }else{
+            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        }    
+       //var_dump($user);   
 
 		return view('pAndR.VPView.get',compact('render','months','user'));
     }
@@ -51,7 +60,17 @@ class VPController extends Controller{
         $cYear = date('Y');
         $pYear = $cYear - 1;
         $regionID = 1;
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
+        if ($cDate >= $lastMonday) {
+            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        }else{
+            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        }    
+
+        
         $user = Request::session()->get('userName');
         $month = Request::get('month');
         $monthName = $base->intToMonth2(array($month)); 

@@ -39,7 +39,30 @@ class vpExcelController extends Controller{
         $cYear = date('Y');
         $pYear = $cYear - 1;
         $regionID = 1;
-        $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2);    
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+        if ($cDate >= $lastMonday) {
+            $currentMonth = strval(date('n'))+1; 
+            $nextMonth = strval(date('n')+2);  
+            $nextNMonth = strval(date('n')+3);  
+            //var_dump($currentMonth);
+            $currentMonthName = $base->intToMonth2(array(intval(date('n')+1))); 
+            $nextMonthName = $base->intToMonth2(array(intval(date('n')+2)));  
+            $nextNMonthName = $base->intToMonth2(array(intval(date('n')+3)));
+        }else{
+            $currentMonth = strval(date('n')); 
+            $nextMonth = strval(date('n')+1);  
+            $nextNMonth = strval(date('n')+2);  
+            
+            //var_dump($currentMonth);
+            $currentMonthName = $base->intToMonth2(array(intval(date('n')))); 
+            $nextMonthName = $base->intToMonth2(array(intval(date('n')+1)));  
+            $nextNMonthName = $base->intToMonth2(array(intval(date('n')+2))); 
+        }    
+        $company = array('1','2','3');
+        
         $user = json_decode(base64_decode(Request::session()->get('userName')));
         $month = Request::get('month');
         $monthName = $base->intToMonth2(array($month)); 
@@ -67,15 +90,7 @@ class vpExcelController extends Controller{
 
         $date = date('Y-m-d');
         $fcstMonth = date('m');
-        //var_dump(Request::all());
-        $currentMonth = strval(date('n')); 
-        $nextMonth = strval(date('n')+1);  
-        $nextNMonth = strval(date('n')+2);  
-        $company = array('1','2','3');
-        //var_dump($currentMonth);
-        $currentMonthName = $base->intToMonth2(array(intval(date('n')))); 
-        $nextMonthName = $base->intToMonth2(array(intval(date('n')+1)));  
-        $nextNMonthName = $base->intToMonth2(array(intval(date('n')+2)));  
+        //var_dump(Request::all()); 
 
         $repsTableC = $vp->repTable($con,$manager,$currentMonth,$cYear,$pYear);
 

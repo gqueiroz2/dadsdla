@@ -14,7 +14,7 @@ use App\pRate;
 class AE extends pAndR{
     
     //THIS FUNCTION MAKE THE TOTAL FOR THE SALES REP MERGING THE COMPANIES AND CLIENTS
-    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value,$clientsTable){
+    public function makeRepTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value,$clientsTable,$cDate,$lastMonday){
         $company = array('1','2','3');
         $month = array('1','2','3','4','5','6','7','8','9','10','11','12');
 
@@ -149,7 +149,7 @@ class AE extends pAndR{
 
 
     //THIS FUNCTION MAKE ALL THE CLIENTS TABLE TO PASS TO FRONT
-    public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value){
+    public function makeClientsTable(Object $con, int $salesRep, Object $pr, int $year, int $pYear, int $region, int $currencyID, string $value,$cDate,$lastMonday){
         $sql = new sql();
         $month = 0;
         $company = array('1','2','3');
@@ -167,7 +167,7 @@ class AE extends pAndR{
 
         $repInfo = $this->getClientByRep($con, $salesRep, $region, $year, $pYear);
 
-        $clientsMonthly = $this->getMonthlyClients($salesRep,$con, $sql);
+        $clientsMonthly = $this->getMonthlyClients($salesRep,$con, $sql,$cDate,$lastMonday);
         //var_dump($newClient);
         
         if ($clientsMonthly != null) {
@@ -304,11 +304,15 @@ class AE extends pAndR{
        return $table;
     }
 
-    public function getMonthlyClients(String $salesRep, Object $con, Object $sql){
+    public function getMonthlyClients(String $salesRep, Object $con, Object $sql,$cDate,$lastMonday){
         
         $year = (int)date("Y");
         $pYear = $year-1;
-        $months =  array(date('n'),date('n')+1,date('n')+2);
+        if ($cDate >= $lastMonday) {
+            $months =  array(date('n')+1,date('n')+2,date('n')+3);
+        }else{
+            $months =  array(date('n'),date('n')+1,date('n')+2);
+        }       
 
          $selectClient = "SELECT distinct  c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
                             from new_clients_fcst f
@@ -984,11 +988,22 @@ class AE extends pAndR{
     //THIS FUNCTION PLACE THE BOOKINGS VALUES TO CLOSED MONTHS IN THE FORECAST ARRAY
     public function addFcstWithBooking(Array $booking, Array $fcst, Array $monthly){
 
-        $date = intval(date('n')-1);
-        $nDate = $date+1;
-        $nNDate = $date + 2;
-       //var_dump($nDate);
+        $cDate = date('d/m/Y');
+        $cMonth = date('M');
+        $cYear = date('Y');
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
 
+        if ($cDate >= $lastMonday) {
+            $date = intval(date('n'));
+            $nDate = $date+1;
+            $nNDate = $date + 2;
+        }else{
+            $date = intval(date('n')-1);
+            $nDate = $date+1;
+            $nNDate = $date + 2;
+       
+        }  
+        //var_dump($nDate);
     
         for ($c=0; $c < sizeof($booking); $c++) { 
             if ($c<$date) {

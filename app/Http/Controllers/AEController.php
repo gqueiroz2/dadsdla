@@ -66,6 +66,10 @@ class AEController extends Controller{
         $regionName = Request::session()->get('userRegion');
         $salesRepName = $sr->getSalesRepById($con,array($salesRepID));
         $list = $ae->listOFClients($con, $cYear);
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
 
         $validator = Validator::make(Request::all(),[
             'region' => 'required',
@@ -77,17 +81,22 @@ class AEController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-        
-        
-        //var_dump($aeTable['total']);
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);  
 
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
+        if ($cDate >= $lastMonday) {
+            $num = 5;
+        }else{
+            $num = 4;
+        }
+
+        //var_dump($aeTable['total']);
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);  
+
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable,$cDate,$lastMonday);
 
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
         //var_dump($clientsTable['clientInfo'][0]['probability']);
-       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear','list'));
+       return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel', 'cYear','pYear','list','num'));
     }
     
     public function save(){
@@ -112,7 +121,19 @@ class AEController extends Controller{
         $currency = $pr->getCurrency($con,false)[0]['name'];
         $permission = Request::session()->get('userLevel');
         $user = Request::session()->get('userName');
-        $currentMonth = date('n')+2;
+        $cMonth = date('M');
+        $cDate = date('d/m/Y');
+        
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
+        if ($cDate >= $lastMonday) {
+            $num = 5;
+            $u = 3;
+        }else{
+            $num = 4;
+            $u = 2;
+        }
+
+        $currentMonth = date('n')+$u;
         //var_dump($currentMonth);
         $regionID = 1;
         $salesRepID = Request::get('salesRep');
@@ -214,7 +235,7 @@ class AEController extends Controller{
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
         //var_dump($clientsTable['clientInfo']);
-        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list'));
+        return view('pAndR.AEView.post',compact('render','region','currencyID','aeTable','salesRepName','currency','value','clientsTable','salesRepID','title','titleExcel','cYear','pYear','list','num'));
         
     }
 
