@@ -148,7 +148,7 @@ class AEController extends Controller{
 
         $repInfo = $ae->getClientByRep($con, $salesRepID,'1', $cYear, $pYear);
 
-        $clientsMonthly = $ae->getMonthlyClients($salesRepID,$con, $sql);    
+        $clientsMonthly = $ae->getMonthlyClients($salesRepID,$con, $sql,$cDate,$lastMonday);    
         //print_r($saveInfo);
 
         if($saveInfo['client'][0] != 0){
@@ -228,9 +228,9 @@ class AEController extends Controller{
         
         //var_dump($clients);
 
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);   
 
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable,$cDate,$lastMonday);
 
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      

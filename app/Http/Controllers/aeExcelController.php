@@ -65,8 +65,8 @@ class aeExcelController extends Controller{
         
         //var_dump($aeTable['total']);
         
-        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value);   
-        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable);
+        $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);   
+        $aeTable = $ae->makeRepTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$clientsTable,$cDate,$lastMonday);
         
         $title = "Forecast.xlsx";
         $titleExcel = "Forecast.xlsx";      
