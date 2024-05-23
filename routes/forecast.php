@@ -15,7 +15,7 @@
 
 Route::group(['prefix'=>'forecast'],function(){	
 
-	Route::group(['prefix'=>'byAE'],function(){
+	Route::group(['prefix'=>'monthlyForecast'],function(){
 			
 			Route::get('/','forecastController@byAEGet')
 										->name('forecastByAEGet');

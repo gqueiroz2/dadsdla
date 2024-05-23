@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('pacingReportPost');
 		});
 
-		Route::group(['prefix'=>'AdvertisersAdjust'],function(){
+		Route::group(['prefix'=>'managerView'],function(){
 			
 			Route::get('/','VPController@get')
 										->name('VPGet');
@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth'],function(){
 										->name('VPSave');
 		});
 		
-		Route::group(['prefix'=>'AccountExecutiveReport'],function(){
+		Route::group(['prefix'=>'forecastCicle'],function(){
 			
 			Route::get('/','AEController@get')
 										->name('AEGet');
