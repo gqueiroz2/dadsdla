@@ -88,7 +88,7 @@
     <div class="container-fluid fill px-4 d-table">
         <div id="map" class="aligh-middle" >
             <center>
-                <img src="\portalLogo.png" style="max-width: 35%; margin-top: 10%; height: auto;" <?php echo(date("U")); ?>>
+                <img src="\wMiniLogo.png" style="max-width: 35%; margin-top: 10%; height: auto;" <?php echo(date("U")); ?>>
             </center>
         </div> <!-- This one wants to be 100% height -->
     </div>

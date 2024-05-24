@@ -15,10 +15,13 @@ class VP extends pAndR{
     
     public function managerTable(Object $con,Array $manager,String $month, Int $year, Int $pYear,$repsTable){
         $sales = new salesRep();
+        $pr = new pRate();
 
         $managerId = $sales->getGroupIdByName($con,$manager);
         $company = array('1','2','3');
-
+        $currencyID = 1;
+        $region = 1;
+        //var_dump($manager);
         $totalPayTvForecast = 0;
         $totalDigitalForecast = 0;
         $totalForecast = 0;
@@ -27,6 +30,7 @@ class VP extends pAndR{
         $totalPayTvBookings = 0;
         $totalDigitalBookings = 0;
         $totalPreviousBookings = 0;
+        $totalTarget = 0;
         
         for ($c=0; $c <sizeof($company) ; $c++) { 
             $payTvForecast[$c] = 0;
@@ -37,6 +41,7 @@ class VP extends pAndR{
             $digitalBookings[$c] = 0;
             $payTvBookings[$c] = 0;
             $previousBookings[$c] = 0;
+            $currentTarget[$c] = 0;
         
             for ($m=0; $m <sizeof($repsTable['repInfo']); $m++) { 
 
@@ -45,19 +50,57 @@ class VP extends pAndR{
                 $forecast[$c] += $repsTable['repValues'][$m][$c]['forecast'];
                 $bookings[$c] += $repsTable['repValues'][$m][$c]['bookings'];
                 $pending[$c] = $forecast[$c] - $bookings[$c];
+
                 if($pending[$c] < 0){
                     $pending[$c] = 0;
                 }
+
                 $digitalBookings[$c] += $repsTable['repValues'][$m][$c]['digitalBookings'];
                 $payTvBookings[$c] += $repsTable['repValues'][$m][$c]['payTvBookings'];
                 $previousBookings[$c] += $repsTable['repValues'][$m][$c]['previousBookings'];
-                //$target[$m][$c] = $this->getValuesByMonth($con,$managerId[$m]['id'],$month,$year,'target',$company[$c]);
+                
+                if ($manager[0] == 'REGIONAIS') {
+                    if($currencyID == 1 ){
+                         $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year)); 
 
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'137,9',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;   
+                    }else{
+                        $pRate = 1;
 
-                $pivot[$c] = array('payTvForecast' => ($payTvForecast[$c]), 'digitalForecast' => ($digitalForecast[$c]), 'payTvForecastC' => $payTvForecast[$c], 'digitalForecastC' => $digitalForecast[$c],'forecast' => ($forecast[$c]), 'bookings' => ($bookings[$c]), 'pending' => ($pending[$c]), 'digitalBookings' => $digitalBookings[$c], 'payTvBookings' => $payTvBookings[$c], 'previousBookings' => $previousBookings[$c]);
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'137,9',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;      
+                    }
+                }elseif ($manager[0] == 'VV') {
+                    if($currencyID == 1 ){
+                         $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year)); 
+
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'137',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;   
+                    }else{
+                        $pRate = 1;
+
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'137',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;      
+                    }
+                }elseif($manager[0] == 'RA'){
+                    if($currencyID == 1 ){
+                         $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year)); 
+
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'9',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;   
+                    }else{
+                        $pRate = 1;
+
+                        $currentTarget[$c] = floatval(($this->getValuesByMonth($con,'9',$month,$year,'target',$company[$c],null,null,null))['revenue'])*$pRate;      
+                    }
+                }else{
+                    $currentTarget[$c]  += $repsTable['repValues'][$m][$c]['currentTarget'];
+                }                
+
+                
+
+                $pivot[$c] = array('payTvForecast' => ($payTvForecast[$c]), 'digitalForecast' => ($digitalForecast[$c]), 'payTvForecastC' => $payTvForecast[$c], 'digitalForecastC' => $digitalForecast[$c],'forecast' => ($forecast[$c]), 'bookings' => ($bookings[$c]), 'pending' => ($pending[$c]), 'digitalBookings' => $digitalBookings[$c], 'payTvBookings' => $payTvBookings[$c], 'previousBookings' => $previousBookings[$c],'currentTarget' => $currentTarget[$c]);
             }
             
-        }
+        }  
+
+        $totalTarget =  $currentTarget[0] + $currentTarget[1] + $currentTarget[2];
 
         for ($m=0; $m <sizeof($repsTable['repInfo']); $m++) { 
             $totalPayTvForecast += $repsTable['total'][$m]['payTvForecast'];
@@ -72,9 +115,10 @@ class VP extends pAndR{
             $totalPayTvBookings += $repsTable['total'][$m]['payTvBookings'];
             $totalDigitalBookings += $repsTable['total'][$m]['digitalBookings'];
             $totalPreviousBookings += $repsTable['total'][$m]['previousBookings'];
+           
         }
 
-        $totalPivot = array('payTvForecast' => ($totalPayTvForecast), 'digitalForecast' => ($totalDigitalForecast),'forecast' => ($totalForecast), 'bookings' => ($totalBookings),'pending' => ($totalPending),'payTvBookings' => $totalPayTvBookings, 'digitalBookings' => $totalDigitalBookings, 'previousBookings' => $totalPreviousBookings);
+        $totalPivot = array('payTvForecast' => ($totalPayTvForecast), 'digitalForecast' => ($totalDigitalForecast),'forecast' => ($totalForecast), 'bookings' => ($totalBookings),'pending' => ($totalPending),'payTvBookings' => $totalPayTvBookings, 'digitalBookings' => $totalDigitalBookings, 'previousBookings' => $totalPreviousBookings, 'currentTarget' => $totalTarget);
 
         //var_dump($totalPivot);
         
@@ -85,7 +129,8 @@ class VP extends pAndR{
 
     public function repTable(Object $con,Array $manager, $month, Int $year, Int $pYear){
         $sR = new salesRep();
-        
+        $pr = new pRate();
+
         if ($manager[0] == 'VV') {
             $managerId[0]['id'] = '5';
             $managerId[0]['name'] = 'Victor Vasconcelos';
@@ -95,6 +140,9 @@ class VP extends pAndR{
         }else{
             $managerId = $sR->getGroupIdByName($con,$manager);    
         }
+        $currencyID = 1;
+        $region = 1;
+        
 
         $company = array('1','2','3');
         $companyView = array('wm','dc','spt');
@@ -149,7 +197,15 @@ class VP extends pAndR{
 
                     }
                 }
-                //$target[$m][$c] = $this->getValuesByMonth($con,$managerId[$m]['id'],$month,$year,'target',$company[$c],null);
+                if($currencyID == 1 ){
+                     $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year)); 
+
+                    $currentTarget[$r][$c] = floatval(($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'target',$company[$c],null))['revenue'])*$pRate;   
+                }else{
+                    $pRate = 1;
+
+                    $currentTarget[$r][$c] = floatval(($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'target',$company[$c],null))['revenue'])*$pRate;      
+                }
                // $payTvForecast[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecast',$company[$c],'pay tv'))['revenue'];
                 //$payTvForecastNew[$r][$c] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'forecastNew',$companyView[$c],'pay tv',null,null))['revenue'];
                 $payTvForecast[$r][$c] = ($payTvForecast[$r][$c] + $payTvForecastNew[$r][$c]);
@@ -159,7 +215,6 @@ class VP extends pAndR{
                 $digitalForecast[$r][$c] = ($digitalForecast[$r][$c] + $digitalForecastNew[$r][$c]);
 
                 $forecast[$r][$c] = $payTvForecast[$r][$c] + $digitalForecast[$r][$c];
-
                
 
                 $bookings[$r][$c] = ($payTvBookings[$r][$c] + $digitalBookings[$r][$c]);
@@ -170,7 +225,7 @@ class VP extends pAndR{
                     $pending[$r][$c] = 0;
                 }                
 
-                $pivot[$r][$c] = array('payTvForecast' => ($payTvForecast[$r][$c]), 'digitalForecast' => ($digitalForecast[$r][$c]), 'payTvForecastC' => $payTvForecast[$r][$c], 'digitalForecastC' => $digitalForecast[$r][$c],'forecast' => ($forecast[$r][$c]), 'bookings' => ($bookings[$r][$c]), 'pending' => ($pending[$r][$c]), 'digitalBookings' => $digitalBookings[$r][$c], 'payTvBookings' => $payTvBookings[$r][$c], 'previousBookings' => $previousBookings[$r][$c]);
+                $pivot[$r][$c] = array('payTvForecast' => ($payTvForecast[$r][$c]), 'digitalForecast' => ($digitalForecast[$r][$c]), 'payTvForecastC' => $payTvForecast[$r][$c], 'digitalForecastC' => $digitalForecast[$r][$c],'forecast' => ($forecast[$r][$c]), 'bookings' => ($bookings[$r][$c]), 'pending' => ($pending[$r][$c]), 'digitalBookings' => $digitalBookings[$r][$c], 'payTvBookings' => $payTvBookings[$r][$c], 'previousBookings' => $previousBookings[$r][$c], 'currentTarget' => $currentTarget[$r][$c]);
                 
             }
 
@@ -198,8 +253,18 @@ class VP extends pAndR{
             
 
             $totalPreviousBookings[$r] = ($this->getValuesByMonth($con,$rep[$r]['id'],$month,$pYear,'bookings','1,2,3',null,null,null))['revenue'];
+            if($currencyID == 1 ){
+                 $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year)); 
+
+                $totalTarget[$r] = floatval(($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'target','1,2,3',null,null,null))['revenue'])*$pRate;   
+            }else{
+                $pRate = 1;
+
+                $totalTarget[$r] = floatval(($this->getValuesByMonth($con,$rep[$r]['id'],$month,$year,'target','1,2,3',null,null,null))['revenue'])*$pRate;      
+            }
+
             
-            $totalPivot[$r] = array('payTvForecast' => ($totalPayTvForecast[$r]), 'digitalForecast' => ($totalDigitalForecast[$r]),'forecast' => ($totalForecast[$r]), 'bookings' => ($totalBookings[$r]),'pending' => ($totalPending[$r]),'payTvBookings' => $totalPayTvBookings[$r], 'digitalBookings' => $totalDigitalBookings[$r], 'previousBookings' => $totalPreviousBookings[$r]);
+            $totalPivot[$r] = array('payTvForecast' => ($totalPayTvForecast[$r]), 'digitalForecast' => ($totalDigitalForecast[$r]),'forecast' => ($totalForecast[$r]), 'bookings' => ($totalBookings[$r]),'pending' => ($totalPending[$r]),'payTvBookings' => $totalPayTvBookings[$r], 'digitalBookings' => $totalDigitalBookings[$r], 'previousBookings' => $totalPreviousBookings[$r], 'currentTarget' => $totalTarget[$r]);
            
             $repInfo[$r] = array('salesRep' => $rep[$r]['name'], 'repID' => $rep[$r]['id']);
         }
@@ -241,6 +306,7 @@ class VP extends pAndR{
 
     public function getValuesByMonth(Object $con,String $user,String $month,Int $year,String $table,String $company, $platform=null,$client=null,$agency=null){
         $sql = new sql();
+        $value = 'GROSS';
 
         switch ($table) {
             case 'forecast':
@@ -328,6 +394,26 @@ class VP extends pAndR{
                     $from = 'revenue';
                     $resultAE = $sql->fetchSUM($query,$from);
                 break;
+            case 'target':
+                 $select = "SELECT sum(pbs.value) as revenue
+                            FROM plan_by_sales pbs
+                            LEFT JOIN brand b on b.id = pbs.brand_id
+                            WHERE pbs.sales_rep_id IN ($user)
+                            AND pbs.year = $year
+                            AND pbs.month = $month
+                            AND pbs.type_of_revenue = '$value'
+                            AND pbs.region_id = 1
+                            AND (b.brand_group_id IN ($company))
+                            ";
+                //var_dump($select);
+                $query = $con->query($select);
+                $from = 'revenue';
+                $resultAE = $sql->fetchSUM($query,$from);
+                
+                if ($resultAE['revenue'] == null) {
+                    $resultAE['revenue'] = 0.0;
+                }
+
             default:
                 // code...
                 break;

@@ -93,10 +93,10 @@
                 <tr>
                     <td class="even center">TARGET</td>
                      @for($c=0; $c <sizeof($company); $c++)
-                        <td class="even" id='' style='text-align:center; width:3%;'>0
+                        <td class="even" id='' style='text-align:center; width:3%;'>{{number_format($managerTable['managerValues'][$c]['currentTarget'],0,',','.')}}
                         </td>   
                     @endfor
-                    <td class="darkBlue center" style='width:5%;'>0</td>
+                     <td class="darkBlue center" style='width:5%;'>{{number_format($managerTable['total']['currentTarget'],0,',','.')}}</td>
                 </tr>
                 <tr>
                     <td class="odd center">FCST - PAY TV</td>
@@ -193,10 +193,10 @@
                 <tr>
                     <td class="even center">TARGET</td>
                      @for($c=0; $c <sizeof($company); $c++)
-                        <td class="even" id='' style='text-align:center; width:3%;'>0
+                        <td class="even" id='' style='text-align:center; width:3%;'> {{number_format($repsTable['repValues'][$r][$c]['currentTarget'],0,',','.')}}
                         </td>   
                     @endfor
-                    <td class="darkBlue center" style='width:5%;'>0</td>
+                     <td class="darkBlue center" style='width:5%;'>{{number_format($repsTable['total'][$r]['currentTarget'],0,',','.')}}</td>
                 </tr>
                 <tr>
                     <td class="odd center">FCST - PAY TV</td>
