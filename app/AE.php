@@ -168,8 +168,8 @@ class AE extends pAndR{
         $repInfo = $this->getClientByRep($con, $salesRep, $region, $year, $pYear);
 
         $clientsMonthly = $this->getMonthlyClients($salesRep,$con, $sql,$cDate,$lastMonday);
+        //var_dump($clientsMonthly);
         //var_dump($newClient);
-        
         if ($clientsMonthly != null) {
             $clients = array_merge($repInfo,$clientsMonthly);
             $clients = array_unique($clients,SORT_REGULAR);
@@ -177,19 +177,21 @@ class AE extends pAndR{
         }else{
             $clients = $repInfo;
         }
-
+        
+        $clients = array_unique($clients,SORT_REGULAR);
+        $clients = array_values($clients);
+        
+        //var_dump($clients);
         if ($newClient != null) {
             $clients = array_merge($repInfo,$newClient);
             $clients = array_unique($clients,SORT_REGULAR);
             $clients = array_values($clients);
-        }else{
-            $clients = $repInfo;
-        }
-        //var_dump($clients);
+        }       
         
        // var_dump($clients);
         $clients = array_unique($clients,SORT_REGULAR);
         $clients = array_values($clients);
+
         //check if exists forecast for this rep in database
         //var_dump($clients);
         for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
@@ -434,13 +436,13 @@ class AE extends pAndR{
                    if ($tmp != false) {
                         $valueClient[] = $tmp[$x][0];
                     }else{
-                        $valueClient = "";
+                        $valueClient = null;
                     }
                 } 
                // var_dump($valueClient);
                 return $valueClient;
             }else{
-                $valueClient = "";
+                $valueClient = null;
 
                 return $valueClient;
             }
