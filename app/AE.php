@@ -170,27 +170,34 @@ class AE extends pAndR{
         $clientsMonthly = $this->getMonthlyClients($salesRep,$con, $sql,$cDate,$lastMonday);
         //var_dump($clientsMonthly);
         //var_dump($newClient);
-        if ($clientsMonthly != null) {
+        if ($clientsMonthly != null && $newClient != null) {
+            //var_dump('ali');
+            $temp = array_merge($clientsMonthly,$newClient);
+            $clients = array_merge($repInfo,$temp);
+            $clients = array_unique($clients,SORT_REGULAR);
+            $clients = array_values($clients);
+        
+        }elseif ($clientsMonthly != null) {
+       // var_dump('aki');
             $clients = array_merge($repInfo,$clientsMonthly);
             $clients = array_unique($clients,SORT_REGULAR);
             $clients = array_values($clients);
-        }else{
-            $clients = $repInfo;
-        }
         
-        $clients = array_unique($clients,SORT_REGULAR);
-        $clients = array_values($clients);
+        }elseif ($newClient != null) {
         
-        //var_dump($clients);
-        if ($newClient != null) {
             $clients = array_merge($repInfo,$newClient);
             $clients = array_unique($clients,SORT_REGULAR);
             $clients = array_values($clients);
-        }       
         
-       // var_dump($clients);
-        $clients = array_unique($clients,SORT_REGULAR);
-        $clients = array_values($clients);
+        }else{
+        
+            $clients = $repInfo;
+        
+        }
+        
+        //var_dump($clients);
+        //$clients = array_unique($clients,SORT_REGULAR);
+        //$clients = array_values($clients);
 
         //check if exists forecast for this rep in database
         //var_dump($clients);

@@ -169,26 +169,30 @@ class AEController extends Controller{
             $clients = array_values($clients);
 
         }else{
-             if ($clientsMonthly != null) {
+            if ($clientsMonthly != null && $newClient != null) {
+                //var_dump('ali');
+                $temp = array_merge($clientsMonthly,$newClient);
+                $clients = array_merge($repInfo,$temp);
+                $clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_values($clients);
+            
+            }elseif ($clientsMonthly != null) {
+           // var_dump('aki');
                 $clients = array_merge($repInfo,$clientsMonthly);
                 $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
-            }else{
-                $clients = $repInfo;
-            }
-            $clients = array_unique($clients,SORT_REGULAR);
-            $clients = array_values($clients);
-          // var_dump($clientsMonthly);
-            if ($newClient != null) {
+            
+            }elseif ($newClient != null) {
+            
                 $clients = array_merge($repInfo,$newClient);
                 $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
+            
             }else{
+            
                 $clients = $repInfo;
-            }      
-
-            $clients = array_unique($clients,SORT_REGULAR);
-            $clients = array_values($clients);
+            
+            }
         } //ta funcionando
         //var_dump($clients);
         $company = array('1','2','3');
