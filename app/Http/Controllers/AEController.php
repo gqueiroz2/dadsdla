@@ -78,15 +78,16 @@ class AEController extends Controller{
             'value' => 'required',
             'salesRep' => 'required'
         ]);
+        
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        if ($cDate >= $lastMonday) {
-            $num = 5;
-        }else{
+       // if ($cDate >= $lastMonday) {
+            $num = 6;
+        /*}else{
             $num = 4;
-        }
+        }*/
 
         //var_dump($aeTable['total']);
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);  
@@ -125,13 +126,13 @@ class AEController extends Controller{
         $cDate = date('d/m/Y');
         
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
-        if ($cDate >= $lastMonday) {
+        //if ($cDate >= $lastMonday) {
             $num = 5;
-            $u = 3;
-        }else{
+            $u = 4;
+        /*}else{
             $num = 4;
             $u = 2;
-        }
+        }*/
 
         $currentMonth = date('n')+$u;
         //var_dump($currentMonth);
@@ -174,6 +175,7 @@ class AEController extends Controller{
                 $temp = array_merge($clientsMonthly,$newClient);
                 $clients = array_merge($repInfo,$temp);
                 $clients = array_unique($clients,SORT_REGULAR);
+                array_push($clients,$newClient);
                 $clients = array_values($clients);
             
             }elseif ($clientsMonthly != null) {
@@ -185,7 +187,7 @@ class AEController extends Controller{
             }elseif ($newClient != null) {
             
                 $clients = array_merge($repInfo,$newClient);
-                $clients = array_unique($clients,SORT_REGULAR);
+                //$clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
             
             }else{

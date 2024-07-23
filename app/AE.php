@@ -997,7 +997,8 @@ class AE extends pAndR{
     //THIS FUNCTION PLACE THE BOOKINGS VALUES TO CLOSED MONTHS IN THE FORECAST ARRAY
     public function addFcstWithBooking(Array $booking, Array $fcst, Array $monthly){
 
-        $cDate = date('d/m/Y');
+       // $cDate = date('d/m/Y');
+        $cDate = '29/07/2024';
         $cMonth = date('M');
         $cYear = date('Y');
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
