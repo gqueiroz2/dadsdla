@@ -127,8 +127,8 @@ class AEController extends Controller{
         
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
         //if ($cDate >= $lastMonday) {
-            $num = 5;
-            $u = 4;
+            $num = 6;
+            $u = 3;
         /*}else{
             $num = 4;
             $u = 2;
@@ -175,7 +175,7 @@ class AEController extends Controller{
                 $temp = array_merge($clientsMonthly,$newClient);
                 $clients = array_merge($repInfo,$temp);
                 $clients = array_unique($clients,SORT_REGULAR);
-                array_push($clients,$newClient);
+                //array_push($clients,$newClient);
                 $clients = array_values($clients);
             
             }elseif ($clientsMonthly != null) {
@@ -187,7 +187,7 @@ class AEController extends Controller{
             }elseif ($newClient != null) {
             
                 $clients = array_merge($repInfo,$newClient);
-                //$clients = array_unique($clients,SORT_REGULAR);
+                $clients = array_unique($clients,SORT_REGULAR);
                 $clients = array_values($clients);
             
             }else{
@@ -201,8 +201,7 @@ class AEController extends Controller{
         $month = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
         $intMonth = array('1','2','3','4','5','6','7','8','9','10','11','12');
         
-        $clients = array_unique($clients,SORT_REGULAR);
-        $clients = array_values($clients);
+        
         //print_r($clients);
        // var_dump($currentMonth);
         for ($a=0; $a <sizeof($clients) ; $a++) { 
@@ -214,7 +213,7 @@ class AEController extends Controller{
                 for ($m=$currentMonth; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
-                  //  var_dump($payTvForecast);
+                    var_dump($payTvForecast);
                     //$check = $ae->checkForecast($con, $salesRepID,$client,$agency,$company[$c], 'pay tv');//check if exists forecast for this rep in database
                     //var_dump($check);
                     //insere valores de pay tv

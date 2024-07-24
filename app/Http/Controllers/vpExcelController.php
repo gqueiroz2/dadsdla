@@ -42,7 +42,7 @@ class vpExcelController extends Controller{
         $cMonth = date('M');
         $cDate = date('d/m/Y');
         
-        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
         if ($cDate >= $lastMonday) {
             $currentMonth = strval(date('n'))+1; 
             $nextMonth = strval(date('n')+2);  

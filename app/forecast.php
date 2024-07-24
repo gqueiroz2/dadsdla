@@ -162,8 +162,20 @@ class forecast extends pAndR{
         }
 
         $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear,$month);
-        //var_dump($clients);
-        //var_dump($newClient);
+
+         $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear,$month);
+
+        $newClients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
+        for ($a=0; $a <sizeof($clients) ; $a++) { 
+            for ($aa=0; $aa <sizeof($newClients) ; $aa++) { 
+                 if ($clients[$a]['clientID'] == $newClients[$aa]['clientID']) {
+                    unset($clients[$a]);
+                }           
+            }
+            
+        }
+        $clients = array_values($clients);
+
       
        // var_dump($clients);
        if ($clients != 'THERE IS NO INFORMATION TO THIS REP') {
@@ -247,6 +259,7 @@ class forecast extends pAndR{
         $sql = new sql();
        // $month = 0;
         $company = array('wm','dc','spt');
+        $companyNum =  array(1,2,3);
         //$month = date('m');
         $totalPayTvForecast = 0;
         $totalDigitalForecast = 0;
@@ -256,7 +269,9 @@ class forecast extends pAndR{
         }else{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
-         
+        
+       
+        
         $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
        // var_dump($clients);
         if ($clients == null) {
@@ -266,21 +281,24 @@ class forecast extends pAndR{
            
            // var_dump($clients);
             for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
-                 $check = $this->checkForecast($con, $salesRep,$month,$clients[$a]['cID'],$clients[$a]['aID']);
+                 $this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'pay tv');
+                 $this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'digital');
+
                 for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
                     //var_dump($salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c]);
                    // if($check != false){
-                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);
+                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', $company[$c])['revenue']);
 
-                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
+                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital',$company[$c])['revenue']);
                     /*}else{
-                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', $company[$c])['revenue']);    
-                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
+                        $payTvForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', $company[$c])['revenue']);    
+                        $digitalForecast[$a][$c] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital',$company[$c])['revenue']);
                     }*/
 
 
-                    $currentPayTvBookings[$a][$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv',$company[$c])['revenue']);
-                    $currentDigitalBookings[$a][$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital',$company[$c])['revenue']);
+                    $currentPayTvBookings[$a][$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv',$companyNum[$c])['revenue']);
+                    //var_dump($currentPayTvBookings);
+                    $currentDigitalBookings[$a][$c] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital',$companyNum[$c])['revenue']);
                     $currentTarget[$a][$c] = 0;
 
                     //this variable is the total of forecast by company and client
@@ -301,19 +319,19 @@ class forecast extends pAndR{
                     $totalPayTvForecast = array();
                     $totalDigitalForecast = array();
 
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', 'wm')['revenue']);
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', 'wm')['revenue']);
 
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital', 'wm')['revenue']);
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital', 'dc')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital', 'spt')['revenue']) + ($this->getValueByClient($con,$salesRep,$year,$value,$month,'forecast',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital', 'wm')['revenue']);
                     //var_dump($totalPayTvForecast);
                 /*}else{
                     $totalPayTvForecast = array();
                     $totalDigitalForecast = array();
-                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv', '1,2,3')['revenue']);
-                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
+                    $totalPayTvForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv', '1,2,3')['revenue']);
+                    $totalDigitalForecast[$a] = ($this->getValueByClient($con,$salesRep,$year,$value,$month,'tRex',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')['revenue']);
                 }   */
                 
-                $totalCurrentPayTvBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['cID'],$clients[$a]['aID'], $region,'pay tv','1,2,3')['revenue']);           
-                $totalCurrentDigitalBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['cID'],$clients[$a]['aID'], $region,'digital','1,2,3')['revenue']);
+                $totalCurrentPayTvBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'pay tv','1,2,3')['revenue']);           
+                $totalCurrentDigitalBookings[$a] = ($this->getValueByMonth($con,$salesRep,$year,$value,$month,'bookings',$clients[$a]['clientID'],$clients[$a]['agencyID'], $region,'digital','1,2,3')['revenue']);
                  
                 $totalForecast[$a] = ($totalPayTvForecast[$a] + $totalDigitalForecast[$a]);
                 //var_dump($totalCurrentDigitalBookings);
@@ -324,12 +342,12 @@ class forecast extends pAndR{
                     $totalPending[$a] = 0;
                 }
                 
-                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['cID'],$clients[$a]['aID'],$salesRep,$month);
+                $probability[$a] = $this->getProbabilityNewClient($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep,$month);
                 
 
                 $totalPivot[$a] = array('payTvForecast' => ($totalPayTvForecast[$a]), 'digitalForecast' => ($totalDigitalForecast[$a]),'forecast' => ($totalForecast[$a]), 'bookings' => ($totalBookings[$a]),'pending' => ($totalPending[$a]),'currentPayTvBookings' => $totalCurrentPayTvBookings[$a], 'currentDigitalBookings' => $totalCurrentDigitalBookings[$a]);
            
-                $clientInfo[$a] = array('clientName' => $clients[$a]['client'], 'clientID' => $clients[$a]['cID'],'agencyName' => $clients[$a]['agency'], 'agencyID' => $clients[$a]['aID'], 'probability' => $probability[$a]);
+                $clientInfo[$a] = array('clientName' => $clients[$a]['clientName'], 'clientID' => $clients[$a]['clientID'],'agencyName' => $clients[$a]['agencyName'], 'agencyID' => $clients[$a]['agencyID'], 'probability' => $probability[$a]);
             }
 
            
@@ -341,6 +359,38 @@ class forecast extends pAndR{
        
         //var_dump($table['clientInfo']);
         return $table;
+    }
+
+    public function checkDuplicates($con, $salesRep,$month,$client,$agency,$platform){
+        $sql =  new sql();
+
+        $selectClient = "SELECT id
+                            from new_clients_fcst f
+                            WHERE (f.sales_rep_id IN ($salesRep))
+                            AND f.month = $month
+                            AND f.client_id = $client
+                            AND f.agency_id = $agency
+                            AND f.platform = '$platform'";
+                    // var_dump($selectClient);
+            $resultClient = $con->query($selectClient);
+            $from = array('id');
+            $forecastID = $sql->fetch($resultClient, $from, $from);
+
+            if (sizeof($forecastID) > 1) {         
+                $tmp = $forecastID[0]['id'];      
+                $delete =  "DELETE f.id FROM new_clients_fcst f
+                            WHERE (f.sales_rep_id IN ($salesRep))
+                            AND f.month = $month
+                            AND f.client_id = $client
+                            AND f.agency_id = $agency
+                            AND f.platform = '$platform'
+                            AND f.id != '$tmp'
+                            ";
+                $query = $con->query($delete);
+                var_dump($delete);
+            }
+
+             //var_dump($forecastID);
     }
 
      //make a list of clients for the front-end button to add a new client basis on existing clients
@@ -425,7 +475,7 @@ class forecast extends pAndR{
         $year = (int)date("Y");
         $pYear = $year-1;
 
-         $selectClient = "SELECT distinct  c.ID as cID, c.name as client, a.ID as aID, a.name as agency
+         $selectClient = "SELECT distinct  c.ID as clientID, c.name as clientName, a.ID as agencyID, a.name as agencyName
                             from new_clients_fcst f
                             left join sales_rep sr on sr.ID = f.sales_rep_id 
                             LEFT JOIN client c ON c.id = f.client_id
@@ -434,7 +484,7 @@ class forecast extends pAndR{
                             AND month = $month";
                     // var_dump($selectClient);
             $resultClient = $con->query($selectClient);
-            $from = array('cID','client','aID','agency');
+            $from = array('clientName','clientID','agencyName','agencyID');
             $client = $sql->fetch($resultClient, $from, $from);
             //var_dump($client);
 
