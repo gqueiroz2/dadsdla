@@ -161,22 +161,21 @@ class forecast extends pAndR{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
 
+        $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear,$month);
 
-         $clients = $this->getClientByRep($con, $salesRep, $region, $year, $pYear,$month);
-
-        /*$newClients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
+        $newClients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
+        
         for ($a=0; $a <sizeof($clients) ; $a++) { 
             for ($aa=0; $aa <sizeof($newClients) ; $aa++) { 
                  if ($clients[$a]['clientID'] == $newClients[$aa]['clientID']) {
                     unset($clients[$a]);
-                }           
+                    $clients = array_values($clients);
+                        
+                }
+                           
             }
-            
-        }
-        $clients = array_values($clients);*/
+        }      
 
-      
-       // var_dump($clients);
        if ($clients != 'THERE IS NO INFORMATION TO THIS REP') {
             for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
                  $check = $this->checkForecast($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID']);//check if exists forecast for this rep in database
@@ -269,7 +268,6 @@ class forecast extends pAndR{
             $pRate = $pr->getPRateByRegionAndYear($con,array($region), array($year));    
         }
         
-       
         
         $clients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
        // var_dump($clients);
@@ -280,8 +278,8 @@ class forecast extends pAndR{
            
            // var_dump($clients);
             for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
-                 //$this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'pay tv');
-                 //$this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'digital');
+                 $this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'pay tv');
+                 $this->checkDuplicates($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID'], 'digital');
 
                 for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
                     //var_dump($salesRep,$year,$value,$month,'forecast',$clients[$a]['clientName'],$clients[$a]['agencyName'], $region,'pay tv', $company[$c]);
@@ -360,6 +358,7 @@ class forecast extends pAndR{
         return $table;
     }
 
+   
     public function checkDuplicates($con, $salesRep,$month,$client,$agency,$platform){
         $sql =  new sql();
 
@@ -377,7 +376,7 @@ class forecast extends pAndR{
 
             if (sizeof($forecastID) > 1) {         
                 $tmp = $forecastID[0]['id'];      
-                $delete =  "DELETE f.id FROM new_clients_fcst f
+                $delete =  "DELETE FROM new_clients_fcst f
                             WHERE (f.sales_rep_id IN ($salesRep))
                             AND f.month = $month
                             AND f.client_id = $client
