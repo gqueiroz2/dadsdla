@@ -165,18 +165,19 @@ class forecast extends pAndR{
 
         $newClients = $this->getSalesRepByClient($salesRep,$con, $sql,$salesRepName,$month);
         
-        for ($a=0; $a <sizeof($clients) ; $a++) { 
-            for ($aa=0; $aa <sizeof($newClients) ; $aa++) { 
-                 if ($clients[$a]['clientID'] == $newClients[$aa]['clientID']) {
-                    unset($clients[$a]);
-                    $clients = array_values($clients);
-                        
-                }
-                           
-            }
-        }      
+          
 
-       if ($clients != 'THERE IS NO INFORMATION TO THIS REP') {
+        if ($clients != 'THERE IS NO INFORMATION TO THIS REP') {
+            for ($a=0; $a <sizeof($clients) ; $a++) { 
+                for ($aa=0; $aa <sizeof($newClients) ; $aa++) { 
+                    if ($clients[$a]['clientID'] == $newClients[$aa]['clientID']) {
+                        unset($clients[$a]);
+                        $clients = array_values($clients);
+                            
+                    }
+                           
+                }
+            }   
             for ($a=0; $a <sizeof($clients) ; $a++) { //this for is to make the interactons for all clients of this rep 
                  $check = $this->checkForecast($con, $salesRep,$month,$clients[$a]['clientID'],$clients[$a]['agencyID']);//check if exists forecast for this rep in database
                 for ($c=0; $c <sizeof($company); $c++) { //this for is to make the interactons for the 3 companies
@@ -385,7 +386,7 @@ class forecast extends pAndR{
                             AND f.id != '$tmp'
                             ";
                 $query = $con->query($delete);
-                var_dump($delete);
+               // var_dump($delete);
             }
 
              //var_dump($forecastID);
