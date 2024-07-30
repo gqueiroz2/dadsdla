@@ -83,11 +83,11 @@ class AEController extends Controller{
             return back()->withErrors($validator)->withInput();
         }
 
-       // if ($cDate >= $lastMonday) {
+       if ($cDate >= $lastMonday) {
             $num = 6;
-        /*}else{
+        }else{
             $num = 4;
-        }*/
+        }
 
         //var_dump($aeTable['total']);
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);  
@@ -126,13 +126,13 @@ class AEController extends Controller{
         $cDate = date('d/m/Y');
         
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
-        //if ($cDate >= $lastMonday) {
+        if ($cDate >= $lastMonday) {
             $num = 6;
             $u = 3;
-        /*}else{
+        }else{
             $num = 4;
             $u = 2;
-        }*/
+        }
 
         $currentMonth = date('n')+$u;
         //var_dump($currentMonth);
@@ -213,7 +213,7 @@ class AEController extends Controller{
                 for ($m=$currentMonth; $m <sizeof($month) ; $m++) { 
                     $payTvForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['payTvForecast-'.$a.'-'.$c.'-'.$month[$m]]);
                     $digitalForecast[$a][$c][$m] = str_replace('.', '', $saveInfo['digitalForecast-'.$a.'-'.$c.'-'.$month[$m]]);
-                    var_dump($payTvForecast);
+                    //var_dump($payTvForecast);
                     //$check = $ae->checkForecast($con, $salesRepID,$client,$agency,$company[$c], 'pay tv');//check if exists forecast for this rep in database
                     //var_dump($check);
                     //insere valores de pay tv
