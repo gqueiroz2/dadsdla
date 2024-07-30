@@ -37,7 +37,7 @@ class forecastController extends Controller{
         $cDate = date('d/m/Y');
         
          $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
-        if ($cDate >= $lastMonday) {*/
+        if ($cDate >= $lastMonday) {
             $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
         }else{
             $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
