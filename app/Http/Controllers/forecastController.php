@@ -258,7 +258,7 @@ class forecastController extends Controller{
             $newClient = $fcst->getSalesRepByClient($salesRepID,$con, $sql,$salesRepName[0]['salesRep'],$intMonth);
         //}
 
-        for ($a=0; $a <sizeof($clients) ; $a++) { 
+      /*  for ($a=0; $a <sizeof($clients) ; $a++) { 
             for ($aa=0; $aa <sizeof($newClient) ; $aa++) { 
                  if ($clients[$a]['clientID'] == $newClient[$aa]['clientID']) {
                     unset($clients[$a]);
@@ -267,7 +267,7 @@ class forecastController extends Controller{
                 }
                            
             }
-        }  
+        }*/  
         $companyName = array('wm','dc','spt');
         $check = $fcst->checkForecast($con, $salesRepID,$saveInfo['month']);
         $checkNew = $fcst->checkForecastNew($con, $salesRepID);//check if exists forecast for this rep in database
