@@ -82,13 +82,23 @@ class AEController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
        if ($cDate >= $lastMonday) {
-            $num = 6;
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+                $num = 5;
+            }else{
+                $num = 6;
+            }
+            
         }else{
-            $num = 4;
-        }
 
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+                $num = 5;
+            }else{
+                $num = 4;
+            }
+            
+        }
+       
         //var_dump($aeTable['total']);
         $clientsTable = $ae->makeClientsTable($con,$salesRepID,$pr,$cYear,$pYear,$regionID,$currencyID,$value,$cDate,$lastMonday);  
 
@@ -127,11 +137,24 @@ class AEController extends Controller{
         
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
         if ($cDate >= $lastMonday) {
-            $num = 6;
-            $u = 3;
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+                $num = 5;
+                $u = 2;
+            }else{
+                $num = 6;
+                $u = 3;
+            }
+            
         }else{
-            $num = 4;
-            $u = 2;
+             
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+                $num = 5;
+                $u = 1;
+            }else{
+                $num = 4;
+                $u = 2;
+            }
+            
         }
 
         $currentMonth = date('n')+$u;

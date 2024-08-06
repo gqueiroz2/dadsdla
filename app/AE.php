@@ -1001,7 +1001,7 @@ class AE extends pAndR{
         $cMonth = date('M');
         $cYear = date('Y');
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
-
+        
         if ($cDate >= $lastMonday) {
             $date = intval(date('n'));
             $nDate = $date+1;
@@ -1012,14 +1012,16 @@ class AE extends pAndR{
             $nNDate = $date + 2;
        
         }  
+        
         //var_dump($nDate);
-    
         for ($c=0; $c < sizeof($booking); $c++) { 
             if ($c<$date) {
                 $sum[$c] = $booking[$c];
             }elseif($c == $date || $c == $nDate || $c == $nNDate){
+               // var_dump($c);
                 $sum[$c] = $monthly[$c];
             }else{
+                //var_dump($c);
                 $sum[$c] = $fcst[$c];
             }
         }
