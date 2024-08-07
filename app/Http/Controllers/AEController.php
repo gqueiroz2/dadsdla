@@ -139,20 +139,20 @@ class AEController extends Controller{
         if ($cDate >= $lastMonday) {
             if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
                 $num = 5;
-                $u = 2;
+                $u = 3;
             }else{
                 $num = 6;
-                $u = 3;
+                $u = 4;
             }
             
         }else{
              
             if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
                 $num = 5;
-                $u = 1;
+                $u = 2;
             }else{
                 $num = 4;
-                $u = 2;
+                $u = 3;
             }
             
         }
