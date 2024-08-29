@@ -282,7 +282,7 @@ class AE extends pAndR{
                 //var_dump(($this->getValueByMonth($con,$salesRep,$year,$value,$month[$m],'newMonthly',null, null, $region,'pay tv','wm')));
             
                 $totalMonthPayTvForecast[$a][$m] = ($totalMonthPayTvForecast[$a][$m] + $totalNewMonthPayTvD[$a][$m] + $totalNewMonthPayTvW[$a][$m] + $totalNewMonthPayTvS[$a][$m]);
-                $totalMonthDigitalForecast[$a][$m] = $totalMonthDigitalForecast[$a][$m] + $totalNewMonthDigitalD[$a][$m] + $totalNewMonthDigitalW[$a][$m] + $totalNewMonthDigitalS[$a][$m];;
+                $totalMonthDigitalForecast[$a][$m] = $totalMonthDigitalForecast[$a][$m] + $totalNewMonthDigitalD[$a][$m] + $totalNewMonthDigitalW[$a][$m] + $totalNewMonthDigitalS[$a][$m];
                  
             }              
             $probability[$a] = $this->getProbability($con,$clients[$a]['clientID'],$clients[$a]['agencyID'],$salesRep);

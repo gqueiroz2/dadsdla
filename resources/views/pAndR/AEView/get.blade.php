@@ -58,8 +58,8 @@
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 24px;">
-				Forecast Cicle 8+4 <span>(NOV - DEZ)</span><br>
-				<span style="color:red;">(23/07 - 08/08)</span>
+				Forecast Cicle 9+3 <span>(DEZ)</span><br>
+				<span style="color:red;">(29/08 - 12/09)</span>
 			</div>
 		</div>
 	</div>

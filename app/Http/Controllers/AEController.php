@@ -82,8 +82,9 @@ class AEController extends Controller{
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+        //var_dump($cMonth);
        if ($cDate >= $lastMonday) {
-            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb' || $cMonth == 'Sep') {
                 $num = 5;
             }else{
                 $num = 6;
@@ -91,7 +92,7 @@ class AEController extends Controller{
             
         }else{
 
-            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb'  || $cMonth == 'Sep') {
                 $num = 5;
             }else{
                 $num = 4;
