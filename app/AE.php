@@ -1030,5 +1030,20 @@ class AE extends pAndR{
         return $sum;
     }
 
+    public function updateCicleDate($con){
+
+        $sql = new sql();
+
+        $select = "SELECT cicle, start_date, end_date, months
+                    FROM forecast_cicle_dates";
+
+        $from = array('cicle', 'start_date', 'end_date', 'months');
+        $resultQuery = $con->query($select);
+        $resultSelect = $sql->fetch($resultQuery, $from, $from);
+
+        //$resultSelect[0]['start_date'] = date_format(date($resultSelect[0]['start_date']), 'd/m');
+        return $resultSelect;
+    }
+
    
 }

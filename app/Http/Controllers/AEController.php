@@ -27,6 +27,7 @@ class AEController extends Controller{
         $sr = new salesRep();
         $render = new PAndRRender();
         $pr = new pRate();
+        $ae = new AE();
 
         $user = Request::session()->get('userName');
         $permission = Request::session()->get('userLevel');
@@ -34,10 +35,14 @@ class AEController extends Controller{
         $region = $r->getRegion($con,null);
         $currency = $pr->getCurrency($con,null);
 
+        $cicleDate = $ae->updateCicleDate($con);
+        
+        //var_dump($cicleDate);
+
         $typeMsg = false;
         $msg = "";
 
-        return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg'));
+        return view('pAndR.AEView.get',compact('con','render','region','currency','permission','user','msg','typeMsg','cicleDate' ,'b'));
     }
 
     public function post(){
@@ -138,7 +143,7 @@ class AEController extends Controller{
         
         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
         if ($cDate >= $lastMonday) {
-            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb' || $cMonth == 'Sep') {
                 $num = 5;
                 $u = 3;
             }else{
@@ -148,7 +153,7 @@ class AEController extends Controller{
             
         }else{
              
-            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb') {
+            if ($cMonth == 'Aug' || $cMonth == 'May' || $cMonth == 'Feb' || $cMonth == 'Sep') {
                 $num = 5;
                 $u = 2;
             }else{

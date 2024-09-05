@@ -35,13 +35,21 @@ class forecastController extends Controller{
         $cMonth = date('M');
         $year = date('Y');
         $cDate = date('d/m/Y');
+        //var_dump($cMonth);
+        if ($cMonth == "Oct" || $cMonth == "Nov" || $cMonth == "Dec") {
+            
+            $months = array(10,11,12);
         
-         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
-        if ($cDate >= $lastMonday) {
-            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
         }else{
-            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
-        }         
+            
+            $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+            if ($cDate >= $lastMonday) {
+                $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+            }else{
+                $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+            }    
+        }
+             
         //var_dump($months);
 
         $typeMsg = false;
@@ -79,12 +87,20 @@ class forecastController extends Controller{
         $cMonth = date('M');
         $cDate = date('d/m/Y');
         
-         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
-        if ($cDate >= $lastMonday) {
-            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        if ($cMonth == "Oct" || $cMonth == "Nov" || $cMonth == "Dec") {
+            
+            $months = array(10,11,12);
+
         }else{
-            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
-        } 
+            
+            $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+            if ($cDate >= $lastMonday) {
+                $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+            }else{
+                $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+            }    
+        }
+
         $monthName = $b->intToMonth2(array($intMonth)); 
         //var_dump($salesRepName);
         $validator = Validator::make(Request::all(),[
@@ -188,12 +204,21 @@ class forecastController extends Controller{
         $value = 'gross';
         $cMonth = date('M');
         $cDate = date('d/m/Y');
-         $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
-        if ($cDate >= $lastMonday) {
-            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        
+        if ($cMonth == "Oct" || $cMonth == "Nov" || $cMonth == "Dec") {
+        
+            $months = array(10,11,12);
+        
         }else{
-            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
-        } 
+        
+            $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+            if ($cDate >= $lastMonday) {
+                $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+            }else{
+                $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+        
+            }    
+        }
         
         $intMonth = Request::get('month');
     

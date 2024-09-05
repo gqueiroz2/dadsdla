@@ -54,12 +54,13 @@
 			</div>
 			<br>
 		</div>
+		
 	</form>
 	<div class="container-fluid">
 		<div class="row justify-content-end mt-2">
 			<div class="col-3" style="color: #0070c0;font-size: 24px;">
-				Forecast Cicle 9+3 <span>(DEZ)</span><br>
-				<span style="color:red;">(29/08 - 12/09)</span>
+				Forecast Cicle {{$cicleDate[0]['cicle']}} <span>({{$cicleDate[0]['months']}})</span><br>
+				<span style="color:red;">({{$b->formatData('aaaa-mm-dd','dd/mm/aaaa',$cicleDate[0]['start_date'])}} - {{$b->formatData('aaaa-mm-dd','dd/mm/aaaa',$cicleDate[0]['end_date'])}})</span>
 			</div>
 		</div>
 	</div>

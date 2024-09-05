@@ -589,7 +589,8 @@ class viewerController extends Controller{
         $managerString = Request::get('managerString');
         $statusString = Request::get('statusString');
         $salesRepString = Request::get('salesRepString');
-        
+         
+      
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
         //print_r($saveInfo);
         if ($table != null) {
@@ -612,23 +613,8 @@ class viewerController extends Controller{
                 }
                // $p->updateLines($con,$sql,$saveInfo['ID-'.$t],$saveInfo['cluster-'.$t],$saveInfo['project-'.$t],$saveInfo['client-'.$t],$saveInfo['agency-'.$t],$saveInfo['ae1-'.$t],$saveInfo['ae2-'.$t],$saveInfo['manager-'.$t],$saveInfo['tv-'.$t],$saveInfo['digital-'.$t],$saveInfo['startMonth-'.$t],$saveInfo['endMonth-'.$t],$saveInfo['quota-'.$t],$saveInfo['status-'.$t],$saveInfo['notes-'.$t]);
             }    
-        }
+        }    
         
-
-         if ($saveInfo['newClient'][0] != 0) {
-            if ($saveInfo['newAe2'][0] == '10') {
-                $saveInfo['newAe2'] = $saveInfo['newAe1'];
-            }
-
-            $p->insertNewLines($con,$sql,$saveInfo);   
-
-            $clientString .= " ,'";
-            $clientString .= $saveInfo['newClient'][0];
-            $clientString .= "'"; 
-            $agencyString .= " ,'";
-            $agencyString .= $saveInfo['newAgency'][0];
-            $agencyString .= "'";
-        }
         //var_dump($pipes);
         //var_dump($table);
        if (!$saveInfo['newClient'][0]) {
@@ -640,6 +626,22 @@ class viewerController extends Controller{
             }
            
         }
+
+        if ($saveInfo['newClient'][0] != 0) {
+            if ($saveInfo['newAe2'][0] == '10') {
+                $saveInfo['newAe2'] = $saveInfo['newAe1'];
+            }
+            //var_dump('aki');
+            $p->insertNewLines($con,$sql,$saveInfo);   
+
+            $clientString .= " ,'";
+            $clientString .= $saveInfo['newClient'][0];
+            $clientString .= "'"; 
+            $agencyString .= " ,'";
+            $agencyString .= $saveInfo['newAgency'][0];
+            $agencyString .= "'";
+        }
+
             //print_r($saveInfo);       
         $table = $p->table($con,$sql,$agencyString,$clientString,$salesRepString,$propString,$managerString,$statusString);
     
