@@ -34,12 +34,21 @@ class VPController extends Controller{
         $cMonth = date('M');
         $cDate = date('d/m/Y');
 
-        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
-        if ($cDate >= $lastMonday) {
-            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+
+        if ($cMonth == "Oct" || $cMonth == "Nov" || $cMonth == "Dec") {
+            
+            $months = array(10,11,12);
+        
         }else{
-            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
-        }   
+            
+            $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+            if ($cDate >= $lastMonday) {
+                $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+            }else{
+                $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+            }    
+        }
+           
        //var_dump($user);   
 
 		return view('pAndR.VPView.get',compact('render','months','user'));
@@ -62,11 +71,18 @@ class VPController extends Controller{
         $regionID = 1;
         $cMonth = date('M');
         $cDate = date('d/m/Y');
-        $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $cYear"));
-        if ($cDate >= $lastMonday) {
-            $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+        if ($cMonth == "Oct" || $cMonth == "Nov" || $cMonth == "Dec") {
+            
+            $months = array(10,11,12);
+        
         }else{
-            $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+            
+            $lastMonday = date('d/m/Y',strtotime("last Monday of $cMonth $year"));
+            if ($cDate >= $lastMonday) {
+                $months = array(intval(date('n'))+1,intval(date('n')) + 2,intval(date('n')) + 3); 
+            }else{
+                $months = array(intval(date('n')),intval(date('n')) + 1,intval(date('n')) + 2); 
+            }    
         }
         
         $user = Request::session()->get('userName');
